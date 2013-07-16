@@ -150,7 +150,7 @@ def web(descript_file,test_file, \
                 benchpath = job_path + '/ismip-hom-c/80km/bench/ishom.c.80km.JFNK.trilinos.config'
         	VV_dome30details.case(ishomc80_case,confpath,benchpath,ncl_path,html_path)
 
-		test_file.write('<TH ALIGN=LEFT><A HREF="ishomc_plot.html">ISMIP HOM C 80km Plots</A>\n')
+		test_file.write('<TH ALIGN=LEFT><A HREF="ishomc80_plot.html">ISMIP HOM C 80km Plots</A>\n')
 		test_file.write('<BR>\n')
         	VV_ismip.c80plot(ishomc80_plot,job_path,ncl_path,html_path)
 

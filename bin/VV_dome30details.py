@@ -226,7 +226,7 @@ def dplot(plot_file,job_path,ncl_path,html_path):  # using data, fill the web pa
         plot_file.write('<TITLE>Diagnostic Dome 30 </TITLE>\n')
         plot_file.write('<TABLE>\n')
         plot_file.write('<TR>\n')
-        plot_file.write('<H4>Difference from benchmark for a range of processor counts for a range of variables</H4>\n')
+        plot_file.write('<H4>Difference from benchmark for 1 and 4 processors, Velocity Norm </H4>\n')
         plot_file.write('<OBJECT data="dome30d.png" type="image/png" width="1100" height="800" hspace=5 align=left alt="Dome 30 Plots">\n')
         plot_file.write('</OBJECT>\n')
         plot_file.write('<TR>\n')
@@ -252,7 +252,7 @@ def eplot(plot_file,job_path,ncl_path,html_path):  # using data, fill the web pa
         try:
                 output = subprocess.call(plot_dome30, shell=True)
         except:
-                print "error creating ncl evolving dome30 plots"
+                print "error creating ncl evolving dome30 velocity and thickness plot"
                 raise
 
 # transferring dome30 pic to www file
@@ -262,16 +262,46 @@ def eplot(plot_file,job_path,ncl_path,html_path):  # using data, fill the web pa
         	try:
                 	output = subprocess.call(dome30pic, shell=True)
         	except:
-                	print "error moving evolving dome30 png file to www directory"
+                	print "error moving evolving dome30 vel/thk png file to www directory"
                         sys.exit(1)
                 	raise
 
         plot_file.write('<HTML>\n')
-        plot_file.write('<TITLE>Dome 30 </TITLE>\n')
+        plot_file.write('<TITLE>Evolving Dome 30 </TITLE>\n')
         plot_file.write('<TABLE>\n')
         plot_file.write('<TR>\n')
-        plot_file.write('<H4>Difference from benchmark for a range of processor counts for a range of variables</H4>\n')
-        plot_file.write('<OBJECT data="dome30e.png" type="image/png" width="1100" height="800" hspace=5 align=left alt="Dome 30 Plots">\n')
+        plot_file.write('<H4>Difference from benchmark for 9 and 15 processors, Vel Norm and Thickness </H4>\n')
+        plot_file.write('<OBJECT data="dome30e.png" type="image/png" width="1100" height="800" hspace=5 align=left alt="Evolving Dome 30 Velocity and Thickness Plots">\n')
+        plot_file.write('</OBJECT>\n')
+        plot_file.write('<TR>\n')
+        plot_file.write('<BR>\n')
+        plot_file.write('</TABLE>\n')
+
+	dome30_plotfile=''+ ncl_path + '/dome30t.ncl'
+	png  = 'PNG = "' + ncl_path + '/dome30t"'
+        plot_dome30 = "ncl '" + VAR9 + "' '" + VAR15 + \
+                           "' '" + stock + "' '" + png + "' " + dome30_plotfile 
+        try:
+                output = subprocess.call(plot_dome30, shell=True)
+        except:
+                print "error creating ncl evolving dome30 temperature plots"
+                raise
+
+# transferring dome30 pic to www file
+
+        if (ncl_path + '/dome30t.png'):
+        	dome30pic = "mv -f " + ncl_path + "/dome30t.png" + " " + html_path + "/"
+        	try:
+                	output = subprocess.call(dome30pic, shell=True)
+        	except:
+                	print "error moving evolving dome30 temp png file to www directory"
+                        sys.exit(1)
+                	raise
+
+        plot_file.write('<TABLE>\n')
+        plot_file.write('<TR>\n')
+        plot_file.write('<H4>Difference from benchmark for 9 and 15 processors, Temperature </H4>\n')
+        plot_file.write('<OBJECT data="dome30t.png" type="image/png" width="1100" height="800" hspace=5 align=left alt="Evolving Dome 30 Temperature Plots">\n')
         plot_file.write('</OBJECT>\n')
         plot_file.write('<TR>\n')
         plot_file.write('<BR>\n')

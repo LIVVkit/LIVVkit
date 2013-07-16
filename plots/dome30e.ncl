@@ -20,7 +20,6 @@ begin
 
   velstock   = STOCK->velnorm(10,1,:,:)
   thkstock   = STOCK->thk(10,:,:)
-  tmpstock   = STOCK->tempstag(10,2,:,:)
 
   velvarbl  = VAR9->velnorm(10,1,:,:)
   veldiff9 = new((/30,30/),float);
@@ -38,23 +37,6 @@ begin
   thkdiff15 = new((/31,31/),float);
   thkdiff15 = thkvarbl(:,:)-thkstock(:,:);
 
-  tmpvarbl  = VAR9->tempstag(10,1,:,:)
-  tmpdiff9 = new((/31,31/),float);
-  tmpdiff9 = tmpvarbl(:,:)-tmpstock(:,:);
-
-  tmpvarbl  = VAR15->tempstag(10,1,:,:)
-  tmpdiff15 = new((/31,31/),float);
-  tmpdiff15 = tmpvarbl(:,:)-tmpstock(:,:);
-
-;  maxv1=max(velstock(:,:));
-;  maxv1=max(velstock(:,:));
-;  maxv1=max(velstock(:,:));
-;  print(maxv1);
-;  printVarSummary(velstock)
-;  maxv50=max(velvarbl(:,:));
-;  print(maxv50);
-;  printVarSummary(velvarbl);
-
   vs= velstock@scale_factor * velstock
   vd9= velstock@scale_factor * veldiff9
   vd15= velstock@scale_factor * veldiff15
@@ -69,10 +51,6 @@ begin
   td9@long_name   = "Scaled Difference 9 proc"
   td15@long_name  = "Scaled Difference 15 proc"
 
-;  tmpstock@long_name   = "Benchmark"
-;  tmpdiff9@long_name   = "Difference 9 proc"
-;  tmpdiff15@long_name  = "Difference 15 proc"
-
 ;************************************************
 ; create plots
 ;************************************************
@@ -81,7 +59,6 @@ begin
   gsn_define_colormap(wks,"wgne15")        ; choose a colormap
   plotvel = new(3,graphic)
   plotthk = new(3,graphic)
-;  plottmp = new(3,graphic)
   
   res                     = True          ; plot mods desired
 
@@ -101,9 +78,6 @@ begin
   plotthk(0) = gsn_contour(wks,ts,res) 
   plotthk(1) = gsn_contour(wks,td9,res) 
   plotthk(2) = gsn_contour(wks,td15,res) 
-;  plottmp(0) = gsn_contour(wks,tmpstock,res) 
-;  plottmp(1) = gsn_contour(wks,tmpdiff9,res) 
-;  plottmp(2) = gsn_contour(wks,tmpdiff15,res) 
 
 ;************************************************
 ; create panel
@@ -112,7 +86,7 @@ begin
   resvel = True                             ; panel resources
   resvel@gsnFrame = False                 
   resvel@gsnPanelTop = 1.0                 
-  resvel@gsnPanelBottom = 0.60                 
+  resvel@gsnPanelBottom = 0.62                 
   resvel@gsnPanelLabelBar = True		; make a common contour bar
 ;  resvel@gsnMaximize = True                 ; make as large as possible
   resvel@txString    = "Norm of Velocity"   ; title string (make blank to remove)
@@ -120,7 +94,7 @@ begin
 
   resthk = True                             ; panel resources
   resthk@gsnFrame = False                 
-  resthk@gsnPanelTop = 0.55                 
+  resthk@gsnPanelTop = 0.57                 
   resthk@gsnPanelBottom = 0.0                 
   resthk@lbLabelAngleF = 45			; angle of contour bar labels
   resthk@gsnPanelLabelBar = True		; make a common contour bar
@@ -128,17 +102,8 @@ begin
   resthk@txString    = "Thickness"   ; title string (make blank to remove)
   resthk@gsnPanelFigureStrings = (/"bench)","1)","4)","9)","15)"/)   ; add strings to panel
 
-;  restmp = True                             ; panel resources
-;  restmp@gsnFrame = False                 
-;  restmp@gsnPanelTop = 0.3                 
-;  restmp@gsnPanelBottom = 0.0                 
-;  restmp@gsnPanelLabelBar = True		; make a common contour bar
-;  restmp@txString    = "Temperature"   ; title string (make blank to remove)
-;  restmp@gsnPanelFigureStrings = (/"bench)","1)","4)","9)","15)"/)   ; add strings to panel
-
   gsn_panel(wks,plotvel,(/1,3/),resvel)                  
   gsn_panel(wks,plotthk,(/2,3/),resthk)                  
-;  gsn_panel(wks,plottmp,(/3,3/),restmp)                  
 
   frame(wks)
 

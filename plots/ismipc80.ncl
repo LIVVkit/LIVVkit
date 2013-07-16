@@ -10,7 +10,7 @@ begin
 ; stand alone read in for testing
 ;  STOCK    = addfile("/global/scratch/sd/evanskj/higher_order/reg_test/ismip-hom-c/80km/bench/ishom.c.80km.JFNK.out.nc","r")
 ;  VAR1    = addfile("/global/scratch/sd/evanskj/higher_order/reg_test/ismip-hom-c/80km/data/ishom.c.80km.JFNK.out.nc","r")
-;  PNG    = "/global/scratch/sd/evanskj/higher_order/livv/plots/ismipc"
+;  PNG    = "/global/scratch/sd/evanskj/higher_order/livv/plots/ismipa"
 
 
 ;************************************************
@@ -88,7 +88,7 @@ begin
   resv = True                             ; panel resources
   resv@gsnFrame = False                 
   resv@gsnPanelTop = 1.0                 
-  resv@gsnPanelBottom = 0.65                 
+  resv@gsnPanelBottom = 0.66                 
 ;  resv@gsnMaximize = True                 ; make as large as possible
   resv@txString    = "V velocity"          ; title string (make blank to remove)
   resv@gsnPanelFigureStrings = (/"bench)","diff)"/)   ; add strings to panel
@@ -96,15 +96,15 @@ begin
   resvel = True                             ; panel resources
   resu = True                             ; panel resources
   resu@gsnFrame = False                 
-  resu@gsnPanelTop = 0.65                 
-  resu@gsnPanelBottom = 0.3                 
+  resu@gsnPanelTop = 0.62                 
+  resu@gsnPanelBottom = 0.33                
 ;  resu@gsnMaximize = True                 ; make as large as possible
   resu@txString    = "U velocity"          ; title string (make blank to remove)
   resu@gsnPanelFigureStrings = (/"bench)","diff)"/)   ; add strings to panel
 
   resvel = True                             ; panel resources
   resvel@gsnFrame = False                 
-  resvel@gsnPanelTop = 0.3                 
+  resvel@gsnPanelTop = 0.29                 
   resvel@gsnPanelBottom = 0.0                 
   resvel@gsnPanelLabelBar = False		; make a common contour bar
 ;  resvel@gsnMaximize = True                 ; make as large as possible
