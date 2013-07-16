@@ -52,6 +52,7 @@ Major:
 *plot the solver and convergence info more usefully for all relevant runs
 *parse data from trilinos_options.xml file as well as configure settings
 *create a more general user interface to process the GIS production output
+*enable the option to read from FELIX data (in exodus format) using visit
 
 Minor:
 *have the input and output information from the benchmark runs set in the software rather than the user 
