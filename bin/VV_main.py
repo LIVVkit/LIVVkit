@@ -12,7 +12,7 @@ user = os.environ['USER']
 #enable use input for filepaths from the command line
 usage_string = "%prog [options]"
 parser = OptionParser(usage=usage_string)
-parser.add_option('-d', '--directory', action='store', type='string', dest='directory_path', \
+parser.add_option('-p', '--directory', action='store', type='string', dest='directory_path', \
                   metavar='PATH', help='path where this directory is located')
 parser.add_option('-j', '--html', action='store', type='string', dest='html_path', \
                   metavar='PATH', help='path where the html directory is located')
@@ -20,7 +20,7 @@ parser.add_option('-l', '--link', action='store', type='string', dest='html_link
                   metavar='PATH', help='location of website for viewing set by user')
 parser.add_option('-k', '--ncl', action='store', type='string', dest='ncl_path', \
                   metavar='PATH', help='path where the ncl directory is located')
-parser.add_option('-a', '--data', action='store', type='string', dest='data_path', \
+parser.add_option('-d', '--data', action='store', type='string', dest='data_path', \
                   metavar='PATH', help='path where the solver data directory is located')
 parser.add_option('-c', '--config', action='store', type='string', dest='config_file', \
                   metavar='FILE', help='the config file python will parse through')
@@ -38,21 +38,34 @@ parser.add_option('-m', '--comment', action='store', type='string', dest='commen
                   metavar='FILE', help='information about the test case for user reference')
 parser.add_option('-u', '--username', action='store', type='string', dest='username', \
                   metavar='FILE', help='username used to create subdirectory of web pages of output')
+parser.add_option('-g', '--gis_prod', action='store_true', dest='gis_prod', \
+                  help='include flag to run the GIS production analysis')
+#parser.add_option('-a', '--ant_prod', action='store_true', dest='ant_prod', \
+#                  help='include flag to run the ANT production analysis')
 
 #parse the command line options and arguments and store in lists
 (options, args) = parser.parse_args()
 
-if (options.stock_netcdf_file):
-	stock_nc = options.stock_netcdf_file 
-else:
-	print "must define a benchmark netcdf file to compare to simulation"
-	exit()
+if (options.gis_prod):
+	if (options.stock_netcdf_file):
+		stock_nc = options.stock_netcdf_file 
+	else:
+		print "need a benchmark GIS file for production analysis"
+	        exit()
 
-if (options.variable_netcdf_file):
-        variable_nc = options.variable_netcdf_file
+	if (options.variable_netcdf_file):
+        	variable_nc = options.variable_netcdf_file
+	else:
+		print "need a production GIS file for analysis"
+       		exit()
+
+	if (options.output_file):
+		gis_output = options.output_file 
+	else:
+		print "no GIS output file provided, so no solver statistics will be provided"
+
 else:
-        print "must define a netcdf file of simulation output"
-        exit()
+        print "not performing GIS production analysis"
 
 if (options.time_stamp):
 	time_stamp = options.time_stamp 
@@ -66,15 +79,15 @@ else:
 	print "no comments about test case given"
 	comment = " "
 
-#if (options.username):
-#
-#	print 'placing HTML files in the ' + options.username + ' subdirectory (check permissions)'
-# 	target_html = options.html_path + '/' + options.username
-#
-#else:
-#
-#	print 'no username specified, placing HTML files in the main html directory'
-target_html = options.html_path 
+if (options.username):
+
+	print 'placing HTML files in the ' + options.username + ' subdirectory (check permissions)'
+ 	target_html = options.html_path + '/' + options.username
+
+else:
+
+	print 'no username specified, placing HTML files in the main html directory'
+	target_html = options.html_path 
 
 #remove html files previously used in specified subdirectory
 
@@ -127,7 +140,7 @@ variable, value = '', ''
 
 #open and grab info from configure file 
 #TODO can grab input and output file information from this file, rather than having user specify in bash script
-if options.config_file:
+if options.gis_prod and options.config_file:
 	for kw in keywords:
 		try:
 			configlog = open(options.config_file, "r")
@@ -160,38 +173,39 @@ if options.config_file:
 				data[kw][variable] = value
 
 		configlog.close()
-
-	#Calculate number of time steps
+	
+#Calculate number of time steps
 	if data['time']['tend'] and data['time']['tstart']:
 		diff = float(data['time']['tend']) - float(data['time']['tstart'])
 		timestp = diff / float(data['time']['dt'])
 
 # create production plots for analysis
+if options.gis_prod:
 
-ncl_script=options.ncl_path + "/tri_ncl_script.ncl"
+	ncl_script=options.ncl_path + "/tri_ncl_script.ncl"
 
-plot_gis_thk = "ncl 'VAR=addfile(\"" + variable_nc + "\", \"r\")'" + ' ' + \
+	plot_gis_thk = "ncl 'VAR=addfile(\"" + variable_nc + "\", \"r\")'" + ' ' + \
 		    "'STOCK=addfile(\"" + stock_nc + "\",\"r\")'" + ' ' + \
 		    "'PNG=\"" + options.ncl_path + "/gis5km_thk\"'" + ' ' + \
                     ncl_script + ' ' + "1> /dev/null"
 
 #print plot_gis_thk
 
-try:
-	output = subprocess.call(plot_gis_thk, shell=True)
-except:
-	print "error formatting thickness plot of production run"
-	raise
+	try:
+		output = subprocess.call(plot_gis_thk, shell=True)
+	except:
+		print "error formatting thickness plot of production run"
+		raise
 
 #transferring thickness plot to www location
 
-if (options.ncl_path + '/gis5km_thk.png'):
-        thkpic = "mv -f " + options.ncl_path + "/gis5km_thk.png" + " " + target_html + "/"
-        try:
-                output = subprocess.call(thkpic, shell=True)
-        except:
-                print "error moving thk png file"
-                raise
+	if (options.ncl_path + '/gis5km_thk.png'):
+        	thkpic = "mv -f " + options.ncl_path + "/gis5km_thk.png" + " " + target_html + "/"
+        	try:
+                	output = subprocess.call(thkpic, shell=True)
+        	except:
+                	print "error moving thk png file"
+                	raise
 
 #transferring cover picture to www file
 
@@ -229,14 +243,17 @@ file.write('<HR noshade size=2 size="100%">\n')
 file.write('<TH ALIGN=LEFT><A HREF="test_suite.html">Basic Test Suite Diagnostics</A>\n')
 file.write('<BR>\n')
 file.write('<BR>\n')
-file.write('<TH ALIGN=LEFT><A HREF="GIS-con-diag.html">Production Configure Diagnostics</A>\n')
-file.write('<BR>\n')
-file.write('<BR>\n')
-file.write('<TH ALIGN=LEFT><A HREF="GIS-out-diag.html">Production Output Diagnostics</A>\n')
-file.write('<BR>\n')
-file.write('<BR>\n')
-file.write('<TH ALIGN=LEFT><A HREF="GIS-plot-diag.html">Ice Thickness</A>\n')
-file.write('<BR>\n <BR>\n <BR> \n')
+
+if options.gis_prod:
+	file.write('<TH ALIGN=LEFT><A HREF="GIS-con-diag.html">Production Configure Diagnostics</A>\n')
+	file.write('<BR>\n')
+	file.write('<BR>\n')
+	file.write('<TH ALIGN=LEFT><A HREF="GIS-out-diag.html">Production Output Diagnostics</A>\n')
+	file.write('<BR>\n')
+	file.write('<BR>\n')
+	file.write('<TH ALIGN=LEFT><A HREF="GIS-plot-diag.html">Ice Thickness</A>\n')
+	file.write('<BR>\n <BR>\n <BR> \n')
+
 file.write('<h4> For Additional Information: </h4> <p>')
 file.write(' Kate Evans <br>')
 file.write('Oak Ridge National Laboratory<br>')
@@ -293,7 +310,7 @@ if options.test_suite:
 
 #create www page with config information
 
-if options.config_file:
+if options.gis_prod:
 	con_file = open(target_html + '/GIS-con-diag.html', 'w')
 
 	con_file.write('<HTML>\n')
@@ -347,14 +364,14 @@ if options.config_file:
 
 # grabbing data from the job output file from the production run
 
-if options.output_file:
+if options.gis_prod:
 
 	out_file = open(target_html + '/GIS-out-diag.html', 'w')
 
 	out_file.write('<HTML>\n')
         out_file.write('<TITLE>Production Job Output Diagnostics</TITLE>\n') 
 
-	procttl, nonlist, avg2, out_flag, nd_name, ld_name = VV_outprocess.jobprocess(options.output_file,'gis5km')
+	procttl, nonlist, avg2, out_flag, nd_name, ld_name = VV_outprocess.jobprocess(gis_output,'gis5km')
 
 #	if error_flag == 1:
 #		out_file.write('<FONT COLOR="purple"><H1>Model run incomplete, pick a new job output file for diagnostics!</H1></FONT>')
@@ -366,76 +383,77 @@ if options.output_file:
 
 # create iteration plots for proudction simulation
 
-data_script=options.ncl_path + "/solver_gis.ncl"
+	data_script=options.ncl_path + "/solver_gis.ncl"
 
-plot_gis_data = "ncl 'nfile=\"" + options.data_path + "" + nd_name + "\"'" + ' ' + \
+	plot_gis_data = "ncl 'nfile=\"" + options.data_path + "" + nd_name + "\"'" + ' ' + \
                      "'lfile=\"" + options.data_path + "" + ld_name + "\"'" + ' ' + \
                      "'PNG=\"" + options.ncl_path + "/gis5km_iter\"'" + ' ' + \
                     data_script + ' ' + "1> /dev/null"
-print options.data_path
+	print options.data_path
 
-try:
-	output = subprocess.call(plot_gis_data, shell=True)
-except:
-	print "error formatting iteration plot of production run"
-	raise
+	try:
+		output = subprocess.call(plot_gis_data, shell=True)
+	except:
+		print "error formatting iteration plot of production run"
+		raise
 
 #transferring thickness plot to www location
 
-if (options.ncl_path + '/gis5km_iter.png'):
-        iterpic = "mv -f " + options.ncl_path + "/gis5km_iter.png" + " " + target_html + "/"
-        try:
-                output = subprocess.call(iterpic, shell=True)
-        except:
-                print "error moving iter png file"
-                raise
+	if (options.ncl_path + '/gis5km_iter.png'):
+	        iterpic = "mv -f " + options.ncl_path + "/gis5km_iter.png" + " " + target_html + "/"
+	        try:
+	                output = subprocess.call(iterpic, shell=True)
+	        except:
+	                print "error moving iter png file"
+	                raise
 
-	out_file.write('<TABLE>\n')
-	out_file.write('<TR>\n')
-	out_file.write('<H4>Iteration Count for Nonlinear and Linear Solver</H4>\n')
-	out_file.write('<OBJECT data="gis5km_iter.png" type="image/png" width="1300" height="800" hspace=10 align=left alt="Solver Plots">\n')
-	out_file.write('</OBJECT>\n')
-	out_file.write('<TR>\n')
-	out_file.write('<BR>\n')
-	out_file.write('</TABLE>\n')
+		out_file.write('<TABLE>\n')
+		out_file.write('<TR>\n')
+		out_file.write('<H4>Iteration Count for Nonlinear and Linear Solver</H4>\n')
+		out_file.write('<OBJECT data="gis5km_iter.png" type="image/png" width="1300" height="800" hspace=10 align=left alt="Solver Plots">\n')
+		out_file.write('</OBJECT>\n')
+		out_file.write('<TR>\n')
+		out_file.write('<BR>\n')
+		out_file.write('</TABLE>\n')
 
-	out_file.write('<BR>\n')
-	out_file.write("Number of Processors = " + str(procttl[-1]) + "<BR>\n")
-	out_file.write("Number of Nonlinear Iterations = ")
-	for item in nonlist:
-		out_file.write(str(item) + ", ")
-	out_file.write('<BR>\n')
-	if out_flag == 1:
-		out_file.write('<FONT COLOR="red">***TIME STEP(S) WHICH FAILED TO CONVERGE</FONT> <BR>\n')
-	out_file.write("Average Number of Linear Iterations per Time-Step = ")
-	for item in avg2:
-		out_file.write(str(item) + ", ")
-	out_file.write('<BR>\n')
-	out_file.write('</HTML>\n')
-	out_file.close()
+		out_file.write('<BR>\n')
+		out_file.write("Number of Processors = " + str(procttl[-1]) + "<BR>\n")
+		out_file.write("Number of Nonlinear Iterations = ")
+		for item in nonlist:
+			out_file.write(str(item) + ", ")
+		out_file.write('<BR>\n')
+		if out_flag == 1:
+			out_file.write('<FONT COLOR="red">***TIME STEP(S) WHICH FAILED TO CONVERGE</FONT> <BR>\n')
+		out_file.write("Average Number of Linear Iterations per Time-Step = ")
+		for item in avg2:
+			out_file.write(str(item) + ", ")
+		out_file.write('<BR>\n')
+		out_file.write('</HTML>\n')
+		out_file.close()
 
 # plot production run output for comparison to the benchmark
 
-if stock_nc:
-	plot_file = open(target_html + '/GIS-plot-diag.html', 'w')
+	if stock_nc:
+		plot_file = open(target_html + '/GIS-plot-diag.html', 'w')
 
-	plot_file.write('<HTML>\n')
-        plot_file.write('<TITLE>Thickness</TITLE>\n')
-	plot_file.write('<H2>Thickness Plot</H2>')
-	plot_file.write('<TABLE>\n')
-	plot_file.write('<TR>\n')
-	plot_file.write('<H4>a) Benchmark Ice Thickness</H4>\n')
-	plot_file.write('<H4>b) Simulation Ice Thickness</H4>\n')
-	plot_file.write('<H4>c) Difference from Benchmark </H4>\n')
-	plot_file.write('<OBJECT data="gis5km_thk.png" type="image/png" width="1300" height="800" hspace=10 align=left alt="Thickness Plots">\n')
-	plot_file.write('</OBJECT>\n')
-	plot_file.write('<TR>\n')
-	plot_file.write('<BR>\n')
-	plot_file.write('</TABLE>\n')
-	plot_file.write('</HTML>\n')
-	plot_file.close()
+		plot_file.write('<HTML>\n')
+       		plot_file.write('<TITLE>Thickness</TITLE>\n')
+		plot_file.write('<H2>Thickness Plot</H2>')
+		plot_file.write('<TABLE>\n')
+		plot_file.write('<TR>\n')
+		plot_file.write('<H4>a) Benchmark Ice Thickness</H4>\n')
+		plot_file.write('<H4>b) Simulation Ice Thickness</H4>\n')
+		plot_file.write('<H4>c) Difference from Benchmark </H4>\n')
+		plot_file.write('<OBJECT data="gis5km_thk.png" type="image/png" width="1300" height="800" hspace=10 align=left alt="Thickness Plots">\n')
+		plot_file.write('</OBJECT>\n')
+		plot_file.write('<TR>\n')
+		plot_file.write('<BR>\n')
+		plot_file.write('</TABLE>\n')
+		plot_file.write('</HTML>\n')
+		plot_file.close()
+
 file.write('</BODY>\n')
 file.write('</HTML>\n')
 file.close()
 
-print "LIVV Completed. Go to " + options.html_link + "/GIS-main-diag.html to view results"
+print "LIVV Completed. Go to " + target_html + "/GIS-main-diag.html to view results"

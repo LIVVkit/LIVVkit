@@ -51,7 +51,7 @@ def a80details(solver_file,job_path):  # using data, fill the web page with info
 
 # JFNK gnu 2 proc
 	solver_file.write('<H4>New Run:</H4>')
-	procttl_ih2d, nonlist_ih2d,avg2_ih2d,out_flag_ih2d,ndiha2_name,ldiha2_name = VV_outprocess.jobprocess(job_path + '/ismip-hom-a/80km/data/ishom.a.80km.out','imhoma2')
+	procttl_ih2d, nonlist_ih2d,avg2_ih2d,out_flag_ih2d,ndiha2_name,ldiha2_name = VV_outprocess.jobprocess(job_path + '/ismip-hom-a/80km/data/ishom.a.80km.out.2','imhoma2')
 
 	solver_file.write("Number of Processors = " + str(procttl_ih2d[-1]) + "<BR>\n")
 	solver_file.write("Number of Nonlinear Iterations = ")
@@ -66,7 +66,7 @@ def a80details(solver_file,job_path):  # using data, fill the web page with info
 	solver_file.write('<BR> \n')
 
 	solver_file.write('<H4>Benchmark Run:</H4>')
-	procttl_ih2b, nonlist_ih2b,avg2_ih2b,out_flag_ih2b,ndiha2b_name,ldiha2b_name = VV_outprocess.jobprocess(job_path + '/ismip-hom-a/80km/bench/ishom.a.80km.out','imhoma2b')
+	procttl_ih2b, nonlist_ih2b,avg2_ih2b,out_flag_ih2b,ndiha2b_name,ldiha2b_name = VV_outprocess.jobprocess(job_path + '/ismip-hom-a/80km/bench/ishom.a.80km.out.2','imhoma2b')
 
 	solver_file.write("Number of Processors = " + str(procttl_ih2b[-1]) + "<BR>\n")
 	solver_file.write("Number of Nonlinear Iterations = ")
@@ -158,7 +158,7 @@ def c80details(solver_file,job_path):  # using data, fill the web page with info
 
 # JFNK gnu 2 proc
 	solver_file.write('<H4>New Run:</H4>')
-	procttl_ih2d, nonlist_ih2d,avg2_ih2d,out_flag_ih2d,ndihc2_name,ldihc2_name = VV_outprocess.jobprocess(job_path + '/ismip-hom-c/80km/data/ishom.c.80km.out','imhom2')
+	procttl_ih2d, nonlist_ih2d,avg2_ih2d,out_flag_ih2d,ndihc2_name,ldihc2_name = VV_outprocess.jobprocess(job_path + '/ismip-hom-c/80km/data/ishom.c.80km.out.2','imhom2')
 
 	solver_file.write("Number of Processors = " + str(procttl_ih2d[-1]) + "<BR>\n")
 	solver_file.write("Number of Nonlinear Iterations = ")
@@ -173,7 +173,7 @@ def c80details(solver_file,job_path):  # using data, fill the web page with info
 	solver_file.write('<BR> \n')
 
 	solver_file.write('<H4>Benchmark Run:</H4>')
-	procttl_ih2b, nonlist_ih2b,avg2_ih2b,out_flag_ih2b,ndihc2b_name,ldihc2b_name = VV_outprocess.jobprocess(job_path + '/ismip-hom-c/80km/bench/ishom.c.80km.out','imhom2b')
+	procttl_ih2b, nonlist_ih2b,avg2_ih2b,out_flag_ih2b,ndihc2b_name,ldihc2b_name = VV_outprocess.jobprocess(job_path + '/ismip-hom-c/80km/bench/ishom.c.80km.out.2','imhom2b')
 
 	solver_file.write("Number of Processors = " + str(procttl_ih2b[-1]) + "<BR>\n")
 	solver_file.write("Number of Nonlinear Iterations = ")
