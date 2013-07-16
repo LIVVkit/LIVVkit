@@ -1,0 +1,43 @@
+Information on how to run the python ice sheet post-processing software.
+KJE 1/2013
+
+This directory contains all the scripts and code to run the LIVV kit.
+The $machine.bash contains the inputs needed to run on a data processing style machine,
+currently their example scripts for Euclid and Carver (NERSC) (and Lens (OLCF) will be updated when 
+Titan comes on line to submit jobs)
+If you want to run elsewhere, these are the software packages and versions that worked on both machines:
+hdf5/1.8.6
+python/2.7            
+ncl/6.0.0  (at NERSC this is called, inexplicably, ncar/6.0.0)  
+nco/4.0.7
+netcdf/4.1.3
+
+Filepaths for the python script are defined in the bash shell script, and most are required.
+
+The command to run the python script along with all of the necessary/optional files is the 
+last line of the shell script. 
+All the python code is in the /bin directory 
+All the ncl code is in the /plots directory 
+
+All that should be needed to run the shell script:
+1. Have run all the simulation output, with the tests copied over to a mirror copy of
+the /seacism/tests/higher-order directory in your scratch space, with the 4 executables
+of simple_glide in the main higher-order directory
+(the 4 executables being those built by the mster build scripts in teh /cmake-scripts directory
+2. in the $machine.bash file in the /livv directory:
+	a. specify the path for all the scripts it calls: $SCRIPT_PATH
+	b. set the $HTML_PATH to post results (check permissions for you destination)
+	c. set config path and output path (if you want to run the optional 5km GIS)
+	d. type "bash $machine.bash" at the command line in the main directory.
+ 
+TODOs (feel free to add to this as needed)
+
+Major:
+*have the picard runs also post processed for solver and convergence details
+*plot the solver and convergence info most usefully for all relevant runs
+*parse data from trilinos_options.xml file as well as configure settings
+Minor:
+*have the input and output information from the benchmark runs set in the software rather than the user 
+specify (or at least have a default)
+*parse more detailed data from the output files about the solver and preconditioner
+n VV_outprocess
