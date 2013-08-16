@@ -23,13 +23,6 @@ begin
   thkvarbl  = VAR->thk(1,:,:)
   velvarbl  = VAR->velnorm(1,1,:,:)
 
-;  maxv1=max(thkstock(:,:));
-;  print(maxv1);
-;  printVarSummary(thkstock)
-;  maxv50=max(thkvarbl(:,:));
-;  print(maxv50);
-;  printVarSummary(thkvarbl);
-
   thkdiff = new((/280,150/),float);
   thkdiff = thkvarbl(:,:)-thkstock(:,:);
 

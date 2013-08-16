@@ -2,9 +2,9 @@ load "$NCARG_ROOT/lib/ncarg/nclscripts/csm/gsn_code.ncl"  ; Load the NCL file th
 load "$NCARG_ROOT/lib/ncarg/nclscripts/csm/gsn_csm.ncl"  ; Load the NCL file that contains the
 begin
 
-;  nfile = "/global/scratch/sd/evanskj/higher-order/livv/data/newton_gis5km.asc"
-;  lfile = "/global/scratch/sd/evanskj/higher-order/livv/data/fgmres_gis5km.asc"
-;  PNG   = "/global/scratch/sd/evanskj/higher-order/livv/plots/gis5km_iter"
+  nfile = "/tmp/work/ab3/higher-order/data/newton_gis5km.asc"
+  lfile = "/tmp/work/ab3/higher-order/livv/data/fgmres_gis5km.asc"
+  PNG   = "/global/scratch/sd/evanskj/higher-order/livv/plots/gis5km_iter"
 
   ndata = asciiread(nfile,(/50/),"integer"); replace 50 with -1 to have a variable end
   ldata = asciiread(lfile,(/50/),"integer"); replace 50 with -1 to have a variable end

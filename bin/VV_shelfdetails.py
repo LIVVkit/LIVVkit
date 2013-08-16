@@ -116,27 +116,58 @@ def circplot(plot_file,job_path,ncl_path,html_path):  # using data, fill the web
 
 	plot_file.write('<HTML>\n')
 	plot_file.write('<H3>Circular Shelf Plot Details:</H3>')
-        circ_plotfile=''+ ncl_path + '/circshelf.ncl'
-	stock='STOCK = addfile(\"'+ job_path + '/bench/circular-shelf/data/circular-shelf.gnu.JFNK.nc\", \"r\")'
-	VAR1  ='VAR1 = addfile(\"' + job_path + '/circular-shelf/data/circular-shelf.gnu.JFNK.nc\", \"r\")'
-	png  = 'PNG = "' + ncl_path + '/circular-shelf"'
-        plot_circ = "ncl '" + VAR1 + "' '" + stock + "' '" + png + "' " + circ_plotfile 
+
+# creating circular shelf velocity plot 
+        circvel_plotfile=''+ ncl_path + '/circshelfvel.ncl'
+	stockPIC='STOCKPIC = addfile(\"'+ job_path + '/bench/circular-shelf/data/circular-shelf.gnu.PIC.nc\", \"r\")'
+	stockJFNK='STOCKJFNK = addfile(\"'+ job_path + '/bench/circular-shelf/data/circular-shelf.gnu.JFNK.nc\", \"r\")'
+	VARPIC  ='VARPIC = addfile(\"' + job_path + '/circular-shelf/data/circular-shelf.gnu.PIC.nc\", \"r\")'
+	VARJFNK  ='VARJFNK = addfile(\"' + job_path + '/circular-shelf/data/circular-shelf.gnu.JFNK.nc\", \"r\")'
+	png  = 'PNG = "' + ncl_path + '/circshelfvel.png"'
+        plot_circvel = "ncl '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARPIC + "' '" + VARJFNK + "' '" + png + "' " + circvel_plotfile 
 
 #TODO create an iteration plot and have that also in the html file 
         try:
-                output = subprocess.call(plot_circ, shell=True)
+                output = subprocess.call(plot_circvel, shell=True)
         except:
-                print "error creating ncl circular shelf plot"
+                print "error creating ncl circular shelf velocity plot"
                 raise
 
-# transferring circ pic to www file
+# transferring circvel pic to www file
 
-        if (ncl_path + '/circular-shelf.png'):
-        	circpic = "mv -f " + ncl_path + "/circular-shelf.png" + " " + html_path + "/"
+        if (ncl_path + '/circshelfvel.png'):
+        	circvelpic = "mv -f " + ncl_path + "/circshelfvel.png" + " " + html_path + "/"
         	try:
-                	output = subprocess.call(circpic, shell=True)
+                	output = subprocess.call(circvelpic, shell=True)
         	except:
-                	print "error moving circular shelf png file to www directory"
+                	print "error moving circular velocity shelf png file to www directory"
+                        sys.exit(1)
+                	raise
+
+# creating circular shelf thickness plot 
+        circthk_plotfile=''+ ncl_path + '/circshelfthk.ncl'
+	stockPIC='STOCKPIC = addfile(\"'+ job_path + '/bench/circular-shelf/data/circular-shelf.gnu.PIC.nc\", \"r\")'
+	stockJFNK='STOCKJFNK = addfile(\"'+ job_path + '/bench/circular-shelf/data/circular-shelf.gnu.JFNK.nc\", \"r\")'
+	VARPIC  ='VARPIC = addfile(\"' + job_path + '/circular-shelf/data/circular-shelf.gnu.PIC.nc\", \"r\")'
+	VARJFNK  ='VARJFNK = addfile(\"' + job_path + '/circular-shelf/data/circular-shelf.gnu.JFNK.nc\", \"r\")'
+	png  = 'PNG = "' + ncl_path + '/circshelfthk.png"'
+        plot_circthk = "ncl '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARPIC + "' '" + VARJFNK + "' '" + png + "' " + circthk_plotfile
+
+#TODO create an iteration plot and have that also in the html file 
+        try:
+                output = subprocess.call(plot_circthk, shell=True)
+        except:
+                print "error creating ncl circular shelf thickness plot"
+                raise
+
+# transferring circthk pic to www file
+
+        if (ncl_path + '/circshelfthk.png'):
+        	circthkpic = "mv -f " + ncl_path + "/circshelfthk.png" + " " + html_path + "/"
+        	try:
+                	output = subprocess.call(circthkpic, shell=True)
+        	except:
+                	print "error moving circular thickness shelf png file to www directory"
                         sys.exit(1)
                 	raise
 
@@ -144,13 +175,14 @@ def circplot(plot_file,job_path,ncl_path,html_path):  # using data, fill the web
         plot_file.write('<TITLE>Circular Shelf </TITLE>\n')
         plot_file.write('<TABLE>\n')
         plot_file.write('<TR>\n')
-        plot_file.write('<H4>Difference from benchmark for a range of processor counts for a range of variables</H4>\n')
-        plot_file.write('<OBJECT data="circular-shelf.png" type="image/png" width="1100" height="800" hspace=10 align=left alt="Circular Shelf Plots PNG">\n')
+        plot_file.write('<H4>Difference from Benchmark for Velocity Norm and Thickness</H4>\n')
+        plot_file.write('<OBJECT data="circshelfvel.png" type="image/png" width="1100" height="800" hspace=10 align=left alt="Circular Shelf Plots PNG">\n')
+        plot_file.write('</OBJECT>\n')
+        plot_file.write('<OBJECT data="circshelfthk.png" type="image/png" width="1100" height="800" hspace=10 align=left alt="Circular Shelf Plots PNG">\n')
         plot_file.write('</OBJECT>\n')
         plot_file.write('<TR>\n')
         plot_file.write('<BR>\n')
         plot_file.write('</TABLE>\n')
-
 	plot_file.write('</HTML>\n')
 	plot_file.close()
 
@@ -162,26 +194,58 @@ def confplot(plot_file,job_path,ncl_path,html_path):  # using data, fill the web
 
         plot_file.write('<HTML>\n')
 	plot_file.write('<H3>Confined Shelf Plot Details:</H3>')
-	conf_plotfile=''+ ncl_path + '/confshelf.ncl'
-	stock='STOCK = addfile(\"'+ job_path + '/bench/confined-shelf/data/confined-shelf.gnu.JFNK.nc\", \"r\")'
-	VAR1  ='VAR1 = addfile(\"' + job_path + '/confined-shelf/data/confined-shelf.gnu.JFNK.nc\", \"r\")'
-	png  = 'PNG = "' + ncl_path + '/confined-shelf"'
-        plot_conf = "ncl '" + VAR1 + "' '" + stock + "' '" + png + "' " + conf_plotfile 
 
+# creating confined shelf velocity plot 
+        confvel_plotfile=''+ ncl_path + '/confshelfvel.ncl'
+	stockPIC='STOCKPIC = addfile(\"'+ job_path + '/bench/confined-shelf/data/confined-shelf.gnu.PIC.nc\", \"r\")'
+	stockJFNK='STOCKJFNK = addfile(\"'+ job_path + '/bench/confined-shelf/data/confined-shelf.gnu.JFNK.nc\", \"r\")'
+	VARPIC  ='VARPIC = addfile(\"' + job_path + '/confined-shelf/data/confined-shelf.gnu.PIC.nc\", \"r\")'
+	VARJFNK  ='VARJFNK = addfile(\"' + job_path + '/confined-shelf/data/confined-shelf.gnu.JFNK.nc\", \"r\")'
+	png  = 'PNG = "' + ncl_path + '/confshelfvel.png"'
+        plot_confvel = "ncl '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARPIC + "' '" + VARJFNK + "' '" + png + "' " + confvel_plotfile
+
+#TODO create an iteration plot and have that also in the html file 
         try:
-                output = subprocess.call(plot_conf, shell=True)
+                output = subprocess.call(plot_confvel, shell=True)
         except:
-                print "error creating ncl confined shelf plot"
+                print "error creating ncl confined shelf velocity plot"
                 raise
 
-# transferring conf pic to www file
+# transferring confvel pic to www file
 
-        if (ncl_path + '/confined-shelf.png'):
-        	confpic = "mv -f " + ncl_path + "/confined-shelf.png" + " " + html_path + "/"
+        if (ncl_path + '/confshelfvel.png'):
+        	confvelpic = "mv -f " + ncl_path + "/confshelfvel.png" + " " + html_path + "/"
         	try:
-                	output = subprocess.call(confpic, shell=True)
+                	output = subprocess.call(confvelpic, shell=True)
         	except:
-                	print "error moving confined shelf png file to www directory"
+                	print "error moving confined velocity shelf png file to www directory"
+                        sys.exit(1)
+                	raise
+
+# creating confined shelf thickness plot 
+        confthk_plotfile=''+ ncl_path + '/confshelfthk.ncl'
+	stockPIC='STOCKPIC = addfile(\"'+ job_path + '/bench/confined-shelf/data/confined-shelf.gnu.PIC.nc\", \"r\")'
+	stockJFNK='STOCKJFNK = addfile(\"'+ job_path + '/bench/confined-shelf/data/confined-shelf.gnu.JFNK.nc\", \"r\")'
+	VARPIC  ='VARPIC = addfile(\"' + job_path + '/confined-shelf/data/confined-shelf.gnu.PIC.nc\", \"r\")'
+	VARJFNK  ='VARJFNK = addfile(\"' + job_path + '/confined-shelf/data/confined-shelf.gnu.JFNK.nc\", \"r\")'
+	png  = 'PNG = "' + ncl_path + '/confshelfthk.png"'
+        plot_confthk = "ncl '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARPIC + "' '" + VARJFNK + "' '" + png + "' " + confthk_plotfile 
+
+#TODO create an iteration plot and have that also in the html file 
+        try:
+                output = subprocess.call(plot_confthk, shell=True)
+        except:
+                print "error creating ncl confined shelf thickness plot"
+                raise
+
+# transferring circthk pic to www file
+
+        if (ncl_path + '/confshelfthk.png'):
+        	confthkpic = "mv -f " + ncl_path + "/confshelfthk.png" + " " + html_path + "/"
+        	try:
+                	output = subprocess.call(confthkpic, shell=True)
+        	except:
+                	print "error moving confined thickness shelf png file to www directory"
                         sys.exit(1)
                 	raise
 
@@ -189,10 +253,12 @@ def confplot(plot_file,job_path,ncl_path,html_path):  # using data, fill the web
         plot_file.write('<TITLE>Confined Shelf </TITLE>\n')
         plot_file.write('<TABLE>\n')
         plot_file.write('<TR>\n')
-        plot_file.write('<H4>Difference from benchmark for a range of processor counts for a range of variables</H4>\n')
-        plot_file.write('<OBJECT data="confined-shelf.png" type="image/png" width="1100" height="800" hspace=10 align=left alt="Confined Shelf Plots PNG">\n')
+        plot_file.write('<H4>Difference from Benchmark for Velocity Norm and Thickness</H4>\n')
+        plot_file.write('<OBJECT data="confshelfvel.png" type="image/png" width="1100" height="800" hspace=10 align=left alt="Confined Shelf Plots PNG">\n')
         plot_file.write('</OBJECT>\n')
         plot_file.write('<TR>\n')
+        plot_file.write('<OBJECT data="confshelfthk.png" type="image/png" width="1100" height="800" hspace=10 align=left alt="Confined Shelf Plots PNG">\n')
+        plot_file.write('</OBJECT>\n')
         plot_file.write('<BR>\n')
         plot_file.write('</TABLE>\n')
 

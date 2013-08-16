@@ -61,7 +61,17 @@ def bit4bit(model_file_path,bench_file_path):
 
 def failcheck(job_path, path):
     failedt = 0
+    flag = 0
+    
     input = open(job_path + path, 'r')
+    
+    for line in input:
+            if 'FATAL' in line:
+                flag = 1
+    input.close()
+
+    input = open(job_path + path, 'r')
+
     while 1:
         line = input.readline()
         if line == '':
@@ -69,7 +79,7 @@ def failcheck(job_path, path):
         if line == "-- Final Status Test Results --\n":
             line = input.readline()
             for letter in line:
-                if letter == 'F':
+                if letter == 'F' or flag == 1:
                     return 1
                 else:
                     return 0
@@ -89,4 +99,6 @@ def emptycheck(checkpath):
                 if line.find('// (0 currently)') != -1:
                         noplot = 1
 
+        comline2 = 'rm temp.txt'
+        subprocess.call(comline2, shell = True)
         return noplot

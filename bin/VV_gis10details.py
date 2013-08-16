@@ -105,43 +105,77 @@ def gis10_plot(plot_file,job_path,ncl_path,html_path):  # using data, fill the w
         tmpath = job_path + '/gis_10km/data/gis_10km.seacism.nc'
         if VV_utilities.emptycheck(tmpath) == 0:
                 return
+        if noplot == 0:
 
-        plot_file.write('<HTML>\n')
-        plot_file.write('<H3>GIS 10km Plot Details:</H3>')
-        gis10km_plotfile=''+ ncl_path + '/gis10km.ncl'
-        stock='STOCK = addfile(\"'+ job_path + '/bench/gis_10km/data/gis_10km.seacism.nc\", \"r\")'
-        VAR  ='VAR = addfile(\"' + job_path + '/gis_10km/data/gis_10km.seacism.nc\", \"r\")'
-        png  = 'PNG = "' + ncl_path + '/gis10km"'
-        plot_gis10km = "ncl '" + VAR + "' '" + stock + "' '" + png + "' " + gis10km_plotfile
+            plot_file.write('<HTML>\n')
+            plot_file.write('<H3>GIS 10km Plot Details:</H3>')
+            
+# formulate gis10km velocity norm plot            
+            gis10kmvel_plotfile=''+ ncl_path + '/gis10kmvel.ncl'
+            stockcism='STOCKcism = addfile(\"'+ job_path + '/bench/gis_10km/data/gis_10km.seacism.nc\", \"r\")'
+            stockcism10='STOCKcism10 = addfile(\"'+ job_path + '/bench/gis_10km/data/gis_10km.seacism.10.nc\", \"r\")'
+            VARcism  ='VARcism = addfile(\"' + job_path + '/gis_10km/data/gis_10km.seacism.nc\", \"r\")'
+            VARcism10  ='VARcism10 = addfile(\"' + job_path + '/gis_10km/data/gis_10km.seacism.10.nc\", \"r\")'
+            png  = 'PNG = "' + ncl_path + '/gis10kmvel"'
+            plot_gis10kmvel = "ncl '" + stockcism + "'  '" + stockcism10 + "'  '" + VARcism + "'  '" + VARcism10 + "' '" + png + "' " + gis10kmvel_plotfile
 
-        try:
-                output = subprocess.call(plot_gis10km, shell=True)
-        except:
-                print "error creating ncl gis10km plot"
-                raise
+            try:
+                    output = subprocess.call(plot_gis10kmvel, shell=True)
+            except:
+                    print "error creating ncl gis10km velocity norm plot"
+                    raise
 
-# transferring conf pic to www file
+# transferring velocity pic to www file
 
-        if (ncl_path + '/gis10km.png'):
-                gispic = "mv -f " + ncl_path + "/gis10km.png" + " " + html_path + "/"
-                try:
-                        output = subprocess.call(gispic, shell=True)
-                except:
-                        print "error moving gis10km png file to www directory"
-                        sys.exit(1)
-                        raise
+            if (ncl_path + '/gis10kmvel.png'):
+                    gispicvel = "mv -f " + ncl_path + "/gis10kmvel.png" + " " + html_path + "/"
+                    try:
+                            output = subprocess.call(gispicvel, shell=True)
+                    except:
+                            print "error moving gis10km velocity png file to www directory"
+                            sys.exit(1)
+                            raise
 
-        plot_file.write('<HTML>\n')
-        plot_file.write('<TITLE>GIS 10km Test Case </TITLE>\n')
-        plot_file.write('<TABLE>\n')
-        plot_file.write('<TR>\n')
-        plot_file.write('<H4>Difference from benchmark for a range of processor counts for a range of variables</H4>\n')
-        plot_file.write('<OBJECT data="gis10km.png" type="image/png" width="1100" height="800" hspace=10 align=left alt="GIS 10km Plots PNG">\n')
-        plot_file.write('</OBJECT>\n')
-        plot_file.write('<TR>\n')
-        plot_file.write('<BR>\n')
-        plot_file.write('</TABLE>\n')
+# formulate gis10km thickness plot
+            gis10kmthk_plotfile=''+ ncl_path + '/gis10kmthk.ncl'
+            stockcism='STOCKcism = addfile(\"'+ job_path + '/bench/gis_10km/data/gis_10km.seacism.nc\", \"r\")'
+            stockcism10='STOCKcism10 = addfile(\"'+ job_path + '/bench/gis_10km/data/gis_10km.seacism.10.nc\", \"r\")'
+            stockcrop='STOCKcrop = addfile(\"'+ job_path + '/bench/gis_10km/data/gis_10km.051011.crop.nc\", \"r\")'
+            VARcism  ='VARcism = addfile(\"' + job_path + '/gis_10km/data/gis_10km.seacism.nc\", \"r\")'
+            VARcism10  ='VARcism10 = addfile(\"' + job_path + '/gis_10km/data/gis_10km.seacism.10.nc\", \"r\")'
+            VARcrop='VARcrop = addfile(\"'+ job_path + '/gis_10km/data/gis_10km.051011.crop.nc\", \"r\")'
+            png  = 'PNG = "' + ncl_path + '/gis10kmthk"'
+            plot_gis10kmthk = "ncl '" + stockcism + "'  '" + stockcism10 + "'  '" + stockcrop + "'  '" + VARcism + "'  '" + VARcism10 + "' '" + VARcrop + "'  '" + png + "' " + gis10kmthk_plotfile
 
-        plot_file.write('</HTML>\n')
-        plot_file.close()
+            try:
+                    output = subprocess.call(plot_gis10kmthk, shell=True)
+            except:
+                    print "error creating ncl gis10km thickness norm plot"
+                    raise
+
+# transferring thickness pic to www file
+
+            if (ncl_path + '/gis10kmthk.png'):
+                    gispicthk = "mv -f " + ncl_path + "/gis10kmthk.png" + " " + html_path + "/"
+                    try:
+                            output = subprocess.call(gispicthk, shell=True)
+                    except:
+                            print "error moving gis10km thickness png file to www directory"
+                            sys.exit(1)
+                            raise
+
+            plot_file.write('<HTML>\n')
+            plot_file.write('<TITLE>GIS 10km Test Case </TITLE>\n')
+            plot_file.write('<TABLE>\n')
+            plot_file.write('<TR>\n')
+            plot_file.write('<H4>Difference from benchmark for a range of processor counts for a range of variables</H4>\n')
+            plot_file.write('<OBJECT data="gis10kmvel.png" type="image/png" width="1100" height="800" hspace=10 align=left alt="GIS 10km Plots PNG">\n')
+            plot_file.write('</OBJECT>\n')
+            plot_file.write('<OBJECT data="gis10kmthk.png" type="image/png" width="1100" height="800" hspace=10 align=left alt="GIS 10km Plots PNG">\n')
+            plot_file.write('</OBJECT>\n')
+            plot_file.write('<TR>\n')
+            plot_file.write('<BR>\n')
+            plot_file.write('</TABLE>\n')
+            plot_file.write('</HTML>\n')
+            plot_file.close()
 
