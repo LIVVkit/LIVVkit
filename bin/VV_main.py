@@ -16,6 +16,8 @@ usage_string = "%prog [options]"
 parser = OptionParser(usage=usage_string)
 parser.add_option('-p', '--directory', action='store', type='string', dest='directory_path', \
                   metavar='PATH', help='path where this directory is located')
+parser.add_option('-b', '--script', action='store', type='string', dest='script_path', \
+                  metavar='PATH', help='path where the livv kit is located')
 parser.add_option('-j', '--html', action='store', type='string', dest='html_path', \
                   metavar='PATH', help='path where the html directory is located')
 parser.add_option('-l', '--link', action='store', type='string', dest='html_link', \
@@ -221,7 +223,7 @@ if options.test_suite:
                 circ_file,circ_case,circ_plot,circ_xml,conf_file,conf_case,conf_plot,conf_xml, \
                 ishoma80_file,ishoma80_case,ishoma80_plot,ishoma80_xml,ishomc80_file,ishomc80_case,ishomc80_plot,ishomc80_xml,\
                 gis10_file,gis10_case,gis10_plot,gis10_xml, \
-                reg_test,options.ncl_path,options.data_path,target_html)
+                reg_test,options.ncl_path,options.data_path,target_html,options.script_path)
 
 dictionary = VV_testsuite.bit_list(reg_test)
 
@@ -290,7 +292,7 @@ file.write('</BODY>\n')
 file.write('</HTML>\n')
 file.close()
 
-print "LIVV Completed. Go to file://" + options.html_path + "/GIS-main-diag.html to view results"
+print "LIVV Completed. Go to " + options.html_link + "/GIS-main-diag.html to view results"
 
 # plot production run output for comparison to the benchmark
 

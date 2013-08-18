@@ -108,7 +108,7 @@ def confdetails(solver_file,job_path):  # using data, fill the web page with inf
         
         return failedt
 
-def circplot(plot_file,job_path,ncl_path,html_path):  # using data, fill the web page with info
+def circplot(plot_file,job_path,ncl_path,html_path,script_path):  # using data, fill the web page with info
 
         tmpath = job_path + '/circular-shelf/data/circular-shelf.gnu.JFNK.nc'
         if VV_utilities.emptycheck(tmpath) == 0:
@@ -124,14 +124,26 @@ def circplot(plot_file,job_path,ncl_path,html_path):  # using data, fill the web
 	VARPIC  ='VARPIC = addfile(\"' + job_path + '/circular-shelf/data/circular-shelf.gnu.PIC.nc\", \"r\")'
 	VARJFNK  ='VARJFNK = addfile(\"' + job_path + '/circular-shelf/data/circular-shelf.gnu.JFNK.nc\", \"r\")'
 	png  = 'PNG = "' + ncl_path + '/circshelfvel.png"'
-        plot_circvel = "ncl '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARPIC + "' '" + VARJFNK + "' '" + png + "' " + circvel_plotfile 
+        plot_circvel = "ncl '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARPIC + "' '" + VARJFNK + "' '" + png + "' " + circvel_plotfile + " >& plot_details.out"
 
 #TODO create an iteration plot and have that also in the html file 
         try:
                 output = subprocess.call(plot_circvel, shell=True)
+                print "creating circular shelf velocity plots"
         except:
                 print "error creating ncl circular shelf velocity plot"
                 raise
+
+# delete old circvel pic in www file
+
+        if (html_path + '/circshelfvel.png'):
+                circvelmove = "rm -f " + html_path + '/circshelfvel.png'
+                try:
+                        output = subprocess.call(circvelmove, shell=True)
+                except:
+                        print "error removing old circular shelf velocity png file from www directory"
+                        sys.exit(1)
+                        raise
 
 # transferring circvel pic to www file
 
@@ -151,14 +163,26 @@ def circplot(plot_file,job_path,ncl_path,html_path):  # using data, fill the web
 	VARPIC  ='VARPIC = addfile(\"' + job_path + '/circular-shelf/data/circular-shelf.gnu.PIC.nc\", \"r\")'
 	VARJFNK  ='VARJFNK = addfile(\"' + job_path + '/circular-shelf/data/circular-shelf.gnu.JFNK.nc\", \"r\")'
 	png  = 'PNG = "' + ncl_path + '/circshelfthk.png"'
-        plot_circthk = "ncl '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARPIC + "' '" + VARJFNK + "' '" + png + "' " + circthk_plotfile
+        plot_circthk = "ncl '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARPIC + "' '" + VARJFNK + "' '" + png + "' " + circthk_plotfile + " >& plot_details.out"
 
 #TODO create an iteration plot and have that also in the html file 
         try:
                 output = subprocess.call(plot_circthk, shell=True)
+                print "creaing circular shelf thickness plots"
         except:
                 print "error creating ncl circular shelf thickness plot"
                 raise
+
+# delete old circthk pic in www file
+
+        if (html_path + '/circshelfthk.png'):
+                circthkmove = "rm -f " + html_path + '/circshelfthk.png'
+                try:
+                        output = subprocess.call(circthkmove, shell=True)
+                except:
+                        print "error removing old circular shelf thickness png file from www directory"
+                        sys.exit(1)
+                        raise
 
 # transferring circthk pic to www file
 
@@ -170,6 +194,16 @@ def circplot(plot_file,job_path,ncl_path,html_path):  # using data, fill the web
                 	print "error moving circular thickness shelf png file to www directory"
                         sys.exit(1)
                 	raise
+
+# remove plot_details.out
+#        if (script_path + '/plot_details.out'):
+#                cleantrash = "rm -f " + script_path + "/plot_details.out"
+#                try:
+#                        output = subprocess.call(cleantrash, shell=True)
+#                except:
+#                        print "error removing plot_details.out"
+#                        sys.exit(1)
+#                        raise
 
         plot_file.write('<HTML>\n')
         plot_file.write('<TITLE>Circular Shelf </TITLE>\n')
@@ -186,7 +220,7 @@ def circplot(plot_file,job_path,ncl_path,html_path):  # using data, fill the web
 	plot_file.write('</HTML>\n')
 	plot_file.close()
 
-def confplot(plot_file,job_path,ncl_path,html_path):  # using data, fill the web page with info
+def confplot(plot_file,job_path,ncl_path,html_path,script_path):  # using data, fill the web page with info
 
         tmpath = job_path + '/confined-shelf/data/confined-shelf.gnu.JFNK.nc'
         if VV_utilities.emptycheck(tmpath) == 0:
@@ -202,14 +236,26 @@ def confplot(plot_file,job_path,ncl_path,html_path):  # using data, fill the web
 	VARPIC  ='VARPIC = addfile(\"' + job_path + '/confined-shelf/data/confined-shelf.gnu.PIC.nc\", \"r\")'
 	VARJFNK  ='VARJFNK = addfile(\"' + job_path + '/confined-shelf/data/confined-shelf.gnu.JFNK.nc\", \"r\")'
 	png  = 'PNG = "' + ncl_path + '/confshelfvel.png"'
-        plot_confvel = "ncl '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARPIC + "' '" + VARJFNK + "' '" + png + "' " + confvel_plotfile
+        plot_confvel = "ncl '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARPIC + "' '" + VARJFNK + "' '" + png + "' " + confvel_plotfile + " >& plot_details.out"
 
 #TODO create an iteration plot and have that also in the html file 
         try:
                 output = subprocess.call(plot_confvel, shell=True)
+                print "creating confined shelf velocity plots"
         except:
                 print "error creating ncl confined shelf velocity plot"
                 raise
+
+# delete old confvel pic in www file
+
+        if (html_path + '/confshelfvel.png'):
+                confvelmove = "rm -f " + html_path + '/confshelfvel.png'
+                try:
+                        output = subprocess.call(confvelmove, shell=True)
+                except:
+                        print "error removing old confined shelf velocity png file from www directory"
+                        sys.exit(1)
+                        raise
 
 # transferring confvel pic to www file
 
@@ -229,14 +275,26 @@ def confplot(plot_file,job_path,ncl_path,html_path):  # using data, fill the web
 	VARPIC  ='VARPIC = addfile(\"' + job_path + '/confined-shelf/data/confined-shelf.gnu.PIC.nc\", \"r\")'
 	VARJFNK  ='VARJFNK = addfile(\"' + job_path + '/confined-shelf/data/confined-shelf.gnu.JFNK.nc\", \"r\")'
 	png  = 'PNG = "' + ncl_path + '/confshelfthk.png"'
-        plot_confthk = "ncl '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARPIC + "' '" + VARJFNK + "' '" + png + "' " + confthk_plotfile 
+        plot_confthk = "ncl '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARPIC + "' '" + VARJFNK + "' '" + png + "' " + confthk_plotfile + " >& plot_details.out"
 
 #TODO create an iteration plot and have that also in the html file 
         try:
                 output = subprocess.call(plot_confthk, shell=True)
+                print "creating confined shelf thickness plots"
         except:
                 print "error creating ncl confined shelf thickness plot"
                 raise
+
+# delete old confthk pic in www file
+
+        if (html_path + '/confshelfthk.png'):
+                confthkmove = "rm -f " + html_path + '/confshelfthk.png'
+                try:
+                        output = subprocess.call(confthkmove, shell=True)
+                except:
+                        print "error removing old confined shelf thickness png file from www directory"
+                        sys.exit(1)
+                        raise
 
 # transferring circthk pic to www file
 
@@ -248,6 +306,16 @@ def confplot(plot_file,job_path,ncl_path,html_path):  # using data, fill the web
                 	print "error moving confined thickness shelf png file to www directory"
                         sys.exit(1)
                 	raise
+
+# remove plot_details.out
+#        if (script_path + '/plot_details.out'):
+#                cleantrash = "rm -f " + script_path + "/plot_details.out"
+#                try:
+#                        output = subprocess.call(cleantrash, shell=True)
+#                except:
+#                        print "error removing plot_details.out"
+#                        sys.exit(1)
+#                        raise
 
         plot_file.write('<HTML>\n')
         plot_file.write('<TITLE>Confined Shelf </TITLE>\n')

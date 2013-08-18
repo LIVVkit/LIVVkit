@@ -185,7 +185,7 @@ def edetails(solver_file,job_path,ncl_path,data_path,target_html):  # using data
 
 	return failedt
 
-def dplot(plot_file,job_path,ncl_path,html_path):  # using data, fill the web page with info
+def dplot(plot_file,job_path,ncl_path,html_path,script_path):  # using data, fill the web page with info
 
 	plot_file.write('<HTML>\n')
 	plot_file.write('<H3>Diagnostic Dome 30 Plot Details:</H3>')
@@ -200,14 +200,26 @@ def dplot(plot_file,job_path,ncl_path,html_path):  # using data, fill the web pa
 	VAR4  ='VAR4 = addfile(\"' + job_path + '/dome30/diagnostic/data/dome.4.nc\", \"r\")'
 	png  = 'PNG = "' + ncl_path + '/dome30dvel"'
         plot_dome30dvel = "ncl '" + stockout + "'  '" + stock1 + "'  '" + stock4 + "'  '" + VARout + "'  '" + VAR1 + "' '" + VAR4 + \
-                           "' '" + png + "' " + dome30dvel_plotfile
+                           "' '" + png + "' " + dome30dvel_plotfile 
         try:
                 output = subprocess.call(plot_dome30dvel, shell=True)
+                print "creating diagnotic dome 30 velocity plots"
         except:
                 print "error creating ncl diagnostic dome30 velocity plots"
                 raise
 
-# transferring dome30 pic to www file
+# delete old dome30 pic in www file
+
+        if (html_path + '/dome30dvel.png'):
+            dome30dvelmove = "rm -f " + html_path + '/dome30dvel.png'
+            try:
+                    output = subprocess.call(dome30dvelmove, shell=True)
+            except:
+                    print "error removing old diagnostic dome30 velocity png file from www directory"
+                    sys.exit(1)
+                    raise
+
+# transferring new dome30 pic to www file
 
         if (ncl_path + '/dome30dvel.png'):
         	dome30dvelpic = "mv -f " + ncl_path + "/dome30dvel.png" + " " + html_path + "/"
@@ -228,12 +240,24 @@ def dplot(plot_file,job_path,ncl_path,html_path):  # using data, fill the web pa
 	VAR4  ='VAR4 = addfile(\"' + job_path + '/dome30/diagnostic/data/dome.4.nc\", \"r\")'
 	png  = 'PNG = "' + ncl_path + '/dome30dthk"'
         plot_dome30dthk = "ncl '" + stockout + "'  '" + stock1 + "'  '" + stock4 + "'  '" + VARout + "'  '" + VAR1 + "' '" + VAR4 + \
-                           "' '" + png + "' " + dome30dthk_plotfile
+                           "' '" + png + "' " + dome30dthk_plotfile 
         try:
                 output = subprocess.call(plot_dome30dthk, shell=True)
+                print "creating diagnostic dome30 thickness plots"
         except:
                 print "error creating ncl diagnostic dome30 thickness plots"
                 raise
+
+# delete old dome30 pic in www file
+
+        if (html_path + '/dome30dthk.png'):
+            dome30dthkmove = "rm -f " + html_path + '/dome30dthk.png'
+            try:
+                    output = subprocess.call(dome30dthkmove, shell=True)
+            except:
+                    print "error removing old diagnostic dome30 thickness png file from www directory"
+                    sys.exit(1)
+                    raise
 
 # transferring dome30 pic to www file
 
@@ -245,6 +269,16 @@ def dplot(plot_file,job_path,ncl_path,html_path):  # using data, fill the web pa
                 	print "error moving diagnostic dome30 thickness png file to www directory"
                         sys.exit(1)
                 	raise
+
+# remove plot_details.out
+#        if (script_path + '/plot_details.out'):
+#                cleantrash = "rm -f " + script_path + "/plot_details.out"
+#                try:
+#                        output = subprocess.call(cleantrash, shell=True)
+#                except:
+#                        print "error removing plot_details.out"
+#                        sys.exit(1)
+#                        raise
 
         plot_file.write('<HTML>\n')
         plot_file.write('<TITLE>Diagnostic Dome 30 </TITLE>\n')
@@ -261,7 +295,7 @@ def dplot(plot_file,job_path,ncl_path,html_path):  # using data, fill the web pa
 	plot_file.write('</HTML>\n')
 	plot_file.close()
 
-def eplot(plot_file,job_path,ncl_path,html_path):  # using data, fill the web page with info
+def eplot(plot_file,job_path,ncl_path,html_path,script_path):  # using data, fill the web page with info
 
 	plot_file.write('<HTML>\n')
 	plot_file.write('<H3>Evolving Dome 30 Plot Details:</H3>')
@@ -269,20 +303,34 @@ def eplot(plot_file,job_path,ncl_path,html_path):  # using data, fill the web pa
         
 # creating dome 30e velocity plot
         dome30evel_plotfile=''+ ncl_path + '/dome30evel.ncl'
-	stockout='STOCKout = addfile(\"'+ job_path + '/bench/dome30/evolving/data/dome.out.nc\", \"r\")'
+#	stockout='STOCKout = addfile(\"'+ job_path + '/bench/dome30/evolving/data/dome.out.nc\", \"r\")'
 	stock9='STOCK9 = addfile(\"'+ job_path + '/bench/dome30/evolving/data/dome.9.nc\", \"r\")'
 	stock15='STOCK15 = addfile(\"'+ job_path + '/bench/dome30/evolving/data/dome.15.nc\", \"r\")'
-	VARout='VARout = addfile(\"'+ job_path + '/dome30/evolving/data/dome.out.nc\", \"r\")'
+#	VARout='VARout = addfile(\"'+ job_path + '/dome30/evolving/data/dome.out.nc\", \"r\")'
 	VAR9  ='VAR9 = addfile(\"' + job_path + '/dome30/evolving/data/dome.9.nc\", \"r\")'
 	VAR15  ='VAR15 = addfile(\"' + job_path + '/dome30/evolving/data/dome.15.nc\", \"r\")'
 	png  = 'PNG = "' + ncl_path + '/dome30evel"'
-        plot_dome30evel = "ncl '" + stockout + "'  '" + stock9 + "'  '" + stock15 + "'  '" + VARout + "'  '" + VAR9 + "' '" + VAR15 + \
+#        plot_dome30evel = "ncl '" + stockout + "'  '" + stock9 + "'  '" + stock15 + "'  '" + VARout + "'  '" + VAR9 + "' '" + VAR15 + \
+#                           "' '" + png + "' " + dome30evel_plotfile + " >& plot_details.out" 
+        plot_dome30evel = "ncl '" + stock9 + "'  '" + stock15 + "'  '" + VAR9 + "' '" + VAR15 + \
                            "' '" + png + "' " + dome30evel_plotfile 
         try:
                 output = subprocess.call(plot_dome30evel, shell=True)
+                print "creating evolving dome30 velocity plots"
         except:
                 print "error creating ncl evolving dome30 velocity plots"
                 raise
+
+# delete old dome30 pic in www file
+
+        if (html_path + '/dome30evel.png'):
+            dome30evelmove = "rm -f " + html_path + '/dome30evel.png'
+            try:
+                    output = subprocess.call(dome30evelmove, shell=True)
+            except:
+                    print "error removing old evolving dome30 velocity png file from www directory"
+                    sys.exit(1)
+                    raise
 
 # transferring dome30 pic to www file
 
@@ -297,20 +345,34 @@ def eplot(plot_file,job_path,ncl_path,html_path):  # using data, fill the web pa
 
 # creating dome 30e thickness plot
         dome30ethk_plotfile=''+ ncl_path + '/dome30ethk.ncl'
-	stockout='STOCKout = addfile(\"'+ job_path + '/bench/dome30/evolving/data/dome.out.nc\", \"r\")'
+#	stockout='STOCKout = addfile(\"'+ job_path + '/bench/dome30/evolving/data/dome.out.nc\", \"r\")'
 	stock9='STOCK9 = addfile(\"'+ job_path + '/bench/dome30/evolving/data/dome.9.nc\", \"r\")'
 	stock15='STOCK15 = addfile(\"'+ job_path + '/bench/dome30/evolving/data/dome.15.nc\", \"r\")'
-	VARout='VARout = addfile(\"'+ job_path + '/dome30/evolving/data/dome.out.nc\", \"r\")'
+#	VARout='VARout = addfile(\"'+ job_path + '/dome30/evolving/data/dome.out.nc\", \"r\")'
 	VAR9  ='VAR9 = addfile(\"' + job_path + '/dome30/evolving/data/dome.9.nc\", \"r\")'
 	VAR15  ='VAR15 = addfile(\"' + job_path + '/dome30/evolving/data/dome.15.nc\", \"r\")'
 	png  = 'PNG = "' + ncl_path + '/dome30ethk"'
-        plot_dome30ethk = "ncl '" + stockout + "'  '" + stock9 + "'  '" + stock15 + "'  '" + VARout + "'  '" + VAR9 + "' '" + VAR15 + \
-                           "' '" + png + "' " + dome30ethk_plotfile 
+#        plot_dome30ethk = "ncl '" + stockout + "'  '" + stock9 + "'  '" + stock15 + "'  '" + VARout + "'  '" + VAR9 + "' '" + VAR15 + \
+#                           "' '" + png + "' " + dome30ethk_plotfile + " >& plot_details.out"
+        plot_dome30ethk = "ncl '" + stock9 + "'  '" + stock15 + "'  '" + VAR9 + "' '" + VAR15 + \
+                           "' '" + png + "' " + dome30ethk_plotfile
         try:
                 output = subprocess.call(plot_dome30ethk, shell=True)
+                print "creating evolving dome30 thickness plots"
         except:
                 print "error creating ncl evolving dome30 thickness plots"
                 raise
+
+# delete old dome30 pic in www file
+
+        if (html_path + '/dome30ethk.png'):
+            dome30ethkmove = "rm -f " + html_path + '/dome30ethk.png'
+            try:
+                    output = subprocess.call(dome30ethkmove, shell=True)
+            except:
+                    print "error removing old evolving dome30 thickness png file from www directory"
+                    sys.exit(1)
+                    raise
 
 # transferring dome30 pic to www file
 
@@ -322,6 +384,16 @@ def eplot(plot_file,job_path,ncl_path,html_path):  # using data, fill the web pa
                 	print "error moving evolving dome30 thickness png file to www directory"
                         sys.exit(1)
                 	raise
+
+# remove plot_details.out
+#        if (script_path + '/plot_details.out'):
+#                cleantrash = "rm -f " + script_path + "/plot_details.out"
+#                try:
+#                        output = subprocess.call(cleantrash, shell=True)
+#                except:
+#                        print "error removing plot_details.out"
+#                        sys.exit(1)
+#                        raise
 
         plot_file.write('<HTML>\n')
         plot_file.write('<TITLE>Evolving Dome 30 </TITLE>\n')

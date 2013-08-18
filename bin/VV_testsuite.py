@@ -25,7 +25,7 @@ def bit_list(reg_test):
     dictionary['diagnostic'] = flag
 #evolving dome30 case
     data_file_path = reg_test + '/dome30/evolving/data'
-    bench_file_path = reg_test + '/bench/dom30/evolving/data'
+    bench_file_path = reg_test + '/bench/dome30/evolving/data'
     flag = VV_checks.bit4bit(data_file_path,bench_file_path)
     dictionary['evolving'] = flag
 #circular shelf case
@@ -60,7 +60,7 @@ def web(descript_file,test_file, \
 	dome30d_file,dome30d_case,dome30d_plot,dome30d_xml,dome30e_file,dome30e_case,dome30e_plot,dome30e_xml, \
 	circ_file,circ_case,circ_plot,circ_xml,conf_file,conf_case,conf_plot,conf_xml, \
 	ishoma80_file,ishoma80_case,ishoma80_plot,ishoma80_xml,ishomc80_file,ishomc80_case,ishomc80_plot,ishomc80_xml, \
-	gis10_file,gis10_case,gis10_plot,gis10_xml,job_path,ncl_path,data_path,html_path):  
+	gis10_file,gis10_case,gis10_plot,gis10_xml,job_path,ncl_path,data_path,html_path,script_path):  
 
 # using data, fill the web page with info about the cases
 	test_file.write('<HTML>\n')
@@ -110,7 +110,7 @@ def web(descript_file,test_file, \
                 noplot1 = noplot
                 noplot = VV_checks.emptycheck(checkpath2)
                 if noplot1 != 1 and noplot != 1:
-                    VV_dome30details.dplot(dome30d_plot,job_path,ncl_path,html_path)
+                    VV_dome30details.dplot(dome30d_plot,job_path,ncl_path,html_path,script_path)
 
 # Time stamping
 	strrand = ''
@@ -159,7 +159,7 @@ def web(descript_file,test_file, \
                 noplot1 = noplot
                 noplot = VV_checks.emptycheck(checkpath2)
                 if noplot != 1 and noplot != 1:
-                    VV_dome30details.eplot(dome30e_plot,job_path,ncl_path,html_path)
+                    VV_dome30details.eplot(dome30e_plot,job_path,ncl_path,html_path,script_path)
 
 # Time stamping
 	mode = os.stat(job_path + '/dome30/evolving').st_mtime
@@ -204,7 +204,7 @@ def web(descript_file,test_file, \
                 checkpath = job_path + '/circular-shelf/data/circular-shelf.gnu.JFNK.nc'
                 noplot = VV_checks.emptycheck(checkpath)
                 if noplot != 1:
-                    VV_shelfdetails.circplot(circ_plot,job_path,ncl_path,html_path)
+                    VV_shelfdetails.circplot(circ_plot,job_path,ncl_path,html_path,script_path)
 
 # Time stamping
 	mode = os.stat(job_path + '/circular-shelf').st_mtime
@@ -247,7 +247,7 @@ def web(descript_file,test_file, \
                 checkpath = job_path + '/confined-shelf/data/confined-shelf.gnu.JFNK.nc'
                 noplot = VV_checks.emptycheck(checkpath)
                 if noplot != 1:
-                    VV_shelfdetails.confplot(conf_plot,job_path,ncl_path,html_path)
+                    VV_shelfdetails.confplot(conf_plot,job_path,ncl_path,html_path,script_path)
 
 # Time stamping
 	mode = os.stat(job_path + '/confined-shelf').st_mtime
@@ -290,7 +290,7 @@ def web(descript_file,test_file, \
                 checkpath = job_path + '/ismip-hom-a/80km/data/ishom.a.80km.JFNK.out.nc'
                 noplot = VV_checks.emptycheck(checkpath)
                 if noplot != 1:
-                    VV_ismip.a80plot(ishoma80_plot,job_path,ncl_path,html_path)
+                    VV_ismip.a80plot(ishoma80_plot,job_path,ncl_path,html_path,script_path)
 
 # Time stamping
 	mode = os.stat(job_path + '/ismip-hom-a/80km').st_mtime
@@ -333,7 +333,7 @@ def web(descript_file,test_file, \
                 checkpath = job_path + '/ismip-hom-c/80km/data/ishom.c.80km.JFNK.out.nc'
                 noplot = VV_checks.emptycheck(checkpath)
                 if noplot != 1:
-                    VV_ismip.c80plot(ishomc80_plot,job_path,ncl_path,html_path)
+                    VV_ismip.c80plot(ishomc80_plot,job_path,ncl_path,html_path,script_path)
 
 # Time stamping
 	mode = os.stat(job_path + '/ismip-hom-c/80km').st_mtime
@@ -376,7 +376,7 @@ def web(descript_file,test_file, \
                 checkpath = job_path + '/gis_10km/data/gis_10km.seacism.nc'
                 noplot = VV_checks.emptycheck(checkpath)
                 if noplot != 1:
-                    VV_gis10details.gis10_plot(gis10_plot,job_path,ncl_path,html_path)
+                    VV_gis10details.gis10_plot(gis10_plot,job_path,ncl_path,html_path,script_path)
 
 # Time stamping
 	mode = os.stat(job_path + '/gis_10km').st_mtime

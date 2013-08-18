@@ -250,7 +250,7 @@ def c80details(solver_file,job_path):  # using data, fill the web page with info
 
         return failedt
 
-def a80plot(plot_file,job_path,ncl_path,html_path):  # using data, fill the web page with info
+def a80plot(plot_file,job_path,ncl_path,html_path,script_path):  # using data, fill the web page with info
 
         noplot = 0    
 
@@ -272,14 +272,27 @@ def a80plot(plot_file,job_path,ncl_path,html_path):  # using data, fill the web 
             VARPIC  ='VARPIC = addfile(\"' + job_path + '/ismip-hom-a/80km/data/ishom.a.80km.PIC.out.nc\", \"r\")'
             VARJFNK  ='VARJFNK = addfile(\"' + job_path + '/ismip-hom-a/80km/data/ishom.a.80km.JFNK.out.nc\", \"r\")'
             png  = 'PNG = "' + ncl_path + '/ismipau"'
-            plot_ishomau = "ncl '" + stockout + "'  '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARout + "'  '" + VARPIC + "'  '" + VARJFNK +"'  '" + png + "' " + ishomau_plotfile
+            plot_ishomau = "ncl '" + stockout + "'  '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARout + "'  '" + VARPIC + "'  '" + VARJFNK +"'  '" + png + "' " + ishomau_plotfile + " >& plot_details.out"
+            
 
 #TODO create an iteration plot and have that also in the html file 
             try:
                     output = subprocess.call(plot_ishomau, shell=True)
+                    print "creating ismip hom a uvel plots"
             except:
-                    print "error creating ncl ismip hom au plots"
+                    print "error creating ncl ismip hom a uvel plots"
                     raise
+
+# delete old ismipa80 uvel pic in www file
+
+            if (html_path + '/ismipau.png'):
+                    ismipauvelmove = "rm -f " + html_path + '/ismipau.png'
+                    try:
+                            output = subprocess.call(ismipauvelmove, shell=True)
+                    except:
+                            print "error removing old ismip a uvel png file from www directory"
+                            sys.exit(1)
+                            raise
 
 # transferring ismipau pic to www file
 
@@ -301,14 +314,26 @@ def a80plot(plot_file,job_path,ncl_path,html_path):  # using data, fill the web 
             VARPIC  ='VARPIC = addfile(\"' + job_path + '/ismip-hom-a/80km/data/ishom.a.80km.PIC.out.nc\", \"r\")'
             VARJFNK  ='VARJFNK = addfile(\"' + job_path + '/ismip-hom-a/80km/data/ishom.a.80km.JFNK.out.nc\", \"r\")'
             png  = 'PNG = "' + ncl_path + '/ismipav"'
-            plot_ishomav = "ncl '" + stockout + "'  '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARout + "'  '" + VARPIC + "'  '" + VARJFNK +"'  '" + png + "' " + ishomav_plotfile
+            plot_ishomav = "ncl '" + stockout + "'  '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARout + "'  '" + VARPIC + "'  '" + VARJFNK +"'  '" + png + "' " + ishomav_plotfile + " >& plot_details.out"
 
 #TODO create an iteration plot and have that also in the html file 
             try:
                     output = subprocess.call(plot_ishomav, shell=True)
+                    print "creating ismip hom a vvel plots"
             except:
-                    print "error creating ncl ismip hom av plots"
+                    print "error creating ncl ismip hom a vvel plots"
                     raise
+
+# delete old ismipa80 vvel pic in www file
+
+            if (html_path + '/ismipav.png'):
+                    ismipavvelmove = "rm -f " + html_path + '/ismipav.png'
+                    try:
+                            output = subprocess.call(ismipavvelmove, shell=True)
+                    except:
+                            print "error removing old ismip a vvel png file from www directory"
+                            sys.exit(1)
+                            raise
 
 # transferring ismipav pic to www file
 
@@ -328,14 +353,26 @@ def a80plot(plot_file,job_path,ncl_path,html_path):  # using data, fill the web 
             VARPIC  ='VARPIC = addfile(\"' + job_path + '/ismip-hom-a/80km/data/ishom.a.80km.PIC.out.nc\", \"r\")'
             VARJFNK  ='VARJFNK = addfile(\"' + job_path + '/ismip-hom-a/80km/data/ishom.a.80km.JFNK.out.nc\", \"r\")'
             png  = 'PNG = "' + ncl_path + '/ismipavel"'
-            plot_ishomavel = "ncl '" + stockout + "'  '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARout + "'  '" + VARPIC + "'  '" + VARJFNK +"'  '" + png + "' " + ishomavel_plotfile
+            plot_ishomavel = "ncl '" + stockout + "'  '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARout + "'  '" + VARPIC + "'  '" + VARJFNK +"'  '" + png + "' " + ishomavel_plotfile + " >& plot_details.out"
 
 #TODO create an iteration plot and have that also in the html file 
             try:
                     output = subprocess.call(plot_ishomavel, shell=True)
+                    print "creating ismip hom a velocity norm plots"
             except:
-                    print "error creating ncl ismip hom a vel plots"
+                    print "error creating ncl ismip hom a vel norm plots"
                     raise
+
+# delete old ismipa80 velnorm pic in www file
+
+            if (html_path + '/ismipavel.png'):
+                    ismipavelmove = "rm -f " + html_path + '/ismipavel.png'
+                    try:
+                            output = subprocess.call(ismipavelmove, shell=True)
+                    except:
+                            print "error removing old ismip a vel norm png file from www directory"
+                            sys.exit(1)
+                            raise
 
 # transferring ismip a velocity norm pic to www file
 
@@ -355,14 +392,26 @@ def a80plot(plot_file,job_path,ncl_path,html_path):  # using data, fill the web 
             VARPIC  ='VARPIC = addfile(\"' + job_path + '/ismip-hom-a/80km/data/ishom.a.80km.PIC.out.nc\", \"r\")'
             VARJFNK  ='VARJFNK = addfile(\"' + job_path + '/ismip-hom-a/80km/data/ishom.a.80km.JFNK.out.nc\", \"r\")'
             png  = 'PNG = "' + ncl_path + '/ismipathk"'
-            plot_ishomathk = "ncl '" + stockout + "'  '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARout + "'  '" + VARPIC + "'  '" + VARJFNK +"'  '" + png + "' " + ishomathk_plotfile
+            plot_ishomathk = "ncl '" + stockout + "'  '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARout + "'  '" + VARPIC + "'  '" + VARJFNK +"'  '" + png + "' " + ishomathk_plotfile + " >& plot_details.out"
 
 #TODO create an iteration plot and have that also in the html file 
             try:
                     output = subprocess.call(plot_ishomathk, shell=True)
+                    print "creating ismip hom a thickness plots"
             except:
                     print "error creating ncl ismip hom a thickness plots"
                     raise
+
+# delete old ismipa80 thk pic in www file
+
+            if (html_path + '/ismipathk.png'):
+                    ismipathkmove = "rm -f " + html_path + '/ismipathk.png'
+                    try:
+                            output = subprocess.call(ismipathkmove, shell=True)
+                    except:
+                            print "error removing old ismip a thickness png file from www directory"
+                            sys.exit(1)
+                            raise
 
 # transferring ismip a thickness norm pic to www file
 
@@ -374,6 +423,16 @@ def a80plot(plot_file,job_path,ncl_path,html_path):  # using data, fill the web 
                             print "error moving ismip hom a thickness 80km png file to www directory"
                             sys.exit(1)
                             raise
+
+# remove plot_details.out
+#            if (script_path + '/plot_details.out'):
+#                    cleantrash = "rm -f " + script_path + "/plot_details.out"
+#                    try:
+#                            output = subprocess.call(cleantrash, shell=True)
+#                    except:
+#                            print "error removing plot_details.out"
+#                            sys.exit(1)
+#                            raise
 
         plot_file.write('<HTML>\n')
         plot_file.write('<TITLE>ISMIP HOM A 80km </TITLE>\n')
@@ -395,11 +454,14 @@ def a80plot(plot_file,job_path,ncl_path,html_path):  # using data, fill the web 
         plot_file.write('</HTML>\n')
         plot_file.close()
 
-def c80plot(plot_file,job_path,ncl_path,html_path):  # using data, fill the web page with info
+def c80plot(plot_file,job_path,ncl_path,html_path,script_path):  # using data, fill the web page with info
+
+        noplot = 0    
 
         tmpath = job_path + '/ismip-hom-c/80km/data/ishom.c.80km.JFNK.out.nc'
         if VV_utilities.emptycheck(tmpath) == 0:
-                return
+                noplot = 1
+     #           return
 
         if noplot == 0:
         
@@ -415,14 +477,26 @@ def c80plot(plot_file,job_path,ncl_path,html_path):  # using data, fill the web 
             VARPIC  ='VARPIC = addfile(\"' + job_path + '/ismip-hom-c/80km/data/ishom.c.80km.PIC.out.nc\", \"r\")'
             VARJFNK  ='VARJFNK = addfile(\"' + job_path + '/ismip-hom-c/80km/data/ishom.c.80km.JFNK.out.nc\", \"r\")'
             png  = 'PNG = "' + ncl_path + '/ismipcu"'
-            plot_ishomcu = "ncl '" + stockout + "'  '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARout + "'  '" + VARPIC + "'  '" + VARJFNK +"'  '" + png + "' " + ishomcu_plotfile
+            plot_ishomcu = "ncl '" + stockout + "'  '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARout + "'  '" + VARPIC + "'  '" + VARJFNK +"'  '" + png + "' " + ishomcu_plotfile + " >& plot_details.out"
 
 #TODO create an iteration plot and have that also in the html file 
             try:
                     output = subprocess.call(plot_ishomcu, shell=True)
+                    print "creating ismip hom c uvel plots"
             except:
-                    print "error creating ncl ismip hom cu plots"
+                    print "error creating ncl ismip hom c uvel plots"
                     raise
+
+# delete old ismipc80 uvel pic in www file
+
+            if (html_path + '/ismipcu.png'):
+                    ismipcuvelmove = "rm -f " + html_path + '/ismipcu.png'
+                    try:
+                            output = subprocess.call(ismipcuvelmove, shell=True)
+                    except:
+                            print "error removing old ismip c uvel png file from www directory"
+                            sys.exit(1)
+                            raise
 
 # transferring ismipcu pic to www file
 
@@ -444,14 +518,26 @@ def c80plot(plot_file,job_path,ncl_path,html_path):  # using data, fill the web 
             VARPIC  ='VARPIC = addfile(\"' + job_path + '/ismip-hom-c/80km/data/ishom.c.80km.PIC.out.nc\", \"r\")'
             VARJFNK  ='VARJFNK = addfile(\"' + job_path + '/ismip-hom-c/80km/data/ishom.c.80km.JFNK.out.nc\", \"r\")'
             png  = 'PNG = "' + ncl_path + '/ismipcv"'
-            plot_ishomcv = "ncl '" + stockout + "'  '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARout + "'  '" + VARPIC + "'  '" + VARJFNK +"'  '" + png + "' " + ishomcv_plotfile
+            plot_ishomcv = "ncl '" + stockout + "'  '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARout + "'  '" + VARPIC + "'  '" + VARJFNK +"'  '" + png + "' " + ishomcv_plotfile + " >& plot_details.out"
 
 #TODO create an iteration plot and have that also in the html file 
             try:
                     output = subprocess.call(plot_ishomcv, shell=True)
+                    print "creating ismip hom c vvel plots"
             except:
-                    print "error creating ncl ismip hom cv plots"
+                    print "error creating ncl ismip hom c vvel plots"
                     raise
+
+# delete old ismipc80 vvel pic in www file
+
+            if (html_path + '/ismipcv.png'):
+                    ismipcvvelmove = "rm -f " + html_path + '/ismipcv.png'
+                    try:
+                            output = subprocess.call(ismipcvvelmove, shell=True)
+                    except:
+                            print "error removing old ismip c vvel png file from www directory"
+                            sys.exit(1)
+                            raise
 
 # transferring ismipcv pic to www file
 
@@ -471,14 +557,26 @@ def c80plot(plot_file,job_path,ncl_path,html_path):  # using data, fill the web 
             VARPIC  ='VARPIC = addfile(\"' + job_path + '/ismip-hom-c/80km/data/ishom.c.80km.PIC.out.nc\", \"r\")'
             VARJFNK  ='VARJFNK = addfile(\"' + job_path + '/ismip-hom-c/80km/data/ishom.c.80km.JFNK.out.nc\", \"r\")'
             png  = 'PNG = "' + ncl_path + '/ismipcvel"'
-            plot_ishomcvel = "ncl '" + stockout + "'  '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARout + "'  '" + VARPIC + "'  '" + VARJFNK +"'  '" + png + "' " + ishomcvel_plotfile
+            plot_ishomcvel = "ncl '" + stockout + "'  '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARout + "'  '" + VARPIC + "'  '" + VARJFNK +"'  '" + png + "' " + ishomcvel_plotfile + " >& plot_details.out"
 
 #TODO create an iteration plot and have that also in the html file 
             try:
                     output = subprocess.call(plot_ishomcvel, shell=True)
+                    print "creating ismip hom c velocity norm plots"
             except:
-                    print "error creating ncl ismip hom c vel plots"
+                    print "error creating ncl ismip hom c vel norm plots"
                     raise
+
+# delete old ismipc80 vel norm pic in www file
+
+            if (html_path + '/ismipcvel.png'):
+                    ismipcvelmove = "rm -f " + html_path + '/ismipcvel.png'
+                    try:
+                            output = subprocess.call(ismipcvelmove, shell=True)
+                    except:
+                            print "error removing old ismip c vel norm png file from www directory"
+                            sys.exit(1)
+                            raise
 
 # transferring ismip c velocity norm pic to www file
 
@@ -498,14 +596,26 @@ def c80plot(plot_file,job_path,ncl_path,html_path):  # using data, fill the web 
             VARPIC  ='VARPIC = addfile(\"' + job_path + '/ismip-hom-c/80km/data/ishom.c.80km.PIC.out.nc\", \"r\")'
             VARJFNK  ='VARJFNK = addfile(\"' + job_path + '/ismip-hom-c/80km/data/ishom.c.80km.JFNK.out.nc\", \"r\")'
             png  = 'PNG = "' + ncl_path + '/ismipcthk"'
-            plot_ishomcthk = "ncl '" + stockout + "'  '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARout + "'  '" + VARPIC + "'  '" + VARJFNK +"'  '" + png + "' " + ishomcthk_plotfile
+            plot_ishomcthk = "ncl '" + stockout + "'  '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARout + "'  '" + VARPIC + "'  '" + VARJFNK +"'  '" + png + "' " + ishomcthk_plotfile + " >& plot_details.out"
 
 #TODO create an iteration plot and have that also in the html file 
             try:
                     output = subprocess.call(plot_ishomcthk, shell=True)
+                    print "creating ismip hom c thickness plots"
             except:
                     print "error creating ncl ismip hom c thickness plots"
                     raise
+
+# delete old ismipc80 thk pic in www file
+
+            if (html_path + '/ismipcthk.png'):
+                    ismipcthkmove = "rm -f " + html_path + '/ismipcthk.png'
+                    try:
+                            output = subprocess.call(ismipcthkmove, shell=True)
+                    except:
+                            print "error removing old ismip c thk png file from www directory"
+                            sys.exit(1)
+                            raise
 
 # transferring ismip c thickness norm pic to www file
 
@@ -516,6 +626,16 @@ def c80plot(plot_file,job_path,ncl_path,html_path):  # using data, fill the web 
                     except:
                             print "error moving ismip hom c thickness 80km png file to www directory"
                             sys.exit(1)
+
+# remove plot_details.out
+#            if (script_path + '/plot_details.out'):
+#                    cleantrash = "rm -f " + script_path + "/plot_details.out"
+#                    try:
+#                            output = subprocess.call(cleantrash, shell=True)
+#                    except:
+#                            print "error removing plot_details.out"
+#                            sys.exit(1)
+#                            raise
 
         plot_file.write('<HTML>\n')
         plot_file.write('<TITLE>ISMIP HOM C 80km </TITLE>\n')

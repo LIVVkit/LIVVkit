@@ -100,7 +100,7 @@ def details(solver_file,job_path,ncl_path,data_path,target_html):  # using data,
 
         return failedt
 
-def gis10_plot(plot_file,job_path,ncl_path,html_path):  # using data, fill the web page with info
+def gis10_plot(plot_file,job_path,ncl_path,html_path,script_path):  # using data, fill the web page with info
 
         tmpath = job_path + '/gis_10km/data/gis_10km.seacism.nc'
         if VV_utilities.emptycheck(tmpath) == 0:
@@ -117,13 +117,25 @@ def gis10_plot(plot_file,job_path,ncl_path,html_path):  # using data, fill the w
             VARcism  ='VARcism = addfile(\"' + job_path + '/gis_10km/data/gis_10km.seacism.nc\", \"r\")'
             VARcism10  ='VARcism10 = addfile(\"' + job_path + '/gis_10km/data/gis_10km.seacism.10.nc\", \"r\")'
             png  = 'PNG = "' + ncl_path + '/gis10kmvel"'
-            plot_gis10kmvel = "ncl '" + stockcism + "'  '" + stockcism10 + "'  '" + VARcism + "'  '" + VARcism10 + "' '" + png + "' " + gis10kmvel_plotfile
+            plot_gis10kmvel = "ncl '" + stockcism + "'  '" + stockcism10 + "'  '" + VARcism + "'  '" + VARcism10 + "' '" + png + "' " + gis10kmvel_plotfile + " >& plot_details.out"
 
             try:
                     output = subprocess.call(plot_gis10kmvel, shell=True)
+                    print "creating gis 10km velocity norm plot"
             except:
                     print "error creating ncl gis10km velocity norm plot"
                     raise
+
+# delete old gis10km vel pic in www file
+
+            if (html_path + '/gis10kmvel.png'):
+                    gis10velmove = "rm -f " + html_path + '/gis10kmvel.png'
+                    try:
+                            output = subprocess.call(gis10velmove, shell=True)
+                    except:
+                            print "error removing old gis10km velocity png file from www directory"
+                            sys.exit(1)
+                            raise
 
 # transferring velocity pic to www file
 
@@ -145,13 +157,25 @@ def gis10_plot(plot_file,job_path,ncl_path,html_path):  # using data, fill the w
             VARcism10  ='VARcism10 = addfile(\"' + job_path + '/gis_10km/data/gis_10km.seacism.10.nc\", \"r\")'
             VARcrop='VARcrop = addfile(\"'+ job_path + '/gis_10km/data/gis_10km.051011.crop.nc\", \"r\")'
             png  = 'PNG = "' + ncl_path + '/gis10kmthk"'
-            plot_gis10kmthk = "ncl '" + stockcism + "'  '" + stockcism10 + "'  '" + stockcrop + "'  '" + VARcism + "'  '" + VARcism10 + "' '" + VARcrop + "'  '" + png + "' " + gis10kmthk_plotfile
+            plot_gis10kmthk = "ncl '" + stockcism + "'  '" + stockcism10 + "'  '" + stockcrop + "'  '" + VARcism + "'  '" + VARcism10 + "' '" + VARcrop + "'  '" + png + "' " + gis10kmthk_plotfile + " >& plot_details.out"
 
             try:
                     output = subprocess.call(plot_gis10kmthk, shell=True)
+                    print "creating gis 10km thickness plot"
             except:
                     print "error creating ncl gis10km thickness norm plot"
                     raise
+
+# delete old gis10km thk pic in www file
+
+            if (html_path + '/gis10kmthk.png'):
+                    gis10thkmove = "rm -f " + html_path + '/gis10kmthk.png'
+                    try:
+                            output = subprocess.call(gis10thkmove, shell=True)
+                    except:
+                            print "error removing old gis10km thickness png file from www directory"
+                            sys.exit(1)
+                            raise
 
 # transferring thickness pic to www file
 
@@ -163,6 +187,16 @@ def gis10_plot(plot_file,job_path,ncl_path,html_path):  # using data, fill the w
                             print "error moving gis10km thickness png file to www directory"
                             sys.exit(1)
                             raise
+
+# remove plot_details.out
+#            if (script_path + '/plot_details.out'):
+#                    cleantrash = "rm -f " + script_path + "/plot_details.out"
+#                    try:
+#                            output = subprocess.call(cleantrash, shell=True)
+#                    except:                      
+#                            print "error removing plot_details.out"
+#                            sys.exit(1)
+#                            raise
 
             plot_file.write('<HTML>\n')
             plot_file.write('<TITLE>GIS 10km Test Case </TITLE>\n')

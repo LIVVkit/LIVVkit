@@ -39,7 +39,7 @@ if [ $RUN_GIS -eq 1 ]
 then
 #Production run and production benchmark information
 #directory of run
-  export GIS_FILEPATH="$TEST_FILEPATH/gis_5km_long"
+  export GIS_FILEPATH="$TEST_FILEPATH/prod_test"
 #configure file
   export GIS_CONFIG="$GIS_FILEPATH/gis_5km.config"
 #sets the filepath to the benchmark netcdf file 
