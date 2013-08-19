@@ -160,11 +160,11 @@ def conf(configure_file,configure_path,bench_configure_path,ncl_path,html_path):
         configure_file.write('<BR\n>')
         configure_file.write("Options<BR>\n")
         configure_file.write("------------------------<BR>\n")
-        if datadome['options']['dycore']:
-                if datadome['options']['dycore'] == databench['options']['dycore']:
-                        configure_file.write('dycore = ' + datadome['options']['dycore'] + "<BR>\n")
-                else:
-                        configure_file.write('<FONT COLOR="red">dycore = ' + datadome['options']['dycore'] + ' different than benchmark value:  ' + databench['options']['dycore'] + '</FONT><BR>\n')
+#        if datadome['options']['dycore']:
+#                if datadome['options']['dycore'] == databench['options']['dycore']:
+#                        configure_file.write('dycore = ' + datadome['options']['dycore'] + "<BR>\n")
+#                else:
+#                        configure_file.write('<FONT COLOR="red">dycore = ' + datadome['options']['dycore'] + ' different than benchmark value:  ' + databench['options']['dycore'] + '</FONT><BR>\n')
         if datadome['options']['flow_law']:
                 if datadome['options']['flow_law'] == databench['options']['flow_law']:
                         configure_file.write('flow_law = ' + datadome['options']['flow_law'] + "<BR>\n")
