@@ -25,7 +25,7 @@ export SCRIPT_PATH="$TEST_FILEPATH/livv"
 
 #specify location where the html files will be sent so they are viewable on the web
 export HTML_PATH="/Users/$USER/mac_run/www"
-#export HTML_LINK="http://users.nccs.gov/~$USER"
+export HTML_LINK="file://$HTML_PATH"
 
 # flags to run the test suite versus production analysis
 #TODO pass these to analysis code and only present the ones asked for
@@ -87,10 +87,10 @@ export DATA_PATH="$SCRIPT_PATH/data"
 #NOTE: not all settings are required to run the python script, type "python VV_main -h" in the command line for a full list of options
 #TODO include options if RUN_ANT is turned on, right now only have settings for GIS
 if (($RUN_GIS == 1)); then
-		python $PY_PATH/VV_main.py -d "$PY_PATH" -j "$HTML_PATH" -k "$NCL_PATH" -c "$GIS_CONFIG_FILE" -o "$GIS_OUTPUT_FILE" -s "$GIS_BENCH_NETCDF_FILE" -n "$GIS_VAR_NETCDF_FILE" -t "$TEST_FILEPATH" -i "$NOW" -m "$COMMENT" -u "$USERNAME" -g "$GIS_FILEPATH"  #-a "$DATA_PATH"
+		python $PY_PATH/VV_main.py -d "$PY_PATH" -j "$HTML_PATH" -l "$HTML_LINK" -k "$NCL_PATH" -c "$GIS_CONFIG_FILE" -o "$GIS_OUTPUT_FILE" -s "$GIS_BENCH_NETCDF_FILE" -n "$GIS_VAR_NETCDF_FILE" -t "$TEST_FILEPATH" -i "$NOW" -m "$COMMENT" -u "$USERNAME" -g "$GIS_FILEPATH"  #-a "$DATA_PATH"
 else
 
-		python $PY_PATH/VV_main.py -d "$PY_PATH" -j "$HTML_PATH" -k "$NCL_PATH" -t "$TEST_FILEPATH" -i "$NOW" -m "$COMMENT" -u "$USERNAME"
+		python $PY_PATH/VV_main.py -d "$PY_PATH" -j "$HTML_PATH" -l "$HTML_LINK" -k "$NCL_PATH" -t "$TEST_FILEPATH" -i "$NOW" -m "$COMMENT" -u "$USERNAME"
 fi
 
 chmod 744 $HTML_PATH/*
