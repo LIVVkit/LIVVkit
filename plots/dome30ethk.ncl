@@ -40,14 +40,18 @@ begin
   thkdiff15    = thkvarbl15(:,:)-thkstock15(:,:);
 
 ;  tsout = thkstockout@scale_factor * thkstockout
-  ts9   = thkstock9@scale_factor * thkstock9
+  ts9   = thkstock9@scale_factor  * thkstock9
   ts15  = thkstock15@scale_factor * thkstock15
+  tv9   = thkstock9@scale_factor  * thkvarbl9
+  tv15  = thkstock15@scale_factor * thkvarbl15
 ;  tdout = thkstockout@scale_factor * thkdiffout
-  td9   = thkstock9@scale_factor * thkdiff9
-  td15= thkstock15@scale_factor * thkdiff15
+  td9   = thkstock9@scale_factor  * thkdiff9
+  td15= thkstock15@scale_factor   * thkdiff15
 ;  tsout@long_name  = "Scaled Benchmark"
   ts9@long_name    = "Scaled Benchmark"
   ts15@long_name   = "Scaled Benchmark"
+  tv9@long_name    = "Scaled Current Run"
+  tv15@long_name   = "Scaled Current Run"
 ;  tdout@long_name  = "Scaled Difference out"
   td9@long_name    = "Scaled Difference 9 proc"
   td15@long_name   = "Scaled Difference 15 proc"
@@ -59,8 +63,8 @@ begin
   wks = gsn_open_wks("png",PNG)            ; open a png file
   gsn_define_colormap(wks,"wgne15")        ; choose a colormap  
 
-  plotthk  = new(2,graphic)
-  plotthk2 = new(2,graphic)
+  plotthk  = new(3,graphic)
+  plotthk2 = new(3,graphic)
 ;  plotthk3 = new(2,graphic)
 
   res                     = True          ; plot mods desired
@@ -74,10 +78,12 @@ begin
 ;  res@gsnMaximize         = True          ; make as large as possible
 
   plotthk(0) = gsn_contour(wks,ts9,res) 
-  plotthk(1) = gsn_contour(wks,td9,res) 
+  plotthk(1) = gsn_contour(wks,tv9,res) 
+  plotthk(2) = gsn_contour(wks,td9,res) 
 
   plotthk2(0) = gsn_contour(wks,ts15,res) 
-  plotthk2(1) = gsn_contour(wks,td15,res) 
+  plotthk2(1) = gsn_contour(wks,tv15,res) 
+  plotthk2(2) = gsn_contour(wks,td15,res) 
 
 ;  plotthk3(0) = gsn_contour(wks,tsout,res)
 ;  plotthk3(1) = gsn_contour(wks,tdout,res)
@@ -89,17 +95,19 @@ begin
   resthk = True                             ; panel resources
   resthk@gsnFrame = False                 
   resthk@gsnPanelTop = 1.00                 
-  resthk@gsnPanelBottom = 0.66                 
+  resthk@gsnPanelBottom = 0.58                 
   resthk@gsnMaximize = True                 ; make as large as possible
   resthk@txString    = "Thickness"   ; title string (make blank to remove)
-  resthk@gsnPanelFigureStrings = (/"bench)","9)"/)   ; add strings to panel
+  resthk@gsnPanelFigureStrings = (/"bench)", "current)", "9)"/)   ; add strings to panel
 
   resthk2 = True
   resthk2@gsnFrame = False
-  resthk2@gsnPanelTop = 0.64                 
-  resthk2@gsnPanelBottom = 0.36                 
+  resthk2@gsnPanelTop = 0.57                 
+  resthk2@gsnPanelBottom = 0.04                 
   resthk2@txString   = ""
-  resthk2@gsnPanelFigureStrings = (/"bench)","15)"/)   ; add strings to panel
+  resthk2@gsnPanelFigureStrings = (/"bench)", "current)", "15)"/)   ; add strings to panel
+  resthk2@gsnPanelLabelBar = True		; make a common contour bar
+  resthk2@lbLabelAngleF = 45			; angle of contour bar labels
   
 ;  resthk3 = True
 ;  resthk3@gsnFrame = False
@@ -111,8 +119,8 @@ begin
 ;  resthk3@lbLabelAngleF = 45			; angle of contour bar labels
 
 
-  gsn_panel(wks,plotthk,(/1,2/),resthk)                  
-  gsn_panel(wks,plotthk2,(/1,2/),resthk2)
+  gsn_panel(wks,plotthk,(/1,3/),resthk)                  
+  gsn_panel(wks,plotthk2,(/1,3/),resthk2)
 ;  gsn_panel(wks,plotthk3,(/1,3/),resthk3)
   frame(wks)
 

@@ -31,14 +31,18 @@ begin
   thkdiffJFNK    = new((/41,41/),float);
   thkdiffJFNK    = thkvarblJFNK(:,:)-thkstockJFNK(:,:);
 
-  tsPIC   = thkstockPIC@scale_factor * thkstockPIC
-  tdPIC   = thkstockPIC@scale_factor * thkdiffPIC
+  tsPIC   = thkstockPIC@scale_factor  * thkstockPIC
   tsJFNK  = thkstockJFNK@scale_factor * thkstockJFNK
+  tvPIC   = thkstockPIC@scale_factor  * thkvarblPIC
+  tvJFNK  = thkstockJFNK@scale_factor * thkvarblJFNK
+  tdPIC   = thkstockPIC@scale_factor  * thkdiffPIC
   tdJFNK  = thkstockJFNK@scale_factor * thkdiffJFNK
   tsPIC@long_name  = "Scaled Benchmark"
-  tdPIC@long_name  = "Scaled Difference PIC"
   tsJFNK@long_name = "Scaled Benchmark"
-  tdJFNK@long_name = "Scaled Difference JFNK"
+  tvPIC@long_name  = "Scaled Current Run"
+  tvJFNK@long_name = "Scaled Current Run"
+  tdPIC@long_name  = "Difference PIC"
+  tdJFNK@long_name = "Difference JFNK"
 
 ;************************************************
 ; create plots
@@ -47,8 +51,8 @@ begin
   wks = gsn_open_wks("png",PNG)            ; open a png file
   gsn_define_colormap(wks,"wgne15")        ; choose a colormap
 
-  plotthk = new(2,graphic)
-  plotthk2 = new(2,graphic)
+  plotthk = new(3,graphic)
+  plotthk2 = new(3,graphic)
 
   res                     = True          ; plot mods desired
   res@cnFillOn            = True          ; turn on color
@@ -61,10 +65,12 @@ begin
 ;  res@gsnMaximize         = True          ; make as large as possible
 
   plotthk(0) = gsn_contour(wks,tsPIC,res)
-  plotthk(1) = gsn_contour(wks,tdPIC,res)
+  plotthk(1) = gsn_contour(wks,tvPIC,res)
+  plotthk(2) = gsn_contour(wks,tdPIC,res)
 
   plotthk2(0) = gsn_contour(wks,tsJFNK,res)
-  plotthk2(1) = gsn_contour(wks,tdJFNK,res)
+  plotthk2(1) = gsn_contour(wks,tvJFNK,res)
+  plotthk2(2) = gsn_contour(wks,tdJFNK,res)
 
 ;************************************************
 ; create panel
@@ -76,18 +82,18 @@ begin
   resthk@gsnPanelBottom = 0.58
   resthk@txString = ""
   resthk@txString    = "Thickness"    ; title string (make blank to remove)
-  resthk@gsnPanelFigureStrings = (/"bench)","PIC)"/)   ; add strings to panel
+  resthk@gsnPanelFigureStrings = (/"bench)", "current)", "PIC)"/)   ; add strings to panel
 
   resthk2 = True                             ; panel resources
   resthk2@gsnFrame = False
   resthk2@gsnPanelTop = 0.57
   resthk2@gsnPanelBottom = 0.04
   resthk2@txString = ""
-  resthk2@gsnPanelFigureStrings = (/"bench)","JFNK)"/)   ; add strings to panel
+  resthk2@gsnPanelFigureStrings = (/"bench)", "current)", "JFNK)"/)   ; add strings to panel
   resthk2@gsnPanelLabelBar = True            ; make a common contour bar
   resthk2@lbLabelAngleF = 45                 ; angle of contour bar labels
 
-  gsn_panel(wks,plotthk,(/1,2/),resthk)
+  gsn_panel(wks,plotthk,(/1,3/),resthk)
   gsn_panel(wks,plotthk2,(/1,3/),resthk2)
   frame(wks)
 

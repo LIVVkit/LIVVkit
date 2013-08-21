@@ -40,14 +40,18 @@ begin
   veldiff15    = velvarbl15(:,:)-velstock15(:,:);
 
 ;  vsout = velstockout@scale_factor * velstockout
-  vs9   = velstock9@scale_factor * velstock9
+  vs9   = velstock9@scale_factor  * velstock9
   vs15  = velstock15@scale_factor * velstock15
+  vv9   = velstock9@scale_factor  * velstock9
+  vv15  = velstock15@scale_factor * velstock15
 ;  vdout = velstockout@scale_factor * veldiffout
-  vd9   = velstock9@scale_factor * veldiff9
+  vd9   = velstock9@scale_factor  * veldiff9
   vd15  = velstock15@scale_factor * veldiff15
-;  vsout@long_name  = "Benchmark"
-  vs9@long_name    = "Benchmark"
-  vs15@long_name   = "Benchmark"
+;  vsout@long_name  = "Scaled Benchmark"
+  vs9@long_name    = "Scaled Benchmark"
+  vs15@long_name   = "Scaled Benchmark"
+  vv9@long_name    = "Scaled Current Run"
+  vv15@long_name   = "Scaled Current Run"
 ;  vdout@long_name  = "Diff out plot"
   vd9@long_name    = "Diff 9 proc"
   vd15@long_name   = "Diff 15 proc"
@@ -59,8 +63,8 @@ begin
   wks = gsn_open_wks("png",PNG)            ; open a png file
   gsn_define_colormap(wks,"wgne15")        ; choose a colormap  
 
-  plotvel  = new(2,graphic)
-  plotvel2 = new(2,graphic)
+  plotvel  = new(3,graphic)
+  plotvel2 = new(3,graphic)
 ;  plotvel3 = new(2,graphic)
 
   res                     = True          ; plot mods desired
@@ -74,10 +78,12 @@ begin
 ;  res@gsnMaximize         = True          ; make as large as possible
 
   plotvel(0) = gsn_contour(wks,vs9,res) 
-  plotvel(1) = gsn_contour(wks,vd9,res) 
+  plotvel(1) = gsn_contour(wks,vv9,res) 
+  plotvel(2) = gsn_contour(wks,vd9,res) 
 
   plotvel2(0) = gsn_contour(wks,vs15,res) 
-  plotvel2(1) = gsn_contour(wks,vd15,res) 
+  plotvel2(1) = gsn_contour(wks,vv15,res) 
+  plotvel2(2) = gsn_contour(wks,vd15,res) 
 
 ;  plotvel3(0) = gsn_contour(wks,vsout,res)
 ;  plotvel3(1) = gsn_contour(wks,vdout,res)
@@ -89,17 +95,19 @@ begin
   resvel = True                             ; panel resources
   resvel@gsnFrame = False                 
   resvel@gsnPanelTop = 1.0                 
-  resvel@gsnPanelBottom = 0.66                 
+  resvel@gsnPanelBottom = 0.58                 
   resvel@gsnMaximize = True                 ; make as large as possible
   resvel@txString = "Velocity Norm"   ; title string (make blank to remove)
-  resvel@gsnPanelFigureStrings = (/"bench)","9)"/)   ; add strings to panel
+  resvel@gsnPanelFigureStrings = (/"bench)", "current)", "9)"/)   ; add strings to panel
   
   resvel2 = True
   resvel2@gsnFrame = False 
-  resvel2@gsnPanelTop = 0.64
-  resvel2@gsnPanelBottom = 0.36
+  resvel2@gsnPanelTop = 0.57
+  resvel2@gsnPanelBottom = 0.04
   resvel2@txString = ""
-  resvel2@gsnPanelFigureStrings = (/"bench)","15)"/)   ; add strings to panel
+  resvel2@gsnPanelFigureStrings = (/"bench)", "current)", "15)"/)   ; add strings to panel
+  resvel2@gsnPanelLabelBar = True		; make a common contour bar
+  resvel2@lbLabelAngleF = 45			; angle of contour bar labels
   
 ;  resvel3 = True
 ;  resvel3@gsnFrame = False
@@ -111,8 +119,8 @@ begin
 ;  resvel3@lbLabelAngleF = 45			; angle of contour bar labels
   
 
-  gsn_panel(wks,plotvel,(/1,2/),resvel)                  
-  gsn_panel(wks,plotvel2,(/1,2/),resvel2)
+  gsn_panel(wks,plotvel,(/1,3/),resvel)                  
+  gsn_panel(wks,plotvel2,(/1,3/),resvel2)
 ;  gsn_panel(wks,plotvel3,(/1,3/),resvel3)
   frame(wks)
 
