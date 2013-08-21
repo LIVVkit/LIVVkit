@@ -40,14 +40,20 @@ begin
   thkdiff4     = thkvarbl4(:,:)-thkstock4(:,:);
 
   tsout = thkstockout@scale_factor * thkstockout
-  ts1   = thkstock1@scale_factor * thkstock1
-  ts4   = thkstock4@scale_factor * thkstock4
+  ts1   = thkstock1@scale_factor   * thkstock1
+  ts4   = thkstock4@scale_factor   * thkstock4
+  tvout = thkstockout@scale_factor * thkvarblout
+  tv1   = thkstock1@scale_factor   * thkvarbl1
+  tv4   = thkstock4@scale_factor   * thkvarbl4
   tdout = thkstockout@scale_factor * thkdiffout
-  td1   = thkstock1@scale_factor * thkdiff1
-  td4   = thkstock4@scale_factor * thkdiff4
+  td1   = thkstock1@scale_factor   * thkdiff1
+  td4   = thkstock4@scale_factor   * thkdiff4
   tsout@long_name  = "Scaled Benchmark"
   ts1@long_name    = "Scaled Benchmark"
   ts4@long_name    = "Scaled Benchmark"
+  tvout@long_name  = "Scaled Current Run"
+  tv1@long_name    = "Scaled Current Run"
+  tv4@long_name    = "Scaled Current Run"
   tdout@long_name  = "Scaled Difference out"
   td1@long_name    = "Scaled Difference 1 proc"
   td4@long_name    = "Scaled Difference 4 proc"
@@ -59,9 +65,9 @@ begin
   wks = gsn_open_wks("png",PNG)            ; open a png file
   gsn_define_colormap(wks,"wgne15")        ; choose a colormap  
 
-  plotthk  = new(2,graphic)
-  plotthk2 = new(2,graphic)
-  plotthk3 = new(2,graphic)
+  plotthk  = new(3,graphic)
+  plotthk2 = new(3,graphic)
+  plotthk3 = new(3,graphic)
 
   res                     = True          ; plot mods desired
   res@cnFillOn            = True          ; turn on color
@@ -74,13 +80,16 @@ begin
 ;  res@gsnMaximize         = True          ; make as large as possible
 
   plotthk(0) = gsn_contour(wks,ts1,res) 
-  plotthk(1) = gsn_contour(wks,td1,res) 
+  plotthk(1) = gsn_contour(wks,tv1,res) 
+  plotthk(2) = gsn_contour(wks,td1,res)
 
   plotthk2(0) = gsn_contour(wks,ts4,res) 
-  plotthk2(1) = gsn_contour(wks,td4,res) 
+  plotthk2(1) = gsn_contour(wks,tv4,res) 
+  plotthk2(2) = gsn_contour(wks,td4,res)
 
   plotthk3(0) = gsn_contour(wks,tsout,res)
-  plotthk3(1) = gsn_contour(wks,tdout,res)
+  plotthk3(1) = gsn_contour(wks,tvout,res)
+  plotthk3(2) = gsn_contour(wks,tdout,res)
 
 ;************************************************
 ; create panel
@@ -92,27 +101,27 @@ begin
   resthk@gsnPanelBottom = 0.66                 
   resthk@gsnMaximize = True                 ; make as large as possible
   resthk@txString    = "Thickness"   ; title string (make blank to remove)
-  resthk@gsnPanelFigureStrings = (/"bench)","1)"/)   ; add strings to panel
+  resthk@gsnPanelFigureStrings = (/"bench)", "current)", "1)"/)   ; add strings to panel
 
   resthk2 = True
   resthk2@gsnFrame = False
   resthk2@gsnPanelTop = 0.64                 
   resthk2@gsnPanelBottom = 0.36                 
   resthk2@txString   = ""
-  resthk2@gsnPanelFigureStrings = (/"bench)","4)"/)   ; add strings to panel
+  resthk2@gsnPanelFigureStrings = (/"bench)", "current)", "4)"/)   ; add strings to panel
   
   resthk3 = True
   resthk3@gsnFrame = False
   resthk3@gsnPanelTop = 0.34
   resthk3@gsnPanelBottom = 0.00
   resthk3@txString = ""
-  resthk3@gsnPanelFigureStrings = (/"bench)","out)"/)
+  resthk3@gsnPanelFigureStrings = (/"bench)", "current)", "out)"/)
   resthk3@gsnPanelLabelBar = True		; make a common contour bar
   resthk3@lbLabelAngleF = 45			; angle of contour bar labels
 
 
-  gsn_panel(wks,plotthk,(/1,2/),resthk)                  
-  gsn_panel(wks,plotthk2,(/1,2/),resthk2)
+  gsn_panel(wks,plotthk,(/1,3/),resthk)                  
+  gsn_panel(wks,plotthk2,(/1,3/),resthk2)
   gsn_panel(wks,plotthk3,(/1,3/),resthk3)
   frame(wks)
 
