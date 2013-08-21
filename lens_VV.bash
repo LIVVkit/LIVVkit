@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#KJE, ACB, NRM 8/2013 evanskj@ornl.gov
+#KJE, AJB, NRM 8/2013 evanskj@ornl.gov
 #This is the master script to set the parameters and paths to run the LIVV kit on lens
 #Efforts funded by DOE BER PISCEES SciDAC project
 #Currently it is designed specifically for the GLIDE dycore of the CISM model, because it is

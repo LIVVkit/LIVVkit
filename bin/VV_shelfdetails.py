@@ -196,14 +196,14 @@ def circplot(plot_file,job_path,ncl_path,html_path,script_path):  # using data, 
                 	raise
 
 # remove plot_details.out
-#        if (script_path + '/plot_details.out'):
-#                cleantrash = "rm -f " + script_path + "/plot_details.out"
-#                try:
-#                        output = subprocess.call(cleantrash, shell=True)
-#                except:
-#                        print "error removing plot_details.out"
-#                        sys.exit(1)
-#                        raise
+        if (script_path + '/plot_details.out'):
+                cleantrash = "rm -f " + script_path + "/plot_details.out"
+                try:
+                        output = subprocess.call(cleantrash, shell=True)
+                except:
+                        print "error removing plot_details.out"
+                        sys.exit(1)
+                        raise
 
         plot_file.write('<HTML>\n')
         plot_file.write('<TITLE>Circular Shelf </TITLE>\n')
@@ -308,14 +308,14 @@ def confplot(plot_file,job_path,ncl_path,html_path,script_path):  # using data, 
                 	raise
 
 # remove plot_details.out
-#        if (script_path + '/plot_details.out'):
-#                cleantrash = "rm -f " + script_path + "/plot_details.out"
-#                try:
-#                        output = subprocess.call(cleantrash, shell=True)
-#                except:
-#                        print "error removing plot_details.out"
-#                        sys.exit(1)
-#                        raise
+        if (script_path + '/plot_details.out'):
+                cleantrash = "rm -f " + script_path + "/plot_details.out"
+                try:
+                        output = subprocess.call(cleantrash, shell=True)
+                except:
+                        print "error removing plot_details.out"
+                        sys.exit(1)
+                        raise
 
         plot_file.write('<HTML>\n')
         plot_file.write('<TITLE>Confined Shelf </TITLE>\n')
