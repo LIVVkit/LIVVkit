@@ -203,7 +203,7 @@ def dplot(plot_file,job_path,ncl_path,html_path,script_path):  # using data, fil
                            "' '" + png + "' " + dome30dvel_plotfile 
         try:
                 output = subprocess.call(plot_dome30dvel, shell=True)
-                print "creating diagnotic dome 30 velocity plots"
+                print "creating diagnostic dome 30 velocity plots"
         except:
                 print "error creating ncl diagnostic dome30 velocity plots"
                 raise

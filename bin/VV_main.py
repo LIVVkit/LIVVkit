@@ -46,6 +46,20 @@ parser.add_option('-g', '--gis_prod', action='store_true', dest='gis_prod', \
                   help='include flag to run the GIS production analysis')
 parser.add_option('-x', '--xml', action='store', type='string', dest='xml_path',\
 		  metavar='FILE', help='path to xml file that python will parse through')
+parser.add_option('-D', '--diagnostic', action='store', type='int', dest='diagnostic_flag', \
+                  metavar='FLAG', help='flag to run dome30 diagnostic test')
+parser.add_option('-E', '--evolving', action='store', type='int', dest='evolving_flag', \
+                  metavar='FLAG', help='flag to run dome30 evolving test')
+parser.add_option('-I', '--circular-shelf', action='store', type='int', dest='circular_flag', \
+                  metavar='FLAG', help='flag to run circular shelf test')
+parser.add_option('-O', '--confined-shelf', action='store', type='int', dest='confined_flag', \
+                  metavar='FLAG', help='flag to run confined shelf test')
+parser.add_option('-A', '--ismip-hom-A', action='store', type='int', dest='ismip_hom_a_flag', \
+                  metavar='FLAG', help='flag to run ismip hom a test')
+parser.add_option('-C', '--ismip-hom-C', action='store', type='int', dest='ismip_hom_c_flag', \
+                  metavar='FLAG', help='flag to run ismip hom c test')
+parser.add_option('-G', '--gis10km', action='store', type='int', dest='gis_10km_flag', \
+                  metavar='FLAG', help='flag to run gis10km test')
 #parser.add_option('-a', '--ant_prod', action='store_true', dest='ant_prod', \
 #                  help='include flag to run the ANT production analysis')
 
@@ -223,7 +237,9 @@ if options.test_suite:
                 circ_file,circ_case,circ_plot,circ_xml,conf_file,conf_case,conf_plot,conf_xml, \
                 ishoma80_file,ishoma80_case,ishoma80_plot,ishoma80_xml,ishomc80_file,ishomc80_case,ishomc80_plot,ishomc80_xml,\
                 gis10_file,gis10_case,gis10_plot,gis10_xml, \
-                reg_test,options.ncl_path,options.data_path,target_html,options.script_path)
+                reg_test,options.ncl_path,options.data_path,target_html,options.script_path,\
+                options.diagnostic_flag,options.evolving_flag,options.circular_flag,options.confined_flag,\
+                options.ismip_hom_a_flag,options.ismip_hom_c_flag,options.gis_10km_flag)
 
 dictionary = VV_testsuite.bit_list(reg_test)
 

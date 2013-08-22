@@ -30,11 +30,19 @@ export SCRIPT_PATH="$TEST_FILEPATH/livv"
 export HTML_PATH="/ccs/home/$USER/www"
 export HTML_LINK="http://users.nccs.gov/~$USER"
 
-# flags to run the test suite versus production analysis
-#TODO pass these to analysis code and only present the ones asked for
-export RUN_TESTS=1
+# flags to select verification tests
+export RUN_DOME30_DIAGNOSTIC=1
+export RUN_DOME30_EVOLVING=0
+export RUN_CIRCULAR_SHELF=1
+export RUN_CONFINED_SHELF=1
+export RUN_ISMIP_HOM_A=1
+export RUN_ISMIP_HOM_C=0
+export RUN_GIS_10KM=0
+
+#flags to select production analysis
 export RUN_GIS=0
 export RUN_ANT=0
+
 
 #specify location of the production GIS run if RUN_GIS is turned
 if (($RUN_GIS == 1)); then
@@ -90,10 +98,10 @@ export DATA_PATH="$SCRIPT_PATH/data"
 #NOTE: not all settings are required to run the python script, type "python VV_main -h" in the command line for a full list of options
 #TODO include options if RUN_ANT is turned on, right now only have settings for GIS
 if (($RUN_GIS == 1)); then
-		python $PY_PATH/VV_main.py -d "$PY_PATH" -b "$SCRIPT_PATH" -j "$HTML_PATH" -l "$HTML_LINK" -k "$NCL_PATH" -c "$GIS_CONFIG_FILE" -o "$GIS_OUTPUT_FILE" -s "$GIS_BENCH_NETCDF_FILE" -n "$GIS_VAR_NETCDF_FILE" -t "$TEST_FILEPATH" -i "$NOW" -m "$COMMENT" -u "$USERNAME" -g "$GIS_FILEPATH"  #-a "$DATA_PATH"
+		python $PY_PATH/VV_main.py -d "$PY_PATH" -b "$SCRIPT_PATH" -j "$HTML_PATH" -l "$HTML_LINK" -k "$NCL_PATH" -c "$GIS_CONFIG_FILE" -o "$GIS_OUTPUT_FILE" -s "$GIS_BENCH_NETCDF_FILE" -n "$GIS_VAR_NETCDF_FILE" -t "$TEST_FILEPATH" -i "$NOW" -m "$COMMENT" -u "$USERNAME" -g "$GIS_FILEPATH" -D "$RUN_DOME30_DIAGNOSTIC" -E "$RUN_DOME30_EVOLVING" -I "$RUN_CIRCULAR_SHELF" -O "$RUN_CONFINED_SHELF" -A "$RUN_ISMIP_HOM_A" -C "$RUN_ISMIP_HOM_C" -G "$RUN_GIS_10KM"  #-a "$DATA_PATH"
 else
 
-		python $PY_PATH/VV_main.py -d "$PY_PATH" -b "$SCRIPT_PATH" -j "$HTML_PATH" -l "$HTML_LINK" -k "$NCL_PATH" -t "$TEST_FILEPATH" -i "$NOW" -m "$COMMENT" -u "$USERNAME"
+		python $PY_PATH/VV_main.py -d "$PY_PATH" -b "$SCRIPT_PATH" -j "$HTML_PATH" -l "$HTML_LINK" -k "$NCL_PATH" -t "$TEST_FILEPATH" -i "$NOW" -m "$COMMENT" -u "$USERNAME" -D "$RUN_DOME30_DIAGNOSTIC" -E "$RUN_DOME30_EVOLVING" -I "$RUN_CIRCULAR_SHELF" -O "$RUN_CONFINED_SHELF" -A "$RUN_ISMIP_HOM_A" -C "$RUN_ISMIP_HOM_C" -G "$RUN_GIS_10KM"
 fi
 
 chmod 744 $HTML_PATH/*

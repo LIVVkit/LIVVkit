@@ -252,187 +252,179 @@ def c80details(solver_file,job_path):  # using data, fill the web page with info
 
 def a80plot(plot_file,job_path,ncl_path,html_path,script_path):  # using data, fill the web page with info
 
-        noplot = 0    
-
-        tmpath = job_path + '/ismip-hom-a/80km/data/ishom.a.80km.JFNK.out.nc'
-        if VV_utilities.emptycheck(tmpath) == 0:
-                noplot = 1
-
-        if noplot == 0:
-
-            plot_file.write('<HTML>\n')
-            plot_file.write('<H3>ISMIP HOM A 80km Plot Details:</H3>')
+        plot_file.write('<HTML>\n')
+        plot_file.write('<H3>ISMIP HOM A 80km Plot Details:</H3>')
 
 # formulate ismip a 80 uvel plot
-            ishomau_plotfile=''+ ncl_path + '/ismipa80u.ncl'
-            stockout ='STOCKout = addfile(\"'+ job_path + '/bench/ismip-hom-a/80km/data/ishom.a.80km.out.nc\", \"r\")'
-            stockPIC ='STOCKPIC = addfile(\"'+ job_path + '/bench/ismip-hom-a/80km/data/ishom.a.80km.PIC.out.nc\", \"r\")'
-            stockJFNK ='STOCKJFNK = addfile(\"'+ job_path + '/bench/ismip-hom-a/80km/data/ishom.a.80km.JFNK.out.nc\", \"r\")'
-            VARout  ='VARout = addfile(\"' + job_path + '/ismip-hom-a/80km/data/ishom.a.80km.out.nc\", \"r\")'
-            VARPIC  ='VARPIC = addfile(\"' + job_path + '/ismip-hom-a/80km/data/ishom.a.80km.PIC.out.nc\", \"r\")'
-            VARJFNK  ='VARJFNK = addfile(\"' + job_path + '/ismip-hom-a/80km/data/ishom.a.80km.JFNK.out.nc\", \"r\")'
-            png  = 'PNG = "' + ncl_path + '/ismipau"'
-            plot_ishomau = "ncl '" + stockout + "'  '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARout + "'  '" + VARPIC + "'  '" + VARJFNK +"'  '" + png + "' " + ishomau_plotfile + " >& plot_details.out"
+        ishomau_plotfile=''+ ncl_path + '/ismipa80u.ncl'
+        stockout ='STOCKout = addfile(\"'+ job_path + '/bench/ismip-hom-a/80km/data/ishom.a.80km.out.nc\", \"r\")'
+        stockPIC ='STOCKPIC = addfile(\"'+ job_path + '/bench/ismip-hom-a/80km/data/ishom.a.80km.PIC.out.nc\", \"r\")'
+        stockJFNK ='STOCKJFNK = addfile(\"'+ job_path + '/bench/ismip-hom-a/80km/data/ishom.a.80km.JFNK.out.nc\", \"r\")'
+        VARout  ='VARout = addfile(\"' + job_path + '/ismip-hom-a/80km/data/ishom.a.80km.out.nc\", \"r\")'
+        VARPIC  ='VARPIC = addfile(\"' + job_path + '/ismip-hom-a/80km/data/ishom.a.80km.PIC.out.nc\", \"r\")'
+        VARJFNK  ='VARJFNK = addfile(\"' + job_path + '/ismip-hom-a/80km/data/ishom.a.80km.JFNK.out.nc\", \"r\")'
+        png  = 'PNG = "' + ncl_path + '/ismipau"'
+        plot_ishomau = "ncl '" + stockout + "'  '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARout + "'  '" + VARPIC + "'  '" + VARJFNK +"'  '" + png + "' " + ishomau_plotfile + " >& plot_details.out"
             
 
 #TODO create an iteration plot and have that also in the html file 
-            try:
-                    output = subprocess.call(plot_ishomau, shell=True)
-                    print "creating ismip hom a uvel plots"
-            except:
-                    print "error creating ncl ismip hom a uvel plots"
-                    raise
+        try:
+                output = subprocess.call(plot_ishomau, shell=True)
+                print "creating ismip hom a uvel plots"
+        except:
+                print "error creating ncl ismip hom a uvel plots"
+                raise
 
 # delete old ismipa80 uvel pic in www file
 
-            if (html_path + '/ismipau.png'):
-                    ismipauvelmove = "rm -f " + html_path + '/ismipau.png'
-                    try:
-                            output = subprocess.call(ismipauvelmove, shell=True)
-                    except:
-                            print "error removing old ismip a uvel png file from www directory"
-                            sys.exit(1)
-                            raise
+        if (html_path + '/ismipau.png'):
+                ismipauvelmove = "rm -f " + html_path + '/ismipau.png'
+                try:
+                        output = subprocess.call(ismipauvelmove, shell=True)
+                except:
+                        print "error removing old ismip a uvel png file from www directory"
+                        sys.exit(1)
+                        raise
 
 # transferring ismipau pic to www file
 
-            if (ncl_path + '/ismipau.png'): 
-                    ishomaupic = "mv -f " + ncl_path + "/ismipau.png" + " " + html_path + "/"
-                    try:
-                            output = subprocess.call(ishomaupic, shell=True)
-                    except:
-                            print "error moving ismip hom au 80km png file to www directory"
-                            sys.exit(1)
-                            raise
+        if (ncl_path + '/ismipau.png'): 
+                ishomaupic = "mv -f " + ncl_path + "/ismipau.png" + " " + html_path + "/"
+                try:
+                        output = subprocess.call(ishomaupic, shell=True)
+                except:
+                        print "error moving ismip hom au 80km png file to www directory"
+                        sys.exit(1)
+                        raise
 
 # formulate ismip a 80 vvel plot
-            ishomav_plotfile=''+ ncl_path + '/ismipa80v.ncl'
-            stockout ='STOCKout = addfile(\"'+ job_path + '/bench/ismip-hom-a/80km/data/ishom.a.80km.out.nc\", \"r\")'
-            stockPIC ='STOCKPIC = addfile(\"'+ job_path + '/bench/ismip-hom-a/80km/data/ishom.a.80km.PIC.out.nc\", \"r\")'
-            stockJFNK ='STOCKJFNK = addfile(\"'+ job_path + '/bench/ismip-hom-a/80km/data/ishom.a.80km.JFNK.out.nc\", \"r\")'
-            VARout  ='VARout = addfile(\"' + job_path + '/ismip-hom-a/80km/data/ishom.a.80km.out.nc\", \"r\")'
-            VARPIC  ='VARPIC = addfile(\"' + job_path + '/ismip-hom-a/80km/data/ishom.a.80km.PIC.out.nc\", \"r\")'
-            VARJFNK  ='VARJFNK = addfile(\"' + job_path + '/ismip-hom-a/80km/data/ishom.a.80km.JFNK.out.nc\", \"r\")'
-            png  = 'PNG = "' + ncl_path + '/ismipav"'
-            plot_ishomav = "ncl '" + stockout + "'  '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARout + "'  '" + VARPIC + "'  '" + VARJFNK +"'  '" + png + "' " + ishomav_plotfile + " >& plot_details.out"
+        ishomav_plotfile=''+ ncl_path + '/ismipa80v.ncl'
+        stockout ='STOCKout = addfile(\"'+ job_path + '/bench/ismip-hom-a/80km/data/ishom.a.80km.out.nc\", \"r\")'
+        stockPIC ='STOCKPIC = addfile(\"'+ job_path + '/bench/ismip-hom-a/80km/data/ishom.a.80km.PIC.out.nc\", \"r\")'
+        stockJFNK ='STOCKJFNK = addfile(\"'+ job_path + '/bench/ismip-hom-a/80km/data/ishom.a.80km.JFNK.out.nc\", \"r\")'
+        VARout  ='VARout = addfile(\"' + job_path + '/ismip-hom-a/80km/data/ishom.a.80km.out.nc\", \"r\")'
+        VARPIC  ='VARPIC = addfile(\"' + job_path + '/ismip-hom-a/80km/data/ishom.a.80km.PIC.out.nc\", \"r\")'
+        VARJFNK  ='VARJFNK = addfile(\"' + job_path + '/ismip-hom-a/80km/data/ishom.a.80km.JFNK.out.nc\", \"r\")'
+        png  = 'PNG = "' + ncl_path + '/ismipav"'
+        plot_ishomav = "ncl '" + stockout + "'  '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARout + "'  '" + VARPIC + "'  '" + VARJFNK +"'  '" + png + "' " + ishomav_plotfile + " >& plot_details.out"
 
 #TODO create an iteration plot and have that also in the html file 
-            try:
-                    output = subprocess.call(plot_ishomav, shell=True)
-                    print "creating ismip hom a vvel plots"
-            except:
-                    print "error creating ncl ismip hom a vvel plots"
-                    raise
+        try:
+                output = subprocess.call(plot_ishomav, shell=True)
+                print "creating ismip hom a vvel plots"
+        except:
+                print "error creating ncl ismip hom a vvel plots"
+                raise
 
 # delete old ismipa80 vvel pic in www file
 
-            if (html_path + '/ismipav.png'):
-                    ismipavvelmove = "rm -f " + html_path + '/ismipav.png'
-                    try:
-                            output = subprocess.call(ismipavvelmove, shell=True)
-                    except:
-                            print "error removing old ismip a vvel png file from www directory"
-                            sys.exit(1)
-                            raise
+        if (html_path + '/ismipav.png'):
+                ismipavvelmove = "rm -f " + html_path + '/ismipav.png'
+                try:
+                        output = subprocess.call(ismipavvelmove, shell=True)
+                except:
+                        print "error removing old ismip a vvel png file from www directory"
+                        sys.exit(1)
+                        raise
 
 # transferring ismipav pic to www file
 
-            if (ncl_path + '/ismipav.png'): 
-                    ishomavpic = "mv -f " + ncl_path + "/ismipav.png" + " " + html_path + "/"
-                    try:
-                            output = subprocess.call(ishomavpic, shell=True)
-                    except:
-                            print "error moving ismip hom av 80km png file to www directory"
-                            sys.exit(1)
-                            raise
+        if (ncl_path + '/ismipav.png'): 
+                ishomavpic = "mv -f " + ncl_path + "/ismipav.png" + " " + html_path + "/"
+                try:
+                        output = subprocess.call(ishomavpic, shell=True)
+                except:
+                        print "error moving ismip hom av 80km png file to www directory"
+                        sys.exit(1)
+                        raise
 
 # formulate ismip a 80 velocity norm plot
-            ishomavel_plotfile=''+ ncl_path + '/ismipa80vel.ncl'
-            stockPIC ='STOCKPIC = addfile(\"'+ job_path + '/bench/ismip-hom-a/80km/data/ishom.a.80km.PIC.out.nc\", \"r\")'
-            stockJFNK ='STOCKJFNK = addfile(\"'+ job_path + '/bench/ismip-hom-a/80km/data/ishom.a.80km.JFNK.out.nc\", \"r\")'
-            VARPIC  ='VARPIC = addfile(\"' + job_path + '/ismip-hom-a/80km/data/ishom.a.80km.PIC.out.nc\", \"r\")'
-            VARJFNK  ='VARJFNK = addfile(\"' + job_path + '/ismip-hom-a/80km/data/ishom.a.80km.JFNK.out.nc\", \"r\")'
-            png  = 'PNG = "' + ncl_path + '/ismipavel"'
-            plot_ishomavel = "ncl '" + stockout + "'  '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARout + "'  '" + VARPIC + "'  '" + VARJFNK +"'  '" + png + "' " + ishomavel_plotfile + " >& plot_details.out"
+        ishomavel_plotfile=''+ ncl_path + '/ismipa80vel.ncl'
+        stockPIC ='STOCKPIC = addfile(\"'+ job_path + '/bench/ismip-hom-a/80km/data/ishom.a.80km.PIC.out.nc\", \"r\")'
+        stockJFNK ='STOCKJFNK = addfile(\"'+ job_path + '/bench/ismip-hom-a/80km/data/ishom.a.80km.JFNK.out.nc\", \"r\")'
+        VARPIC  ='VARPIC = addfile(\"' + job_path + '/ismip-hom-a/80km/data/ishom.a.80km.PIC.out.nc\", \"r\")'
+        VARJFNK  ='VARJFNK = addfile(\"' + job_path + '/ismip-hom-a/80km/data/ishom.a.80km.JFNK.out.nc\", \"r\")'
+        png  = 'PNG = "' + ncl_path + '/ismipavel"'
+        plot_ishomavel = "ncl '" + stockout + "'  '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARout + "'  '" + VARPIC + "'  '" + VARJFNK +"'  '" + png + "' " + ishomavel_plotfile + " >& plot_details.out"
 
 #TODO create an iteration plot and have that also in the html file 
-            try:
-                    output = subprocess.call(plot_ishomavel, shell=True)
-                    print "creating ismip hom a velocity norm plots"
-            except:
-                    print "error creating ncl ismip hom a vel norm plots"
-                    raise
+        try:
+                output = subprocess.call(plot_ishomavel, shell=True)
+                print "creating ismip hom a velocity norm plots"
+        except:
+                print "error creating ncl ismip hom a vel norm plots"
+                raise
 
 # delete old ismipa80 velnorm pic in www file
 
-            if (html_path + '/ismipavel.png'):
-                    ismipavelmove = "rm -f " + html_path + '/ismipavel.png'
-                    try:
-                            output = subprocess.call(ismipavelmove, shell=True)
-                    except:
-                            print "error removing old ismip a vel norm png file from www directory"
-                            sys.exit(1)
-                            raise
+        if (html_path + '/ismipavel.png'):
+                ismipavelmove = "rm -f " + html_path + '/ismipavel.png'
+                try:
+                        output = subprocess.call(ismipavelmove, shell=True)
+                except:
+                        print "error removing old ismip a vel norm png file from www directory"
+                        sys.exit(1)
+                        raise
 
 # transferring ismip a velocity norm pic to www file
 
-            if (ncl_path + '/ismipavel.png'): 
-                    ishomavelpic = "mv -f " + ncl_path + "/ismipavel.png" + " " + html_path + "/"
-                    try:
-                            output = subprocess.call(ishomavelpic, shell=True)
-                    except:
-                            print "error moving ismip hom a velocity 80km png file to www directory"
-                            sys.exit(1)
-                            raise
+        if (ncl_path + '/ismipavel.png'): 
+                ishomavelpic = "mv -f " + ncl_path + "/ismipavel.png" + " " + html_path + "/"
+                try:
+                        output = subprocess.call(ishomavelpic, shell=True)
+                except:
+                        print "error moving ismip hom a velocity 80km png file to www directory"
+                        sys.exit(1)
+                        raise
 
 # formulate ismip a 80 thickness norm plot
-            ishomathk_plotfile=''+ ncl_path + '/ismipa80thk.ncl'
-            stockPIC ='STOCKPIC = addfile(\"'+ job_path + '/bench/ismip-hom-a/80km/data/ishom.a.80km.PIC.out.nc\", \"r\")'
-            stockJFNK ='STOCKJFNK = addfile(\"'+ job_path + '/bench/ismip-hom-a/80km/data/ishom.a.80km.JFNK.out.nc\", \"r\")'
-            VARPIC  ='VARPIC = addfile(\"' + job_path + '/ismip-hom-a/80km/data/ishom.a.80km.PIC.out.nc\", \"r\")'
-            VARJFNK  ='VARJFNK = addfile(\"' + job_path + '/ismip-hom-a/80km/data/ishom.a.80km.JFNK.out.nc\", \"r\")'
-            png  = 'PNG = "' + ncl_path + '/ismipathk"'
-            plot_ishomathk = "ncl '" + stockout + "'  '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARout + "'  '" + VARPIC + "'  '" + VARJFNK +"'  '" + png + "' " + ishomathk_plotfile + " >& plot_details.out"
+        ishomathk_plotfile=''+ ncl_path + '/ismipa80thk.ncl'
+        stockPIC ='STOCKPIC = addfile(\"'+ job_path + '/bench/ismip-hom-a/80km/data/ishom.a.80km.PIC.out.nc\", \"r\")'
+        stockJFNK ='STOCKJFNK = addfile(\"'+ job_path + '/bench/ismip-hom-a/80km/data/ishom.a.80km.JFNK.out.nc\", \"r\")'
+        VARPIC  ='VARPIC = addfile(\"' + job_path + '/ismip-hom-a/80km/data/ishom.a.80km.PIC.out.nc\", \"r\")'
+        VARJFNK  ='VARJFNK = addfile(\"' + job_path + '/ismip-hom-a/80km/data/ishom.a.80km.JFNK.out.nc\", \"r\")'
+        png  = 'PNG = "' + ncl_path + '/ismipathk"'
+        plot_ishomathk = "ncl '" + stockout + "'  '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARout + "'  '" + VARPIC + "'  '" + VARJFNK +"'  '" + png + "' " + ishomathk_plotfile + " >& plot_details.out"
 
 #TODO create an iteration plot and have that also in the html file 
-            try:
-                    output = subprocess.call(plot_ishomathk, shell=True)
-                    print "creating ismip hom a thickness plots"
-            except:
-                    print "error creating ncl ismip hom a thickness plots"
-                    raise
+        try:
+                output = subprocess.call(plot_ishomathk, shell=True)
+                print "creating ismip hom a thickness plots"
+        except:
+                print "error creating ncl ismip hom a thickness plots"
+                raise
 
 # delete old ismipa80 thk pic in www file
 
-            if (html_path + '/ismipathk.png'):
-                    ismipathkmove = "rm -f " + html_path + '/ismipathk.png'
-                    try:
-                            output = subprocess.call(ismipathkmove, shell=True)
-                    except:
-                            print "error removing old ismip a thickness png file from www directory"
-                            sys.exit(1)
-                            raise
+        if (html_path + '/ismipathk.png'):
+                ismipathkmove = "rm -f " + html_path + '/ismipathk.png'
+                try:
+                        output = subprocess.call(ismipathkmove, shell=True)
+                except:
+                        print "error removing old ismip a thickness png file from www directory"
+                        sys.exit(1)
+                        raise
 
 # transferring ismip a thickness norm pic to www file
 
-            if (ncl_path + '/ismipathk.png'): 
-                    ishomathkpic = "mv -f " + ncl_path + "/ismipathk.png" + " " + html_path + "/"
-                    try:
-                            output = subprocess.call(ishomathkpic, shell=True)
-                    except:
-                            print "error moving ismip hom a thickness 80km png file to www directory"
-                            sys.exit(1)
-                            raise
+        if (ncl_path + '/ismipathk.png'): 
+                ishomathkpic = "mv -f " + ncl_path + "/ismipathk.png" + " " + html_path + "/"
+                try:
+                        output = subprocess.call(ishomathkpic, shell=True)
+                except:
+                        print "error moving ismip hom a thickness 80km png file to www directory"
+                        sys.exit(1)
+                        raise
 
 # remove plot_details.out
-            if (script_path + '/plot_details.out'):
-                    cleantrash = "rm -f " + script_path + "/plot_details.out"
-                    try:
-                            output = subprocess.call(cleantrash, shell=True)
-                    except:
-                            print "error removing plot_details.out"
-                            sys.exit(1)
-                            raise
+        if (script_path + '/plot_details.out'):
+                cleantrash = "rm -f " + script_path + "/plot_details.out"
+                try:
+                        output = subprocess.call(cleantrash, shell=True)
+                except:
+                        print "error removing plot_details.out"
+                        sys.exit(1)
+                        raise
 
         plot_file.write('<HTML>\n')
         plot_file.write('<TITLE>ISMIP HOM A 80km </TITLE>\n')
@@ -456,186 +448,177 @@ def a80plot(plot_file,job_path,ncl_path,html_path,script_path):  # using data, f
 
 def c80plot(plot_file,job_path,ncl_path,html_path,script_path):  # using data, fill the web page with info
 
-        noplot = 0    
-
-        tmpath = job_path + '/ismip-hom-c/80km/data/ishom.c.80km.JFNK.out.nc'
-        if VV_utilities.emptycheck(tmpath) == 0:
-                noplot = 1
-     #           return
-
-        if noplot == 0:
-        
-            plot_file.write('<HTML>\n')
-            plot_file.write('<H3>ISMIP HOM C 80km Plot Details:</H3>')
+        plot_file.write('<HTML>\n')
+        plot_file.write('<H3>ISMIP HOM C 80km Plot Details:</H3>')
         
 # formulate ismip c 80 uvel plot
-            ishomcu_plotfile=''+ ncl_path + '/ismipc80u.ncl'
-            stockout ='STOCKout = addfile(\"'+ job_path + '/bench/ismip-hom-c/80km/data/ishom.c.80km.out.nc\", \"r\")'
-            stockPIC ='STOCKPIC = addfile(\"'+ job_path + '/bench/ismip-hom-c/80km/data/ishom.c.80km.PIC.out.nc\", \"r\")'
-            stockJFNK ='STOCKJFNK = addfile(\"'+ job_path + '/bench/ismip-hom-c/80km/data/ishom.c.80km.JFNK.out.nc\", \"r\")'
-            VARout  ='VARout = addfile(\"' + job_path + '/ismip-hom-c/80km/data/ishom.c.80km.out.nc\", \"r\")'
-            VARPIC  ='VARPIC = addfile(\"' + job_path + '/ismip-hom-c/80km/data/ishom.c.80km.PIC.out.nc\", \"r\")'
-            VARJFNK  ='VARJFNK = addfile(\"' + job_path + '/ismip-hom-c/80km/data/ishom.c.80km.JFNK.out.nc\", \"r\")'
-            png  = 'PNG = "' + ncl_path + '/ismipcu"'
-            plot_ishomcu = "ncl '" + stockout + "'  '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARout + "'  '" + VARPIC + "'  '" + VARJFNK +"'  '" + png + "' " + ishomcu_plotfile + " >& plot_details.out"
+        ishomcu_plotfile=''+ ncl_path + '/ismipc80u.ncl'
+        stockout ='STOCKout = addfile(\"'+ job_path + '/bench/ismip-hom-c/80km/data/ishom.c.80km.out.nc\", \"r\")'
+        stockPIC ='STOCKPIC = addfile(\"'+ job_path + '/bench/ismip-hom-c/80km/data/ishom.c.80km.PIC.out.nc\", \"r\")'
+        stockJFNK ='STOCKJFNK = addfile(\"'+ job_path + '/bench/ismip-hom-c/80km/data/ishom.c.80km.JFNK.out.nc\", \"r\")'
+        VARout  ='VARout = addfile(\"' + job_path + '/ismip-hom-c/80km/data/ishom.c.80km.out.nc\", \"r\")'
+        VARPIC  ='VARPIC = addfile(\"' + job_path + '/ismip-hom-c/80km/data/ishom.c.80km.PIC.out.nc\", \"r\")'
+        VARJFNK  ='VARJFNK = addfile(\"' + job_path + '/ismip-hom-c/80km/data/ishom.c.80km.JFNK.out.nc\", \"r\")'
+        png  = 'PNG = "' + ncl_path + '/ismipcu"'
+        plot_ishomcu = "ncl '" + stockout + "'  '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARout + "'  '" + VARPIC + "'  '" + VARJFNK +"'  '" + png + "' " + ishomcu_plotfile + " >& plot_details.out"
 
 #TODO create an iteration plot and have that also in the html file 
-            try:
-                    output = subprocess.call(plot_ishomcu, shell=True)
-                    print "creating ismip hom c uvel plots"
-            except:
-                    print "error creating ncl ismip hom c uvel plots"
-                    raise
+        try:
+                output = subprocess.call(plot_ishomcu, shell=True)
+                print "creating ismip hom c uvel plots"
+        except:
+                print "error creating ncl ismip hom c uvel plots"
+                raise
 
 # delete old ismipc80 uvel pic in www file
 
-            if (html_path + '/ismipcu.png'):
-                    ismipcuvelmove = "rm -f " + html_path + '/ismipcu.png'
-                    try:
-                            output = subprocess.call(ismipcuvelmove, shell=True)
-                    except:
-                            print "error removing old ismip c uvel png file from www directory"
-                            sys.exit(1)
-                            raise
+        if (html_path + '/ismipcu.png'):
+                ismipcuvelmove = "rm -f " + html_path + '/ismipcu.png'
+                try:
+                        output = subprocess.call(ismipcuvelmove, shell=True)
+                except:
+                        print "error removing old ismip c uvel png file from www directory"
+                        sys.exit(1)
+                        raise
 
 # transferring ismipcu pic to www file
 
-            if (ncl_path + '/ismipcu.png'): 
-                    ishomcupic = "mv -f " + ncl_path + "/ismipcu.png" + " " + html_path + "/"
-                    try:
-                            output = subprocess.call(ishomcupic, shell=True)
-                    except:
-                            print "error moving ismip hom cu 80km png file to www directory"
-                            sys.exit(1)
-                            raise
+        if (ncl_path + '/ismipcu.png'): 
+                ishomcupic = "mv -f " + ncl_path + "/ismipcu.png" + " " + html_path + "/"
+                try:
+                        output = subprocess.call(ishomcupic, shell=True)
+                except:
+                        print "error moving ismip hom cu 80km png file to www directory"
+                        sys.exit(1)
+                        raise
 
 # formulate ismip c 80 vvel plot
-            ishomcv_plotfile=''+ ncl_path + '/ismipc80v.ncl'
-            stockout ='STOCKout = addfile(\"'+ job_path + '/bench/ismip-hom-c/80km/data/ishom.c.80km.out.nc\", \"r\")'
-            stockPIC ='STOCKPIC = addfile(\"'+ job_path + '/bench/ismip-hom-c/80km/data/ishom.c.80km.PIC.out.nc\", \"r\")'
-            stockJFNK ='STOCKJFNK = addfile(\"'+ job_path + '/bench/ismip-hom-c/80km/data/ishom.c.80km.JFNK.out.nc\", \"r\")'
-            VARout  ='VARout = addfile(\"' + job_path + '/ismip-hom-c/80km/data/ishom.c.80km.out.nc\", \"r\")'
-            VARPIC  ='VARPIC = addfile(\"' + job_path + '/ismip-hom-c/80km/data/ishom.c.80km.PIC.out.nc\", \"r\")'
-            VARJFNK  ='VARJFNK = addfile(\"' + job_path + '/ismip-hom-c/80km/data/ishom.c.80km.JFNK.out.nc\", \"r\")'
-            png  = 'PNG = "' + ncl_path + '/ismipcv"'
-            plot_ishomcv = "ncl '" + stockout + "'  '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARout + "'  '" + VARPIC + "'  '" + VARJFNK +"'  '" + png + "' " + ishomcv_plotfile + " >& plot_details.out"
+        ishomcv_plotfile=''+ ncl_path + '/ismipc80v.ncl'
+        stockout ='STOCKout = addfile(\"'+ job_path + '/bench/ismip-hom-c/80km/data/ishom.c.80km.out.nc\", \"r\")'
+        stockPIC ='STOCKPIC = addfile(\"'+ job_path + '/bench/ismip-hom-c/80km/data/ishom.c.80km.PIC.out.nc\", \"r\")'
+        stockJFNK ='STOCKJFNK = addfile(\"'+ job_path + '/bench/ismip-hom-c/80km/data/ishom.c.80km.JFNK.out.nc\", \"r\")'
+        VARout  ='VARout = addfile(\"' + job_path + '/ismip-hom-c/80km/data/ishom.c.80km.out.nc\", \"r\")'
+        VARPIC  ='VARPIC = addfile(\"' + job_path + '/ismip-hom-c/80km/data/ishom.c.80km.PIC.out.nc\", \"r\")'
+        VARJFNK  ='VARJFNK = addfile(\"' + job_path + '/ismip-hom-c/80km/data/ishom.c.80km.JFNK.out.nc\", \"r\")'
+        png  = 'PNG = "' + ncl_path + '/ismipcv"'
+        plot_ishomcv = "ncl '" + stockout + "'  '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARout + "'  '" + VARPIC + "'  '" + VARJFNK +"'  '" + png + "' " + ishomcv_plotfile + " >& plot_details.out"
 
 #TODO create an iteration plot and have that also in the html file 
-            try:
-                    output = subprocess.call(plot_ishomcv, shell=True)
-                    print "creating ismip hom c vvel plots"
-            except:
-                    print "error creating ncl ismip hom c vvel plots"
-                    raise
+        try:
+                output = subprocess.call(plot_ishomcv, shell=True)
+                print "creating ismip hom c vvel plots"
+        except:
+                print "error creating ncl ismip hom c vvel plots"
+                raise
 
 # delete old ismipc80 vvel pic in www file
 
-            if (html_path + '/ismipcv.png'):
-                    ismipcvvelmove = "rm -f " + html_path + '/ismipcv.png'
-                    try:
-                            output = subprocess.call(ismipcvvelmove, shell=True)
-                    except:
-                            print "error removing old ismip c vvel png file from www directory"
-                            sys.exit(1)
-                            raise
+        if (html_path + '/ismipcv.png'):
+                ismipcvvelmove = "rm -f " + html_path + '/ismipcv.png'
+                try:
+                        output = subprocess.call(ismipcvvelmove, shell=True)
+                except:
+                        print "error removing old ismip c vvel png file from www directory"
+                        sys.exit(1)
+                        raise
 
 # transferring ismipcv pic to www file
 
-            if (ncl_path + '/ismipcv.png'): 
-                    ishomcvpic = "mv -f " + ncl_path + "/ismipcv.png" + " " + html_path + "/"
-                    try:
-                            output = subprocess.call(ishomcvpic, shell=True)
-                    except:
-                            print "error moving ismip hom cv 80km png file to www directory"
-                            sys.exit(1)
-                            raise
+        if (ncl_path + '/ismipcv.png'): 
+                ishomcvpic = "mv -f " + ncl_path + "/ismipcv.png" + " " + html_path + "/"
+                try:
+                        output = subprocess.call(ishomcvpic, shell=True)
+                except:
+                        print "error moving ismip hom cv 80km png file to www directory"
+                        sys.exit(1)
+                        raise
 
 # formulate ismip c 80 velocity norm plot
-            ishomcvel_plotfile=''+ ncl_path + '/ismipc80vel.ncl'
-            stockPIC ='STOCKPIC = addfile(\"'+ job_path + '/bench/ismip-hom-c/80km/data/ishom.c.80km.PIC.out.nc\", \"r\")'
-            stockJFNK ='STOCKJFNK = addfile(\"'+ job_path + '/bench/ismip-hom-c/80km/data/ishom.c.80km.JFNK.out.nc\", \"r\")'
-            VARPIC  ='VARPIC = addfile(\"' + job_path + '/ismip-hom-c/80km/data/ishom.c.80km.PIC.out.nc\", \"r\")'
-            VARJFNK  ='VARJFNK = addfile(\"' + job_path + '/ismip-hom-c/80km/data/ishom.c.80km.JFNK.out.nc\", \"r\")'
-            png  = 'PNG = "' + ncl_path + '/ismipcvel"'
-            plot_ishomcvel = "ncl '" + stockout + "'  '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARout + "'  '" + VARPIC + "'  '" + VARJFNK +"'  '" + png + "' " + ishomcvel_plotfile + " >& plot_details.out"
+        ishomcvel_plotfile=''+ ncl_path + '/ismipc80vel.ncl'
+        stockPIC ='STOCKPIC = addfile(\"'+ job_path + '/bench/ismip-hom-c/80km/data/ishom.c.80km.PIC.out.nc\", \"r\")'
+        stockJFNK ='STOCKJFNK = addfile(\"'+ job_path + '/bench/ismip-hom-c/80km/data/ishom.c.80km.JFNK.out.nc\", \"r\")'
+        VARPIC  ='VARPIC = addfile(\"' + job_path + '/ismip-hom-c/80km/data/ishom.c.80km.PIC.out.nc\", \"r\")'
+        VARJFNK  ='VARJFNK = addfile(\"' + job_path + '/ismip-hom-c/80km/data/ishom.c.80km.JFNK.out.nc\", \"r\")'
+        png  = 'PNG = "' + ncl_path + '/ismipcvel"'
+        plot_ishomcvel = "ncl '" + stockout + "'  '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARout + "'  '" + VARPIC + "'  '" + VARJFNK +"'  '" + png + "' " + ishomcvel_plotfile + " >& plot_details.out"
 
 #TODO create an iteration plot and have that also in the html file 
-            try:
-                    output = subprocess.call(plot_ishomcvel, shell=True)
-                    print "creating ismip hom c velocity norm plots"
-            except:
-                    print "error creating ncl ismip hom c vel norm plots"
-                    raise
+        try:
+                output = subprocess.call(plot_ishomcvel, shell=True)
+                print "creating ismip hom c velocity norm plots"
+        except:
+                print "error creating ncl ismip hom c vel norm plots"
+                raise
 
 # delete old ismipc80 vel norm pic in www file
 
-            if (html_path + '/ismipcvel.png'):
-                    ismipcvelmove = "rm -f " + html_path + '/ismipcvel.png'
-                    try:
-                            output = subprocess.call(ismipcvelmove, shell=True)
-                    except:
-                            print "error removing old ismip c vel norm png file from www directory"
-                            sys.exit(1)
-                            raise
+        if (html_path + '/ismipcvel.png'):
+                ismipcvelmove = "rm -f " + html_path + '/ismipcvel.png'
+                try:
+                        output = subprocess.call(ismipcvelmove, shell=True)
+                except:
+                        print "error removing old ismip c vel norm png file from www directory"
+                        sys.exit(1)
+                        raise
 
 # transferring ismip c velocity norm pic to www file
 
-            if (ncl_path + '/ismipcvel.png'): 
-                    ishomcvelpic = "mv -f " + ncl_path + "/ismipcvel.png" + " " + html_path + "/"
-                    try:
-                            output = subprocess.call(ishomcvelpic, shell=True)
-                    except:
-                            print "error moving ismip hom c velocity 80km png file to www directory"
-                            sys.exit(1)
-                            raise
+        if (ncl_path + '/ismipcvel.png'): 
+                ishomcvelpic = "mv -f " + ncl_path + "/ismipcvel.png" + " " + html_path + "/"
+                try:
+                        output = subprocess.call(ishomcvelpic, shell=True)
+                except:
+                        print "error moving ismip hom c velocity 80km png file to www directory"
+                        sys.exit(1)
+                        raise
 
 # formulate ismip c 80 thickness norm plot
-            ishomcthk_plotfile=''+ ncl_path + '/ismipc80thk.ncl'
-            stockPIC ='STOCKPIC = addfile(\"'+ job_path + '/bench/ismip-hom-c/80km/data/ishom.c.80km.PIC.out.nc\", \"r\")'
-            stockJFNK ='STOCKJFNK = addfile(\"'+ job_path + '/bench/ismip-hom-c/80km/data/ishom.c.80km.JFNK.out.nc\", \"r\")'
-            VARPIC  ='VARPIC = addfile(\"' + job_path + '/ismip-hom-c/80km/data/ishom.c.80km.PIC.out.nc\", \"r\")'
-            VARJFNK  ='VARJFNK = addfile(\"' + job_path + '/ismip-hom-c/80km/data/ishom.c.80km.JFNK.out.nc\", \"r\")'
-            png  = 'PNG = "' + ncl_path + '/ismipcthk"'
-            plot_ishomcthk = "ncl '" + stockout + "'  '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARout + "'  '" + VARPIC + "'  '" + VARJFNK +"'  '" + png + "' " + ishomcthk_plotfile + " >& plot_details.out"
+        ishomcthk_plotfile=''+ ncl_path + '/ismipc80thk.ncl'
+        stockPIC ='STOCKPIC = addfile(\"'+ job_path + '/bench/ismip-hom-c/80km/data/ishom.c.80km.PIC.out.nc\", \"r\")'
+        stockJFNK ='STOCKJFNK = addfile(\"'+ job_path + '/bench/ismip-hom-c/80km/data/ishom.c.80km.JFNK.out.nc\", \"r\")'
+        VARPIC  ='VARPIC = addfile(\"' + job_path + '/ismip-hom-c/80km/data/ishom.c.80km.PIC.out.nc\", \"r\")'
+        VARJFNK  ='VARJFNK = addfile(\"' + job_path + '/ismip-hom-c/80km/data/ishom.c.80km.JFNK.out.nc\", \"r\")'
+        png  = 'PNG = "' + ncl_path + '/ismipcthk"'
+        plot_ishomcthk = "ncl '" + stockout + "'  '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARout + "'  '" + VARPIC + "'  '" + VARJFNK +"'  '" + png + "' " + ishomcthk_plotfile + " >& plot_details.out"
 
 #TODO create an iteration plot and have that also in the html file 
-            try:
-                    output = subprocess.call(plot_ishomcthk, shell=True)
-                    print "creating ismip hom c thickness plots"
-            except:
-                    print "error creating ncl ismip hom c thickness plots"
-                    raise
+        try:
+                output = subprocess.call(plot_ishomcthk, shell=True)
+                print "creating ismip hom c thickness plots"
+        except:
+                print "error creating ncl ismip hom c thickness plots"
+                raise
 
 # delete old ismipc80 thk pic in www file
 
-            if (html_path + '/ismipcthk.png'):
-                    ismipcthkmove = "rm -f " + html_path + '/ismipcthk.png'
-                    try:
-                            output = subprocess.call(ismipcthkmove, shell=True)
-                    except:
-                            print "error removing old ismip c thk png file from www directory"
-                            sys.exit(1)
-                            raise
+        if (html_path + '/ismipcthk.png'):
+                ismipcthkmove = "rm -f " + html_path + '/ismipcthk.png'
+                try:
+                        output = subprocess.call(ismipcthkmove, shell=True)
+                except:
+                        print "error removing old ismip c thk png file from www directory"
+                        sys.exit(1)
+                        raise
 
 # transferring ismip c thickness norm pic to www file
 
-            if (ncl_path + '/ismipcthk.png'): 
-                    ishomcthkpic = "mv -f " + ncl_path + "/ismipcthk.png" + " " + html_path + "/"
-                    try:
-                            output = subprocess.call(ishomcthkpic, shell=True)
-                    except:
-                            print "error moving ismip hom c thickness 80km png file to www directory"
-                            sys.exit(1)
+        if (ncl_path + '/ismipcthk.png'): 
+                ishomcthkpic = "mv -f " + ncl_path + "/ismipcthk.png" + " " + html_path + "/"
+                try:
+                        output = subprocess.call(ishomcthkpic, shell=True)
+                except:
+                        print "error moving ismip hom c thickness 80km png file to www directory"
+                        sys.exit(1)
 
 # remove plot_details.out
-            if (script_path + '/plot_details.out'):
-                    cleantrash = "rm -f " + script_path + "/plot_details.out"
-                    try:
-                            output = subprocess.call(cleantrash, shell=True)
-                    except:
-                            print "error removing plot_details.out"
-                            sys.exit(1)
-                            raise
+        if (script_path + '/plot_details.out'):
+                cleantrash = "rm -f " + script_path + "/plot_details.out"
+                try:
+                        output = subprocess.call(cleantrash, shell=True)
+                except:
+                        print "error removing plot_details.out"
+                        sys.exit(1)
+                        raise
 
         plot_file.write('<HTML>\n')
         plot_file.write('<TITLE>ISMIP HOM C 80km </TITLE>\n')

@@ -419,19 +419,3 @@ def format(file, list):
         else:
             file.write(str(item))
         i = 1
-
-
-def emptycheck(checkpath):
-        file = 'temp.txt'
-        comline = 'ncdump -c ' + checkpath + '> temp.txt'
-        subprocess.call(comline, shell = True)
-
-        input = open('temp.txt', 'r')
-        line = ''
-
-        for line in input:
-                if line.find('data:') != -1:
-                        input.close()
-                        return 1
-        return 0
-

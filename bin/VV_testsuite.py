@@ -60,7 +60,9 @@ def web(descript_file,test_file, \
 	dome30d_file,dome30d_case,dome30d_plot,dome30d_xml,dome30e_file,dome30e_case,dome30e_plot,dome30e_xml, \
 	circ_file,circ_case,circ_plot,circ_xml,conf_file,conf_case,conf_plot,conf_xml, \
 	ishoma80_file,ishoma80_case,ishoma80_plot,ishoma80_xml,ishomc80_file,ishomc80_case,ishomc80_plot,ishomc80_xml, \
-	gis10_file,gis10_case,gis10_plot,gis10_xml,job_path,ncl_path,data_path,html_path,script_path):  
+	gis10_file,gis10_case,gis10_plot,gis10_xml,job_path,ncl_path,data_path,html_path,script_path,\
+        diagnostic_flag,evolving_flag,circular_flag,confined_flag,
+        ismip_hom_a_flag,ismip_hom_c_flag,gis_10km_flag):  
 
 # using data, fill the web page with info about the cases
 	test_file.write('<HTML>\n')
@@ -73,318 +75,366 @@ def web(descript_file,test_file, \
 
         dictionary = bit_list(job_path)
 
+
+#apply flag to turn off running test
+        if diagnostic_flag == 1:
+
 # Diagnostic Dome 30 stats
-        if dictionary['diagnostic'] == 0:
-            test_file.write('<H2>Diagnostic Dome 30 Test: <font color="green">Bit-for-Bit</font></H2>')
-        else:
-            test_file.write('<H2>Diagnostic Dome 30 Test: <font color="red">NOT Bit-for-Bit</font></H2>')
+            if dictionary['diagnostic'] == 0:
+                test_file.write('<H2>Diagnostic Dome 30 Test: <font color="green">Bit-for-Bit</font></H2>')
+            else:
+                test_file.write('<H2>Diagnostic Dome 30 Test: <font color="red">NOT Bit-for-Bit</font></H2>')
 	
 #put something here to flag BFB results and no need to do any more calculations
-	flag_to_plot_dome30d = 1
-	if flag_to_plot_dome30d:
+	    flag_to_plot_dome30d = 1
+	    if flag_to_plot_dome30d:
 
 # link to dome30d_file with descriptions about the test cases
-		test_file.write('<TH ALIGN=LEFT><A HREF="dome30d_details.html">Diagnostic Dome 30 Velocity Solver Details</A>\n')
-		test_file.write('<BR>\n')
-                failedt = VV_dome30details.ddetails(dome30d_file,job_path,ncl_path,data_path,html_path)
+		    test_file.write('<TH ALIGN=LEFT><A HREF="dome30d_details.html">Diagnostic Dome 30 Velocity Solver Details</A>\n')
+		    test_file.write('<BR>\n')
+                    failedt = VV_dome30details.ddetails(dome30d_file,job_path,ncl_path,data_path,html_path)
 
-		test_file.write('<TH ALIGN=LEFT><A HREF="dome30d_xml.html">Solver Parameter Settings: Diagnostic Dome 30 XML Details</A>\n')
-		test_file.write('<BR>\n')
-		xml_path = job_path + '/dome30/diagnostic/trilinosOptions.xml'
-		bench_xml_path = job_path + '/bench/dome30/diagnostic/trilinosOptions.xml'
-                VV_utilities.xml(dome30d_xml,xml_path,bench_xml_path,ncl_path,html_path)
+		    test_file.write('<TH ALIGN=LEFT><A HREF="dome30d_xml.html">Solver Parameter Settings: Diagnostic Dome 30 XML Details</A>\n')
+		    test_file.write('<BR>\n')
+		    xml_path = job_path + '/dome30/diagnostic/trilinosOptions.xml'
+		    bench_xml_path = job_path + '/bench/dome30/diagnostic/trilinosOptions.xml'
+                    VV_utilities.xml(dome30d_xml,xml_path,bench_xml_path,ncl_path,html_path)
 
-		test_file.write('<TH ALIGN=LEFT><A HREF="dome30d_case.html">Diagnostic Dome 30 Case Details</A>\n')
-		test_file.write('<BR>\n')
-                configure_path = job_path + '/dome30/diagnostic/dome.30.JFNK.trilinos.config.1'
-                bench_configure_path = job_path + '/bench/dome30/diagnostic/dome.30.JFNK.trilinos.config.1'
-        	VV_utilities.conf(dome30d_case,configure_path,bench_configure_path,ncl_path,html_path)
+		    test_file.write('<TH ALIGN=LEFT><A HREF="dome30d_case.html">Diagnostic Dome 30 Case Details</A>\n')
+		    test_file.write('<BR>\n')
+                    configure_path = job_path + '/dome30/diagnostic/dome.30.JFNK.trilinos.config.1'
+                    bench_configure_path = job_path + '/bench/dome30/diagnostic/dome.30.JFNK.trilinos.config.1'
+        	    VV_utilities.conf(dome30d_case,configure_path,bench_configure_path,ncl_path,html_path)
 
-		test_file.write('<TH ALIGN=LEFT><A HREF="dome30d_plot.html">Diagnostic Dome 30 Plots</A>\n')
-		test_file.write('<BR>\n')
-                if failedt != 0:
-                    dome30d_plot.write("<H2>Diagnostic Dome 30 Test failed, plots may not be generated</H2><br>")
-                checkpath = job_path + '/dome30/diagnostic/data/dome.1.nc'
-                checkpath2 = job_path + '/dome30/diagnostic/data/dome.4.nc'
-                noplot = VV_checks.emptycheck(checkpath)
-                noplot1 = noplot
-                noplot = VV_checks.emptycheck(checkpath2)
-                if noplot1 != 1 and noplot != 1:
-                    VV_dome30details.dplot(dome30d_plot,job_path,ncl_path,html_path,script_path)
+		    test_file.write('<TH ALIGN=LEFT><A HREF="dome30d_plot.html">Diagnostic Dome 30 Plots</A>\n')
+		    test_file.write('<BR>\n')
+                    if failedt != 0:
+                        dome30d_plot.write("<H2>Diagnostic Dome 30 Test failed, plots may not be generated</H2><br>")
+                    checkpath = job_path + '/dome30/diagnostic/data/dome.1.nc'
+                    checkpath2 = job_path + '/dome30/diagnostic/data/dome.4.nc'
+                    noplot = VV_checks.emptycheck(checkpath)
+                    noplot1 = noplot
+                    noplot = VV_checks.emptycheck(checkpath2)
+                    if noplot1 != 1 and noplot != 1:
+                        VV_dome30details.dplot(dome30d_plot,job_path,ncl_path,html_path,script_path)
 
 # Time stamping
-	strrand = ''
-	mode = os.stat(job_path + '/dome30/diagnostic').st_mtime
-	mode = mode - 14400
-	mode = time.gmtime(mode)
-	ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
-	strrand = '<b>Time of last access: ' + str(ctime) + '</b>'
-	test_file.write(strrand)
-	
+	    strrand = ''
+	    mode = os.stat(job_path + '/dome30/diagnostic').st_mtime
+	    mode = mode - 14400
+	    mode = time.gmtime(mode)
+	    ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
+	    strrand = '<b>Time of last access: ' + str(ctime) + '</b>'
+	    test_file.write(strrand)
+
+        else:
+            print "NOT RUNNING DIAGNOSTIC DOME30 TESTCASE"
+
+
+#apply flag to turn off running test
+        if evolving_flag == 1:
 
 # Evolving Dome 30 stats
-        if dictionary['evolving'] == 0:
-            test_file.write('<H2>Evolving Dome 30 Test: <font color="green">Bit-for-Bit</font></H2>')
-        else:
-            test_file.write('<H2>Evolving Dome 30 Test: <font color="red">NOT Bit-for-Bit</font></H2>')
+            if dictionary['evolving'] == 0:
+                test_file.write('<H2>Evolving Dome 30 Test: <font color="green">Bit-for-Bit</font></H2>')
+            else:
+                test_file.write('<H2>Evolving Dome 30 Test: <font color="red">NOT Bit-for-Bit</font></H2>')
 
 # put something here to flag BFB results and no need to do any more calculations
-	flag_to_plot_dome30e = 1
-	if flag_to_plot_dome30e:
+	    flag_to_plot_dome30e = 1
+	    if flag_to_plot_dome30e:
 
 # link to dome30e_file with descriptions about the test cases
-		test_file.write('<TH ALIGN=LEFT><A HREF="dome30e_details.html">Evolving Dome 30 Velocity Solver Details</A>\n')
-		test_file.write('<BR>\n')
-        	failedt = VV_dome30details.edetails(dome30e_file,job_path,ncl_path,data_path,html_path)
+		    test_file.write('<TH ALIGN=LEFT><A HREF="dome30e_details.html">Evolving Dome 30 Velocity Solver Details</A>\n')
+		    test_file.write('<BR>\n')
+        	    failedt = VV_dome30details.edetails(dome30e_file,job_path,ncl_path,data_path,html_path)
 
-		test_file.write('<TH ALIGN=LEFT><A HREF="dome30e_xml.html">Solver Parameter Settings: Evolving Dome 30 XML Details</A>\n')
-		test_file.write('<BR>\n')
-		xml_path = job_path + '/dome30/evolving/trilinosOptions.xml'
-		bench_xml_path = job_path + '/bench/dome30/evolving/trilinosOptions.xml'
-		VV_utilities.xml(dome30e_xml,xml_path,bench_xml_path,ncl_path,html_path)
+		    test_file.write('<TH ALIGN=LEFT><A HREF="dome30e_xml.html">Solver Parameter Settings: Evolving Dome 30 XML Details</A>\n')
+		    test_file.write('<BR>\n')
+		    xml_path = job_path + '/dome30/evolving/trilinosOptions.xml'
+		    bench_xml_path = job_path + '/bench/dome30/evolving/trilinosOptions.xml'
+		    VV_utilities.xml(dome30e_xml,xml_path,bench_xml_path,ncl_path,html_path)
 
-                test_file.write('<TH ALIGN=LEFT><A HREF="dome30e_case.html">Evolving Dome 30 Case Details</A>\n')
-		test_file.write('<BR>\n')
-                configure_path = job_path + '/dome30/evolving/dome.30.JFNK.trilinos.config.15'
-                bench_configure_path = job_path + '/bench/dome30/evolving/dome.30.JFNK.trilinos.config.15'
-        	VV_utilities.conf(dome30e_case,configure_path,bench_configure_path,ncl_path,html_path)
+                    test_file.write('<TH ALIGN=LEFT><A HREF="dome30e_case.html">Evolving Dome 30 Case Details</A>\n')
+		    test_file.write('<BR>\n')
+                    configure_path = job_path + '/dome30/evolving/dome.30.JFNK.trilinos.config.15'
+                    bench_configure_path = job_path + '/bench/dome30/evolving/dome.30.JFNK.trilinos.config.15'
+        	    VV_utilities.conf(dome30e_case,configure_path,bench_configure_path,ncl_path,html_path)
 
-		test_file.write('<TH ALIGN=LEFT><A HREF="dome30e_plot.html">Evolving Dome 30 Plots</A>\n')
-		test_file.write('<BR>\n')
-                if failedt != 0:
-                    dome30e_plot.write("<H2>Evolving Dome 30 Test failed, plots may not be generated</H2><br>")
-                checkpath = job_path + '/dome30/evolving/data/dome.9.nc'
-                checkpath2 = job_path + '/dome30/evolving/data/dome.15.nc'
-                noplot = VV_checks.emptycheck(checkpath)
-                noplot1 = noplot
-                noplot = VV_checks.emptycheck(checkpath2)
-                if noplot != 1 and noplot != 1:
-                    VV_dome30details.eplot(dome30e_plot,job_path,ncl_path,html_path,script_path)
+		    test_file.write('<TH ALIGN=LEFT><A HREF="dome30e_plot.html">Evolving Dome 30 Plots</A>\n')
+		    test_file.write('<BR>\n')
+                    if failedt != 0:
+                        dome30e_plot.write("<H2>Evolving Dome 30 Test failed, plots may not be generated</H2><br>")
+                    checkpath = job_path + '/dome30/evolving/data/dome.9.nc'
+                    checkpath2 = job_path + '/dome30/evolving/data/dome.15.nc'
+                    noplot = VV_checks.emptycheck(checkpath)
+                    noplot1 = noplot
+                    noplot = VV_checks.emptycheck(checkpath2)
+                    if noplot != 1 and noplot != 1:
+                        VV_dome30details.eplot(dome30e_plot,job_path,ncl_path,html_path,script_path)
 
 # Time stamping
-	mode = os.stat(job_path + '/dome30/evolving').st_mtime
-	mode = mode - 14400
-	mode = time.gmtime(mode)
-	ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
-	strrand = '<b>Time of last access: ' + ctime + '</b>'
-	test_file.write(strrand)
+	    mode = os.stat(job_path + '/dome30/evolving').st_mtime
+	    mode = mode - 14400
+	    mode = time.gmtime(mode)
+	    ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
+	    strrand = '<b>Time of last access: ' + ctime + '</b>'
+	    test_file.write(strrand)
 
+        else:
+            print "NOT RUNNING EVOLVING DOME30 TESTCASE"
+
+
+#apply flag to turn off running test
+        if circular_flag == 1:
 
 # Circular Shelf stats
-        if dictionary['circular'] == 0:
-            test_file.write('<H2>Circular Shelf Test: <font color="green">Bit-for-Bit</font></H2>')
-        else:
-            test_file.write('<H2>Circular Shelf Test: <font color="red">NOT Bit-for-Bit</font></H2>')
+            if dictionary['circular'] == 0:
+                test_file.write('<H2>Circular Shelf Test: <font color="green">Bit-for-Bit</font></H2>')
+            else:
+                test_file.write('<H2>Circular Shelf Test: <font color="red">NOT Bit-for-Bit</font></H2>')
 
 
 # put something here to flag BFB results and no need to do any more calculations
-	flag_to_plot_circ = 1
-	if flag_to_plot_circ:
+	    flag_to_plot_circ = 1
+    	    if flag_to_plot_circ:
 
-		test_file.write('<TH ALIGN=LEFT><A HREF="circ_details.html">Circular Shelf Velocity Solver Details</A>\n')
-		test_file.write('<BR>\n')
-        	failedt = VV_shelfdetails.circdetails(circ_file,job_path)
+		    test_file.write('<TH ALIGN=LEFT><A HREF="circ_details.html">Circular Shelf Velocity Solver Details</A>\n')
+		    test_file.write('<BR>\n')
+        	    failedt = VV_shelfdetails.circdetails(circ_file,job_path)
 
-		test_file.write('<TH ALIGN=LEFT><A HREF="circ_xml.html">Solver Parameter Settings: Circular Shelf XML Details</A>\n')
-                test_file.write('<BR>\n')
-                xml_path = job_path + '/circular-shelf/trilinosOptions.xml'
-                bench_xml_path = job_path + '/bench/circular-shelf/trilinosOptions.xml'
-                VV_utilities.xml(circ_xml,xml_path,bench_xml_path,ncl_path,html_path)
+		    test_file.write('<TH ALIGN=LEFT><A HREF="circ_xml.html">Solver Parameter Settings: Circular Shelf XML Details</A>\n')
+                    test_file.write('<BR>\n')
+                    xml_path = job_path + '/circular-shelf/trilinosOptions.xml'
+                    bench_xml_path = job_path + '/bench/circular-shelf/trilinosOptions.xml'
+                    VV_utilities.xml(circ_xml,xml_path,bench_xml_path,ncl_path,html_path)
                 
-                test_file.write('<TH ALIGN=LEFT><A HREF="circ_case.html">Circular Shelf Case Details</A>\n')
-		test_file.write('<BR>\n')
-                configure_path = job_path + '/circular-shelf/circular-shelf.JFNK.config'
-                bench_configure_path = job_path + '/bench/circular-shelf/circular-shelf.JFNK.config'
-        	VV_utilities.conf(circ_case,configure_path,bench_configure_path,ncl_path,html_path)
+                    test_file.write('<TH ALIGN=LEFT><A HREF="circ_case.html">Circular Shelf Case Details</A>\n')
+		    test_file.write('<BR>\n')
+                    configure_path = job_path + '/circular-shelf/circular-shelf.JFNK.config'
+                    bench_configure_path = job_path + '/bench/circular-shelf/circular-shelf.JFNK.config'
+        	    VV_utilities.conf(circ_case,configure_path,bench_configure_path,ncl_path,html_path)
 
-		test_file.write('<TH ALIGN=LEFT><A HREF="circ_plot.html">Circular Shelf Plots</A>\n')
-		test_file.write('<BR>\n')
-                if failedt != 0:
-                    circ_plot.write("<H2>Circular Shelf Test failed, plots may not be generated</H2><br>")
-                checkpath = job_path + '/circular-shelf/data/circular-shelf.gnu.JFNK.nc'
-                noplot = VV_checks.emptycheck(checkpath)
-                if noplot != 1:
-                    VV_shelfdetails.circplot(circ_plot,job_path,ncl_path,html_path,script_path)
+		    test_file.write('<TH ALIGN=LEFT><A HREF="circ_plot.html">Circular Shelf Plots</A>\n')
+		    test_file.write('<BR>\n')
+                    if failedt != 0:
+                        circ_plot.write("<H2>Circular Shelf Test failed, plots may not be generated</H2><br>")
+                    checkpath = job_path + '/circular-shelf/data/circular-shelf.gnu.JFNK.nc'
+                    noplot = VV_checks.emptycheck(checkpath)
+                    if noplot != 1:
+                        VV_shelfdetails.circplot(circ_plot,job_path,ncl_path,html_path,script_path)
 
 # Time stamping
-	mode = os.stat(job_path + '/circular-shelf').st_mtime
-	mode = mode - 14400
-	mode = time.gmtime(mode)
-	ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
-	strrand = '<b>Time of last access: ' + ctime + '</b>'
-	test_file.write(strrand)
+	    mode = os.stat(job_path + '/circular-shelf').st_mtime
+	    mode = mode - 14400
+	    mode = time.gmtime(mode)
+	    ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
+	    strrand = '<b>Time of last access: ' + ctime + '</b>'
+	    test_file.write(strrand)
 	
-# Confined Shelf stats
-        if dictionary['confined'] == 0:
-            test_file.write('<H2>Confined Shelf Test: <font color="green">Bit-for-Bit</font></H2>')
         else:
-            test_file.write('<H2>Confined Shelf Test: <font color="red">NOT Bit-for-Bit</font></H2>')
+            print "NOT RUNNING CIRCULAR SHELF TESTCASE"
+
+
+#apply flag to turn off running test
+        if confined_flag == 1:
+
+# Confined Shelf stats
+            if dictionary['confined'] == 0:
+                test_file.write('<H2>Confined Shelf Test: <font color="green">Bit-for-Bit</font></H2>')
+            else:
+                test_file.write('<H2>Confined Shelf Test: <font color="red">NOT Bit-for-Bit</font></H2>')
 
 # put something here to flag BFB results and no need to do any more calculations
-	flag_to_plot_conf = 1
-	if flag_to_plot_conf:
+	    flag_to_plot_conf = 1
+	    if flag_to_plot_conf:
 
-		test_file.write('<TH ALIGN=LEFT><A HREF="conf_details.html">Confined Shelf Velocity Solver Details</A>\n')
-		test_file.write('<BR>\n')
-        	failedt = VV_shelfdetails.confdetails(conf_file,job_path)
+		    test_file.write('<TH ALIGN=LEFT><A HREF="conf_details.html">Confined Shelf Velocity Solver Details</A>\n')
+		    test_file.write('<BR>\n')
+        	    failedt = VV_shelfdetails.confdetails(conf_file,job_path)
 
-		test_file.write('<TH ALIGN=LEFT><A HREF="conf_xml.html">Solver Parameter Details: Confined Shelf XML Details</A>\n')
-                test_file.write('<BR>\n')
-                xml_path = job_path + '/confined-shelf/trilinosOptions.xml'
-                bench_xml_path = job_path + '/bench/confined-shelf//trilinosOptions.xml'
-                VV_utilities.xml(conf_xml,xml_path,bench_xml_path,ncl_path,html_path)
+		    test_file.write('<TH ALIGN=LEFT><A HREF="conf_xml.html">Solver Parameter Details: Confined Shelf XML Details</A>\n')
+                    test_file.write('<BR>\n')
+                    xml_path = job_path + '/confined-shelf/trilinosOptions.xml'
+                    bench_xml_path = job_path + '/bench/confined-shelf//trilinosOptions.xml'
+                    VV_utilities.xml(conf_xml,xml_path,bench_xml_path,ncl_path,html_path)
 
-                test_file.write('<TH ALIGN=LEFT><A HREF="conf_case.html">Confined Shelf Case Details</A>\n')
-		test_file.write('<BR>\n')
-                configure_path = job_path + '/confined-shelf/confined-shelf.JFNK.config'
-                bench_configure_path = job_path + '/bench/confined-shelf/confined-shelf.JFNK.config'
-        	VV_utilities.conf(conf_case,configure_path,bench_configure_path,ncl_path,html_path)
+                    test_file.write('<TH ALIGN=LEFT><A HREF="conf_case.html">Confined Shelf Case Details</A>\n')
+		    test_file.write('<BR>\n')
+                    configure_path = job_path + '/confined-shelf/confined-shelf.JFNK.config'
+                    bench_configure_path = job_path + '/bench/confined-shelf/confined-shelf.JFNK.config'
+        	    VV_utilities.conf(conf_case,configure_path,bench_configure_path,ncl_path,html_path)
 
-		test_file.write('<TH ALIGN=LEFT><A HREF="conf_plot.html">Confined Shelf Plot</A>\n')
-		test_file.write('<BR>\n')
-                if failedt != 0:
-                    conf_plot.write("<H2>Confined Shelf Test failed, plots may not be generated</H2><br>")
-                checkpath = job_path + '/confined-shelf/data/confined-shelf.gnu.JFNK.nc'
-                noplot = VV_checks.emptycheck(checkpath)
-                if noplot != 1:
-                    VV_shelfdetails.confplot(conf_plot,job_path,ncl_path,html_path,script_path)
+		    test_file.write('<TH ALIGN=LEFT><A HREF="conf_plot.html">Confined Shelf Plot</A>\n')
+		    test_file.write('<BR>\n')
+                    if failedt != 0:
+                        conf_plot.write("<H2>Confined Shelf Test failed, plots may not be generated</H2><br>")
+                    checkpath = job_path + '/confined-shelf/data/confined-shelf.gnu.JFNK.nc'
+                    noplot = VV_checks.emptycheck(checkpath)
+                    if noplot != 1:
+                        VV_shelfdetails.confplot(conf_plot,job_path,ncl_path,html_path,script_path)
 
 # Time stamping
-	mode = os.stat(job_path + '/confined-shelf').st_mtime
-	mode = mode - 14400
-	mode = time.gmtime(mode)
-	ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
-	strrand = '<b>Time of last access: ' + ctime + '</b>'
-	test_file.write(strrand)
+	    mode = os.stat(job_path + '/confined-shelf').st_mtime
+	    mode = mode - 14400
+	    mode = time.gmtime(mode)
+	    ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
+	    strrand = '<b>Time of last access: ' + ctime + '</b>'
+	    test_file.write(strrand)
+
+        else:
+            print "NOT RUNNING CONFINED SHELF TESTCASE"
+
+
+#apply flag to turn off running test
+        if ismip_hom_a_flag == 1:
 
 # ISMIP HOM A stats
-        if dictionary['ismip-hom-a'] == 0:
-            test_file.write('<H2>ISMIP HOM A 80km Test: <font color="green">Bit-for-Bit</font></H2>')
-        else:
-            test_file.write('<H2>ISMIP HOM A 80km Test: <font color="red">NOT Bit-for-Bit</font></H2>')
+            if dictionary['ismip-hom-a'] == 0:
+                test_file.write('<H2>ISMIP HOM A 80KM Test: <font color="green">Bit-for-Bit</font></H2>')
+            else:
+                test_file.write('<H2>ISMIP HOM A 80KM Test: <font color="red">NOT Bit-for-Bit</font></H2>')
 
 # put something here to flag BFB results and no need to do any more calculations
-	flag_to_plot_iha = 1
-	if flag_to_plot_iha:
+	    flag_to_plot_iha = 1
+	    if flag_to_plot_iha:
 
-		test_file.write('<TH ALIGN=LEFT><A HREF="ishoma80_details.html">ISMIP HOM A 80km Velocity Solver Details</A>\n')
-		test_file.write('<BR>\n')
-        	failedt = VV_ismip.a80details(ishoma80_file,job_path)
+		    test_file.write('<TH ALIGN=LEFT><A HREF="ishoma80_details.html">ISMIP HOM A 80km Velocity Solver Details</A>\n')
+		    test_file.write('<BR>\n')
+        	    failedt = VV_ismip.a80details(ishoma80_file,job_path)
 
-		test_file.write('<TH ALIGN=LEFT><A HREF="ishoma80_xml.html">Solver Parameter Details: ISMIP HOM A 80km XML Details</A>\n')
-                test_file.write('<BR>\n')
-                xml_path = job_path + '/ismip-hom-a/80km/trilinosOptions.xml'
-                bench_xml_path = job_path + '/bench/ismip-hom-a/80km/trilinosOptions.xml'
-                VV_utilities.xml(ishoma80_xml,xml_path,bench_xml_path,ncl_path,html_path)
+		    test_file.write('<TH ALIGN=LEFT><A HREF="ishoma80_xml.html">Solver Parameter Details: ISMIP HOM A 80km XML Details</A>\n')
+                    test_file.write('<BR>\n')
+                    xml_path = job_path + '/ismip-hom-a/80km/trilinosOptions.xml'
+                    bench_xml_path = job_path + '/bench/ismip-hom-a/80km/trilinosOptions.xml'
+                    VV_utilities.xml(ishoma80_xml,xml_path,bench_xml_path,ncl_path,html_path)
                 
-                test_file.write('<TH ALIGN=LEFT><A HREF="ishoma80_case.html">ISMIP HOM A 80km Case Details</A>\n')
-		test_file.write('<BR>\n')
-                configure_path = job_path + '/ismip-hom-a/80km/ishom.a.80km.JFNK.trilinos.config'
-                bench_configure_path = job_path + '/bench/ismip-hom-a/80km/ishom.a.80km.JFNK.trilinos.config'
-        	VV_utilities.conf(ishoma80_case,configure_path,bench_configure_path,ncl_path,html_path)
+                    test_file.write('<TH ALIGN=LEFT><A HREF="ishoma80_case.html">ISMIP HOM A 80km Case Details</A>\n')
+		    test_file.write('<BR>\n')
+                    configure_path = job_path + '/ismip-hom-a/80km/ishom.a.80km.JFNK.trilinos.config'
+                    bench_configure_path = job_path + '/bench/ismip-hom-a/80km/ishom.a.80km.JFNK.trilinos.config'
+        	    VV_utilities.conf(ishoma80_case,configure_path,bench_configure_path,ncl_path,html_path)
 
-		test_file.write('<TH ALIGN=LEFT><A HREF="ishoma80_plot.html">ISMIP HOM A 80km Plots</A>\n')
-		test_file.write('<BR>\n')
-                if failedt != 0:
-                    ishoma80_plot.write("<H2>ISMIP HOM A Test failed, plots may not be generated</H2><br>")
-                checkpath = job_path + '/ismip-hom-a/80km/data/ishom.a.80km.JFNK.out.nc'
-                noplot = VV_checks.emptycheck(checkpath)
-                if noplot != 1:
-                    VV_ismip.a80plot(ishoma80_plot,job_path,ncl_path,html_path,script_path)
+		    test_file.write('<TH ALIGN=LEFT><A HREF="ishoma80_plot.html">ISMIP HOM A 80km Plots</A>\n')
+		    test_file.write('<BR>\n')
+                    if failedt != 0:
+                        ishoma80_plot.write("<H2>ISMIP HOM A Test failed, plots may not be generated</H2><br>")
+                    checkpath = job_path + '/ismip-hom-a/80km/data/ishom.a.80km.JFNK.out.nc'
+                    noplot = VV_checks.emptycheck(checkpath)
+                    if noplot != 1:
+                        VV_ismip.a80plot(ishoma80_plot,job_path,ncl_path,html_path,script_path)
 
 # Time stamping
-	mode = os.stat(job_path + '/ismip-hom-a/80km').st_mtime
-	mode = mode - 14400
-	mode = time.gmtime(mode)
-	ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
-	strrand = '<b>Time of last access: ' + ctime + '</b>'
-	test_file.write(strrand)
+	    mode = os.stat(job_path + '/ismip-hom-a/80km').st_mtime
+	    mode = mode - 14400
+	    mode = time.gmtime(mode)
+	    ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
+	    strrand = '<b>Time of last access: ' + ctime + '</b>'
+	    test_file.write(strrand)
+
+        else:
+            print "NOT RUNNING ISMIP HOM A TESTCASE"
+
+
+#apply flag to turn off running test
+        if ismip_hom_c_flag == 1:
 
 # ISMIP HOM C stats
-        if dictionary['ismip-hom-c'] == 0:
-            test_file.write('<H2>ISMIP HOM C Test: <font color="green">Bit-for-Bit</font></H2>')
-        else:
-            test_file.write('<H2>ISMIP HOM C Test: <font color="red">NOT Bit-for-Bit</font></H2>')
+            if dictionary['ismip-hom-c'] == 0:
+                test_file.write('<H2>ISMIP HOM C 80KM Test: <font color="green">Bit-for-Bit</font></H2>')
+            else:
+                test_file.write('<H2>ISMIP HOM C 80KM Test: <font color="red">NOT Bit-for-Bit</font></H2>')
 
 # put something here to flag BFB results and no need to do any more calculations
-	flag_to_plot_ihc = 1
-	if flag_to_plot_ihc:
+	    flag_to_plot_ihc = 1
+	    if flag_to_plot_ihc:
 
-		test_file.write('<TH ALIGN=LEFT><A HREF="ishomc80_details.html">ISMIP HOM C 80km Velocity Solver Details</A>\n')
-		test_file.write('<BR>\n')
-        	failedt = VV_ismip.c80details(ishomc80_file,job_path)
+		    test_file.write('<TH ALIGN=LEFT><A HREF="ishomc80_details.html">ISMIP HOM C 80km Velocity Solver Details</A>\n')
+		    test_file.write('<BR>\n')
+        	    failedt = VV_ismip.c80details(ishomc80_file,job_path)
 
-		test_file.write('<TH ALIGN=LEFT><A HREF="ishomc80_xml.html">Solver Parameter Settings: ISMIP HOM C 80km XML Details</A>\n')
-                test_file.write('<BR>\n')
-                xml_path = job_path + '/ismip-hom-c/80km/trilinosOptions.xml'
-                bench_xml_path = job_path + '/bench/ismip-hom-c/80km/trilinosOptions.xml'
-                VV_utilities.xml(ishomc80_xml,xml_path,bench_xml_path,ncl_path,html_path)
+		    test_file.write('<TH ALIGN=LEFT><A HREF="ishomc80_xml.html">Solver Parameter Settings: ISMIP HOM C 80km XML Details</A>\n')
+                    test_file.write('<BR>\n')
+                    xml_path = job_path + '/ismip-hom-c/80km/trilinosOptions.xml'
+                    bench_xml_path = job_path + '/bench/ismip-hom-c/80km/trilinosOptions.xml'
+                    VV_utilities.xml(ishomc80_xml,xml_path,bench_xml_path,ncl_path,html_path)
                 
-                test_file.write('<TH ALIGN=LEFT><A HREF="ishomc80_case.html">ISMIP HOM C 80km Case Details</A>\n')
-		test_file.write('<BR>\n')
-                configure_path = job_path + '/ismip-hom-c/80km/ishom.c.80km.JFNK.trilinos.config'
-                bench_configure_path = job_path + '/bench/ismip-hom-c/80km/ishom.c.80km.JFNK.trilinos.config'
-        	VV_utilities.conf(ishomc80_case,configure_path,bench_configure_path,ncl_path,html_path)
+                    test_file.write('<TH ALIGN=LEFT><A HREF="ishomc80_case.html">ISMIP HOM C 80km Case Details</A>\n')
+		    test_file.write('<BR>\n')
+                    configure_path = job_path + '/ismip-hom-c/80km/ishom.c.80km.JFNK.trilinos.config'
+                    bench_configure_path = job_path + '/bench/ismip-hom-c/80km/ishom.c.80km.JFNK.trilinos.config'
+        	    VV_utilities.conf(ishomc80_case,configure_path,bench_configure_path,ncl_path,html_path)
 
-		test_file.write('<TH ALIGN=LEFT><A HREF="ishomc80_plot.html">ISMIP HOM C 80km Plots</A>\n')
-		test_file.write('<BR>\n')
-                if failedt != 0:
-                    ishomc80_plot.write("<H2>ISMIP HOM C Test failed, plots may not be generated</H2><br>")
-                checkpath = job_path + '/ismip-hom-c/80km/data/ishom.c.80km.JFNK.out.nc'
-                noplot = VV_checks.emptycheck(checkpath)
-                if noplot != 1:
-                    VV_ismip.c80plot(ishomc80_plot,job_path,ncl_path,html_path,script_path)
+		    test_file.write('<TH ALIGN=LEFT><A HREF="ishomc80_plot.html">ISMIP HOM C 80km Plots</A>\n')
+		    test_file.write('<BR>\n')
+                    if failedt != 0:
+                        ishomc80_plot.write("<H2>ISMIP HOM C Test failed, plots may not be generated</H2><br>")
+                    checkpath = job_path + '/ismip-hom-c/80km/data/ishom.c.80km.JFNK.out.nc'
+                    noplot = VV_checks.emptycheck(checkpath)
+                    if noplot != 1:
+                        VV_ismip.c80plot(ishomc80_plot,job_path,ncl_path,html_path,script_path)
 
 # Time stamping
-	mode = os.stat(job_path + '/ismip-hom-c/80km').st_mtime
-	mode = mode - 14400
-	mode = time.gmtime(mode)
-	ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
-	strrand = '<b>Time of last access: ' + ctime + '</b>'
-	test_file.write(strrand)
+	    mode = os.stat(job_path + '/ismip-hom-c/80km').st_mtime
+	    mode = mode - 14400
+	    mode = time.gmtime(mode)
+	    ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
+	    strrand = '<b>Time of last access: ' + ctime + '</b>'
+	    test_file.write(strrand)
+
+        else:
+            print "NOT RUNNING ISMIP HOM C TESTCASE"
+
+
+#apply flag to turn off running test
+        if gis_10km_flag == 1:
 
 # GIS 10km stats
-        if dictionary['gis_10km'] == 0:
-            test_file.write('<H2>GIS 10km Test: <font color="green">Bit-for-Bit</font></H2>')
-        else:
-            test_file.write('<H2>GIS 10km Test: <font color="red">NOT Bit-for-Bit</font></H2>')
+            if dictionary['gis_10km'] == 0:
+                test_file.write('<H2>GIS 10KM Test: <font color="green">Bit-for-Bit</font></H2>')
+            else:
+                test_file.write('<H2>GIS 10KM Test: <font color="red">NOT Bit-for-Bit</font></H2>')
 
 # put something here to flag BFB results between data and bench and pgi and gnu etc.
-	flag_to_plot_gis10km = 1
-	if flag_to_plot_gis10km:
+	    flag_to_plot_gis10km = 1
+	    if flag_to_plot_gis10km:
 
-		test_file.write('<TH ALIGN=LEFT><A HREF="gis10_details.html">GIS 10km Velocity Solver Details</A>\n')
-		test_file.write('<BR>\n')
-        	failedt = VV_gis10details.details(gis10_file,job_path,ncl_path,data_path,html_path)
+		    test_file.write('<TH ALIGN=LEFT><A HREF="gis10_details.html">GIS 10km Velocity Solver Details</A>\n')
+		    test_file.write('<BR>\n')
+        	    failedt = VV_gis10details.details(gis10_file,job_path,ncl_path,data_path,html_path)
 
-		test_file.write('<TH ALIGN=LEFT><A HREF="gis10_xml.html">Solver Parameter Settings: GIS 10km XML Details</A>\n')
-                test_file.write('<BR>\n')
-                xml_path = job_path + '/gis_10km/trilinosOptions.xml'
-                bench_xml_path = job_path + '/bench/gis_10km/trilinosOptions.xml'
-                VV_utilities.xml(gis10_xml,xml_path,bench_xml_path,ncl_path,html_path)
+		    test_file.write('<TH ALIGN=LEFT><A HREF="gis10_xml.html">Solver Parameter Settings: GIS 10km XML Details</A>\n')
+                    test_file.write('<BR>\n')
+                    xml_path = job_path + '/gis_10km/trilinosOptions.xml'
+                    bench_xml_path = job_path + '/bench/gis_10km/trilinosOptions.xml'
+                    VV_utilities.xml(gis10_xml,xml_path,bench_xml_path,ncl_path,html_path)
                 
-                test_file.write('<TH ALIGN=LEFT><A HREF="gis10_case.html">GIS 10km Case Details</A>\n')
-		test_file.write('<BR>\n')
-                configure_path = job_path + '/gis_10km/gis_10km.JFNK.trilinos.10.config'
-                bench_configure_path = job_path + '/bench/gis_10km/gis_10km.JFNK.trilinos.10.config'
-        	VV_utilities.conf(gis10_case,configure_path,bench_configure_path,ncl_path,html_path)
+                    test_file.write('<TH ALIGN=LEFT><A HREF="gis10_case.html">GIS 10km Case Details</A>\n')
+		    test_file.write('<BR>\n')
+                    configure_path = job_path + '/gis_10km/gis_10km.JFNK.trilinos.10.config'
+                    bench_configure_path = job_path + '/bench/gis_10km/gis_10km.JFNK.trilinos.10.config'
+        	    VV_utilities.conf(gis10_case,configure_path,bench_configure_path,ncl_path,html_path)
 
-		test_file.write('<TH ALIGN=LEFT><A HREF="gis10_plot.html">GIS 10km Plots</A>\n')
-		test_file.write('<BR>\n')
-                if failedt != 0:
-                    gis10_plot.write("<H2>GIS 10km Test failed, plots may not be generated</H2><br>")
-                checkpath = job_path + '/gis_10km/data/gis_10km.seacism.nc'
-                noplot = VV_checks.emptycheck(checkpath)
-                if noplot != 1:
-                    VV_gis10details.gis10_plot(gis10_plot,job_path,ncl_path,html_path,script_path)
+		    test_file.write('<TH ALIGN=LEFT><A HREF="gis10_plot.html">GIS 10km Plots</A>\n')
+		    test_file.write('<BR>\n')
+                    if failedt != 0:
+                        gis10_plot.write("<H2>GIS 10km Test failed, plots may not be generated</H2><br>")
+                    checkpath = job_path + '/gis_10km/data/gis_10km.seacism.nc'
+                    noplot = VV_checks.emptycheck(checkpath)
+                    if noplot != 1:
+                        VV_gis10details.gis10_plot(gis10_plot,job_path,ncl_path,html_path,script_path)
 
 # Time stamping
-	mode = os.stat(job_path + '/gis_10km').st_mtime
-	mode = mode - 14400
-	mode = time.gmtime(mode)
-	ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
-	strrand = '<b>Time of last access: ' + ctime + '</b>\n'
-	test_file.write(strrand)
+	    mode = os.stat(job_path + '/gis_10km').st_mtime
+	    mode = mode - 14400
+	    mode = time.gmtime(mode)
+	    ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
+	    strrand = '<b>Time of last access: ' + ctime + '</b>\n'
+	    test_file.write(strrand)
+
+        else:
+            print "NOT RUNNING GIS 10KM TESTCASE"
+
 
         test_file.write('<BR>\n')
         test_file.write('<BR>\n')

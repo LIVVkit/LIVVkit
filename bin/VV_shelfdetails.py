@@ -110,10 +110,6 @@ def confdetails(solver_file,job_path):  # using data, fill the web page with inf
 
 def circplot(plot_file,job_path,ncl_path,html_path,script_path):  # using data, fill the web page with info
 
-        tmpath = job_path + '/circular-shelf/data/circular-shelf.gnu.JFNK.nc'
-        if VV_utilities.emptycheck(tmpath) == 0:
-                return
-
 	plot_file.write('<HTML>\n')
 	plot_file.write('<H3>Circular Shelf Plot Details:</H3>')
 
@@ -168,7 +164,7 @@ def circplot(plot_file,job_path,ncl_path,html_path,script_path):  # using data, 
 #TODO create an iteration plot and have that also in the html file 
         try:
                 output = subprocess.call(plot_circthk, shell=True)
-                print "creaing circular shelf thickness plots"
+                print "creating circular shelf thickness plots"
         except:
                 print "error creating ncl circular shelf thickness plot"
                 raise
@@ -221,10 +217,6 @@ def circplot(plot_file,job_path,ncl_path,html_path,script_path):  # using data, 
 	plot_file.close()
 
 def confplot(plot_file,job_path,ncl_path,html_path,script_path):  # using data, fill the web page with info
-
-        tmpath = job_path + '/confined-shelf/data/confined-shelf.gnu.JFNK.nc'
-        if VV_utilities.emptycheck(tmpath) == 0:
-                return
 
         plot_file.write('<HTML>\n')
 	plot_file.write('<H3>Confined Shelf Plot Details:</H3>')
