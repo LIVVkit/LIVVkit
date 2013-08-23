@@ -24,11 +24,11 @@ begin
   thkstockJFNK   = STOCKJFNK->thk(0,:,:)
 
   thkvarblPIC    = VARPIC->thk(0,:,:)
-  thkdiffPIC     = new((/41,41/),float);
+  thkdiffPIC     = new((/40,40/),float);
   thkdiffPIC     = thkvarblPIC(:,:)-thkstockPIC(:,:);
 
   thkvarblJFNK   = VARJFNK->thk(0,:,:)
-  thkdiffJFNK    = new((/41,41/),float);
+  thkdiffJFNK    = new((/40,40/),float);
   thkdiffJFNK    = thkvarblJFNK(:,:)-thkstockJFNK(:,:);
 
   tsPIC   = thkstockPIC@scale_factor  * thkstockPIC

@@ -8,11 +8,11 @@ begin
 
 ; stand alone read in for testing
 
-;  STOCKPIC    = addfile("/tmp/work/ab3/higher-order/reg_test/bench/ismip-hom-a/80km/data/ishom.a.80km.PIC.out.nc","r")
-;  STOCKJFNK   = addfile("/tmp/work/ab3/higher-order/reg_test/bench/ismip-hom-a/80km/data/ishom.a.80km.JFNK.out.nc","r")
-;  VARPIC      = addfile("/tmp/work/ab3/higher-order/reg_test/ismip-hom-a/80km/data/ishom.a.80km.PIC.out.nc","r")
-;  VARJFNK     = addfile("/tmp/work/ab3/higher-order/reg_test/ismip-hom-a/80km/data/ishom.a.80km.JFNK.out.nc","r")
-;  PNG         = "/tmp/work/ab3/higher-order/livv_new/plots2/ismipavel"
+  STOCKPIC    = addfile("/tmp/work/4ue/higher-order/reg_test/bench/ismip-hom-a/80km/data/ishom.a.80km.PIC.out.nc","r")
+  STOCKJFNK   = addfile("/tmp/work/4ue/higher-order/reg_test/bench/ismip-hom-a/80km/data/ishom.a.80km.JFNK.out.nc","r")
+  VARPIC      = addfile("/tmp/work/4ue/higher-order/reg_test/ismip-hom-a/80km/data/ishom.a.80km.PIC.out.nc","r")
+  VARJFNK     = addfile("/tmp/work/4ue/higher-order/reg_test/ismip-hom-a/80km/data/ishom.a.80km.JFNK.out.nc","r")
+  PNG         = "/tmp/work/4ue/higher-order/livv/plots/ismipavel"
 
 ;************************************************
 ; create plots
@@ -24,11 +24,11 @@ begin
   velstockJFNK   = STOCKJFNK->velnorm(0,1,:,:)
 
   velvarblPIC    = VARPIC->velnorm(0,1,:,:)
-  veldiffPIC     = new((/40,40/),float);
+  veldiffPIC     = new((/39,39/),float);
   veldiffPIC     = velvarblPIC(:,:)-velstockPIC(:,:);
 
   velvarblJFNK   = VARJFNK->velnorm(0,1,:,:)
-  veldiffJFNK    = new((/40,40/),float);
+  veldiffJFNK    = new((/39,39/),float);
   veldiffJFNK    = velvarblJFNK(:,:)-velstockJFNK(:,:);
 
   velsPIC   = velstockPIC@scale_factor  * velstockPIC

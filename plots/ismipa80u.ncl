@@ -21,40 +21,29 @@ begin
 ;************************************************
   wks = gsn_open_wks("png",PNG)                 ; open a png file
 
-  ustockout    = STOCKout->uvel(0,1,:,:)
 
   ustockPIC    = STOCKPIC->uvel(0,1,:,:)
 
   ustockJFNK   = STOCKJFNK->uvel(0,1,:,:)
 
-  uvarblout    = VARout->uvel(0,1,:,:)
-  udiffout     = new((/40,40/),float);
-  udiffout     = uvarblout(:,:)-ustockout(:,:);  
-
   uvarblPIC    = VARPIC->uvel(0,1,:,:)
-  udiffPIC     = new((/40,40/),float);
+  udiffPIC     = new((/39,39/),float);
   udiffPIC     = uvarblPIC(:,:)-ustockPIC(:,:);
 
   uvarblJFNK   = VARJFNK->uvel(0,1,:,:)
-  udiffJFNK    = new((/40,40/),float);
+  udiffJFNK    = new((/39,39/),float);
   udiffJFNK    = uvarblJFNK(:,:)-ustockJFNK(:,:);
 
-  usout   = ustockout@scale_factor  * ustockout
   usPIC   = ustockPIC@scale_factor  * ustockPIC
   usJFNK  = ustockJFNK@scale_factor * ustockJFNK
-  uvout   = ustockout@scale_factor  * uvarblout
   uvPIC   = ustockPIC@scale_factor  * uvarblPIC
   uvJFNK  = ustockJFNK@scale_factor * uvarblJFNK
-  udout   = ustockout@scale_factor  * udiffout
   udPIC   = ustockPIC@scale_factor  * udiffPIC
   udJFNK  = ustockJFNK@scale_factor * udiffJFNK
-  usout@long_name  = "Scaled Benchmark"
   usPIC@long_name  = "Scaled Benchmark"
   usJFNK@long_name = "Scaled Benchmark"
-  uvout@long_name  = "Scaled Current Run"
   uvPIC@long_name  = "Scaled Current Run"
   uvJFNK@long_name = "Scaled Current Run"
-  udout@long_name  = "Diff out plot"
   udPIC@long_name  = "Diff PIC plot"
   udJFNK@long_name = "Diff JFNK plot"
 
@@ -67,7 +56,6 @@ begin
 
   plotu = new(3,graphic)
   plotu2 = new(3,graphic)
-  plotu3 = new(3,graphic)
 
   res                     = True          ; plot mods desired
   res@cnFillOn            = True          ; turn on color
@@ -77,19 +65,14 @@ begin
   res@gsnFrame            = False         ; don't advance frame
   res@cnLinesOn           = False         ; turn off contour lines
   res@cnInfoLabelOn       = False         ; turn off cn info label
-;  res@gsnMaximize         = True          ; make as large as possible
 
-  plotu(0) = gsn_contour(wks,usout,res)
-  plotu(1) = gsn_contour(wks,uvout,res)
-  plotu(2) = gsn_contour(wks,udout,res)
+  plotu(0) = gsn_contour(wks,usPIC,res)
+  plotu(1) = gsn_contour(wks,uvPIC,res)
+  plotu(2) = gsn_contour(wks,udPIC,res)
 
-  plotu2(0) = gsn_contour(wks,usPIC,res)
-  plotu2(1) = gsn_contour(wks,uvPIC,res)
-  plotu2(2) = gsn_contour(wks,udPIC,res)
-
-  plotu3(0) = gsn_contour(wks,usJFNK,res)
-  plotu3(1) = gsn_contour(wks,uvJFNK,res)
-  plotu3(2) = gsn_contour(wks,udJFNK,res)
+  plotu2(0) = gsn_contour(wks,usJFNK,res)
+  plotu2(1) = gsn_contour(wks,uvJFNK,res)
+  plotu2(2) = gsn_contour(wks,udJFNK,res)
 
 ;************************************************
 ; create panel
@@ -97,31 +80,23 @@ begin
 
   resu = True                             ; panel resources
   resu@gsnFrame = False
-  resu@gsnPanelTop = 1.0
-  resu@gsnPanelBottom = 0.66
+  resu@gsnPanelTop = 1.00
+  resu@gsnPanelBottom = 0.58
   resu@gsnMaximize = True                 ; make as large as possible
   resu@txString    = "U Velocity"    ; title string (make blank to remove)
-  resu@gsnPanelFigureStrings = (/"bench)", "current)", "out)"/)   ; add strings to panel
+  resu@gsnPanelFigureStrings = (/"bench)", "current)", "PIC)"/)   ; add strings to panel
 
   resu2 = True                             ; panel resources
   resu2@gsnFrame = False
-  resu2@gsnPanelTop = 0.64
-  resu2@gsnPanelBottom = 0.36
+  resu2@gsnPanelTop = 0.57
+  resu2@gsnPanelBottom = 0.04
   resu2@txString = ""
-  resu2@gsnPanelFigureStrings = (/"bench)", "current)", "PIC)"/)   ; add strings to panel
-
-  resu3 = True                             ; panel resources
-  resu3@gsnFrame = False
-  resu3@gsnPanelTop = 0.34
-  resu3@gsnPanelBottom = 0.00
-  resu3@txString = ""
-  resu3@gsnPanelFigureStrings = (/"bench)", "current)", "JFNK)"/)   ; add strings to panel
-  resu3@gsnPanelLabelBar = True            ; make a common contour bar
-  resu3@lbLabelAngleF = 45                 ; angle of contour bar labels
+  resu2@gsnPanelFigureStrings = (/"bench)", "current)", "JFNK)"/)   ; add strings to panel
+  resu2@gsnPanelLabelBar = True            ; make a common contour bar
+  resu2@lbLabelAngleF = 45                 ; angle of contour bar labels
 
   gsn_panel(wks,plotu,(/1,3/),resu)
   gsn_panel(wks,plotu2,(/1,3/),resu2)
-  gsn_panel(wks,plotu3,(/1,3/),resu3)
   frame(wks)
 
 
