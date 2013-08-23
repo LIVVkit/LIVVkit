@@ -38,11 +38,16 @@ def bit_list(reg_test):
     bench_file_path = reg_test + '/bench/confined-shelf/data'
     flag = VV_checks.bit4bit(data_file_path,bench_file_path)
     dictionary['confined'] = flag
-#ismip hom a case
+#ismip hom a 80 case
     data_file_path = reg_test + '/ismip-hom-a/80km/data'
     bench_file_path = reg_test + '/bench/ismip-hom-a/80km/data'
     flag = VV_checks.bit4bit(data_file_path,bench_file_path)
-    dictionary['ismip-hom-a'] = flag
+    dictionary['ismip-hom-a80'] = flag
+#ismip hom a 20 case
+    data_file_path = reg_test + '/ismip-hom-a/20km/data'
+    bench_file_path = reg_test + '/bench/ismip-hom-a/20km/data'
+    flag = VV_checks.bit4bit(data_file_path,bench_file_path)
+    dictionary['ismip-hom-a20'] = flag
 #ismip hom c case
     data_file_path = reg_test + '/ismip-hom-c/80km/data'
     bench_file_path = reg_test + '/bench/ismip-hom-c/80km/data'
@@ -59,10 +64,11 @@ def bit_list(reg_test):
 def web(descript_file,test_file, \
 	dome30d_file,dome30d_case,dome30d_plot,dome30d_xml,dome30e_file,dome30e_case,dome30e_plot,dome30e_xml, \
 	circ_file,circ_case,circ_plot,circ_xml,conf_file,conf_case,conf_plot,conf_xml, \
-	ishoma80_file,ishoma80_case,ishoma80_plot,ishoma80_xml,ishomc80_file,ishomc80_case,ishomc80_plot,ishomc80_xml, \
+	ishoma80_file,ishoma80_case,ishoma80_plot,ishoma80_xml,ishoma20_file,ishoma20_case,ishoma20_plot,ishoma20_xml, \
+        ishomc80_file,ishomc80_case,ishomc80_plot,ishomc80_xml, \
 	gis10_file,gis10_case,gis10_plot,gis10_xml,job_path,ncl_path,data_path,html_path,script_path,\
         diagnostic_flag,evolving_flag,circular_flag,confined_flag,
-        ismip_hom_a_flag,ismip_hom_c_flag,gis_10km_flag):  
+        ismip_hom_a80_flag,ismip_hom_a20_flag,ismip_hom_c_flag,gis_10km_flag):  
 
 # using data, fill the web page with info about the cases
 	test_file.write('<HTML>\n')
@@ -287,17 +293,17 @@ def web(descript_file,test_file, \
 
 
 #apply flag to turn off running test
-        if ismip_hom_a_flag == 1:
+        if ismip_hom_a80_flag == 1:
 
-# ISMIP HOM A stats
-            if dictionary['ismip-hom-a'] == 0:
+# ISMIP HOM A 80km stats
+            if dictionary['ismip-hom-a80'] == 0:
                 test_file.write('<H2>ISMIP HOM A 80KM Test: <font color="green">Bit-for-Bit</font></H2>')
             else:
                 test_file.write('<H2>ISMIP HOM A 80KM Test: <font color="red">NOT Bit-for-Bit</font></H2>')
 
 # put something here to flag BFB results and no need to do any more calculations
-	    flag_to_plot_iha = 1
-	    if flag_to_plot_iha:
+	    flag_to_plot_iha80 = 1
+	    if flag_to_plot_iha80:
 
 		    test_file.write('<TH ALIGN=LEFT><A HREF="ishoma80_details.html">ISMIP HOM A 80km Velocity Solver Details</A>\n')
 		    test_file.write('<BR>\n')
@@ -318,7 +324,7 @@ def web(descript_file,test_file, \
 		    test_file.write('<TH ALIGN=LEFT><A HREF="ishoma80_plot.html">ISMIP HOM A 80km Plots</A>\n')
 		    test_file.write('<BR>\n')
                     if failedt != 0:
-                        ishoma80_plot.write("<H2>ISMIP HOM A Test failed, plots may not be generated</H2><br>")
+                        ishoma80_plot.write("<H2>ISMIP HOM A 80km Test failed, plots may not be generated</H2><br>")
                     checkpath = job_path + '/ismip-hom-a/80km/data/ishom.a.80km.JFNK.out.nc'
                     noplot = VV_checks.emptycheck(checkpath)
                     if noplot != 1:
@@ -333,7 +339,56 @@ def web(descript_file,test_file, \
 	    test_file.write(strrand)
 
         else:
-            print "NOT RUNNING ISMIP HOM A TESTCASE"
+            print "NOT RUNNING ISMIP HOM A 80KM TESTCASE"
+
+
+#apply flag to turn off running test
+        if ismip_hom_a20_flag == 1:
+ 
+# ISMIP HOM A 20km stats
+            if dictionary['ismip-hom-a20'] == 0:
+                test_file.write('<H2>ISMIP HOM A 20KM Test: <font color="green">Bit-for-Bit</font></H2>')
+            else:
+                test_file.write('<H2>ISMIP HOM A 20KM Test: <font color="red">NOT Bit-for-Bit</font></H2>')
+
+# put something here to flag BFB results and no need to do any more calculations
+            flag_to_plot_iha20 = 1
+            if flag_to_plot_iha20:
+
+                test_file.write('<TH ALIGN=LEFT><A HREF="ishoma20_details.html">ISMIP HOM A 20km Velocity Solver Details</A>\n')
+                test_file.write('<BR>\n')
+                failedt = VV_ismip.a20details(ishoma20_file,job_path)
+
+                test_file.write('<TH ALIGN=LEFT><A HREF="ishoma20_xml.html">Solver Parameter Details: ISMIP HOM A 20km XML Details</A>\n')
+                test_file.write('<BR>\n')
+                xml_path = job_path + '/ismip-hom-a/20km/trilinosOptions.xml'
+                bench_xml_path = job_path + '/bench/ismip-hom-a/20km/trilinosOptions.xml'
+                VV_utilities.xml(ishoma20_xml,xml_path,bench_xml_path,ncl_path,html_path)
+                
+                test_file.write('<TH ALIGN=LEFT><A HREF="ishoma20_case.html">ISMIP HOM A 20km Case Details</A>\n')
+                test_file.write('<BR>\n')
+                configure_path = job_path + '/ismip-hom-a/20km/ishom.a.20km.JFNK.trilinos.config'
+                bench_configure_path = job_path + '/bench/ismip-hom-a/20km/ishom.a.20km.JFNK.trilinos.config'
+                VV_utilities.conf(ishoma20_case,configure_path,bench_configure_path,ncl_path,html_path)
+                test_file.write('<TH ALIGN=LEFT><A HREF="ishoma20_plot.html">ISMIP HOM A 20km Plots</A>\n')
+                test_file.write('<BR>\n')
+                if failedt != 0:
+                    ishoma20_plot.write("<H2>ISMIP HOM A 20 Test failed, plots may not be generated</H2><br>")
+                checkpath = job_path + '/ismip-hom-a/20km/data/ishom.a.20km.JFNK.out.nc'
+                noplot = VV_checks.emptycheck(checkpath)
+                if noplot != 1:
+                    VV_ismip.a20plot(ishoma20_plot,job_path,ncl_path,html_path,script_path)
+ 
+# Time stamping
+            mode = os.stat(job_path + '/ismip-hom-a/20km').st_mtime
+            mode = mode - 14400
+            mode = time.gmtime(mode)
+            ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
+            strrand = '<b>Time of last access: ' + ctime + '</b>'
+            test_file.write(strrand)
+ 
+        else:
+            print "NOT RUNNING ISMIP HOM A 20KM TESTCASE"
 
 
 #apply flag to turn off running test

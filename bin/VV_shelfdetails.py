@@ -120,7 +120,7 @@ def circplot(plot_file,job_path,ncl_path,html_path,script_path):  # using data, 
 	VARPIC  ='VARPIC = addfile(\"' + job_path + '/circular-shelf/data/circular-shelf.gnu.PIC.nc\", \"r\")'
 	VARJFNK  ='VARJFNK = addfile(\"' + job_path + '/circular-shelf/data/circular-shelf.gnu.JFNK.nc\", \"r\")'
 	png  = 'PNG = "' + ncl_path + '/circshelfvel.png"'
-        plot_circvel = "ncl '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARPIC + "' '" + VARJFNK + "' '" + png + "' " + circvel_plotfile + " >& plot_details.out"
+        plot_circvel = "ncl '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARPIC + "' '" + VARJFNK + "' '" + png + "' " + circvel_plotfile + " >> plot_details.out"
 
 #TODO create an iteration plot and have that also in the html file 
         try:
@@ -159,7 +159,7 @@ def circplot(plot_file,job_path,ncl_path,html_path,script_path):  # using data, 
 	VARPIC  ='VARPIC = addfile(\"' + job_path + '/circular-shelf/data/circular-shelf.gnu.PIC.nc\", \"r\")'
 	VARJFNK  ='VARJFNK = addfile(\"' + job_path + '/circular-shelf/data/circular-shelf.gnu.JFNK.nc\", \"r\")'
 	png  = 'PNG = "' + ncl_path + '/circshelfthk.png"'
-        plot_circthk = "ncl '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARPIC + "' '" + VARJFNK + "' '" + png + "' " + circthk_plotfile + " >& plot_details.out"
+        plot_circthk = "ncl '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARPIC + "' '" + VARJFNK + "' '" + png + "' " + circthk_plotfile + " >> plot_details.out"
 
 #TODO create an iteration plot and have that also in the html file 
         try:
@@ -192,14 +192,14 @@ def circplot(plot_file,job_path,ncl_path,html_path,script_path):  # using data, 
                 	raise
 
 # remove plot_details.out
-        if (script_path + '/plot_details.out'):
-                cleantrash = "rm -f " + script_path + "/plot_details.out"
-                try:
-                        output = subprocess.call(cleantrash, shell=True)
-                except:
-                        print "error removing plot_details.out"
-                        sys.exit(1)
-                        raise
+#        if (script_path + '/plot_details.out'):
+#                cleantrash = "rm -f " + script_path + "/plot_details.out"
+#                try:
+#                        output = subprocess.call(cleantrash, shell=True)
+#                except:
+#                        print "error removing plot_details.out"
+#                        sys.exit(1)
+#                        raise
 
         plot_file.write('<HTML>\n')
         plot_file.write('<TITLE>Circular Shelf </TITLE>\n')
@@ -228,7 +228,7 @@ def confplot(plot_file,job_path,ncl_path,html_path,script_path):  # using data, 
 	VARPIC  ='VARPIC = addfile(\"' + job_path + '/confined-shelf/data/confined-shelf.gnu.PIC.nc\", \"r\")'
 	VARJFNK  ='VARJFNK = addfile(\"' + job_path + '/confined-shelf/data/confined-shelf.gnu.JFNK.nc\", \"r\")'
 	png  = 'PNG = "' + ncl_path + '/confshelfvel.png"'
-        plot_confvel = "ncl '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARPIC + "' '" + VARJFNK + "' '" + png + "' " + confvel_plotfile + " >& plot_details.out"
+        plot_confvel = "ncl '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARPIC + "' '" + VARJFNK + "' '" + png + "' " + confvel_plotfile + " >> plot_details.out"
 
 #TODO create an iteration plot and have that also in the html file 
         try:
@@ -267,7 +267,7 @@ def confplot(plot_file,job_path,ncl_path,html_path,script_path):  # using data, 
 	VARPIC  ='VARPIC = addfile(\"' + job_path + '/confined-shelf/data/confined-shelf.gnu.PIC.nc\", \"r\")'
 	VARJFNK  ='VARJFNK = addfile(\"' + job_path + '/confined-shelf/data/confined-shelf.gnu.JFNK.nc\", \"r\")'
 	png  = 'PNG = "' + ncl_path + '/confshelfthk.png"'
-        plot_confthk = "ncl '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARPIC + "' '" + VARJFNK + "' '" + png + "' " + confthk_plotfile + " >& plot_details.out"
+        plot_confthk = "ncl '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARPIC + "' '" + VARJFNK + "' '" + png + "' " + confthk_plotfile + " >> plot_details.out"
 
 #TODO create an iteration plot and have that also in the html file 
         try:
@@ -300,14 +300,14 @@ def confplot(plot_file,job_path,ncl_path,html_path,script_path):  # using data, 
                 	raise
 
 # remove plot_details.out
-        if (script_path + '/plot_details.out'):
-                cleantrash = "rm -f " + script_path + "/plot_details.out"
-                try:
-                        output = subprocess.call(cleantrash, shell=True)
-                except:
-                        print "error removing plot_details.out"
-                        sys.exit(1)
-                        raise
+#        if (script_path + '/plot_details.out'):
+#                cleantrash = "rm -f " + script_path + "/plot_details.out"
+#                try:
+#                        output = subprocess.call(cleantrash, shell=True)
+#                except:
+#                        print "error removing plot_details.out"
+#                        sys.exit(1)
+#                        raise
 
         plot_file.write('<HTML>\n')
         plot_file.write('<TITLE>Confined Shelf </TITLE>\n')

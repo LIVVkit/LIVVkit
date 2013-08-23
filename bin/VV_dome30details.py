@@ -200,7 +200,7 @@ def dplot(plot_file,job_path,ncl_path,html_path,script_path):  # using data, fil
 	VAR4  ='VAR4 = addfile(\"' + job_path + '/dome30/diagnostic/data/dome.4.nc\", \"r\")'
 	png  = 'PNG = "' + ncl_path + '/dome30dvel"'
         plot_dome30dvel = "ncl '" + stockout + "'  '" + stock1 + "'  '" + stock4 + "'  '" + VARout + "'  '" + VAR1 + "' '" + VAR4 + \
-                           "' '" + png + "' " + dome30dvel_plotfile 
+                           "' '" + png + "' " + dome30dvel_plotfile + " >> plot_details.out" 
         try:
                 output = subprocess.call(plot_dome30dvel, shell=True)
                 print "creating diagnostic dome 30 velocity plots"
@@ -240,7 +240,7 @@ def dplot(plot_file,job_path,ncl_path,html_path,script_path):  # using data, fil
 	VAR4  ='VAR4 = addfile(\"' + job_path + '/dome30/diagnostic/data/dome.4.nc\", \"r\")'
 	png  = 'PNG = "' + ncl_path + '/dome30dthk"'
         plot_dome30dthk = "ncl '" + stockout + "'  '" + stock1 + "'  '" + stock4 + "'  '" + VARout + "'  '" + VAR1 + "' '" + VAR4 + \
-                           "' '" + png + "' " + dome30dthk_plotfile 
+                           "' '" + png + "' " + dome30dthk_plotfile + " >> plot_details.out"
         try:
                 output = subprocess.call(plot_dome30dthk, shell=True)
                 print "creating diagnostic dome30 thickness plots"
@@ -271,14 +271,14 @@ def dplot(plot_file,job_path,ncl_path,html_path,script_path):  # using data, fil
                 	raise
 
 # remove plot_details.out
-        if (script_path + '/plot_details.out'):
-                cleantrash = "rm -f " + script_path + "/plot_details.out"
-                try:
-                        output = subprocess.call(cleantrash, shell=True)
-                except:
-                        print "error removing plot_details.out"
-                        sys.exit(1)
-                        raise
+#        if (script_path + '/plot_details.out'):
+#                cleantrash = "rm -f " + script_path + "/plot_details.out"
+#                try:
+#                        output = subprocess.call(cleantrash, shell=True)
+#                except:
+#                        print "error removing plot_details.out"
+#                        sys.exit(1)
+#                        raise
 
         plot_file.write('<HTML>\n')
         plot_file.write('<TITLE>Diagnostic Dome 30 </TITLE>\n')
@@ -303,17 +303,13 @@ def eplot(plot_file,job_path,ncl_path,html_path,script_path):  # using data, fil
         
 # creating dome 30e velocity plot
         dome30evel_plotfile=''+ ncl_path + '/dome30evel.ncl'
-#	stockout='STOCKout = addfile(\"'+ job_path + '/bench/dome30/evolving/data/dome.out.nc\", \"r\")'
 	stock9='STOCK9 = addfile(\"'+ job_path + '/bench/dome30/evolving/data/dome.9.nc\", \"r\")'
 	stock15='STOCK15 = addfile(\"'+ job_path + '/bench/dome30/evolving/data/dome.15.nc\", \"r\")'
-#	VARout='VARout = addfile(\"'+ job_path + '/dome30/evolving/data/dome.out.nc\", \"r\")'
 	VAR9  ='VAR9 = addfile(\"' + job_path + '/dome30/evolving/data/dome.9.nc\", \"r\")'
 	VAR15  ='VAR15 = addfile(\"' + job_path + '/dome30/evolving/data/dome.15.nc\", \"r\")'
 	png  = 'PNG = "' + ncl_path + '/dome30evel"'
-#        plot_dome30evel = "ncl '" + stockout + "'  '" + stock9 + "'  '" + stock15 + "'  '" + VARout + "'  '" + VAR9 + "' '" + VAR15 + \
-#                           "' '" + png + "' " + dome30evel_plotfile + " >& plot_details.out" 
         plot_dome30evel = "ncl '" + stock9 + "'  '" + stock15 + "'  '" + VAR9 + "' '" + VAR15 + \
-                           "' '" + png + "' " + dome30evel_plotfile 
+                           "' '" + png + "' " + dome30evel_plotfile + " >> plot_details.out" 
         try:
                 output = subprocess.call(plot_dome30evel, shell=True)
                 print "creating evolving dome30 velocity plots"
@@ -345,17 +341,13 @@ def eplot(plot_file,job_path,ncl_path,html_path,script_path):  # using data, fil
 
 # creating dome 30e thickness plot
         dome30ethk_plotfile=''+ ncl_path + '/dome30ethk.ncl'
-#	stockout='STOCKout = addfile(\"'+ job_path + '/bench/dome30/evolving/data/dome.out.nc\", \"r\")'
 	stock9='STOCK9 = addfile(\"'+ job_path + '/bench/dome30/evolving/data/dome.9.nc\", \"r\")'
 	stock15='STOCK15 = addfile(\"'+ job_path + '/bench/dome30/evolving/data/dome.15.nc\", \"r\")'
-#	VARout='VARout = addfile(\"'+ job_path + '/dome30/evolving/data/dome.out.nc\", \"r\")'
 	VAR9  ='VAR9 = addfile(\"' + job_path + '/dome30/evolving/data/dome.9.nc\", \"r\")'
 	VAR15  ='VAR15 = addfile(\"' + job_path + '/dome30/evolving/data/dome.15.nc\", \"r\")'
 	png  = 'PNG = "' + ncl_path + '/dome30ethk"'
-#        plot_dome30ethk = "ncl '" + stockout + "'  '" + stock9 + "'  '" + stock15 + "'  '" + VARout + "'  '" + VAR9 + "' '" + VAR15 + \
-#                           "' '" + png + "' " + dome30ethk_plotfile + " >& plot_details.out"
         plot_dome30ethk = "ncl '" + stock9 + "'  '" + stock15 + "'  '" + VAR9 + "' '" + VAR15 + \
-                           "' '" + png + "' " + dome30ethk_plotfile
+                           "' '" + png + "' " + dome30ethk_plotfile + " >> plot_details.out"
         try:
                 output = subprocess.call(plot_dome30ethk, shell=True)
                 print "creating evolving dome30 thickness plots"
@@ -386,14 +378,14 @@ def eplot(plot_file,job_path,ncl_path,html_path,script_path):  # using data, fil
                 	raise
 
 # remove plot_details.out
-        if (script_path + '/plot_details.out'):
-                cleantrash = "rm -f " + script_path + "/plot_details.out"
-                try:
-                        output = subprocess.call(cleantrash, shell=True)
-                except:
-                        print "error removing plot_details.out"
-                        sys.exit(1)
-                        raise
+#        if (script_path + '/plot_details.out'):
+#                cleantrash = "rm -f " + script_path + "/plot_details.out"
+#                try:
+#                        output = subprocess.call(cleantrash, shell=True)
+#                except:
+#                        print "error removing plot_details.out"
+#                        sys.exit(1)
+#                        raise
 
         plot_file.write('<HTML>\n')
         plot_file.write('<TITLE>Evolving Dome 30 </TITLE>\n')

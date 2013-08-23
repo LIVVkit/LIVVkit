@@ -54,8 +54,10 @@ parser.add_option('-I', '--circular-shelf', action='store', type='int', dest='ci
                   metavar='FLAG', help='flag to run circular shelf test')
 parser.add_option('-O', '--confined-shelf', action='store', type='int', dest='confined_flag', \
                   metavar='FLAG', help='flag to run confined shelf test')
-parser.add_option('-A', '--ismip-hom-A', action='store', type='int', dest='ismip_hom_a_flag', \
-                  metavar='FLAG', help='flag to run ismip hom a test')
+parser.add_option('-A', '--ismip-hom-A80', action='store', type='int', dest='ismip_hom_a80_flag', \
+                  metavar='FLAG', help='flag to run ismip hom a 80km test')
+parser.add_option('-B', '--ismip-hom-A20', action='store', type='int', dest='ismip_hom_a20_flag', \
+                  metavar='FLAG', help='flag to run ismip hom a 20km test')
 parser.add_option('-C', '--ismip-hom-C', action='store', type='int', dest='ismip_hom_c_flag', \
                   metavar='FLAG', help='flag to run ismip hom c test')
 parser.add_option('-G', '--gis10km', action='store', type='int', dest='gis_10km_flag', \
@@ -216,6 +218,11 @@ if options.test_suite:
         ishoma80_case = open(target_html + '/ishoma80_case.html', 'w')
         ishoma80_plot = open(target_html + '/ishoma80_plot.html', 'w')
         ishoma80_xml  = open(target_html + '/ishoma80_xml.html', 'w')
+# ismip hom a 20km case
+        ishoma20_file = open(target_html + '/ishoma20_details.html', 'w')
+        ishoma20_case = open(target_html + '/ishoma20_case.html', 'w')
+        ishoma20_plot = open(target_html + '/ishoma20_plot.html', 'w')
+        ishoma20_xml  = open(target_html + '/ishoma20_xml.html', 'w')
 # ismip hom c 80km case
         ishomc80_file = open(target_html + '/ishomc80_details.html', 'w')
         ishomc80_case = open(target_html + '/ishomc80_case.html', 'w')
@@ -235,11 +242,12 @@ if options.test_suite:
         VV_testsuite.web(descript_file,test_file,dome30d_file,dome30d_case,dome30d_plot,dome30d_xml, \
                 dome30e_file,dome30e_case,dome30e_plot,dome30e_xml, \
                 circ_file,circ_case,circ_plot,circ_xml,conf_file,conf_case,conf_plot,conf_xml, \
-                ishoma80_file,ishoma80_case,ishoma80_plot,ishoma80_xml,ishomc80_file,ishomc80_case,ishomc80_plot,ishomc80_xml,\
+                ishoma80_file,ishoma80_case,ishoma80_plot,ishoma80_xml,ishoma20_file,ishoma20_case,ishoma20_plot,ishoma20_xml, \
+                ishomc80_file,ishomc80_case,ishomc80_plot,ishomc80_xml,\
                 gis10_file,gis10_case,gis10_plot,gis10_xml, \
                 reg_test,options.ncl_path,options.data_path,target_html,options.script_path,\
                 options.diagnostic_flag,options.evolving_flag,options.circular_flag,options.confined_flag,\
-                options.ismip_hom_a_flag,options.ismip_hom_c_flag,options.gis_10km_flag)
+                options.ismip_hom_a80_flag,options.ismip_hom_a20_flag,options.ismip_hom_c_flag,options.gis_10km_flag)
 
 dictionary = VV_testsuite.bit_list(reg_test)
 
