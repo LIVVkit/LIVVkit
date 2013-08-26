@@ -48,15 +48,15 @@ begin
   tdout = thkstockout@scale_factor * thkdiffout
   td1   = thkstock1@scale_factor   * thkdiff1
   td4   = thkstock4@scale_factor   * thkdiff4
-  tsout@long_name  = "Scaled Benchmark"
-  ts1@long_name    = "Scaled Benchmark"
-  ts4@long_name    = "Scaled Benchmark"
-  tvout@long_name  = "Scaled Current Run"
-  tv1@long_name    = "Scaled Current Run"
-  tv4@long_name    = "Scaled Current Run"
-  tdout@long_name  = "Scaled Difference out"
-  td1@long_name    = "Scaled Difference 1 proc"
-  td4@long_name    = "Scaled Difference 4 proc"
+  tsout@long_name  = "Serial Scaled Benchmark"
+  ts1@long_name    = "1 Proc Scaled Benchmark"
+  ts4@long_name    = "4 Proc Scaled Benchmark"
+  tvout@long_name  = "Serial Scaled Current Run"
+  tv1@long_name    = "1 Proc Scaled Current Run"
+  tv4@long_name    = "4 Proc Scaled Current Run"
+  tdout@long_name  = "Serial Scaled Difference"
+  td1@long_name    = "1 Proc Scaled Difference"
+  td4@long_name    = "4 Proc Scaled Difference"
 
 ;************************************************
 ; create plots

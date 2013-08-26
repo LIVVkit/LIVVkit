@@ -37,12 +37,12 @@ begin
   tvJFNK = thkstockJFNK@scale_factor * thkvarblJFNK
   tdPIC  = thkstockPIC@scale_factor  * thkdiffPIC
   tdJFNK = thkstockJFNK@scale_factor * thkdiffJFNK
-  tsPIC@long_name  = "Scaled Benchmark"
-  tsJFNK@long_name = "Scaled Benchmark"
-  tvPIC@long_name  = "Scaled Current Run"
-  tvJFNK@long_name = "Scaled Current Run"
-  tdPIC@long_name  = "Scaled Difference PIC"
-  tdJFNK@long_name = "Scaled Difference JFNK"
+  tsPIC@long_name  = "PIC Scaled Benchmark"
+  tsJFNK@long_name = "JFNK Scaled Benchmark"
+  tvPIC@long_name  = "PIC Scaled Current Run"
+  tvJFNK@long_name = "JFNK Scaled Current Run"
+  tdPIC@long_name  = "PIC Scaled Difference"
+  tdJFNK@long_name = "JFNK Scaled Difference"
 
 ;************************************************
 ; create plots

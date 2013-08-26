@@ -48,15 +48,15 @@ begin
   vdout   = vstockout@scale_factor  * vdiffout
   vdPIC   = vstockPIC@scale_factor  * vdiffPIC
   vdJFNK  = vstockJFNK@scale_factor * vdiffJFNK
-  vsout@long_name  = "Scaled Benchmark"
-  vsPIC@long_name  = "Scaled Benchmark"
-  vsJFNK@long_name = "Scaled Benchmark"
-  vvout@long_name  = "Scaled Current Run"
-  vvPIC@long_name  = "Scaled Current Run"
-  vvJFNK@long_name = "Scaled Current Run"
-  vdout@long_name  = "Diff out plot"
-  vdPIC@long_name  = "Diff PIC plot"
-  vdJFNK@long_name = "Diff JFNK plot"
+  vsout@long_name  = "Serial Scaled Benchmark"
+  vsPIC@long_name  = "PIC Scaled Benchmark"
+  vsJFNK@long_name = "JFNK Scaled Benchmark"
+  vvout@long_name  = "Serial Scaled Current Run"
+  vvPIC@long_name  = "PIC Scaled Current Run"
+  vvJFNK@long_name = "JFNK Scaled Current Run"
+  vdout@long_name  = "Serial Scaled Difference"
+  vdPIC@long_name  = "PIC Scaled Difference"
+  vdJFNK@long_name = "JFNK Scaled Difference"
 
 ;************************************************
 ; create plots

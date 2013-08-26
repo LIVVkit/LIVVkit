@@ -32,13 +32,13 @@ export HTML_LINK="http://users.nccs.gov/~$USER"
 
 # flags to select verification tests
 export RUN_DOME30_DIAGNOSTIC=1
-export RUN_DOME30_EVOLVING=0
+export RUN_DOME30_EVOLVING=1
 export RUN_CIRCULAR_SHELF=1
 export RUN_CONFINED_SHELF=1
 export RUN_ISMIP_HOM_A80=1
 export RUN_ISMIP_HOM_A20=1
-export RUN_ISMIP_HOM_C=0
-export RUN_GIS_10KM=0
+export RUN_ISMIP_HOM_C=1
+export RUN_GIS_10KM=1
 
 #flags to select production analysis
 export RUN_GIS=0

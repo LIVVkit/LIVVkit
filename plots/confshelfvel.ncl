@@ -37,12 +37,12 @@ begin
   vvJFNK = velstockJFNK@scale_factor * velvarblJFNK
   vdPIC  = velstockPIC@scale_factor  * veldiffPIC
   vdJFNK = velstockJFNK@scale_factor * veldiffJFNK
-  vsPIC@long_name  = "Scaled Benchmark"
-  vsJFNK@long_name = "Scaled Benchmark"
-  vvPIC@long_name  = "Scaled Current Run"
-  vvJFNK@long_name = "Scaled Current Run"
-  vdPIC@long_name  = "Diff PIC plot"
-  vdJFNK@long_name = "Diff JFNK plot"
+  vsPIC@long_name  = "PIC Scaled Benchmark"
+  vsJFNK@long_name = "JFNK Scaled Benchmark"
+  vvPIC@long_name  = "PIC Scaled Current Run"
+  vvJFNK@long_name = "JFNK Scaled Current Run"
+  vdPIC@long_name  = "PIC Scaled Difference"
+  vdJFNK@long_name = "JFNK Scaled Difference"
 
 ;************************************************
 ; create plots

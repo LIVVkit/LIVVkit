@@ -47,15 +47,15 @@ begin
   udout   = ustockout@scale_factor  * udiffout
   udPIC   = ustockPIC@scale_factor  * udiffPIC
   udJFNK  = ustockJFNK@scale_factor * udiffJFNK
-  usout@long_name  = "Scaled Benchmark"
-  usPIC@long_name  = "Scaled Benchmark"
-  usJFNK@long_name = "Scaled Benchmark"
-  uvout@long_name  = "Scaled Current Run"
-  uvPIC@long_name  = "Scaled Current Run"
-  uvJFNK@long_name = "Scaled Current Run"
-  udout@long_name  = "Diff out plot"
-  udPIC@long_name  = "Diff PIC plot"
-  udJFNK@long_name = "Diff JFNK plot"
+  usout@long_name  = "Serial Scaled Benchmark"
+  usPIC@long_name  = "PIC Scaled Benchmark"
+  usJFNK@long_name = "JFNK Scaled Benchmark"
+  uvout@long_name  = "Serial Scaled Current Run"
+  uvPIC@long_name  = "PIC Scaled Current Run"
+  uvJFNK@long_name = "JFNK Scaled Current Run"
+  udout@long_name  = "Serial Scaled Difference"
+  udPIC@long_name  = "PIC Scaled Difference"
+  udJFNK@long_name = "JFNK Scaled Difference"
 
 ;************************************************
 ; create plots

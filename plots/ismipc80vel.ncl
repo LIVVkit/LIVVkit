@@ -12,7 +12,7 @@ begin
 ;  STOCKJFNK   = addfile("/tmp/work/ab3/higher-order/reg_test/bench/ismip-hom-a/80km/data/ishom.c.80km.JFNK.out.nc","r")
 ;  VARPIC      = addfile("/tmp/work/ab3/higher-order/reg_test/ismip-hom-a/80km/data/ishom.c.80km.PIC.out.nc","r")
 ;  VARJFNK     = addfile("/tmp/work/ab3/higher-order/reg_test/ismip-hom-a/80km/data/ishom.c.80km.JFNK.out.nc","r")
-;  PNG         = "/tmp/work/ab3/higher-order/livv_new/plots2/ismipavel"
+;  PNG         = "/tmp/work/ab3/higher-order/livv_new/plots2/ismipcvel"
 
 ;************************************************
 ; create plots
@@ -37,12 +37,12 @@ begin
   velvJFNK  = velstockJFNK@scale_factor * velvarblJFNK
   veldPIC   = velstockPIC@scale_factor  * veldiffPIC
   veldJFNK  = velstockJFNK@scale_factor * veldiffJFNK
-  velsPIC@long_name  = "Scaled Benchmark"
-  velsJFNK@long_name = "Scaled Benchmark"
-  velvPIC@long_name  = "Scaled Current Run"
-  velvJFNK@long_name = "Scaled Current Run"
-  veldPIC@long_name  = "Diff PIC plot"
-  veldJFNK@long_name = "Diff JFNK plot"
+  velsPIC@long_name  = "PIC Scaled Benchmark"
+  velsJFNK@long_name = "JFNK Scaled Benchmark"
+  velvPIC@long_name  = "PIC Scaled Current Run"
+  velvJFNK@long_name = "JFNK Scaled Current Run"
+  veldPIC@long_name  = "PIC Scaled Difference"
+  veldJFNK@long_name = "JFNK Scaled Difference"
 
 ;************************************************
 ; create plots

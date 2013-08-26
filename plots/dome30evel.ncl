@@ -47,14 +47,14 @@ begin
 ;  vdout = velstockout@scale_factor * veldiffout
   vd9   = velstock9@scale_factor  * veldiff9
   vd15  = velstock15@scale_factor * veldiff15
-;  vsout@long_name  = "Scaled Benchmark"
-  vs9@long_name    = "Scaled Benchmark"
-  vs15@long_name   = "Scaled Benchmark"
-  vv9@long_name    = "Scaled Current Run"
-  vv15@long_name   = "Scaled Current Run"
-;  vdout@long_name  = "Diff out plot"
-  vd9@long_name    = "Diff 9 proc"
-  vd15@long_name   = "Diff 15 proc"
+;  vsout@long_name  = "Serial Scaled Benchmark"
+  vs9@long_name    = "9 Proc Scaled Benchmark"
+  vs15@long_name   = "15 Proc Scaled Benchmark"
+  vv9@long_name    = "9 Proc Scaled Current Run"
+  vv15@long_name   = "15 Proc Scaled Current Run"
+;  vdout@long_name  = "Serial Scaled Difference"
+  vd9@long_name    = "9 Proc Scaled Difference"
+  vd15@long_name   = "15 Proc Scaled Difference"
 
 ;************************************************
 ; create plots
