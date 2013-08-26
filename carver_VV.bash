@@ -6,14 +6,12 @@
 #Currently it is designed specifically for the GLIDE dycore of the CISM model, because it is
 #designed to read its output
 
-# load these before running
+# load these before running, note that on Carver, laoding python also loads numpy and matplotlib
 source $MODULESHOME/init/bash
 module load ncl/6.0.0
 module load nco/4.0.7
 module unload python/2.7
 module load python/2.7.3
-module load python_numpy/1.7.1
-module load python_matplotlib/1.2.1
 module load netcdf/4.1.3
 
 #define user for website
