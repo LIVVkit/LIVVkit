@@ -24,6 +24,8 @@ parser.add_option('-l', '--link', action='store', type='string', dest='html_link
                   metavar='PATH', help='location of website for viewing set by user')
 parser.add_option('-k', '--ncl', action='store', type='string', dest='ncl_path', \
                   metavar='PATH', help='path where the ncl directory is located')
+parser.add_option('-r', '--bdata', action='store', type='string', dest='bench_data', \
+                  metavar='FILE', help='file where the benchmark data files are stored')
 parser.add_option('-d', '--data', action='store', type='string', dest='data_path', \
                   metavar='PATH', help='path where the solver data directory is located')
 parser.add_option('-c', '--config', action='store', type='string', dest='config_file', \
@@ -148,6 +150,13 @@ except OSError as o:
 		print "recreating GIS-plot-diag.html in " + options.username + " subdirectory"
 	else:
 		raise
+try:
+        os.remove('plot_details.out')
+except OSError as o:
+        if o.errno == 2:
+                print "clearing plot_details.out"
+        else:
+                raise
 
 # create production plots for analysis
 if options.gis_prod:
@@ -245,11 +254,11 @@ if options.test_suite:
                 ishoma80_file,ishoma80_case,ishoma80_plot,ishoma80_xml,ishoma20_file,ishoma20_case,ishoma20_plot,ishoma20_xml, \
                 ishomc80_file,ishomc80_case,ishomc80_plot,ishomc80_xml,\
                 gis10_file,gis10_case,gis10_plot,gis10_xml, \
-                reg_test,options.ncl_path,options.data_path,target_html,options.script_path,\
+                reg_test,options.bench_data,options.ncl_path,options.data_path,target_html,options.script_path,\
                 options.diagnostic_flag,options.evolving_flag,options.circular_flag,options.confined_flag,\
                 options.ismip_hom_a80_flag,options.ismip_hom_a20_flag,options.ismip_hom_c_flag,options.gis_10km_flag)
 
-dictionary = VV_testsuite.bit_list(reg_test)
+dictionary = VV_testsuite.bit_list(reg_test,options.bench_data)
 
 #writing the main HTML page
 

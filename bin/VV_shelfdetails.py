@@ -9,7 +9,7 @@ import VV_outprocess
 import VV_utilities
 import VV_checks
 
-def circdetails(solver_file,job_path):  # using data, fill the web page with info
+def circdetails(solver_file,job_path,bench_data):  # using data, fill the web page with info
 
         failedt_list = []
 	solver_file.write('<HTML>\n')
@@ -37,7 +37,7 @@ def circdetails(solver_file,job_path):  # using data, fill the web page with inf
         solver_file.write('<BR> \n')
 
         solver_file.write('<H4>Benchmark Run: circular-shelf.out</H4>')
-        procttl_circb, nonlist_circb, avg2_circb, out_flag_circb, ndcircb_name, ldcircb_name = VV_outprocess.jobprocess(job_path + '/bench/circular-shelf/data/circular-shelf.out','circb')
+        procttl_circb, nonlist_circb, avg2_circb, out_flag_circb, ndcircb_name, ldcircb_name = VV_outprocess.jobprocess(job_path + '/bench/circular-shelf/' + bench_data + '/circular-shelf.out','circb')
 
         solver_file.write("Number of Processors = " + str(procttl_circb[-1]) + "<BR>\n")
         solver_file.write("Number of Nonlinear Iterations = ")
@@ -57,7 +57,7 @@ def circdetails(solver_file,job_path):  # using data, fill the web page with inf
         return failedt
 # TODO have jobprocess grab picard solver info as well
 
-def confdetails(solver_file,job_path):  # using data, fill the web page with info
+def confdetails(solver_file,job_path,bench_data):  # using data, fill the web page with info
 
         failedt_list = []
 
@@ -86,7 +86,7 @@ def confdetails(solver_file,job_path):  # using data, fill the web page with inf
         solver_file.write('<BR> \n')
 
         solver_file.write('<H4>Benchmark Run: confined-shelf.out</H4>')
-        procttl_confb, nonlist_confb, avg2_confb, out_flag_confb, ndconfb_name, ldconfb_name = VV_outprocess.jobprocess(job_path + '/bench/confined-shelf/data/confined-shelf.out','confb')
+        procttl_confb, nonlist_confb, avg2_confb, out_flag_confb, ndconfb_name, ldconfb_name = VV_outprocess.jobprocess(job_path + '/bench/confined-shelf/' + bench_data + '/confined-shelf.out','confb')
 
         solver_file.write("Number of Processors = " + str(procttl_confb[-1]) + "<BR>\n")
         solver_file.write("Number of Nonlinear Iterations = ")
@@ -108,15 +108,15 @@ def confdetails(solver_file,job_path):  # using data, fill the web page with inf
         
         return failedt
 
-def circplot(plot_file,job_path,ncl_path,html_path,script_path):  # using data, fill the web page with info
+def circplot(plot_file,job_path,ncl_path,html_path,script_path,bench_data):  # using data, fill the web page with info
 
 	plot_file.write('<HTML>\n')
 	plot_file.write('<H3>Circular Shelf Plot Details:</H3>')
 
 # creating circular shelf velocity plot 
         circvel_plotfile=''+ ncl_path + '/circshelfvel.ncl'
-	stockPIC='STOCKPIC = addfile(\"'+ job_path + '/bench/circular-shelf/data/circular-shelf.gnu.PIC.nc\", \"r\")'
-	stockJFNK='STOCKJFNK = addfile(\"'+ job_path + '/bench/circular-shelf/data/circular-shelf.gnu.JFNK.nc\", \"r\")'
+	stockPIC='STOCKPIC = addfile(\"'+ job_path + '/bench/circular-shelf/' + bench_data + '/circular-shelf.gnu.PIC.nc\", \"r\")'
+	stockJFNK='STOCKJFNK = addfile(\"'+ job_path + '/bench/circular-shelf/' + bench_data + '/circular-shelf.gnu.JFNK.nc\", \"r\")'
 	VARPIC  ='VARPIC = addfile(\"' + job_path + '/circular-shelf/data/circular-shelf.gnu.PIC.nc\", \"r\")'
 	VARJFNK  ='VARJFNK = addfile(\"' + job_path + '/circular-shelf/data/circular-shelf.gnu.JFNK.nc\", \"r\")'
 	png  = 'PNG = "' + ncl_path + '/circshelfvel.png"'
@@ -154,8 +154,8 @@ def circplot(plot_file,job_path,ncl_path,html_path,script_path):  # using data, 
 
 # creating circular shelf thickness plot 
         circthk_plotfile=''+ ncl_path + '/circshelfthk.ncl'
-	stockPIC='STOCKPIC = addfile(\"'+ job_path + '/bench/circular-shelf/data/circular-shelf.gnu.PIC.nc\", \"r\")'
-	stockJFNK='STOCKJFNK = addfile(\"'+ job_path + '/bench/circular-shelf/data/circular-shelf.gnu.JFNK.nc\", \"r\")'
+	stockPIC='STOCKPIC = addfile(\"'+ job_path + '/bench/circular-shelf/' + bench_data + '/circular-shelf.gnu.PIC.nc\", \"r\")'
+	stockJFNK='STOCKJFNK = addfile(\"'+ job_path + '/bench/circular-shelf/' + bench_data + '/circular-shelf.gnu.JFNK.nc\", \"r\")'
 	VARPIC  ='VARPIC = addfile(\"' + job_path + '/circular-shelf/data/circular-shelf.gnu.PIC.nc\", \"r\")'
 	VARJFNK  ='VARJFNK = addfile(\"' + job_path + '/circular-shelf/data/circular-shelf.gnu.JFNK.nc\", \"r\")'
 	png  = 'PNG = "' + ncl_path + '/circshelfthk.png"'
@@ -216,15 +216,15 @@ def circplot(plot_file,job_path,ncl_path,html_path,script_path):  # using data, 
 	plot_file.write('</HTML>\n')
 	plot_file.close()
 
-def confplot(plot_file,job_path,ncl_path,html_path,script_path):  # using data, fill the web page with info
+def confplot(plot_file,job_path,ncl_path,html_path,script_path,bench_data):  # using data, fill the web page with info
 
         plot_file.write('<HTML>\n')
 	plot_file.write('<H3>Confined Shelf Plot Details:</H3>')
 
 # creating confined shelf velocity plot 
         confvel_plotfile=''+ ncl_path + '/confshelfvel.ncl'
-	stockPIC='STOCKPIC = addfile(\"'+ job_path + '/bench/confined-shelf/data/confined-shelf.gnu.PIC.nc\", \"r\")'
-	stockJFNK='STOCKJFNK = addfile(\"'+ job_path + '/bench/confined-shelf/data/confined-shelf.gnu.JFNK.nc\", \"r\")'
+	stockPIC='STOCKPIC = addfile(\"'+ job_path + '/bench/confined-shelf/' + bench_data + '/confined-shelf.gnu.PIC.nc\", \"r\")'
+	stockJFNK='STOCKJFNK = addfile(\"'+ job_path + '/bench/confined-shelf/' + bench_data + '/confined-shelf.gnu.JFNK.nc\", \"r\")'
 	VARPIC  ='VARPIC = addfile(\"' + job_path + '/confined-shelf/data/confined-shelf.gnu.PIC.nc\", \"r\")'
 	VARJFNK  ='VARJFNK = addfile(\"' + job_path + '/confined-shelf/data/confined-shelf.gnu.JFNK.nc\", \"r\")'
 	png  = 'PNG = "' + ncl_path + '/confshelfvel.png"'
@@ -262,8 +262,8 @@ def confplot(plot_file,job_path,ncl_path,html_path,script_path):  # using data, 
 
 # creating confined shelf thickness plot 
         confthk_plotfile=''+ ncl_path + '/confshelfthk.ncl'
-	stockPIC='STOCKPIC = addfile(\"'+ job_path + '/bench/confined-shelf/data/confined-shelf.gnu.PIC.nc\", \"r\")'
-	stockJFNK='STOCKJFNK = addfile(\"'+ job_path + '/bench/confined-shelf/data/confined-shelf.gnu.JFNK.nc\", \"r\")'
+	stockPIC='STOCKPIC = addfile(\"'+ job_path + '/bench/confined-shelf/' + bench_data + '/confined-shelf.gnu.PIC.nc\", \"r\")'
+	stockJFNK='STOCKJFNK = addfile(\"'+ job_path + '/bench/confined-shelf/' + bench_data + '/confined-shelf.gnu.JFNK.nc\", \"r\")'
 	VARPIC  ='VARPIC = addfile(\"' + job_path + '/confined-shelf/data/confined-shelf.gnu.PIC.nc\", \"r\")'
 	VARJFNK  ='VARJFNK = addfile(\"' + job_path + '/confined-shelf/data/confined-shelf.gnu.JFNK.nc\", \"r\")'
 	png  = 'PNG = "' + ncl_path + '/confshelfthk.png"'

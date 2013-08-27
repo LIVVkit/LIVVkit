@@ -16,46 +16,46 @@ from stat import *
 import time
 
 #bit-for-bit check for each test case
-def bit_list(reg_test):
+def bit_list(reg_test,bench_data):
     dictionary = {}
 #diagnostic dome30 case
     data_file_path = reg_test + '/dome30/diagnostic/data'
-    bench_file_path = reg_test + '/bench/dome30/diagnostic/data'
+    bench_file_path = reg_test + '/bench/dome30/diagnostic/' + bench_data
     flag = VV_checks.bit4bit(data_file_path,bench_file_path)
     dictionary['diagnostic'] = flag
 #evolving dome30 case
     data_file_path = reg_test + '/dome30/evolving/data'
-    bench_file_path = reg_test + '/bench/dome30/evolving/data'
+    bench_file_path = reg_test + '/bench/dome30/evolving/' + bench_data
     flag = VV_checks.bit4bit(data_file_path,bench_file_path)
     dictionary['evolving'] = flag
 #circular shelf case
     data_file_path = reg_test + '/circular-shelf/data'
-    bench_file_path = reg_test + '/bench/circular-shelf/data'
+    bench_file_path = reg_test + '/bench/circular-shelf/' + bench_data
     flag = VV_checks.bit4bit(data_file_path,bench_file_path)
     dictionary['circular'] = flag
 #confined shelf case
     data_file_path = reg_test + '/confined-shelf/data'
-    bench_file_path = reg_test + '/bench/confined-shelf/data'
+    bench_file_path = reg_test + '/bench/confined-shelf/' + bench_data
     flag = VV_checks.bit4bit(data_file_path,bench_file_path)
     dictionary['confined'] = flag
 #ismip hom a 80 case
     data_file_path = reg_test + '/ismip-hom-a/80km/data'
-    bench_file_path = reg_test + '/bench/ismip-hom-a/80km/data'
+    bench_file_path = reg_test + '/bench/ismip-hom-a/80km/' + bench_data
     flag = VV_checks.bit4bit(data_file_path,bench_file_path)
     dictionary['ismip-hom-a80'] = flag
 #ismip hom a 20 case
     data_file_path = reg_test + '/ismip-hom-a/20km/data'
-    bench_file_path = reg_test + '/bench/ismip-hom-a/20km/data'
+    bench_file_path = reg_test + '/bench/ismip-hom-a/20km/' + bench_data
     flag = VV_checks.bit4bit(data_file_path,bench_file_path)
     dictionary['ismip-hom-a20'] = flag
 #ismip hom c case
     data_file_path = reg_test + '/ismip-hom-c/80km/data'
-    bench_file_path = reg_test + '/bench/ismip-hom-c/80km/data'
+    bench_file_path = reg_test + '/bench/ismip-hom-c/80km/' + bench_data
     flag = VV_checks.bit4bit(data_file_path,bench_file_path)
     dictionary['ismip-hom-c'] = flag
 #gis10km case
     data_file_path = reg_test + '/gis_10km/data'
-    bench_file_path = reg_test + '/bench/gis_10km/data'
+    bench_file_path = reg_test + '/bench/gis_10km/' + bench_data
     flag = VV_checks.bit4bit(data_file_path,bench_file_path)
     dictionary['gis_10km'] = flag
 
@@ -66,7 +66,7 @@ def web(descript_file,test_file, \
 	circ_file,circ_case,circ_plot,circ_xml,conf_file,conf_case,conf_plot,conf_xml, \
 	ishoma80_file,ishoma80_case,ishoma80_plot,ishoma80_xml,ishoma20_file,ishoma20_case,ishoma20_plot,ishoma20_xml, \
         ishomc80_file,ishomc80_case,ishomc80_plot,ishomc80_xml, \
-	gis10_file,gis10_case,gis10_plot,gis10_xml,job_path,ncl_path,data_path,html_path,script_path,\
+	gis10_file,gis10_case,gis10_plot,gis10_xml,job_path,bench_data,ncl_path,data_path,html_path,script_path,\
         diagnostic_flag,evolving_flag,circular_flag,confined_flag,
         ismip_hom_a80_flag,ismip_hom_a20_flag,ismip_hom_c_flag,gis_10km_flag):  
 
@@ -79,7 +79,7 @@ def web(descript_file,test_file, \
 	test_file.write('<TH ALIGN=LEFT><A HREF="test_descript.html">Test Suite Descriptions</A>\n')
 	test_file.write('<BR>\n')
 
-        dictionary = bit_list(job_path)
+        dictionary = bit_list(job_path,bench_data)
 
 
 #apply flag to turn off running test
@@ -98,7 +98,7 @@ def web(descript_file,test_file, \
 # link to dome30d_file with descriptions about the test cases
 		    test_file.write('<TH ALIGN=LEFT><A HREF="dome30d_details.html">Diagnostic Dome 30 Velocity Solver Details</A>\n')
 		    test_file.write('<BR>\n')
-                    failedt = VV_dome30details.ddetails(dome30d_file,job_path,ncl_path,data_path,html_path)
+                    failedt = VV_dome30details.ddetails(dome30d_file,job_path,ncl_path,data_path,html_path,bench_data)
 
 		    test_file.write('<TH ALIGN=LEFT><A HREF="dome30d_xml.html">Solver Parameter Settings: Diagnostic Dome 30 XML Details</A>\n')
 		    test_file.write('<BR>\n')
@@ -122,7 +122,7 @@ def web(descript_file,test_file, \
                     noplot1 = noplot
                     noplot = VV_checks.emptycheck(checkpath2)
                     if noplot1 != 1 and noplot != 1:
-                        VV_dome30details.dplot(dome30d_plot,job_path,ncl_path,html_path,script_path)
+                        VV_dome30details.dplot(dome30d_plot,job_path,ncl_path,html_path,script_path,bench_data)
 
 # Time stamping
 	    strrand = ''
@@ -153,7 +153,7 @@ def web(descript_file,test_file, \
 # link to dome30e_file with descriptions about the test cases
 		    test_file.write('<TH ALIGN=LEFT><A HREF="dome30e_details.html">Evolving Dome 30 Velocity Solver Details</A>\n')
 		    test_file.write('<BR>\n')
-        	    failedt = VV_dome30details.edetails(dome30e_file,job_path,ncl_path,data_path,html_path)
+        	    failedt = VV_dome30details.edetails(dome30e_file,job_path,ncl_path,data_path,html_path,bench_data)
 
 		    test_file.write('<TH ALIGN=LEFT><A HREF="dome30e_xml.html">Solver Parameter Settings: Evolving Dome 30 XML Details</A>\n')
 		    test_file.write('<BR>\n')
@@ -177,7 +177,7 @@ def web(descript_file,test_file, \
                     noplot1 = noplot
                     noplot = VV_checks.emptycheck(checkpath2)
                     if noplot != 1 and noplot != 1:
-                        VV_dome30details.eplot(dome30e_plot,job_path,ncl_path,html_path,script_path)
+                        VV_dome30details.eplot(dome30e_plot,job_path,ncl_path,html_path,script_path,bench_data)
 
 # Time stamping
 	    mode = os.stat(job_path + '/dome30/evolving').st_mtime
@@ -207,7 +207,7 @@ def web(descript_file,test_file, \
 
 		    test_file.write('<TH ALIGN=LEFT><A HREF="circ_details.html">Circular Shelf Velocity Solver Details</A>\n')
 		    test_file.write('<BR>\n')
-        	    failedt = VV_shelfdetails.circdetails(circ_file,job_path)
+        	    failedt = VV_shelfdetails.circdetails(circ_file,job_path,bench_data)
 
 		    test_file.write('<TH ALIGN=LEFT><A HREF="circ_xml.html">Solver Parameter Settings: Circular Shelf XML Details</A>\n')
                     test_file.write('<BR>\n')
@@ -228,7 +228,7 @@ def web(descript_file,test_file, \
                     checkpath = job_path + '/circular-shelf/data/circular-shelf.gnu.JFNK.nc'
                     noplot = VV_checks.emptycheck(checkpath)
                     if noplot != 1:
-                        VV_shelfdetails.circplot(circ_plot,job_path,ncl_path,html_path,script_path)
+                        VV_shelfdetails.circplot(circ_plot,job_path,ncl_path,html_path,script_path,bench_data)
 
 # Time stamping
 	    mode = os.stat(job_path + '/circular-shelf').st_mtime
@@ -257,7 +257,7 @@ def web(descript_file,test_file, \
 
 		    test_file.write('<TH ALIGN=LEFT><A HREF="conf_details.html">Confined Shelf Velocity Solver Details</A>\n')
 		    test_file.write('<BR>\n')
-        	    failedt = VV_shelfdetails.confdetails(conf_file,job_path)
+        	    failedt = VV_shelfdetails.confdetails(conf_file,job_path,bench_data)
 
 		    test_file.write('<TH ALIGN=LEFT><A HREF="conf_xml.html">Solver Parameter Details: Confined Shelf XML Details</A>\n')
                     test_file.write('<BR>\n')
@@ -278,7 +278,7 @@ def web(descript_file,test_file, \
                     checkpath = job_path + '/confined-shelf/data/confined-shelf.gnu.JFNK.nc'
                     noplot = VV_checks.emptycheck(checkpath)
                     if noplot != 1:
-                        VV_shelfdetails.confplot(conf_plot,job_path,ncl_path,html_path,script_path)
+                        VV_shelfdetails.confplot(conf_plot,job_path,ncl_path,html_path,script_path,bench_data)
 
 # Time stamping
 	    mode = os.stat(job_path + '/confined-shelf').st_mtime
@@ -307,7 +307,7 @@ def web(descript_file,test_file, \
 
 		    test_file.write('<TH ALIGN=LEFT><A HREF="ishoma80_details.html">ISMIP HOM A 80km Velocity Solver Details</A>\n')
 		    test_file.write('<BR>\n')
-        	    failedt = VV_ismip.a80details(ishoma80_file,job_path)
+        	    failedt = VV_ismip.a80details(ishoma80_file,job_path,bench_data)
 
 		    test_file.write('<TH ALIGN=LEFT><A HREF="ishoma80_xml.html">Solver Parameter Details: ISMIP HOM A 80km XML Details</A>\n')
                     test_file.write('<BR>\n')
@@ -328,7 +328,7 @@ def web(descript_file,test_file, \
                     checkpath = job_path + '/ismip-hom-a/80km/data/ishom.a.80km.JFNK.out.nc'
                     noplot = VV_checks.emptycheck(checkpath)
                     if noplot != 1:
-                        VV_ismip.a80plot(ishoma80_plot,job_path,ncl_path,html_path,script_path)
+                        VV_ismip.a80plot(ishoma80_plot,job_path,ncl_path,html_path,script_path,bench_data)
 
 # Time stamping
 	    mode = os.stat(job_path + '/ismip-hom-a/80km').st_mtime
@@ -357,7 +357,7 @@ def web(descript_file,test_file, \
 
                 test_file.write('<TH ALIGN=LEFT><A HREF="ishoma20_details.html">ISMIP HOM A 20km Velocity Solver Details</A>\n')
                 test_file.write('<BR>\n')
-                failedt = VV_ismip.a20details(ishoma20_file,job_path)
+                failedt = VV_ismip.a20details(ishoma20_file,job_path,bench_data)
 
                 test_file.write('<TH ALIGN=LEFT><A HREF="ishoma20_xml.html">Solver Parameter Details: ISMIP HOM A 20km XML Details</A>\n')
                 test_file.write('<BR>\n')
@@ -377,7 +377,7 @@ def web(descript_file,test_file, \
                 checkpath = job_path + '/ismip-hom-a/20km/data/ishom.a.20km.JFNK.out.nc'
                 noplot = VV_checks.emptycheck(checkpath)
                 if noplot != 1:
-                    VV_ismip.a20plot(ishoma20_plot,job_path,ncl_path,html_path,script_path)
+                    VV_ismip.a20plot(ishoma20_plot,job_path,ncl_path,html_path,script_path,bench_data)
  
 # Time stamping
             mode = os.stat(job_path + '/ismip-hom-a/20km').st_mtime
@@ -406,7 +406,7 @@ def web(descript_file,test_file, \
 
 		    test_file.write('<TH ALIGN=LEFT><A HREF="ishomc80_details.html">ISMIP HOM C 80km Velocity Solver Details</A>\n')
 		    test_file.write('<BR>\n')
-        	    failedt = VV_ismip.c80details(ishomc80_file,job_path)
+        	    failedt = VV_ismip.c80details(ishomc80_file,job_path,bench_data)
 
 		    test_file.write('<TH ALIGN=LEFT><A HREF="ishomc80_xml.html">Solver Parameter Settings: ISMIP HOM C 80km XML Details</A>\n')
                     test_file.write('<BR>\n')
@@ -427,7 +427,7 @@ def web(descript_file,test_file, \
                     checkpath = job_path + '/ismip-hom-c/80km/data/ishom.c.80km.JFNK.out.nc'
                     noplot = VV_checks.emptycheck(checkpath)
                     if noplot != 1:
-                        VV_ismip.c80plot(ishomc80_plot,job_path,ncl_path,html_path,script_path)
+                        VV_ismip.c80plot(ishomc80_plot,job_path,ncl_path,html_path,script_path,bench_data)
 
 # Time stamping
 	    mode = os.stat(job_path + '/ismip-hom-c/80km').st_mtime
@@ -456,7 +456,7 @@ def web(descript_file,test_file, \
 
 		    test_file.write('<TH ALIGN=LEFT><A HREF="gis10_details.html">GIS 10km Velocity Solver Details</A>\n')
 		    test_file.write('<BR>\n')
-        	    failedt = VV_gis10details.details(gis10_file,job_path,ncl_path,data_path,html_path)
+        	    failedt = VV_gis10details.details(gis10_file,job_path,ncl_path,data_path,html_path,bench_data)
 
 		    test_file.write('<TH ALIGN=LEFT><A HREF="gis10_xml.html">Solver Parameter Settings: GIS 10km XML Details</A>\n')
                     test_file.write('<BR>\n')
@@ -477,7 +477,7 @@ def web(descript_file,test_file, \
                     checkpath = job_path + '/gis_10km/data/gis_10km.seacism.nc'
                     noplot = VV_checks.emptycheck(checkpath)
                     if noplot != 1:
-                        VV_gis10details.gis10_plot(gis10_plot,job_path,ncl_path,html_path,script_path)
+                        VV_gis10details.gis10_plot(gis10_plot,job_path,ncl_path,html_path,script_path,bench_data)
 
 # Time stamping
 	    mode = os.stat(job_path + '/gis_10km').st_mtime
