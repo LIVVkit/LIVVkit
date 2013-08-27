@@ -461,12 +461,12 @@ def a80plot(plot_file,job_path,ncl_path,html_path,script_path,bench_data):  # us
 
 # formulate ismip a 80 thickness norm plot
         ishoma80thk_plotfile=''+ ncl_path + '/ismipa80thk.ncl'
-        stockPIC ='STOCKPIC = addfile(\"'+ job_path + '/bench/ismip-hom-a/80km/data/ishom.a.80km.PIC.out.nc\", \"r\")'
-        stockJFNK ='STOCKJFNK = addfile(\"'+ job_path + '/bench/ismip-hom-a/80km/data/ishom.a.80km.JFNK.out.nc\", \"r\")'
+        stockPIC ='STOCKPIC = addfile(\"'+ job_path + '/bench/ismip-hom-a/80km/' + bench_data + '/ishom.a.80km.PIC.out.nc\", \"r\")'
+        stockJFNK ='STOCKJFNK = addfile(\"'+ job_path + '/bench/ismip-hom-a/80km/' + bench_data + '/ishom.a.80km.JFNK.out.nc\", \"r\")'
         VARPIC  ='VARPIC = addfile(\"' + job_path + '/ismip-hom-a/80km/data/ishom.a.80km.PIC.out.nc\", \"r\")'
         VARJFNK  ='VARJFNK = addfile(\"' + job_path + '/ismip-hom-a/80km/data/ishom.a.80km.JFNK.out.nc\", \"r\")'
         png  = 'PNG = "' + ncl_path + '/ismipa80thk"'
-        plot_ishoma80thk = "ncl '" + stockout + "'  '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARout + "'  '" + VARPIC + "'  '" + VARJFNK +"'  '" + png + "' " + ishoma80thk_plotfile + " >> plot_details.out"
+        plot_ishoma80thk = "ncl '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARPIC + "'  '" + VARJFNK +"'  '" + png + "' " + ishoma80thk_plotfile + " >> plot_details.out"
 
 #TODO create an iteration plot and have that also in the html file 
         try:
@@ -657,12 +657,12 @@ def a20plot(plot_file,job_path,ncl_path,html_path,script_path,bench_data):  # us
 
 # formulate ismip a 20 thickness norm plot
         ishoma20thk_plotfile=''+ ncl_path + '/ismipa20thk.ncl'
-        stockPIC ='STOCKPIC = addfile(\"'+ job_path + '/bench/ismip-hom-a/20km/data/ishom.a.20km.PIC.out.nc\", \"r\")'
-        stockJFNK ='STOCKJFNK = addfile(\"'+ job_path + '/bench/ismip-hom-a/20km/data/ishom.a.20km.JFNK.out.nc\", \"r\")'
+        stockPIC ='STOCKPIC = addfile(\"'+ job_path + '/bench/ismip-hom-a/20km/' + bench_data + '/ishom.a.20km.PIC.out.nc\", \"r\")'
+        stockJFNK ='STOCKJFNK = addfile(\"'+ job_path + '/bench/ismip-hom-a/20km/' + bench_data + '/ishom.a.20km.JFNK.out.nc\", \"r\")'
         VARPIC  ='VARPIC = addfile(\"' + job_path + '/ismip-hom-a/20km/data/ishom.a.20km.PIC.out.nc\", \"r\")'
         VARJFNK  ='VARJFNK = addfile(\"' + job_path + '/ismip-hom-a/20km/data/ishom.a.20km.JFNK.out.nc\", \"r\")'
         png  = 'PNG = "' + ncl_path + '/ismipa20thk"'
-        plot_ishoma20thk = "ncl '" + stockout + "'  '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARout + "'  '" + VARPIC + "'  '" + VARJFNK +"'  '" + png + "' " + ishoma20thk_plotfile + " >> plot_details.out"
+        plot_ishoma20thk = "ncl '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARPIC + "'  '" + VARJFNK +"'  '" + png + "' " + ishoma20thk_plotfile + " >> plot_details.out"
 
 #TODO create an iteration plot and have that also in the html file 
         try:
