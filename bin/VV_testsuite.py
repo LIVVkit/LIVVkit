@@ -66,7 +66,7 @@ def web(descript_file,test_file, \
 	circ_file,circ_case,circ_plot,circ_xml,conf_file,conf_case,conf_plot,conf_xml, \
 	ishoma80_file,ishoma80_case,ishoma80_plot,ishoma80_xml,ishoma20_file,ishoma20_case,ishoma20_plot,ishoma20_xml, \
         ishomc80_file,ishomc80_case,ishomc80_plot,ishomc80_xml, \
-	gis10_file,gis10_case,gis10_plot,gis10_xml,job_path,bench_data,ncl_path,data_path,html_path,script_path,\
+	gis10_file,gis10_case,gis10_plot,gis10_xml,reg_test,bench_data,ncl_path,data_path,html_path,script_path,\
         diagnostic_flag,evolving_flag,circular_flag,confined_flag,
         ismip_hom_a80_flag,ismip_hom_a20_flag,ismip_hom_c_flag,gis_10km_flag):  
 
@@ -79,7 +79,7 @@ def web(descript_file,test_file, \
 	test_file.write('<TH ALIGN=LEFT><A HREF="test_descript.html">Test Suite Descriptions</A>\n')
 	test_file.write('<BR>\n')
 
-        dictionary = bit_list(job_path,bench_data)
+        dictionary = bit_list(reg_test,bench_data)
 
 
 #apply flag to turn off running test
@@ -98,35 +98,35 @@ def web(descript_file,test_file, \
 # link to dome30d_file with descriptions about the test cases
 		    test_file.write('<TH ALIGN=LEFT><A HREF="dome30d_details.html">Diagnostic Dome 30 Velocity Solver Details</A>\n')
 		    test_file.write('<BR>\n')
-                    failedt = VV_dome30details.ddetails(dome30d_file,job_path,ncl_path,data_path,html_path,bench_data)
+                    failedt = VV_dome30details.ddetails(dome30d_file,reg_test,bench_data)
 
 		    test_file.write('<TH ALIGN=LEFT><A HREF="dome30d_xml.html">Solver Parameter Settings: Diagnostic Dome 30 XML Details</A>\n')
 		    test_file.write('<BR>\n')
-		    xml_path = job_path + '/dome30/diagnostic/trilinosOptions.xml'
-		    bench_xml_path = job_path + '/bench/dome30/diagnostic/trilinosOptions.xml'
-                    VV_utilities.xml(dome30d_xml,xml_path,bench_xml_path,ncl_path,html_path)
+		    xml_path = reg_test + '/dome30/diagnostic/trilinosOptions.xml'
+		    bench_xml_path = reg_test + '/bench/dome30/diagnostic/trilinosOptions.xml'
+                    VV_utilities.xml(dome30d_xml,xml_path,bench_xml_path)
 
 		    test_file.write('<TH ALIGN=LEFT><A HREF="dome30d_case.html">Diagnostic Dome 30 Case Details</A>\n')
 		    test_file.write('<BR>\n')
-                    configure_path = job_path + '/dome30/diagnostic/dome.30.JFNK.trilinos.config.1'
-                    bench_configure_path = job_path + '/bench/dome30/diagnostic/dome.30.JFNK.trilinos.config.1'
-        	    VV_utilities.conf(dome30d_case,configure_path,bench_configure_path,ncl_path,html_path)
+                    configure_path = reg_test + '/dome30/diagnostic/dome.30.JFNK.trilinos.config.1'
+                    bench_configure_path = reg_test + '/bench/dome30/diagnostic/dome.30.JFNK.trilinos.config.1'
+        	    VV_utilities.conf(dome30d_case,configure_path,bench_configure_path)
 
 		    test_file.write('<TH ALIGN=LEFT><A HREF="dome30d_plot.html">Diagnostic Dome 30 Plots</A>\n')
 		    test_file.write('<BR>\n')
                     if failedt != 0:
                         dome30d_plot.write("<H2>Diagnostic Dome 30 Test failed, plots may not be generated</H2><br>")
-                    checkpath = job_path + '/dome30/diagnostic/data/dome.1.nc'
-                    checkpath2 = job_path + '/dome30/diagnostic/data/dome.4.nc'
+                    checkpath = reg_test + '/dome30/diagnostic/data/dome.1.nc'
+                    checkpath2 = reg_test + '/dome30/diagnostic/data/dome.4.nc'
                     noplot = VV_checks.emptycheck(checkpath)
                     noplot1 = noplot
                     noplot = VV_checks.emptycheck(checkpath2)
                     if noplot1 != 1 and noplot != 1:
-                        VV_dome30details.dplot(dome30d_plot,job_path,ncl_path,html_path,script_path,bench_data)
+                        VV_dome30details.dplot(dome30d_plot,reg_test,ncl_path,html_path,script_path,bench_data)
 
 # Time stamping
 	    strrand = ''
-	    mode = os.stat(job_path + '/dome30/diagnostic').st_mtime
+	    mode = os.stat(reg_test + '/dome30/diagnostic').st_mtime
 	    mode = mode - 14400
 	    mode = time.gmtime(mode)
 	    ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
@@ -153,34 +153,34 @@ def web(descript_file,test_file, \
 # link to dome30e_file with descriptions about the test cases
 		    test_file.write('<TH ALIGN=LEFT><A HREF="dome30e_details.html">Evolving Dome 30 Velocity Solver Details</A>\n')
 		    test_file.write('<BR>\n')
-        	    failedt = VV_dome30details.edetails(dome30e_file,job_path,ncl_path,data_path,html_path,bench_data)
+        	    failedt = VV_dome30details.edetails(dome30e_file,reg_test,bench_data)
 
 		    test_file.write('<TH ALIGN=LEFT><A HREF="dome30e_xml.html">Solver Parameter Settings: Evolving Dome 30 XML Details</A>\n')
 		    test_file.write('<BR>\n')
-		    xml_path = job_path + '/dome30/evolving/trilinosOptions.xml'
-		    bench_xml_path = job_path + '/bench/dome30/evolving/trilinosOptions.xml'
-		    VV_utilities.xml(dome30e_xml,xml_path,bench_xml_path,ncl_path,html_path)
+		    xml_path = reg_test + '/dome30/evolving/trilinosOptions.xml'
+		    bench_xml_path = reg_test + '/bench/dome30/evolving/trilinosOptions.xml'
+		    VV_utilities.xml(dome30e_xml,xml_path,bench_xml_path)
 
                     test_file.write('<TH ALIGN=LEFT><A HREF="dome30e_case.html">Evolving Dome 30 Case Details</A>\n')
 		    test_file.write('<BR>\n')
-                    configure_path = job_path + '/dome30/evolving/dome.30.JFNK.trilinos.config.15'
-                    bench_configure_path = job_path + '/bench/dome30/evolving/dome.30.JFNK.trilinos.config.15'
-        	    VV_utilities.conf(dome30e_case,configure_path,bench_configure_path,ncl_path,html_path)
+                    configure_path = reg_test + '/dome30/evolving/dome.30.JFNK.trilinos.config.15'
+                    bench_configure_path = reg_test + '/bench/dome30/evolving/dome.30.JFNK.trilinos.config.15'
+        	    VV_utilities.conf(dome30e_case,configure_path,bench_configure_path)
 
 		    test_file.write('<TH ALIGN=LEFT><A HREF="dome30e_plot.html">Evolving Dome 30 Plots</A>\n')
 		    test_file.write('<BR>\n')
                     if failedt != 0:
                         dome30e_plot.write("<H2>Evolving Dome 30 Test failed, plots may not be generated</H2><br>")
-                    checkpath = job_path + '/dome30/evolving/data/dome.9.nc'
-                    checkpath2 = job_path + '/dome30/evolving/data/dome.15.nc'
+                    checkpath = reg_test + '/dome30/evolving/data/dome.9.nc'
+                    checkpath2 = reg_test + '/dome30/evolving/data/dome.15.nc'
                     noplot = VV_checks.emptycheck(checkpath)
                     noplot1 = noplot
                     noplot = VV_checks.emptycheck(checkpath2)
                     if noplot != 1 and noplot != 1:
-                        VV_dome30details.eplot(dome30e_plot,job_path,ncl_path,html_path,script_path,bench_data)
+                        VV_dome30details.eplot(dome30e_plot,reg_test,ncl_path,html_path,script_path,bench_data)
 
 # Time stamping
-	    mode = os.stat(job_path + '/dome30/evolving').st_mtime
+	    mode = os.stat(reg_test + '/dome30/evolving').st_mtime
 	    mode = mode - 14400
 	    mode = time.gmtime(mode)
 	    ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
@@ -207,31 +207,31 @@ def web(descript_file,test_file, \
 
 		    test_file.write('<TH ALIGN=LEFT><A HREF="circ_details.html">Circular Shelf Velocity Solver Details</A>\n')
 		    test_file.write('<BR>\n')
-        	    failedt = VV_shelfdetails.circdetails(circ_file,job_path,bench_data)
+        	    failedt = VV_shelfdetails.circdetails(circ_file,reg_test,bench_data)
 
 		    test_file.write('<TH ALIGN=LEFT><A HREF="circ_xml.html">Solver Parameter Settings: Circular Shelf XML Details</A>\n')
                     test_file.write('<BR>\n')
-                    xml_path = job_path + '/circular-shelf/trilinosOptions.xml'
-                    bench_xml_path = job_path + '/bench/circular-shelf/trilinosOptions.xml'
-                    VV_utilities.xml(circ_xml,xml_path,bench_xml_path,ncl_path,html_path)
+                    xml_path = reg_test + '/circular-shelf/trilinosOptions.xml'
+                    bench_xml_path = reg_test + '/bench/circular-shelf/trilinosOptions.xml'
+                    VV_utilities.xml(circ_xml,xml_path,bench_xml_path)
                 
                     test_file.write('<TH ALIGN=LEFT><A HREF="circ_case.html">Circular Shelf Case Details</A>\n')
 		    test_file.write('<BR>\n')
-                    configure_path = job_path + '/circular-shelf/circular-shelf.JFNK.config'
-                    bench_configure_path = job_path + '/bench/circular-shelf/circular-shelf.JFNK.config'
-        	    VV_utilities.conf(circ_case,configure_path,bench_configure_path,ncl_path,html_path)
+                    configure_path = reg_test + '/circular-shelf/circular-shelf.JFNK.config'
+                    bench_configure_path = reg_test + '/bench/circular-shelf/circular-shelf.JFNK.config'
+        	    VV_utilities.conf(circ_case,configure_path,bench_configure_path)
 
 		    test_file.write('<TH ALIGN=LEFT><A HREF="circ_plot.html">Circular Shelf Plots</A>\n')
 		    test_file.write('<BR>\n')
                     if failedt != 0:
                         circ_plot.write("<H2>Circular Shelf Test failed, plots may not be generated</H2><br>")
-                    checkpath = job_path + '/circular-shelf/data/circular-shelf.gnu.JFNK.nc'
+                    checkpath = reg_test + '/circular-shelf/data/circular-shelf.gnu.JFNK.nc'
                     noplot = VV_checks.emptycheck(checkpath)
                     if noplot != 1:
-                        VV_shelfdetails.circplot(circ_plot,job_path,ncl_path,html_path,script_path,bench_data)
+                        VV_shelfdetails.circplot(circ_plot,reg_test,ncl_path,html_path,script_path,bench_data)
 
 # Time stamping
-	    mode = os.stat(job_path + '/circular-shelf').st_mtime
+	    mode = os.stat(reg_test + '/circular-shelf').st_mtime
 	    mode = mode - 14400
 	    mode = time.gmtime(mode)
 	    ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
@@ -257,31 +257,31 @@ def web(descript_file,test_file, \
 
 		    test_file.write('<TH ALIGN=LEFT><A HREF="conf_details.html">Confined Shelf Velocity Solver Details</A>\n')
 		    test_file.write('<BR>\n')
-        	    failedt = VV_shelfdetails.confdetails(conf_file,job_path,bench_data)
+        	    failedt = VV_shelfdetails.confdetails(conf_file,reg_test,bench_data)
 
 		    test_file.write('<TH ALIGN=LEFT><A HREF="conf_xml.html">Solver Parameter Details: Confined Shelf XML Details</A>\n')
                     test_file.write('<BR>\n')
-                    xml_path = job_path + '/confined-shelf/trilinosOptions.xml'
-                    bench_xml_path = job_path + '/bench/confined-shelf//trilinosOptions.xml'
-                    VV_utilities.xml(conf_xml,xml_path,bench_xml_path,ncl_path,html_path)
+                    xml_path = reg_test + '/confined-shelf/trilinosOptions.xml'
+                    bench_xml_path = reg_test + '/bench/confined-shelf//trilinosOptions.xml'
+                    VV_utilities.xml(conf_xml,xml_path,bench_xml_path)
 
                     test_file.write('<TH ALIGN=LEFT><A HREF="conf_case.html">Confined Shelf Case Details</A>\n')
 		    test_file.write('<BR>\n')
-                    configure_path = job_path + '/confined-shelf/confined-shelf.JFNK.config'
-                    bench_configure_path = job_path + '/bench/confined-shelf/confined-shelf.JFNK.config'
-        	    VV_utilities.conf(conf_case,configure_path,bench_configure_path,ncl_path,html_path)
+                    configure_path = reg_test + '/confined-shelf/confined-shelf.JFNK.config'
+                    bench_configure_path = reg_test + '/bench/confined-shelf/confined-shelf.JFNK.config'
+        	    VV_utilities.conf(conf_case,configure_path,bench_configure_path)
 
 		    test_file.write('<TH ALIGN=LEFT><A HREF="conf_plot.html">Confined Shelf Plot</A>\n')
 		    test_file.write('<BR>\n')
                     if failedt != 0:
                         conf_plot.write("<H2>Confined Shelf Test failed, plots may not be generated</H2><br>")
-                    checkpath = job_path + '/confined-shelf/data/confined-shelf.gnu.JFNK.nc'
+                    checkpath = reg_test + '/confined-shelf/data/confined-shelf.gnu.JFNK.nc'
                     noplot = VV_checks.emptycheck(checkpath)
                     if noplot != 1:
-                        VV_shelfdetails.confplot(conf_plot,job_path,ncl_path,html_path,script_path,bench_data)
+                        VV_shelfdetails.confplot(conf_plot,reg_test,ncl_path,html_path,script_path,bench_data)
 
 # Time stamping
-	    mode = os.stat(job_path + '/confined-shelf').st_mtime
+	    mode = os.stat(reg_test + '/confined-shelf').st_mtime
 	    mode = mode - 14400
 	    mode = time.gmtime(mode)
 	    ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
@@ -307,31 +307,31 @@ def web(descript_file,test_file, \
 
 		    test_file.write('<TH ALIGN=LEFT><A HREF="ishoma80_details.html">ISMIP HOM A 80km Velocity Solver Details</A>\n')
 		    test_file.write('<BR>\n')
-        	    failedt = VV_ismip.a80details(ishoma80_file,job_path,bench_data)
+        	    failedt = VV_ismip.a80details(ishoma80_file,reg_test,bench_data)
 
 		    test_file.write('<TH ALIGN=LEFT><A HREF="ishoma80_xml.html">Solver Parameter Details: ISMIP HOM A 80km XML Details</A>\n')
                     test_file.write('<BR>\n')
-                    xml_path = job_path + '/ismip-hom-a/80km/trilinosOptions.xml'
-                    bench_xml_path = job_path + '/bench/ismip-hom-a/80km/trilinosOptions.xml'
-                    VV_utilities.xml(ishoma80_xml,xml_path,bench_xml_path,ncl_path,html_path)
+                    xml_path = reg_test + '/ismip-hom-a/80km/trilinosOptions.xml'
+                    bench_xml_path = reg_test + '/bench/ismip-hom-a/80km/trilinosOptions.xml'
+                    VV_utilities.xml(ishoma80_xml,xml_path,bench_xml_path)
                 
                     test_file.write('<TH ALIGN=LEFT><A HREF="ishoma80_case.html">ISMIP HOM A 80km Case Details</A>\n')
 		    test_file.write('<BR>\n')
-                    configure_path = job_path + '/ismip-hom-a/80km/ishom.a.80km.JFNK.trilinos.config'
-                    bench_configure_path = job_path + '/bench/ismip-hom-a/80km/ishom.a.80km.JFNK.trilinos.config'
-        	    VV_utilities.conf(ishoma80_case,configure_path,bench_configure_path,ncl_path,html_path)
+                    configure_path = reg_test + '/ismip-hom-a/80km/ishom.a.80km.JFNK.trilinos.config'
+                    bench_configure_path = reg_test + '/bench/ismip-hom-a/80km/ishom.a.80km.JFNK.trilinos.config'
+        	    VV_utilities.conf(ishoma80_case,configure_path,bench_configure_path)
 
 		    test_file.write('<TH ALIGN=LEFT><A HREF="ishoma80_plot.html">ISMIP HOM A 80km Plots</A>\n')
 		    test_file.write('<BR>\n')
                     if failedt != 0:
                         ishoma80_plot.write("<H2>ISMIP HOM A 80km Test failed, plots may not be generated</H2><br>")
-                    checkpath = job_path + '/ismip-hom-a/80km/data/ishom.a.80km.JFNK.out.nc'
+                    checkpath = reg_test + '/ismip-hom-a/80km/data/ishom.a.80km.JFNK.out.nc'
                     noplot = VV_checks.emptycheck(checkpath)
                     if noplot != 1:
-                        VV_ismip.a80plot(ishoma80_plot,job_path,ncl_path,html_path,script_path,bench_data)
+                        VV_ismip.a80plot(ishoma80_plot,reg_test,ncl_path,html_path,script_path,bench_data)
 
 # Time stamping
-	    mode = os.stat(job_path + '/ismip-hom-a/80km').st_mtime
+	    mode = os.stat(reg_test + '/ismip-hom-a/80km').st_mtime
 	    mode = mode - 14400
 	    mode = time.gmtime(mode)
 	    ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
@@ -357,30 +357,31 @@ def web(descript_file,test_file, \
 
                 test_file.write('<TH ALIGN=LEFT><A HREF="ishoma20_details.html">ISMIP HOM A 20km Velocity Solver Details</A>\n')
                 test_file.write('<BR>\n')
-                failedt = VV_ismip.a20details(ishoma20_file,job_path,bench_data)
+                failedt = VV_ismip.a20details(ishoma20_file,reg_test,bench_data)
 
                 test_file.write('<TH ALIGN=LEFT><A HREF="ishoma20_xml.html">Solver Parameter Details: ISMIP HOM A 20km XML Details</A>\n')
                 test_file.write('<BR>\n')
-                xml_path = job_path + '/ismip-hom-a/20km/trilinosOptions.xml'
-                bench_xml_path = job_path + '/bench/ismip-hom-a/20km/trilinosOptions.xml'
-                VV_utilities.xml(ishoma20_xml,xml_path,bench_xml_path,ncl_path,html_path)
+                xml_path = reg_test + '/ismip-hom-a/20km/trilinosOptions.xml'
+                bench_xml_path = reg_test + '/bench/ismip-hom-a/20km/trilinosOptions.xml'
+                VV_utilities.xml(ishoma20_xml,xml_path,bench_xml_path)
                 
                 test_file.write('<TH ALIGN=LEFT><A HREF="ishoma20_case.html">ISMIP HOM A 20km Case Details</A>\n')
                 test_file.write('<BR>\n')
-                configure_path = job_path + '/ismip-hom-a/20km/ishom.a.20km.JFNK.trilinos.config'
-                bench_configure_path = job_path + '/bench/ismip-hom-a/20km/ishom.a.20km.JFNK.trilinos.config'
-                VV_utilities.conf(ishoma20_case,configure_path,bench_configure_path,ncl_path,html_path)
+                configure_path = reg_test + '/ismip-hom-a/20km/ishom.a.20km.JFNK.trilinos.config'
+                bench_configure_path = reg_test + '/bench/ismip-hom-a/20km/ishom.a.20km.JFNK.trilinos.config'
+                VV_utilities.conf(ishoma20_case,configure_path,bench_configure_path)
+
                 test_file.write('<TH ALIGN=LEFT><A HREF="ishoma20_plot.html">ISMIP HOM A 20km Plots</A>\n')
                 test_file.write('<BR>\n')
                 if failedt != 0:
                     ishoma20_plot.write("<H2>ISMIP HOM A 20 Test failed, plots may not be generated</H2><br>")
-                checkpath = job_path + '/ismip-hom-a/20km/data/ishom.a.20km.JFNK.out.nc'
+                checkpath = reg_test + '/ismip-hom-a/20km/data/ishom.a.20km.JFNK.out.nc'
                 noplot = VV_checks.emptycheck(checkpath)
                 if noplot != 1:
-                    VV_ismip.a20plot(ishoma20_plot,job_path,ncl_path,html_path,script_path,bench_data)
+                    VV_ismip.a20plot(ishoma20_plot,reg_test,ncl_path,html_path,script_path,bench_data)
  
 # Time stamping
-            mode = os.stat(job_path + '/ismip-hom-a/20km').st_mtime
+            mode = os.stat(reg_test + '/ismip-hom-a/20km').st_mtime
             mode = mode - 14400
             mode = time.gmtime(mode)
             ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
@@ -406,31 +407,31 @@ def web(descript_file,test_file, \
 
 		    test_file.write('<TH ALIGN=LEFT><A HREF="ishomc80_details.html">ISMIP HOM C 80km Velocity Solver Details</A>\n')
 		    test_file.write('<BR>\n')
-        	    failedt = VV_ismip.c80details(ishomc80_file,job_path,bench_data)
+        	    failedt = VV_ismip.c80details(ishomc80_file,reg_test,bench_data)
 
 		    test_file.write('<TH ALIGN=LEFT><A HREF="ishomc80_xml.html">Solver Parameter Settings: ISMIP HOM C 80km XML Details</A>\n')
                     test_file.write('<BR>\n')
-                    xml_path = job_path + '/ismip-hom-c/80km/trilinosOptions.xml'
-                    bench_xml_path = job_path + '/bench/ismip-hom-c/80km/trilinosOptions.xml'
-                    VV_utilities.xml(ishomc80_xml,xml_path,bench_xml_path,ncl_path,html_path)
+                    xml_path = reg_test + '/ismip-hom-c/80km/trilinosOptions.xml'
+                    bench_xml_path = reg_test + '/bench/ismip-hom-c/80km/trilinosOptions.xml'
+                    VV_utilities.xml(ishomc80_xml,xml_path,bench_xml_path)
                 
                     test_file.write('<TH ALIGN=LEFT><A HREF="ishomc80_case.html">ISMIP HOM C 80km Case Details</A>\n')
 		    test_file.write('<BR>\n')
-                    configure_path = job_path + '/ismip-hom-c/80km/ishom.c.80km.JFNK.trilinos.config'
-                    bench_configure_path = job_path + '/bench/ismip-hom-c/80km/ishom.c.80km.JFNK.trilinos.config'
-        	    VV_utilities.conf(ishomc80_case,configure_path,bench_configure_path,ncl_path,html_path)
+                    configure_path = reg_test + '/ismip-hom-c/80km/ishom.c.80km.JFNK.trilinos.config'
+                    bench_configure_path = reg_test + '/bench/ismip-hom-c/80km/ishom.c.80km.JFNK.trilinos.config'
+        	    VV_utilities.conf(ishomc80_case,configure_path,bench_configure_path)
 
 		    test_file.write('<TH ALIGN=LEFT><A HREF="ishomc80_plot.html">ISMIP HOM C 80km Plots</A>\n')
 		    test_file.write('<BR>\n')
                     if failedt != 0:
                         ishomc80_plot.write("<H2>ISMIP HOM C Test failed, plots may not be generated</H2><br>")
-                    checkpath = job_path + '/ismip-hom-c/80km/data/ishom.c.80km.JFNK.out.nc'
+                    checkpath = reg_test + '/ismip-hom-c/80km/data/ishom.c.80km.JFNK.out.nc'
                     noplot = VV_checks.emptycheck(checkpath)
                     if noplot != 1:
-                        VV_ismip.c80plot(ishomc80_plot,job_path,ncl_path,html_path,script_path,bench_data)
+                        VV_ismip.c80plot(ishomc80_plot,reg_test,ncl_path,html_path,script_path,bench_data)
 
 # Time stamping
-	    mode = os.stat(job_path + '/ismip-hom-c/80km').st_mtime
+	    mode = os.stat(reg_test + '/ismip-hom-c/80km').st_mtime
 	    mode = mode - 14400
 	    mode = time.gmtime(mode)
 	    ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
@@ -456,31 +457,31 @@ def web(descript_file,test_file, \
 
 		    test_file.write('<TH ALIGN=LEFT><A HREF="gis10_details.html">GIS 10km Velocity Solver Details</A>\n')
 		    test_file.write('<BR>\n')
-        	    failedt = VV_gis10details.details(gis10_file,job_path,ncl_path,data_path,html_path,bench_data)
+        	    failedt = VV_gis10details.details(gis10_file,reg_test,ncl_path,data_path,html_path,bench_data)
 
 		    test_file.write('<TH ALIGN=LEFT><A HREF="gis10_xml.html">Solver Parameter Settings: GIS 10km XML Details</A>\n')
                     test_file.write('<BR>\n')
-                    xml_path = job_path + '/gis_10km/trilinosOptions.xml'
-                    bench_xml_path = job_path + '/bench/gis_10km/trilinosOptions.xml'
-                    VV_utilities.xml(gis10_xml,xml_path,bench_xml_path,ncl_path,html_path)
+                    xml_path = reg_test + '/gis_10km/trilinosOptions.xml'
+                    bench_xml_path = reg_test + '/bench/gis_10km/trilinosOptions.xml'
+                    VV_utilities.xml(gis10_xml,xml_path,bench_xml_path)
                 
                     test_file.write('<TH ALIGN=LEFT><A HREF="gis10_case.html">GIS 10km Case Details</A>\n')
 		    test_file.write('<BR>\n')
-                    configure_path = job_path + '/gis_10km/gis_10km.JFNK.trilinos.10.config'
-                    bench_configure_path = job_path + '/bench/gis_10km/gis_10km.JFNK.trilinos.10.config'
-        	    VV_utilities.conf(gis10_case,configure_path,bench_configure_path,ncl_path,html_path)
+                    configure_path = reg_test + '/gis_10km/gis_10km.JFNK.trilinos.10.config'
+                    bench_configure_path = reg_test + '/bench/gis_10km/gis_10km.JFNK.trilinos.10.config'
+        	    VV_utilities.conf(gis10_case,configure_path,bench_configure_path)
 
 		    test_file.write('<TH ALIGN=LEFT><A HREF="gis10_plot.html">GIS 10km Plots</A>\n')
 		    test_file.write('<BR>\n')
                     if failedt != 0:
                         gis10_plot.write("<H2>GIS 10km Test failed, plots may not be generated</H2><br>")
-                    checkpath = job_path + '/gis_10km/data/gis_10km.seacism.nc'
+                    checkpath = reg_test + '/gis_10km/data/gis_10km.seacism.nc'
                     noplot = VV_checks.emptycheck(checkpath)
                     if noplot != 1:
-                        VV_gis10details.gis10_plot(gis10_plot,job_path,ncl_path,html_path,script_path,bench_data)
+                        VV_gis10details.gis10_plot(gis10_plot,reg_test,ncl_path,html_path,script_path,bench_data)
 
 # Time stamping
-	    mode = os.stat(job_path + '/gis_10km').st_mtime
+	    mode = os.stat(reg_test + '/gis_10km').st_mtime
 	    mode = mode - 14400
 	    mode = time.gmtime(mode)
 	    ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
@@ -493,7 +494,7 @@ def web(descript_file,test_file, \
 
         test_file.write('<BR>\n')
         test_file.write('<BR>\n')
-        test_file.write('<TH ALIGN=LEFT><A HREF="GIS-main-diag.html">Home</A>\n')
+        test_file.write('<TH ALIGN=LEFT><A HREF="livv_kit_main.html">Home</A>\n')
 
 	test_file.write('</HTML>\n')
 	test_file.close()
@@ -505,7 +506,7 @@ def web(descript_file,test_file, \
 	descript_file.write('<BR>\n')
 	descript_file.write('The Diagnostic Dome 30 test case \n')
 	descript_file.write('<BR>\n')
-	descript_file.write('  Attributes -  \n')
+        descript_file.write('  Attributes: 3-D paraboloid dome of ice with a circular, 60 km diameter base sitting on a flat bed. The horizontal spatial resolution studies are 2 km, 1 km, 0.5 km and 0.25 km, and there are 10 vertical levels. For this set of experiments a quasi no-slip basal condition in imposed by setting. A zero-flux boundary condition is applied to the dome margins. \n')
 	descript_file.write('<BR>\n')
 	descript_file.write('  What does it test? \n')
 	descript_file.write('<BR><BR>\n')
@@ -529,19 +530,25 @@ def web(descript_file,test_file, \
 	descript_file.write('<BR><BR>\n')
 	descript_file.write('The ISMIP HOM A 80km test case \n')
 	descript_file.write('<BR>\n')
-	descript_file.write('  Attributes \n')
+        descript_file.write('  Attributes: Simulates steady ice flow with no basal slip over a sinusoidally varying bed with periodic boundary conditions at 80km resolution. \n')
 	descript_file.write('<BR>\n')
-	descript_file.write('  What does it test? simulates steady ice flow with no basal slip over a sinusoidally varying bed with periodic boundary conditions\n')
+	descript_file.write('  What does it test?\n')
+	descript_file.write('<BR><BR>\n')
+	descript_file.write('The ISMIP HOM A 20km test case \n')
+	descript_file.write('<BR>\n')
+        descript_file.write('  Attributes: Simulates steady ice flow with no basal slip over a sinusoidally varying bed with periodic boundary conditions at 20km resolution. \n')
+	descript_file.write('<BR>\n')
+	descript_file.write('  What does it test?\n')
 	descript_file.write('<BR><BR>\n')
 	descript_file.write('The ISMIP HOM C 80km test case \n')
 	descript_file.write('<BR>\n')
-	descript_file.write('  Attributes \n')
+        descript_file.write('  Attributes: Simulates steady ice flow with sinusoidally carrying basal traction over a flat bed with periodic boundary conditions. In the experiment, r is specified to equal 0 in the sliding law. \n')
 	descript_file.write('<BR>\n')
-	descript_file.write('  What does it test? simulates steady ice flow with sinusoidally carrying basal traction over a flat bed with periodic boundary conditions \n')
+	descript_file.write('  What does it test? \n')
 	descript_file.write('<BR><BR>\n')
-	descript_file.write('The Greenland Ice Sheet 10km test case \n')
+	descript_file.write('The Greenland Ice Sheet 10km and 5km test cases \n')
 	descript_file.write('<BR>\n')
-	descript_file.write('  Attributes \n')
+        descript_file.write('  Attributes: This test case represents the Greenland ice sheet (GIS) at different spatial resolutions (10km and 5km). A quasi-no slip boundary condition is applied at the bed. As with the dome test cases, a zero-flux boundary condition is applied to the lateral margins. In all test cases, the ice is taken as isothermal with a constant and uniform rate factor of. \n')
 	descript_file.write('<BR>\n')
 	descript_file.write('  What does it test? \n')
 	descript_file.write('<BR><BR>\n')

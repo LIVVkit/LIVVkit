@@ -48,20 +48,21 @@ last line of the script.
 /data: the solver data from each processed run is placed here in a $case.asc format 
 
 To run the shell script (lens/carver):
-1. Create a mirror copy of everything in the /seacism/tests/higher-order directory in your scratch space
-2. Put the 4 currently evaluated executables of simple_glide into the mirror /higher-order directory
+1. Make sure to place "source $MODULESHOME/init/bash" in your .bashrc file
+2. Create a mirror copy of everything in the /seacism/tests/higher-order directory in your scratch space
+3. Put the 4 currently evaluated executables of simple_glide into the mirror /higher-order directory
 (this is done automatically by the master build scripts in the /cmake-scripts directory)
 In the mirror directory:
-3. in the carver.bash file in the /livv directory it will automatically:
+4. in the carver.bash file in the /livv directory it will automatically:
 	a. specifies the global scratch path for all the scripts it calls: $SCRIPT_PATH
 	b. sets the $HTML_PATH on where to post results
 	c. sets config path and output path (if you want to run the optional 5km GIS and have followed the same
 naming convention)
-4. in the carver.bash file in the /livv directory you set:
+5. in the carver.bash file in the /livv directory you set:
 	a. USERNAME: it doesn't have to be your machine user name. Its the name of the subdirectory where your 
 files will be placed to be on the web and also to ID folks who go to you website of who ran the kit
 	b. COMMENT: case details so those who view the website will know the goal of that run
-5. type "bash $machine.bash" at the command line in the main directory.
+6. type "bash lens_VV.bash" at the command line in the main directory.
 (right now, use KJE GIS 5km output, or have run using the associated config scripts if you want the LIVV kit 
 to process a production 5km case)
 	c. whether to run production cases or not (RUN_$, right now it will only run reg_tests)
@@ -76,7 +77,9 @@ To run the shell script (Mac OS X):
 2. change the TEST_FILEPATH to the path containing the livv kit
 3. change the HTML_PATH to the location of the www directory (if downloaded mac_run directory from /tmp/proj/cli054/, the www directory is located in mac_run)
 4. leave RUN_GIS=0 and RUN_ANT=0 in the mac_VV.bash script since production analysis will not be run locally
-
+5. type "bash mac_VV.bash" at the command line in the main directory.
+(right now, use KJE GIS 5km output, or have run using the associated config scripts if you want the LIVV kit 
+to process a production 5km case)
 When you are done, the script tells you the website location to go look at the output.
 
 

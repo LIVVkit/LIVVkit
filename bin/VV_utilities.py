@@ -11,7 +11,7 @@ import VV_testsuite
 
 
 #parse through the configure file and print information
-def conf(configure_file,configure_path,bench_configure_path,ncl_path,html_path):
+def conf(configure_file,configure_path,bench_configure_path):
 
 #this function allows creation of nested dictionaries on the fly (like PERL autovivification)
         def makehashdome():
@@ -30,14 +30,14 @@ def conf(configure_file,configure_path,bench_configure_path,ncl_path,html_path):
                         configlog = open(configure_path, 'r')
 
                 except:
-                        print "error reading" + configlog
+                        print "error reading" + configure_path
                         sys.exit(1)
                         raise
                 try:
                         benchlog = open(bench_configure_path, 'r')
 
                 except:
-                        print "error reading" + benchlog
+                        print "error reading" + bench_configure_path
                         sys.exit(1)
                         raise
 
@@ -213,7 +213,7 @@ def conf(configure_file,configure_path,bench_configure_path,ncl_path,html_path):
 
 
 
-def xml(xml_file,xml_path,bench_xml_path,ncl_path,html_path):
+def xml(xml_file,xml_path,bench_xml_path):
 
 #parse through xml file information
 

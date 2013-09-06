@@ -7,7 +7,7 @@ import subprocess
 import collections
 import VV_outprocess
 import VV_testsuite
-import VV_gisproduction
+import VV_largesuite
 
 user = os.environ['USER']
 
@@ -28,26 +28,14 @@ parser.add_option('-r', '--bdata', action='store', type='string', dest='bench_da
                   metavar='FILE', help='file where the benchmark data files are stored')
 parser.add_option('-d', '--data', action='store', type='string', dest='data_path', \
                   metavar='PATH', help='path where the solver data directory is located')
-parser.add_option('-c', '--config', action='store', type='string', dest='config_file', \
-                  metavar='FILE', help='the config file python will parse through')
 parser.add_option('-t', '--test', action='store', type='string', dest='test_suite', \
                   metavar='TEST', help='path to location of test suite')
-parser.add_option('-o', '--output', action='store', type='string', dest='output_file', \
-                  metavar='FILE', help='the job output file python will parse through')
-parser.add_option('-s', '--stocknc', action='store', type='string', dest='stock_netcdf_file', \
-                  metavar='FILE', help='the stock NETCDF file that the ncl script will read')
-parser.add_option('-n', '--variablenc', action='store', type='string', dest='variable_netcdf_file', \
-                  metavar='FILE', help='the variable NETCDF file that the ncl script will read')
 parser.add_option('-i', '--timestamp', action='store', type='string', dest='time_stamp', \
                   metavar='FILE', help='the current time to record in the web output')
 parser.add_option('-m', '--comment', action='store', type='string', dest='comment', \
                   metavar='FILE', help='information about the test case for user reference')
 parser.add_option('-u', '--username', action='store', type='string', dest='username', \
                   metavar='FILE', help='username used to create subdirectory of web pages of output')
-parser.add_option('-g', '--gis_prod', action='store_true', dest='gis_prod', \
-                  help='include flag to run the GIS production analysis')
-parser.add_option('-x', '--xml', action='store', type='string', dest='xml_path',\
-		  metavar='FILE', help='path to xml file that python will parse through')
 parser.add_option('-D', '--diagnostic', action='store', type='int', dest='diagnostic_flag', \
                   metavar='FLAG', help='flag to run dome30 diagnostic test')
 parser.add_option('-E', '--evolving', action='store', type='int', dest='evolving_flag', \
@@ -64,32 +52,15 @@ parser.add_option('-C', '--ismip-hom-C', action='store', type='int', dest='ismip
                   metavar='FLAG', help='flag to run ismip hom c test')
 parser.add_option('-G', '--gis10km', action='store', type='int', dest='gis_10km_flag', \
                   metavar='FLAG', help='flag to run gis10km test')
+parser.add_option('-F', '--dome500', action='store', type='int', dest='dome500_flag', \
+                  metavar='FLAG', help='flag to run dome500 test')
+parser.add_option('-H', '--gis5km', action='store', type='int', dest='gis_5km_flag', \
+                  metavar='FLAG', help='flag to run gis5km test')
 #parser.add_option('-a', '--ant_prod', action='store_true', dest='ant_prod', \
 #                  help='include flag to run the ANT production analysis')
 
 #parse the command line options and arguments and store in lists
 (options, args) = parser.parse_args()
-
-if (options.gis_prod):
-	if (options.stock_netcdf_file):
-		stock_nc = options.stock_netcdf_file 
-	else:
-		print "need a benchmark GIS file for production analysis"
-	        exit()
-
-	if (options.variable_netcdf_file):
-        	variable_nc = options.variable_netcdf_file
-	else:
-		print "need a production GIS file for analysis"
-       		exit()
-
-	if (options.output_file):
-		gis_output = options.output_file 
-	else:
-		print "no GIS output file provided, so no solver statistics will be provided"
-
-else:
-        print "not performing GIS production analysis"
 
 if (options.time_stamp):
 	time_stamp = options.time_stamp 
@@ -107,19 +78,17 @@ if (options.username):
 
 	print 'placing HTML files in the ' + options.username + ' subdirectory (check permissions)'
  	target_html = options.html_path
-
 else:
-
 	print 'no username specified, placing HTML files in the main html directory'
 	target_html = options.html_path 
 
 #remove html files previously used in specified subdirectory
 
 try:
-	os.remove(target_html + '/GIS-main-diag.html')
+	os.remove(target_html + '/livv_kit_main.html')
 except OSError as o:
       	if o.errno == 2:
-		print "recreating GIS-main-diag.html in " + options.username + " subdirectory"
+		print "recreating livv_kit_main.html in " + options.username + " subdirectory"
 	else:
 		raise
 try:
@@ -130,24 +99,10 @@ except OSError as o:
 	else:
 		raise
 try:
-       	os.remove(target_html + '/GIS-con-diag.html')
+       	os.remove(target_html + '/large_test_suite.html')
 except OSError as o:
 	if o.errno == 2:
-		print "recreating GIS-con-diag.html in " + options.username + " subdirectory"
-	else:
-		raise
-try:
-       	os.remove(target_html + '/GIS-out-diag.html')
-except OSError as o:
-	if o.errno == 2:
-		print "recreating GIS-out-diag.html in " + options.username + " subdirectory"
-	else:
-		raise
-try:
-       	os.remove(target_html + '/GIS-plot-diag.html')
-except OSError as o:
-	if o.errno == 2:
-		print "recreating GIS-plot-diag.html in " + options.username + " subdirectory"
+		print "recreating large test suite in " + options.username + " subdirectory"
 	else:
 		raise
 try:
@@ -157,34 +112,6 @@ except OSError as o:
                 print "clearing plot_details.out"
         else:
                 raise
-
-# create production plots for analysis
-if options.gis_prod:
-
-	ncl_script=options.ncl_path + "/tri_ncl_script.ncl"
-
-	plot_gis_thk = "ncl 'VAR=addfile(\"" + variable_nc + "\", \"r\")'" + ' ' + \
-		    "'STOCK=addfile(\"" + stock_nc + "\",\"r\")'" + ' ' + \
-		    "'PNG=\"" + options.ncl_path + "/gis5km_thk\"'" + ' ' + \
-                    ncl_script + ' ' + "1> /dev/null"
-
-#print plot_gis_thk
-
-	try:
-		output = subprocess.call(plot_gis_thk, shell=True)
-	except:
-		print "error formatting thickness plot of production run"
-		raise
-
-#transferring thickness plot to www location
-
-	if (options.ncl_path + '/gis5km_thk.png'):
-        	thkpic = "mv -f " + options.ncl_path + "/gis5km_thk.png" + " " + target_html + "/"
-        	try:
-                	output = subprocess.call(thkpic, shell=True)
-        	except:
-                	print "error moving thk png file"
-                	raise
 
 #transferring cover picture to www file
 
@@ -212,8 +139,7 @@ if options.test_suite:
         dome30e_case = open(target_html + '/dome30e_case.html', 'w')
         dome30e_plot = open(target_html + '/dome30e_plot.html', 'w')
         dome30e_xml  = open(target_html + '/dome30e_xml.html', 'w')
-# circular shelf case
-        circ_file = open(target_html + '/circ_details.html', 'w')
+
         circ_case = open(target_html + '/circ_case.html', 'w')
         circ_plot = open(target_html + '/circ_plot.html', 'w')
         circ_xml  = open(target_html + '/circ_xml.html', 'w')
@@ -260,9 +186,37 @@ if options.test_suite:
 
 dictionary = VV_testsuite.bit_list(reg_test,options.bench_data)
 
+
+#create all the large test suite diagnostics pages
+if options.dome500_flag==1 or options.gis_5km_flag==1:
+
+        large_test_file = open(target_html + '/large_test_suite.html', 'w')
+        descript_file = open(target_html + '/large_test_descript.html', 'w')
+# dome500 case
+        dome500_file = open(target_html + '/dome500_details.html', 'w')
+        dome500_case = open(target_html + '/dome500_case.html', 'w')
+        dome500_plot = open(target_html + '/dome500_plot.html', 'w')
+        dome500_xml  = open(target_html + '/dome500_xml.html', 'w')
+# gis 5km case
+        gis5km_file = open(target_html + '/gis5km_details.html', 'w')
+        gis5km_case = open(target_html + '/gis5km_case.html', 'w')
+        gis5km_plot = open(target_html + '/gis5km_plot.html', 'w')
+        gis5km_xml  = open(target_html + '/gis5km_xml.html', 'w')
+
+#path to python code to create all the large test suite pages and data
+        perf_test = options.test_suite + "/perf_test"
+
+        VV_largesuite.large_tests(descript_file,large_test_file,dome500_file,dome500_case,dome500_plot,dome500_xml, \
+                gis5km_file,gis5km_case,gis5km_plot,gis5km_xml, \
+                perf_test,options.ncl_path,target_html,options.script_path, \
+                options.dome500_flag,options.gis_5km_flag,options.bench_data)
+
+        dictionary_large = VV_largesuite.bit_list(perf_test,options.bench_data)
+
+
 #writing the main HTML page
 
-file = open(target_html + '/GIS-main-diag.html', 'w')
+file = open(target_html + '/livv_kit_main.html', 'w')
 
 file.write('<HTML><HEAD>\n')
 file.write('<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">')
@@ -270,7 +224,6 @@ file.write('<title>Land Ice Verification and Validation toolkit</title>')
 file.write('<link href="style.css" rel="stylesheet" type="text/css">')
 file.write('<BODY>\n')
 file.write(' <div id="container"> <div id="content">')
-#file.write('<BODY bgcolor="white">\n')
 file.write('<P>\n')
 file.write('<OBJECT data="alaska_pic.png" type="image/png" width="400" height="300" hspace=10 align=left alt="ice sheet pic">\n')
 file.write('</OBJECT>\n')
@@ -288,31 +241,18 @@ file.write('<TH ALIGN=LEFT><A HREF="test_suite.html">Basic Test Suite Diagnostic
 if 1 in dictionary.values():
         file.write('<font color="red"> All Cases NOT Bit-for-Bit</font><br>')
 else:
-        file.write(' All Cases Bit-for-Bit <br>')
+        file.write('<font color="green"> All Cases Bit-for-Bit</font><br>')
 
 file.write('<BR>\n')
 file.write('<BR>\n')
-if options.gis_prod:
-        
-        gis_con = open(target_html + '/GIS-con-diag.html', 'w')
-        file.write('<TH ALIGN=LEFT><A HREF="GIS-con-diag.html">Production Configure Diagnostics</A>\n')
-	configure_path = options.config_file
-        VV_gisproduction.conf(gis_con,configure_path) 
-        
-        file.write('<BR>\n')
-        file.write('<BR>\n')
-	
-        gis_out = open(target_html + '/GIS-out-diag.html', 'w')
-	file.write('<TH ALIGN=LEFT><A HREF="GIS-out-diag.html">Production Output Diagnostics</A>\n')
-	VV_gisproduction.outfile(gis_out,gis_output,'gis5km')
+if options.dome500_flag==1 or options.gis_5km_flag==1:
 
-	file.write('<BR>\n')
-	file.write('<BR>\n')
-	
-	if stock_nc:
-		plot_file = open(target_html + '/GIS-plot-diag.html', 'w')
-        file.write('<TH ALIGN=LEFT><A HREF="GIS-plot-diag.html">Ice Thickness</A>\n')
-	file.write('<BR>\n <BR>\n <BR> \n')
+        file.write('<TH ALIGN=LEFT><A HREF="large_test_suite.html">Performance and Analysis Test Suite</A>\n')
+        
+        if 1 in dictionary_large.values():
+                file.write('<font color="red"> All Cases NOT Bit-for-Bit</font><br>')
+        else:
+                file.write('<font color="green"> All Cases Bit-for-Bit</font><br>')
 
 file.write('<h4> For Additional Information: </h4> <p>')
 file.write(' Kate Evans <br>')
@@ -325,24 +265,5 @@ file.write('</BODY>\n')
 file.write('</HTML>\n')
 file.close()
 
-print "LIVV Completed. Go to " + options.html_link + "/GIS-main-diag.html to view results"
-
-# plot production run output for comparison to the benchmark
-
-#		plot_file.write('<HTML>\n')
-#      		plot_file.write('<TITLE>Thickness</TITLE>\n')
-#                plot_file.write('<H2>Thickness Plot</H2>')
-#		plot_file.write('<TABLE>\n')
-#		plot_file.write('<TR>\n')
-#		plot_file.write('<H4>a) Benchmark Ice Thickness</H4>\n')
-#		plot_file.write('<H4>b) Simulation Ice Thickness</H4>\n')
-#		plot_file.write('<H4>c) Difference from Benchmark </H4>\n')
-#		plot_file.write('<OBJECT data="gis5km_thk.png" type="image/png" width="1300" height="800" hspace=10 align=left alt="Thickness Plots">\n')
-#		plot_file.write('</OBJECT>\n')
-#		plot_file.write('<TR>\n')
-#		plot_file.write('<BR>\n')
-#		plot_file.write('</TABLE>\n')
-#		plot_file.write('</HTML>\n')
-#		plot_file.close()
-
+print "LIVV Completed. Go to " + options.html_link + "/livv_kit_main.html to view results"
 

@@ -5,38 +5,97 @@ import os
 from optparse import OptionParser
 import subprocess
 import collections
+import netCDF4
+from netCDF4 import Dataset
 import glob
+
+#zerocheck
+def zerocheck(filename):
+        data_vars =['thk', 'uvel', 'velnorm', 'vvel']
+	
+        input_netcdf = filename
+        netCDF4.python3 = True
+        netCDF4.default_encoding = 'iso8859-1'
+
+        netcdf = Dataset(input_netcdf, 'r')
+
+#read in variable from file. Don't know which one so try each.
+#for v in data_vars:
+        for var in data_vars:
+                data = netcdf.variables[var][:]
+
+                time = netcdf.variables['time']
+
+                if var != 'thk':
+                        level = netcdf.variables['level']
+
+                if var == 'uvel' or var == 'velnorm' or var == 'vvel':
+                        x = netcdf.variables['x0']
+                        y = netcdf.variables['y0']
+                else:
+                        x = netcdf.variables['x1']
+                        y = netcdf.variables['y1']
+
+
+                change = False
+                if var == 'thk':
+                        for t in range(time.size):
+                                for j in range(y.size):
+                                        for i in range(x.size):
+                                                if data[t, j, i] != 0.0:
+                                                        change = True
+                                #print(data[t, j, i])
+                else:
+                        for t in range(time.size):
+                                for l in range(level.size):
+                                        for j in range(y.size):
+                                                for i in range(x.size):
+                                                        if data[t, l, j, i] != 0.0:
+                                                                change = True
+
+
+                if change:
+                        return 1
+                else:
+                        return 0
+
 
 #bit4bit check
 def bit4bit(model_file_path,bench_file_path):
     a = []
     b = []
-    flag = 0
+    flag = []
+    bench_file = ''
 
     model_file_list = glob.glob(model_file_path + '/*.nc')
 
     bench_file_list = glob.glob(bench_file_path + '/*.nc')
 
-    for model_file in model_file_list:
-            md5sum_model = "md5sum " + model_file
-            p = subprocess.Popen(md5sum_model, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-            output = p.communicate()[0]
-            a.append(output[0:32])
+    output = open("temp.txt", 'w')
+    output.write(model_file_path)
+    output.write('\n')
+    output.write(bench_file_path)
 
+    output2 = 'rm -rf temp.txt'
+    subprocess.call(output2, shell=True)
+    
     for bench_file in bench_file_list:
-            md5sum_bench = "md5sum " + bench_file
-            q = subprocess.Popen(md5sum_bench, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-            output = q.communicate()[0]
-            b.append(output[0:32])
+	for model_file in model_file_list:
+		if bench_file == model_file:
+			file1 = bench_file_list[i]
+			file2 = model_file_list[i]
+			comline = 'ncdiff ' + file1 + ' ' + file2 + ' ' + model_file_path + '/temp.nc'
+	      		subprocess.call(comline, shell=True)
+       		 	flag.append(zerocheck(model_file_path + '/temp.nc'))
+			comline = 'rm -rf temp.nc'
+        		subprocess.call(comline, shell=True)
 
 #match up the md5sums in a and b, tell if bit-for-bit for each specific case
-    for b_file in b:
-        if b_file not in a:
-            i = b.index(b_file)
-            flag = 1
-            break
-
-    return flag
+	
+        if 1 in flag: 
+   		return 1
+	else:
+		return 0
 
 #ncdump_model = "ncdump -c " + model_file
 #ncdump_bench = "ncdump -c " + bench_file
