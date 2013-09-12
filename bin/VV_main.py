@@ -139,7 +139,8 @@ if options.test_suite:
         dome30e_case = open(target_html + '/dome30e_case.html', 'w')
         dome30e_plot = open(target_html + '/dome30e_plot.html', 'w')
         dome30e_xml  = open(target_html + '/dome30e_xml.html', 'w')
-
+# circular shelf case
+        circ_file = open(target_html + '/circ_details.html', 'w')
         circ_case = open(target_html + '/circ_case.html', 'w')
         circ_plot = open(target_html + '/circ_plot.html', 'w')
         circ_xml  = open(target_html + '/circ_xml.html', 'w')
