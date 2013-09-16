@@ -16,46 +16,46 @@ from stat import *
 import time
 
 #bit-for-bit check for each test case
-def bit_list(reg_test,bench_data):
+def bit_list(reg_test,data_dir):
     dictionary = {}
 #diagnostic dome30 case
-    data_file_path = reg_test + '/dome30/diagnostic/data'
-    bench_file_path = reg_test + '/bench/dome30/diagnostic/' + bench_data
+    data_file_path = reg_test + '/dome30/diagnostic/' + data_dir
+    bench_file_path = reg_test + '/bench/dome30/diagnostic/' + data_dir
     flag = VV_checks.bit4bit(data_file_path,bench_file_path)
     dictionary['diagnostic'] = flag
 #evolving dome30 case
-    data_file_path = reg_test + '/dome30/evolving/data'
-    bench_file_path = reg_test + '/bench/dome30/evolving/' + bench_data
+    data_file_path = reg_test + '/dome30/evolving/' + data_dir
+    bench_file_path = reg_test + '/bench/dome30/evolving/' + data_dir
     flag = VV_checks.bit4bit(data_file_path,bench_file_path)
     dictionary['evolving'] = flag
 #circular shelf case
-    data_file_path = reg_test + '/circular-shelf/data'
-    bench_file_path = reg_test + '/bench/circular-shelf/' + bench_data
+    data_file_path = reg_test + '/circular-shelf/' + data_dir
+    bench_file_path = reg_test + '/bench/circular-shelf/' + data_dir
     flag = VV_checks.bit4bit(data_file_path,bench_file_path)
     dictionary['circular'] = flag
 #confined shelf case
-    data_file_path = reg_test + '/confined-shelf/data'
-    bench_file_path = reg_test + '/bench/confined-shelf/' + bench_data
+    data_file_path = reg_test + '/confined-shelf/' + data_dir
+    bench_file_path = reg_test + '/bench/confined-shelf/' + data_dir
     flag = VV_checks.bit4bit(data_file_path,bench_file_path)
     dictionary['confined'] = flag
 #ismip hom a 80 case
-    data_file_path = reg_test + '/ismip-hom-a/80km/data'
-    bench_file_path = reg_test + '/bench/ismip-hom-a/80km/' + bench_data
+    data_file_path = reg_test + '/ismip-hom-a/80km/' + data_dir
+    bench_file_path = reg_test + '/bench/ismip-hom-a/80km/' + data_dir
     flag = VV_checks.bit4bit(data_file_path,bench_file_path)
     dictionary['ismip-hom-a80'] = flag
 #ismip hom a 20 case
-    data_file_path = reg_test + '/ismip-hom-a/20km/data'
-    bench_file_path = reg_test + '/bench/ismip-hom-a/20km/' + bench_data
+    data_file_path = reg_test + '/ismip-hom-a/20km/' + data_dir
+    bench_file_path = reg_test + '/bench/ismip-hom-a/20km/' + data_dir
     flag = VV_checks.bit4bit(data_file_path,bench_file_path)
     dictionary['ismip-hom-a20'] = flag
 #ismip hom c case
-    data_file_path = reg_test + '/ismip-hom-c/80km/data'
-    bench_file_path = reg_test + '/bench/ismip-hom-c/80km/' + bench_data
+    data_file_path = reg_test + '/ismip-hom-c/80km/' + data_dir
+    bench_file_path = reg_test + '/bench/ismip-hom-c/80km/' + data_dir
     flag = VV_checks.bit4bit(data_file_path,bench_file_path)
     dictionary['ismip-hom-c'] = flag
 #gis10km case
-    data_file_path = reg_test + '/gis_10km/data'
-    bench_file_path = reg_test + '/bench/gis_10km/' + bench_data
+    data_file_path = reg_test + '/gis_10km/' + data_dir
+    bench_file_path = reg_test + '/bench/gis_10km/' + data_dir
     flag = VV_checks.bit4bit(data_file_path,bench_file_path)
     dictionary['gis_10km'] = flag
 
@@ -66,7 +66,7 @@ def web(descript_file,test_file, \
 	circ_file,circ_case,circ_plot,circ_xml,conf_file,conf_case,conf_plot,conf_xml, \
 	ishoma80_file,ishoma80_case,ishoma80_plot,ishoma80_xml,ishoma20_file,ishoma20_case,ishoma20_plot,ishoma20_xml, \
         ishomc80_file,ishomc80_case,ishomc80_plot,ishomc80_xml, \
-	gis10_file,gis10_case,gis10_plot,gis10_xml,reg_test,bench_data,ncl_path,data_path,html_path,script_path,\
+	gis10_file,gis10_case,gis10_plot,gis10_xml,reg_test,data_dir,ncl_path,html_path,script_path,\
         diagnostic_flag,evolving_flag,circular_flag,confined_flag,
         ismip_hom_a80_flag,ismip_hom_a20_flag,ismip_hom_c_flag,gis_10km_flag):  
 
@@ -79,7 +79,7 @@ def web(descript_file,test_file, \
 	test_file.write('<TH ALIGN=LEFT><A HREF="test_descript.html">Test Suite Descriptions</A>\n')
 	test_file.write('<BR>\n')
 
-        dictionary = bit_list(reg_test,bench_data)
+        dictionary = bit_list(reg_test,data_dir)
 
 
 #apply flag to turn off running test
@@ -98,7 +98,7 @@ def web(descript_file,test_file, \
 # link to dome30d_file with descriptions about the test cases
 		    test_file.write('<TH ALIGN=LEFT><A HREF="dome30d_details.html">Diagnostic Dome 30 Velocity Solver Details</A>\n')
 		    test_file.write('<BR>\n')
-                    failedt = VV_dome30details.ddetails(dome30d_file,reg_test,bench_data)
+                    failedt = VV_dome30details.ddetails(dome30d_file,reg_test,data_dir)
 
 		    test_file.write('<TH ALIGN=LEFT><A HREF="dome30d_xml.html">Solver Parameter Settings: Diagnostic Dome 30 XML Details</A>\n')
 		    test_file.write('<BR>\n')
@@ -116,13 +116,13 @@ def web(descript_file,test_file, \
 		    test_file.write('<BR>\n')
                     if failedt != 0:
                         dome30d_plot.write("<H2>Diagnostic Dome 30 Test failed, plots may not be generated</H2><br>")
-                    checkpath = reg_test + '/dome30/diagnostic/data/dome.1.nc'
-                    checkpath2 = reg_test + '/dome30/diagnostic/data/dome.4.nc'
+                    checkpath = reg_test + '/dome30/diagnostic/' + data_dir + '/dome.1.nc'
+                    checkpath2 = reg_test + '/dome30/diagnostic/' + data_dir + '/dome.4.nc'
                     noplot = VV_checks.emptycheck(checkpath)
                     noplot1 = noplot
                     noplot = VV_checks.emptycheck(checkpath2)
                     if noplot1 != 1 and noplot != 1:
-                        VV_dome30details.dplot(dome30d_plot,reg_test,ncl_path,html_path,script_path,bench_data)
+                        VV_dome30details.dplot(dome30d_plot,reg_test,ncl_path,html_path,script_path,data_dir)
 
 # Time stamping
 	    strrand = ''
@@ -153,7 +153,7 @@ def web(descript_file,test_file, \
 # link to dome30e_file with descriptions about the test cases
 		    test_file.write('<TH ALIGN=LEFT><A HREF="dome30e_details.html">Evolving Dome 30 Velocity Solver Details</A>\n')
 		    test_file.write('<BR>\n')
-        	    failedt = VV_dome30details.edetails(dome30e_file,reg_test,bench_data)
+        	    failedt = VV_dome30details.edetails(dome30e_file,reg_test,data_dir)
 
 		    test_file.write('<TH ALIGN=LEFT><A HREF="dome30e_xml.html">Solver Parameter Settings: Evolving Dome 30 XML Details</A>\n')
 		    test_file.write('<BR>\n')
@@ -171,13 +171,13 @@ def web(descript_file,test_file, \
 		    test_file.write('<BR>\n')
                     if failedt != 0:
                         dome30e_plot.write("<H2>Evolving Dome 30 Test failed, plots may not be generated</H2><br>")
-                    checkpath = reg_test + '/dome30/evolving/data/dome.9.nc'
-                    checkpath2 = reg_test + '/dome30/evolving/data/dome.15.nc'
+                    checkpath = reg_test + '/dome30/evolving/' + data_dir + '/dome.9.nc'
+                    checkpath2 = reg_test + '/dome30/evolving/' + data_dir + '/dome.15.nc'
                     noplot = VV_checks.emptycheck(checkpath)
                     noplot1 = noplot
                     noplot = VV_checks.emptycheck(checkpath2)
                     if noplot != 1 and noplot != 1:
-                        VV_dome30details.eplot(dome30e_plot,reg_test,ncl_path,html_path,script_path,bench_data)
+                        VV_dome30details.eplot(dome30e_plot,reg_test,ncl_path,html_path,script_path,data_dir)
 
 # Time stamping
 	    mode = os.stat(reg_test + '/dome30/evolving').st_mtime
@@ -207,7 +207,7 @@ def web(descript_file,test_file, \
 
 		    test_file.write('<TH ALIGN=LEFT><A HREF="circ_details.html">Circular Shelf Velocity Solver Details</A>\n')
 		    test_file.write('<BR>\n')
-        	    failedt = VV_shelfdetails.circdetails(circ_file,reg_test,bench_data)
+        	    failedt = VV_shelfdetails.circdetails(circ_file,reg_test,data_dir)
 
 		    test_file.write('<TH ALIGN=LEFT><A HREF="circ_xml.html">Solver Parameter Settings: Circular Shelf XML Details</A>\n')
                     test_file.write('<BR>\n')
@@ -225,10 +225,10 @@ def web(descript_file,test_file, \
 		    test_file.write('<BR>\n')
                     if failedt != 0:
                         circ_plot.write("<H2>Circular Shelf Test failed, plots may not be generated</H2><br>")
-                    checkpath = reg_test + '/circular-shelf/data/circular-shelf.gnu.JFNK.nc'
+                    checkpath = reg_test + '/circular-shelf/' + data_dir + '/circular-shelf.gnu.JFNK.nc'
                     noplot = VV_checks.emptycheck(checkpath)
                     if noplot != 1:
-                        VV_shelfdetails.circplot(circ_plot,reg_test,ncl_path,html_path,script_path,bench_data)
+                        VV_shelfdetails.circplot(circ_plot,reg_test,ncl_path,html_path,script_path,data_dir)
 
 # Time stamping
 	    mode = os.stat(reg_test + '/circular-shelf').st_mtime
@@ -257,7 +257,7 @@ def web(descript_file,test_file, \
 
 		    test_file.write('<TH ALIGN=LEFT><A HREF="conf_details.html">Confined Shelf Velocity Solver Details</A>\n')
 		    test_file.write('<BR>\n')
-        	    failedt = VV_shelfdetails.confdetails(conf_file,reg_test,bench_data)
+        	    failedt = VV_shelfdetails.confdetails(conf_file,reg_test,data_dir)
 
 		    test_file.write('<TH ALIGN=LEFT><A HREF="conf_xml.html">Solver Parameter Details: Confined Shelf XML Details</A>\n')
                     test_file.write('<BR>\n')
@@ -275,10 +275,10 @@ def web(descript_file,test_file, \
 		    test_file.write('<BR>\n')
                     if failedt != 0:
                         conf_plot.write("<H2>Confined Shelf Test failed, plots may not be generated</H2><br>")
-                    checkpath = reg_test + '/confined-shelf/data/confined-shelf.gnu.JFNK.nc'
+                    checkpath = reg_test + '/confined-shelf/' + data_dir + '/confined-shelf.gnu.JFNK.nc'
                     noplot = VV_checks.emptycheck(checkpath)
                     if noplot != 1:
-                        VV_shelfdetails.confplot(conf_plot,reg_test,ncl_path,html_path,script_path,bench_data)
+                        VV_shelfdetails.confplot(conf_plot,reg_test,ncl_path,html_path,script_path,data_dir)
 
 # Time stamping
 	    mode = os.stat(reg_test + '/confined-shelf').st_mtime
@@ -307,7 +307,7 @@ def web(descript_file,test_file, \
 
 		    test_file.write('<TH ALIGN=LEFT><A HREF="ishoma80_details.html">ISMIP HOM A 80km Velocity Solver Details</A>\n')
 		    test_file.write('<BR>\n')
-        	    failedt = VV_ismip.a80details(ishoma80_file,reg_test,bench_data)
+        	    failedt = VV_ismip.a80details(ishoma80_file,reg_test,data_dir)
 
 		    test_file.write('<TH ALIGN=LEFT><A HREF="ishoma80_xml.html">Solver Parameter Details: ISMIP HOM A 80km XML Details</A>\n')
                     test_file.write('<BR>\n')
@@ -325,10 +325,10 @@ def web(descript_file,test_file, \
 		    test_file.write('<BR>\n')
                     if failedt != 0:
                         ishoma80_plot.write("<H2>ISMIP HOM A 80km Test failed, plots may not be generated</H2><br>")
-                    checkpath = reg_test + '/ismip-hom-a/80km/data/ishom.a.80km.JFNK.out.nc'
+                    checkpath = reg_test + '/ismip-hom-a/80km/' + data_dir + '/ishom.a.80km.JFNK.out.nc'
                     noplot = VV_checks.emptycheck(checkpath)
                     if noplot != 1:
-                        VV_ismip.a80plot(ishoma80_plot,reg_test,ncl_path,html_path,script_path,bench_data)
+                        VV_ismip.a80plot(ishoma80_plot,reg_test,ncl_path,html_path,script_path,data_dir)
 
 # Time stamping
 	    mode = os.stat(reg_test + '/ismip-hom-a/80km').st_mtime
@@ -357,7 +357,7 @@ def web(descript_file,test_file, \
 
                 test_file.write('<TH ALIGN=LEFT><A HREF="ishoma20_details.html">ISMIP HOM A 20km Velocity Solver Details</A>\n')
                 test_file.write('<BR>\n')
-                failedt = VV_ismip.a20details(ishoma20_file,reg_test,bench_data)
+                failedt = VV_ismip.a20details(ishoma20_file,reg_test,data_dir)
 
                 test_file.write('<TH ALIGN=LEFT><A HREF="ishoma20_xml.html">Solver Parameter Details: ISMIP HOM A 20km XML Details</A>\n')
                 test_file.write('<BR>\n')
@@ -375,10 +375,10 @@ def web(descript_file,test_file, \
                 test_file.write('<BR>\n')
                 if failedt != 0:
                     ishoma20_plot.write("<H2>ISMIP HOM A 20 Test failed, plots may not be generated</H2><br>")
-                checkpath = reg_test + '/ismip-hom-a/20km/data/ishom.a.20km.JFNK.out.nc'
+                checkpath = reg_test + '/ismip-hom-a/20km/' + data_dir + '/ishom.a.20km.JFNK.out.nc'
                 noplot = VV_checks.emptycheck(checkpath)
                 if noplot != 1:
-                    VV_ismip.a20plot(ishoma20_plot,reg_test,ncl_path,html_path,script_path,bench_data)
+                    VV_ismip.a20plot(ishoma20_plot,reg_test,ncl_path,html_path,script_path,data_dir)
  
 # Time stamping
             mode = os.stat(reg_test + '/ismip-hom-a/20km').st_mtime
@@ -407,7 +407,7 @@ def web(descript_file,test_file, \
 
 		    test_file.write('<TH ALIGN=LEFT><A HREF="ishomc80_details.html">ISMIP HOM C 80km Velocity Solver Details</A>\n')
 		    test_file.write('<BR>\n')
-        	    failedt = VV_ismip.c80details(ishomc80_file,reg_test,bench_data)
+        	    failedt = VV_ismip.c80details(ishomc80_file,reg_test,data_dir)
 
 		    test_file.write('<TH ALIGN=LEFT><A HREF="ishomc80_xml.html">Solver Parameter Settings: ISMIP HOM C 80km XML Details</A>\n')
                     test_file.write('<BR>\n')
@@ -425,10 +425,10 @@ def web(descript_file,test_file, \
 		    test_file.write('<BR>\n')
                     if failedt != 0:
                         ishomc80_plot.write("<H2>ISMIP HOM C Test failed, plots may not be generated</H2><br>")
-                    checkpath = reg_test + '/ismip-hom-c/80km/data/ishom.c.80km.JFNK.out.nc'
+                    checkpath = reg_test + '/ismip-hom-c/80km/' + data_dir + '/ishom.c.80km.JFNK.out.nc'
                     noplot = VV_checks.emptycheck(checkpath)
                     if noplot != 1:
-                        VV_ismip.c80plot(ishomc80_plot,reg_test,ncl_path,html_path,script_path,bench_data)
+                        VV_ismip.c80plot(ishomc80_plot,reg_test,ncl_path,html_path,script_path,data_dir)
 
 # Time stamping
 	    mode = os.stat(reg_test + '/ismip-hom-c/80km').st_mtime
@@ -457,7 +457,7 @@ def web(descript_file,test_file, \
 
 		    test_file.write('<TH ALIGN=LEFT><A HREF="gis10_details.html">GIS 10km Velocity Solver Details</A>\n')
 		    test_file.write('<BR>\n')
-        	    failedt = VV_gis10details.details(gis10_file,reg_test,ncl_path,data_path,html_path,bench_data)
+        	    failedt = VV_gis10details.details(gis10_file,reg_test,ncl_path,html_path,data_dir)
 
 		    test_file.write('<TH ALIGN=LEFT><A HREF="gis10_xml.html">Solver Parameter Settings: GIS 10km XML Details</A>\n')
                     test_file.write('<BR>\n')
@@ -475,10 +475,10 @@ def web(descript_file,test_file, \
 		    test_file.write('<BR>\n')
                     if failedt != 0:
                         gis10_plot.write("<H2>GIS 10km Test failed, plots may not be generated</H2><br>")
-                    checkpath = reg_test + '/gis_10km/data/gis_10km.seacism.nc'
+                    checkpath = reg_test + '/gis_10km/' + data_dir + '/gis_10km.seacism.nc'
                     noplot = VV_checks.emptycheck(checkpath)
                     if noplot != 1:
-                        VV_gis10details.gis10_plot(gis10_plot,reg_test,ncl_path,html_path,script_path,bench_data)
+                        VV_gis10details.gis10_plot(gis10_plot,reg_test,ncl_path,html_path,script_path,data_dir)
 
 # Time stamping
 	    mode = os.stat(reg_test + '/gis_10km').st_mtime

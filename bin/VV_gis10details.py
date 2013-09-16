@@ -9,7 +9,7 @@ import VV_outprocess
 import VV_utilities
 import VV_checks
 
-def details(solver_file,reg_test,ncl_path,data_path,target_html,bench_data):  # using data, fill the web page with info
+def details(solver_file,reg_test,ncl_path,target_html,data_dir):  # using data, fill the web page with info
         
         failedt_list = []
 
@@ -21,12 +21,12 @@ def details(solver_file,reg_test,ncl_path,data_path,target_html,bench_data):  # 
 # JFNK multiple procs
         
 # Failure checking
-        failedt1 = VV_checks.failcheck(reg_test, '/gis_10km/data/gis_10km.JFNK.trilinos.10.gnu.out')
+        failedt1 = VV_checks.failcheck(reg_test, '/gis_10km/' + data_dir + '/gis_10km.JFNK.trilinos.10.gnu.out')
         failedt_list.append(failedt1)
 
-        procttl_gis10d, nonlist_gis10d, avg2_gis10d, out_flag_gis10d, ndg102_name, ldg102_name = VV_outprocess.jobprocess(reg_test + '/gis_10km/data/gis_10km.JFNK.trilinos.10.gnu.out','gis10km2')
+        procttl_gis10d, nonlist_gis10d, avg2_gis10d, out_flag_gis10d, ndg102_name, ldg102_name = VV_outprocess.jobprocess(reg_test + '/gis_10km/' + data_dir + '/gis_10km.JFNK.trilinos.10.gnu.out','gis10km2')
 
-        procttl_gis10b, nonlist_gis10b, avg2_gis10b, out_flag_gis10b, ndg102b_name, ldg102b_name = VV_outprocess.jobprocess(reg_test + '/bench/gis_10km/'+ bench_data + '/gis_10km.JFNK.trilinos.10.gnu.out','gis10km2b')
+        procttl_gis10b, nonlist_gis10b, avg2_gis10b, out_flag_gis10b, ndg102b_name, ldg102b_name = VV_outprocess.jobprocess(reg_test + '/bench/gis_10km/'+ data_dir + '/gis_10km.JFNK.trilinos.10.gnu.out','gis10km2b')
 
 
 # create iteration plots for proudction simulation
@@ -100,9 +100,9 @@ def details(solver_file,reg_test,ncl_path,data_path,target_html,bench_data):  # 
 
         return failedt
 
-def gis10_plot(plot_file,reg_test,ncl_path,html_path,script_path,bench_data):  # using data, fill the web page with info
+def gis10_plot(plot_file,reg_test,ncl_path,html_path,script_path,data_dir):  # using data, fill the web page with info
 
-        tmpath = reg_test + '/gis_10km/data/gis_10km.seacism.nc'
+        tmpath = reg_test + '/gis_10km/' + data_dir + '/gis_10km.seacism.nc'
         if VV_utilities.emptycheck(tmpath) == 0:
                 return
         if noplot == 0:
@@ -112,10 +112,10 @@ def gis10_plot(plot_file,reg_test,ncl_path,html_path,script_path,bench_data):  #
             
 # formulate gis10km velocity norm plot            
             gis10kmvel_plotfile=''+ ncl_path + '/gis10kmvel.ncl'
-            stockcism='STOCKcism = addfile(\"'+ reg_test + '/bench/gis_10km/' + bench_data + '/gis_10km.seacism.nc\", \"r\")'
-            stockcism10='STOCKcism10 = addfile(\"'+ reg_test + '/bench/gis_10km/' + bench_data + '/gis_10km.seacism.10.nc\", \"r\")'
-            VARcism  ='VARcism = addfile(\"' + reg_test + '/gis_10km/data/gis_10km.seacism.nc\", \"r\")'
-            VARcism10  ='VARcism10 = addfile(\"' + reg_test + '/gis_10km/data/gis_10km.seacism.10.nc\", \"r\")'
+            stockcism='STOCKcism = addfile(\"'+ reg_test + '/bench/gis_10km/' + data_dir + '/gis_10km.seacism.nc\", \"r\")'
+            stockcism10='STOCKcism10 = addfile(\"'+ reg_test + '/bench/gis_10km/' + data_dir + '/gis_10km.seacism.10.nc\", \"r\")'
+            VARcism  ='VARcism = addfile(\"' + reg_test + '/gis_10km/' + data_dir + '/gis_10km.seacism.nc\", \"r\")'
+            VARcism10  ='VARcism10 = addfile(\"' + reg_test + '/gis_10km/' + data_dir + '/gis_10km.seacism.10.nc\", \"r\")'
             png  = 'PNG = "' + ncl_path + '/gis10kmvel"'
             plot_gis10kmvel = "ncl '" + stockcism + "'  '" + stockcism10 + "'  '" + VARcism + "'  '" + VARcism10 + "' '" + png + "' " + gis10kmvel_plotfile + " >> plot_details.out"
 
@@ -150,12 +150,12 @@ def gis10_plot(plot_file,reg_test,ncl_path,html_path,script_path,bench_data):  #
 
 # formulate gis10km thickness plot
             gis10kmthk_plotfile=''+ ncl_path + '/gis10kmthk.ncl'
-            stockcism='STOCKcism = addfile(\"'+ reg_test + '/bench/gis_10km/' + bench_data + '/gis_10km.seacism.nc\", \"r\")'
-            stockcism10='STOCKcism10 = addfile(\"'+ reg_test + '/bench/gis_10km/' + bench_data + '/gis_10km.seacism.10.nc\", \"r\")'
-            stockcrop='STOCKcrop = addfile(\"'+ reg_test + '/bench/gis_10km/' + bench_data + '/gis_10km.051011.crop.nc\", \"r\")'
-            VARcism  ='VARcism = addfile(\"' + reg_test + '/gis_10km/data/gis_10km.seacism.nc\", \"r\")'
-            VARcism10  ='VARcism10 = addfile(\"' + reg_test + '/gis_10km/data/gis_10km.seacism.10.nc\", \"r\")'
-            VARcrop='VARcrop = addfile(\"'+ reg_test + '/gis_10km/data/gis_10km.051011.crop.nc\", \"r\")'
+            stockcism='STOCKcism = addfile(\"'+ reg_test + '/bench/gis_10km/' + data_dir + '/gis_10km.seacism.nc\", \"r\")'
+            stockcism10='STOCKcism10 = addfile(\"'+ reg_test + '/bench/gis_10km/' + data_dir + '/gis_10km.seacism.10.nc\", \"r\")'
+            stockcrop='STOCKcrop = addfile(\"'+ reg_test + '/bench/gis_10km/' + data_dir + '/gis_10km.051011.crop.nc\", \"r\")'
+            VARcism  ='VARcism = addfile(\"' + reg_test + '/gis_10km/' + data_dir + '/gis_10km.seacism.nc\", \"r\")'
+            VARcism10  ='VARcism10 = addfile(\"' + reg_test + '/gis_10km/' + data_dir + '/gis_10km.seacism.10.nc\", \"r\")'
+            VARcrop='VARcrop = addfile(\"'+ reg_test + '/gis_10km/' + data_dir + '/gis_10km.051011.crop.nc\", \"r\")'
             png  = 'PNG = "' + ncl_path + '/gis10kmthk"'
             plot_gis10kmthk = "ncl '" + stockcism + "'  '" + stockcism10 + "'  '" + stockcrop + "'  '" + VARcism + "'  '" + VARcism10 + "' '" + VARcrop + "'  '" + png + "' " + gis10kmthk_plotfile + " >> plot_details.out"
 

@@ -24,10 +24,8 @@ parser.add_option('-l', '--link', action='store', type='string', dest='html_link
                   metavar='PATH', help='location of website for viewing set by user')
 parser.add_option('-k', '--ncl', action='store', type='string', dest='ncl_path', \
                   metavar='PATH', help='path where the ncl directory is located')
-parser.add_option('-r', '--bdata', action='store', type='string', dest='bench_data', \
-                  metavar='FILE', help='file where the benchmark data files are stored')
-parser.add_option('-d', '--data', action='store', type='string', dest='data_path', \
-                  metavar='PATH', help='path where the solver data directory is located')
+parser.add_option('-d', '--data', action='store', type='string', dest='data_dir', \
+                  metavar='PATH', help='defining which data directory to use for both bench and current run')
 parser.add_option('-t', '--test', action='store', type='string', dest='test_suite', \
                   metavar='TEST', help='path to location of test suite')
 parser.add_option('-i', '--timestamp', action='store', type='string', dest='time_stamp', \
@@ -139,7 +137,7 @@ if options.test_suite:
         dome30e_case = open(target_html + '/dome30e_case.html', 'w')
         dome30e_plot = open(target_html + '/dome30e_plot.html', 'w')
         dome30e_xml  = open(target_html + '/dome30e_xml.html', 'w')
-# circular shelf case
+#circular shelf case
         circ_file = open(target_html + '/circ_details.html', 'w')
         circ_case = open(target_html + '/circ_case.html', 'w')
         circ_plot = open(target_html + '/circ_plot.html', 'w')
@@ -181,11 +179,11 @@ if options.test_suite:
                 ishoma80_file,ishoma80_case,ishoma80_plot,ishoma80_xml,ishoma20_file,ishoma20_case,ishoma20_plot,ishoma20_xml, \
                 ishomc80_file,ishomc80_case,ishomc80_plot,ishomc80_xml,\
                 gis10_file,gis10_case,gis10_plot,gis10_xml, \
-                reg_test,options.bench_data,options.ncl_path,options.data_path,target_html,options.script_path,\
+                reg_test,options.data_dir,options.ncl_path,target_html,options.script_path,\
                 options.diagnostic_flag,options.evolving_flag,options.circular_flag,options.confined_flag,\
                 options.ismip_hom_a80_flag,options.ismip_hom_a20_flag,options.ismip_hom_c_flag,options.gis_10km_flag)
 
-dictionary = VV_testsuite.bit_list(reg_test,options.bench_data)
+dictionary = VV_testsuite.bit_list(reg_test,options.data_dir)
 
 
 #create all the large test suite diagnostics pages
@@ -210,9 +208,9 @@ if options.dome500_flag==1 or options.gis_5km_flag==1:
         VV_largesuite.large_tests(descript_file,large_test_file,dome500_file,dome500_case,dome500_plot,dome500_xml, \
                 gis5km_file,gis5km_case,gis5km_plot,gis5km_xml, \
                 perf_test,options.ncl_path,target_html,options.script_path, \
-                options.dome500_flag,options.gis_5km_flag,options.bench_data)
+                options.dome500_flag,options.gis_5km_flag,options.data_dir)
 
-        dictionary_large = VV_largesuite.bit_list(perf_test,options.bench_data)
+        dictionary_large = VV_largesuite.bit_list(perf_test,options.data_dir)
 
 
 #writing the main HTML page

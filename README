@@ -1,4 +1,5 @@
 Information on how to run the Land Ice V&V (LIVV) post-processing software.
+export DATA="data_titan"
 KJE, AB, NM 8/2013
 
 The /livv directory contains all the scripts and code to run the LIVV kit.
@@ -16,12 +17,12 @@ on both NERSC and OLCF machines as of 8/2013:
 	7. netcdf/4.1.3
 
 Mac Packages:
-	1. python/2.7.3 or newer
-        2. netcdf4-python/1.0
-        3. python_numpy/1.7.1
-        4. ncl/6.0.0
-        5. nco/4.0.7
-        6. netcdf/4.1.3
+	1. python
+        2. py-netcdf4 @1.0.4_0
+        3. py-numpy @1.7.1_0
+        4. ncl/6.0.0 from source
+        5. nco @4.3.4
+        6. netcdf @4.2.1.1
 
 Steps to install packages on the local Mac:
 
