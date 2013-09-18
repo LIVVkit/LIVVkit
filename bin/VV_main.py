@@ -72,13 +72,21 @@ else:
 	print "no comments about test case given"
 	comment = " "
 
+if os.path.isdir(options.html_path) == True:
+    
+        target_html = options.html_path
+else:
+        mkdir = 'mkdir ' + options.html_path
+        subprocess.call(mkdir, shell=True )
+        chmod = 'chmod 755 ' + options.html_path
+        subprocess.call(chmod, shell=True)
+        target_html = options.html_path
+
 if (options.username):
 
 	print 'placing HTML files in the ' + options.username + ' subdirectory (check permissions)'
- 	target_html = options.html_path
 else:
 	print 'no username specified, placing HTML files in the main html directory'
-	target_html = options.html_path 
 
 #remove html files previously used in specified subdirectory
 

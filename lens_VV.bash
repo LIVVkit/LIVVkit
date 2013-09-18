@@ -30,6 +30,7 @@ export SCRIPT_PATH="$TEST_FILEPATH/livv"
 export DATA_DIR="data_titan"
 
 # specify location where the html files will be sent so they are viewable on the web
+# livv will create the www directory in the HTML_PATH if it does not already exist
 export HTML_PATH="/ccs/home/$USER/www"
 export HTML_LINK="http://users.nccs.gov/~$USER"
 
@@ -39,9 +40,9 @@ export RUN_DOME30_EVOLVING=1
 export RUN_CIRCULAR_SHELF=1
 export RUN_CONFINED_SHELF=1
 export RUN_ISMIP_HOM_A80=1
-export RUN_ISMIP_HOM_A20=0
+export RUN_ISMIP_HOM_A20=1
 export RUN_ISMIP_HOM_C=0
-export RUN_GIS_10KM=1
+export RUN_GIS_10KM=0
 
 # flags to select production analysis
 export GIS_LARGE_TESTS=0
