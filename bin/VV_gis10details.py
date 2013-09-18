@@ -103,7 +103,7 @@ def details(solver_file,reg_test,ncl_path,target_html,data_dir):  # using data, 
 def gis10_plot(plot_file,reg_test,ncl_path,html_path,script_path,data_dir):  # using data, fill the web page with info
 
         tmpath = reg_test + '/gis_10km/' + data_dir + '/gis_10km.seacism.nc'
-        if VV_utilities.emptycheck(tmpath) == 0:
+        if VV_checks.emptycheck(tmpath) == 0:
                 return
         if noplot == 0:
 
