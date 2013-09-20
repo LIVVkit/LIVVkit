@@ -192,14 +192,12 @@ def dplot(plot_file,reg_test,ncl_path,html_path,script_path,data_dir):  # using 
 	
 # creating dome 30d velocity plot
         dome30dvel_plotfile=''+ ncl_path + '/dome30dvel.ncl'
-	stockout='STOCKout = addfile(\"'+ reg_test + '/bench/dome30/diagnostic/' + data_dir + '/dome.out.nc\", \"r\")'
 	stock1='STOCK1 = addfile(\"'+ reg_test + '/bench/dome30/diagnostic/' + data_dir + '/dome.1.nc\", \"r\")'
 	stock4='STOCK4 = addfile(\"'+ reg_test + '/bench/dome30/diagnostic/' + data_dir + '/dome.4.nc\", \"r\")'
-	VARout='VARout = addfile(\"'+ reg_test + '/dome30/diagnostic/' + data_dir + '/dome.out.nc\", \"r\")'
 	VAR1  ='VAR1 = addfile(\"' + reg_test + '/dome30/diagnostic/' + data_dir + '/dome.1.nc\", \"r\")'
 	VAR4  ='VAR4 = addfile(\"' + reg_test + '/dome30/diagnostic/' + data_dir + '/dome.4.nc\", \"r\")'
 	png  = 'PNG = "' + ncl_path + '/dome30dvel"'
-        plot_dome30dvel = "ncl '" + stockout + "'  '" + stock1 + "'  '" + stock4 + "'  '" + VARout + "'  '" + VAR1 + "' '" + VAR4 + \
+        plot_dome30dvel = "ncl '" + stock1 + "'  '" + stock4 + "'  '" + VAR1 + "' '" + VAR4 + \
                            "' '" + png + "' " + dome30dvel_plotfile + " >> plot_details.out" 
         try:
                 output = subprocess.call(plot_dome30dvel, shell=True)

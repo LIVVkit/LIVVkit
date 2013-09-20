@@ -9,6 +9,20 @@ import netCDF4
 from netCDF4 import Dataset
 import glob
 
+
+
+#pulls out the name of the file
+def yank(temp):
+        word = ''
+        letter = ''
+        for letter in temp:
+                if letter == '/':
+                        word = ''
+                word = word + letter
+
+        return word
+
+
 #zerocheck
 def zerocheck(filename):
         data_vars =['thk', 'uvel', 'velnorm', 'vvel']
@@ -44,7 +58,6 @@ def zerocheck(filename):
                                         for i in range(x.size):
                                                 if data[t, j, i] != 0.0:
                                                         change = True
-                                #print(data[t, j, i])
                 else:
                         for t in range(time.size):
                                 for l in range(level.size):
@@ -52,8 +65,7 @@ def zerocheck(filename):
                                                 for i in range(x.size):
                                                         if data[t, l, j, i] != 0.0:
                                                                 change = True
-
-
+                                
                 if change:
                         return 1
                 else:
@@ -62,86 +74,69 @@ def zerocheck(filename):
 
 #bit4bit check
 def bit4bit(model_file_path,bench_file_path):
-    a = []
-    b = []
-    flag = []
-    bench_file = ''
+	a = []
+	b = []
+	flag = []
+	bench_file = ''
 
-    model_file_list = glob.glob(model_file_path + '/*.nc')
+	model_file_list = glob.glob(model_file_path + '/*.nc')
 
-    bench_file_list = glob.glob(bench_file_path + '/*.nc')
+	bench_file_list = glob.glob(bench_file_path + '/*.nc')
+	output = open("temp.txt", 'w')
+	output.write(model_file_path)
+	output.write('\n')
+	output.write(bench_file_path)
 
-    output = open("temp.txt", 'w')
-    output.write(model_file_path)
-    output.write('\n')
-    output.write(bench_file_path)
-
-    output2 = 'rm -rf temp.txt'
-    subprocess.call(output2, shell=True)
+	output2 = 'rm -rf temp.txt'
+	subprocess.call(output2, shell=True)
     
-    for bench_file in bench_file_list:
-	for model_file in model_file_list:
-		if bench_file == model_file:
-			file1 = bench_file_list[i]
-			file2 = model_file_list[i]
-			comline = 'ncdiff ' + file1 + ' ' + file2 + ' ' + model_file_path + '/temp.nc'
-	      		subprocess.call(comline, shell=True)
-       		 	flag.append(zerocheck(model_file_path + '/temp.nc'))
-			comline = 'rm -rf temp.nc'
-        		subprocess.call(comline, shell=True)
+	for bench_file in bench_file_list:
+		for model_file in model_file_list:
+			word1 = yank(bench_file)	
+			word2 = yank(model_file)
+			if word1 == word2:
+				file1 = bench_file
+				file2 = model_file
+				#comline = 'rm ' + model_file_path + '/temp.nc'
+        			#subprocess.call(comline, shell=True)
+				comline = 'ncdiff ' + file1 + ' ' + file2 + ' ' + model_file_path + '/temp.nc -O'
+	      			subprocess.call(comline, shell=True)
+       			 	flag.append(zerocheck(model_file_path + '/temp.nc'))
 
 #match up the md5sums in a and b, tell if bit-for-bit for each specific case
-	
+
         if 1 in flag: 
    		return 1
 	else:
 		return 0
 
-#ncdump_model = "ncdump -c " + model_file
-#ncdump_bench = "ncdump -c " + bench_file
-
-#p = subprocess.Popen(ncdump_model, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-#output_model = p.communicate()
-
-#q = subprocess.Popen(ncdump_bench, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-#output_bench = q.communicate()
-
-#if output_model == output_bench:
-#       print "bit-for-bit"
-#else:
-#       print "not bit-for-bit: in terms of ncdump -c"
-
-##need to write results to GIS-con-diag.html
-#make red if not bit-for-bit
-
-
 
 #test failure check
 
 def failcheck(job_path, path):
-    failedt = 0
-    flag = 0
+	failedt = 0
+	flag = 0
     
-    input = open(job_path + path, 'r')
+	input = open(job_path + path, 'r')
     
-    for line in input:
-            if 'FATAL' in line:
-                flag = 1
-    input.close()
+	for line in input:
+		if 'FATAL' in line:
+			flag = 1
+	input.close()
 
-    input = open(job_path + path, 'r')
+	input = open(job_path + path, 'r')
 
-    while 1:
-        line = input.readline()
-        if line == '':
-            return
-        if line == "-- Final Status Test Results --\n":
-            line = input.readline()
-            for letter in line:
-                if letter == 'F' or flag == 1:
-                    return 1
-                else:
-                    return 0
+	while 1:
+		line = input.readline()
+		if line == '':
+			return
+		if line == "-- Final Status Test Results --\n":
+			line = input.readline()
+		for letter in line:
+			if letter == 'F' or flag == 1:
+				return 1
+			else:
+				return 0
 
 
 

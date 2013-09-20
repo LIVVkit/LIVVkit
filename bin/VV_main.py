@@ -191,8 +191,8 @@ if options.test_suite:
                 options.diagnostic_flag,options.evolving_flag,options.circular_flag,options.confined_flag,\
                 options.ismip_hom_a80_flag,options.ismip_hom_a20_flag,options.ismip_hom_c_flag,options.gis_10km_flag)
 
-dictionary = VV_testsuite.bit_list(reg_test,options.data_dir)
-
+        dictionary = VV_testsuite.bit_list(reg_test,options.data_dir,options.diagnostic_flag,options.evolving_flag,options.circular_flag,\
+                                options.confined_flag,options.ismip_hom_a80_flag,options.ismip_hom_a20_flag,options.ismip_hom_c_flag,options.gis_10km_flag)
 
 #create all the large test suite diagnostics pages
 if options.dome500_flag==1 or options.gis_5km_flag==1:
@@ -219,8 +219,7 @@ if options.dome500_flag==1 or options.gis_5km_flag==1:
                 options.dome500_flag,options.gis_5km_flag,options.data_dir)
 
         dictionary_large = VV_largesuite.bit_list(perf_test,options.data_dir)
-
-
+        
 #writing the main HTML page
 
 file = open(target_html + '/livv_kit_main.html', 'w')

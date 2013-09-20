@@ -16,48 +16,81 @@ from stat import *
 import time
 
 #bit-for-bit check for each test case
-def bit_list(reg_test,data_dir):
+def bit_list(reg_test,data_dir,diagnostic_flag,evolving_flag,circular_flag,\
+                confined_flag,ismip_hom_a80_flag,ismip_hom_a20_flag,ismip_hom_c_flag,gis_10km_flag):
     dictionary = {}
 #diagnostic dome30 case
-    data_file_path = reg_test + '/dome30/diagnostic/' + data_dir
-    bench_file_path = reg_test + '/bench/dome30/diagnostic/' + data_dir
-    flag = VV_checks.bit4bit(data_file_path,bench_file_path)
-    dictionary['diagnostic'] = flag
+    #apply flag to turn off running test
+    if diagnostic_flag == 1:
+        data_file_path = reg_test + '/dome30/diagnostic/' + data_dir
+        bench_file_path = reg_test + '/bench/dome30/diagnostic/' + data_dir
+        flag = VV_checks.bit4bit(data_file_path,bench_file_path)
+        dictionary['diagnostic'] = flag
+    else:
+        dictionary['diagnostic'] = 0
 #evolving dome30 case
-    data_file_path = reg_test + '/dome30/evolving/' + data_dir
-    bench_file_path = reg_test + '/bench/dome30/evolving/' + data_dir
-    flag = VV_checks.bit4bit(data_file_path,bench_file_path)
-    dictionary['evolving'] = flag
+    #apply flag to turn off running test
+    if evolving_flag == 1:
+        data_file_path = reg_test + '/dome30/evolving/' + data_dir
+        bench_file_path = reg_test + '/bench/dome30/evolving/' + data_dir
+        flag = VV_checks.bit4bit(data_file_path,bench_file_path)
+        dictionary['evolving'] = flag
+    else:
+        dictionary['evolving'] = 0
 #circular shelf case
-    data_file_path = reg_test + '/circular-shelf/' + data_dir
-    bench_file_path = reg_test + '/bench/circular-shelf/' + data_dir
-    flag = VV_checks.bit4bit(data_file_path,bench_file_path)
-    dictionary['circular'] = flag
+    #apply flag to turn off running test
+    if circular_flag == 1:
+        data_file_path = reg_test + '/circular-shelf/' + data_dir
+        bench_file_path = reg_test + '/bench/circular-shelf/' + data_dir
+        flag = VV_checks.bit4bit(data_file_path,bench_file_path)
+        dictionary['circular'] = flag
+    else:
+        dictionary['circular'] = 0
 #confined shelf case
-    data_file_path = reg_test + '/confined-shelf/' + data_dir
-    bench_file_path = reg_test + '/bench/confined-shelf/' + data_dir
-    flag = VV_checks.bit4bit(data_file_path,bench_file_path)
-    dictionary['confined'] = flag
+    #apply flag to turn off running test
+    if confined_flag == 1:
+        data_file_path = reg_test + '/confined-shelf/' + data_dir
+        bench_file_path = reg_test + '/bench/confined-shelf/' + data_dir
+        flag = VV_checks.bit4bit(data_file_path,bench_file_path)
+        dictionary['confined'] = flag
+    else:
+        dictionary['confined'] = 0
 #ismip hom a 80 case
-    data_file_path = reg_test + '/ismip-hom-a/80km/' + data_dir
-    bench_file_path = reg_test + '/bench/ismip-hom-a/80km/' + data_dir
-    flag = VV_checks.bit4bit(data_file_path,bench_file_path)
-    dictionary['ismip-hom-a80'] = flag
+    #apply flag to turn off running test
+    if ismip_hom_a80_flag == 1:
+        data_file_path = reg_test + '/ismip-hom-a/80km/' + data_dir
+        bench_file_path = reg_test + '/bench/ismip-hom-a/80km/' + data_dir
+        flag = VV_checks.bit4bit(data_file_path,bench_file_path)
+        dictionary['ismip-hom-a80'] = flag
+    else:
+        dictionary['ismip-hom-a80'] = 0
 #ismip hom a 20 case
-    data_file_path = reg_test + '/ismip-hom-a/20km/' + data_dir
-    bench_file_path = reg_test + '/bench/ismip-hom-a/20km/' + data_dir
-    flag = VV_checks.bit4bit(data_file_path,bench_file_path)
-    dictionary['ismip-hom-a20'] = flag
+    #apply flag to turn off running test
+    if ismip_hom_a20_flag == 1:
+        data_file_path = reg_test + '/ismip-hom-a/20km/' + data_dir
+        bench_file_path = reg_test + '/bench/ismip-hom-a/20km/' + data_dir
+        flag = VV_checks.bit4bit(data_file_path,bench_file_path)
+        dictionary['ismip-hom-a20'] = flag
+    else:
+        dictionary['ismip-hom-a20'] = 0
 #ismip hom c case
-    data_file_path = reg_test + '/ismip-hom-c/80km/' + data_dir
-    bench_file_path = reg_test + '/bench/ismip-hom-c/80km/' + data_dir
-    flag = VV_checks.bit4bit(data_file_path,bench_file_path)
-    dictionary['ismip-hom-c'] = flag
+    #apply flag to turn off running test
+    if ismip_hom_c_flag == 1:
+        data_file_path = reg_test + '/ismip-hom-c/80km/' + data_dir
+        bench_file_path = reg_test + '/bench/ismip-hom-c/80km/' + data_dir
+        flag = VV_checks.bit4bit(data_file_path,bench_file_path)
+        dictionary['ismip-hom-c'] = flag
+    else:
+        dictionary['ismip-hom-c'] = 0
 #gis10km case
-    data_file_path = reg_test + '/gis_10km/' + data_dir
-    bench_file_path = reg_test + '/bench/gis_10km/' + data_dir
-    flag = VV_checks.bit4bit(data_file_path,bench_file_path)
-    dictionary['gis_10km'] = flag
+    #apply flag to turn off running test
+    if gis_10km_flag == 1:
+        data_file_path = reg_test + '/gis_10km/' + data_dir
+        bench_file_path = reg_test + '/bench/gis_10km/' + data_dir
+        flag = VV_checks.bit4bit(data_file_path,bench_file_path)
+        dictionary['gis_10km'] = flag
+    else:
+        dictionary['gis_10km'] = 0
 
     return dictionary
 
@@ -67,7 +100,7 @@ def web(descript_file,test_file, \
 	ishoma80_file,ishoma80_case,ishoma80_plot,ishoma80_xml,ishoma20_file,ishoma20_case,ishoma20_plot,ishoma20_xml, \
         ishomc80_file,ishomc80_case,ishomc80_plot,ishomc80_xml, \
 	gis10_file,gis10_case,gis10_plot,gis10_xml,reg_test,data_dir,ncl_path,html_path,script_path,\
-        diagnostic_flag,evolving_flag,circular_flag,confined_flag,
+        diagnostic_flag,evolving_flag,circular_flag,confined_flag, \
         ismip_hom_a80_flag,ismip_hom_a20_flag,ismip_hom_c_flag,gis_10km_flag):  
 
 # using data, fill the web page with info about the cases
@@ -79,7 +112,8 @@ def web(descript_file,test_file, \
 	test_file.write('<TH ALIGN=LEFT><A HREF="test_descript.html">Test Suite Descriptions</A>\n')
 	test_file.write('<BR>\n')
 
-        dictionary = bit_list(reg_test,data_dir)
+        dictionary = bit_list(reg_test,data_dir,diagnostic_flag,evolving_flag,circular_flag, \
+                        confined_flag,ismip_hom_a80_flag,ismip_hom_a20_flag,ismip_hom_c_flag,gis_10km_flag)
 
 
 #apply flag to turn off running test
