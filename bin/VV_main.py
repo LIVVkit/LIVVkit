@@ -77,9 +77,19 @@ if os.path.isdir(options.html_path) == True:
         target_html = options.html_path
 else:
         mkdir = 'mkdir ' + options.html_path
-        subprocess.call(mkdir, shell=True )
+        try:
+                subprocess.check_call(mkdir, shell=True)
+        except subprocess.CalledProcessError as e:
+                print "There was a CalledProcessError with the error number: ", e.returncode
+                print "There was a CalledProcessError when trying to run command: ", e.cmd
+                exit(e.returncode)
         chmod = 'chmod 755 ' + options.html_path
-        subprocess.call(chmod, shell=True)
+        try:
+                subprocess.check_call(chmod, shell=True)
+        except subprocess.CalledProcessError as e:
+                print "There was a CalledProcessError with the error number: ", e.returncode
+                print "There was a CalledProcessError when trying to run command: ", e.cmd
+                exit(e.returncode)
         target_html = options.html_path
 
 if (options.username):
@@ -124,10 +134,11 @@ except OSError as o:
 if (options.ncl_path + '/alaska_pic.png'):
         alaskapic = "cp -f " + options.ncl_path + "/alaska_pic.png" + " " + target_html + "/"
         try:
-                output = subprocess.call(alaskapic, shell=True)
-        except:
-                print "error moving cover picture"
-                raise
+                subprocess.check_call(alaskapic, shell=True)
+        except subprocess.CalledProcessError as e:
+                print "There was a CalledProcessError with the error number: ", e.returncode
+                print "There was a CalledProcessError when trying to run command: ", e.cmd
+                exit(e.returncode)
 
 
 #create all the test suite diagnostics pages

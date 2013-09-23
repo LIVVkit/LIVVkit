@@ -200,43 +200,44 @@ def dplot(plot_file,reg_test,ncl_path,html_path,script_path,data_dir):  # using 
         plot_dome30dvel = "ncl '" + stock1 + "'  '" + stock4 + "'  '" + VAR1 + "' '" + VAR4 + \
                            "' '" + png + "' " + dome30dvel_plotfile + " >> plot_details.out" 
         try:
-                output = subprocess.call(plot_dome30dvel, shell=True)
+                subprocess.check_call(plot_dome30dvel, shell=True)
                 print "creating diagnostic dome 30 velocity plots"
-        except:
-                print "error creating ncl diagnostic dome30 velocity plots"
-                raise
+        except subprocess.CalledProcessError as e:
+                print "There was a CalledProcessError with the error number: ", e.returncode
+                print "There was a CalledProcessError when trying to run command: ", e.cmd
+                exit(e.returncode)
 
 # delete old dome30 pic in www file
 
         if (html_path + '/dome30dvel.png'):
             dome30dvelmove = "rm -f " + html_path + '/dome30dvel.png'
             try:
-                    output = subprocess.call(dome30dvelmove, shell=True)
-            except:
-                    print "error removing old diagnostic dome30 velocity png file from www directory"
-                    sys.exit(1)
-                    raise
+                    subprocess.check_call(dome30dvelmove, shell=True)
+            except subprocess.CalledProcessError as e:
+                    print "There was a CalledProcessError with the error number: ", e.returncode
+                    print "There was a CalledProcessError when trying to run command: ", e.cmd
+                    exit(e.returncode)
 
 # transferring new dome30 pic to www file
 
         if (ncl_path + '/dome30dvel.png'):
         	dome30dvelpic = "mv -f " + ncl_path + "/dome30dvel.png" + " " + html_path + "/"
-        	try:
-                	output = subprocess.call(dome30dvelpic, shell=True)
-        	except:
-                	print "error moving diagnostic dome30 velocity png file to www directory"
-                        sys.exit(1)
-                	raise
+                try:
+                        subprocess.check_call(dome30dvelpic, shell=True)
+                except subprocess.CalledProcessError as e:
+                        print "There was a CalledProcessError with the error number: ", e.returncode
+                        print "There was a CalledProcessError when trying to run command: ", e.cmd
+                        exit(e.returncode)
 
 # remove plot_details.out
 #        if (script_path + '/plot_details.out'):
 #                cleantrash = "rm -f " + script_path + "/plot_details.out"
-#                try:
-#                        output = subprocess.call(cleantrash, shell=True)
-#                except:
-#                        print "error removing plot_details.out"
-#                        sys.exit(1)
-#                        raise
+#                 try:
+#                        subprocess.check_call(cleantrash, shell=True)
+#                except subprocess.CalledProcessError as e:
+#                        print "There was a CalledProcessError with the error number: ", e.returncode
+#                        print "There was a CalledProcessError when trying to run command: ", e.cmd
+#                        exit(e.returncode)
 
         plot_file.write('<HTML>\n')
         plot_file.write('<TITLE>Diagnostic Dome 30 </TITLE>\n')
@@ -267,33 +268,34 @@ def eplot(plot_file,reg_test,ncl_path,html_path,script_path,data_dir):  # using 
         plot_dome30evel = "ncl '" + stock9 + "'  '" + stock15 + "'  '" + VAR9 + "' '" + VAR15 + \
                            "' '" + png + "' " + dome30evel_plotfile + " >> plot_details.out" 
         try:
-                output = subprocess.call(plot_dome30evel, shell=True)
-                print "creating evolving dome30 velocity plots"
-        except:
-                print "error creating ncl evolving dome30 velocity plots"
-                raise
+                subprocess.check_call(plot_dome30evel, shell=True)
+                print "creating evolving dome 30 velocity plots"
+        except subprocess.CalledProcessError as e:
+                print "There was a CalledProcessError with the error number: ", e.returncode
+                print "There was a CalledProcessError when trying to run command: ", e.cmd
+                exit(e.returncode)
 
 # delete old dome30 pic in www file
 
         if (html_path + '/dome30evel.png'):
             dome30evelmove = "rm -f " + html_path + '/dome30evel.png'
             try:
-                    output = subprocess.call(dome30evelmove, shell=True)
-            except:
-                    print "error removing old evolving dome30 velocity png file from www directory"
-                    sys.exit(1)
-                    raise
+                    subprocess.check_call(dome30evelmove, shell=True)
+            except subprocess.CalledProcessError as e:
+                    print "There was a CalledProcessError with the error number: ", e.returncode
+                    print "There was a CalledProcessError when trying to run command: ", e.cmd
+                    exit(e.returncode)
 
 # transferring dome30 pic to www file
 
         if (ncl_path + '/dome30evel.png'):
         	dome30evelpic = "mv -f " + ncl_path + "/dome30evel.png" + " " + html_path + "/"
-        	try:
-                	output = subprocess.call(dome30evelpic, shell=True)
-        	except:
-                	print "error moving evolving dome30 velocity png file to www directory"
-                        sys.exit(1)
-                	raise
+                try:
+                        subprocess.check_call(dome30evelpic, shell=True)
+                except subprocess.CalledProcessError as e:
+                        print "There was a CalledProcessError with the error number: ", e.returncode
+                        print "There was a CalledProcessError when trying to run command: ", e.cmd
+                        exit(e.returncode)
 
 # creating dome 30e thickness plot
         dome30ethk_plotfile=''+ ncl_path + '/dome30ethk.ncl'
@@ -305,43 +307,44 @@ def eplot(plot_file,reg_test,ncl_path,html_path,script_path,data_dir):  # using 
         plot_dome30ethk = "ncl '" + stock9 + "'  '" + stock15 + "'  '" + VAR9 + "' '" + VAR15 + \
                            "' '" + png + "' " + dome30ethk_plotfile + " >> plot_details.out"
         try:
-                output = subprocess.call(plot_dome30ethk, shell=True)
-                print "creating evolving dome30 thickness plots"
-        except:
-                print "error creating ncl evolving dome30 thickness plots"
-                raise
+                subprocess.check_call(plot_dome30ethk, shell=True)
+                print "creating evolving dome 30 thickness plots"
+        except subprocess.CalledProcessError as e:
+                print "There was a CalledProcessError with the error number: ", e.returncode
+                print "There was a CalledProcessError when trying to run command: ", e.cmd
+                exit(e.returncode)
 
 # delete old dome30 pic in www file
 
         if (html_path + '/dome30ethk.png'):
             dome30ethkmove = "rm -f " + html_path + '/dome30ethk.png'
             try:
-                    output = subprocess.call(dome30ethkmove, shell=True)
-            except:
-                    print "error removing old evolving dome30 thickness png file from www directory"
-                    sys.exit(1)
-                    raise
+                    subprocess.check_call(dome30ethkmove, shell=True)
+            except subprocess.CalledProcessError as e:
+                    print "There was a CalledProcessError with the error number: ", e.returncode
+                    print "There was a CalledProcessError when trying to run command: ", e.cmd
+                    exit(e.returncode)
 
 # transferring dome30 pic to www file
 
         if (ncl_path + '/dome30ethk.png'):
         	dome30ethkpic = "mv -f " + ncl_path + "/dome30ethk.png" + " " + html_path + "/"
-        	try:
-                	output = subprocess.call(dome30ethkpic, shell=True)
-        	except:
-                	print "error moving evolving dome30 thickness png file to www directory"
-                        sys.exit(1)
-                	raise
+                try:
+                        subprocess.check_call(dome30ethkpic, shell=True)
+                except subprocess.CalledProcessError as e:
+                        print "There was a CalledProcessError with the error number: ", e.returncode
+                        print "There was a CalledProcessError when trying to run command: ", e.cmd
+                        exit(e.returncode)
 
 # remove plot_details.out
 #        if (script_path + '/plot_details.out'):
 #                cleantrash = "rm -f " + script_path + "/plot_details.out"
 #                try:
-#                        output = subprocess.call(cleantrash, shell=True)
-#                except:
-#                        print "error removing plot_details.out"
-#                        sys.exit(1)
-#                        raise
+#                        subprocess.check_call(cleantrash, shell=True)
+#                except subprocess.CalledProcessError as e:
+#                        print "There was a CalledProcessError with the error number: ", e.returncode
+#                        print "There was a CalledProcessError when trying to run command: ", e.cmd
+#                        exit(e.returncode)
 
         plot_file.write('<HTML>\n')
         plot_file.write('<TITLE>Evolving Dome 30 </TITLE>\n')

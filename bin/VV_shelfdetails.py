@@ -124,43 +124,44 @@ def circplot(plot_file,reg_test,ncl_path,html_path,script_path,data_dir):  # usi
 
 #TODO create an iteration plot and have that also in the html file 
         try:
-                output = subprocess.call(plot_circvel, shell=True)
+                subprocess.check_call(plot_circvel, shell=True)
                 print "creating circular shelf velocity plots"
-        except:
-                print "error creating ncl circular shelf velocity plot"
-                raise
+        except subprocess.CalledProcessError as e:
+                print "There was a CalledProcessError with the error number: ", e.returncode
+                print "There was a CalledProcessError when trying to run command: ", e.cmd
+                exit(e.returncode)
 
 # delete old circvel pic in www file
 
         if (html_path + '/circshelfvel.png'):
                 circvelmove = "rm -f " + html_path + '/circshelfvel.png'
                 try:
-                        output = subprocess.call(circvelmove, shell=True)
-                except:
-                        print "error removing old circular shelf velocity png file from www directory"
-                        sys.exit(1)
-                        raise
+                        subprocess.check_call(circvelmove, shell=True)
+                except subprocess.CalledProcessError as e:
+                        print "There was a CalledProcessError with the error number: ", e.returncode
+                        print "There was a CalledProcessError when trying to run command: ", e.cmd
+                        exit(e.returncode)
 
 # transferring circvel pic to www file
 
         if (ncl_path + '/circshelfvel.png'):
         	circvelpic = "mv -f " + ncl_path + "/circshelfvel.png" + " " + html_path + "/"
-        	try:
-                	output = subprocess.call(circvelpic, shell=True)
-        	except:
-                	print "error moving circular velocity shelf png file to www directory"
-                        sys.exit(1)
-                	raise
+                try:
+                        subprocess.check_call(circvelpic, shell=True)
+                except subprocess.CalledProcessError as e:
+                        print "There was a CalledProcessError with the error number: ", e.returncode
+                        print "There was a CalledProcessError when trying to run command: ", e.cmd
+                        exit(e.returncode)
 
 # remove plot_details.out
 #        if (script_path + '/plot_details.out'):
 #                cleantrash = "rm -f " + script_path + "/plot_details.out"
 #                try:
-#                        output = subprocess.call(cleantrash, shell=True)
-#                except:
-#                        print "error removing plot_details.out"
-#                        sys.exit(1)
-#                        raise
+#                        subprocess.check_call(cleantrash, shell=True)
+#                except subprocess.CalledProcessError as e:
+#                        print "There was a CalledProcessError with the error number: ", e.returncode
+#                        print "There was a CalledProcessError when trying to run command: ", e.cmd
+#                        exit(e.returncode)
 
         plot_file.write('<HTML>\n')
         plot_file.write('<TITLE>Circular Shelf </TITLE>\n')
@@ -191,43 +192,44 @@ def confplot(plot_file,reg_test,ncl_path,html_path,script_path,data_dir):  # usi
 
 #TODO create an iteration plot and have that also in the html file 
         try:
-                output = subprocess.call(plot_confvel, shell=True)
+                subprocess.check_call(plot_confvel, shell=True)
                 print "creating confined shelf velocity plots"
-        except:
-                print "error creating ncl confined shelf velocity plot"
-                raise
+        except subprocess.CalledProcessError as e:
+                print "There was a CalledProcessError with the error number: ", e.returncode
+                print "There was a CalledProcessError when trying to run command: ", e.cmd
+                exit(e.returncode)
 
 # delete old confvel pic in www file
 
         if (html_path + '/confshelfvel.png'):
                 confvelmove = "rm -f " + html_path + '/confshelfvel.png'
                 try:
-                        output = subprocess.call(confvelmove, shell=True)
-                except:
-                        print "error removing old confined shelf velocity png file from www directory"
-                        sys.exit(1)
-                        raise
+                        subprocess.check_call(confvelmove, shell=True)
+                except subprocess.CalledProcessError as e:
+                        print "There was a CalledProcessError with the error number: ", e.returncode
+                        print "There was a CalledProcessError when trying to run command: ", e.cmd
+                        exit(e.returncode)
 
 # transferring confvel pic to www file
 
         if (ncl_path + '/confshelfvel.png'):
         	confvelpic = "mv -f " + ncl_path + "/confshelfvel.png" + " " + html_path + "/"
-        	try:
-                	output = subprocess.call(confvelpic, shell=True)
-        	except:
-                	print "error moving confined velocity shelf png file to www directory"
-                        sys.exit(1)
-                	raise
+                try:
+                        subprocess.check_call(confvelpic, shell=True)
+                except subprocess.CalledProcessError as e:
+                        print "There was a CalledProcessError with the error number: ", e.returncode
+                        print "There was a CalledProcessError when trying to run command: ", e.cmd
+                        exit(e.returncode)
 
 # remove plot_details.out
 #        if (script_path + '/plot_details.out'):
 #                cleantrash = "rm -f " + script_path + "/plot_details.out"
 #                try:
-#                        output = subprocess.call(cleantrash, shell=True)
-#                except:
-#                        print "error removing plot_details.out"
-#                        sys.exit(1)
-#                        raise
+#                        subprocess.check_call(cleantrash, shell=True)
+#                except subprocess.CalledProcessError as e:
+#                        print "There was a CalledProcessError with the error number: ", e.returncode
+#                        print "There was a CalledProcessError when trying to run command: ", e.cmd
+#                        exit(e.returncode)
 
         plot_file.write('<HTML>\n')
         plot_file.write('<TITLE>Confined Shelf </TITLE>\n')

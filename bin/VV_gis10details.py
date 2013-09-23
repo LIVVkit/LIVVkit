@@ -120,33 +120,32 @@ def gis10_plot(plot_file,reg_test,ncl_path,html_path,script_path,data_dir):  # u
             plot_gis10kmvel = "ncl '" + stockcism + "'  '" + stockcism10 + "'  '" + VARcism + "'  '" + VARcism10 + "' '" + png + "' " + gis10kmvel_plotfile + " >> plot_details.out"
 
             try:
-                    output = subprocess.call(plot_gis10kmvel, shell=True)
+                    subprocess.check_call(plot_gis10kmvel, shell=True)
                     print "creating gis 10km velocity norm plot"
-            except:
-                    print "error creating ncl gis10km velocity norm plot"
-                    raise
+            except subprocess.CalledProcessError as e:
+                    print "There was a CalledProcessError with the error number: ", e.returncode
+                    print "There was a CalledProcessError when trying to run command: ", e.cmd
+                    exit(e.returncode)
 
 # delete old gis10km vel pic in www file
-
             if (html_path + '/gis10kmvel.png'):
                     gis10velmove = "rm -f " + html_path + '/gis10kmvel.png'
                     try:
-                            output = subprocess.call(gis10velmove, shell=True)
-                    except:
-                            print "error removing old gis10km velocity png file from www directory"
-                            sys.exit(1)
-                            raise
+                            subprocess.check_call(gis10velmove, shell=True)
+                    except subprocess.CalledProcessError as e:
+                            print "There was a CalledProcessError with the error number: ", e.returncode
+                            print "There was a CalledProcessError when trying to run command: ", e.cmd
+                            exit(e.returncode)
 
 # transferring velocity pic to www file
-
             if (ncl_path + '/gis10kmvel.png'):
                     gispicvel = "mv -f " + ncl_path + "/gis10kmvel.png" + " " + html_path + "/"
                     try:
-                            output = subprocess.call(gispicvel, shell=True)
-                    except:
-                            print "error moving gis10km velocity png file to www directory"
-                            sys.exit(1)
-                            raise
+                            subprocess.check_call(gispicvel, shell=True)
+                    except subprocess.CalledProcessError as e:
+                            print "There was a CalledProcessError with the error number: ", e.returncode
+                            print "There was a CalledProcessError when trying to run command: ", e.cmd
+                            exit(e.returncode)
 
 # formulate gis10km thickness plot
             gis10kmthk_plotfile=''+ ncl_path + '/gis10kmthk.ncl'
@@ -160,43 +159,42 @@ def gis10_plot(plot_file,reg_test,ncl_path,html_path,script_path,data_dir):  # u
             plot_gis10kmthk = "ncl '" + stockcism + "'  '" + stockcism10 + "'  '" + stockcrop + "'  '" + VARcism + "'  '" + VARcism10 + "' '" + VARcrop + "'  '" + png + "' " + gis10kmthk_plotfile + " >> plot_details.out"
 
             try:
-                    output = subprocess.call(plot_gis10kmthk, shell=True)
+                    subprocess.check_call(plot_gis10kmthk, shell=True)
                     print "creating gis 10km thickness plot"
-            except:
-                    print "error creating ncl gis10km thickness norm plot"
-                    raise
+            except subprocess.CalledProcessError as e:
+                    print "There was a CalledProcessError with the error number: ", e.returncode
+                    print "There was a CalledProcessError when trying to run command: ", e.cmd
+                    exit(e.returncode)
 
 # delete old gis10km thk pic in www file
-
             if (html_path + '/gis10kmthk.png'):
                     gis10thkmove = "rm -f " + html_path + '/gis10kmthk.png'
                     try:
-                            output = subprocess.call(gis10thkmove, shell=True)
-                    except:
-                            print "error removing old gis10km thickness png file from www directory"
-                            sys.exit(1)
-                            raise
+                            subprocess.check_call(gis10thkmove, shell=True)
+                    except subprocess.CalledProcessError as e:
+                            print "There was a CalledProcessError with the error number: ", e.returncode
+                            print "There was a CalledProcessError when trying to run command: ", e.cmd
+                            exit(e.returncode)
 
 # transferring thickness pic to www file
-
             if (ncl_path + '/gis10kmthk.png'):
                     gispicthk = "mv -f " + ncl_path + "/gis10kmthk.png" + " " + html_path + "/"
                     try:
-                            output = subprocess.call(gispicthk, shell=True)
-                    except:
-                            print "error moving gis10km thickness png file to www directory"
-                            sys.exit(1)
-                            raise
+                            subprocess.check_call(gispicthk, shell=True)
+                    except subprocess.CalledProcessError as e:
+                            print "There was a CalledProcessError with the error number: ", e.returncode
+                            print "There was a CalledProcessError when trying to run command: ", e.cmd
+                            exit(e.returncode)
 
 # remove plot_details.out
 #            if (script_path + '/plot_details.out'):
 #                    cleantrash = "rm -f " + script_path + "/plot_details.out"
 #                    try:
-#                            output = subprocess.call(cleantrash, shell=True)
-#                    except:                      
-#                            print "error removing plot_details.out"
-#                            sys.exit(1)
-#                            raise
+#                            subprocess.check_call(cleantrash, shell=True)
+#                    except subprocess.CalledProcessError as e:
+#                            print "There was a CalledProcessError with the error number: ", e.returncode
+#                            print "There was a CalledProcessError when trying to run command: ", e.cmd
+#                            exit(e.returncode)
 
             plot_file.write('<HTML>\n')
             plot_file.write('<TITLE>GIS 10km Test Case </TITLE>\n')

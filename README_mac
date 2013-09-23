@@ -46,13 +46,15 @@ To run the shell script (Mac OS X):
 
 2. Change the TEST_FILEPATH to the path containing the livv kit. (^^ path to the directory mentioned above)
 
-3. Change the HTML_PATH to the location of the www directory. If it doesn't exist, specify the path to where
+3. Change MY_PYTHON to wherever your python2.7 package exists on your mac.
+
+4. Change the HTML_PATH to the location of the www directory. If it doesn't exist, specify the path to where
    you would like it and LIVV will check the path and create it if it is not already there.
 
-4. Leave RUN_GIS=0 and RUN_ANT=0 in the mac_VV.bash script since production analysis will not be run locally.
+5. Leave RUN_GIS=0 and RUN_ANT=0 in the mac_VV.bash script since production analysis will not be run locally.
    The flags are pre-set in the bash script for what will be analyzed on the mac.
 
-5. Type "bash mac_VV.bash" at the command line in the main directory.
+6. Type "bash mac_VV.bash" at the command line in the main directory.
 
 We have piped the NCL output to a file called plot_details.out. So if there is any concern over whether plots
 formed correctly or not after inspecting the website, you can check in that file.

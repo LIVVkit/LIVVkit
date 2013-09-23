@@ -1,4 +1,6 @@
-#!/usr/bin/env
+#!/opt/local/bin/python2.7
+
+# #!/usr/bin/env
 
 import sys
 import os
@@ -30,8 +32,11 @@ def zerocheck(filename):
         input_netcdf = filename
         netCDF4.python3 = True
         netCDF4.default_encoding = 'iso8859-1'
-
-        netcdf = Dataset(input_netcdf, 'r')
+	if not os.path.isfile(input_netcdf):
+		print("File does not exist: ", input_netcdf)
+		sys.exit(0)	
+	else:
+        	netcdf = Dataset(input_netcdf, 'r')
 
 #read in variable from file. Don't know which one so try each.
 #for v in data_vars:
@@ -82,13 +87,19 @@ def bit4bit(model_file_path,bench_file_path):
 	model_file_list = glob.glob(model_file_path + '/*.nc')
 
 	bench_file_list = glob.glob(bench_file_path + '/*.nc')
+	
 	output = open("temp.txt", 'w')
 	output.write(model_file_path)
 	output.write('\n')
 	output.write(bench_file_path)
-
 	output2 = 'rm -rf temp.txt'
-	subprocess.call(output2, shell=True)
+	
+	try:
+		subprocess.check_call(output2, shell=True)
+	except subprocess.CalledProcessError as e:
+		print "There was a CalledProcessError with the error number: ", e.returncode
+		print "There was a CalledProcessError when trying to run command: ", e.cmd
+		exit(e.returncode)
     
 	for bench_file in bench_file_list:
 		for model_file in model_file_list:
@@ -97,11 +108,23 @@ def bit4bit(model_file_path,bench_file_path):
 			if word1 == word2:
 				file1 = bench_file
 				file2 = model_file
-				#comline = 'rm ' + model_file_path + '/temp.nc'
-        			#subprocess.call(comline, shell=True)
 				comline = 'ncdiff ' + file1 + ' ' + file2 + ' ' + model_file_path + '/temp.nc -O'
-	      			subprocess.call(comline, shell=True)
-       			 	flag.append(zerocheck(model_file_path + '/temp.nc'))
+				try:
+					subprocess.check_call(comline, shell=True)
+				except subprocess.CalledProcessError as e:
+					print "There was a CalledProcessError with the error number: ", e.returncode
+					print "There was a CalledProcessError when trying to run command: ", e.cmd
+					exit(e.returncode)
+       			 	
+				flag.append(zerocheck(model_file_path + '/temp.nc'))
+
+				comline = 'rm ' + model_file_path + '/temp.nc'
+				try:
+					subprocess.check_call(comline, shell=True)
+				except subprocess.CalledProcessError as e:
+					print "There was a CalledProcessError with the error number: ", e.returncode
+					print "There was a CalledProcessError when trying to run command: ", e.cmd
+					exit(e.returncode)
 
 #match up the md5sums in a and b, tell if bit-for-bit for each specific case
 
@@ -144,7 +167,12 @@ def emptycheck(checkpath):
         noplot = 0
         file = 'temp.txt'
         comline = 'ncdump -c ' + checkpath + '> temp.txt'
-        subprocess.call(comline, shell = True)
+	try:
+		subprocess.check_call(comline, shell=True)
+	except subprocess.CalledProcessError as e:
+		print "There was a CalledProcessError with the error number: ", e.returncode
+		print "There was a CalledProcessError when trying to run command: ", e.cmd
+		exit(e.returncode)
 
         input = open('temp.txt', 'r')
         line = ''
@@ -154,5 +182,10 @@ def emptycheck(checkpath):
                         noplot = 1
 
         comline2 = 'rm temp.txt'
-        subprocess.call(comline2, shell = True)
+	try:
+		subprocess.check_call(comline2, shell=True)
+	except subprocess.CalledProcessError as e:
+		print "There was a CalledProcessError with the error number: ", e.returncode
+		print "There was a CalledProcessError when trying to run command: ", e.cmd
+		exit(e.returncode)
         return noplot
