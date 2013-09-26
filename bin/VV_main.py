@@ -76,20 +76,25 @@ if os.path.isdir(options.html_path) == True:
     
         target_html = options.html_path
 else:
-        mkdir = 'mkdir ' + options.html_path
+        mkdir = ['mkdir ', options.html_path]
         try:
-                subprocess.check_call(mkdir, shell=True)
+                subprocess.check_call(mkdir)
         except subprocess.CalledProcessError as e:
-                print "There was a CalledProcessError with the error number: ", e.returncode
-                print "There was a CalledProcessError when trying to run command: ", e.cmd
+                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                 exit(e.returncode)
-        chmod = 'chmod 755 ' + options.html_path
+        except OSError as e:
+                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                exit(e.errno)
+        chmod = ['chmod 755 ', options.html_path]
         try:
-                subprocess.check_call(chmod, shell=True)
+                subprocess.check_call(chmod)
         except subprocess.CalledProcessError as e:
-                print "There was a CalledProcessError with the error number: ", e.returncode
-                print "There was a CalledProcessError when trying to run command: ", e.cmd
+                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                 exit(e.returncode)
+        except OSError as e:
+                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                exit(e.errno)
+        
         target_html = options.html_path
 
 if (options.username):
@@ -132,14 +137,15 @@ except OSError as o:
 #transferring cover picture to www file
 
 if (options.ncl_path + '/alaska_pic.png'):
-        alaskapic = "cp -f " + options.ncl_path + "/alaska_pic.png" + " " + target_html + "/"
+        alaskapic = ["cp", "-f", options.ncl_path+ "/alaska_pic.png", target_html+ "/"]
         try:
-                subprocess.check_call(alaskapic, shell=True)
+                subprocess.check_call(alaskapic)
         except subprocess.CalledProcessError as e:
-                print "There was a CalledProcessError with the error number: ", e.returncode
-                print "There was a CalledProcessError when trying to run command: ", e.cmd
+                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                 exit(e.returncode)
-
+        except OSError as e:
+                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                exit(e.errno)
 
 #create all the test suite diagnostics pages
 if options.test_suite:

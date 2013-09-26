@@ -383,36 +383,43 @@ def a80plot(plot_file,reg_test,ncl_path,html_path,script_path,data_dir):  # usin
         VARPIC  ='VARPIC = addfile(\"' + reg_test + '/ismip-hom-a/80km/' + data_dir + '/ishom.a.80km.PIC.out.nc\", \"r\")'
         VARJFNK  ='VARJFNK = addfile(\"' + reg_test + '/ismip-hom-a/80km/' + data_dir + '/ishom.a.80km.JFNK.out.nc\", \"r\")'
         png  = 'PNG = "' + ncl_path + '/ismipa80u"'
-        plot_ishoma80u = "ncl '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARPIC + "'  '" + VARJFNK +"'  '" + png + "' " + ishoma80u_plotfile + " >> plot_details.out"
-            
+        plot_ishoma80u = "ncl '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARPIC + "'  '" + VARJFNK \
+                            +"'  '" + png + "' " + ishoma80u_plotfile + " >> plot_details.out" 
+
 #TODO create an iteration plot and have that also in the html file 
         try:
                 subprocess.check_call(plot_ishoma80u, shell=True)
                 print "creating ismip hom a 80km uvel plots"
         except subprocess.CalledProcessError as e:
-                print "There was a CalledProcessError with the error number: ", e.returncode
-                print "There was a CalledProcessError when trying to run command: ", e.cmd
+                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                 exit(e.returncode)
+        except OSError as e:
+                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                exit(e.errno)              
 
 # delete old ismipa80 uvel pic in www file
         if (html_path + '/ismipa80u.png'):
-                ismipa80uvelmove = "rm -f " + html_path + '/ismipa80u.png'
+                ismipa80uvelmove = ["rm", "-f", html_path+"/ismipa80u.png"]
                 try:
-                        subprocess.check_call(ismipa80uvelmove, shell=True)
+                        subprocess.check_call(ismipa80uvelmove)
                 except subprocess.CalledProcessError as e:
-                        print "There was a CalledProcessError with the error number: ", e.returncode
-                        print "There was a CalledProcessError when trying to run command: ", e.cmd
+                        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                         exit(e.returncode)
+                except OSError as e:
+                        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                        exit(e.errno)              
 
 # transferring ismipau pic to www file
         if (ncl_path + '/ismipa80u.png'): 
-                ishoma80upic = "mv -f " + ncl_path + "/ismipa80u.png" + " " + html_path + "/"
+                ishoma80upic = ["mv", "-f", ncl_path+"/ismipa80u.png", html_path+"/"]
                 try:
-                        subprocess.check_call(ishoma80upic, shell=True)
+                        subprocess.check_call(ishoma80upic)
                 except subprocess.CalledProcessError as e:
-                        print "There was a CalledProcessError with the error number: ", e.returncode
-                        print "There was a CalledProcessError when trying to run command: ", e.cmd
+                        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                         exit(e.returncode)
+                except OSError as e:
+                        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                        exit(e.errno)              
 
 # formulate ismip a 80 vvel plot
         ishoma80v_plotfile=''+ ncl_path + '/ismipa80v.ncl'
@@ -421,36 +428,42 @@ def a80plot(plot_file,reg_test,ncl_path,html_path,script_path,data_dir):  # usin
         VARPIC  ='VARPIC = addfile(\"' + reg_test + '/ismip-hom-a/80km/' + data_dir + '/ishom.a.80km.PIC.out.nc\", \"r\")'
         VARJFNK  ='VARJFNK = addfile(\"' + reg_test + '/ismip-hom-a/80km/' + data_dir + '/ishom.a.80km.JFNK.out.nc\", \"r\")'
         png  = 'PNG = "' + ncl_path + '/ismipa80v"'
-        plot_ishoma80v = "ncl '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARPIC + "'  '" + VARJFNK +"'  '" + png + "' " + ishoma80v_plotfile + " >> plot_details.out"
-
+        plot_ishoma80v = "ncl '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARPIC + "'  '" + VARJFNK +"'  '" \
+                            + png + "' " + ishoma80v_plotfile + " >> plot_details.out"
 #TODO create an iteration plot and have that also in the html file 
         try:
                 subprocess.check_call(plot_ishoma80v, shell=True)
                 print "creating ismip hom a 80km vvel plots"
         except subprocess.CalledProcessError as e:
-                print "There was a CalledProcessError with the error number: ", e.returncode
-                print "There was a CalledProcessError when trying to run command: ", e.cmd
+                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                 exit(e.returncode)
+        except OSError as e:
+                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                exit(e.errno)              
 
 # delete old ismipa80 vvel pic in www file
         if (html_path + '/ismipa80v.png'):
-                ismipa80vvelmove = "rm -f " + html_path + '/ismipa80v.png'
+                ismipa80vvelmove = ["rm", "-f", html_path+"/ismipa80v.png"]
                 try:
-                        subprocess.check_call(ismipa80vvelmove, shell=True)
+                        subprocess.check_call(ismipa80vvelmove)
                 except subprocess.CalledProcessError as e:
-                        print "There was a CalledProcessError with the error number: ", e.returncode
-                        print "There was a CalledProcessError when trying to run command: ", e.cmd
+                        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                         exit(e.returncode)
+                except OSError as e:
+                        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                        exit(e.errno)              
 
 # transferring ismipav pic to www file
         if (ncl_path + '/ismipa80v.png'): 
-                ishoma80vpic = "mv -f " + ncl_path + "/ismipa80v.png" + " " + html_path + "/"
+                ishoma80vpic = ["mv", "-f", ncl_path+"/ismipa80v.png", html_path+"/"]
                 try:
-                        subprocess.check_call(ishoma80vpic, shell=True)
+                        subprocess.check_call(ishoma80vpic)
                 except subprocess.CalledProcessError as e:
-                        print "There was a CalledProcessError with the error number: ", e.returncode
-                        print "There was a CalledProcessError when trying to run command: ", e.cmd
+                        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                         exit(e.returncode)
+                except OSError as e:
+                        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                        exit(e.errno)              
 
 # formulate ismip a 80 velocity norm plot
 #        ishoma80vel_plotfile=''+ ncl_path + '/ismipa80vel.ncl'
@@ -459,48 +472,57 @@ def a80plot(plot_file,reg_test,ncl_path,html_path,script_path,data_dir):  # usin
 #        VARPIC  ='VARPIC = addfile(\"' + reg_test + '/ismip-hom-a/80km/data/ishom.a.80km.PIC.out.nc\", \"r\")'
 #        VARJFNK  ='VARJFNK = addfile(\"' + reg_test + '/ismip-hom-a/80km/data/ishom.a.80km.JFNK.out.nc\", \"r\")'
 #        png  = 'PNG = "' + ncl_path + '/ismipa80vel"'
-#        plot_ishoma80vel = "ncl '" + stockout + "'  '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARout + "'  '" + VARPIC + "'  '" + VARJFNK +"'  '" + png + "' " + ishoma80vel_plotfile + " >> plot_details.out"
+#        plot_ishoma80vel = "ncl '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARPIC + "'  '" + VARJFNK +"'  '" \
+#                            + png + "' " + ishoma80vel_plotfile + " >> plot_details.out"
 
 #TODO create an iteration plot and have that also in the html file 
 #        try:
 #                subprocess.check_call(plot_ishoma80vel, shell=True)
 #                print "creating ismip hom a 80km velocity norm plots"
 #        except subprocess.CalledProcessError as e:
-#                print "There was a CalledProcessError with the error number: ", e.returncode
-#                print "There was a CalledProcessError when trying to run command: ", e.cmd
+#                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
 #                exit(e.returncode)
+#        except OSError as e:
+#                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+#                exit(e.errno)              
 
 # delete old ismipa80 velnorm pic in www file
 
 #        if (html_path + '/ismipa80vel.png'):
-#                ismipa80velmove = "rm -f " + html_path + '/ismipa80vel.png'
+#                ismipa80velmove = ["rm", "-f", html_path+"/ismipa80vel.png"]
 #                try:
-#                        subprocess.check_call(ismipa80velmove, shell=True)
+#                        subprocess.check_call(ismipa80velmove)
 #                except subprocess.CalledProcessError as e:
-#                        print "There was a CalledProcessError with the error number: ", e.returncode
-#                        print "There was a CalledProcessError when trying to run command: ", e.cmd
+#                        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
 #                        exit(e.returncode)
+#                except OSError as e:
+#                        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+#                        exit(e.errno)              
 
 # transferring ismip a 80km velocity norm pic to www file
 
 #        if (ncl_path + '/ismipa80vel.png'): 
-#                ishoma80velpic = "mv -f " + ncl_path + "/ismipa80vel.png" + " " + html_path + "/"
+#                ishoma80velpic = ["mv", "-f", ncl_path+"/ismipa80vel.png", html_path+"/"]
 #                try:
-#                        subprocess.check_call(ishoma80velpic, shell=True)
+#                        subprocess.check_call(ishoma80velpic)
 #                except subprocess.CalledProcessError as e:
-#                        print "There was a CalledProcessError with the error number: ", e.returncode
-#                        print "There was a CalledProcessError when trying to run command: ", e.cmd
+#                        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
 #                        exit(e.returncode)
+#                except OSError as e:
+#                        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+#                        exit(e.errno)              
 
 # remove plot_details.out
 #        if (script_path + '/plot_details.out'):
-#                cleantrash = "rm -f " + script_path + "/plot_details.out"
+#                cleantrash = ["rm", "-f", script_path+"/plot_details.out"]
 #                try:
-#                        subprocess.check_call(cleantrash, shell=True)
+#                        subprocess.check_call(cleantrash)
 #                except subprocess.CalledProcessError as e:
-#                        print "There was a CalledProcessError with the error number: ", e.returncode
-#                        print "There was a CalledProcessError when trying to run command: ", e.cmd
+#                        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
 #                        exit(e.returncode)
+#                except OSError as e:
+#                        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+#                        exit(e.errno)              
 
         plot_file.write('<HTML>\n')
         plot_file.write('<TITLE>ISMIP HOM A 80km </TITLE>\n')
@@ -532,37 +554,43 @@ def a20plot(plot_file,reg_test,ncl_path,html_path,script_path,data_dir):  # usin
         VARPIC  ='VARPIC = addfile(\"' + reg_test + '/ismip-hom-a/20km/' + data_dir + '/ishom.a.20km.PIC.out.nc\", \"r\")'
         VARJFNK  ='VARJFNK = addfile(\"' + reg_test + '/ismip-hom-a/20km/' + data_dir + '/ishom.a.20km.JFNK.out.nc\", \"r\")'
         png  = 'PNG = "' + ncl_path + '/ismipa20u"'
-        plot_ishoma20u = "ncl '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARPIC + "'  '" + VARJFNK +"'  '" + png + "' " + ishoma20u_plotfile + " >> plot_details.out"
-            
+        plot_ishoma20u = "ncl '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARPIC + "'  '" + VARJFNK \
+                            +"'  '" + png + "' " + ishoma20u_plotfile + " >> plot_details.out"            
 
 #TODO create an iteration plot and have that also in the html file 
         try:
                 subprocess.check_call(plot_ishoma20u, shell=True)
                 print "creating ismip hom a 20km uvel plots"
         except subprocess.CalledProcessError as e:
-                print "There was a CalledProcessError with the error number: ", e.returncode
-                print "There was a CalledProcessError when trying to run command: ", e.cmd
+                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                 exit(e.returncode)
+        except OSError as e:
+                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                exit(e.errno)              
 
 # delete old ismipa20 uvel pic in www file
         if (html_path + '/ismipa20u.png'):
-                ismipa20uvelmove = "rm -f " + html_path + '/ismipa20u.png'
+                ismipa20uvelmove = ["rm", "-f", html_path+"/ismipa20u.png"]
                 try:
-                        subprocess.check_call(ismipa20uvelmove, shell=True)
+                        subprocess.check_call(ismipa20uvelmove)
                 except subprocess.CalledProcessError as e:
-                        print "There was a CalledProcessError with the error number: ", e.returncode
-                        print "There was a CalledProcessError when trying to run command: ", e.cmd
+                        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                         exit(e.returncode)
+                except OSError as e:
+                        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                        exit(e.errno)              
 
 # transferring ismipa20u pic to www file
         if (ncl_path + '/ismipa20u.png'): 
-                ishoma20upic = "mv -f " + ncl_path + "/ismipa20u.png" + " " + html_path + "/"
+                ishoma20upic = ["mv", "-f", ncl_path+"/ismipa20u.png", html_path+"/"]
                 try:
-                        subprocess.check_call(ishoma20upic, shell=True)
+                        subprocess.check_call(ishoma20upic)
                 except subprocess.CalledProcessError as e:
-                        print "There was a CalledProcessError with the error number: ", e.returncode
-                        print "There was a CalledProcessError when trying to run command: ", e.cmd
+                        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                         exit(e.returncode)
+                except OSError as e:
+                        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                        exit(e.errno)              
 
 # formulate ismip a 20 vvel plot
         ishoma20v_plotfile=''+ ncl_path + '/ismipa20v.ncl'
@@ -571,36 +599,42 @@ def a20plot(plot_file,reg_test,ncl_path,html_path,script_path,data_dir):  # usin
         VARPIC  ='VARPIC = addfile(\"' + reg_test + '/ismip-hom-a/20km/' + data_dir + '/ishom.a.20km.PIC.out.nc\", \"r\")'
         VARJFNK  ='VARJFNK = addfile(\"' + reg_test + '/ismip-hom-a/20km/' + data_dir + '/ishom.a.20km.JFNK.out.nc\", \"r\")'
         png  = 'PNG = "' + ncl_path + '/ismipa20v"'
-        plot_ishoma20v = "ncl '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARPIC + "'  '" + VARJFNK +"'  '" + png + "' " + ishoma20v_plotfile + " >> plot_details.out"
-
+        plot_ishoma20v = "ncl '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARPIC + "'  '" + VARJFNK \
+                            + "'  '" + png + "' " + ishoma20v_plotfile + " >> plot_details.out"
 #TODO create an iteration plot and have that also in the html file 
         try:
                 subprocess.check_call(plot_ishoma20v, shell=True)
                 print "creating ismip hom a 20km vvel plots"
         except subprocess.CalledProcessError as e:
-                print "There was a CalledProcessError with the error number: ", e.returncode
-                print "There was a CalledProcessError when trying to run command: ", e.cmd
+                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                 exit(e.returncode)
+        except OSError as e:
+                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                exit(e.errno)              
 
 # delete old ismipa20 vvel pic in www file
         if (html_path + '/ismipa20v.png'):
-                ismipa20vvelmove = "rm -f " + html_path + '/ismipa20v.png'
+                ismipa20vvelmove = ["rm", "-f", html_path+"/ismipa20v.png"]
                 try:
-                        subprocess.check_call(ismipa20vvelmove, shell=True)
+                        subprocess.check_call(ismipa20vvelmove)
                 except subprocess.CalledProcessError as e:
-                        print "There was a CalledProcessError with the error number: ", e.returncode
-                        print "There was a CalledProcessError when trying to run command: ", e.cmd
+                        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                         exit(e.returncode)
+                except OSError as e:
+                        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                        exit(e.errno)              
 
 # transferring ismipa20v pic to www file
         if (ncl_path + '/ismipa20v.png'): 
-                ishoma20vpic = "mv -f " + ncl_path + "/ismipa20v.png" + " " + html_path + "/"
+                ishoma20vpic = ["mv", "-f", ncl_path+"/ismipa20v.png", html_path+"/"]
                 try:
-                        subprocess.check_call(ishoma20vpic, shell=True)
+                        subprocess.check_call(ishoma20vpic)
                 except subprocess.CalledProcessError as e:
-                        print "There was a CalledProcessError with the error number: ", e.returncode
-                        print "There was a CalledProcessError when trying to run command: ", e.cmd
+                        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                         exit(e.returncode)
+                except OSError as e:
+                        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                        exit(e.errno)              
 
 # formulate ismip a 20 velocity norm plot
 #        ishoma20vel_plotfile=''+ ncl_path + '/ismipa20vel.ncl'
@@ -609,46 +643,54 @@ def a20plot(plot_file,reg_test,ncl_path,html_path,script_path,data_dir):  # usin
 #        VARPIC  ='VARPIC = addfile(\"' + reg_test + '/ismip-hom-a/20km/data/ishom.a.20km.PIC.out.nc\", \"r\")'
 #        VARJFNK  ='VARJFNK = addfile(\"' + reg_test + '/ismip-hom-a/20km/data/ishom.a.20km.JFNK.out.nc\", \"r\")'
 #        png  = 'PNG = "' + ncl_path + '/ismipa20vel"'
-#        plot_ishoma20vel = "ncl '" + stockout + "'  '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARout + "'  '" + VARPIC + "'  '" + VARJFNK +"'  '" + png + "' " + ishoma20vel_plotfile + " >> plot_details.out"
-
+#        plot_ishoma20vel = "ncl '" + stockout + "'  '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARout + "'  '" + VARPIC + "'  '" + VARJFNK \
+#        + "'  '" + png + "' " + ishoma20vel_plotfile + " >> plot_details.out"
 #TODO create an iteration plot and have that also in the html file 
 #        try:
 #                subprocess.check_call(plot_ishoma20vel, shell=True)
 #                print "creating ismip hom a 20km velocity norm plots"
 #        except subprocess.CalledProcessError as e:
-#                print "There was a CalledProcessError with the error number: ", e.returncode
-#                print "There was a CalledProcessError when trying to run command: ", e.cmd
+#                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
 #                exit(e.returncode)
+#        except OSError as e:
+#                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+#                exit(e.errno)              
 
 # delete old ismipa20 velnorm pic in www file
 #        if (html_path + '/ismipa20vel.png'):
-#                ismipa20velmove = "rm -f " + html_path + '/ismipa20vel.png'
+#                ismipa20velmove = ["rm", "-f", html_path+"/ismipa20vel.png"]
 #                try:
-#                        subprocess.check_call(ismipa20velmove, shell=True)
+#                        subprocess.check_call(ismipa20velmove)
 #                except subprocess.CalledProcessError as e:
-#                        print "There was a CalledProcessError with the error number: ", e.returncode
-#                        print "There was a CalledProcessError when trying to run command: ", e.cmd
+#                        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
 #                        exit(e.returncode)
+#                except OSError as e:
+#                        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+#                        exit(e.errno)              
 
 # transferring ismip a 20km velocity norm pic to www file
 #        if (ncl_path + '/ismipa20vel.png'): 
-#                ishoma20velpic = "mv -f " + ncl_path + "/ismipa20vel.png" + " " + html_path + "/"
+#                ishoma20velpic = ["mv", "-f", ncl_path+"/ismipa20vel.png", html_path+"/"]
 #                try:
-#                        subprocess.check_call(ishoma20velpic, shell=True)
+#                        subprocess.check_call(ishoma20velpic)
 #                except subprocess.CalledProcessError as e:
-#                        print "There was a CalledProcessError with the error number: ", e.returncode
-#                        print "There was a CalledProcessError when trying to run command: ", e.cmd
+#                        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
 #                        exit(e.returncode)
+#                except OSError as e:
+#                        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+#                        exit(e.errno)              
 
 # remove plot_details.out
 #        if (script_path + '/plot_details.out'):
-#                cleantrash = "rm -f " + script_path + "/plot_details.out"
+#                cleantrash = ["rm", "-f", script_path+"/plot_details.out"]
 #                try:
-#                        subprocess.check_call(cleantrash, shell=True)
+#                        subprocess.check_call(cleantrash)
 #                except subprocess.CalledProcessError as e:
-#                        print "There was a CalledProcessError with the error number: ", e.returncode
-#                        print "There was a CalledProcessError when trying to run command: ", e.cmd
+#                        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
 #                        exit(e.returncode)
+#                except OSError as e:
+#                        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+#                        exit(e.errno)              
 
         plot_file.write('<HTML>\n')
         plot_file.write('<TITLE>ISMIP HOM A 20km </TITLE>\n')
@@ -681,36 +723,42 @@ def c80plot(plot_file,reg_test,ncl_path,html_path,script_path,data_dir):  # usin
         VARPIC  ='VARPIC = addfile(\"' + reg_test + '/ismip-hom-c/80km/' + data_dir + '/ishom.c.80km.PIC.out.nc\", \"r\")'
         VARJFNK  ='VARJFNK = addfile(\"' + reg_test + '/ismip-hom-c/80km/' + data_dir + '/ishom.c.80km.JFNK.out.nc\", \"r\")'
         png  = 'PNG = "' + ncl_path + '/ismipcu"'
-        plot_ishomcu = "ncl '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARPIC + "'  '" + VARJFNK +"'  '" + png + "' " + ishomcu_plotfile + " >> plot_details.out"
-
+        plot_ishomcu = "ncl '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARPIC + "'  '" + VARJFNK \
+                            + "'  '" + png + "' " + ishomcu_plotfile + " >> plot_details.out"
 #TODO create an iteration plot and have that also in the html file 
         try:
                 subprocess.check_call(plot_ishomcu, shell=True)
                 print "creating ismip hom c uvel plots"
         except subprocess.CalledProcessError as e:
-                print "There was a CalledProcessError with the error number: ", e.returncode
-                print "There was a CalledProcessError when trying to run command: ", e.cmd
+                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                 exit(e.returncode)
+        except OSError as e:
+                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                exit(e.errno)              
 
 # delete old ismipc80 uvel pic in www file
         if (html_path + '/ismipcu.png'):
-                ismipcuvelmove = "rm -f " + html_path + '/ismipcu.png'
+                ismipcuvelmove = ["rm", "-f", html_path+"/ismipcu.png"]
                 try:
-                        subprocess.check_call(ismipcuvelmove, shell=True)
+                        subprocess.check_call(ismipcuvelmove)
                 except subprocess.CalledProcessError as e:
-                        print "There was a CalledProcessError with the error number: ", e.returncode
-                        print "There was a CalledProcessError when trying to run command: ", e.cmd
+                        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                         exit(e.returncode)
+                except OSError as e:
+                        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                        exit(e.errno)              
 
 # transferring ismipcu pic to www file
         if (ncl_path + '/ismipcu.png'): 
-                ishomcupic = "mv -f " + ncl_path + "/ismipcu.png" + " " + html_path + "/"
+                ishomcupic = ["mv", "-f", ncl_path+"/ismipcu.png", html_path+"/"]
                 try:
-                        subprocess.check_call(ishomcupic, shell=True)
+                        subprocess.check_call(ishomcupic)
                 except subprocess.CalledProcessError as e:
-                        print "There was a CalledProcessError with the error number: ", e.returncode
-                        print "There was a CalledProcessError when trying to run command: ", e.cmd
+                        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                         exit(e.returncode)
+                except OSError as e:
+                        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                        exit(e.errno)              
 
 # formulate ismip c 80 vvel plot
         ishomcv_plotfile=''+ ncl_path + '/ismipc80v.ncl'
@@ -719,36 +767,42 @@ def c80plot(plot_file,reg_test,ncl_path,html_path,script_path,data_dir):  # usin
         VARPIC  ='VARPIC = addfile(\"' + reg_test + '/ismip-hom-c/80km/' + data_dir + '/ishom.c.80km.PIC.out.nc\", \"r\")'
         VARJFNK  ='VARJFNK = addfile(\"' + reg_test + '/ismip-hom-c/80km/' + data_dir + '/ishom.c.80km.JFNK.out.nc\", \"r\")'
         png  = 'PNG = "' + ncl_path + '/ismipcv"'
-        plot_ishomcv = "ncl '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARPIC + "'  '" + VARJFNK +"'  '" + png + "' " + ishomcv_plotfile + " >> plot_details.out"
-
+        plot_ishomcv = "ncl '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARPIC + "'  '" + VARJFNK \
+                            + "'  '" + png + "' " + ishomcv_plotfile + " >> plot_details.out"
 #TODO create an iteration plot and have that also in the html file 
         try:
                 subprocess.check_call(plot_ishomcv, shell=True)
                 print "creating ismip hom c vvel plots"
         except subprocess.CalledProcessError as e:
-                print "There was a CalledProcessError with the error number: ", e.returncode
-                print "There was a CalledProcessError when trying to run command: ", e.cmd
+                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                 exit(e.returncode)
+        except OSError as e:
+                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                exit(e.errno)              
 
 # delete old ismipc80 vvel pic in www file
         if (html_path + '/ismipcv.png'):
-                ismipcvvelmove = "rm -f " + html_path + '/ismipcv.png'
+                ismipcvvelmove = ["rm", "-f", html_path+"/ismipcv.png"]
                 try:
-                        subprocess.check_call(ismipcvvelmove, shell=True)
+                        subprocess.check_call(ismipcvvelmove)
                 except subprocess.CalledProcessError as e:
-                        print "There was a CalledProcessError with the error number: ", e.returncode
-                        print "There was a CalledProcessError when trying to run command: ", e.cmd
+                        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                         exit(e.returncode)
+                except OSError as e:
+                        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                        exit(e.errno)              
 
 # transferring ismipcv pic to www file
         if (ncl_path + '/ismipcv.png'): 
-                ishomcvpic = "mv -f " + ncl_path + "/ismipcv.png" + " " + html_path + "/"
+                ishomcvpic = ["mv", "-f", ncl_path+"/ismipcv.png", html_path+"/"]
                 try:
-                        subprocess.check_call(ishomcvpic, shell=True)
+                        subprocess.check_call(ishomcvpic)
                 except subprocess.CalledProcessError as e:
-                        print "There was a CalledProcessError with the error number: ", e.returncode
-                        print "There was a CalledProcessError when trying to run command: ", e.cmd
+                        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                         exit(e.returncode)
+                except OSError as e:
+                        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                        exit(e.errno)              
 
 # formulate ismip c 80 velocity norm plot
         ishomcvel_plotfile=''+ ncl_path + '/ismipc80vel.ncl'
@@ -757,46 +811,54 @@ def c80plot(plot_file,reg_test,ncl_path,html_path,script_path,data_dir):  # usin
         VARPIC  ='VARPIC = addfile(\"' + reg_test + '/ismip-hom-c/80km/' + data_dir + '/ishom.c.80km.PIC.out.nc\", \"r\")'
         VARJFNK  ='VARJFNK = addfile(\"' + reg_test + '/ismip-hom-c/80km/' + data_dir + '/ishom.c.80km.JFNK.out.nc\", \"r\")'
         png  = 'PNG = "' + ncl_path + '/ismipcvel"'
-        plot_ishomcvel = "ncl '" + stockout + "'  '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARout + "'  '" + VARPIC + "'  '" + VARJFNK +"'  '" + png + "' " + ishomcvel_plotfile + " >> plot_details.out"
-
+        plot_ishomcvel = "ncl '" + stockout + "'  '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARout + "'  '" + VARPIC + "'  '" + VARJFNK \
+                            + "'  '" + png + "' " + ishomcvel_plotfile + " >> plot_details.out"
 #TODO create an iteration plot and have that also in the html file 
         try:
                 subprocess.check_call(plot_ishomcvel, shell=True)
                 print "creating ismip hom c velocity norm plots"
         except subprocess.CalledProcessError as e:
-                print "There was a CalledProcessError with the error number: ", e.returncode
-                print "There was a CalledProcessError when trying to run command: ", e.cmd
+                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                 exit(e.returncode)
+        except OSError as e:
+                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                exit(e.errno)              
 
 # delete old ismipc80 vel norm pic in www file
         if (html_path + '/ismipcvel.png'):
-                ismipcvelmove = "rm -f " + html_path + '/ismipcvel.png'
+                ismipcvelmove = ["rm", "-f", html_path+"/ismipcvel.png"]
                 try:
-                        subprocess.check_call(ismipcvelmove, shell=True)
+                        subprocess.check_call(ismipcvelmove)
                 except subprocess.CalledProcessError as e:
-                        print "There was a CalledProcessError with the error number: ", e.returncode
-                        print "There was a CalledProcessError when trying to run command: ", e.cmd
+                        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                         exit(e.returncode)
+                except OSError as e:
+                        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                        exit(e.errno)              
 
 # transferring ismip c velocity norm pic to www file
         if (ncl_path + '/ismipcvel.png'): 
-                ishomcvelpic = "mv -f " + ncl_path + "/ismipcvel.png" + " " + html_path + "/"
+                ishomcvelpic = ["mv", "-f", ncl_path+"/ismipcvel.png", html_path+"/"]
                 try:
-                        subprocess.check_call(ishomcvelpic, shell=True)
+                        subprocess.check_call(ishomcvelpic)
                 except subprocess.CalledProcessError as e:
-                        print "There was a CalledProcessError with the error number: ", e.returncode
-                        print "There was a CalledProcessError when trying to run command: ", e.cmd
+                        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                         exit(e.returncode)
+                except OSError as e:
+                        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                        exit(e.errno)              
 
 # remove plot_details.out
 #        if (script_path + '/plot_details.out'):
-#                cleantrash = "rm -f " + script_path + "/plot_details.out"
+#                cleantrash = ["rm", "-f", script_path+"/plot_details.out"]
 #                try:
-#                        subprocess.check_call(cleantrash, shell=True)
+#                        subprocess.check_call(cleantrash)
 #                except subprocess.CalledProcessError as e:
-#                        print "There was a CalledProcessError with the error number: ", e.returncode
-#                        print "There was a CalledProcessError when trying to run command: ", e.cmd
+#                        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
 #                        exit(e.returncode)
+#                except OSError as e:
+#                        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+#                        exit(e.errno)              
 
         plot_file.write('<HTML>\n')
         plot_file.write('<TITLE>ISMIP HOM C 80km </TITLE>\n')

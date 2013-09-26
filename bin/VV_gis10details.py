@@ -41,7 +41,7 @@ def details(solver_file,reg_test,ncl_path,target_html,data_dir):  # using data, 
 #                    data_script + ' ' + "1> /dev/null"
 
 #        try:
-#                output = subprocess.call(plot_gis10_data, shell=True)
+#                output = subprocess.call(plot_gis10_data)
 #        except:
 #                print "error formatting iteration plot of gis10km run"
 #                raise
@@ -51,7 +51,7 @@ def details(solver_file,reg_test,ncl_path,target_html,data_dir):  # using data, 
 #        if (ncl_path + '/gis10km_iter.png'):
 #                iterpic = "mv -f " + ncl_path + "/gis10km_iter.png" + " " + target_html + "/"
 #                try:
-#                        output = subprocess.call(iterpic, shell=True)
+#                        output = subprocess.call(iterpic)
 #                except:
 #                        print "error moving iter png file"
 #                        raise
@@ -117,35 +117,42 @@ def gis10_plot(plot_file,reg_test,ncl_path,html_path,script_path,data_dir):  # u
             VARcism  ='VARcism = addfile(\"' + reg_test + '/gis_10km/' + data_dir + '/gis_10km.seacism.nc\", \"r\")'
             VARcism10  ='VARcism10 = addfile(\"' + reg_test + '/gis_10km/' + data_dir + '/gis_10km.seacism.10.nc\", \"r\")'
             png  = 'PNG = "' + ncl_path + '/gis10kmvel"'
-            plot_gis10kmvel = "ncl '" + stockcism + "'  '" + stockcism10 + "'  '" + VARcism + "'  '" + VARcism10 + "' '" + png + "' " + gis10kmvel_plotfile + " >> plot_details.out"
+            plot_gis10kmvel = "ncl '" + stockcism + "'  '" + stockcism10 + "'  '" + VARcism + "'  '" + VARcism10 \
+                                + "' '" + png + "' " + gis10kmvel_plotfile + " >> plot_details.out"
 
             try:
                     subprocess.check_call(plot_gis10kmvel, shell=True)
                     print "creating gis 10km velocity norm plot"
             except subprocess.CalledProcessError as e:
-                    print "There was a CalledProcessError with the error number: ", e.returncode
-                    print "There was a CalledProcessError when trying to run command: ", e.cmd
+                    print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                     exit(e.returncode)
+            except OSError as e:
+                    print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                    exit(e.errno) 
 
 # delete old gis10km vel pic in www file
             if (html_path + '/gis10kmvel.png'):
-                    gis10velmove = "rm -f " + html_path + '/gis10kmvel.png'
+                    gis10velmove = ["rm", "-f", html_path+"/gis10kmvel.png"]
                     try:
-                            subprocess.check_call(gis10velmove, shell=True)
+                            subprocess.check_call(gis10velmove)
                     except subprocess.CalledProcessError as e:
-                            print "There was a CalledProcessError with the error number: ", e.returncode
-                            print "There was a CalledProcessError when trying to run command: ", e.cmd
+                            print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                             exit(e.returncode)
+                    except OSError as e:
+                            print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                            exit(e.errno) 
 
 # transferring velocity pic to www file
             if (ncl_path + '/gis10kmvel.png'):
-                    gispicvel = "mv -f " + ncl_path + "/gis10kmvel.png" + " " + html_path + "/"
+                    gispicvel = ["mv", "-f", ncl_path+"/gis10kmvel.png", html_path+"/"]
                     try:
-                            subprocess.check_call(gispicvel, shell=True)
+                            subprocess.check_call(gispicvel)
                     except subprocess.CalledProcessError as e:
-                            print "There was a CalledProcessError with the error number: ", e.returncode
-                            print "There was a CalledProcessError when trying to run command: ", e.cmd
+                            print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                             exit(e.returncode)
+                    except OSError as e:
+                            print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                            exit(e.errno) 
 
 # formulate gis10km thickness plot
             gis10kmthk_plotfile=''+ ncl_path + '/gis10kmthk.ncl'
@@ -156,45 +163,53 @@ def gis10_plot(plot_file,reg_test,ncl_path,html_path,script_path,data_dir):  # u
             VARcism10  ='VARcism10 = addfile(\"' + reg_test + '/gis_10km/' + data_dir + '/gis_10km.seacism.10.nc\", \"r\")'
             VARcrop='VARcrop = addfile(\"'+ reg_test + '/gis_10km/' + data_dir + '/gis_10km.051011.crop.nc\", \"r\")'
             png  = 'PNG = "' + ncl_path + '/gis10kmthk"'
-            plot_gis10kmthk = "ncl '" + stockcism + "'  '" + stockcism10 + "'  '" + stockcrop + "'  '" + VARcism + "'  '" + VARcism10 + "' '" + VARcrop + "'  '" + png + "' " + gis10kmthk_plotfile + " >> plot_details.out"
-
+            plot_gis10kmthk = "ncl '" + stockcism + "'  '" + stockcism10 + "'  '" + stockcrop + "'  '" + VARcism + "'  '" + VARcism10 + "' '" + VARcrop \
+                                + "'  '" + png + "' " + gis10kmthk_plotfile + " >> plot_details.out"
             try:
                     subprocess.check_call(plot_gis10kmthk, shell=True)
                     print "creating gis 10km thickness plot"
             except subprocess.CalledProcessError as e:
-                    print "There was a CalledProcessError with the error number: ", e.returncode
-                    print "There was a CalledProcessError when trying to run command: ", e.cmd
+                    print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                     exit(e.returncode)
+            except OSError as e:
+                    print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                    exit(e.errno) 
 
 # delete old gis10km thk pic in www file
             if (html_path + '/gis10kmthk.png'):
-                    gis10thkmove = "rm -f " + html_path + '/gis10kmthk.png'
+                    gis10thkmove = ["rm", "-f", html_path+"/gis10kmthk.png"]
                     try:
-                            subprocess.check_call(gis10thkmove, shell=True)
+                            subprocess.check_call(gis10thkmove)
                     except subprocess.CalledProcessError as e:
-                            print "There was a CalledProcessError with the error number: ", e.returncode
-                            print "There was a CalledProcessError when trying to run command: ", e.cmd
+                            print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                             exit(e.returncode)
+                    except OSError as e:
+                            print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                            exit(e.errno) 
 
 # transferring thickness pic to www file
             if (ncl_path + '/gis10kmthk.png'):
-                    gispicthk = "mv -f " + ncl_path + "/gis10kmthk.png" + " " + html_path + "/"
+                    gispicthk = ["mv", "-f", ncl_path+"/gis10kmthk.png", html_path+"/"]
                     try:
-                            subprocess.check_call(gispicthk, shell=True)
+                            subprocess.check_call(gispicthk)
                     except subprocess.CalledProcessError as e:
-                            print "There was a CalledProcessError with the error number: ", e.returncode
-                            print "There was a CalledProcessError when trying to run command: ", e.cmd
+                            print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                             exit(e.returncode)
+                    except OSError as e:
+                            print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                            exit(e.errno) 
 
 # remove plot_details.out
 #            if (script_path + '/plot_details.out'):
-#                    cleantrash = "rm -f " + script_path + "/plot_details.out"
+#                    cleantrash = ["rm", "-f", script_path+"/plot_details.out"]
 #                    try:
-#                            subprocess.check_call(cleantrash, shell=True)
+#                            subprocess.check_call(cleantrash)
 #                    except subprocess.CalledProcessError as e:
-#                            print "There was a CalledProcessError with the error number: ", e.returncode
-#                            print "There was a CalledProcessError when trying to run command: ", e.cmd
+#                            print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
 #                            exit(e.returncode)
+#                    except OSError as e:
+#                            print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+#                            exit(e.errno) 
 
             plot_file.write('<HTML>\n')
             plot_file.write('<TITLE>GIS 10km Test Case </TITLE>\n')

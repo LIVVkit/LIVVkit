@@ -198,46 +198,54 @@ def dplot(plot_file,reg_test,ncl_path,html_path,script_path,data_dir):  # using 
 	VAR4  ='VAR4 = addfile(\"' + reg_test + '/dome30/diagnostic/' + data_dir + '/dome.4.nc\", \"r\")'
 	png  = 'PNG = "' + ncl_path + '/dome30dvel"'
         plot_dome30dvel = "ncl '" + stock1 + "'  '" + stock4 + "'  '" + VAR1 + "' '" + VAR4 + \
-                           "' '" + png + "' " + dome30dvel_plotfile + " >> plot_details.out" 
+                            "' '" + png + "' " + dome30dvel_plotfile + " >> plot_details.out"
         try:
                 subprocess.check_call(plot_dome30dvel, shell=True)
                 print "creating diagnostic dome 30 velocity plots"
         except subprocess.CalledProcessError as e:
-                print "There was a CalledProcessError with the error number: ", e.returncode
-                print "There was a CalledProcessError when trying to run command: ", e.cmd
+                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                 exit(e.returncode)
-
+        except OSError as e:
+                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                exit(e.errno)
+                
 # delete old dome30 pic in www file
 
         if (html_path + '/dome30dvel.png'):
-            dome30dvelmove = "rm -f " + html_path + '/dome30dvel.png'
+            dome30dvelmove = ["rm", "-f", html_path+"/dome30dvel.png"]
             try:
-                    subprocess.check_call(dome30dvelmove, shell=True)
+                    subprocess.check_call(dome30dvelmove)
             except subprocess.CalledProcessError as e:
-                    print "There was a CalledProcessError with the error number: ", e.returncode
-                    print "There was a CalledProcessError when trying to run command: ", e.cmd
+                    print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                     exit(e.returncode)
+            except OSError as e:
+                    print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                    exit(e.errno)
 
 # transferring new dome30 pic to www file
 
         if (ncl_path + '/dome30dvel.png'):
-        	dome30dvelpic = "mv -f " + ncl_path + "/dome30dvel.png" + " " + html_path + "/"
+        	dome30dvelpic = ["mv", "-f", ncl_path+"/dome30dvel.png", html_path+"/"]
                 try:
-                        subprocess.check_call(dome30dvelpic, shell=True)
+                        subprocess.check_call(dome30dvelpic)
                 except subprocess.CalledProcessError as e:
-                        print "There was a CalledProcessError with the error number: ", e.returncode
-                        print "There was a CalledProcessError when trying to run command: ", e.cmd
+                        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                         exit(e.returncode)
+                except OSError as e:
+                        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                        exit(e.errno)
 
 # remove plot_details.out
 #        if (script_path + '/plot_details.out'):
-#                cleantrash = "rm -f " + script_path + "/plot_details.out"
+#                cleantrash = ["rm", "-f", script_path+"/plot_details.out"]
 #                 try:
-#                        subprocess.check_call(cleantrash, shell=True)
+#                        subprocess.check_call(cleantrash)
 #                except subprocess.CalledProcessError as e:
-#                        print "There was a CalledProcessError with the error number: ", e.returncode
-#                        print "There was a CalledProcessError when trying to run command: ", e.cmd
+#                        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
 #                        exit(e.returncode)
+#                except OSError as e:
+#                        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+#                        exit(e.errno)
 
         plot_file.write('<HTML>\n')
         plot_file.write('<TITLE>Diagnostic Dome 30 </TITLE>\n')
@@ -266,36 +274,42 @@ def eplot(plot_file,reg_test,ncl_path,html_path,script_path,data_dir):  # using 
 	VAR15  ='VAR15 = addfile(\"' + reg_test + '/dome30/evolving/' + data_dir + '/dome.15.nc\", \"r\")'
 	png  = 'PNG = "' + ncl_path + '/dome30evel"'
         plot_dome30evel = "ncl '" + stock9 + "'  '" + stock15 + "'  '" + VAR9 + "' '" + VAR15 + \
-                           "' '" + png + "' " + dome30evel_plotfile + " >> plot_details.out" 
+                            "' '" + png + "' " + dome30evel_plotfile + " >> plot_details.out"
         try:
                 subprocess.check_call(plot_dome30evel, shell=True)
                 print "creating evolving dome 30 velocity plots"
         except subprocess.CalledProcessError as e:
-                print "There was a CalledProcessError with the error number: ", e.returncode
-                print "There was a CalledProcessError when trying to run command: ", e.cmd
+                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                 exit(e.returncode)
+        except OSError as e:
+                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                exit(e.errno)
 
 # delete old dome30 pic in www file
 
         if (html_path + '/dome30evel.png'):
-            dome30evelmove = "rm -f " + html_path + '/dome30evel.png'
+            dome30evelmove = ["rm", "-f", html_path+"/dome30evel.png"]
             try:
-                    subprocess.check_call(dome30evelmove, shell=True)
+                    subprocess.check_call(dome30evelmove)
             except subprocess.CalledProcessError as e:
-                    print "There was a CalledProcessError with the error number: ", e.returncode
-                    print "There was a CalledProcessError when trying to run command: ", e.cmd
+                    print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                     exit(e.returncode)
+            except OSError as e:
+                    print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                    exit(e.errno)
 
 # transferring dome30 pic to www file
 
         if (ncl_path + '/dome30evel.png'):
-        	dome30evelpic = "mv -f " + ncl_path + "/dome30evel.png" + " " + html_path + "/"
+        	dome30evelpic = ["mv", "-f", ncl_path+"/dome30evel.png", html_path+"/"]
                 try:
-                        subprocess.check_call(dome30evelpic, shell=True)
+                        subprocess.check_call(dome30evelpic)
                 except subprocess.CalledProcessError as e:
-                        print "There was a CalledProcessError with the error number: ", e.returncode
-                        print "There was a CalledProcessError when trying to run command: ", e.cmd
+                        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                         exit(e.returncode)
+                except OSError as e:
+                        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                        exit(e.errno)
 
 # creating dome 30e thickness plot
         dome30ethk_plotfile=''+ ncl_path + '/dome30ethk.ncl'
@@ -305,46 +319,54 @@ def eplot(plot_file,reg_test,ncl_path,html_path,script_path,data_dir):  # using 
 	VAR15  ='VAR15 = addfile(\"' + reg_test + '/dome30/evolving/' + data_dir + '/dome.15.nc\", \"r\")'
 	png  = 'PNG = "' + ncl_path + '/dome30ethk"'
         plot_dome30ethk = "ncl '" + stock9 + "'  '" + stock15 + "'  '" + VAR9 + "' '" + VAR15 + \
-                           "' '" + png + "' " + dome30ethk_plotfile + " >> plot_details.out"
+                            "' '" + png + "' " + dome30ethk_plotfile + " >> plot_details.out"
         try:
                 subprocess.check_call(plot_dome30ethk, shell=True)
                 print "creating evolving dome 30 thickness plots"
         except subprocess.CalledProcessError as e:
-                print "There was a CalledProcessError with the error number: ", e.returncode
-                print "There was a CalledProcessError when trying to run command: ", e.cmd
+                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                 exit(e.returncode)
+        except OSError as e:
+                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                exit(e.errno)
 
 # delete old dome30 pic in www file
 
         if (html_path + '/dome30ethk.png'):
-            dome30ethkmove = "rm -f " + html_path + '/dome30ethk.png'
+            dome30ethkmove = ["rm", "-f", html_path+"/dome30ethk.png"]
             try:
-                    subprocess.check_call(dome30ethkmove, shell=True)
+                    subprocess.check_call(dome30ethkmove)
             except subprocess.CalledProcessError as e:
-                    print "There was a CalledProcessError with the error number: ", e.returncode
-                    print "There was a CalledProcessError when trying to run command: ", e.cmd
+                    print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                     exit(e.returncode)
+            except OSError as e:
+                    print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                    exit(e.errno)
 
 # transferring dome30 pic to www file
 
         if (ncl_path + '/dome30ethk.png'):
-        	dome30ethkpic = "mv -f " + ncl_path + "/dome30ethk.png" + " " + html_path + "/"
+        	dome30ethkpic = ["mv", "-f", ncl_path+"/dome30ethk.png", html_path+"/"]
                 try:
-                        subprocess.check_call(dome30ethkpic, shell=True)
+                        subprocess.check_call(dome30ethkpic)
                 except subprocess.CalledProcessError as e:
-                        print "There was a CalledProcessError with the error number: ", e.returncode
-                        print "There was a CalledProcessError when trying to run command: ", e.cmd
+                        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                         exit(e.returncode)
+                except OSError as e:
+                        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                        exit(e.errno)
 
 # remove plot_details.out
 #        if (script_path + '/plot_details.out'):
-#                cleantrash = "rm -f " + script_path + "/plot_details.out"
+#                cleantrash = ["rm", "-f", script_path+"/plot_details.out"]
 #                try:
-#                        subprocess.check_call(cleantrash, shell=True)
+#                        subprocess.check_call(cleantrash)
 #                except subprocess.CalledProcessError as e:
-#                        print "There was a CalledProcessError with the error number: ", e.returncode
-#                        print "There was a CalledProcessError when trying to run command: ", e.cmd
+#                        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
 #                        exit(e.returncode)
+#                except OSError as e:
+#                        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+#                        exit(e.errno)
 
         plot_file.write('<HTML>\n')
         plot_file.write('<TITLE>Evolving Dome 30 </TITLE>\n')

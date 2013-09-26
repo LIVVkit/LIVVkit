@@ -92,15 +92,17 @@ def bit4bit(model_file_path,bench_file_path):
 	output.write(model_file_path)
 	output.write('\n')
 	output.write(bench_file_path)
-	output2 = 'rm -rf temp.txt'
+	output2 = ['rm', '-rf', 'temp.txt']
 	
 	try:
-		subprocess.check_call(output2, shell=True)
+		subprocess.check_call(output2)
 	except subprocess.CalledProcessError as e:
-		print "There was a CalledProcessError with the error number: ", e.returncode
-		print "There was a CalledProcessError when trying to run command: ", e.cmd
-		exit(e.returncode)
-    
+                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                exit(e.returncode)
+        except OSError as e:
+                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                exit(e.errno)
+
 	for bench_file in bench_file_list:
 		for model_file in model_file_list:
 			word1 = yank(bench_file)	
@@ -108,23 +110,27 @@ def bit4bit(model_file_path,bench_file_path):
 			if word1 == word2:
 				file1 = bench_file
 				file2 = model_file
-				comline = 'ncdiff ' + file1 + ' ' + file2 + ' ' + model_file_path + '/temp.nc -O'
+				comline = ['ncdiff', file1, file2, model_file_path+'/temp.nc', '-O']
 				try:
-					subprocess.check_call(comline, shell=True)
+					subprocess.check_call(comline)
 				except subprocess.CalledProcessError as e:
-					print "There was a CalledProcessError with the error number: ", e.returncode
-					print "There was a CalledProcessError when trying to run command: ", e.cmd
-					exit(e.returncode)
+                                        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                                        exit(e.returncode)
+                                except OSError as e:
+                                        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                                        exit(e.errno)
        			 	
 				flag.append(zerocheck(model_file_path + '/temp.nc'))
 
-				comline = 'rm ' + model_file_path + '/temp.nc'
+				comline = ['rm', model_file_path+'/temp.nc']
 				try:
-					subprocess.check_call(comline, shell=True)
+					subprocess.check_call(comline)
 				except subprocess.CalledProcessError as e:
-					print "There was a CalledProcessError with the error number: ", e.returncode
-					print "There was a CalledProcessError when trying to run command: ", e.cmd
-					exit(e.returncode)
+                                        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                                        exit(e.returncode)
+                                except OSError as e:
+                                        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                                        exit(e.errno)
 
 #match up the md5sums in a and b, tell if bit-for-bit for each specific case
 
@@ -165,14 +171,12 @@ def failcheck(job_path, path):
 
 def emptycheck(checkpath):
         noplot = 0
-        file = 'temp.txt'
-        comline = 'ncdump -c ' + checkpath + '> temp.txt'
-	try:
-		subprocess.check_call(comline, shell=True)
-	except subprocess.CalledProcessError as e:
-		print "There was a CalledProcessError with the error number: ", e.returncode
-		print "There was a CalledProcessError when trying to run command: ", e.cmd
-		exit(e.returncode)
+        comline = ('ncdump -c ' + checkpath + ' > ' + 'temp.txt')
+        try:
+		os.system(comline)
+        except OSError as e:
+                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                exit(e.errno)
 
         input = open('temp.txt', 'r')
         line = ''
@@ -181,11 +185,14 @@ def emptycheck(checkpath):
                 if line.find('// (0 currently)') != -1:
                         noplot = 1
 
-        comline2 = 'rm temp.txt'
+        comline2 = ['rm', 'temp.txt']
 	try:
-		subprocess.check_call(comline2, shell=True)
+		subprocess.check_call(comline2)
 	except subprocess.CalledProcessError as e:
-		print "There was a CalledProcessError with the error number: ", e.returncode
-		print "There was a CalledProcessError when trying to run command: ", e.cmd
-		exit(e.returncode)
+                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                exit(e.returncode)
+        except OSError as e:
+                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                exit(e.errno)
+        
         return noplot
