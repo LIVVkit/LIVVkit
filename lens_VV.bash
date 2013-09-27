@@ -31,7 +31,7 @@ export DATA_DIR="data_titan"
 
 # specify location where the html files will be sent so they are viewable on the web
 # livv will create the www directory in the HTML_PATH if it does not already exist
-export HTML_PATH="/ccs/home/$USER/www"
+export HTML_PATH="/ccs/home/$USER/www/"
 export HTML_LINK="http://users.nccs.gov/~$USER"
 
 # flags to select verification tests
@@ -87,4 +87,4 @@ else
 		python $PY_PATH/VV_main.py -d "$PY_PATH" -b "$SCRIPT_PATH" -j "$HTML_PATH" -l "$HTML_LINK" -k "$NCL_PATH" -d "$DATA_DIR" -t "$TEST_FILEPATH" -i "$NOW" -m "$COMMENT" -u "$USERNAME" -D "$RUN_DOME30_DIAGNOSTIC" -E "$RUN_DOME30_EVOLVING" -I "$RUN_CIRCULAR_SHELF" -O "$RUN_CONFINED_SHELF" -A "$RUN_ISMIP_HOM_A80" -B "$RUN_ISMIP_HOM_A20" -C "$RUN_ISMIP_HOM_C" -G "$RUN_GIS_10KM" -F "$RUN_DOME500" -H "$RUN_GIS_5KM"
 fi
 
-chmod 744 $HTML_PATH/*
+chmod -R 775 $HTML_PATH/*

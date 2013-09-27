@@ -72,11 +72,24 @@ else:
 	print "no comments about test case given"
 	comment = " "
 
+#remove www/livv directory if it exists
+if os.path.isdir(options.html_path + 'livv') == True:
+    
+        rmdir = ['rm', '-rf', options.html_path + 'livv']
+        try:
+                subprocess.check_call(rmdir)
+        except subprocess.CalledProcessError as e:
+                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                exit(e.returncode)
+        except OSError as e:
+                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+
+#create www directory if it doesn't exists already
 if os.path.isdir(options.html_path) == True:
     
         target_html = options.html_path
 else:
-        mkdir = ['mkdir ', options.html_path]
+        mkdir = ['mkdir', options.html_path]
         try:
                 subprocess.check_call(mkdir)
         except subprocess.CalledProcessError as e:
@@ -85,17 +98,23 @@ else:
         except OSError as e:
                 print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                 exit(e.errno)
-        chmod = ['chmod 755 ', options.html_path]
+
+#create www/livv directory if it doesn't already exist
+if os.path.isdir(options.html_path + 'livv') == True:
+    
+        target_html = options.html_path + 'livv/'
+else:
+        mkdir = ['mkdir', options.html_path+'livv']
         try:
-                subprocess.check_call(chmod)
+                subprocess.check_call(mkdir)
         except subprocess.CalledProcessError as e:
                 print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                 exit(e.returncode)
         except OSError as e:
                 print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                 exit(e.errno)
-        
-        target_html = options.html_path
+
+target_html = options.html_path + 'livv/'
 
 if (options.username):
 
