@@ -30,7 +30,7 @@ export DATA_DIR="data_mac"
 #specify location where the html files will be sent so they are viewable on the web
 export HTML_PATH="/home/$USER/public_html"
 mkdir -p $HTML_PATH
-export HTML_LINK="file://$HTML_PATH"
+export HTML_LINK="file://$HTML_PATH/livv"
 
 # flags to select verification tests
 export RUN_DOME30_DIAGNOSTIC=1
