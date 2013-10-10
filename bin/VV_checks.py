@@ -27,7 +27,7 @@ def yank(temp):
 
 #zerocheck
 def zerocheck(filename):
-        data_vars =['thk', 'uvel', 'velnorm', 'vvel']
+        data_vars =['thk', 'velnorm']
 	
         input_netcdf = filename
         netCDF4.python3 = True
