@@ -20,6 +20,7 @@ Filepaths for the python script are defined in the bash shell script, and most a
 
 The command to run the python script along with all of the necessary/optional files is the 
 last line of the script. 
+
 /bin: the python processing code 
 /plots: the ncl code 
 /data: the solver data from each processed run is placed here in a $case.asc format 

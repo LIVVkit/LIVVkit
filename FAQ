@@ -20,6 +20,6 @@ UnboundLocalError: local variable 'configlog' referenced before assignment
 3. can't find netcdf and other modules.
 
 Are you trying to run it on the compute machine like Titan?
-If so perform the moduel loads as specificed int eh README or the top of the script 
+If so perform the moduel loads as specificed in the README or the top of the script 
 designed for the machine
 

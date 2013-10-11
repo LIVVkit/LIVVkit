@@ -16,7 +16,7 @@ Mac Packages:
 
 Steps to install packages on the local Mac (best to use Macports insteading of loading them from source):
 
-	1. udunits2 from source
+      	1. udunits2 from source
         2. hdf5 from source
         3. netcdf4 from source
         4. nco from source
@@ -33,6 +33,7 @@ $NCARG_ROOT/bin to the PATH environment variable. Best to do those in your
 Filepaths for the python script are defined in the bash shell script, and most are required.
 
 The command to run the python script along with all of the necessary/optional files is the last line of the script. 
+
 /bin: the python processing code 
 /plots: the ncl code 
 /data: the solver data from each processed run is placed here in a $case.asc format 
@@ -40,24 +41,30 @@ The command to run the python script along with all of the necessary/optional fi
 
 To run the shell script (Mac OS X):
 
-1. Place reg_test directory (taken from /tmp/proj/cli054/) on your mac, preferably place in some sort 
-   of directory (ex. mac_run) which contains reg_test and livv. This will be the same directory as 
-   specified as TEST_DIR in the master_build_mac.csh file. 
+  1. Copy reg_test directory from /tmp/proj/cli054/ on lens or titan (choose the tar file with the most recent date stamp)
+     and place on your mac, preferably place in some sort of directory (ex. mac_run, higher-order) which contains both reg_test
+     and livv. This will be the same directory as specified as TEST_DIR in the master_build_mac.csh file. Go ahead and 
+     copy this entire /trunk/tests/higher-order/livv directory and place in this new directory as well.
 
-2. Change the TEST_FILEPATH to the path containing the livv kit. (^^ path to the directory mentioned above)
+In mac_VV.bash:
 
-3. Change MY_PYTHON to wherever your python2.7 package exists on your mac.
+  2. Change the TEST_FILEPATH to the path containing the livv kit. (^^ path to the directory mentioned above)
 
-4. Change the HTML_PATH to the location of the www directory. If it doesn't exist, specify the path to where
-   you would like it and LIVV will check the path and create it if it is not already there.
+  3. Change MY_PYTHON to wherever your python2.7 package exists on your mac.
 
-5. Leave RUN_GIS=0 and RUN_ANT=0 in the mac_VV.bash script since production analysis will not be run locally.
-   The flags are pre-set in the bash script for what will be analyzed on the mac.
+  4. Change the HTML_PATH to the location of the www directory. If it doesn't already exist, specify the path to where
+     you would like it and LIVV will check the path and create it if it is not already there.
 
-6. Type "bash mac_VV.bash" at the command line in the main directory.
+  5. Leave RUN_GIS=0 and RUN_ANT=0 in the mac_VV.bash script since production analysis will not be run locally.
+     The flags are pre-set in the bash script for what will be analyzed on the mac. Note that you can adjust which
+     testcases you would like livv to run within the mac_VV.bash script by changing the flag from a 0 to 1. If you 
+     have just recently checked out the code, the flags should already be set for the tests that are commonly run
+     by the model on the machine.
+
+  6. Type "bash mac_VV.bash" in the command line in the main directory.
 
 We have piped the NCL output to a file called plot_details.out. So if there is any concern over whether plots
-formed correctly or not after inspecting the website, you can check in that file.
+have formed correctly after inspecting the website, you can inspect that file.
 
 When you are done, the script tells you the website location to go look at the output.
 
