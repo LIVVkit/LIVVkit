@@ -28,7 +28,7 @@ def yank(temp):
 #zerocheck
 def zerocheck(filename):
         data_vars =['thk', 'velnorm']
-	
+	data_ac_vars = []
         input_netcdf = filename
         netCDF4.python3 = True
         netCDF4.default_encoding = 'iso8859-1'
@@ -41,21 +41,23 @@ def zerocheck(filename):
 #read in variable from file. Don't know which one so try each.
 #for v in data_vars:
         for var in data_vars:
-                data = netcdf.variables[var][:]
-
-                time = netcdf.variables['time']
-
+		#input = open(filename)
+		data_ac_vars = netcdf.variables.keys()
+		if var not in data_ac_vars:
+			return 0
+		data = netcdf.variables[var][:]
+		#print "got here with " + filename + " and variable: " + var
+		time = netcdf.variables['time']
+		
                 if var != 'thk':
-                        level = netcdf.variables['level']
-
-                if var == 'uvel' or var == 'velnorm' or var == 'vvel':
-                        x = netcdf.variables['x0']
-                        y = netcdf.variables['y0']
-                else:
-                        x = netcdf.variables['x1']
-                        y = netcdf.variables['y1']
-
-
+                       	level = netcdf.variables['level']
+                if var == 'velnorm':
+			x = netcdf.variables['x0']
+                       	y = netcdf.variables['y0']
+		else:
+                       	x = netcdf.variables['x1']
+                       	y = netcdf.variables['y1']
+			
                 change = False
                 if var == 'thk':
                         for t in range(time.size):
@@ -71,10 +73,10 @@ def zerocheck(filename):
                                                         if data[t, l, j, i] != 0.0:
                                                                 change = True
                                 
-                if change:
-                        return 1
-                else:
-                        return 0
+	if change:
+		return 1
+	else:
+		return 0
 
 
 #bit4bit check
@@ -110,6 +112,7 @@ def bit4bit(model_file_path,bench_file_path):
 			if word1 == word2:
 				file1 = bench_file
 				file2 = model_file
+				#print "Comparing: " + file1 + " and  " + file2
 				comline = ['ncdiff', file1, file2, model_file_path+'/temp.nc', '-O']
 				try:
 					subprocess.check_call(comline)
