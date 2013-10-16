@@ -307,5 +307,5 @@ file.write('</BODY>\n')
 file.write('</HTML>\n')
 file.close()
 
-print "LIVV Completed. Go to " + options.html_link + "/livv/livv_kit_main.html to view results"
+print "LIVV Completed. Go to " + options.html_link + "/livv_kit_main.html to view results"
 
