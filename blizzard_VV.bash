@@ -33,7 +33,7 @@ export DATA_DIR="data_rhel6"
 # livv will create the www directory in the HTML_PATH if it does not already exist
 export HTML_PATH="/home/$USER/public_html/livv_2013_1007_16_22_27"
 mkdir -p $HTML_PATH
-export HTML_LINK="file://$HTML_PATH/livv"
+export HTML_LINK="file://$HTML_PATH"
 
 # flags to select verification tests
 export RUN_DOME30_DIAGNOSTIC=1
