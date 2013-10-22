@@ -8,13 +8,16 @@
 
 # load these before running, note that on Carver, laoding python also loads numpy and matplotlib
 source $MODULESHOME/init/bash
-module load ncl/6.0.0
-module load nco/4.0.7
+module load ncar/6.0.0
+module load nco/4.3.6
 module unload python/2.7
 module load python/2.7.3
-module load numpy/1.6.1
-module load matplotlib/1.1.0
-module load netcdf/4.2.0
+module unload numpy
+module load numpy/1.7.1
+module unload matplotlib
+module load matplotlib/1.2.1
+module unload netcdf-gnu
+module load netcdf/4.2.1.1
 module load netcdf4-python/1.0.6
 
 #define user for website
@@ -30,9 +33,9 @@ export SCRIPT_PATH="$TEST_FILEPATH/livv"
 export DATA_DIR="data_hopper"
 
 #specify location where the html files will be sent 
-export HTML_PATH="/project/projectdirs/piscees/www"
+export HTML_PATH="/global/project/projectdirs/piscees/www/$USER/"
 # providing a username creates a directory by that name in the location above in which all the web files will go
-export HTML_LINK="portal.nersc.gov/project/~piscees"
+export HTML_LINK="portal.nersc.gov/project/piscees/LIVV.html"
 
 # flags to select verification tests
 export RUN_DOME30_DIAGNOSTIC=1
@@ -89,6 +92,6 @@ fi
 
 #type "python VV_main -h" in the command line for a full list of options
 
-chmod -R 2775 $HTML_PATH/$USER
-chgrp -R piscees $HTML_PATH/$USER
+chmod -R 2775 $HTML_PATH
+chgrp -R piscees $HTML_PATH
 

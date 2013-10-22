@@ -1,9 +1,9 @@
 Information on how to run the Land Ice V&V (LIVV) post-processing software.
-export DATA="data_titan"
-KJE, AB, NM 9/2013
+export DATA="data_hopper"
+KJE, AB, NM 8/2013
 
 The /livv directory contains all the scripts and code to run the LIVV kit.
-The lens_VV.bash script contains the inputs needed to run on a data processing style machine.
+The carver_VV.bash script contains the inputs needed to run on a data processing style machine.
 An example scripts for Carver (NERSC), Lens (OLCF), and Mac OSX (local) are provided.
 
 If you want to run on another machine, these are the software packages and versions that worked 
@@ -14,18 +14,17 @@ on both NERSC and OLCF machines as of 8/2013:
 	4. python_numpy/1.7.1            
 	5. ncl/6.0.0  (at NERSC this is called, inexplicably, ncar/6.0.0)  
 	6. nco/4.0.7 (NERSC is 4.3.6)
-        7. netcdf/4.1.3 (NERSC is 4.2.1.1)
+	7. netcdf/4.1.3 (NERSC is 4.2.1.1)
 
 Filepaths for the python script are defined in the bash shell script, and most are required.
 
 The command to run the python script along with all of the necessary/optional files is the 
 last line of the script. 
-
 /bin: the python processing code 
 /plots: the ncl code 
 /data: the solver data from each processed run is placed here in a $case.asc format 
 
-To run the shell script (lens):
+To run the shell script (carver):
 
 1. Make sure to place "source $MODULESHOME/init/bash" in your .bashrc file
 
@@ -33,24 +32,25 @@ To run the shell script (lens):
 
 3. Place reg_test directory (taken from /tmp/proj/cli054/) in the higher-order directory in your scratch space
 
-4. Build and run the model in your home space on titan (see README in /trunk/cmake-scripts/ for instructions on running the model)
-   NOTE: make sure to wait until all job scripts have completed before running LIVV. 
-   Option of having an email sent to your account when a job is finished. (option: #PBS -m abe)
+4. Build and run the model in your home space on hopper (see README in /trunk/cmake-scripts/ for instructions on running the model)
+   NOTE: make sure to wait until all job scripts have completed before running LIVV.
 
 5. Put the 4 currently evaluated executables of simple_glide into the mirror /higher-order directory
    NOTE: (this is done automatically by the master build scripts in the /cmake-scripts directory)
 
-6. In the lens_VV.bash file in the /livv directory you set:
-	a. USERNAME: it doesn't have to be your machine user name. Its the name of the subdirectory where your 
-	   files will be placed to be on the web and also to ID folks who go to you website of who ran the kit,
-	   for lens users, this should automatically be set as $USER.
-	b. COMMENT: case details so those who view the website will know the goal of that run
-	c. Whether to run production cases or not (RUN_$, right now it will only run reg_tests).
-	   There are now options in place in the bash file to turn specific testcases on and off.
-	d. HTML_PATH: specify where your www directory exists, if it doesn't exist, specify the path to where
-	   you would like it and LIVV will check the path and create it if it is not already there.
+6. In the carver_VV.bash file in the /livv directory you set:
+        a. USERNAME: it doesn't have to be your machine user name. Its the name of the subdirectory where your
+           files will be placed to be on the web and also to ID folks who go to you website of who ran the kit,
+           for carver users, this should automatically be set as $USER.
+        b. COMMENT: case details so those who view the website will know the goal of that run
+        c. Whether to run production cases or not (RUN_$, right now it will only run reg_tests).
+           There are now options in place in the bash file to turn specific testcases on and off.
+        d. HTML_PATH: this is to specify where your www directory exists. for carver, go to /project/projectdirs/piscees/www
+	   BEFORE you run livv and create a directory of your username. Then open file LIVV.html and add a line similar
+	   to the ones listed there already but change the path to the one containing your username and adjust the link title.
+	   After doing this, you shouldn't have to adjust anything to the HTML_LINK and HTML_PATH set in the bash file.
 
-7. Type "bash lens_VV.bash" at the command line in the main directory.
+7. Type "bash carver_VV.bash" at the command line in the main directory.
 
 We have piped the NCL output to a file called plot_details.out. So if there is any concern over whether plots
 formed correctly or not after inspecting the website, you can check that file.
