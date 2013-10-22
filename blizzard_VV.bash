@@ -31,7 +31,7 @@ export DATA_DIR="data_rhel6"
 
 # specify location where the html files will be sent so they are viewable on the web
 # livv will create the www directory in the HTML_PATH if it does not already exist
-export HTML_PATH="/home/$USER/public_html/livv_2013_1007_16_22_27"
+export HTML_PATH="/home/$USER/public_html/livv_2013_1007_16_22_27/"
 mkdir -p $HTML_PATH
 export HTML_LINK="file://$HTML_PATH"
 

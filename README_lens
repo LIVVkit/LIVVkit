@@ -34,13 +34,13 @@ To run the shell script (lens):
 3. Place reg_test directory (taken from /tmp/proj/cli054/) in the higher-order directory in your scratch space
 
 4. Build and run the model in your home space on titan (see README in /trunk/cmake-scripts/ for instructions on running the model)
-   NOTE: make sure to wait until all job scripts have completed before running LIVV. 
+   NOTE: make sure to wait until all job scripts have completed before running LIVV.
    Option of having an email sent to your account when a job is finished. (option: #PBS -m abe)
 
 5. Put the 4 currently evaluated executables of simple_glide into the mirror /higher-order directory
    NOTE: (this is done automatically by the master build scripts in the /cmake-scripts directory)
 
-6. In the lens_VV.bash file in the /livv directory you set:
+6. In the carver_VV.bash file in the /livv directory you set:
 	a. USERNAME: it doesn't have to be your machine user name. Its the name of the subdirectory where your 
 	   files will be placed to be on the web and also to ID folks who go to you website of who ran the kit,
 	   for lens users, this should automatically be set as $USER.

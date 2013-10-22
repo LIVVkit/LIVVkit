@@ -28,7 +28,7 @@ export SCRIPT_PATH="$TEST_FILEPATH/livv"
 export DATA_DIR="data_mac"
 
 #specify location where the html files will be sent so they are viewable on the web
-export HTML_PATH="/Users/$USER/mac_run/www"
+export HTML_PATH="/Users/$USER/mac_run/www/"
 export HTML_LINK="file://$HTML_PATH"
 
 # flags to select verification tests

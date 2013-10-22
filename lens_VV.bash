@@ -32,7 +32,7 @@ export DATA_DIR="data_titan"
 # specify location where the html files will be sent so they are viewable on the web
 # livv will create the www directory in the HTML_PATH if it does not already exist
 export HTML_PATH="/ccs/home/$USER/www/"
-export HTML_LINK="http://users.nccs.gov/~$USER"
+export HTML_LINK="http://users.nccs.gov/~$USER/"
 
 # flags to select verification tests
 export RUN_DOME30_DIAGNOSTIC=1

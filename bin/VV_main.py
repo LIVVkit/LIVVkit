@@ -310,5 +310,5 @@ file.close()
 if options.data_dir == "data_hopper":
 	print "LIVV Completed. Go to " + options.html_link + " to view results"
 else:
-	print "LIVV Completed. Go to " + options.html_link + "/livv/livv_kit_main.html to view results"
+	print "LIVV Completed. Go to " + options.html_link + "livv/livv_kit_main.html to view results"
 
