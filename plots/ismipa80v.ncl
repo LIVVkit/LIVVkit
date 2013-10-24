@@ -57,14 +57,17 @@ begin
   plotv2 = new(3,graphic)
 ;  plotv3 = new(3,graphic)
 
-  res                     = True          ; plot mods desired
-  res@cnFillOn            = True          ; turn on color
-  res@gsnSpreadColors     = True          ; use full range of colormap
-  res@cnLinesOn           = False         ; turn off contour lines
-  res@gsnDraw             = False         ; don't draw
-  res@gsnFrame            = False         ; don't advance frame
-  res@cnLinesOn           = False         ; turn off contour lines
-  res@cnInfoLabelOn       = False         ; turn off cn info label
+  res                        = True          ; plot mods desired
+  res@cnFillOn               = True          ; turn on color
+  res@gsnSpreadColors        = True          ; use full range of colormap
+  res@cnLinesOn              = False         ; turn off contour lines
+  res@gsnDraw                = False         ; don't draw
+  res@gsnFrame               = False         ; don't advance frame
+  res@cnMaxLevelCount        = 8             ; limit number of contours to 8
+  res@pmLabelBarDisplayMode  = "Always"      ; enable individual label bars
+  res@pmLabelBarSide         = "Bottom"      ; place individual bar below each graph
+  res@lbOrientation          = "Horizontal"  ; horizonal label bar
+  res@cnInfoLabelOn          = False         ; turn off cn info label
 
   plotv(0) = gsn_contour(wks,vsPIC,res)
   plotv(1) = gsn_contour(wks,vvPIC,res)
@@ -81,19 +84,17 @@ begin
   resv = True                             ; panel resources
   resv@gsnFrame = False
   resv@gsnPanelTop = 1.00
-  resv@gsnPanelBottom = 0.58
+  resv@gsnPanelBottom = 0.53
   resv@gsnMaximize = True                 ; make as large as possible
   resv@txString = "V Velocity"
   resv@gsnPanelFigureStrings = (/"bench)", "current)", "PIC)"/)   ; add strings to panel
 
   resv2 = True                             ; panel resources
   resv2@gsnFrame = False
-  resv2@gsnPanelTop = 0.57
-  resv2@gsnPanelBottom = 0.04
+  resv2@gsnPanelTop = 0.49
+  resv2@gsnPanelBottom = 0.08
   resv2@txString = ""
   resv2@gsnPanelFigureStrings = (/"bench)", "current)", "JFNK)"/)   ; add strings to panel
-  resv2@gsnPanelLabelBar = True            ; make a common contour bar
-  resv2@lbLabelAngleF = 45                 ; angle of contour bar labels
 
   gsn_panel(wks,plotv,(/1,3/),resv)
   gsn_panel(wks,plotv2,(/1,3/),resv2)

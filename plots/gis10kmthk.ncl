@@ -60,17 +60,20 @@ begin
   plotthk2 = new(3,graphic)
   plotthk3 = new(3,graphic)
 
-  res                     = True          ; plot mods desired
-  res@cnFillOn            = True          ; turn on color
-  res@gsnSpreadColors     = True          ; tse full range of colormap
-  res@cnLinesOn           = False         ; turn off contour lines
-  res@gsnDraw             = False         ; don't draw
-  res@gsnFrame            = False         ; don't advance frame
-  res@cnLinesOn           = False         ; turn off contour lines
-  res@cnInfoLabelOn       = False         ; turn off cn info label
-;  res@gsnMaximize         = True          ; make as large as possible
-  res@vpWidthF            = 0.25           ; change aspect ratio of plot
-  res@vpHeightF           = 0.6
+  res                        = True          ; plot mods desired
+  res@cnFillOn               = True          ; turn on color
+  res@gsnSpreadColors        = True          ; tse full range of colormap
+  res@cnLinesOn              = False         ; turn off contour lines
+  res@gsnDraw                = False         ; don't draw
+  res@gsnFrame               = False         ; don't advance frame
+  res@cnInfoLabelOn          = False         ; turn off cn info label
+  res@cnMaxLevelCount        = 8             ; limit number of contours to 8
+  res@pmLabelBarDisplayMode  = "Always"      ; enable individual label bars
+  res@pmLabelBarSide         = "Bottom"      ; place individual bar below each graph
+  res@lbOrientation          = "Horizontal"  ; horizonal label bar
+; res@gsnMaximize            = True          ; make as large as possible
+  res@vpWidthF               = 0.25           ; change aspect ratio of plot
+  res@vpHeightF              = 0.6
   
   plotthk(0) = gsn_contour(wks,thkstockcism,res)
   plotthk(1) = gsn_contour(wks,thkvarblcism,res)
@@ -108,9 +111,6 @@ begin
   resthk3@gsnPanelBottom = 0.00
   resthk3@txString = ""
   resthk3@gsnPanelFigureStrings = (/"bench)","sim crop)","diff)"/)   ; add strings to panel
-  resthk3@gsnPanelLabelBar = True            ; make a common contour bar
-  resthk3@lbLabelAngleF = 45                 ; angle of contour bar labels
-  
 
   gsn_panel(wks,plotthk,(/1,3/),resthk)
   gsn_panel(wks,plotthk2,(/1,3/),resthk2)

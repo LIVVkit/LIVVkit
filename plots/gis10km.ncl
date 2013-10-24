@@ -45,16 +45,19 @@ begin
   plotthk = new(3,graphic)
   plotvel = new(3,graphic)
   
-  res                     = True          ; plot mods desired
-
-  res@cnFillOn            = True          ; turn on color
-  res@gsnSpreadColors     = True          ; use full range of colormap
-  res@cnLinesOn           = False         ; turn off contour lines
-  res@gsnDraw             = False         ; don't draw
-  res@gsnFrame            = False         ; don't advance frame
-  res@cnInfoLabelOn       = False         ; turn off cn info label
-  res@vpWidthF            = 0.25           ; change aspect ratio of plot
-  res@vpHeightF           = 0.6
+  res                        = True          ; plot mods desired
+  res@cnFillOn               = True          ; turn on color
+  res@gsnSpreadColors        = True          ; use full range of colormap
+  res@cnLinesOn              = False         ; turn off contour lines
+  res@gsnDraw                = False         ; don't draw
+  res@gsnFrame               = False         ; don't advance frame
+  res@cnMaxLevelCount        = 8             ; limit number of contours to 8
+  res@pmLabelBarDisplayMode  = "Always"      ; enable individual label bars
+  res@pmLabelBarSide         = "Bottom"      ; place individual bar below each graph
+  res@lbOrientation          = "Horizontal"  ; horizonal label bar
+  res@cnInfoLabelOn          = False         ; turn off cn info label
+  res@vpWidthF               = 0.25          ; change aspect ratio of plot
+  res@vpHeightF              = 0.6
 
   thkstock@_FillValue     = 9.96921e+36 ; set missing values for ncl v5.0
   thkvarbl@_FillValue     = 9.96921e+36 ; set missing values for ncl v5.0

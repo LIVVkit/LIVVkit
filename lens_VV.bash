@@ -41,8 +41,8 @@ export RUN_CIRCULAR_SHELF=1
 export RUN_CONFINED_SHELF=1
 export RUN_ISMIP_HOM_A80=1
 export RUN_ISMIP_HOM_A20=1
-export RUN_ISMIP_HOM_C=0
-export RUN_GIS_10KM=0
+export RUN_ISMIP_HOM_C=1
+export RUN_GIS_10KM=1
 
 # flags to select production analysis
 export GIS_LARGE_TESTS=0

@@ -67,15 +67,18 @@ begin
   plotthk2 = new(3,graphic)
 ;  plotthk3 = new(2,graphic)
 
-  res                     = True          ; plot mods desired
-  res@cnFillOn            = True          ; turn on color
-  res@gsnSpreadColors     = True          ; use full range of colormap
-  res@cnLinesOn           = False         ; turn off contour lines
-  res@gsnDraw             = False         ; don't draw
-  res@gsnFrame            = False         ; don't advance frame
-  res@cnLinesOn           = False         ; turn off contour lines
-  res@cnInfoLabelOn       = False         ; turn off cn info label
-;  res@gsnMaximize         = True          ; make as large as possible
+  res                        = True          ; plot mods desired
+  res@cnFillOn               = True          ; turn on color
+  res@gsnSpreadColors        = True          ; use full range of colormap
+  res@gsnDraw                = False         ; don't draw
+  res@gsnFrame               = False         ; don't advance frame
+  res@cnLinesOn              = False         ; turn off contour lines
+  res@cnInfoLabelOn          = False         ; turn off cn info label
+  res@cnMaxLevelCount        = 8             ; limit number of contours to 8
+  res@pmLabelBarDisplayMode  = "Always"      ; enable individual label bars  
+  res@pmLabelBarSide         = "Bottom"      ; place individual bar below each graph
+  res@lbOrientation          = "Horizontal"  ; horizonal label bar
+; res@gsnMaximize            = True          ; make as large as possible
 
   plotthk(0) = gsn_contour(wks,ts9,res) 
   plotthk(1) = gsn_contour(wks,tv9,res) 
@@ -95,19 +98,19 @@ begin
   resthk = True                             ; panel resources
   resthk@gsnFrame = False                 
   resthk@gsnPanelTop = 1.00                 
-  resthk@gsnPanelBottom = 0.58                 
+  resthk@gsnPanelBottom = 0.53                 
   resthk@gsnMaximize = True                 ; make as large as possible
   resthk@txString    = "Thickness"   ; title string (make blank to remove)
   resthk@gsnPanelFigureStrings = (/"bench)", "current)", "9)"/)   ; add strings to panel
 
   resthk2 = True
   resthk2@gsnFrame = False
-  resthk2@gsnPanelTop = 0.57                 
-  resthk2@gsnPanelBottom = 0.04                 
+  resthk2@gsnPanelTop = 0.49                 
+  resthk2@gsnPanelBottom = 0.08                 
   resthk2@txString   = ""
   resthk2@gsnPanelFigureStrings = (/"bench)", "current)", "15)"/)   ; add strings to panel
-  resthk2@gsnPanelLabelBar = True		; make a common contour bar
-  resthk2@lbLabelAngleF = 45			; angle of contour bar labels
+;  resthk2@gsnPanelLabelBar = True		; make a common contour bar
+;  resthk2@lbLabelAngleF = 45			; angle of contour bar labels
   
 ;  resthk3 = True
 ;  resthk3@gsnFrame = False

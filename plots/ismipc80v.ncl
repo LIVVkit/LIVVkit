@@ -69,15 +69,18 @@ begin
   plotv2 = new(3,graphic)
   plotv3 = new(3,graphic)
 
-  res                     = True          ; plot mods desired
-  res@cnFillOn            = True          ; turn on color
-  res@gsnSpreadColors     = True          ; use full range of colormap
-  res@cnLinesOn           = False         ; turn off contour lines
-  res@gsnDraw             = False         ; don't draw
-  res@gsnFrame            = False         ; don't advance frame
-  res@cnLinesOn           = False         ; turn off contour lines
-  res@cnInfoLabelOn       = False         ; turn off cn info label
-;  res@gsnMaximize         = True          ; make as large as possible
+  res                        = True          ; plot mods desired
+  res@cnFillOn               = True          ; turn on color
+  res@gsnSpreadColors        = True          ; use full range of colormap
+  res@cnLinesOn              = False         ; turn off contour lines
+  res@gsnDraw                = False         ; don't draw
+  res@gsnFrame               = False         ; don't advance frame
+  res@cnInfoLabelOn          = False         ; turn off cn info label
+  res@cnMaxLevelCount        = 8             ; limit number of contours to 8
+  res@pmLabelBarDisplayMode  = "Always"      ; enable individual label bars
+  res@pmLabelBarSide         = "Bottom"      ; place individual bar below each graph
+  res@lbOrientation          = "Horizontal"  ; horizonal label bar
+; res@gsnMaximize            = True          ; make as large as possible
 
   plotv(0) = gsn_contour(wks,vsout,res)
   plotv(1) = gsn_contour(wks,vvout,res)
@@ -116,8 +119,6 @@ begin
   resv3@gsnPanelBottom = 0.00
   resv3@txString = ""
   resv3@gsnPanelFigureStrings = (/"bench)", "current)", "JFNK)"/)   ; add strings to panel
-  resv3@gsnPanelLabelBar = True            ; make a common contour bar
-  resv3@lbLabelAngleF = 45                 ; angle of contour bar labels
 
   gsn_panel(wks,plotv,(/1,3/),resv)
   gsn_panel(wks,plotv2,(/1,3/),resv2)

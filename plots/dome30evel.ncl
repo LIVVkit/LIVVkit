@@ -67,15 +67,18 @@ begin
   plotvel2 = new(3,graphic)
 ;  plotvel3 = new(2,graphic)
 
-  res                     = True          ; plot mods desired
-  res@cnFillOn            = True          ; turn on color
-  res@gsnSpreadColors     = True          ; use full range of colormap
-  res@cnLinesOn           = False         ; turn off contour lines
-  res@gsnDraw             = False         ; don't draw
-  res@gsnFrame            = False         ; don't advance frame
-  res@cnLinesOn           = False         ; turn off contour lines
-  res@cnInfoLabelOn       = False         ; turn off cn info label
-;  res@gsnMaximize         = True          ; make as large as possible
+  res                        = True          ; plot mods desired
+  res@cnFillOn               = True          ; turn on color
+  res@gsnSpreadColors        = True          ; use full range of colormap
+  res@cnLinesOn              = False         ; turn off contour lines
+  res@gsnDraw                = False         ; don't draw
+  res@gsnFrame               = False         ; don't advance frame
+  res@cnInfoLabelOn          = False         ; turn off cn info label
+  res@cnMaxLevelCount        = 8             ; limit number of contours to 8
+  res@pmLabelBarDisplayMode  = "Always"      ; enable individual label bars
+  res@pmLabelBarSide         = "Bottom"      ; place individual bar below each graph
+  res@lbOrientation          = "Horizontal"  ; horizonal label bar
+; res@gsnMaximize            = True          ; make as large as possible
 
   plotvel(0) = gsn_contour(wks,vs9,res) 
   plotvel(1) = gsn_contour(wks,vv9,res) 
@@ -95,19 +98,17 @@ begin
   resvel = True                             ; panel resources
   resvel@gsnFrame = False                 
   resvel@gsnPanelTop = 1.0                 
-  resvel@gsnPanelBottom = 0.58                 
+  resvel@gsnPanelBottom = 0.53                 
   resvel@gsnMaximize = True                 ; make as large as possible
   resvel@txString = "Velocity Norm"   ; title string (make blank to remove)
   resvel@gsnPanelFigureStrings = (/"bench)", "current)", "9)"/)   ; add strings to panel
   
   resvel2 = True
   resvel2@gsnFrame = False 
-  resvel2@gsnPanelTop = 0.57
-  resvel2@gsnPanelBottom = 0.04
+  resvel2@gsnPanelTop = 0.49
+  resvel2@gsnPanelBottom = 0.08
   resvel2@txString = ""
   resvel2@gsnPanelFigureStrings = (/"bench)", "current)", "15)"/)   ; add strings to panel
-  resvel2@gsnPanelLabelBar = True		; make a common contour bar
-  resvel2@lbLabelAngleF = 45			; angle of contour bar labels
   
 ;  resvel3 = True
 ;  resvel3@gsnFrame = False
