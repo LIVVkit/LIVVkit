@@ -55,6 +55,8 @@ begin
   res@pmLabelBarDisplayMode  = "Always"      ; enable individual label bars
   res@pmLabelBarSide         = "Bottom"      ; place individual bar below each graph
   res@lbOrientation          = "Horizontal"  ; horizonal label bar
+  res@lbAutoManage           = False         ; allow to change label bar font height
+  res@lbLabelFontHeightF     = 0.02          ; make font height uniform for all label bars
   res@cnInfoLabelOn          = False         ; turn off cn info label
   res@vpWidthF               = 0.25          ; change aspect ratio of plot
   res@vpHeightF              = 0.6
