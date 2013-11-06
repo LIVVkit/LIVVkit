@@ -1,7 +1,10 @@
 #!/bin/bash
 
-if (($1 == "from-script")); then
- source ~/.bashrc 
+nargs=${#}
+if ((nargs >= 1)); then
+ if (($1 == "from-script")); then
+  source ~/.bashrc 
+ fi
 fi
 
 #KJE 1/2013 evanskj@ornl.gov
@@ -106,7 +109,7 @@ export NCL_PATH="$SCRIPT_PATH/plots"
 #NOTE: not all settings are required to run the python script, type "python VV_main -h" in the command line for a full list of options
 #TODO include options if RUN_ANT is turned on, right now only have settings for GIS
 
-if (($2 == "quick-test")); then
+if [[ ((($nargs == 1) && ($1 == "quick-test")) || (($nargs == 2) && ($2 == "quick-test"))) ]]; then
  rm $HTML_PATH/livv/*
 		$MY_PYTHON $PY_PATH/VV_main.py -d "$PY_PATH" -j "$HTML_PATH" -l "$HTML_LINK" -k "$NCL_PATH" -d "$DATA_DIR" -t "$TEST_FILEPATH" -i "$NOW" -m "$COMMENT" -u "$USERNAME" -D "$RUN_DOME30_DIAGNOSTIC" 
 
