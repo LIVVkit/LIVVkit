@@ -50,8 +50,16 @@ parser.add_option('-C', '--ismip-hom-C', action='store', type='int', dest='ismip
                   metavar='FLAG', help='flag to run ismip hom c test')
 parser.add_option('-G', '--gis10km', action='store', type='int', dest='gis_10km_flag', \
                   metavar='FLAG', help='flag to run gis10km test')
+parser.add_option('-J', '--dome60', action='store', type='int', dest='dome60_flag', \
+                  metavar='FLAG', help='flag to run dome60 test')
+parser.add_option('-K', '--dome120', action='store', type='int', dest='dome120_flag', \
+                  metavar='FLAG', help='flag to run dome120 test')
+parser.add_option('-L', '--dome240', action='store', type='int', dest='dome240_flag', \
+                  metavar='FLAG', help='flag to run dome240 test')
 parser.add_option('-F', '--dome500', action='store', type='int', dest='dome500_flag', \
                   metavar='FLAG', help='flag to run dome500 test')
+parser.add_option('-M', '--dome1000', action='store', type='int', dest='dome1000_flag', \
+                  metavar='FLAG', help='flag to run dome1000 test')
 parser.add_option('-H', '--gis5km', action='store', type='int', dest='gis_5km_flag', \
                   metavar='FLAG', help='flag to run gis5km test')
 #parser.add_option('-a', '--ant_prod', action='store_true', dest='ant_prod', \
@@ -99,14 +107,12 @@ else:
                 print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                 exit(e.errno)
 
-#create www/livv directory if it doesn't already exist
+#remove html/livv if it already exists
 if os.path.isdir(options.html_path + 'livv') == True:
-    
-        target_html = options.html_path + 'livv/'
-else:
-        mkdir = ['mkdir', options.html_path+'livv']
+
+        remove_html = ['rm', '-rf', options.html_path+'livv']
         try:
-                subprocess.check_call(mkdir)
+                subprocess.check_call(remove_html)
         except subprocess.CalledProcessError as e:
                 print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                 exit(e.returncode)
@@ -114,44 +120,36 @@ else:
                 print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                 exit(e.errno)
 
-target_html = options.html_path + 'livv/'
+#create www/livv directory
+mkdir = ['mkdir', options.html_path+'livv']
+try:
+        subprocess.check_call(mkdir)
+except subprocess.CalledProcessError as e:
+        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+        exit(e.returncode)
+except OSError as e:
+        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+        exit(e.errno)
+
+target_html = options.html_path + 'livv'
 
 if (options.username):
-
 	print 'placing HTML files in the ' + options.username + ' subdirectory (check permissions)'
 else:
 	print 'no username specified, placing HTML files in the main html directory'
 
-#remove html files previously used in specified subdirectory
+#remove plot_details file previously used in specified subdirectory
 
-try:
-	os.remove(target_html + '/livv_kit_main.html')
-except OSError as o:
-      	if o.errno == 2:
-		print "recreating livv_kit_main.html in " + options.username + " subdirectory"
-	else:
-		raise
-try:
-       	os.remove(target_html + '/test_suite.html')
-except OSError as o:
-	if o.errno == 2:
-		print "recreating test suite in " + options.username + " subdirectory"
-	else:
-		raise
-try:
-       	os.remove(target_html + '/large_test_suite.html')
-except OSError as o:
-	if o.errno == 2:
-		print "recreating large test suite in " + options.username + " subdirectory"
-	else:
-		raise
-try:
-        os.remove('plot_details.out')
-except OSError as o:
-        if o.errno == 2:
-                print "clearing plot_details.out"
-        else:
-                raise
+if (options.test_suite + '/livv/plot_details.out'):
+        plotdetails = ["rm", "-f", "plot_details.out"]
+        try:
+                subprocess.check_call(plotdetails)
+        except subprocess.CalledProcessError as e:
+                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                exit(e.returncode)
+        except OSError as e:
+                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                exit(e.errno)
 
 #transferring cover picture to www file
 
@@ -228,18 +226,38 @@ if options.test_suite:
                 options.ismip_hom_a80_flag,options.ismip_hom_a20_flag,options.ismip_hom_c_flag,options.gis_10km_flag)
 
         dictionary = VV_testsuite.bit_list(reg_test,options.data_dir,options.diagnostic_flag,options.evolving_flag,options.circular_flag,\
-                                options.confined_flag,options.ismip_hom_a80_flag,options.ismip_hom_a20_flag,options.ismip_hom_c_flag,options.gis_10km_flag)
+                        options.confined_flag,options.ismip_hom_a80_flag,options.ismip_hom_a20_flag,options.ismip_hom_c_flag,options.gis_10km_flag)
 
 #create all the large test suite diagnostics pages
-if options.dome500_flag==1 or options.gis_5km_flag==1:
+if options.dome60_flag==1 or options.dome120_flag==1 or options.dome240_flag==1 or options.dome500_flag==1 or options.dome1000_flag==1 or options.gis_5km_flag==1:
 
         large_test_file = open(target_html + '/large_test_suite.html', 'w')
         descript_file = open(target_html + '/large_test_descript.html', 'w')
+# dome60 case
+        dome60_file = open(target_html + '/dome60_details.html', 'w')
+        dome60_case = open(target_html + '/dome60_case.html', 'w')
+        dome60_plot = open(target_html + '/dome60_plot.html', 'w')
+        dome60_xml  = open(target_html + '/dome60_xml.html', 'w')
+# dome120 case
+        dome120_file = open(target_html + '/dome120_details.html', 'w')
+        dome120_case = open(target_html + '/dome120_case.html', 'w')
+        dome120_plot = open(target_html + '/dome120_plot.html', 'w')
+        dome120_xml  = open(target_html + '/dome120_xml.html', 'w')
+# dome240 case
+        dome240_file = open(target_html + '/dome240_details.html', 'w')
+        dome240_case = open(target_html + '/dome240_case.html', 'w')
+        dome240_plot = open(target_html + '/dome240_plot.html', 'w')
+        dome240_xml  = open(target_html + '/dome240_xml.html', 'w')
 # dome500 case
         dome500_file = open(target_html + '/dome500_details.html', 'w')
         dome500_case = open(target_html + '/dome500_case.html', 'w')
         dome500_plot = open(target_html + '/dome500_plot.html', 'w')
         dome500_xml  = open(target_html + '/dome500_xml.html', 'w')
+# dome1000 case
+        dome1000_file = open(target_html + '/dome1000_details.html', 'w')
+        dome1000_case = open(target_html + '/dome1000_case.html', 'w')
+        dome1000_plot = open(target_html + '/dome1000_plot.html', 'w')
+        dome1000_xml  = open(target_html + '/dome1000_xml.html', 'w')
 # gis 5km case
         gis5km_file = open(target_html + '/gis5km_details.html', 'w')
         gis5km_case = open(target_html + '/gis5km_case.html', 'w')
@@ -249,12 +267,16 @@ if options.dome500_flag==1 or options.gis_5km_flag==1:
 #path to python code to create all the large test suite pages and data
         perf_test = options.test_suite + "/perf_test"
 
-        VV_largesuite.large_tests(descript_file,large_test_file,dome500_file,dome500_case,dome500_plot,dome500_xml, \
-                gis5km_file,gis5km_case,gis5km_plot,gis5km_xml, \
+        VV_largesuite.large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_plot,dome60_xml, \
+               dome120_file,dome120_case,dome120_plot,dome120_xml,dome240_file,dome240_case,dome240_plot,dome240_xml, \
+               dome500_file,dome500_case,dome500_plot,dome500_xml,dome1000_file,dome1000_case,dome1000_plot,dome1000_xml, \
+               gis5km_file,gis5km_case,gis5km_plot,gis5km_xml, \
                 perf_test,options.ncl_path,target_html,options.script_path, \
-                options.dome500_flag,options.gis_5km_flag,options.data_dir)
+                options.dome60_flag,options.dome120_flag,options.dome240_flag, \
+                options.dome500_flag,options.dome1000_flag,options.gis_5km_flag,options.data_dir)
 
-        dictionary_large = VV_largesuite.bit_list(perf_test,options.data_dir)
+        dictionary_large = VV_largesuite.bit_list(perf_test,options.data_dir,options.dome60_flag,options.dome120_flag,options.dome240_flag,\
+                            options.dome500_flag,options.dome1000_flag,options.gis_5km_flag)
         
 #writing the main HTML page
 
@@ -287,8 +309,8 @@ else:
 
 file.write('<BR>\n')
 file.write('<BR>\n')
-if options.dome500_flag==1 or options.gis_5km_flag==1:
-
+if options.dome60_flag==1 or options.dome120_flag==1 or options.dome240_flag==1 or options.dome500_flag==1 or options.dome1000_flag==1 or options.gis_5km_flag==1:
+        
         file.write('<TH ALIGN=LEFT><A HREF="large_test_suite.html">Performance and Analysis Test Suite</A>\n')
         
         if 1 in dictionary_large.values():

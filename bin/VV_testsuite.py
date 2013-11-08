@@ -164,7 +164,7 @@ def web(descript_file,test_file, \
 	    mode = mode - 14400
 	    mode = time.gmtime(mode)
 	    ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
-	    strrand = '<b>Time of last access: ' + str(ctime) + '</b>'
+	    strrand = '<b>Time of Last Simulation: ' + str(ctime) + '</b>'
 	    test_file.write(strrand)
 
         else:
@@ -218,7 +218,7 @@ def web(descript_file,test_file, \
 	    mode = mode - 14400
 	    mode = time.gmtime(mode)
 	    ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
-	    strrand = '<b>Time of last access: ' + ctime + '</b>'
+	    strrand = '<b>Time of Last Simulation: ' + ctime + '</b>'
 	    test_file.write(strrand)
 
         else:
@@ -269,7 +269,7 @@ def web(descript_file,test_file, \
 	    mode = mode - 14400
 	    mode = time.gmtime(mode)
 	    ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
-	    strrand = '<b>Time of last access: ' + ctime + '</b>'
+	    strrand = '<b>Time of Last Simulation: ' + ctime + '</b>'
 	    test_file.write(strrand)
 	
         else:
@@ -319,7 +319,7 @@ def web(descript_file,test_file, \
 	    mode = mode - 14400
 	    mode = time.gmtime(mode)
 	    ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
-	    strrand = '<b>Time of last access: ' + ctime + '</b>'
+	    strrand = '<b>Time of Last Simulation: ' + ctime + '</b>'
 	    test_file.write(strrand)
 
         else:
@@ -369,7 +369,7 @@ def web(descript_file,test_file, \
 	    mode = mode - 14400
 	    mode = time.gmtime(mode)
 	    ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
-	    strrand = '<b>Time of last access: ' + ctime + '</b>'
+	    strrand = '<b>Time of Last Simulation: ' + ctime + '</b>'
 	    test_file.write(strrand)
 
         else:
@@ -419,7 +419,7 @@ def web(descript_file,test_file, \
             mode = mode - 14400
             mode = time.gmtime(mode)
             ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
-            strrand = '<b>Time of last access: ' + ctime + '</b>'
+            strrand = '<b>Time of Last Simulation: ' + ctime + '</b>'
             test_file.write(strrand)
  
         else:
@@ -469,7 +469,7 @@ def web(descript_file,test_file, \
 	    mode = mode - 14400
 	    mode = time.gmtime(mode)
 	    ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
-	    strrand = '<b>Time of last access: ' + ctime + '</b>'
+	    strrand = '<b>Time of Last Simulation: ' + ctime + '</b>'
 	    test_file.write(strrand)
 
         else:
@@ -519,7 +519,7 @@ def web(descript_file,test_file, \
 	    mode = mode - 14400
 	    mode = time.gmtime(mode)
 	    ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
-	    strrand = '<b>Time of last access: ' + ctime + '</b>\n'
+	    strrand = '<b>Time of Last Simulation: ' + ctime + '</b>\n'
 	    test_file.write(strrand)
 
         else:
