@@ -35,10 +35,10 @@ export HTML_PATH="/ccs/home/$USER/www/"
 export HTML_LINK="http://users.nccs.gov/~$USER/"
 
 # flags to select verification tests
-export RUN_DOME30_DIAGNOSTIC=1
+export RUN_DOME30_DIAGNOSTIC=0
 export RUN_DOME30_EVOLVING=0
-export RUN_CIRCULAR_SHELF=0
-export RUN_CONFINED_SHELF=0
+export RUN_CIRCULAR_SHELF=1
+export RUN_CONFINED_SHELF=1
 export RUN_ISMIP_HOM_A80=0
 export RUN_ISMIP_HOM_A20=0
 export RUN_ISMIP_HOM_C=0
