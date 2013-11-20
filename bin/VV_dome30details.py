@@ -40,7 +40,7 @@ def ddetails(solver_file,reg_test,data_dir): # using data, fill the web page wit
 
     solver_file.write('<H4>Benchmark Run: gnu.JFNK.1proc</H4>')
     procttl_dd301b, nonlist_dd301b,avg2_dd301b,out_flag_dd301b,ndd301b_name,ldd301b_name = \
-    VV_outprocess.jobprocess(reg_test + '/bench/dome30/diagnostic/' + data_dir + '/gnu.JFNK.1proc', 'domed301b')
+        VV_outprocess.jobprocess(reg_test + '/bench/dome30/diagnostic/' + data_dir + '/gnu.JFNK.1proc', 'domed301b')
 
     solver_file.write("Number of Processors = " + str(procttl_dd301b[-1]) + "<BR>\n")
     solver_file.write("Number of Nonlinear Iterations = ")
