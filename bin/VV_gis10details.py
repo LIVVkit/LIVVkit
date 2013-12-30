@@ -100,7 +100,6 @@ def gis10_plot(plot_file,reg_test,ncl_path,html_path,script_path,data_dir):  # u
     tmpath = reg_test + '/gis_10km/' + data_dir + '/gis_10km.seacism.nc'
     if VV_checks.emptycheck(tmpath) == 0:
         return
-    if noplot == 0:
 
         plot_file.write('<HTML>\n')
         plot_file.write('<H3>GIS 10km Plot Details:</H3>')
