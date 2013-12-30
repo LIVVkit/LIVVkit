@@ -24,7 +24,7 @@ USERNAME=$USER
 COMMENT="test run of code"
 
 # change to your location of livv kit
-export TEST_FILEPATH="/tmp/work/$USER/higher-order"
+export TEST_FILEPATH="/lustre/atlas/scratch/$USER/cli062/higher-order"
 export SCRIPT_PATH="$TEST_FILEPATH/livv"
 #data_dir changes based on what machine livv is run on (choices: titan, hopper, mac)
 export DATA_DIR="data_titan"
