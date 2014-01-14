@@ -162,7 +162,7 @@ def web(descript_file,test_file, \
 # Time stamping
         strrand = ''
         mode = os.stat(reg_test + '/dome30/diagnostic').st_mtime
-        mode = mode - 14400
+        mode = mode - 18000
         mode = time.gmtime(mode)
         ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
         strrand = '<b>Time of Last Simulation: ' + str(ctime) + '</b>'
@@ -217,7 +217,7 @@ def web(descript_file,test_file, \
 
 # Time stamping
         mode = os.stat(reg_test + '/dome30/evolving').st_mtime
-        mode = mode - 14400
+        mode = mode - 18000
         mode = time.gmtime(mode)
         ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
         strrand = '<b>Time of Last Simulation: ' + ctime + '</b>'
@@ -269,7 +269,7 @@ def web(descript_file,test_file, \
 
 # Time stamping
         mode = os.stat(reg_test + '/circular-shelf').st_mtime
-        mode = mode - 14400
+        mode = mode - 18000
         mode = time.gmtime(mode)
         ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
         strrand = '<b>Time of Last Simulation: ' + ctime + '</b>'
@@ -321,7 +321,7 @@ def web(descript_file,test_file, \
 
 # Time stamping
         mode = os.stat(reg_test + '/confined-shelf').st_mtime
-        mode = mode - 14400
+        mode = mode - 18000
         mode = time.gmtime(mode)
         ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
         strrand = '<b>Time of Last Simulation: ' + ctime + '</b>'
@@ -373,7 +373,7 @@ def web(descript_file,test_file, \
 
 # Time stamping
         mode = os.stat(reg_test + '/ismip-hom-a/80km').st_mtime
-        mode = mode - 14400
+        mode = mode - 18000
         mode = time.gmtime(mode)
         ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
         strrand = '<b>Time of Last Simulation: ' + ctime + '</b>'
@@ -425,7 +425,7 @@ def web(descript_file,test_file, \
 
 # Time stamping
         mode = os.stat(reg_test + '/ismip-hom-a/20km').st_mtime
-        mode = mode - 14400
+        mode = mode - 18000
         mode = time.gmtime(mode)
         ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
         strrand = '<b>Time of Last Simulation: ' + ctime + '</b>'
@@ -477,7 +477,7 @@ def web(descript_file,test_file, \
 
 # Time stamping
         mode = os.stat(reg_test + '/ismip-hom-c/80km').st_mtime
-        mode = mode - 14400
+        mode = mode - 18000
         mode = time.gmtime(mode)
         ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
         strrand = '<b>Time of Last Simulation: ' + ctime + '</b>'
@@ -529,7 +529,7 @@ def web(descript_file,test_file, \
 
 # Time stamping
         mode = os.stat(reg_test + '/gis_10km').st_mtime
-        mode = mode - 14400
+        mode = mode - 18000
         mode = time.gmtime(mode)
         ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
         strrand = '<b>Time of Last Simulation: ' + ctime + '</b>\n'
