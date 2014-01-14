@@ -491,7 +491,7 @@ def web(descript_file,test_file, \
     if gis_10km_flag == 1:
 
 # GIS 10km stats
-        print "running ismip gis 10km testcase"
+        print "running gis 10km testcase"
         if dictionary['gis_10km'] == 0:
             test_file.write('<H2>GIS 10KM Test: <font color="green">Bit-for-Bit</font></H2>')
         else:
