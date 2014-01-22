@@ -290,8 +290,7 @@ def confxml(configure_xml_file,configure_path,bench_configure_path,xml_path,benc
     configure_xml_file.write('<TITLE>XML Settings </TITLE>\n')
     configure_xml_file.write('<TABLE>\n')
     configure_xml_file.write('<TR>\n')
-
-    configure_xml_file.write('<BR\n>')
+    configure_xml_file.write('<H4>XML File Settings </H4>\n')
     configure_xml_file.write('Preconditioner: Picard<BR>\n')
     configure_xml_file.write('------------------------<BR>\n')
     if fileL1parameters['Convergence Tolerance']:
