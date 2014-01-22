@@ -73,10 +73,10 @@ def bit_list(perf_test,data_dir,dome60_flag,dome120_flag,dome240_flag, \
     return dictionary_large
 
 
-def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_plot,dome60_xml, \
-    dome120_file,dome120_case,dome120_plot,dome120_xml,dome240_file,dome240_case,dome240_plot,dome240_xml, \
-    dome500_file,dome500_case,dome500_plot,dome500_xml,dome1000_file,dome1000_case,dome1000_plot,dome1000_xml, \
-    gis5km_file,gis5km_case,gis5km_plot,gis5km_xml,perf_test,ncl_path,html_path,script_path, \
+def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_plot, \
+    dome120_file,dome120_case,dome120_plot,dome240_file,dome240_case,dome240_plot, \
+    dome500_file,dome500_case,dome500_plot,dome1000_file,dome1000_case,dome1000_plot, \
+    gis5km_file,gis5km_case,gis5km_plot,perf_test,ncl_path,html_path,script_path, \
     dome60_flag,dome120_flag,dome240_flag,dome500_flag,dome1000_flag,gis_5km_flag,data_dir):
 
 # using data, fill the web page with info about the cases
@@ -107,23 +107,19 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_plo
         if flag_to_plot_dome60:
 
 # link to dome60_file with descriptions about the test cases
-            large_test_file.write('<TH ALIGN=LEFT><A HREF="dome60_details.html">Diagnostic Dome 60 Velocity Solver Details</A>\n')
+            large_test_file.write('<TH ALIGN=LEFT><A HREF="dome60_details.html">Velocity Solver Details</A>\n')
             large_test_file.write('<BR>\n')
             failedt = VV_largetestdetails.details60(dome60_file,perf_test,data_dir)
 
-            large_test_file.write('<TH ALIGN=LEFT><A HREF="dome60_xml.html">Solver Parameter Settings: Diagnostic Dome 60 XML Details</A>\n')
+            large_test_file.write('<TH ALIGN=LEFT><A HREF="dome60_case.html">Case and Parameter Settings Details</A>\n')
             large_test_file.write('<BR>\n')
             xml_path = perf_test + '/dome60/trilinosOptions.xml'
             bench_xml_path = perf_test + '/bench/dome60/trilinosOptions.xml'
-            VV_utilities.xml(dome60_xml,xml_path,bench_xml_path)
-
-            large_test_file.write('<TH ALIGN=LEFT><A HREF="dome60_case.html">Diagnostic Dome 60 Case Details</A>\n')
-            large_test_file.write('<BR>\n')
             configure_path = perf_test + '/dome60/dome.60.JFNK.trilinos.config'
             bench_configure_path = perf_test + '/bench/dome60/dome.60.JFNK.trilinos.config'
-            VV_utilities.conf(dome60_case,configure_path,bench_configure_path)
+            VV_utilities.confxml(dome60_case,configure_path,bench_configure_path,xml_path,bench_xml_path)
 
-#           large_test_file.write('<TH ALIGN=LEFT><A HREF="dome60_plot.html">Diagnostic Dome 60 Plots</A>\n')
+#           large_test_file.write('<TH ALIGN=LEFT><A HREF="dome60_plot.html">Plots</A>\n')
 #           large_test_file.write('<BR>\n')
 #           if failedt != 0:
 #               dome60_plot.write("<H2>Diagnostic Dome 60 Test failed, plots may not be generated</H2><br>")
@@ -163,23 +159,19 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_plo
         if flag_to_plot_dome120:
 
 # link to dome120_file with descriptions about the test cases
-            large_test_file.write('<TH ALIGN=LEFT><A HREF="dome120_details.html">Diagnostic Dome 120 Velocity Solver Details</A>\n')
+            large_test_file.write('<TH ALIGN=LEFT><A HREF="dome120_details.html">Velocity Solver Details</A>\n')
             large_test_file.write('<BR>\n')
             failedt = VV_largetestdetails.details120(dome120_file,perf_test,data_dir)
 
-            large_test_file.write('<TH ALIGN=LEFT><A HREF="dome120_xml.html">Solver Parameter Settings: Diagnostic Dome 120 XML Details</A>\n')
+            large_test_file.write('<TH ALIGN=LEFT><A HREF="dome120_case.html">Case and Parameter Settings Details</A>\n')
             large_test_file.write('<BR>\n')
             xml_path = perf_test + '/dome120/trilinosOptions.xml'
             bench_xml_path = perf_test + '/bench/dome120/trilinosOptions.xml'
-            VV_utilities.xml(dome120_xml,xml_path,bench_xml_path)
-
-            large_test_file.write('<TH ALIGN=LEFT><A HREF="dome120_case.html">Diagnostic Dome 120 Case Details</A>\n')
-            large_test_file.write('<BR>\n')
             configure_path = perf_test + '/dome120/dome.120.JFNK.trilinos.config'
             bench_configure_path = perf_test + '/bench/dome120/dome.120.JFNK.trilinos.config'
-            VV_utilities.conf(dome120_case,configure_path,bench_configure_path)
+            VV_utilities.confxml(dome120_case,configure_path,bench_configure_path,xml_path,bench_xml_path)
 
-#           large_test_file.write('<TH ALIGN=LEFT><A HREF="dome120_plot.html">Diagnostic Dome 120 Plots</A>\n')
+#           large_test_file.write('<TH ALIGN=LEFT><A HREF="dome120_plot.html">Plots</A>\n')
 #           large_test_file.write('<BR>\n')
 #           if failedt != 0:
 #               dome120_plot.write("<H2>Diagnostic Dome 120 Test failed, plots may not be generated</H2><br>")
@@ -218,23 +210,19 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_plo
         if flag_to_plot_dome240:
 
 # link to dome240_file with descriptions about the test cases
-            large_test_file.write('<TH ALIGN=LEFT><A HREF="dome240_details.html">Diagnostic Dome 240 Velocity Solver Details</A>\n')
+            large_test_file.write('<TH ALIGN=LEFT><A HREF="dome240_details.html">Velocity Solver Details</A>\n')
             large_test_file.write('<BR>\n')
             failedt = VV_largetestdetails.details240(dome240_file,perf_test,data_dir)
 
-            large_test_file.write('<TH ALIGN=LEFT><A HREF="dome240_xml.html">Solver Parameter Settings: Diagnostic Dome 240 XML Details</A>\n')
+            large_test_file.write('<TH ALIGN=LEFT><A HREF="dome240_case.html">Case and Parameter Settings Details</A>\n')
             large_test_file.write('<BR>\n')
             xml_path = perf_test + '/dome240/trilinosOptions.xml'
             bench_xml_path = perf_test + '/bench/dome240/trilinosOptions.xml'
-            VV_utilities.xml(dome240_xml,xml_path,bench_xml_path)
-
-            large_test_file.write('<TH ALIGN=LEFT><A HREF="dome240_case.html">Diagnostic Dome 240 Case Details</A>\n')
-            large_test_file.write('<BR>\n')
             configure_path = perf_test + '/dome240/dome.240.JFNK.trilinos.config'
             bench_configure_path = perf_test + '/bench/dome240/dome.240.JFNK.trilinos.config'
-            VV_utilities.conf(dome240_case,configure_path,bench_configure_path)
+            VV_utilities.confxml(dome240_case,configure_path,bench_configure_path,xml_path,bench_xml_path)
 
-#           large_test_file.write('<TH ALIGN=LEFT><A HREF="dome240_plot.html">Diagnostic Dome 240 Plots</A>\n')
+#           large_test_file.write('<TH ALIGN=LEFT><A HREF="dome240_plot.html">Plots</A>\n')
 #           large_test_file.write('<BR>\n')
 #           if failedt != 0:
 #               dome240_plot.write("<H2>Diagnostic Dome 240 Test failed, plots may not be generated</H2><br>")
@@ -273,23 +261,19 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_plo
         if flag_to_plot_dome500:
 
 # link to dome500_file with descriptions about the test cases
-            large_test_file.write('<TH ALIGN=LEFT><A HREF="dome500_details.html">Diagnostic Dome 500 Velocity Solver Details</A>\n')
+            large_test_file.write('<TH ALIGN=LEFT><A HREF="dome500_details.html">Velocity Solver Details</A>\n')
             large_test_file.write('<BR>\n')
             failedt = VV_largetestdetails.details500(dome500_file,perf_test,data_dir)
 
-            large_test_file.write('<TH ALIGN=LEFT><A HREF="dome500_xml.html">Solver Parameter Settings: Diagnostic Dome 500 XML Details</A>\n')
+            large_test_file.write('<TH ALIGN=LEFT><A HREF="dome500_case.html">Case and Parameter Settings Details</A>\n')
             large_test_file.write('<BR>\n')
             xml_path = perf_test + '/dome500/trilinosOptions.xml'
             bench_xml_path = perf_test + '/bench/dome500/trilinosOptions.xml'
-            VV_utilities.xml(dome500_xml,xml_path,bench_xml_path)
-
-            large_test_file.write('<TH ALIGN=LEFT><A HREF="dome500_case.html">Diagnostic Dome 500 Case Details</A>\n')
-            large_test_file.write('<BR>\n')
             configure_path = perf_test + '/dome500/dome.500.JFNK.trilinos.config'
             bench_configure_path = perf_test + '/bench/dome500/dome.500.JFNK.trilinos.config'
-            VV_utilities.conf(dome500_case,configure_path,bench_configure_path)
+            VV_utilities.confxml(dome500_case,configure_path,bench_configure_path,xml_path,bench_xml_path)
 
-#           large_test_file.write('<TH ALIGN=LEFT><A HREF="dome500_plot.html">Diagnostic Dome 500 Plots</A>\n')
+#           large_test_file.write('<TH ALIGN=LEFT><A HREF="dome500_plot.html">Plots</A>\n')
 #           large_test_file.write('<BR>\n')
 #           if failedt != 0:
 #               dome500_plot.write("<H2>Diagnostic Dome 500 Test failed, plots may not be generated</H2><br>")
@@ -328,23 +312,19 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_plo
         if flag_to_plot_dome1000:
 
 # link to dome1000_file with descriptions about the test cases
-            large_test_file.write('<TH ALIGN=LEFT><A HREF="dome500_details.html">Diagnostic Dome 1000 Velocity Solver Details</A>\n')
+            large_test_file.write('<TH ALIGN=LEFT><A HREF="dome500_details.html">Velocity Solver Details</A>\n')
             large_test_file.write('<BR>\n')
             failedt = VV_largetestdetails.details1000(dome1000_file,perf_test,data_dir)
 
-            large_test_file.write('<TH ALIGN=LEFT><A HREF="dome1000_xml.html">Solver Parameter Settings: Diagnostic Dome 1000 XML Details</A>\n')
+            large_test_file.write('<TH ALIGN=LEFT><A HREF="dome1000_case.html">Case and Parameter Settings Details</A>\n')
             large_test_file.write('<BR>\n')
             xml_path = perf_test + '/dome1000/trilinosOptions.xml'
             bench_xml_path = perf_test + '/bench/dome1000/trilinosOptions.xml'
-            VV_utilities.xml(dome1000_xml,xml_path,bench_xml_path)
-
-            large_test_file.write('<TH ALIGN=LEFT><A HREF="dome1000_case.html">Diagnostic Dome 1000 Case Details</A>\n')
-            large_test_file.write('<BR>\n')
             configure_path = perf_test + '/dome1000/dome.1000.JFNK.trilinos.config'
             bench_configure_path = perf_test + '/bench/dome1000/dome.1000.JFNK.trilinos.config'
-            VV_utilities.conf(dome1000_case,configure_path,bench_configure_path)
+            VV_utilities.confxml(dome1000_case,configure_path,bench_configure_path,xml_path,bench_xml_path)
 
-#           large_test_file.write('<TH ALIGN=LEFT><A HREF="dome1000_plot.html">Diagnostic Dome 1000 Plots</A>\n')
+#           large_test_file.write('<TH ALIGN=LEFT><A HREF="dome1000_plot.html">Plots</A>\n')
 #           large_test_file.write('<BR>\n')
 #           if failedt != 0:
 #               dome1000_plot.write("<H2>Diagnostic Dome 1000 Test failed, plots may not be generated</H2><br>")
@@ -383,23 +363,19 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_plo
         flag_to_plot_gis5km = 1
         if flag_to_plot_gis5km:
 
-            large_test_file.write('<TH ALIGN=LEFT><A HREF="gis5km_details.html">GIS 5km Velocity Solver Details</A>\n')
+            large_test_file.write('<TH ALIGN=LEFT><A HREF="gis5km_details.html">Velocity Solver Details</A>\n')
             large_test_file.write('<BR>\n')
             failedt = VV_gis5details.details(gis5km_file,perf_test,data_dir)
 
-            large_test_file.write('<TH ALIGN=LEFT><A HREF="gis5km_xml.html">Solver Parameter Settings: GIS 5km XML Details</A>\n')
+            large_test_file.write('<TH ALIGN=LEFT><A HREF="gis5km_case.html">Case and Parameter Settings Details</A>\n')
             large_test_file.write('<BR>\n')
             xml_path = perf_test + '/gis_5km/trilinosOptions.xml'
             bench_xml_path = perf_test + '/bench/gis_5km/trilinosOptions.xml'
-            VV_utilities.xml(gis5km_xml,xml_path,bench_xml_path)
-
-            large_test_file.write('<TH ALIGN=LEFT><A HREF="gis5km_case.html">GIS 5km Case Details</A>\n')
-            large_test_file.write('<BR>\n')
             configure_path = perf_test + '/gis_5km/gis_5km.config'
             bench_configure_path = perf_test + '/bench/gis_5km/gis_5km.config'
-            VV_utilities.conf(gis5km_case,configure_path,bench_configure_path)
+            VV_utilities.confxml(gis5km_case,configure_path,bench_configure_path,xml_path,bench_xml_path)
 
-            large_test_file.write('<TH ALIGN=LEFT><A HREF="gis5km_plot.html">GIS 5km Plots</A>\n')
+            large_test_file.write('<TH ALIGN=LEFT><A HREF="gis5km_plot.html">Plots</A>\n')
             large_test_file.write('<BR>\n')
             if failedt != 0:
                 gis5_plot.write("<H2>GIS 5km Test failed, plots may not be generated</H2><br>")

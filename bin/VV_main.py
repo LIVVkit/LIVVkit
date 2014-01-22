@@ -173,54 +173,46 @@ if options.test_suite:
         dome30d_file = open(target_html + '/dome30d_details.html', 'w')
         dome30d_case = open(target_html + '/dome30d_case.html', 'w')
         dome30d_plot = open(target_html + '/dome30d_plot.html', 'w')
-        dome30d_xml  = open(target_html + '/dome30d_xml.html', 'w')
 # evolving dome case
         dome30e_file = open(target_html + '/dome30e_details.html', 'w')
         dome30e_case = open(target_html + '/dome30e_case.html', 'w')
         dome30e_plot = open(target_html + '/dome30e_plot.html', 'w')
-        dome30e_xml  = open(target_html + '/dome30e_xml.html', 'w')
 #circular shelf case
         circ_file = open(target_html + '/circ_details.html', 'w')
         circ_case = open(target_html + '/circ_case.html', 'w')
         circ_plot = open(target_html + '/circ_plot.html', 'w')
-        circ_xml  = open(target_html + '/circ_xml.html', 'w')
 # confined shelf case
         conf_file = open(target_html + '/conf_details.html', 'w')
         conf_case = open(target_html + '/conf_case.html', 'w')
         conf_plot = open(target_html + '/conf_plot.html', 'w')
-        conf_xml  = open(target_html + '/conf_xml.html', 'w')
 # ismip hom a 80km case
         ishoma80_file = open(target_html + '/ishoma80_details.html', 'w')
         ishoma80_case = open(target_html + '/ishoma80_case.html', 'w')
         ishoma80_plot = open(target_html + '/ishoma80_plot.html', 'w')
-        ishoma80_xml  = open(target_html + '/ishoma80_xml.html', 'w')
 # ismip hom a 20km case
         ishoma20_file = open(target_html + '/ishoma20_details.html', 'w')
         ishoma20_case = open(target_html + '/ishoma20_case.html', 'w')
         ishoma20_plot = open(target_html + '/ishoma20_plot.html', 'w')
-        ishoma20_xml  = open(target_html + '/ishoma20_xml.html', 'w')
 # ismip hom c 80km case
         ishomc80_file = open(target_html + '/ishomc80_details.html', 'w')
         ishomc80_case = open(target_html + '/ishomc80_case.html', 'w')
         ishomc80_plot = open(target_html + '/ishomc80_plot.html', 'w')
-        ishomc80_xml  = open(target_html + '/ishomc80_xml.html', 'w')
 # 10km GIS case
         gis10_file = open(target_html + '/gis10_details.html', 'w')
         gis10_case = open(target_html + '/gis10_case.html', 'w')
         gis10_plot = open(target_html + '/gis10_plot.html', 'w')
-        gis10_xml  = open(target_html + '/gis10_xml.html', 'w')
 
 # TODO create a list of the html files of the included cases, then pass through the testsuite.web call
 
 #path to python code to create all the test suite pages and data
         reg_test = options.test_suite + "/reg_test"
 
-        VV_testsuite.web(descript_file,test_file,dome30d_file,dome30d_case,dome30d_plot,dome30d_xml, \
-                dome30e_file,dome30e_case,dome30e_plot,dome30e_xml, \
-                circ_file,circ_case,circ_plot,circ_xml,conf_file,conf_case,conf_plot,conf_xml, \
-                ishoma80_file,ishoma80_case,ishoma80_plot,ishoma80_xml,ishoma20_file,ishoma20_case,ishoma20_plot,ishoma20_xml, \
-                ishomc80_file,ishomc80_case,ishomc80_plot,ishomc80_xml,\
-                gis10_file,gis10_case,gis10_plot,gis10_xml, \
+        VV_testsuite.web(descript_file,test_file,dome30d_file,dome30d_case,dome30d_plot, \
+                dome30e_file,dome30e_case,dome30e_plot, \
+                circ_file,circ_case,circ_plot,conf_file,conf_case,conf_plot, \
+                ishoma80_file,ishoma80_case,ishoma80_plot,ishoma20_file,ishoma20_case,ishoma20_plot, \
+                ishomc80_file,ishomc80_case,ishomc80_plot,\
+                gis10_file,gis10_case,gis10_plot, \
                 reg_test,options.data_dir,options.ncl_path,target_html,options.script_path,\
                 options.diagnostic_flag,options.evolving_flag,options.circular_flag,options.confined_flag,\
                 options.ismip_hom_a80_flag,options.ismip_hom_a20_flag,options.ismip_hom_c_flag,options.gis_10km_flag)
@@ -237,40 +229,34 @@ if options.dome60_flag==1 or options.dome120_flag==1 or options.dome240_flag==1 
         dome60_file = open(target_html + '/dome60_details.html', 'w')
         dome60_case = open(target_html + '/dome60_case.html', 'w')
         dome60_plot = open(target_html + '/dome60_plot.html', 'w')
-        dome60_xml  = open(target_html + '/dome60_xml.html', 'w')
 # dome120 case
         dome120_file = open(target_html + '/dome120_details.html', 'w')
         dome120_case = open(target_html + '/dome120_case.html', 'w')
         dome120_plot = open(target_html + '/dome120_plot.html', 'w')
-        dome120_xml  = open(target_html + '/dome120_xml.html', 'w')
 # dome240 case
         dome240_file = open(target_html + '/dome240_details.html', 'w')
         dome240_case = open(target_html + '/dome240_case.html', 'w')
         dome240_plot = open(target_html + '/dome240_plot.html', 'w')
-        dome240_xml  = open(target_html + '/dome240_xml.html', 'w')
 # dome500 case
         dome500_file = open(target_html + '/dome500_details.html', 'w')
         dome500_case = open(target_html + '/dome500_case.html', 'w')
         dome500_plot = open(target_html + '/dome500_plot.html', 'w')
-        dome500_xml  = open(target_html + '/dome500_xml.html', 'w')
 # dome1000 case
         dome1000_file = open(target_html + '/dome1000_details.html', 'w')
         dome1000_case = open(target_html + '/dome1000_case.html', 'w')
         dome1000_plot = open(target_html + '/dome1000_plot.html', 'w')
-        dome1000_xml  = open(target_html + '/dome1000_xml.html', 'w')
 # gis 5km case
         gis5km_file = open(target_html + '/gis5km_details.html', 'w')
         gis5km_case = open(target_html + '/gis5km_case.html', 'w')
         gis5km_plot = open(target_html + '/gis5km_plot.html', 'w')
-        gis5km_xml  = open(target_html + '/gis5km_xml.html', 'w')
 
 #path to python code to create all the large test suite pages and data
         perf_test = options.test_suite + "/perf_test"
 
-        VV_largesuite.large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_plot,dome60_xml, \
-               dome120_file,dome120_case,dome120_plot,dome120_xml,dome240_file,dome240_case,dome240_plot,dome240_xml, \
-               dome500_file,dome500_case,dome500_plot,dome500_xml,dome1000_file,dome1000_case,dome1000_plot,dome1000_xml, \
-               gis5km_file,gis5km_case,gis5km_plot,gis5km_xml, \
+        VV_largesuite.large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_plot, \
+               dome120_file,dome120_case,dome120_plot,dome240_file,dome240_case,dome240_plot, \
+               dome500_file,dome500_case,dome500_plot,dome1000_file,dome1000_case,dome1000_plot, \
+               gis5km_file,gis5km_case,gis5km_plot, \
                 perf_test,options.ncl_path,target_html,options.script_path, \
                 options.dome60_flag,options.dome120_flag,options.dome240_flag, \
                 options.dome500_flag,options.dome1000_flag,options.gis_5km_flag,options.data_dir)
