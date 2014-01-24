@@ -9,12 +9,12 @@ import VV_outprocess
 import VV_utilities
 import VV_checks
 
-def circdetails(solver_file,reg_test,data_dir):  # using data, fill the web page with info
+def circdetails(solver_file,reg_test,data_dir): # using data, fill the web page with info
 
     failedt_list = []
     solver_file.write('<HTML>\n')
+    solver_file.write('<BODY BGCOLOR="#CADFE0">\n')
     solver_file.write('<H3>Circular Shelf Iteration Count Details:</H3>')
-    solver_file.write('<H4>Eventually published in plot form</H4>')
     solver_file.write('<BR> \n')
 
 # JFNK 2 proc
@@ -23,14 +23,15 @@ def circdetails(solver_file,reg_test,data_dir):  # using data, fill the web page
     failedt1 = VV_checks.failcheck(reg_test, '/circular-shelf/' + data_dir + '/circular-shelf.out')
     failedt_list.append(failedt1)
 
-    solver_file.write('<H4>New Run: circular-shelf.out</H4>')
     procttl_circd, nonlist_circd, avg2_circd, out_flag_circd, ndcirc_name, ldcirc_name = \
         VV_outprocess.jobprocess(reg_test + '/circular-shelf/' + data_dir + '/circular-shelf.out','circ')
 
+    solver_file.write('<H4>New Run: circular-shelf.out</H4>')
     solver_file.write("Number of Processors = " + str(procttl_circd[-1]) + "<BR>\n")
     solver_file.write("Number of Nonlinear Iterations = ")
     VV_utilities.format(solver_file, nonlist_circd)
     solver_file.write('<BR>\n')
+    
     if out_flag_circd == 1:
         solver_file.write('<FONT COLOR="red">***TIME STEP(S) WHICH FAILED TO CONVERGE</FONT> <BR>\n')
     solver_file.write("Average Number of Linear Iterations per Time-Step = ")
@@ -45,6 +46,7 @@ def circdetails(solver_file,reg_test,data_dir):  # using data, fill the web page
     solver_file.write("Number of Nonlinear Iterations = ")
     VV_utilities.format(solver_file, nonlist_circb)
     solver_file.write('<BR>\n')
+    
     if out_flag_circb == 1:
         solver_file.write('<FONT COLOR="red">***TIME STEP(S) WHICH FAILED TO CONVERGE</FONT> <BR>\n')
     solver_file.write("Average Number of Linear Iterations per Time-Step = ")
@@ -60,13 +62,13 @@ def circdetails(solver_file,reg_test,data_dir):  # using data, fill the web page
 
 # TODO have jobprocess grab picard solver info as well
 
-def confdetails(solver_file,reg_test,data_dir):  # using data, fill the web page with info
+def confdetails(solver_file,reg_test,data_dir): # using data, fill the web page with info
 
     failedt_list = []
 
     solver_file.write('<HTML>\n')
+    solver_file.write('<BODY BGCOLOR="#CADFE0">\n')
     solver_file.write('<H3>Confined Shelf Iteration Count Details:</H3>')
-    solver_file.write('<H4>Eventually published in plot form</H4>')
     solver_file.write('<BR> \n')
 
 # JFNK 2 proc
@@ -75,14 +77,15 @@ def confdetails(solver_file,reg_test,data_dir):  # using data, fill the web page
     failedt1 = VV_checks.failcheck(reg_test, '/confined-shelf/' + data_dir + '/confined-shelf.out')
     failedt_list.append(failedt1)
 
-    solver_file.write('<H4>New Run: confined-shelf.out</H4>')
     procttl_confd, nonlist_confd, avg2_confd, out_flag_confd, ndconf_name, ldconf_name = \
         VV_outprocess.jobprocess(reg_test + '/confined-shelf/' + data_dir + '/confined-shelf.out', 'conf')
 
+    solver_file.write('<H4>New Run: confined-shelf.out</H4>')
     solver_file.write("Number of Processors = " + str(procttl_confd[-1]) + "<BR>\n")
     solver_file.write("Number of Nonlinear Iterations = ")
     VV_utilities.format(solver_file, nonlist_confd)
     solver_file.write('<BR>\n')
+    
     if out_flag_confd == 1:
         solver_file.write('<FONT COLOR="red">***TIME STEP(S) WHICH FAILED TO CONVERGE</FONT> <BR>\n')
     solver_file.write("Average Number of Linear Iterations per Time-Step = ")
@@ -97,6 +100,7 @@ def confdetails(solver_file,reg_test,data_dir):  # using data, fill the web page
     solver_file.write("Number of Nonlinear Iterations = ")
     VV_utilities.format(solver_file, nonlist_confb)
     solver_file.write('<BR>\n')
+    
     if out_flag_confb == 1:
         solver_file.write('<FONT COLOR="red">***TIME STEP(S) WHICH FAILED TO CONVERGE</FONT> <BR>\n')
     solver_file.write("Average Number of Linear Iterations per Time-Step = ")
@@ -116,6 +120,7 @@ def confdetails(solver_file,reg_test,data_dir):  # using data, fill the web page
 def circplot(plot_file,reg_test,ncl_path,html_path,script_path,data_dir):  # using data, fill the web page with info
 
     plot_file.write('<HTML>\n')
+    plot_file.write('<BODY BGCOLOR="#CADFE0">\n')
     plot_file.write('<H3>Circular Shelf Plot Details:</H3>')
 
 # creating circular shelf velocity plot 
@@ -199,6 +204,7 @@ def circplot(plot_file,reg_test,ncl_path,html_path,script_path,data_dir):  # usi
 def confplot(plot_file,reg_test,ncl_path,html_path,script_path,data_dir):  # using data, fill the web page with info
 
     plot_file.write('<HTML>\n')
+    plot_file.write('<BODY BGCOLOR="#CADFE0">\n')
     plot_file.write('<H3>Confined Shelf Plot Details:</H3>')
 
 # creating confined shelf velocity plot 

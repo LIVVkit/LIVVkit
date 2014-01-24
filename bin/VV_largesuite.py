@@ -82,6 +82,7 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_plo
 # using data, fill the web page with info about the cases
     large_test_file.write('<HTML>\n')
     large_test_file.write('<TITLE>Performance and Analysis Test Suite</TITLE>\n')
+    large_test_file.write('<BODY BGCOLOR="#CADFE0">\n') 
     large_test_file.write('<H1>Performance and Analysis Test Suite</H1>')
 
 # link to descript_file about the test cases
@@ -403,6 +404,7 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_plo
 
     descript_file.write('<HTML>\n')
     descript_file.write('<TITLE>Descriptions about the Test Suite</TITLE>\n')
+    descript_file.write('<BODY BGCOLOR="#CADFE0">\n') 
     descript_file.write('<H2>Test Suite Details</H2>')
     descript_file.write('<BR>\n')
     descript_file.write('The Diagnostic Dome 500 test case \n')

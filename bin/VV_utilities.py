@@ -101,6 +101,7 @@ def confxml(configure_xml_file,configure_path,bench_configure_path,xml_path,benc
         timestp_bench = diff / float(databench['time']['dt'])
 #Put settings on website, check if they match the benchmark settings
     configure_xml_file.write('<HTML>\n')
+    configure_xml_file.write('<BODY BGCOLOR="#CADFE0">\n')
     configure_xml_file.write('<H3>Case Details:</H3>')
     configure_xml_file.write('<HTML>\n')
     configure_xml_file.write('<TITLE>Configure Settings </TITLE>\n')

@@ -8,13 +8,13 @@ begin
 ;************************************************
 
 ; stand alone read in for testing
-;  STOCKout    = addfile("/tmp/work/ab3/higher-order/reg_test/bench/ismip-hom-c/80km/data/ishom.c.80km.out.nc","r")
-;  STOCKPIC    = addfile("/tmp/work/ab3/higher-order/reg_test/bench/ismip-hom-c/80km/data/ishom.c.80km.PIC.out.nc","r")
-;  STOCKJFNK    = addfile("/tmp/work/ab3/higher-order/reg_test/bench/ismip-hom-c/80km/data/ishom.c.80km.JFNK.out.nc","r")
-;  VARout   = addfile("/tmp/work/ab3/higher-order/reg_test/ismip-hom-c/80km/data/ishom.c.80km.out.nc","r")
-;  VARPIC   = addfile("/tmp/work/ab3/higher-order/reg_test/ismip-hom-c/80km/data/ishom.c.80km.PIC.out.nc","r")
-;  VARJFNK   = addfile("/tmp/work/ab3/higher-order/reg_test/ismip-hom-c/80km/data/ishom.c.80km.JFNK.out.nc","r")
-;  PNG    = "/tmp/work/ab3/higher-order/livv_new/plots2/ismipcu"
+  STOCKout    = addfile("/lustre/atlas/scratch/ab3/cli062/higher-order/reg_test/bench/ismip-hom-c/80km/data_titan/ishom.c.80km.out.nc","r")
+  STOCKPIC    = addfile("/lustre/atlas/scratch/ab3/cli062/higher-order/reg_test/bench/ismip-hom-c/80km/data_titan/ishom.c.80km.PIC.out.nc","r")
+  STOCKJFNK    = addfile("/lustre/atlas/scratch/ab3/cli062/higher-order/reg_test/bench/ismip-hom-c/80km/data_titan/ishom.c.80km.JFNK.out.nc","r")
+  VARout   = addfile("/lustre/atlas/scratch/ab3/cli062/higher-order/reg_test/ismip-hom-c/80km/data_titan/ishom.c.80km.out.nc","r")
+  VARPIC   = addfile("/lustre/atlas/scratch/ab3/cli062/higher-order/reg_test/ismip-hom-c/80km/data_titan/ishom.c.80km.PIC.out.nc","r")
+  VARJFNK   = addfile("/lustre/atlas/scratch/ab3/cli062/higher-order/reg_test/ismip-hom-c/80km/data_titan/ishom.c.80km.JFNK.out.nc","r")
+  PNG    = "/lustre/atlas/scratch/ab3/cli062/higher-order/livv/plots/ismipcu"
 
 ;************************************************
 ; create plots

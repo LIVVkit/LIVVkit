@@ -13,6 +13,7 @@ def details(solver_file,perf_test,bench_data):  # using data, fill the web page 
         
     failedt_list = []
     solver_file.write('<HTML>\n')
+    solver_file.write('<BODY BGCOLOR="#CADFE0">\n')
     solver_file.write('<H3>GIS 5km Iteration Count Details:</H3>')
     solver_file.write('<BR> \n')
                         

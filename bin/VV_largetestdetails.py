@@ -15,6 +15,7 @@ def details60(solver_file,perf_test,data_dir):  # using data, fill the web page 
         
     failedt_list = []
     solver_file.write('<HTML>\n')
+    solver_file.write('<BODY BGCOLOR="#CADFE0">\n')
     solver_file.write('<H3>Dome 60 Iteration Count Details:</H3>')
     solver_file.write('<BR> \n')
 
@@ -99,6 +100,7 @@ def details120(solver_file,perf_test,data_dir):  # using data, fill the web page
         
     failedt_list = []
     solver_file.write('<HTML>\n')
+    solver_file.write('<BODY BGCOLOR="#CADFE0">\n')
     solver_file.write('<H3>Dome 120 Iteration Count Details:</H3>')
     solver_file.write('<BR> \n')
 
@@ -183,6 +185,7 @@ def details240(solver_file,perf_test,data_dir):  # using data, fill the web page
         
     failedt_list = []
     solver_file.write('<HTML>\n')
+    solver_file.write('<BODY BGCOLOR="#CADFE0">\n')
     solver_file.write('<H3>Dome 240 Iteration Count Details:</H3>')
     solver_file.write('<BR> \n')
 
@@ -267,6 +270,7 @@ def details500(solver_file,perf_test,data_dir):  # using data, fill the web page
         
     failedt_list = []
     solver_file.write('<HTML>\n')
+    solver_file.write('<BODY BGCOLOR="#CADFE0">\n')
     solver_file.write('<H3>Dome 500 Iteration Count Details:</H3>')
     solver_file.write('<BR> \n')
 
@@ -351,6 +355,7 @@ def details1000(solver_file,perf_test,data_dir):  # using data, fill the web pag
         
     failedt_list = []
     solver_file.write('<HTML>\n')
+    solver_file.write('<BODY BGCOLOR="#CADFE0">\n')
     solver_file.write('<H3>Dome 1000 Iteration Count Details:</H3>')
     solver_file.write('<BR> \n')
 

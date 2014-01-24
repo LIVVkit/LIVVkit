@@ -15,6 +15,7 @@ def ddetails(solver_file,reg_test,data_dir): # using data, fill the web page wit
 
     failedt_list = []
     solver_file.write('<HTML>\n')
+    solver_file.write('<BODY BGCOLOR="#CADFE0">\n')
     solver_file.write('<H3>Diagnostic Dome 30 Iteration Count Details:</H3>')
     solver_file.write('<BR> \n')
 
@@ -24,9 +25,10 @@ def ddetails(solver_file,reg_test,data_dir): # using data, fill the web page wit
     failedt1 = VV_checks.failcheck(reg_test, '/dome30/diagnostic/' + data_dir + '/gnu.JFNK.1proc')
     failedt_list.append(failedt1)
 
-    solver_file.write('<H4>New Run: gnu.JFNK.1proc</H4>')
     procttl_dd301, nonlist_dd301,avg2_dd301,out_flag_dd301,ndd301_name,ldd301_name = \
         VV_outprocess.jobprocess(reg_test + '/dome30/diagnostic/' + data_dir + '/gnu.JFNK.1proc', 'domed301')
+
+    solver_file.write('<H4>New Run: gnu.JFNK.1proc</H4>')
     solver_file.write("Number of Processors = " + str(procttl_dd301[-1]) + "<BR>\n")
     solver_file.write("Number of Nonlinear Iterations = ")
     VV_utilities.format(solver_file, nonlist_dd301)
@@ -58,10 +60,11 @@ def ddetails(solver_file,reg_test,data_dir): # using data, fill the web page wit
 # Failure checking
     failedt2 = VV_checks.failcheck(reg_test, '/dome30/diagnostic/' + data_dir + '/gnu.JFNK.4proc')
     failedt_list.append(failedt2)
-    solver_file.write('<H4>New Run: gnu.JFNK.4proc</H4>')
+    
     procttl_dd304, nonlist_dd304,avg2_dd304,out_flag_dd304,ndd304_name,ldd304_name = \
         VV_outprocess.jobprocess(reg_test + '/dome30/diagnostic/' + data_dir + '/gnu.JFNK.4proc','domed304')
 
+    solver_file.write('<H4>New Run: gnu.JFNK.4proc</H4>')
     solver_file.write("Number of Processors = " + str(procttl_dd304[-1]) + "<BR>\n")
     solver_file.write("Number of Nonlinear Iterations = ")
     VV_utilities.format(solver_file, nonlist_dd304)
@@ -95,9 +98,10 @@ def ddetails(solver_file,reg_test,data_dir): # using data, fill the web page wit
 
     return failedt
 
-def edetails(solver_file,reg_test,data_dir):  # using data, fill the web page with info
+def edetails(solver_file,test_suite,reg_test,ncl_path,html_path,data_dir): # using data, fill the web page with info
 
     solver_file.write('<HTML>\n')
+    solver_file.write('<BODY BGCOLOR="#CADFE0">\n')
     solver_file.write('<H3>Evolving Dome 30 Iteration Count Details:</H3>')
     solver_file.write('<BR> \n')
 
@@ -107,15 +111,65 @@ def edetails(solver_file,reg_test,data_dir):  # using data, fill the web page wi
     failedt1 = VV_checks.failcheck(reg_test, '/dome30/evolving/' + data_dir + '/gnu.JFNK.9proc')
     failedt_list.append(failedt1)
 
-# print reg_test + '/dome30/evolving/data/gnu.JFNK.1proc'
     procttl_de309, nonlist_de309,avg2_de309,out_flag_de309,nde309_name,lde309_name = \
         VV_outprocess.jobprocess(reg_test + '/dome30/evolving/' + data_dir + '/gnu.JFNK.9proc', 'domee309')
+    
     procttl_de309b, nonlist_de309b,avg2_de309b,out_flag_de309b,nde309b_name,lde309b_name = \
         VV_outprocess.jobprocess(reg_test + '/bench/dome30/evolving/' + data_dir + '/gnu.JFNK.9proc', 'domee309b')
-    solver_file.write('<TR>\n')
-    solver_file.write('<BR>\n')
+    
+# create iteration plot
+    dome30e_iter = ''+ ncl_path + '/solver_iterations.ncl'
+    nfile   = 'nfile = "' + test_suite + '/livv/data' + nde309_name + '"'
+    lfile   = 'lfile = "' + test_suite + '/livv/data' + lde309_name + '"'
+    nbfile  = 'nbfile = "' + test_suite + '/livv/data' + nde309b_name + '"'
+    lbfile  = 'lbfile = "' + test_suite + '/livv/data' + lde309b_name + '"'
+    png     = 'PNG = "' + ncl_path + '/dome30e9_iter"'
+    name    = 'name = "Dome 30x30, 9 Processors"'
+    iter_dome30e = "ncl '" + nfile + "'  '" + lfile + "'  '" + nbfile + "'  '" + lbfile +\
+                    "' '" + png + "' '" + name + "'  '" + dome30e_iter + "' >> iter_details.out"
+    try:
+        subprocess.check_call(iter_dome30e, shell=True)
+        #print "creating evolving dome 30 iteration plots"
+    except subprocess.CalledProcessError as e:
+        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
+                + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+        exit(e.returncode)
+    except OSError as e:
+        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
+                + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+        exit(e.errno)
 
-# JFNK gnu 9 proc
+# delete old dome30 pic in www file
+    if (html_path + '/dome30e9_iter.png'):
+        dome30eitermove = ["rm", "-f", html_path+"/dome30e9_iter.png"]
+        try:
+            subprocess.check_call(dome30eitermove)
+        except subprocess.CalledProcessError as e:
+            print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
+                    + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+            exit(e.returncode)
+        except OSError as e:
+            print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
+                    + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+            exit(e.errno)
+
+# transferring new dome30 pic to www file
+    if (ncl_path + '/dome30e9_iter.png'):
+        dome30eiterpic = ["mv", "-f", ncl_path+"/dome30e9_iter.png", html_path+"/"]
+        try:
+            subprocess.check_call(dome30eiterpic)
+        except subprocess.CalledProcessError as e:
+            print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
+                    + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+            exit(e.returncode)
+        except OSError as e:
+            print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
+                    + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+            exit(e.errno)
+
+    solver_file.write('<OBJECT data="dome30e9_iter.png" type="image/png" width="800" height="600" hspace=5 align=center">\n')
+    solver_file.write('</OBJECT>\n')
+
     solver_file.write('<H4>New Run: gnu.JFNK.9proc</H4>')
     solver_file.write("Number of Processors = " + str(procttl_de309[-1]) + "<BR>\n")
     solver_file.write("Number of Nonlinear Iterations = ")
@@ -139,6 +193,8 @@ def edetails(solver_file,reg_test,data_dir):  # using data, fill the web page wi
     solver_file.write("Average Number of Linear Iterations per Time-Step = ")
     VV_utilities.format(solver_file, avg2_de309b)
     solver_file.write('<BR> \n')
+    solver_file.write('<BR> \n')
+    solver_file.write('<BR> \n')
 
 # JFNK gnu 15 proc
 
@@ -146,9 +202,66 @@ def edetails(solver_file,reg_test,data_dir):  # using data, fill the web page wi
     failedt2 = VV_checks.failcheck(reg_test, '/dome30/evolving/' + data_dir + '/gnu.JFNK.15proc')
     failedt_list.append(failedt2)
 
-    solver_file.write('<H4>New Run: gnu.JFNK.15proc</H4>')
     procttl_de3015, nonlist_de3015,avg2_de3015,out_flag_de3015,nde3015_name,lde3015_name = \
         VV_outprocess.jobprocess(reg_test + '/dome30/evolving/' + data_dir + '/gnu.JFNK.15proc', 'domee3015')
+
+    procttl_de3015b, nonlist_de3015b,avg2_de3015b,out_flag_de3015b,nde3015b_name,lde3015b_name = \
+        VV_outprocess.jobprocess(reg_test + '/bench/dome30/evolving/' + data_dir + '/gnu.JFNK.15proc', 'domee3015b')
+
+# create iteration plot
+    dome30e_iter = ''+ ncl_path + '/solver_iterations.ncl'
+    nfile    = 'nfile = "' + test_suite + '/livv/data' + nde3015_name + '"'
+    lfile    = 'lfile = "' + test_suite + '/livv/data' + lde3015_name + '"'
+    nbfile   = 'nbfile = "' + test_suite + '/livv/data' + nde3015b_name + '"'
+    lbfile   = 'lbfile = "' + test_suite + '/livv/data' + lde3015b_name + '"'
+    png      = 'PNG = "' + ncl_path + '/dome30e15_iter"'
+    name     = 'name = "Dome 30x30, 15 Processors"'
+    iter_dome30e = "ncl '" + nfile + "'  '" + lfile + "'  '" + nbfile + "'  '" + lbfile +\
+                    "' '" + png + "' '" + name + "'  '" + dome30e_iter + "' >> iter_details.out"
+    try:
+        subprocess.check_call(iter_dome30e, shell=True)
+        #print "creating evolving dome 30 iteration plots"
+    except subprocess.CalledProcessError as e:
+        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
+                + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+        exit(e.returncode)
+    except OSError as e:
+        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
+                + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+        exit(e.errno)
+
+# delete old dome30 pic in www file
+    if (html_path + '/dome30e15_iter.png'):
+        dome30eitermove = ["rm", "-f", html_path+"/dome30e15_iter.png"]
+        try:
+            subprocess.check_call(dome30eitermove)
+        except subprocess.CalledProcessError as e:
+            print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
+                    + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+            exit(e.returncode)
+        except OSError as e:
+            print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
+                    + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+            exit(e.errno)
+
+# transferring new dome30 pic to www file
+    if (ncl_path + '/dome30e15_iter.png'):
+        dome30eiterpic = ["mv", "-f", ncl_path+"/dome30e15_iter.png", html_path+"/"]
+        try:
+            subprocess.check_call(dome30eiterpic)
+        except subprocess.CalledProcessError as e:
+            print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
+                    + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+            exit(e.returncode)
+        except OSError as e:
+            print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
+                    + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+            exit(e.errno)
+
+    solver_file.write('<OBJECT data="dome30e15_iter.png" type="image/png" width="800" height="600" hspace=5 align=center">\n')
+    solver_file.write('</OBJECT>\n')
+
+    solver_file.write('<H4>New Run: gnu.JFNK.15proc</H4>')
     solver_file.write("Number of Processors = " + str(procttl_de3015[-1]) + "<BR>\n")
     solver_file.write("Number of Nonlinear Iterations = ")
     VV_utilities.format(solver_file, nonlist_de3015)
@@ -161,8 +274,6 @@ def edetails(solver_file,reg_test,data_dir):  # using data, fill the web page wi
     solver_file.write('<BR> \n')
 
     solver_file.write('<H4>Benchmark Run: gnu.JFNK.15proc</H4>')
-    procttl_de3015b, nonlist_de3015b,avg2_de3015b,out_flag_de3015b,nde3015b_name,lde3015b_name = \
-        VV_outprocess.jobprocess(reg_test + '/bench/dome30/evolving/' + data_dir + '/gnu.JFNK.15proc', 'domee3015b')
     solver_file.write("Number of Processors = " + str(procttl_de3015b[-1]) + "<BR>\n")
     solver_file.write("Number of Nonlinear Iterations = ")
     VV_utilities.format(solver_file, nonlist_de3015b)
@@ -187,6 +298,7 @@ def edetails(solver_file,reg_test,data_dir):  # using data, fill the web page wi
 def dplot(plot_file,reg_test,ncl_path,html_path,script_path,data_dir):  # using data, fill the web page with info 
     
     plot_file.write('<HTML>\n')
+    plot_file.write('<BODY BGCOLOR="#CADFE0">\n')
     plot_file.write('<H3>Diagnostic Dome 30 Plot Details:</H3>')
 
 # creating dome 30d velocity plot
@@ -268,6 +380,7 @@ def dplot(plot_file,reg_test,ncl_path,html_path,script_path,data_dir):  # using 
 def eplot(plot_file,reg_test,ncl_path,html_path,script_path,data_dir):  # using data, fill the web page with info
 
     plot_file.write('<HTML>\n')
+    plot_file.write('<BODY BGCOLOR="#CADFE0">\n')
     plot_file.write('<H3>Evolving Dome 30 Plot Details:</H3>')
 
 # creating dome 30e velocity plot

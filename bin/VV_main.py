@@ -139,7 +139,6 @@ else:
 	print 'no username specified, placing HTML files in the main html directory'
 
 #remove plot_details file previously used in specified subdirectory
-
 if (options.test_suite + '/livv/plot_details.out'):
         plotdetails = ["rm", "-f", "plot_details.out"]
         try:
@@ -151,8 +150,19 @@ if (options.test_suite + '/livv/plot_details.out'):
                 print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                 exit(e.errno)
 
-#transferring cover picture to www file
+#remove iter_details file previously used in specified subdirectory
+if (options.test_suite + '/livv/iter_details.out'):
+        iterdetails = ["rm", "-f", "iter_details.out"]
+        try:
+                subprocess.check_call(iterdetails)
+        except subprocess.CalledProcessError as e:
+                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                exit(e.returncode)
+        except OSError as e:
+                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                exit(e.errno)
 
+#transferring cover picture to www file
 if (options.ncl_path + '/alaska_pic.png'):
         alaskapic = ["cp", "-f", options.ncl_path+ "/alaska_pic.png", target_html+ "/"]
         try:
@@ -213,7 +223,7 @@ if options.test_suite:
                 ishoma80_file,ishoma80_case,ishoma80_plot,ishoma20_file,ishoma20_case,ishoma20_plot, \
                 ishomc80_file,ishomc80_case,ishomc80_plot,\
                 gis10_file,gis10_case,gis10_plot, \
-                reg_test,options.data_dir,options.ncl_path,target_html,options.script_path,\
+                reg_test,options.test_suite,options.data_dir,options.ncl_path,target_html,options.script_path,\
                 options.diagnostic_flag,options.evolving_flag,options.circular_flag,options.confined_flag,\
                 options.ismip_hom_a80_flag,options.ismip_hom_a20_flag,options.ismip_hom_c_flag,options.gis_10km_flag)
 
@@ -273,6 +283,7 @@ file.write('<meta http-equiv="Content-Type" content="text/html; charset=iso-8859
 file.write('<title>Land Ice Verification and Validation toolkit</title>')
 file.write('<link href="style.css" rel="stylesheet" type="text/css">')
 file.write('<BODY>\n')
+file.write('<BODY BGCOLOR="#CADFE0">\n')
 file.write(' <div id="container"> <div id="content">')
 file.write('<P>\n')
 file.write('<OBJECT data="alaska_pic.png" type="image/png" width="400" height="300" hspace=10 align=left alt="ice sheet pic">\n')

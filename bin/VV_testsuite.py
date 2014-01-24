@@ -100,13 +100,14 @@ def web(descript_file,test_file, \
     circ_file,circ_case,circ_plot,conf_file,conf_case,conf_plot, \
     ishoma80_file,ishoma80_case,ishoma80_plot,ishoma20_file,ishoma20_case,ishoma20_plot, \
     ishomc80_file,ishomc80_case,ishomc80_plot, \
-    gis10_file,gis10_case,gis10_plot,reg_test,data_dir,ncl_path,html_path,script_path,\
+    gis10_file,gis10_case,gis10_plot,reg_test,test_suite,data_dir,ncl_path,html_path,script_path,\
     diagnostic_flag,evolving_flag,circular_flag,confined_flag, \
     ismip_hom_a80_flag,ismip_hom_a20_flag,ismip_hom_c_flag,gis_10km_flag):
 
 # using data, fill the web page with info about the cases
     test_file.write('<HTML>\n')
     test_file.write('<TITLE>Test Suite Diagnostics</TITLE>\n')
+    test_file.write('<BODY BGCOLOR="#CADFE0">\n')
     test_file.write('<H1>Test Suite Diagnostics</H1>')
 
 # link to descript_file about the test cases
@@ -185,7 +186,7 @@ def web(descript_file,test_file, \
 # link to dome30e_file with descriptions about the test cases
             test_file.write('<TH ALIGN=LEFT><A HREF="dome30e_details.html">Velocity Solver Details</A>\n')
             test_file.write('<BR>\n')
-            failedt = VV_dome30details.edetails(dome30e_file,reg_test,data_dir)
+            failedt = VV_dome30details.edetails(dome30e_file,test_suite,reg_test,ncl_path,html_path,data_dir)
 
             test_file.write('<TH ALIGN=LEFT><A HREF="dome30e_case.html">Case and Parameter Settings Details</A>\n')
             test_file.write('<BR>\n')
@@ -333,7 +334,7 @@ def web(descript_file,test_file, \
             test_file.write('<TH ALIGN=LEFT><A HREF="ishoma80_details.html">Velocity Solver Details</A>\n')
             test_file.write('<BR>\n')
             failedt = VV_ismip.a80details(ishoma80_file,reg_test,data_dir)
-
+            
             test_file.write('<TH ALIGN=LEFT><A HREF="ishoma80_case.html">Case and Parameter Settings Details</A>\n')
             test_file.write('<BR>\n')
             xml_path = reg_test + '/ismip-hom-a/80km/trilinosOptions.xml'
@@ -476,7 +477,7 @@ def web(descript_file,test_file, \
 # link to gis_10km_file with descriptions about the test cases
             test_file.write('<TH ALIGN=LEFT><A HREF="gis10_details.html">Velocity Solver Details</A>\n')
             test_file.write('<BR>\n')
-            failedt = VV_gis10details.details(gis10_file,reg_test,ncl_path,html_path,data_dir)
+            failedt = VV_gis10details.details(gis10_file,test_suite,reg_test,ncl_path,html_path,data_dir)
             
             test_file.write('<TH ALIGN=LEFT><A HREF="gis10_case.html">Case and Parameter Settings Details</A>\n')
             test_file.write('<BR>\n')
@@ -515,6 +516,7 @@ def web(descript_file,test_file, \
 
 # descript_file = open(options.html_path + '/test_descript.html', 'w')
     descript_file.write('<HTML>\n')
+    descript_file.write('<BODY BGCOLOR="#CADFE0">\n')
     descript_file.write('<TITLE>Descriptions about the Test Suite</TITLE>\n')
     descript_file.write('<H2>Test Suite Details</H2>')
     descript_file.write('<BR>\n')

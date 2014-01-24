@@ -9,12 +9,12 @@ import VV_outprocess
 import VV_utilities
 import VV_checks
 
-def details(solver_file,reg_test,ncl_path,target_html,data_dir):  # using data, fill the web page with info
+def details(solver_file,test_suite,reg_test,ncl_path,html_path,data_dir):  # using data, fill the web page with info
         
     failedt_list = []
     solver_file.write('<HTML>\n')
+    solver_file.write('<BODY BGCOLOR="#CADFE0">\n')
     solver_file.write('<H3>GIS 10km Iteration Count Details:</H3>')
-    solver_file.write('<H4>Eventually published in plot form</H4>')
     solver_file.write('<BR> \n')
 
 # JFNK multiple procs
@@ -29,38 +29,58 @@ def details(solver_file,reg_test,ncl_path,target_html,data_dir):  # using data, 
     procttl_gis10b, nonlist_gis10b, avg2_gis10b, out_flag_gis10b, ndg102b_name, ldg102b_name = \
         VV_outprocess.jobprocess(reg_test + '/bench/gis_10km/'+ data_dir + '/gis_10km.JFNK.trilinos.10.gnu.out','gis10km2b')
 
-# create iteration plots for proudction simulation
-#    data_script=ncl_path + "/solver_gis10.ncl" 
-#    plot_gis10_data = "ncl 'nfile=\"" + data_path + "" + ndg102_name + "\"'" + ' ' + \
-#                      "'lfile=\"" + data_path + "" + ldg102_name + "\"'" + ' ' + \
-#                      "'nbfile=\"" + data_path + "" + ndg102b_name + "\"'" + ' ' + \
-#                      "'lbfile=\"" + data_path + "" + ldg102b_name + "\"'" + ' ' + \
-#                      "'PNG=\"" + ncl_path + "/gis10km_iter\"'" + ' ' + \
-#                      data_script + ' ' + "1> /dev/null"
+# create iteration plots for production simulation
+    gis10km_iter = ''+ ncl_path + '/solver_iterations.ncl'
+    nfile   = 'nfile = "' + test_suite + '/livv/data' + ndg102_name + '"'
+    lfile   = 'lfile = "' + test_suite + '/livv/data' + ldg102_name + '"' 
+    nbfile  = 'nbfile = "' + test_suite + '/livv/data/' + ndg102b_name + '"'
+    lbfile  = 'lbfile = "' + test_suite + '/livv/data/' + ldg102b_name + '"'
+    png     = 'PNG = "' + ncl_path + '/gis10km_iter"'
+    name    = 'name = "GIS 10km, 2 Processors"'
+    iter_gis10km = "ncl '" + nfile + "'  '" + lfile + "'  '" + nbfile + "'  '" + lbfile + \
+                    "' '" + png + "' '" + name + "'  '" + gis10km_iter + "' >> iter_details.out"
+    try:                
+        subprocess.check_call(iter_gis10km, shell=True)
+        #print "creating gis 10km iteration plots"
+    except subprocess.CalledProcessError as e:
+        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
+                + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+        exit(e.returncode)
+    except OSError as e:
+        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
+                + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+        exit(e.errno) 
 
-#    try:
-#        output = subprocess.call(plot_gis10_data)
-#    except:
-#        print "error formatting iteration plot of gis10km run"
-#        raise
+# delete old gis 10km pic in www file
+    if (html_path + '/gis10km_iter.png'):
+        gis10kmitermove = ["rm", "-f", html_path+"/gis10km_iter.png"]
+        try:
+            subprocess.check_call(gis10kmitermove)
+        except subprocess.CalledProcessError as e:
+            print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
+                    + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+            exit(e.returncode)
+        except OSError as e:
+            print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
+                    + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+            exit(e.errno)
 
-#transferring iteration plot to www location
-#    if (ncl_path + '/gis10km_iter.png'):
-#        iterpic = "mv -f " + ncl_path + "/gis10km_iter.png" + " " + target_html + "/"
-#        try:
-#            output = subprocess.call(iterpic)
-#        except:
-#            print "error moving iter png file"
-#            raise
+# transferring new gis 10km pic to www file
+    if (ncl_path + '/gis10km_iter.png'):
+        gis10kmiterpic = ["mv", "-f", ncl_path+"/gis10km_iter.png", html_path+"/"]
+        try:
+            subprocess.check_call(gis10kmiterpic)
+        except subprocess.CalledProcessError as e:
+            print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
+                    + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+            exit(e.returncode)
+        except OSError as e:
+            print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
+                    + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+            exit(e.errno)
 
-#    solver_file.write('<TABLE>\n')
-#    solver_file.write('<TR>\n') 
-#    solver_file.write('<H4>Iteration Count for Nonlinear and Linear Solver</H4>\n')
-#    solver_file.write('<OBJECT data="gis10km_iter.png" type="image/png" width="1300" height="800" hspace=10 align=left alt="Solver Plots">\n')
-#    solver_file.write('</OBJECT>\n')
-#    solver_file.write('<TR>\n')
-#    solver_file.write('<BR>\n')
-#    solver_file.write('</TABLE>\n')
+    solver_file.write('<OBJECT data="gis10km_iter.png" type="image/png" width="800" height="600" hspace=5 align=center">\n')
+    solver_file.write('</OBJECT>\n')
 
 # also present data in list form
     solver_file.write('<H4>New Run: gis_10km.JFNK.trilinos.10.gnu.out</H4>')
@@ -102,6 +122,7 @@ def gis10_plot(plot_file,reg_test,ncl_path,html_path,script_path,data_dir):  # u
         return
 
         plot_file.write('<HTML>\n')
+        plot_file.write('<BODY BGCOLOR="#CADFE0">\n')
         plot_file.write('<H3>GIS 10km Plot Details:</H3>')
 
 # formulate gis10km velocity norm plot            
