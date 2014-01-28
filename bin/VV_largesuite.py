@@ -10,6 +10,7 @@ import time
 import VV_utilities
 import VV_gis5details
 import VV_largetestdetails
+import VV_timing
 
 #bit-for-bit check for each test case
 def bit_list(perf_test,data_dir,dome60_flag,dome120_flag,dome240_flag, \
@@ -73,10 +74,10 @@ def bit_list(perf_test,data_dir,dome60_flag,dome120_flag,dome240_flag, \
     return dictionary_large
 
 
-def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_plot, \
-    dome120_file,dome120_case,dome120_plot,dome240_file,dome240_case,dome240_plot, \
-    dome500_file,dome500_case,dome500_plot,dome1000_file,dome1000_case,dome1000_plot, \
-    gis5km_file,gis5km_case,gis5km_plot,perf_test,ncl_path,html_path,script_path, \
+def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_time,dome60_plot, \
+    dome120_file,dome120_case,dome120_time,dome120_plot,dome240_file,dome240_case,dome240_time,dome240_plot, \
+    dome500_file,dome500_case,dome500_time,dome500_plot,dome1000_file,dome1000_case,dome1000_time,dome1000_plot, \
+    gis5km_file,gis5km_case,gis5km_time,gis5km_plot,perf_test,ncl_path,html_path,script_path, \
     dome60_flag,dome120_flag,dome240_flag,dome500_flag,dome1000_flag,gis_5km_flag,data_dir):
 
 # using data, fill the web page with info about the cases
@@ -120,6 +121,16 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_plo
             bench_configure_path = perf_test + '/bench/dome60/dome.60.JFNK.trilinos.config'
             VV_utilities.confxml(dome60_case,configure_path,bench_configure_path,xml_path,bench_xml_path)
 
+            #if timing_flag == 1:
+            large_test_file.write('<TH ALIGN=LEFT><A HREF="dome60_timing.html">Timing Details</A>\n')
+            large_test_file.write('<BR>\n')
+            flag = 0
+            JFNK_timing_path = perf_test + '/dome60/data/out.60.JFNK.timing'
+            VV_timing.timing_table_current_run(dome60_time,JFNK_timing_path,flag)
+            flag = 1
+            PIC_timing_path = perf_test + '/dome60/data/out.60.PIC.timing'
+            VV_timing.timing_table_current_run(dome60_time,PIC_timing_path,flag)
+            
 #           large_test_file.write('<TH ALIGN=LEFT><A HREF="dome60_plot.html">Plots</A>\n')
 #           large_test_file.write('<BR>\n')
 #           if failedt != 0:
@@ -172,6 +183,16 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_plo
             bench_configure_path = perf_test + '/bench/dome120/dome.120.JFNK.trilinos.config'
             VV_utilities.confxml(dome120_case,configure_path,bench_configure_path,xml_path,bench_xml_path)
 
+            #if timing_flag == 1:
+            large_test_file.write('<TH ALIGN=LEFT><A HREF="dome120_timing.html">Timing Details</A>\n')
+            large_test_file.write('<BR>\n')
+            flag = 0
+            JFNK_timing_path = perf_test + '/dome120/data/out.120.JFNK.timing'
+            VV_timing.timing_table_current_run(dome120_time,JFNK_timing_path,flag)
+            flag = 1
+            PIC_timing_path = perf_test + '/dome120/data/out.120.PIC.timing'
+            VV_timing.timing_table_current_run(dome120_time,PIC_timing_path,flag)
+
 #           large_test_file.write('<TH ALIGN=LEFT><A HREF="dome120_plot.html">Plots</A>\n')
 #           large_test_file.write('<BR>\n')
 #           if failedt != 0:
@@ -223,6 +244,16 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_plo
             bench_configure_path = perf_test + '/bench/dome240/dome.240.JFNK.trilinos.config'
             VV_utilities.confxml(dome240_case,configure_path,bench_configure_path,xml_path,bench_xml_path)
 
+            #if timing_flag == 1:
+            large_test_file.write('<TH ALIGN=LEFT><A HREF="dome240_timing.html">Timing Details</A>\n')
+            large_test_file.write('<BR>\n')
+            flag = 0
+            JFNK_timing_path = perf_test + '/dome240/data/out.240.JFNK.timing'
+            VV_timing.timing_table_current_run(dome240_time,JFNK_timing_path,flag)
+            flag = 1
+            PIC_timing_path = perf_test + '/dome240/data/out.240.PIC.timing'
+            VV_timing.timing_table_current_run(dome240_time,PIC_timing_path,flag)
+
 #           large_test_file.write('<TH ALIGN=LEFT><A HREF="dome240_plot.html">Plots</A>\n')
 #           large_test_file.write('<BR>\n')
 #           if failedt != 0:
@@ -273,6 +304,16 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_plo
             configure_path = perf_test + '/dome500/dome.500.JFNK.trilinos.config'
             bench_configure_path = perf_test + '/bench/dome500/dome.500.JFNK.trilinos.config'
             VV_utilities.confxml(dome500_case,configure_path,bench_configure_path,xml_path,bench_xml_path)
+            
+            #if timing_flag == 1:
+            large_test_file.write('<TH ALIGN=LEFT><A HREF="dome500_timing.html">Timing Details</A>\n')
+            large_test_file.write('<BR>\n')
+            flag = 0
+            JFNK_timing_path = perf_test + '/dome500/data/out.500.JFNK.timing'
+            VV_timing.timing_table_current_run(dome500_time,JFNK_timing_path,flag)
+            flag = 1
+            PIC_timing_path = perf_test + '/dome500/data/out.500.PIC.timing'
+            VV_timing.timing_table_current_run(dome500_time,PIC_timing_path,flag)
 
 #           large_test_file.write('<TH ALIGN=LEFT><A HREF="dome500_plot.html">Plots</A>\n')
 #           large_test_file.write('<BR>\n')
@@ -324,6 +365,16 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_plo
             configure_path = perf_test + '/dome1000/dome.1000.JFNK.trilinos.config'
             bench_configure_path = perf_test + '/bench/dome1000/dome.1000.JFNK.trilinos.config'
             VV_utilities.confxml(dome1000_case,configure_path,bench_configure_path,xml_path,bench_xml_path)
+
+            #if timing_flag == 1:
+            large_test_file.write('<TH ALIGN=LEFT><A HREF="dome1000_timing.html">Timing Details</A>\n')
+            large_test_file.write('<BR>\n')
+            flag = 0
+            JFNK_timing_path = perf_test + '/dome1000/data/out.1000.JFNK.timing'
+            VV_timing.timing_table_current_run(dome1000_time,JFNK_timing_path,flag)
+            flag = 1
+            PIC_timing_path = perf_test + '/dome1000/data/out.1000.PIC.timing'
+            VV_timing.timing_table_current_run(dome1000_time,PIC_timing_path,flag)
 
 #           large_test_file.write('<TH ALIGN=LEFT><A HREF="dome1000_plot.html">Plots</A>\n')
 #           large_test_file.write('<BR>\n')

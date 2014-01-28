@@ -238,35 +238,41 @@ if options.dome60_flag==1 or options.dome120_flag==1 or options.dome240_flag==1 
 # dome60 case
         dome60_file = open(target_html + '/dome60_details.html', 'w')
         dome60_case = open(target_html + '/dome60_case.html', 'w')
+        dome60_time = open(target_html + '/dome60_timing.html', 'w')
         dome60_plot = open(target_html + '/dome60_plot.html', 'w')
 # dome120 case
         dome120_file = open(target_html + '/dome120_details.html', 'w')
         dome120_case = open(target_html + '/dome120_case.html', 'w')
+        dome120_time = open(target_html + '/dome120_timing.html', 'w')
         dome120_plot = open(target_html + '/dome120_plot.html', 'w')
 # dome240 case
         dome240_file = open(target_html + '/dome240_details.html', 'w')
         dome240_case = open(target_html + '/dome240_case.html', 'w')
+        dome240_time = open(target_html + '/dome240_timing.html', 'w')
         dome240_plot = open(target_html + '/dome240_plot.html', 'w')
 # dome500 case
         dome500_file = open(target_html + '/dome500_details.html', 'w')
         dome500_case = open(target_html + '/dome500_case.html', 'w')
+        dome500_time = open(target_html + '/dome500_timing.html', 'w')
         dome500_plot = open(target_html + '/dome500_plot.html', 'w')
 # dome1000 case
         dome1000_file = open(target_html + '/dome1000_details.html', 'w')
         dome1000_case = open(target_html + '/dome1000_case.html', 'w')
+        dome1000_time = open(target_html + '/dome1000_timing.html', 'w')
         dome1000_plot = open(target_html + '/dome1000_plot.html', 'w')
 # gis 5km case
         gis5km_file = open(target_html + '/gis5km_details.html', 'w')
         gis5km_case = open(target_html + '/gis5km_case.html', 'w')
+        gis5km_time = open(target_html + '/gis5km_timing.html', 'w')
         gis5km_plot = open(target_html + '/gis5km_plot.html', 'w')
 
 #path to python code to create all the large test suite pages and data
         perf_test = options.test_suite + "/perf_test"
 
-        VV_largesuite.large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_plot, \
-               dome120_file,dome120_case,dome120_plot,dome240_file,dome240_case,dome240_plot, \
-               dome500_file,dome500_case,dome500_plot,dome1000_file,dome1000_case,dome1000_plot, \
-               gis5km_file,gis5km_case,gis5km_plot, \
+        VV_largesuite.large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_time,dome60_plot, \
+               dome120_file,dome120_case,dome120_time,dome120_plot,dome240_file,dome240_case,dome240_time,dome240_plot, \
+               dome500_file,dome500_case,dome500_time,dome500_plot,dome1000_file,dome1000_case,dome1000_time,dome1000_plot, \
+               gis5km_file,gis5km_case,gis5km_time,gis5km_plot, \
                 perf_test,options.ncl_path,target_html,options.script_path, \
                 options.dome60_flag,options.dome120_flag,options.dome240_flag, \
                 options.dome500_flag,options.dome1000_flag,options.gis_5km_flag,options.data_dir)
