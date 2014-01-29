@@ -1,12 +1,13 @@
 #!/bin/bash
 
-#KJE, AJB, NRM 8/2013 evanskj@ornl.gov
+#KJE, AJB, NRM 12/2013 evanskj@ornl.gov
 #This is the master script to set the parameters and paths to run the LIVV kit on lens
 #Efforts funded by DOE BER PISCEES SciDAC project
 #Currently it is designed specifically for the GLIDE dycore of the CISM model, because it is designed to read its output
 
 
-# load these before running
+# load these before running, and it may not work if you have already loaded some modules 
+# lens is very fragile right now
 source $MODULESHOME/init/bash #make sure to put "source $MODULESHOME/init/bash" in your .bashrc file
 module load ncl/6.0.0
 module load nco/4.0.7
