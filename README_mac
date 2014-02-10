@@ -1,61 +1,56 @@
 Information on how to run the Land Ice V&V (LIVV) post-processing software.
-export DATA="data_mac"
-KJE, AB, NM 9/2013
+KJE, AB, NM 2/2014
 
-The /livv directory contains all the scripts and code to run the LIVV kit.
-The mac_VV.bash script contains the inputs needed to run on a data processing style machine.
-An example scripts for Carver (NERSC), Lens (OLCF), and Mac OSX (local) are provided.
+The /PISCEES/trunk/tests/higher-order/livv directory contains all the scripts and code to run the LIVV kit.
+The mac_VV.bash script contains the inputs needed to run on an OSX machine.
+Scripts for Carver (NERSC), Rhea (OLCF), and Mac OSX (local) are provided.
 
-Mac Packages:
-	1. python
-        2. py-netcdf4 @1.0.4_0
-        3. py-numpy @1.7.1_0
-        4. ncl/6.0.0 from source
-        5. nco @4.3.4
-        6. netcdf @4.2.1.1
+Software needed for LIVV:
 
-Steps to install packages on the local Mac (best to use Macports insteading of loading them from source):
+  Packages via MacPorts (versions as of 2/2014):
+      1. python27
+      2. py-netcdf4 @1.0.4
+      3. py-numpy @1.8.0
+      5. nco @4.4.0
+      6. netcdf @4.3.0
+      7. udunits2 @2.1.24
+      8. hdf5 @1.6.9
 
-      	1. udunits2 from source
-        2. hdf5 from source
-        3. netcdf4 from source
-        4. nco from source
-        5. download Mac OSX NCL binary for 10.7 (instructions listed below)
+  Packages not available via MacPorts (versions as of 2/2014):
+      5. download Mac OSX NCL binary for 10.7 (instructions listed below)
 
-to install NCL go here:
-<http://www.earthsystemgrid.org/dataset/ncl.612.0.html>, download the latest
-Mac OSX binary for 10.7, even if you have 10.8, just pretend. Unpack it and
-move it where you want it.
-Set NCARG_ROOT to the NCL directory, and add
-$NCARG_ROOT/bin to the PATH environment variable. Best to do those in your
-.bashrc so you don't have to think about it again.
+      To install NCL go here:
+      <http://www.earthsystemgrid.org/dataset/ncl.612.0.html>, download the latest
+      Mac OSX binary for 10.7, even if you have 10.8, just pretend. Unpack it and
+      move it where you want it.
+      Set NCARG_ROOT to the NCL directory, and add
+      $NCARG_ROOT/bin to the PATH environment variable. Best to do those in your
+      .bashrc so you don't have to think about it again.
 
 Filepaths for the python script are defined in the bash shell script, and most are required.
-
 The command to run the python script along with all of the necessary/optional files is the last line of the script. 
 
-/bin: the python processing code 
-/plots: the ncl code 
-/data: the solver data from each processed run is placed here in a $case.asc format 
-
+/livv/bin: the python processing code 
+/livv/plots: the ncl scripts 
+/livv/data: the solver data from each processed run is placed here in a $case.asc format 
 
 To run the shell script (Mac OS X):
 
-  1. Copy reg_test directory from /tmp/proj/cli054/ on lens or titan (choose the tar file with the most recent date stamp)
+  1. Copy reg_test directory from /ccs/proj/cli062/ on rhea or titan (choose the tar file with the most recent date stamp)
      and place on your mac, preferably place in some sort of directory (ex. mac_run, higher-order) which contains both reg_test
-     and livv. This will be the same directory as specified as TEST_DIR in the master_build_mac.csh file. Go ahead and 
-     copy this entire /trunk/tests/higher-order/livv directory and place in this new directory as well.
+     and livv. This will be the same directory as specified as TEST_DIR in the /PISCEES/trunk/cmake-scripts/master_build_mac.csh file.
+     Go ahead and copy the entire /trunk/tests/higher-order/livv directory and place in this new directory as well.
 
 In mac_VV.bash:
 
-  2. Change the TEST_FILEPATH to the path containing the livv kit. (^^ path to the directory mentioned above)
+  2. Change the TEST_FILEPATH to the path containing the livv directory. (^^ path to the directory mentioned above)
 
   3. Change MY_PYTHON to wherever your python2.7 package exists on your mac.
 
   4. Change the HTML_PATH to the location of the www directory. If it doesn't already exist, specify the path to where
      you would like it and LIVV will check the path and create it if it is not already there.
 
-  5. Leave RUN_GIS=0 and RUN_ANT=0 in the mac_VV.bash script since production analysis will not be run locally.
+  5. Leave RUN_ANT=0 in the mac_VV.bash script since antarctica  analysis will not be run locally.
      The flags are pre-set in the bash script for what will be analyzed on the mac. Note that you can adjust which
      testcases you would like livv to run within the mac_VV.bash script by changing the flag from a 0 to 1. If you 
      have just recently checked out the code, the flags should already be set for the tests that are commonly run
@@ -73,7 +68,6 @@ When you are done, the script tells you the website location to go look at the o
 TODOs (feel free to add to this as needed)
 
 Major:
-*plot the solver and convergence info more usefully for all relevant runs
 *create a more general user interface to process the GIS production output
 *enable the option to read from FELIX data (in exodus format) using visit
 

@@ -1,11 +1,10 @@
 #!/bin/bash
 
-#KJE, AJB, NRM 01/2014 evanskj@ornl.gov
+#KJE, AJB, NRM 02/2014 evanskj@ornl.gov
 #This is the master script to set the parameters and paths to run the LIVV kit on rhea at OLCF
 #Efforts funded by DOE BER PISCEES SciDAC project
 #Currently it is designed specifically for the GLIDE dycore of the CISM model, because it is 
 #designed to read its output
-
 
 # load these before running
 source $MODULESHOME/init/bash #make sure to put "source $MODULESHOME/init/bash" in your .bashrc file
@@ -17,22 +16,17 @@ module load python_matplotlib/1.3.1
 module load netcdf/4.1.3
 module load python_netcdf4/1.0.6
 
-# define user for website
-USERNAME=$USER
-
+# the below settings highlighted between the ***'s need to be changed by the user:
+#*******************************************************************************
 # user added comment of analysis to be performed
 COMMENT="test run of code"
 
-# change to your location of livv kit
+# /reg_test and /livv needs to be placed in the subdirectory below
 export TEST_FILEPATH="/lustre/atlas/scratch/$USER/cli062/higher-order"
-export SCRIPT_PATH="$TEST_FILEPATH/livv"
-#data_dir changes based on what machine livv is run on (choices: titan, hopper, mac)
-export DATA_DIR="data_titan"
 
 # specify location where the html files will be sent so they are viewable on the web
 # livv will create the www directory in the HTML_PATH if it does not already exist
 export HTML_PATH="/ccs/home/$USER/www/"
-export HTML_LINK="http://users.nccs.gov/~$USER/"
 
 # flags to select verification tests, 1=yes
 export RUN_DOME30_DIAGNOSTIC=1
@@ -53,6 +47,17 @@ export RUN_DOME1000=0
 export RUN_GIS_5KM=0
 
 export RUN_ANT=0
+#*******************************************************************************
+
+# From here below, the commands are set automatically and don't require changing by the user
+
+export SCRIPT_PATH="$TEST_FILEPATH/livv"
+# data_dir changes based on what machine livv is run on (choices: titan, hopper, mac)
+export DATA_DIR="data_titan"
+export HTML_LINK="http://users.nccs.gov/~$USER/"
+
+# providing a username creates a directory by that name in the location above in which all the web files will go
+USERNAME=$USER
 
 if (($RUN_ANT == 1)); then
 		#  directory of run
@@ -62,8 +67,6 @@ if (($RUN_ANT == 1)); then
 		#  production run screen output for collecting convergence information
 		export ANT_OUTPUT="out.gnu"
 	fi
-
-# *****From here below, the commands are set automatically and don't require changing by the user
 
 # resulting pathnames from settings given by user
 # date stamp of LIVV run to put with comments
