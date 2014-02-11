@@ -1,9 +1,9 @@
-Information on how to run the Land Ice V&V (LIVV) post-processing software.
+Information on how to run the Land Ice V&V (LIVV) Post-Processing Software.
 KJE, AB, NM 2/2014
 
 The /PISCEES/trunk/tests/higher-order/livv directory contains all the scripts and code to run the LIVV kit.
 The mac_VV.bash script contains the inputs needed to run on an OSX machine.
-Scripts for Carver (NERSC), Rhea (OLCF), and Mac OSX (local) are provided.
+Scripts for Carver (NERSC) and Rhea (OLCF) are also provided.
 
 Software needed for LIVV:
 
@@ -36,32 +36,46 @@ The command to run the python script along with all of the necessary/optional fi
 
 To run the shell script (Mac OS X):
 
-  1. Copy reg_test directory from /ccs/proj/cli062/ on rhea or titan (choose the tar file with the most recent date stamp)
-     and place on your mac, preferably place in some sort of directory (ex. mac_run, higher-order) which contains both reg_test
-     and livv. This will be the same directory as specified as TEST_DIR in the /PISCEES/trunk/cmake-scripts/master_build_mac.csh file.
-     Go ahead and copy the entire /trunk/tests/higher-order/livv directory and place in this new directory as well.
+  1. Copy the reg_test directory from /ccs/proj/cli062/ on rhea or titan (choose the tar file with the most recent date stamp),
+     untar it and place in a new directory (ex. mac_run, higher-order) on your mac. This will be the same directory as
+     specified as TEST_DIR in the /PISCEES/trunk/cmake-scripts/master_build_mac.csh file. Go ahead and copy the entire
+     /PISCEES/trunk/tests/higher-order/livv directory and place in this new directory as well.
 
-In mac_VV.bash:
+  2. Now run the /PISCEES/trunk/cmake-scripts/master_build_mac.csh file on your mac (see /PISCEES/trunk/cmake-scripts/README
+     for more information on how to run the csh script). Make sure the TEST_DIR is set to the directory that you created
+     in step #1. Also make sure the tests you want to run and analyze on your machine later are selected in the csh file.
+     The jobs in reg_test will be automatically run by this csh script (as long as the path is correctly specified) after
+     the model is successfully built. Once the model is built and the jobs are submitted, you will then go into the livv
+     directory in the path set above and run livv to post-process all of the tests you just ran. 
 
-  2. Change the TEST_FILEPATH to the path containing the livv directory. (^^ path to the directory mentioned above)
+To set up the livv executable /livv/mac_VV.bash (this can be done after you run the master_build_mac.csh file):
 
   3. Change MY_PYTHON to wherever your python2.7 package exists on your mac.
+  
+  4. There is an opportunity to insert a COMMENT to display your reason for running livv on the website.
+  
+  5. Change the TEST_FILEPATH to the path containing the livv directory (the directory mentioned in step #1).
 
-  4. Change the HTML_PATH to the location of the www directory. If it doesn't already exist, specify the path to where
-     you would like it and LIVV will check the path and create it if it is not already there.
+  6. Change the HTML_PATH to the location of the www directory. If it doesn't already exist, specify the path to where
+     you would like it and LIVV will check the path and create it if it is not already there. An example path is already
+     in the bash file that you may try. If you have posted html pages from your mac previously, you can point livv to
+     whatever html directory you have used and livv will create a sub-directory where it will store all of its own html
+     files, therefore not disrupting the rest of your workspace.
 
-  5. Leave RUN_ANT=0 in the mac_VV.bash script since antarctica  analysis will not be run locally.
-     The flags are pre-set in the bash script for what will be analyzed on the mac. Note that you can adjust which
-     testcases you would like livv to run within the mac_VV.bash script by changing the flag from a 0 to 1. If you 
-     have just recently checked out the code, the flags should already be set for the tests that are commonly run
-     by the model on the machine.
+  7. The verification flags are pre-set in the bash script for what will be analyzed on the mac. Note that you can
+     adjust which testcases you would like livv to run within the mac_VV.bash script by changing the flag from a
+     0 to 1. If you have just recently checked out the code, the flags should already be set for the tests that are
+     run by the software on the machine. Mac can only run a subset of the tests due to the capacity of the machine.
+     Those tests are highlighted in the mac_VV.bash script to avoid any confusion. However, you are of course
+     not required to run all 5 tests that the machine processes. You are allowed to select any sub-set and combination
+     of the tests. Leave RUN_ANT=0 in the mac_VV.bash script since Antarctica analysis will not be run locally.
 
-  6. Type "bash mac_VV.bash" in the command line in the main directory.
+To run livv:
 
-We have piped the NCL output to a file called plot_details.out. So if there is any concern over whether plots
-have formed correctly after inspecting the website, you can inspect that file.
-
-When you are done, the script tells you the website location to go look at the output.
+  8. Type "bash mac_VV.bash" in the command line in the /livv/ directory. When it is finished running, the website
+     location will be printed to the screen where you can look at the output.
+     We have piped the ncl output to a file called plot_details.out. So if there is any concern over whether plots
+     have formed correctly after inspecting the website, you can look in that file.
 
 
 

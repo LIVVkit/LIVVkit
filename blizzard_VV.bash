@@ -5,7 +5,7 @@
 #Efforts funded by DOE BER PISCEES SciDAC project
 #Currently it is designed specifically for the GLIDE dycore of the CISM model, because it is designed to read its output
 
-# load these before running
+# load these before running (they will automatically load)
 #source $MODULESHOME/init/bash #make sure to put "source $MODULESHOME/init/bash" in your .bashrc file
 #module load ncl/6.0.0
 #module load nco/4.0.7
@@ -38,14 +38,17 @@ export RUN_ISMIP_HOM_A20=1
 export RUN_ISMIP_HOM_C=0
 export RUN_GIS_10KM=0
 
+# flag to select Antarctica analysis (keep turned off for now)
 export RUN_ANT=0
 #*******************************************************************************
 
 # From here below, the commands are set automatically and don't require changing by the user
 
+# points to livv in the directory set above
 export SCRIPT_PATH="$TEST_FILEPATH/livv"
 # data_dir changes based on what machine livv is run on (choices: titan, hopper, mac)
 export DATA_DIR="data_rhel6"
+# creates HTML_LINK based on HTML_PATH given above
 mkdir -p $HTML_PATH
 export HTML_LINK="file://$HTML_PATH"
 
@@ -61,7 +64,6 @@ if (($RUN_ANT == 1)); then
 		export ANT_OUTPUT="out.gnu"
 	fi
 
-# resulting pathnames from settings given by user
 # date stamp of LIVV run to put with comments
 NOW=$(date +"%m-%d-%Y-%r")
 echo $NOW $COMMENT

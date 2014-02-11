@@ -1,17 +1,13 @@
 #!/bin/bash
 
 #KJE 1/2013 evanskj@ornl.gov
-#This is the master script to set the parameters and paths to run the LIVV kit on mac os computer
+#This is the master script to set the parameters and paths to run the LIVV kit on the Mac OSX computer
 #Efforts funded by DOE BER PISCEES SciDAC project
 #Currently it is designed specifically for the GLIDE dycore of the CISM model, because it is
 #designed to read its output
 
-# load these before running
-#source $MODULESHOME/init/bash
-#module load ncl/6.0.0
-#module load nco/4.0.7
-#module load python/2.7
-#module load netcdf/4.1.3
+# MAKE SURE YOUR ENVIRONMENT IS SET CORRECTLY BEFORE RUNNING THIS SCRIPT
+# refer to the README_mac script for more information on the software needed 
 
 nargs=${#}
 if ((nargs >= 1)); then
@@ -36,6 +32,8 @@ export TEST_FILEPATH="$TEST_DIR"
 export HTML_PATH="$TEST_FILEPATH/html/"
 
 # flags to select verification tests, 1=yes
+# due to the capability of the machine, the only tests that should be run on the machine are:
+# Dome30_Diagnostic, Circular_Shelf, Confined_Shelf, ISMIP_HOM_A80, and ISMIP_HOM_A20
 export RUN_DOME30_DIAGNOSTIC=1
 export RUN_DOME30_EVOLVING=0
 export RUN_CIRCULAR_SHELF=1
@@ -45,14 +43,17 @@ export RUN_ISMIP_HOM_A20=1
 export RUN_ISMIP_HOM_C=0
 export RUN_GIS_10KM=0
 
+# leave RUN_ANT=0 since this capability is not ready yet
 export RUN_ANT=0
 #*******************************************************************************
 
 # From here below, the commands are set automatically and don't require changing by the user
 
+# points to livv in the directory set above
 export SCRIPT_PATH="$TEST_FILEPATH/livv"
-#data_dir changes based on what machine livv is run on (choices: titan, hopper, mac)
+# data_dir changes based on what machine livv is run on (choices: titan, hopper, mac)
 export DATA_DIR="data_mac"
+# creates HTML_LINK based on HTML_PATH given above
 export HTML_LINK="file://$HTML_PATH"
 
 # providing a username creates a directory by that name in the location above in which all the web files will go
@@ -67,15 +68,14 @@ if (($RUN_ANT == 1)); then
 		export ANT_OUTPUT="out.gnu"
 	fi
 
-# resulting pathnames from settings given by user
 # date stamp of LIVV run to put with comments
 NOW=$(date +"%m-%d-%Y-%r")
 echo $NOW $COMMENT
 
 # settings not generally altered, but leaving the option open for future extension
-# location where the livv code is located
+# where the python code is located within livv
 export PY_PATH="$SCRIPT_PATH/bin"
-# location where the ncl directory of the ncl scripts and .nc files are located
+# where the ncl directory of the ncl scripts and .nc files are located within livv
 export NCL_PATH="$SCRIPT_PATH/plots"
 
 # command to run python script while inputting all of the files listed above

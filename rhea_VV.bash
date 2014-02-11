@@ -6,7 +6,7 @@
 #Currently it is designed specifically for the GLIDE dycore of the CISM model, because it is 
 #designed to read its output
 
-# load these before running
+# load these before running (they will automatically load)
 source $MODULESHOME/init/bash #make sure to put "source $MODULESHOME/init/bash" in your .bashrc file
 module load ncl/6.1.0
 module load nco/4.3.9
@@ -46,14 +46,17 @@ export RUN_DOME500=0
 export RUN_DOME1000=0
 export RUN_GIS_5KM=0
 
+# flag to select Antarctica analysis (keep turned off for now)
 export RUN_ANT=0
 #*******************************************************************************
 
 # From here below, the commands are set automatically and don't require changing by the user
 
+# points to livv in the directory set above
 export SCRIPT_PATH="$TEST_FILEPATH/livv"
 # data_dir changes based on what machine livv is run on (choices: titan, hopper, mac)
 export DATA_DIR="data_titan"
+# creates HTML_LINK based on HTML_PATH given above
 export HTML_LINK="http://users.nccs.gov/~$USER/"
 
 # providing a username creates a directory by that name in the location above in which all the web files will go
@@ -68,7 +71,6 @@ if (($RUN_ANT == 1)); then
 		export ANT_OUTPUT="out.gnu"
 	fi
 
-# resulting pathnames from settings given by user
 # date stamp of LIVV run to put with comments
 NOW=$(date +"%m-%d-%Y-%r")
 echo $NOW $COMMENT

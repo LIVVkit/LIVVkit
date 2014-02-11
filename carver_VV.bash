@@ -6,8 +6,9 @@
 #Currently it is designed specifically for the GLIDE dycore of the CISM model, because it is
 #designed to read its output
 
-# load these before running, note that on Carver, laoding python also loads numpy and matplotlib
-source $MODULESHOME/init/bash
+# load these before running (they will automatically load)
+# note that on Carver, loading python also loads numpy and matplotlib
+source $MODULESHOME/init/bash # make sure to put "source $MODULESHOME/init/bash" in your .bashrc file
 module load ncar/6.0.0
 module load nco/4.3.6
 module unload python/2.7
@@ -42,7 +43,7 @@ export RUN_ISMIP_HOM_A20=1
 export RUN_ISMIP_HOM_C=0
 export RUN_GIS_10KM=0
 
-# flags to run the performance analysis
+# flags to select the performance analysis
 export RUN_DOME60=0
 export RUN_DOME120=0
 export RUN_DOME240=0
@@ -50,14 +51,17 @@ export RUN_DOME500=0
 export RUN_DOME1000=0
 export RUN_GIS_5KM=0
 
+# flag to select Antarctica analysis (keep turned off for now)
 export RUN_ANT=0
 #*******************************************************************************
 
 # From here below, the commands are set automatically and don't require changing by the user
 
+# points to livv in the directory set above
 export SCRIPT_PATH="$TEST_FILEPATH/livv"
 # data_dir changes based on what machine livv is run on (choices: titan, hopper, mac)
 export DATA_DIR="data_hopper"
+# creates HTML_LINK based on HTML_PATH given above
 export HTML_LINK="portal.nersc.gov/project/piscees/LIVV.html"
 
 # providing a username creates a directory by that name in the location above in which all the web files will go
@@ -72,7 +76,6 @@ if (($RUN_ANT == 1)); then
 		export ANT_OUTPUT="out.gnu"
 	fi
 
-# resulting pathnames from settings given by user
 # date stamp of LIVV run to put with comments
 NOW=$(date +"%m-%d-%Y-%r")
 echo $NOW $COMMENT
