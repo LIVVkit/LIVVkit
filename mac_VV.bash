@@ -33,9 +33,9 @@ export HTML_PATH="$TEST_FILEPATH/html/"
 
 # flags to select verification tests, 1=yes
 # due to the capability of the machine, the only tests that should be run on the machine are:
-# Dome30_Diagnostic, Circular_Shelf, Confined_Shelf, ISMIP_HOM_A80, and ISMIP_HOM_A20
+# Dome30_Diagnostic, Dome30_Evolving, Circular_Shelf, Confined_Shelf, ISMIP_HOM_A80, and ISMIP_HOM_A20
 export RUN_DOME30_DIAGNOSTIC=1
-export RUN_DOME30_EVOLVING=0
+export RUN_DOME30_EVOLVING=1
 export RUN_CIRCULAR_SHELF=1
 export RUN_CONFINED_SHELF=1
 export RUN_ISMIP_HOM_A80=1

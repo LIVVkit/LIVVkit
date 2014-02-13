@@ -69,7 +69,7 @@ To set up the livv executable /higher-order/livv/mac_VV.bash:
      0 to 1. If you have just recently checked out the code, the flags should already be set for the tests that are
      run by the software on the machine. Mac can only run a subset of the tests due to the capacity of the machine.
      Those tests are highlighted in the mac_VV.bash script to avoid any confusion. However, you are of course
-     not required to run all 5 tests that the machine processes. You are allowed to select any sub-set and combination
+     not required to run all 6 tests that the machine processes. You are allowed to select any sub-set and combination
      of the tests. Leave RUN_ANT=0 in the mac_VV.bash script since Antarctica analysis will not be run locally.
 
 To run livv:
