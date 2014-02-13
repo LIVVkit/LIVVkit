@@ -1,59 +1,70 @@
-Information on how to run the Land Ice V&V (LIVV) post-processing software.
+Information on how to run the Land Ice V&V (livv) Post-Processing Software.
 KJE, AB, NM 2/2014
 
-The /PISCEES/trunk/tests/higher-order/livv directory contains all the scripts and code to run the LIVV kit.
+The /PISCEES/trunk/tests/higher-order/livv directory contains all the scripts and code to run livv.
 The carver_VV.bash script contains the inputs needed to run on a data processing style machine.
-Scripts for Carver (NERSC), Rhea (OLCF), and Mac OSX (local) are provided.
+Scripts for Rhea (OLCF) and Mac OSX (local) are provided.
 
 If you want to run on another machine, these are the software packages and versions that worked 
 on both NERSC and OLCF machines as of 8/2013:
-	1. hdf5/1.8.6
-	2. python/2.7.3
-	3. netcdf4-python/1.0 (NERSC is 1.0.6)
-	4. python_numpy/1.7.1            
-	5. ncl/6.0.0  (at NERSC this is called, inexplicably, ncar/6.0.0)  
-	6. nco/4.0.7 (NERSC is 4.3.6)
-	7. netcdf/4.1.3 (NERSC is 4.2.1.1)
+	    1. hdf5/1.8.6
+	    2. python/2.7.3
+	    3. netcdf4-python/1.0 (NERSC is 1.0.6)
+	    4. python_numpy/1.7.1            
+	    5. ncl/6.0.0  (at NERSC this is called, inexplicably, ncar/6.0.0)  
+	    6. nco/4.0.7 (NERSC is 4.3.6)
+	    7. netcdf/4.1.3 (NERSC is 4.2.1.1)
 
 Filepaths for the python script are defined in the bash shell script, and most are required.
 The command to run the python script along with all of the necessary/optional files is the last line of the script. 
 
 /livv/bin: the python processing code 
-/livv/plots: the ncl code 
+/livv/plots: the ncl scripts 
 /livv/data: the solver data from each processed run is placed here in a $case.asc format 
 
 To run the shell script (Carver):
 
-1. Make sure to place "source $MODULESHOME/init/bash" in your .bashrc file
+  1. Make sure to place "source $MODULESHOME/init/bash" in your .bashrc file
 
-2. Create a mirror copy of everything in the /trunk/tests/higher-order directory in your scratch space
+  2. Create a higher-order directory in your scratch space. Copy reg_test and perf_test directories from /project/projectdirs/piscees/
+     on carver or hopper (choose tar files with the most recent date stamps) along with /PISCEES/trunk/tests/higher-order/livv
+     and place in the higher-order directory mentioned above.
 
-3. Place reg_test directory (taken from /tmp/proj/cli054/) in the higher-order directory in your scratch space
+  3. Now run the /PISCEES/trunk/cmake-scripts/master_build_hopper.csh file in your home space
+     on hopper (see /PISCEES/trunk/cmake-scripts/README for more information on how to run the csh script).
+     NOTE: make sure to wait until all job scripts have completed before running livv.
+     Make sure the TEST_DIR is set to the directory that you created in step #2. Also make sure the tests you want to run and
+     analyze on your machine later are selected in the csh file. The jobs in reg_test will be automatically run by this
+     csh script (as long as the path is correctly specified) after the model is successfully built. Once the model is built and the 
+     jobs are submitted, you will then go into the higher-order directory in the path set above and run livv to post-process all of
+     the tests you just ran.
 
-4. Build and run the model in your home space on hopper (see README in /trunk/cmake-scripts/ for instructions on running the model)
-   NOTE: make sure to wait until all job scripts have completed before running LIVV.
+To set up the livv executable /higher-order/livv/carver_VV.bash:
+(This can be done after you run the master_build_hopper.csh file)
 
-5. Put the 4 currently evaluated executables of simple_glide into the mirror /higher-order directory
-   NOTE: (this is done automatically by the master build scripts in the /cmake-scripts directory)
+  4. There is an opportunity to insert a COMMENT to display your reason for running livv on the website.
 
-6. In the carver_VV.bash file in the /livv directory you set:
-        a. USERNAME: it doesn't have to be your machine user name. Its the name of the subdirectory where your
-           files will be placed to be on the web and also to ID folks who go to you website of who ran the kit,
-           for carver users, this should automatically be set as $USER.
-        b. COMMENT: case details so those who view the website will know the goal of that run
-        c. Whether to run production cases or not (RUN_$, right now it will only run reg_tests).
-           There are now options in place in the bash file to turn specific testcases on and off.
-        d. HTML_PATH: this is to specify where your www directory exists. for carver, go to /project/projectdirs/piscees/www
-	   BEFORE you run livv and create a directory of your username. Then open file LIVV.html and add a line similar
-	   to the ones listed there already but change the path to the one containing your username and adjust the link title.
-	   After doing this, you shouldn't have to adjust anything to the HTML_LINK and HTML_PATH set in the bash file.
+  5. Change the TEST_FILEPATH to the path containing the higher-order directory (the directory mentioned in step #2).
 
-7. Type "bash carver_VV.bash" at the command line in the main directory.
+  6. The HTML_PATH is the location of the www directory. Go to /project/projectdirs/piscees/www before you run livv and create
+     a directory of your username. Then open file Livv.html and add a line similar to the ones listed there already but change
+     the path to the one containing your username and adjust the link title. After doing this, you shouldn't have to adjust anything
+     to the HTML_LINK and HTML_PATH in the bash file below.
 
-We have piped the NCL output to a file called plot_details.out. So if there is any concern over whether plots
-formed correctly or not after inspecting the website, you can check that file.
+  7. The verification flag options are listed and you may set the flags to however you would prefer, 0 = do not run, 1 = run.
 
-When you are done, the script tells you the website location to go look at the output.
+  8. The performance flag options are listed and you may set the flags to however you would prefer, 0 = do not run, 1 = run.
+
+  9. RUN_ANT should be left as it is since Antarctica analysis is not set up yet.
+
+To run livv:
+
+  10. Type "bash carver_VV.bash" in the command line in the /higher-order/livv/ directory. When it is finished running, the website 
+      location will be printed to the screen where you can go look at the output. We have piped the ncl plot output to a file called
+      plot_details.out. So if there is any concern over whether plots have formed correctly after inspecting the website, you can
+      look in that file. Same for the iteration plots in iter_details.out.
+
+
 
 
 TODOs (feel free to add to this as needed)

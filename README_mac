@@ -1,23 +1,23 @@
-Information on how to run the Land Ice V&V (LIVV) Post-Processing Software.
+Information on how to run the Land Ice V&V (livv) Post-Processing Software.
 KJE, AB, NM 2/2014
 
-The /PISCEES/trunk/tests/higher-order/livv directory contains all the scripts and code to run the LIVV kit.
+The /PISCEES/trunk/tests/higher-order/livv directory contains all the scripts and code to run livv.
 The mac_VV.bash script contains the inputs needed to run on an OSX machine.
 Scripts for Carver (NERSC) and Rhea (OLCF) are also provided.
 
-Software needed for LIVV:
+Software needed for livv:
 
   Packages via MacPorts (versions as of 2/2014):
       1. python27
       2. py-netcdf4 @1.0.4
       3. py-numpy @1.8.0
-      5. nco @4.4.0
-      6. netcdf @4.3.0
-      7. udunits2 @2.1.24
-      8. hdf5 @1.6.9
+      4. nco @4.4.0
+      5. netcdf @4.3.0
+      6. udunits2 @2.1.24
+      7. hdf5 @1.6.9
 
   Packages not available via MacPorts (versions as of 2/2014):
-      5. download Mac OSX NCL binary for 10.7 (instructions listed below)
+      8. download Mac OSX NCL binary for 10.7 (instructions listed below)
 
       To install NCL go here:
       <http://www.earthsystemgrid.org/dataset/ncl.612.0.html>, download the latest
@@ -37,27 +37,29 @@ The command to run the python script along with all of the necessary/optional fi
 To run the shell script (Mac OS X):
 
   1. Copy the reg_test directory from /ccs/proj/cli062/ on rhea or titan (choose the tar file with the most recent date stamp),
-     untar it and place in a new directory (ex. mac_run, higher-order) on your mac. This will be the same directory as
+     untar it and place in a new higher-order directory on your mac. This will be the same directory as
      specified as TEST_DIR in the /PISCEES/trunk/cmake-scripts/master_build_mac.csh file. Go ahead and copy the entire
      /PISCEES/trunk/tests/higher-order/livv directory and place in this new directory as well.
 
   2. Now run the /PISCEES/trunk/cmake-scripts/master_build_mac.csh file on your mac (see /PISCEES/trunk/cmake-scripts/README
      for more information on how to run the csh script). Make sure the TEST_DIR is set to the directory that you created
      in step #1. Also make sure the tests you want to run and analyze on your machine later are selected in the csh file.
+     NOTE: Make sure to wait until all job scripts have completed before running livv.
      The jobs in reg_test will be automatically run by this csh script (as long as the path is correctly specified) after
-     the model is successfully built. Once the model is built and the jobs are submitted, you will then go into the livv
+     the model is successfully built. Once the model is built and the jobs are submitted, you will then go into the higher-order
      directory in the path set above and run livv to post-process all of the tests you just ran. 
 
-To set up the livv executable /livv/mac_VV.bash (this can be done after you run the master_build_mac.csh file):
+To set up the livv executable /higher-order/livv/mac_VV.bash:
+(This can be done after you run the master_build_mac.csh file.)
 
   3. Change MY_PYTHON to wherever your python2.7 package exists on your mac.
   
   4. There is an opportunity to insert a COMMENT to display your reason for running livv on the website.
   
-  5. Change the TEST_FILEPATH to the path containing the livv directory (the directory mentioned in step #1).
+  5. Change the TEST_FILEPATH to the path containing the higher-order directory (the directory mentioned in step #1).
 
   6. Change the HTML_PATH to the location of the www directory. If it doesn't already exist, specify the path to where
-     you would like it and LIVV will check the path and create it if it is not already there. An example path is already
+     you would like it and livv will check the path and create it if it is not already there. An example path is already
      in the bash file that you may try. If you have posted html pages from your mac previously, you can point livv to
      whatever html directory you have used and livv will create a sub-directory where it will store all of its own html
      files, therefore not disrupting the rest of your workspace.
@@ -72,8 +74,8 @@ To set up the livv executable /livv/mac_VV.bash (this can be done after you run 
 
 To run livv:
 
-  8. Type "bash mac_VV.bash" in the command line in the /livv/ directory. When it is finished running, the website
-     location will be printed to the screen where you can look at the output.
+  8. Type "bash mac_VV.bash" in the command line in the /higher-order/livv/ directory. When it is finished running,
+     the website location will be printed to the screen where you can look at the output.
      We have piped the ncl output to a file called plot_details.out. So if there is any concern over whether plots
      have formed correctly after inspecting the website, you can look in that file.
 
