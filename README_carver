@@ -57,7 +57,7 @@ To set up the livv executable /higher-order/livv/carver_VV.bash:
 
   9. RUN_ANT should be left as it is since Antarctica analysis is not set up yet.
 
-To run livv:
+To run livv (on carver!):
 
   10. Type "bash carver_VV.bash" in the command line in the /higher-order/livv/ directory. When it is finished running, the website 
       location will be printed to the screen where you can go look at the output. We have piped the ncl plot output to a file called

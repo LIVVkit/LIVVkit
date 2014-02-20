@@ -30,17 +30,17 @@ To run the shell script (Rhea):
      /ccs/proj/cli062/ on rhea or titan (choose the tar files with the most recent date stamps) along with
      /PISCEES/trunk/tests/higher-order/livv and place in the higher-order directory mentioned above.
 
-  3. Now run the /PISCEES/trunk/cmake-scripts/master_build_titan.csh file on titan (see /PISCEES/trunk/cmake-scripts/README
+  3. Now run the /PISCEES/trunk/cmake-scripts/master_build_titan.csh file on Titan (see /PISCEES/trunk/cmake-scripts/README
      for more information on how to run the csh script). NOTE: make sure to wait until all job scripts have completed before
      running livv. Option of having an email sent to your account when a job is finished (option: #PBS -m abe).
      Make sure the TEST_DIR is set to the directory that you created in step #2. Also make sure the tests you want to run
      and analyze on your machine later are selected in the csh file. The jobs in reg_test will be automatically run by this csh
      script (as long as the path is correctly specified) after the model is successfuly built. Once the model is built and the
      jobs are submitted, you will then go into the higher-order directory in the path set above and run livv to post-process all
-     of the tests you just ran.
+     of the tests you just ran on rhea.
 
 To set up the livv executable /higher-order/livv/rhea_VV.bash:
-(This can be done after you run the master_build_rhea.csh file.)
+(This can be done after you run the master_build_titan.csh file.)
 
   4. There is an opportunity to insert a COMMENT to display your reason for running livv on the website.
 
@@ -57,7 +57,7 @@ To set up the livv executable /higher-order/livv/rhea_VV.bash:
 
   9. RUN_ANT should be left as it is since Antartica analysis is not set up yet.
 
-To run livv:
+To run livv (on Rhea!):
 
   10. Type "bash rhea_VV.bash" in the command line in the /higher-order/livv/ directory. When it is finished running, the website
       location will be printed to the screen where you can go look at the output. We have piped the ncl plot output to a file called
