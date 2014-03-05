@@ -159,11 +159,11 @@ def confxml(configure_xml_file,configure_path,bench_configure_path,xml_path,benc
     configure_xml_file.write('<BR\n>')
     configure_xml_file.write("Options<BR>\n")
     configure_xml_file.write("------------------------<BR>\n")
-#   if datadome['options']['dycore']:
-#       if datadome['options']['dycore'] == databench['options']['dycore']:
-#           configure_xml_file.write('dycore = ' + datadome['options']['dycore'] + "<BR>\n")
-#       else:
-#           configure_xml_file.write('<FONT COLOR="red">dycore = ' + datadome['options']['dycore'] + ' different than benchmark value:  ' + databench['options']['dycore'] + '</FONT><BR>\n')
+    if datadome['options']['dycore']:
+        if datadome['options']['dycore'] == databench['options']['dycore']:
+            configure_xml_file.write('dycore = ' + datadome['options']['dycore'] + "<BR>\n")
+        else:
+            configure_xml_file.write('<FONT COLOR="red">dycore = ' + datadome['options']['dycore'] + ' different than benchmark value:  ' + databench['options']['dycore'] + '</FONT><BR>\n')
     if datadome['options']['flow_law']:
         if datadome['options']['flow_law'] == databench['options']['flow_law']:
             configure_xml_file.write('flow_law = ' + datadome['options']['flow_law'] + "<BR>\n")
@@ -179,6 +179,31 @@ def confxml(configure_xml_file,configure_path,bench_configure_path,xml_path,benc
             configure_xml_file.write('temperature = ' + datadome['options']['temperature'] + "<BR>\n")
         else:
             configure_xml_file.write('<FONT COLOR="red">temperature = ' + datadome['options']['temperature'] + ' different than benchmark value:  ' + databench['options']['temperature'] + '</FONT><BR>\n')
+    if datadome['options']['slip_coeff']:
+        if datadome['options']['slip_coeff'] == databench['options']['slip_coeff']:
+            configure_xml_file.write('slip_coeff = ' + datadome['options']['slip_coeff'] + "<BR>\n")
+        else:
+            configure_xml_file.write('<FONT COLOR="red">slip_coeff = ' + datadome['options']['slip_coeff'] + ' different than benchmark value:  ' + databench['options']['slip_coeff'] + '</FONT><BR>\n')
+    if datadome['options']['basal_water']:
+        if datadome['options']['basal_water'] == databench['options']['basal_water']:
+            configure_xml_file.write('basal_water = ' + datadome['options']['basal_water'] + "<BR>\n")
+        else:
+            configure_xml_file.write('<FONT COLOR="red">basal_water = ' + datadome['options']['basal_water'] + ' different than benchmark value:  ' + databench['options']['basal_water'] + '</FONT><BR>\n')
+    if datadome['options']['marine_margin']:
+        if datadome['options']['marine_margin'] == databench['options']['marine_margin']:
+            configure_xml_file.write('marine_margin = ' + datadome['options']['marine_margin'] + "<BR>\n")
+        else:
+            configure_xml_file.write('<FONT COLOR="red">marine_margin = ' + datadome['options']['marine_margin'] + ' different than benchmark value:  ' + databench['options']['marine_margin'] + '</FONT><BR>\n')
+    if datadome['options']['isostasy']:
+        if datadome['options']['isostasy'] == databench['options']['isostasy']:
+            configure_xml_file.write('isostasy = ' + datadome['options']['isostasy'] + "<BR>\n")
+        else:
+            configure_xml_file.write('<FONT COLOR="red">isostasy = ' + datadome['options']['isostasy'] + ' different than benchmark value:  ' + databench['options']['isostasy'] + '</FONT><BR>\n')
+    if datadome['options']['restart']:
+        if datadome['options']['restart'] == databench['options']['restart']:
+            configure_xml_file.write('restart = ' + datadome['options']['restart'] + "<BR>\n")
+        else:
+            configure_xml_file.write('<FONT COLOR="red">restart = ' + datadome['options']['restart'] + ' different than benchmark value:  ' + databench['options']['restart'] + '</FONT><BR>\n')
 
 #HO Options settings
     configure_xml_file.write('<BR\n>')
@@ -199,11 +224,21 @@ def confxml(configure_xml_file,configure_path,bench_configure_path,xml_path,benc
             configure_xml_file.write('which_ho_efvs = ' + datadome['ho_options']['which_ho_efvs'] + "<BR>\n")
         else:
             configure_xml_file.write('<FONT COLOR="red">which_ho_efvs = ' + datadome['ho_options']['which_ho_efvs'] + ' different than benchmark value:  ' + databench['ho_options']['which_ho_efvs'] + '</FONT><BR>\n')
-#   if datadome['ho_options']['which_ho_nonlinear']:
-#       if datadome['ho_options']['which_ho_nonlinear'] == databench['ho_options']['which_ho_nonlinear']:
-#           configure_xml_file.write('which_ho_nonlinear = ' + datadome['ho_options']['which_ho_nonlinear'] + "<BR>\n")
-#       else:
-#           configure_xml_file.write('<FONT COLOR="red">which_ho_nonlinear = ' + datadome['ho_options']['which_ho_nonlinear'] + ' different than benchmark value:  ' + databench['ho_options']['which_ho_nonlinear'] + '</FONT><BR>\n')
+    if datadome['ho_options']['which_ho_sparse']:
+        if datadome['ho_options']['which_ho_sparse'] == databench['ho_options']['which_ho_sparse']:
+            configure_xml_file.write('which_ho_sparse = ' + datadome['ho_options']['which_ho_sparse'] + "<BR>\n")
+        else:
+            configure_xml_file.write('<FONT COLOR="red">which_ho_sparse = ' + datadome['ho_options']['which_ho_sparse'] + ' different than benchmark value:  ' + databench['ho_options']['which_ho_sparse'] + '</FONT><BR>\n')
+    if datadome['ho_options']['which_ho_nonlinear']:
+        if datadome['ho_options']['which_ho_nonlinear'] == databench['ho_options']['which_ho_nonlinear']:
+            configure_xml_file.write('which_ho_nonlinear = ' + datadome['ho_options']['which_ho_nonlinear'] + "<BR>\n")
+        else:
+            configure_xml_file.write('<FONT COLOR="red">which_ho_nonlinear = ' + datadome['ho_options']['which_ho_nonlinear'] + ' different than benchmark value:  ' + databench['ho_options']['which_ho_nonlinear'] + '</FONT><BR>\n')
+    if datadome['ho_options']['which_ho_resid']:
+        if datadome['ho_options']['which_ho_resid'] == databench['ho_options']['which_ho_resid']:
+            configure_xml_file.write('which_ho_resid = ' + datadome['ho_options']['which_ho_resid'] + "<BR>\n")
+        else:
+            configure_xml_file.write('<FONT COLOR="red">which_ho_resid = ' + datadome['ho_options']['which_ho_resid'] + ' different than benchmark value:  ' + databench['ho_options']['which_ho_resid'] + '</FONT><BR>\n')
     configure_xml_file.write('<BR\n>')
 
 
