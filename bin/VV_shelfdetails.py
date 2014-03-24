@@ -117,20 +117,30 @@ def confdetails(solver_file,reg_test,data_dir): # using data, fill the web page 
 
     return failedt
 
-def circplot(plot_file,reg_test,ncl_path,html_path,script_path,data_dir):  # using data, fill the web page with info
+def circplot(glide_flag,plot_file,reg_test,ncl_path,html_path,script_path,data_dir):  # using data, fill the web page with info
 
     plot_file.write('<HTML>\n')
     plot_file.write('<BODY BGCOLOR="#CADFE0">\n')
     plot_file.write('<H3>Circular Shelf Plot Details:</H3>')
 
 # creating circular shelf velocity plot 
-    circvel_plotfile = ''+ ncl_path + '/circshelfvel.ncl'
-    stockPIC  = 'STOCKPIC = addfile(\"'+ reg_test + '/bench/circular-shelf/' + data_dir + '/circular-shelf.gnu.PIC.nc\", \"r\")'
-    stockJFNK = 'STOCKJFNK = addfile(\"'+ reg_test + '/bench/circular-shelf/' + data_dir + '/circular-shelf.gnu.JFNK.nc\", \"r\")'
-    VARPIC    = 'VARPIC = addfile(\"' + reg_test + '/circular-shelf/' + data_dir + '/circular-shelf.gnu.PIC.nc\", \"r\")'
-    VARJFNK   = 'VARJFNK = addfile(\"' + reg_test + '/circular-shelf/' + data_dir + '/circular-shelf.gnu.JFNK.nc\", \"r\")'
-    png       = 'PNG = "' + ncl_path + '/circshelfvel.png"'
-    plot_circvel = "ncl '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARPIC + "' '" + VARJFNK \
+    if glide_flag == 1:
+        circvel_plotfile = ''+ ncl_path + '/shelf/circshelfvel.ncl'
+        stockPIC    = 'STOCKPIC = addfile(\"'+ reg_test + '/bench/circular-shelf/' + data_dir + '/circular-shelf.gnu.PIC.nc\", \"r\")'
+        stockJFNK   = 'STOCKJFNK = addfile(\"'+ reg_test + '/bench/circular-shelf/' + data_dir + '/circular-shelf.gnu.JFNK.nc\", \"r\")'
+        VARPIC      = 'VARPIC = addfile(\"' + reg_test + '/circular-shelf/' + data_dir + '/circular-shelf.gnu.PIC.nc\", \"r\")'
+        VARJFNK     = 'VARJFNK = addfile(\"' + reg_test + '/circular-shelf/' + data_dir + '/circular-shelf.gnu.JFNK.nc\", \"r\")'
+        pngnamevel  = 'circshelfvel.png' 
+        png         = 'PNG = "' + ncl_path + '/' + pngnamevel + '"'
+        plot_circvel = "ncl '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARPIC + "' '" + VARJFNK \
+                + "' '" + png + "' " + circvel_plotfile + " >> plot_details.out"
+    else:
+        circvel_plotfile = ''+ ncl_path + '/shelf/circshelfvelg.ncl'
+        stockGLS    = 'STOCKGLS = addfile(\"'+ reg_test + '/bench/circular-shelf/' + data_dir + '/circular-shelf.gnu.glissade.nc\", \"r\")'
+        VARGLS      = 'VARGLS = addfile(\"' + reg_test + '/circular-shelf/' + data_dir + '/circular-shelf.gnu.glissade.nc\", \"r\")'
+        pngnamevel  = 'circshelfvelg.png' 
+        png         = 'PNG = "' + ncl_path + '/' + pngnamevel + '"'
+        plot_circvel = "ncl '" + stockGLS + "'  '" + VARGLS \
                 + "' '" + png + "' " + circvel_plotfile + " >> plot_details.out"
 
 #TODO create an iteration plot and have that also in the html file 
@@ -147,8 +157,8 @@ def circplot(plot_file,reg_test,ncl_path,html_path,script_path,data_dir):  # usi
         exit(e.errno)
 
 # delete old circvel pic in www file
-    if (html_path + '/circshelfvel.png'):
-        circvelmove = ["rm", "-f", html_path+"/circshelfvel.png"]
+    if (html_path + '/' + pngnamevel):
+        circvelmove = ["rm", "-f", html_path+"/" + pngnamevel]
         try:
             subprocess.check_call(circvelmove)
         except subprocess.CalledProcessError as e:
@@ -161,8 +171,8 @@ def circplot(plot_file,reg_test,ncl_path,html_path,script_path,data_dir):  # usi
             exit(e.errno)
 
 # transferring circvel pic to www file
-    if (ncl_path + '/circshelfvel.png'):
-        circvelpic = ["mv", "-f", ncl_path+"/circshelfvel.png", html_path+"/"]
+    if (ncl_path + '/' + pngnamevel):
+        circvelpic = ["mv", "-f", ncl_path+"/" + pngnamevel, html_path+"/"]
         try:
             subprocess.check_call(circvelpic)
         except subprocess.CalledProcessError as e:
@@ -193,7 +203,7 @@ def circplot(plot_file,reg_test,ncl_path,html_path,script_path,data_dir):  # usi
     plot_file.write('<TABLE>\n')
     plot_file.write('<TR>\n')
     plot_file.write('<H4>Difference from Benchmark for Velocity Norm </H4>\n')
-    plot_file.write('<OBJECT data="circshelfvel.png" type="image/png" width="1100" height="800" hspace=10 align=left alt="Circular Shelf Plots PNG">\n')
+    plot_file.write('<OBJECT data="' + pngnamevel + '" type="image/png" width="1100" height="800" hspace=10 align=left alt="Circular Shelf Plots PNG">\n')
     plot_file.write('</OBJECT>\n')
     plot_file.write('<TR>\n')
     plot_file.write('<BR>\n')
@@ -201,20 +211,30 @@ def circplot(plot_file,reg_test,ncl_path,html_path,script_path,data_dir):  # usi
     plot_file.write('</HTML>\n')
     plot_file.close()
 
-def confplot(plot_file,reg_test,ncl_path,html_path,script_path,data_dir):  # using data, fill the web page with info
+def confplot(glide_flag,plot_file,reg_test,ncl_path,html_path,script_path,data_dir):  # using data, fill the web page with info
 
     plot_file.write('<HTML>\n')
     plot_file.write('<BODY BGCOLOR="#CADFE0">\n')
     plot_file.write('<H3>Confined Shelf Plot Details:</H3>')
 
-# creating confined shelf velocity plot 
-    confvel_plotfile = ''+ ncl_path + '/confshelfvel.ncl'
-    stockPIC  = 'STOCKPIC = addfile(\"'+ reg_test + '/bench/confined-shelf/' + data_dir + '/confined-shelf.gnu.PIC.nc\", \"r\")'
-    stockJFNK = 'STOCKJFNK = addfile(\"'+ reg_test + '/bench/confined-shelf/' + data_dir + '/confined-shelf.gnu.JFNK.nc\", \"r\")'
-    VARPIC    = 'VARPIC = addfile(\"' + reg_test + '/confined-shelf/' + data_dir + '/confined-shelf.gnu.PIC.nc\", \"r\")'
-    VARJFNK   = 'VARJFNK = addfile(\"' + reg_test + '/confined-shelf/' + data_dir + '/confined-shelf.gnu.JFNK.nc\", \"r\")'
-    png       = 'PNG = "' + ncl_path + '/confshelfvel.png"'
-    plot_confvel = "ncl '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARPIC + "' '" + VARJFNK \
+# creating confined shelf velocity plot
+    if glide_flag == 1:
+        confvel_plotfile = ''+ ncl_path + '/shelf/confshelfvel.ncl'
+        stockPIC    = 'STOCKPIC = addfile(\"'+ reg_test + '/bench/confined-shelf/' + data_dir + '/confined-shelf.gnu.PIC.nc\", \"r\")'
+        stockJFNK   = 'STOCKJFNK = addfile(\"'+ reg_test + '/bench/confined-shelf/' + data_dir + '/confined-shelf.gnu.JFNK.nc\", \"r\")'
+        VARPIC      = 'VARPIC = addfile(\"' + reg_test + '/confined-shelf/' + data_dir + '/confined-shelf.gnu.PIC.nc\", \"r\")'
+        VARJFNK     = 'VARJFNK = addfile(\"' + reg_test + '/confined-shelf/' + data_dir + '/confined-shelf.gnu.JFNK.nc\", \"r\")'
+        pngnamevel  = 'confshelfvel.png' 
+        png         = 'PNG = "' + ncl_path + '/' + pngnamevel + '"'
+        plot_confvel = "ncl '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARPIC + "' '" + VARJFNK \
+                + "' '" + png + "' " + confvel_plotfile + " >> plot_details.out"
+    else:
+        confvel_plotfile = ''+ ncl_path + '/shelf/confshelfvelg.ncl'
+        stockGLS    = 'STOCKGLS = addfile(\"'+ reg_test + '/bench/confined-shelf/' + data_dir + '/confined-shelf.gnu.glissade.nc\", \"r\")'
+        VARGLS      = 'VARGLS = addfile(\"' + reg_test + '/confined-shelf/' + data_dir + '/confined-shelf.gnu.glissade.nc\", \"r\")'
+        pngnamevel  = 'confshelfvelg.png' 
+        png         = 'PNG = "' + ncl_path + '/' + pngnamevel + '"'
+        plot_confvel = "ncl '" + stockGLS + "'  '" + VARGLS \
                 + "' '" + png + "' " + confvel_plotfile + " >> plot_details.out"
 
     try:
@@ -230,8 +250,8 @@ def confplot(plot_file,reg_test,ncl_path,html_path,script_path,data_dir):  # usi
         exit(e.errno)
 
 # delete old confvel pic in www file
-    if (html_path + '/confshelfvel.png'):
-        confvelmove = ["rm", "-f", html_path+"/confshelfvel.png"]
+    if (html_path + '/' + pngnamevel):
+        confvelmove = ["rm", "-f", html_path+"/" + pngnamevel]
         try:
             subprocess.check_call(confvelmove)
         except subprocess.CalledProcessError as e:
@@ -244,8 +264,8 @@ def confplot(plot_file,reg_test,ncl_path,html_path,script_path,data_dir):  # usi
             exit(e.errno)
 
 # transferring confvel pic to www file
-    if (ncl_path + '/confshelfvel.png'):
-        confvelpic = ["mv", "-f", ncl_path+"/confshelfvel.png", html_path+"/"]
+    if (ncl_path + '/' + pngnamevel):
+        confvelpic = ["mv", "-f", ncl_path+"/" + pngnamevel, html_path+"/"]
         try:
             subprocess.check_call(confvelpic)
         except subprocess.CalledProcessError as e:
@@ -276,7 +296,7 @@ def confplot(plot_file,reg_test,ncl_path,html_path,script_path,data_dir):  # usi
     plot_file.write('<TABLE>\n')
     plot_file.write('<TR>\n')
     plot_file.write('<H4>Difference from Benchmark for Velocity Norm </H4>\n')
-    plot_file.write('<OBJECT data="confshelfvel.png" type="image/png" width="1100" height="800" hspace=10 align=left alt="Confined Shelf Plots PNG">\n')
+    plot_file.write('<OBJECT data="' + pngnamevel + '" type="image/png" width="1100" height="800" hspace=10 align=left alt="Confined Shelf Plots PNG">\n')
     plot_file.write('</OBJECT>\n')
     plot_file.write('<TR>\n')
     plot_file.write('<BR>\n')

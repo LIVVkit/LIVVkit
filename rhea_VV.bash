@@ -31,19 +31,22 @@ export HTML_PATH="/ccs/home/$USER/www/"
 # flags to select verification tests, 1=yes
 export RUN_DOME30_DIAGNOSTIC=1
 export RUN_DOME30_EVOLVING=0
-export RUN_CIRCULAR_SHELF=1
-export RUN_CONFINED_SHELF=1
-export RUN_ISMIP_HOM_A80=1
-export RUN_ISMIP_HOM_A20=1
-export RUN_ISMIP_HOM_C=0
-export RUN_GIS_10KM=1
+export RUN_CIRCULAR_SHELF=0
+export RUN_CONFINED_SHELF=0
+export RUN_ISMIP_HOM_A80=0
+export RUN_ISMIP_HOM_A20=0
+export RUN_ISMIP_HOM_C80=0
+export RUN_ISMIP_HOM_C20=0
 
 # flags to select performance analysis
 export RUN_DOME60=0
 export RUN_DOME120=0
-export RUN_DOME240=0
-export RUN_DOME500=0
+export RUN_DOME240=1
+export RUN_DOME500=1
 export RUN_DOME1000=0
+export RUN_GIS_1KM=0
+export RUN_GIS_2KM=0
+export RUN_GIS_4KM=0
 export RUN_GIS_5KM=0
 
 # flag to select Antarctica analysis (keep turned off for now)
@@ -85,6 +88,6 @@ export NCL_PATH="$SCRIPT_PATH/plots"
 # NOTE: not all settings are required to run the python script, type "python VV_main -h" in the command line for a full list of options
 # TODO include options if RUN_ANT is turned on, right now only have settings for GIS
 		
-python $PY_PATH/VV_main.py -j "$HTML_PATH" -l "$HTML_LINK" -k "$NCL_PATH" -d "$DATA_DIR" -t "$TEST_FILEPATH" -i "$NOW" -m "$COMMENT" -u "$USERNAME" -D "$RUN_DOME30_DIAGNOSTIC" -E "$RUN_DOME30_EVOLVING" -I "$RUN_CIRCULAR_SHELF" -O "$RUN_CONFINED_SHELF" -A "$RUN_ISMIP_HOM_A80" -B "$RUN_ISMIP_HOM_A20" -C "$RUN_ISMIP_HOM_C" -G "$RUN_GIS_10KM" -J "$RUN_DOME60" -K "$RUN_DOME120" -L "$RUN_DOME240" -F "$RUN_DOME500" -M "$RUN_DOME1000" -H "$RUN_GIS_5KM"
+python $PY_PATH/VV_main.py -j "$HTML_PATH" -l "$HTML_LINK" -k "$NCL_PATH" -d "$DATA_DIR" -t "$TEST_FILEPATH" -i "$NOW" -m "$COMMENT" -u "$USERNAME" -D "$RUN_DOME30_DIAGNOSTIC" -E "$RUN_DOME30_EVOLVING" -I "$RUN_CIRCULAR_SHELF" -O "$RUN_CONFINED_SHELF" -A "$RUN_ISMIP_HOM_A80" -B "$RUN_ISMIP_HOM_A20" -C "$RUN_ISMIP_HOM_C80" -X "$RUN_ISMIP_HOM_C20" -J "$RUN_DOME60" -K "$RUN_DOME120" -L "$RUN_DOME240" -F "$RUN_DOME500" -M "$RUN_DOME1000" -T "$RUN_GIS_1KM" -U "$RUN_GIS_2KM" -V "$RUN_GIS_4KM" -H "$RUN_GIS_5KM"
 
 chmod -R 775 $HTML_PATH/*

@@ -8,6 +8,7 @@ import collections
 import VV_outprocess
 import VV_testsuite
 import VV_largesuite
+import VV_timing_check
 
 user = os.environ['USER']
 
@@ -46,10 +47,10 @@ parser.add_option('-A', '--ismip-hom-A80', action='store', type='int', dest='ism
                   metavar='FLAG', help='flag to run ismip hom a 80km test')
 parser.add_option('-B', '--ismip-hom-A20', action='store', type='int', dest='ismip_hom_a20_flag', \
                   metavar='FLAG', help='flag to run ismip hom a 20km test')
-parser.add_option('-C', '--ismip-hom-C', action='store', type='int', dest='ismip_hom_c_flag', \
-                  metavar='FLAG', help='flag to run ismip hom c test')
-parser.add_option('-G', '--gis10km', action='store', type='int', dest='gis_10km_flag', \
-                  metavar='FLAG', help='flag to run gis10km test')
+parser.add_option('-C', '--ismip-hom-C80', action='store', type='int', dest='ismip_hom_c80_flag', \
+                  metavar='FLAG', help='flag to run ismip hom c 80km test')
+parser.add_option('-X', '--ismip-hom-C20', action='store', type='int', dest='ismip_hom_c20_flag', \
+                  metavar='FLAG', help='flag to run ismip hom c 20km test')
 parser.add_option('-J', '--dome60', action='store', type='int', dest='dome60_flag', \
                   metavar='FLAG', help='flag to run dome60 test')
 parser.add_option('-K', '--dome120', action='store', type='int', dest='dome120_flag', \
@@ -60,6 +61,12 @@ parser.add_option('-F', '--dome500', action='store', type='int', dest='dome500_f
                   metavar='FLAG', help='flag to run dome500 test')
 parser.add_option('-M', '--dome1000', action='store', type='int', dest='dome1000_flag', \
                   metavar='FLAG', help='flag to run dome1000 test')
+parser.add_option('-T', '--gis1km', action='store', type='int', dest='gis_1km_flag', \
+                  metavar='FLAG', help='flag to run gis1km test')
+parser.add_option('-U', '--gis2km', action='store', type='int', dest='gis_2km_flag', \
+                  metavar='FLAG', help='flag to run gis2km test')
+parser.add_option('-V', '--gis4km', action='store', type='int', dest='gis_4km_flag', \
+                  metavar='FLAG', help='flag to run gis4km test')
 parser.add_option('-H', '--gis5km', action='store', type='int', dest='gis_5km_flag', \
                   metavar='FLAG', help='flag to run gis5km test')
 #parser.add_option('-a', '--ant_prod', action='store_true', dest='ant_prod', \
@@ -82,15 +89,14 @@ else:
 
 #remove www/livv directory if it exists
 if os.path.isdir(options.html_path + 'livv') == True:
-    
-        rmdir = ['rm', '-rf', options.html_path + 'livv']
-        try:
-                subprocess.check_call(rmdir)
-        except subprocess.CalledProcessError as e:
-                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
-                exit(e.returncode)
-        except OSError as e:
-                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+    rmdir = ['rm', '-rf', options.html_path + 'livv']
+    try:
+        subprocess.check_call(rmdir)
+    except subprocess.CalledProcessError as e:
+        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+        exit(e.returncode)
+    except OSError as e:
+        print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
 
 #create www directory if it doesn't exists already
 if os.path.isdir(options.html_path) == True:
@@ -174,9 +180,10 @@ if (options.ncl_path + '/alaska_pic.png'):
                 print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                 exit(e.errno)
 
-#create all the test suite diagnostics pages
+#create all the test suite diagnostics pages for glide
 if options.test_suite:
 
+        glide_flag = 1
         test_file = open(target_html + '/test_suite.html', 'w')
         descript_file = open(target_html + '/test_descript.html', 'w')
 # diagnostic dome case
@@ -207,29 +214,80 @@ if options.test_suite:
         ishomc80_file = open(target_html + '/ishomc80_details.html', 'w')
         ishomc80_case = open(target_html + '/ishomc80_case.html', 'w')
         ishomc80_plot = open(target_html + '/ishomc80_plot.html', 'w')
-# 10km GIS case
-        gis10_file = open(target_html + '/gis10_details.html', 'w')
-        gis10_case = open(target_html + '/gis10_case.html', 'w')
-        gis10_plot = open(target_html + '/gis10_plot.html', 'w')
-
-# TODO create a list of the html files of the included cases, then pass through the testsuite.web call
+# ismip hom c 20km case
+        ishomc20_file = open(target_html + '/ishomc20_details.html', 'w')
+        ishomc20_case = open(target_html + '/ishomc20_case.html', 'w')
+        ishomc20_plot = open(target_html + '/ishomc20_plot.html', 'w')
 
 #path to python code to create all the test suite pages and data
         reg_test = options.test_suite + "/reg_test"
 
-        VV_testsuite.web(descript_file,test_file,dome30d_file,dome30d_case,dome30d_plot, \
+        VV_testsuite.web(glide_flag,descript_file,test_file,dome30d_file,dome30d_case,dome30d_plot, \
                 dome30e_file,dome30e_case,dome30e_plot, \
                 circ_file,circ_case,circ_plot,conf_file,conf_case,conf_plot, \
                 ishoma80_file,ishoma80_case,ishoma80_plot,ishoma20_file,ishoma20_case,ishoma20_plot, \
-                ishomc80_file,ishomc80_case,ishomc80_plot,\
-                gis10_file,gis10_case,gis10_plot, \
+                ishomc80_file,ishomc80_case,ishomc80_plot,ishomc20_file,ishomc20_case,ishomc20_plot,\
                 reg_test,options.test_suite,options.data_dir,options.ncl_path,target_html,options.script_path,\
                 options.diagnostic_flag,options.evolving_flag,options.circular_flag,options.confined_flag,\
-                options.ismip_hom_a80_flag,options.ismip_hom_a20_flag,options.ismip_hom_c_flag,options.gis_10km_flag)
+                options.ismip_hom_a80_flag,options.ismip_hom_a20_flag,options.ismip_hom_c80_flag,options.ismip_hom_c20_flag)
 
-        dictionary = VV_testsuite.bit_list(reg_test,options.data_dir,options.diagnostic_flag,options.evolving_flag,options.circular_flag,\
-                        options.confined_flag,options.ismip_hom_a80_flag,options.ismip_hom_a20_flag,options.ismip_hom_c_flag,options.gis_10km_flag)
+        dictionary = VV_testsuite.bit_list(reg_test,options.data_dir,options.diagnostic_flag,options.evolving_flag,options.circular_flag,options.confined_flag,\
+                        options.ismip_hom_a80_flag,options.ismip_hom_a20_flag,options.ismip_hom_c80_flag,options.ismip_hom_c20_flag)
 
+#create all the test suite diagnostics pages for glissade
+if options.test_suite:
+
+        glide_flag = 0
+        test_file_glissade = open(target_html + '/test_suite_glissade.html', 'w')
+        descript_file_glissade = open(target_html + '/test_descript.html', 'w')
+# diagnostic dome case
+        dome30d_file_glissade = open(target_html + '/dome30d_details_glissade.html', 'w')
+        dome30d_case_glissade = open(target_html + '/dome30d_case_glissade.html', 'w')
+        dome30d_plot_glissade = open(target_html + '/dome30d_plot_glissade.html', 'w')
+# evolving dome case
+        dome30e_file_glissade = open(target_html + '/dome30e_details_glissade.html', 'w')
+        dome30e_case_glissade = open(target_html + '/dome30e_case_glissade.html', 'w')
+        dome30e_plot_glissade = open(target_html + '/dome30e_plot_glissade.html', 'w')
+#circular shelf case
+        circ_file_glissade = open(target_html + '/circ_details_glissade.html', 'w')
+        circ_case_glissade = open(target_html + '/circ_case_glissade.html', 'w')
+        circ_plot_glissade = open(target_html + '/circ_plot_glissade.html', 'w')
+# confined shelf case
+        conf_file_glissade = open(target_html + '/conf_details_glissade.html', 'w')
+        conf_case_glissade = open(target_html + '/conf_case_glissade.html', 'w')
+        conf_plot_glissade = open(target_html + '/conf_plot_glissade.html', 'w')
+# ismip hom a 80km case
+        ishoma80_file_glissade = open(target_html + '/ishoma80_details_glissade.html', 'w')
+        ishoma80_case_glissade = open(target_html + '/ishoma80_case_glissade.html', 'w')
+        ishoma80_plot_glissade = open(target_html + '/ishoma80_plot_glissade.html', 'w')
+# ismip hom a 20km case
+        ishoma20_file_glissade = open(target_html + '/ishoma20_details_glissade.html', 'w')
+        ishoma20_case_glissade = open(target_html + '/ishoma20_case_glissade.html', 'w')
+        ishoma20_plot_glissade = open(target_html + '/ishoma20_plot_glissade.html', 'w')
+# ismip hom c 80km case
+        ishomc80_file_glissade = open(target_html + '/ishomc80_details_glissade.html', 'w')
+        ishomc80_case_glissade = open(target_html + '/ishomc80_case_glissade.html', 'w')
+        ishomc80_plot_glissade = open(target_html + '/ishomc80_plot_glissade.html', 'w')
+# ismip hom c 20km case
+        ishomc20_file_glissade = open(target_html + '/ishomc20_details_glissade.html', 'w')
+        ishomc20_case_glissade = open(target_html + '/ishomc20_case_glissade.html', 'w')
+        ishomc20_plot_glissade = open(target_html + '/ishomc20_plot_glissade.html', 'w')
+        
+#path to python code to create all the test suite pages and data
+        reg_test = options.test_suite + "/reg_test"
+
+        VV_testsuite.web(glide_flag,descript_file_glissade,test_file_glissade, \
+                dome30d_file_glissade,dome30d_case_glissade,dome30d_plot_glissade,dome30e_file_glissade,dome30e_case_glissade,dome30e_plot_glissade, \
+                circ_file_glissade,circ_case_glissade,circ_plot_glissade,conf_file_glissade,conf_case_glissade,conf_plot_glissade, \
+                ishoma80_file_glissade,ishoma80_case_glissade,ishoma80_plot_glissade,ishoma20_file_glissade,ishoma20_case_glissade,ishoma20_plot_glissade, \
+                ishomc80_file_glissade,ishomc80_case_glissade,ishomc80_plot_glissade,ishomc20_file_glissade,ishomc20_case_glissade,ishomc20_plot_glissade, \
+                reg_test,options.test_suite,options.data_dir,options.ncl_path,target_html,options.script_path,\
+                options.diagnostic_flag,options.evolving_flag,options.circular_flag,options.confined_flag,\
+                options.ismip_hom_a80_flag,options.ismip_hom_a20_flag,options.ismip_hom_c80_flag,options.ismip_hom_c20_flag)
+
+        dictionary = VV_testsuite.bit_list(reg_test,options.data_dir,options.diagnostic_flag,options.evolving_flag,options.circular_flag,options.confined_flag,\
+                        options.ismip_hom_a80_flag,options.ismip_hom_a20_flag,options.ismip_hom_c80_flag,options.ismip_hom_c20_flag)
+        
 #create all the large test suite diagnostics pages
 if options.dome60_flag==1 or options.dome120_flag==1 or options.dome240_flag==1 or options.dome500_flag==1 or options.dome1000_flag==1 or options.gis_5km_flag==1:
 
@@ -260,6 +318,21 @@ if options.dome60_flag==1 or options.dome120_flag==1 or options.dome240_flag==1 
         dome1000_case = open(target_html + '/dome1000_case.html', 'w')
         dome1000_time = open(target_html + '/dome1000_timing.html', 'w')
         dome1000_plot = open(target_html + '/dome1000_plot.html', 'w')
+# gis 1km case
+        gis1km_file = open(target_html + '/gis1km_details.html', 'w')
+        gis1km_case = open(target_html + '/gis1km_case.html', 'w')
+        gis1km_time = open(target_html + '/gis1km_timing.html', 'w')
+        gis1km_plot = open(target_html + '/gis1km_plot.html', 'w')
+# gis 2km case
+        gis2km_file = open(target_html + '/gis2km_details.html', 'w')
+        gis2km_case = open(target_html + '/gis2km_case.html', 'w')
+        gis2km_time = open(target_html + '/gis2km_timing.html', 'w')
+        gis2km_plot = open(target_html + '/gis2km_plot.html', 'w')
+# gis 4km case
+        gis4km_file = open(target_html + '/gis4km_details.html', 'w')
+        gis4km_case = open(target_html + '/gis4km_case.html', 'w')
+        gis4km_time = open(target_html + '/gis4km_timing.html', 'w')
+        gis4km_plot = open(target_html + '/gis4km_plot.html', 'w')
 # gis 5km case
         gis5km_file = open(target_html + '/gis5km_details.html', 'w')
         gis5km_case = open(target_html + '/gis5km_case.html', 'w')
@@ -272,14 +345,19 @@ if options.dome60_flag==1 or options.dome120_flag==1 or options.dome240_flag==1 
         VV_largesuite.large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_time,dome60_plot, \
                dome120_file,dome120_case,dome120_time,dome120_plot,dome240_file,dome240_case,dome240_time,dome240_plot, \
                dome500_file,dome500_case,dome500_time,dome500_plot,dome1000_file,dome1000_case,dome1000_time,dome1000_plot, \
+               gis1km_file,gis1km_case,gis1km_time,gis1km_plot, \
+               gis2km_file,gis2km_case,gis2km_time,gis2km_plot, \
+               gis4km_file,gis4km_case,gis4km_time,gis4km_plot, \
                gis5km_file,gis5km_case,gis5km_time,gis5km_plot, \
                 perf_test,options.ncl_path,target_html,options.script_path, \
                 options.dome60_flag,options.dome120_flag,options.dome240_flag, \
-                options.dome500_flag,options.dome1000_flag,options.gis_5km_flag,options.data_dir)
+                options.dome500_flag,options.dome1000_flag,options.gis_1km_flag, \
+                options.gis_2km_flag,options.gis_4km_flag,options.gis_5km_flag,options.data_dir)
 
-        dictionary_large = VV_largesuite.bit_list(perf_test,options.data_dir,options.dome60_flag,options.dome120_flag,options.dome240_flag,\
-                            options.dome500_flag,options.dome1000_flag,options.gis_5km_flag)
-        
+        dictionary_large = VV_largesuite.time_check(perf_test,options.dome60_flag,options.dome120_flag,options.dome240_flag,\
+                            options.dome500_flag,options.dome1000_flag,options.gis_1km_flag,options.gis_2km_flag,\
+                            options.gis_4km_flag,options.gis_5km_flag)
+
 #writing the main HTML page
 
 file = open(target_html + '/livv_kit_main.html', 'w')
@@ -295,7 +373,7 @@ file.write('<P>\n')
 file.write('<OBJECT data="alaska_pic.png" type="image/png" width="400" height="300" hspace=10 align=left alt="ice sheet pic">\n')
 file.write('</OBJECT>\n')
 file.write('<FONT color=blue><B>\n')
-file.write('Land Ice Validation package  </B></FONT> <BR>\n')
+file.write('Land Ice Verification and Validation Package  </B></FONT> <BR>\n')
 file.write('Performed on ' + options.time_stamp + '<BR>\n')
 file.write('Test case run by: ' + options.username + '<BR>\n')
 file.write('Details: ' + options.comment + '<BR>\n')
@@ -303,23 +381,28 @@ file.write('</P>\n')
 file.write('<BR clear=left>\n')
 file.write('<BR>\n')
 file.write('<HR noshade size=2 size="100%">\n')
-file.write('<TH ALIGN=LEFT><A HREF="test_suite.html">Basic Test Suite Diagnostics</A>\n')
-
 if 1 in dictionary.values():
         file.write('<font color="red"> All Cases NOT Bit-for-Bit</font><br>')
 else:
         file.write('<font color="green"> All Cases Bit-for-Bit</font><br>')
+file.write('<BR>\n')
+file.write('<TH ALIGN=LEFT><A HREF="test_suite.html">Basic Verification Test Suite Diagnostics - Glide</A>\n')
+file.write('<BR>\n')
+file.write('<BR>\n')
+file.write('<TH ALIGN=LEFT><A HREF="test_suite_glissade.html">Basic Verification Test Suite Diagnostics - Glissade</A>\n')
+file.write('<BR>\n')
+file.write('<BR>\n')
+file.write('<BR>\n')
+file.write('<BR>\n')
 
-file.write('<BR>\n')
-file.write('<BR>\n')
-if options.dome60_flag==1 or options.dome120_flag==1 or options.dome240_flag==1 or options.dome500_flag==1 or options.dome1000_flag==1 or options.gis_5km_flag==1:
+if options.dome60_flag==1 or options.dome120_flag==1 or options.dome240_flag==1 or options.dome500_flag==1 or options.dome1000_flag==1 or options.gis_1km_flag==1 or options.gis_2km_flag==1 or options.gis_4km_flag==1 or options.gis_5km_flag==1:
         
-        file.write('<TH ALIGN=LEFT><A HREF="large_test_suite.html">Performance and Analysis Test Suite</A>\n')
+        file.write('<TH ALIGN=LEFT><A HREF="large_test_suite.html">Performance and Analysis Test Suite (pLIVV)</A>\n')
         
-        if 1 in dictionary_large.values():
-                file.write('<font color="red"> All Cases NOT Bit-for-Bit</font><br>')
+        if 1 or 2 in dictionary_large.values():
+                file.write('<font color="red"> Not All Tests Within Expected Performance Range</font><br>')
         else:
-                file.write('<font color="green"> All Cases Bit-for-Bit</font><br>')
+                file.write('<font color="green"> All Tests Within Expected Performance Range</font><br>')
 
 file.write('<h4> For Additional Information: </h4> <p>')
 file.write(' Kate Evans <br>')

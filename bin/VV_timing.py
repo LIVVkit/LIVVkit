@@ -523,7 +523,6 @@ def timing_table_current_run(timing_file,file,flag):
     timing_file.write('<BODY>\n')
     
     if flag == 0:
-        
         #check if 10 timing files exist, otherwise can't run timing
         t_flag = []
         for i in range(1,10):
@@ -541,8 +540,8 @@ def timing_table_current_run(timing_file,file,flag):
 
         if 1 in t_flag:
             timing_file.write('<H4>Cannot Generate Timing Table: Missing at least one of the 10 timing directories and/or the current run. Go to perf_test directory to run ijob_timing_JFNK and/or ijob scripts.</H4>')
+            sys.exit(0)
         else:
-
             #call above definitions to get averages of avg, max, and min for each timer across 10 files
             sg_avgs,gid_avgs,gv_avgs,cf_avgs,bop_avgs,npu_avgs,npv_avgs,gio_avgs = timing_averages(file,flag)
         
