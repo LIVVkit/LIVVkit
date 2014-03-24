@@ -15,7 +15,7 @@ import VV_timing_check
 
 #timing check to see if all tests are within range
 def time_check(perf_test,dome60_flag,dome120_flag,dome240_flag,dome500_flag,dome1000_flag,\
-                gis_1km_flag,gis_2km_flag,gis_4km_flag,gis_5km_flag):
+                gis_1km_flag,gis_2km_flag,gis_4km_flag):
     dictionary_large = {}
     flag = 0
 #dome60
@@ -66,19 +66,13 @@ def time_check(perf_test,dome60_flag,dome120_flag,dome240_flag,dome500_flag,dome
         dictionary_large['gis4km'] = VV_timing_check.timing_check(JFNK_timing_path,flag)
     else:
         dictionary_large['gis4km'] = 0
-#gis5km
-    if gis_5km_flag == 1:
-        JFNK_timing_path = perf_test + '/gis_5km/data/out.120.JFNK.timing'
-        dictionary_large['gis5km'] = VV_timing_check.timing_check(JFNK_timing_path,flag)
-    else:
-        dictionary_large['gis5km'] = 0
     return dictionary_large
 
 def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_time,dome60_plot, \
     dome120_file,dome120_case,dome120_time,dome120_plot,dome240_file,dome240_case,dome240_time,dome240_plot, \
     dome500_file,dome500_case,dome500_time,dome500_plot,dome1000_file,dome1000_case,dome1000_time,dome1000_plot, \
     gis1km_file,gis1km_case,gis1km_time,gis1km_plot,gis2km_file,gis2km_case,gis2km_time,gis2km_plot, \
-    gis4km_file,gis4km_case,gis4km_time,gis4km_plot,gis5km_file,gis5km_case,gis5km_time,gis5km_plot, \
+    gis4km_file,gis4km_case,gis4km_time,gis4km_plot, \
     perf_test,ncl_path,html_path,script_path, \
     dome60_flag,dome120_flag,dome240_flag,dome500_flag,dome1000_flag, \
     gis_1km_flag,gis_2km_flag,gis_4km_flag,gis_5km_flag,data_dir):
@@ -94,7 +88,7 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_tim
     large_test_file.write('<BR>\n')
 
     dictionary_large = time_check(perf_test,dome60_flag,dome120_flag,dome240_flag, \
-                dome500_flag,dome1000_flag,gis_1km_flag,gis_2km_flag,gis_4km_flag,gis_5km_flag)
+                dome500_flag,dome1000_flag,gis_1km_flag,gis_2km_flag,gis_4km_flag)
 
 
 #apply flag to turn off running test
@@ -578,55 +572,6 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_tim
     else:
         print "NOT RUNNING GIS 4KM TESTCASE"
 
-#apply flag to turn off running test
-    if gis_5km_flag == 1:
-
-# GIS 5km stats
-        print "running gis5km testcase"
-        if dictionary_large['gis5km'] == 0:
-            large_test_file.write('<H2>GIS 5KM Test: <font color="green">Test Within Expected Performance Range</font></H2>')
-        elif dictionary_large['gis5km'] == 1:
-            large_test_file.write('<H2>GIS 5KM Test: <font color="red">Test Slower Than Expected Performance Range</font></H2>')
-        else:
-            large_test_file.write('<H2>GIS 5KM Test: <font color="blue">Test Faster Than Expected Performance Range</font></H2>')
-
-# put something here to flag BFB results between data and bench and pgi and gnu etc.
-        flag_to_plot_gis5km = 1
-        if flag_to_plot_gis5km:
-
-            large_test_file.write('<TH ALIGN=LEFT><A HREF="gis5km_details.html">Velocity Solver Details</A>\n')
-            large_test_file.write('<BR>\n')
-            failedt = VV_gis5details.details(gis5km_file,perf_test,data_dir)
-
-            large_test_file.write('<TH ALIGN=LEFT><A HREF="gis5km_case.html">Case and Parameter Settings Details</A>\n')
-            large_test_file.write('<BR>\n')
-            xml_path = perf_test + '/gis_5km/trilinosOptions.xml'
-            bench_xml_path = perf_test + '/bench/gis_5km/trilinosOptions.xml'
-            configure_path = perf_test + '/gis_5km/configure_files/gis_5km.config'
-            bench_configure_path = perf_test + '/bench/gis_5km/configure_files/gis_5km.config'
-            VV_utilities.confxml(gis5km_case,configure_path,bench_configure_path,xml_path,bench_xml_path)
-
-            large_test_file.write('<TH ALIGN=LEFT><A HREF="gis5km_plot.html">Plots</A>\n')
-            large_test_file.write('<BR>\n')
-            if failedt != 0:
-                gis5_plot.write("<H2>GIS 5km Test failed, plots may not be generated</H2><br>")
-            checkpath = perf_test + '/gis_5km/data/gis_5km.ice2sea.init.nc'
-            noplot = VV_checks.emptycheck(checkpath)
-            if noplot != 1:
-                VV_gis5details.gis5_plot(gis5km_plot,perf_test,ncl_path,html_path,script_path,data_dir)
-
-# Time stamping
-        mode = os.stat(perf_test + '/gis_5km').st_mtime
-        mode = mode - 14400
-        mode = time.gmtime(mode)
-        ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
-        strrand = '<b>Time of Last Simulation: ' + ctime + '</b>\n'
-        large_test_file.write(strrand)
-
-    else:
-        print "NOT RUNNING GIS 5KM TESTCASE"
-
-    large_test_file.write('<BR>\n')
     large_test_file.write('<BR>\n')
     large_test_file.write('<TH ALIGN=LEFT><A HREF="livv_kit_main.html">Home</A>\n')
     large_test_file.write('</HTML>\n')
@@ -644,7 +589,7 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_tim
     descript_file.write('  What does it test? \n')
     descript_file.write('<BR><BR>\n')
     descript_file.write('<BR>\n')
-    descript_file.write('GIS 5KM Test Case \n')
+    descript_file.write('GIS 4KM, 2KM, 1KM Test Case \n')
     descript_file.write('<BR>\n')
     descript_file.write('  Attributes: 3-D paraboloid dome of ice with a circular, 60 km diameter base sitting on a flat bed. The horizontal spatial resolution studies are 2 km, 1 km, 0.5 km and 0.25 km, and there are 10 vertical levels. For this set of experiments a quasi no-slip basal condition in imposed by setting. A zero-flux boundary condition is applied to the dome margins. \n')
     descript_file.write('<BR>\n')

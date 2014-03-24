@@ -67,8 +67,6 @@ parser.add_option('-U', '--gis2km', action='store', type='int', dest='gis_2km_fl
                   metavar='FLAG', help='flag to run gis2km test')
 parser.add_option('-V', '--gis4km', action='store', type='int', dest='gis_4km_flag', \
                   metavar='FLAG', help='flag to run gis4km test')
-parser.add_option('-H', '--gis5km', action='store', type='int', dest='gis_5km_flag', \
-                  metavar='FLAG', help='flag to run gis5km test')
 #parser.add_option('-a', '--ant_prod', action='store_true', dest='ant_prod', \
 #                  help='include flag to run the ANT production analysis')
 
@@ -289,7 +287,8 @@ if options.test_suite:
                         options.ismip_hom_a80_flag,options.ismip_hom_a20_flag,options.ismip_hom_c80_flag,options.ismip_hom_c20_flag)
         
 #create all the large test suite diagnostics pages
-if options.dome60_flag==1 or options.dome120_flag==1 or options.dome240_flag==1 or options.dome500_flag==1 or options.dome1000_flag==1 or options.gis_5km_flag==1:
+if options.dome60_flag==1 or options.dome120_flag==1 or options.dome240_flag==1 or options.dome500_flag==1 or options.dome1000_flag==1 or options.gis_1km_flag==1 \
+        or options.gis_2km_flag==1 or options.gis_4km_flag==1:
 
         large_test_file = open(target_html + '/large_test_suite.html', 'w')
         descript_file = open(target_html + '/large_test_descript.html', 'w')
@@ -333,30 +332,23 @@ if options.dome60_flag==1 or options.dome120_flag==1 or options.dome240_flag==1 
         gis4km_case = open(target_html + '/gis4km_case.html', 'w')
         gis4km_time = open(target_html + '/gis4km_timing.html', 'w')
         gis4km_plot = open(target_html + '/gis4km_plot.html', 'w')
-# gis 5km case
-        gis5km_file = open(target_html + '/gis5km_details.html', 'w')
-        gis5km_case = open(target_html + '/gis5km_case.html', 'w')
-        gis5km_time = open(target_html + '/gis5km_timing.html', 'w')
-        gis5km_plot = open(target_html + '/gis5km_plot.html', 'w')
 
 #path to python code to create all the large test suite pages and data
         perf_test = options.test_suite + "/perf_test"
 
         VV_largesuite.large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_time,dome60_plot, \
-               dome120_file,dome120_case,dome120_time,dome120_plot,dome240_file,dome240_case,dome240_time,dome240_plot, \
-               dome500_file,dome500_case,dome500_time,dome500_plot,dome1000_file,dome1000_case,dome1000_time,dome1000_plot, \
-               gis1km_file,gis1km_case,gis1km_time,gis1km_plot, \
-               gis2km_file,gis2km_case,gis2km_time,gis2km_plot, \
-               gis4km_file,gis4km_case,gis4km_time,gis4km_plot, \
-               gis5km_file,gis5km_case,gis5km_time,gis5km_plot, \
+                dome120_file,dome120_case,dome120_time,dome120_plot,dome240_file,dome240_case,dome240_time,dome240_plot, \
+                dome500_file,dome500_case,dome500_time,dome500_plot,dome1000_file,dome1000_case,dome1000_time,dome1000_plot, \
+                gis1km_file,gis1km_case,gis1km_time,gis1km_plot, \
+                gis2km_file,gis2km_case,gis2km_time,gis2km_plot, \
+                gis4km_file,gis4km_case,gis4km_time,gis4km_plot, \
                 perf_test,options.ncl_path,target_html,options.script_path, \
                 options.dome60_flag,options.dome120_flag,options.dome240_flag, \
                 options.dome500_flag,options.dome1000_flag,options.gis_1km_flag, \
                 options.gis_2km_flag,options.gis_4km_flag,options.gis_5km_flag,options.data_dir)
 
         dictionary_large = VV_largesuite.time_check(perf_test,options.dome60_flag,options.dome120_flag,options.dome240_flag,\
-                            options.dome500_flag,options.dome1000_flag,options.gis_1km_flag,options.gis_2km_flag,\
-                            options.gis_4km_flag,options.gis_5km_flag)
+                            options.dome500_flag,options.dome1000_flag,options.gis_1km_flag,options.gis_2km_flag,options.gis_4km_flag)
 
 #writing the main HTML page
 
@@ -395,7 +387,7 @@ file.write('<BR>\n')
 file.write('<BR>\n')
 file.write('<BR>\n')
 
-if options.dome60_flag==1 or options.dome120_flag==1 or options.dome240_flag==1 or options.dome500_flag==1 or options.dome1000_flag==1 or options.gis_1km_flag==1 or options.gis_2km_flag==1 or options.gis_4km_flag==1 or options.gis_5km_flag==1:
+if options.dome60_flag==1 or options.dome120_flag==1 or options.dome240_flag==1 or options.dome500_flag==1 or options.dome1000_flag==1 or options.gis_1km_flag==1 or options.gis_2km_flag==1 or options.gis_4km_flag==1:
         
         file.write('<TH ALIGN=LEFT><A HREF="large_test_suite.html">Performance and Analysis Test Suite (pLIVV)</A>\n')
         
