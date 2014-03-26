@@ -8,6 +8,7 @@ import collections
 import VV_outprocess
 import VV_testsuite
 import VV_largesuite
+import VV_validation_suite
 import VV_timing_check
 
 user = os.environ['USER']
@@ -15,8 +16,6 @@ user = os.environ['USER']
 #enable use input for filepaths from the command line
 usage_string = "%prog [options]"
 parser = OptionParser(usage=usage_string)
-parser.add_option('-p', '--directory', action='store', type='string', dest='directory_path', \
-                  metavar='PATH', help='path where this directory is located')
 parser.add_option('-b', '--script', action='store', type='string', dest='script_path', \
                   metavar='PATH', help='path where the livv kit is located')
 parser.add_option('-j', '--html', action='store', type='string', dest='html_path', \
@@ -65,8 +64,10 @@ parser.add_option('-T', '--gis1km', action='store', type='int', dest='gis_1km_fl
                   metavar='FLAG', help='flag to run gis1km test')
 parser.add_option('-U', '--gis2km', action='store', type='int', dest='gis_2km_flag', \
                   metavar='FLAG', help='flag to run gis2km test')
-parser.add_option('-V', '--gis4km', action='store', type='int', dest='gis_4km_flag', \
+parser.add_option('-W', '--gis4km', action='store', type='int', dest='gis_4km_flag', \
                   metavar='FLAG', help='flag to run gis4km test')
+parser.add_option('-V', '--validation', action='store', type='int', dest='validation_flag', \
+                  metavar='FLAG', help='flag to run validation')
 #parser.add_option('-a', '--ant_prod', action='store_true', dest='ant_prod', \
 #                  help='include flag to run the ANT production analysis')
 
@@ -159,6 +160,18 @@ if (options.test_suite + '/livv/iter_details.out'):
         iterdetails = ["rm", "-f", "iter_details.out"]
         try:
                 subprocess.check_call(iterdetails)
+        except subprocess.CalledProcessError as e:
+                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                exit(e.returncode)
+        except OSError as e:
+                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                exit(e.errno)
+
+#remove valid_details file previously used in specified subdirectory
+if (options.test_suite + '/livv/valid_details.out'):
+        validdetails = ["rm", "-f", "valid_details.out"]
+        try:
+                subprocess.check_call(validdetails)
         except subprocess.CalledProcessError as e:
                 print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                 exit(e.returncode)
@@ -287,8 +300,8 @@ if options.test_suite:
                         options.ismip_hom_a80_flag,options.ismip_hom_a20_flag,options.ismip_hom_c80_flag,options.ismip_hom_c20_flag)
         
 #create all the large test suite diagnostics pages
-if options.dome60_flag==1 or options.dome120_flag==1 or options.dome240_flag==1 or options.dome500_flag==1 or options.dome1000_flag==1 or options.gis_1km_flag==1 \
-        or options.gis_2km_flag==1 or options.gis_4km_flag==1:
+if options.dome60_flag==1 or options.dome120_flag==1 or options.dome240_flag==1 or options.dome500_flag==1 \
+        or options.dome1000_flag==1 or options.gis_1km_flag==1 or options.gis_2km_flag==1 or options.gis_4km_flag==1:
 
         large_test_file = open(target_html + '/large_test_suite.html', 'w')
         descript_file = open(target_html + '/large_test_descript.html', 'w')
@@ -345,10 +358,30 @@ if options.dome60_flag==1 or options.dome120_flag==1 or options.dome240_flag==1 
                 perf_test,options.ncl_path,target_html,options.script_path, \
                 options.dome60_flag,options.dome120_flag,options.dome240_flag, \
                 options.dome500_flag,options.dome1000_flag,options.gis_1km_flag, \
-                options.gis_2km_flag,options.gis_4km_flag,options.gis_5km_flag,options.data_dir)
+                options.gis_2km_flag,options.gis_4km_flag,options.data_dir)
 
         dictionary_large = VV_largesuite.time_check(perf_test,options.dome60_flag,options.dome120_flag,options.dome240_flag,\
                             options.dome500_flag,options.dome1000_flag,options.gis_1km_flag,options.gis_2km_flag,options.gis_4km_flag)
+
+#create all the validation plot pages
+if options.validation_flag==1:
+
+        valid_file = open(target_html + '/validation_plots.html', 'w')
+# figure1
+        figure1_plot = open(target_html + '/figure1_plot.html', 'w')
+# figure2
+        figure2_plot = open(target_html + '/figure2_plot.html', 'w')
+# figure3
+        figure3_plot = open(target_html + '/figure3_plot.html', 'w')
+# figure4
+        figure4_plot = open(target_html + '/figure4_plot.html', 'w')
+# figure5
+        figure5_plot = open(target_html + '/figure5_plot.html', 'w')
+
+#path to python code to create all the test suite pages and data
+
+        VV_validation_suite.web(valid_file,figure1_plot,figure2_plot,figure3_plot,figure4_plot,figure5_plot, \
+                options.data_dir,options.ncl_path,target_html,options.script_path)
 
 #writing the main HTML page
 
@@ -385,16 +418,21 @@ file.write('<TH ALIGN=LEFT><A HREF="test_suite_glissade.html">Basic Verification
 file.write('<BR>\n')
 file.write('<BR>\n')
 file.write('<BR>\n')
-file.write('<BR>\n')
 
-if options.dome60_flag==1 or options.dome120_flag==1 or options.dome240_flag==1 or options.dome500_flag==1 or options.dome1000_flag==1 or options.gis_1km_flag==1 or options.gis_2km_flag==1 or options.gis_4km_flag==1:
+if options.dome60_flag==1 or options.dome120_flag==1 or options.dome240_flag==1 or options.dome500_flag==1 \
+        or options.dome1000_flag==1 or options.gis_1km_flag==1 or options.gis_2km_flag==1 or options.gis_4km_flag==1:
         
         file.write('<TH ALIGN=LEFT><A HREF="large_test_suite.html">Performance and Analysis Test Suite (pLIVV)</A>\n')
         
-        if 1 or 2 in dictionary_large.values():
+        if 1 in dictionary_large.values() or 2 in dictionary_large.values():
                 file.write('<font color="red"> Not All Tests Within Expected Performance Range</font><br>')
         else:
                 file.write('<font color="green"> All Tests Within Expected Performance Range</font><br>')
+
+file.write('<BR>\n')
+file.write('<BR>\n')
+if options.validation_flag==1:
+        file.write('<TH ALIGN=LEFT><A HREF="validation_plots.html">Validation Plots</A>\n')
 
 file.write('<h4> For Additional Information: </h4> <p>')
 file.write(' Kate Evans <br>')

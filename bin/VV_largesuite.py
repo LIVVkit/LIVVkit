@@ -75,7 +75,7 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_tim
     gis4km_file,gis4km_case,gis4km_time,gis4km_plot, \
     perf_test,ncl_path,html_path,script_path, \
     dome60_flag,dome120_flag,dome240_flag,dome500_flag,dome1000_flag, \
-    gis_1km_flag,gis_2km_flag,gis_4km_flag,gis_5km_flag,data_dir):
+    gis_1km_flag,gis_2km_flag,gis_4km_flag,data_dir):
 
 # using data, fill the web page with info about the cases
     large_test_file.write('<HTML>\n')
