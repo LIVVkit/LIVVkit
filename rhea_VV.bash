@@ -49,7 +49,7 @@ export RUN_GIS_2KM=0
 export RUN_GIS_4KM=0
 
 # flag to select validation analysis
-export RUN_VALIDATION=0
+export RUN_VALIDATION=1
 
 # flag to select Antarctica analysis (keep turned off for now)
 export RUN_ANT=0

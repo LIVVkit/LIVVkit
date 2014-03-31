@@ -10,7 +10,7 @@ import VV_utilities
 from stat import *
 import time
 
-def web(valid_file,figure1_plot,figure2_plot,figure3_plot,figure4_plot,figure5_plot, \
+def web(valid_file,details_file,figure1_plot,figure2_plot,figure3_plot,figure4_plot,figure5_plot, \
         data_dir,ncl_path,html_path,script_path):
 
     valid_file.write('<HTML>\n')
@@ -19,6 +19,16 @@ def web(valid_file,figure1_plot,figure2_plot,figure3_plot,figure4_plot,figure5_p
     valid_file.write('<H1>Validation Plots</H1>')
     valid_file.write('<BR>\n')
 
+    valid_file.write('<TH ALIGN=LEFT><A HREF="case_details.html">Case Details</A>\n')
+    valid_file.write('<BR>\n')
+    valid_file.write('<BR>\n')
+    
+    
+    
+    
+    
+    
+    
     valid_file.write('<TH ALIGN=LEFT><A HREF="figure1_plot.html">Figure1 Plot</A>\n')
     valid_file.write('<BR>\n')
    

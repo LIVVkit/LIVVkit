@@ -30,6 +30,8 @@ To run the shell script (Carver):
      on carver or hopper (choose tar files with the most recent date stamps) along with /PISCEES/trunk/tests/higher-order/livv
      and place in the higher-order directory mentioned above.
 
+Log onto Hopper:
+
   3. Now run the /PISCEES/trunk/cmake-scripts/master_build_hopper.csh file in your home space
      on hopper (see /PISCEES/trunk/cmake-scripts/README for more information on how to run the csh script).
      NOTE: make sure to wait until all job scripts have completed before running livv.
