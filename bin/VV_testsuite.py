@@ -123,7 +123,7 @@ def web(glide_flag,descript_file,test_file, \
         if flag_to_plot_dome30d:
 
 # link to dome30d_file with descriptions about the test cases
-            # since glissade does not output solver information:
+            #since glissade does not output solver information:
             if glide_flag == 1:
                 test_file.write('<TH ALIGN=LEFT><A HREF="dome30d_details.html">Velocity Solver Details</A>\n')
                 test_file.write('<BR>\n')

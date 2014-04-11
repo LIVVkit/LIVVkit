@@ -9,7 +9,7 @@ import collections
 import VV_outprocess
 import VV_testsuite
 
-def valid_conf(details_file,valid_configure_path,land_file,atm_file,icesheet_file)
+def valid_conf(details_file,valid_configure_path,land_file,atm_file,icesheet_file):
 
     #this function allows creation of nested dictionaries on the fly (like PERL autovivification)
     def makehashdome():

@@ -21,49 +21,57 @@ def time_check(perf_test,dome60_flag,dome120_flag,dome240_flag,dome500_flag,dome
 #dome60
     if dome60_flag == 1:
         JFNK_timing_path = perf_test + '/dome60/data/out.60.JFNK.timing'
-        dictionary_large['dome60'] = VV_timing_check.timing_check(JFNK_timing_path,flag)
+        test = 'dome60'
+        dictionary_large['dome60'] = VV_timing_check.timing_check(JFNK_timing_path,flag,test)
     else:
         dictionary_large['dome60'] = 0
 #dome120
     if dome120_flag == 1:
         JFNK_timing_path = perf_test + '/dome120/data/out.120.JFNK.timing'
-        dictionary_large['dome120'] = VV_timing_check.timing_check(JFNK_timing_path,flag)
+        test = 'dome120'
+        dictionary_large['dome120'] = VV_timing_check.timing_check(JFNK_timing_path,flag,test)
     else:
         dictionary_large['dome120'] = 0
 #dome240
     if dome240_flag == 1:
         JFNK_timing_path = perf_test + '/dome240/data/out.240.JFNK.timing'
-        dictionary_large['dome240'] = VV_timing_check.timing_check(JFNK_timing_path,flag)
+        test = 'dome240'
+        dictionary_large['dome240'] = VV_timing_check.timing_check(JFNK_timing_path,flag,test)
     else:
         dictionary_large['dome240'] = 0
 #dome500
     if dome500_flag == 1:
         JFNK_timing_path = perf_test + '/dome500/data/out.500.JFNK.timing'
-        dictionary_large['dome500'] = VV_timing_check.timing_check(JFNK_timing_path,flag)
+        test = 'dome500'
+        dictionary_large['dome500'] = VV_timing_check.timing_check(JFNK_timing_path,flag,test)
     else:
         dictionary_large['dome500'] = 0
 #dome1000
     if dome1000_flag == 1:
         JFNK_timing_path = perf_test + '/dome1000/data/out.1000.JFNK.timing'
-        dictionary_large['dome1000'] = VV_timing_check.timing_check(JFNK_timing_path,flag)
+        test = 'dome1000'
+        dictionary_large['dome1000'] = VV_timing_check.timing_check(JFNK_timing_path,flag,test)
     else:
         dictionary_large['dome1000'] = 0
 #gis1km
     if gis_1km_flag == 1:
-        JFNK_timing_path = perf_test + '/gis_1km/data/out.120.JFNK.timing'
-        dictionary_large['gis1km'] = VV_timing_check.timing_check(JFNK_timing_path,flag)
+        JFNK_timing_path = perf_test + '/gis_1km/data/out.gis.1km.timing'
+        test = 'gis1km'
+        dictionary_large['gis1km'] = VV_timing_check.timing_check(JFNK_timing_path,flag,test)
     else:
         dictionary_large['gis1km'] = 0
 #gis2km
     if gis_2km_flag == 1:
-        JFNK_timing_path = perf_test + '/gis_2km/data/out.120.JFNK.timing'
-        dictionary_large['gis2km'] = VV_timing_check.timing_check(JFNK_timing_path,flag)
+        JFNK_timing_path = perf_test + '/gis_2km/data/out.gis.2km.timing'
+        test = 'gis2km'
+        dictionary_large['gis2km'] = VV_timing_check.timing_check(JFNK_timing_path,flag,test)
     else:
         dictionary_large['gis2km'] = 0
 #gis4km
     if gis_4km_flag == 1:
-        JFNK_timing_path = perf_test + '/gis_4km/data/out.120.JFNK.timing'
-        dictionary_large['gis4km'] = VV_timing_check.timing_check(JFNK_timing_path,flag)
+        JFNK_timing_path = perf_test + '/gis_4km/data/out.gis.4km.timing'
+        test = 'gis4km'
+        dictionary_large['gis4km'] = VV_timing_check.timing_check(JFNK_timing_path,flag,test)
     else:
         dictionary_large['gis4km'] = 0
     return dictionary_large
@@ -124,27 +132,11 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_tim
                 bench_configure_path = perf_test + '/bench/dome60/dome.60.JFNK.trilinos.config'
             VV_utilities.confxml(dome60_case,configure_path,bench_configure_path,xml_path,bench_xml_path)
 
-            #if timing_flag == 1:
             large_test_file.write('<TH ALIGN=LEFT><A HREF="dome60_timing.html">Timing Details</A>\n')
             large_test_file.write('<BR>\n')
             flag = 0
-            JFNK_timing_path = perf_test + '/dome60/data/out.60.JFNK.timing'
-            VV_timing.timing_table_current_run(dome60_time,JFNK_timing_path,flag)
-            flag = 1
-            PIC_timing_path = perf_test + '/dome60/data/out.60.PIC.timing'
-            VV_timing.timing_table_current_run(dome60_time,PIC_timing_path,flag)
-            
-#           large_test_file.write('<TH ALIGN=LEFT><A HREF="dome60_plot.html">Plots</A>\n')
-#           large_test_file.write('<BR>\n')
-#           if failedt != 0:
-#               dome60_plot.write("<H2>Diagnostic Dome 60 Test failed, plots may not be generated</H2><br>")
-#           checkpath = perf_test + '/dome60/data/dome.1.nc'
-#           checkpath2 = perf_test + '/dome60/data/dome.4.nc'
-#           noplot = VV_checks.emptycheck(checkpath)
-#           noplot1 = noplot
-#           noplot = VV_checks.emptycheck(checkpath2)
-#           if noplot1 != 1 and noplot != 1:
-#               VV_dome60details.plot(dome60_plot,perf_test,ncl_path,html_path,script_path,data_dir)
+            timing_path = perf_test + '/dome60/data/out.60.JFNK.timing'
+            VV_timing.timing_table_current_run(dome60_time,timing_path,flag)
 
 # Time stamping
         strrand = ''
@@ -192,27 +184,11 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_tim
                 bench_configure_path = perf_test + '/bench/dome120/dome.120.JFNK.trilinos.config'
             VV_utilities.confxml(dome120_case,configure_path,bench_configure_path,xml_path,bench_xml_path)
 
-            #if timing_flag == 1:
             large_test_file.write('<TH ALIGN=LEFT><A HREF="dome120_timing.html">Timing Details</A>\n')
             large_test_file.write('<BR>\n')
             flag = 0
-            JFNK_timing_path = perf_test + '/dome120/data/out.120.JFNK.timing'
-            VV_timing.timing_table_current_run(dome120_time,JFNK_timing_path,flag)
-            flag = 1
-            PIC_timing_path = perf_test + '/dome120/data/out.120.PIC.timing'
-            VV_timing.timing_table_current_run(dome120_time,PIC_timing_path,flag)
-
-#           large_test_file.write('<TH ALIGN=LEFT><A HREF="dome120_plot.html">Plots</A>\n')
-#           large_test_file.write('<BR>\n')
-#           if failedt != 0:
-#               dome120_plot.write("<H2>Diagnostic Dome 120 Test failed, plots may not be generated</H2><br>")
-#           checkpath = perf_test + '/dome120/data/dome.1.nc'
-#           checkpath2 = perf_test + '/dome120/data/dome.4.nc'
-#           noplot = VV_checks.emptycheck(checkpath)
-#           noplot1 = noplot
-#           noplot = VV_checks.emptycheck(checkpath2)
-#           if noplot1 != 1 and noplot != 1:
-#               VV_dome120details.plot(dome120_plot,perf_test,ncl_path,html_path,script_path,data_dir)
+            timing_path = perf_test + '/dome120/data/out.120.JFNK.timing'
+            VV_timing.timing_table_current_run(dome120_time,timing_path,flag)
 
 # Time stamping
         strrand = ''
@@ -225,6 +201,7 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_tim
 
     else:
         print "NOT RUNNING DOME120 TESTCASE"
+
 
 #apply flag to turn off running test
     if dome240_flag == 1:
@@ -259,27 +236,11 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_tim
                 bench_configure_path = perf_test + '/bench/dome240/dome.240.JFNK.trilinos.config'
             VV_utilities.confxml(dome240_case,configure_path,bench_configure_path,xml_path,bench_xml_path)
 
-            #if timing_flag == 1:
             large_test_file.write('<TH ALIGN=LEFT><A HREF="dome240_timing.html">Timing Details</A>\n')
             large_test_file.write('<BR>\n')
             flag = 0
-            JFNK_timing_path = perf_test + '/dome240/data/out.240.JFNK.timing'
-            VV_timing.timing_table_current_run(dome240_time,JFNK_timing_path,flag)
-            flag = 1
-            PIC_timing_path = perf_test + '/dome240/data/out.240.PIC.timing'
-            VV_timing.timing_table_current_run(dome240_time,PIC_timing_path,flag)
-
-#           large_test_file.write('<TH ALIGN=LEFT><A HREF="dome240_plot.html">Plots</A>\n')
-#           large_test_file.write('<BR>\n')
-#           if failedt != 0:
-#               dome240_plot.write("<H2>Diagnostic Dome 240 Test failed, plots may not be generated</H2><br>")
-#           checkpath = perf_test + '/dome240/data/dome.1.nc'
-#           checkpath2 = perf_test + '/dome240/data/dome.4.nc'
-#           noplot = VV_checks.emptycheck(checkpath)
-#           noplot1 = noplot
-#           noplot = VV_checks.emptycheck(checkpath2)
-#           if noplot1 != 1 and noplot != 1:
-#               VV_dome240details.plot(dome240_plot,perf_test,ncl_path,html_path,script_path,data_dir)
+            timing_path = perf_test + '/dome240/data/out.240.JFNK.timing'
+            VV_timing.timing_table_current_run(dome240_time,timing_path,flag)
 
 # Time stamping
         strrand = ''
@@ -292,6 +253,7 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_tim
 
     else:
         print "NOT RUNNING DOME240 TESTCASE"
+
 
 #apply flag to turn off running test
     if dome500_flag == 1:
@@ -326,27 +288,11 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_tim
                 bench_configure_path = perf_test + '/bench/dome500/dome.500.JFNK.trilinos.config'
             VV_utilities.confxml(dome500_case,configure_path,bench_configure_path,xml_path,bench_xml_path)
             
-            #if timing_flag == 1:
             large_test_file.write('<TH ALIGN=LEFT><A HREF="dome500_timing.html">Timing Details</A>\n')
             large_test_file.write('<BR>\n')
             flag = 0
-            JFNK_timing_path = perf_test + '/dome500/data/out.500.JFNK.timing'
-            VV_timing.timing_table_current_run(dome500_time,JFNK_timing_path,flag)
-            flag = 1
-            PIC_timing_path = perf_test + '/dome500/data/out.500.PIC.timing'
-            VV_timing.timing_table_current_run(dome500_time,PIC_timing_path,flag)
-
-#           large_test_file.write('<TH ALIGN=LEFT><A HREF="dome500_plot.html">Plots</A>\n')
-#           large_test_file.write('<BR>\n')
-#           if failedt != 0:
-#               dome500_plot.write("<H2>Diagnostic Dome 500 Test failed, plots may not be generated</H2><br>")
-#           checkpath = perf_test + '/dome500/data/dome.1.nc'
-#           checkpath2 = perf_test + '/dome500/data/dome.4.nc'
-#           noplot = VV_checks.emptycheck(checkpath)
-#           noplot1 = noplot
-#           noplot = VV_checks.emptycheck(checkpath2)
-#           if noplot1 != 1 and noplot != 1:
-#               VV_dome500details.plot(dome500_plot,perf_test,ncl_path,html_path,script_path,data_dir)
+            timing_path = perf_test + '/dome500/data/out.500.JFNK.timing'
+            VV_timing.timing_table_current_run(dome500_time,timing_path,flag)
 
 # Time stamping
         strrand = ''
@@ -359,6 +305,7 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_tim
 
     else:
         print "NOT RUNNING DOME500 TESTCASE"
+
 
 #apply flag to turn off running test
     if dome1000_flag == 1:
@@ -389,31 +336,15 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_tim
                 configure_path = perf_test + '/dome1000/configure_files/dome.1000.JFNK.trilinos.config'
                 bench_configure_path = perf_test + '/bench/dome1000/configure_files/dome.1000.JFNK.trilinos.config'
             else:
-                configure_path = perf_test + '/dome1000//dome.1000.JFNK.trilinos.config'
+                configure_path = perf_test + '/dome1000/dome.1000.JFNK.trilinos.config'
                 bench_configure_path = perf_test + '/bench/dome1000/dome.1000.JFNK.trilinos.config'
             VV_utilities.confxml(dome1000_case,configure_path,bench_configure_path,xml_path,bench_xml_path)
 
-            #if timing_flag == 1:
             large_test_file.write('<TH ALIGN=LEFT><A HREF="dome1000_timing.html">Timing Details</A>\n')
             large_test_file.write('<BR>\n')
             flag = 0
-            JFNK_timing_path = perf_test + '/dome1000/data/out.1000.JFNK.timing'
-            VV_timing.timing_table_current_run(dome1000_time,JFNK_timing_path,flag)
-            flag = 1
-            PIC_timing_path = perf_test + '/dome1000/data/out.1000.PIC.timing'
-            VV_timing.timing_table_current_run(dome1000_time,PIC_timing_path,flag)
-
-#           large_test_file.write('<TH ALIGN=LEFT><A HREF="dome1000_plot.html">Plots</A>\n')
-#           large_test_file.write('<BR>\n')
-#           if failedt != 0:
-#               dome1000_plot.write("<H2>Diagnostic Dome 1000 Test failed, plots may not be generated</H2><br>")
-#           checkpath = perf_test + '/dome1000/data/dome.1.nc'
-#           checkpath2 = perf_test + '/dome1000/data/dome.4.nc'
-#           noplot = VV_checks.emptycheck(checkpath)
-#           noplot1 = noplot
-#           noplot = VV_checks.emptycheck(checkpath2)
-#           if noplot1 != 1 and noplot != 1:
-#               VV_dome1000details.plot(dome1000_plot,perf_test,ncl_path,html_path,script_path,data_dir)
+            timing_path = perf_test + '/dome1000/data/out.1000.JFNK.timing'
+            VV_timing.timing_table_current_run(dome1000_time,timing_path,flag)
 
 # Time stamping
         strrand = ''
@@ -426,6 +357,124 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_tim
 
     else:
         print "NOT RUNNING DOME1000 TESTCASE"
+
+
+#apply flag to turn off running test
+    if gis_4km_flag == 1:
+
+# GIS 4km stats
+        print "running gis4km testcase"
+        if dictionary_large['gis4km'] == 0:
+            large_test_file.write('<H2>GIS 4KM Test: <font color="green">Test Within Expected Performance Range</font></H2>')
+        elif dictionary_large['gis4km'] == 1:
+            large_test_file.write('<H2>GIS 4KM Test: <font color="red">Test Slower Than Expected Performance Range</font></H2>')
+        else:
+            large_test_file.write('<H2>GIS 4KM Test: <font color="blue">Test Faster Than Expected Performance Range</font></H2>')
+
+# put something here to flag BFB results between data and bench and pgi and gnu etc.
+        flag_to_plot_gis4km = 1
+        if flag_to_plot_gis4km:
+
+            large_test_file.write('<TH ALIGN=LEFT><A HREF="gis4km_details.html">Velocity Solver Details</A>\n')
+            large_test_file.write('<BR>\n')
+            failedt = VV_largetestdetails.detailsgis4km(gis4km_file,perf_test,data_dir)
+
+            large_test_file.write('<TH ALIGN=LEFT><A HREF="gis4km_case.html">Case and Parameter Settings Details</A>\n')
+            large_test_file.write('<BR>\n')
+            xml_path = perf_test + '/gis_4km/trilinosOptions.xml'
+            bench_xml_path = perf_test + '/bench/gis_4km/trilinosOptions.xml'
+            if os.path.isdir(perf_test + '/gis_4km/configure_files/') == True: 
+                configure_path = perf_test + '/gis_4km/configure_files/gis.4km.config'
+                bench_configure_path = perf_test + '/bench/gis_4km/configure_files/gis.4km.config'
+            else:
+                configure_path = perf_test + '/gis_4km/gis.4km.config'
+                bench_configure_path = perf_test + '/bench/gis_4km/gis.4km.config'
+            VV_utilities.confxml(gis4km_case,configure_path,bench_configure_path,xml_path,bench_xml_path)
+
+            large_test_file.write('<TH ALIGN=LEFT><A HREF="gis4km_timing.html">Timing Details</A>\n')
+            large_test_file.write('<BR>\n')
+            flag = 1
+            timing_path = perf_test + '/gis_4km/data/out.gis.4km.timing'
+            VV_timing.timing_table_current_run(gis4km_time,timing_path,flag)
+            
+            #large_test_file.write('<TH ALIGN=LEFT><A HREF="gis4km_plot.html">Plots</A>\n')
+            #large_test_file.write('<BR>\n')
+            #if failedt != 0:
+            #    gis4_plot.write("<H2>GIS 4km Test failed, plots may not be generated</H2><br>")
+            #checkpath = perf_test + '/gis_4km/data/gis_4km.ice2sea.init.nc'
+            #noplot = VV_checks.emptycheck(checkpath)
+            #if noplot != 1:
+            #    VV_gis4details.gis4_plot(gis4km_plot,perf_test,ncl_path,html_path,script_path,data_dir)
+
+# Time stamping
+        mode = os.stat(perf_test + '/gis_4km').st_mtime
+        mode = mode - 14400
+        mode = time.gmtime(mode)
+        ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
+        strrand = '<b>Time of Last Simulation: ' + ctime + '</b>\n'
+        large_test_file.write(strrand)
+
+    else:
+        print "NOT RUNNING GIS 4KM TESTCASE"
+
+
+#apply flag to turn off running test
+    if gis_2km_flag == 1:
+
+# GIS 2km stats
+        print "running gis2km testcase"
+        if dictionary_large['gis2km'] == 0:
+            large_test_file.write('<H2>GIS 2KM Test: <font color="green">Test Within Expected Performance Range</font></H2>')
+        elif dictionary_large['gis2km'] == 1:
+            large_test_file.write('<H2>GIS 2KM Test: <font color="red">Test Slower Than Expected Performance Range</font></H2>')
+        else:
+            large_test_file.write('<H2>GIS 2KM Test: <font color="blue">Test Faster Than Expected Performance Range</font></H2>')
+
+# put something here to flag BFB results between data and bench and pgi and gnu etc.
+        flag_to_plot_gis2km = 1
+        if flag_to_plot_gis2km:
+
+            large_test_file.write('<TH ALIGN=LEFT><A HREF="gis2km_details.html">Velocity Solver Details</A>\n')
+            large_test_file.write('<BR>\n')
+            failedt = VV_largetestdetails.detailsgis2km(gis2km_file,perf_test,data_dir)
+
+            large_test_file.write('<TH ALIGN=LEFT><A HREF="gis2km_case.html">Case and Parameter Settings Details</A>\n')
+            large_test_file.write('<BR>\n')
+            xml_path = perf_test + '/gis_2km/trilinosOptions.xml'
+            bench_xml_path = perf_test + '/bench/gis_2km/trilinosOptions.xml'
+            if os.path.isdir(perf_test + '/gis_2km/configure_files/') == True: 
+                configure_path = perf_test + '/gis_2km/configure_files/gis.2km.config'
+                bench_configure_path = perf_test + '/bench/gis_2km/configure_files/gis.2km.config'
+            else:
+                configure_path = perf_test + '/gis_2km/gis.2km.config'
+                bench_configure_path = perf_test + '/bench/gis_2km/gis.2km.config'
+            VV_utilities.confxml(gis2km_case,configure_path,bench_configure_path,xml_path,bench_xml_path)
+
+            large_test_file.write('<TH ALIGN=LEFT><A HREF="gis2km_timing.html">Timing Details</A>\n')
+            large_test_file.write('<BR>\n')
+            flag = 1
+            timing_path = perf_test + '/gis_2km/data/out.gis.2km.timing'
+            VV_timing.timing_table_current_run(gis2km_time,timing_path,flag)
+            
+            #large_test_file.write('<TH ALIGN=LEFT><A HREF="gis2km_plot.html">Plots</A>\n')
+            #large_test_file.write('<BR>\n')
+            #if failedt != 0:
+            #    gis2_plot.write("<H2>GIS 2km Test failed, plots may not be generated</H2><br>")
+            #checkpath = perf_test + '/gis_2km/data/gis_2km.ice2sea.init.nc'
+            #noplot = VV_checks.emptycheck(checkpath)
+            #if noplot != 1:
+            #    VV_gis2details.gis2_plot(gis2km_plot,perf_test,ncl_path,html_path,script_path,data_dir)
+
+# Time stamping
+        mode = os.stat(perf_test + '/gis_2km').st_mtime
+        mode = mode - 14400
+        mode = time.gmtime(mode)
+        ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
+        strrand = '<b>Time of Last Simulation: ' + ctime + '</b>\n'
+        large_test_file.write(strrand)
+
+    else:
+        print "NOT RUNNING GIS 2KM TESTCASE"
 
 
 #apply flag to turn off running test
@@ -446,24 +495,34 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_tim
 
             large_test_file.write('<TH ALIGN=LEFT><A HREF="gis1km_details.html">Velocity Solver Details</A>\n')
             large_test_file.write('<BR>\n')
-            failedt = VV_gis1details.details(gis1km_file,perf_test,data_dir)
+            failedt = VV_largetestdetails.detailsgis1km(gis1km_file,perf_test,data_dir)
 
             large_test_file.write('<TH ALIGN=LEFT><A HREF="gis1km_case.html">Case and Parameter Settings Details</A>\n')
             large_test_file.write('<BR>\n')
             xml_path = perf_test + '/gis_1km/trilinosOptions.xml'
             bench_xml_path = perf_test + '/bench/gis_1km/trilinosOptions.xml'
-            configure_path = perf_test + '/gis_1km/configure_files/gis_1km.config'
-            bench_configure_path = perf_test + '/bench/gis_1km/configure_files/gis_1km.config'
+            if os.path.isdir(perf_test + '/gis_1km/configure_files/') == True: 
+                configure_path = perf_test + '/gis_1km/configure_files/gis.1km.config'
+                bench_configure_path = perf_test + '/bench/gis_1km/configure_files/gis.1km.config'
+            else:
+                configure_path = perf_test + '/gis_1km/gis.1km.config'
+                bench_configure_path = perf_test + '/bench/gis_1km/gis.1km.config'
             VV_utilities.confxml(gis1km_case,configure_path,bench_configure_path,xml_path,bench_xml_path)
 
-            large_test_file.write('<TH ALIGN=LEFT><A HREF="gis1km_plot.html">Plots</A>\n')
+            large_test_file.write('<TH ALIGN=LEFT><A HREF="gis1km_timing.html">Timing Details</A>\n')
             large_test_file.write('<BR>\n')
-            if failedt != 0:
-                gis1_plot.write("<H2>GIS 1km Test failed, plots may not be generated</H2><br>")
-            checkpath = perf_test + '/gis_1km/data/gis_1km.ice2sea.init.nc'
-            noplot = VV_checks.emptycheck(checkpath)
-            if noplot != 1:
-                VV_gis1details.gis1_plot(gis1km_plot,perf_test,ncl_path,html_path,script_path,data_dir)
+            flag = 1
+            timing_path = perf_test + '/gis_1km/data/out.gis.1km.timing'
+            VV_timing.timing_table_current_run(gis1km_time,timing_path,flag)
+            
+            #large_test_file.write('<TH ALIGN=LEFT><A HREF="gis1km_plot.html">Plots</A>\n')
+            #large_test_file.write('<BR>\n')
+            #if failedt != 0:
+            #    gis1_plot.write("<H2>GIS 1km Test failed, plots may not be generated</H2><br>")
+            #checkpath = perf_test + '/gis_1km/data/gis_1km.ice2sea.init.nc'
+            #noplot = VV_checks.emptycheck(checkpath)
+            #if noplot != 1:
+            #    VV_gis1details.gis1_plot(gis1km_plot,perf_test,ncl_path,html_path,script_path,data_dir)
 
 # Time stamping
         mode = os.stat(perf_test + '/gis_1km').st_mtime
@@ -476,102 +535,8 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_tim
     else:
         print "NOT RUNNING GIS 1KM TESTCASE"
 
-#apply flag to turn off running test
-    if gis_2km_flag == 1:
 
-# GIS 2km stats
-        print "running gis2km testcase"
-        if dictionary_large['gis2km'] == 0:
-            large_test_file.write('<H2>GIS 2KM Test: <font color="green">Test Within Expected Performance Range</font></H2>')
-        elif dictionary_large['gis2km'] == 1:
-            large_test_file.write('<H2>GIS 2KM Test: <font color="red">Test Slower Than Expected Performance Range</font></H2>')
-        else:
-            large_test_file.write('<H2>GIS 2KM Test: <font color="blue">Test Faster Than Expected Performance Range</font></H2>')
-
-# put something here to flag BFB results between data and bench and pgi and gnu etc.
-        flag_to_plot_gis2km = 1
-        if flag_to_plot_gis2km:
-
-            large_test_file.write('<TH ALIGN=LEFT><A HREF="gis2km_details.html">Velocity Solver Details</A>\n')
-            large_test_file.write('<BR>\n')
-            failedt = VV_gis2details.details(gis2km_file,perf_test,data_dir)
-
-            large_test_file.write('<TH ALIGN=LEFT><A HREF="gis2km_case.html">Case and Parameter Settings Details</A>\n')
-            large_test_file.write('<BR>\n')
-            xml_path = perf_test + '/gis_2km/trilinosOptions.xml'
-            bench_xml_path = perf_test + '/bench/gis_2km/trilinosOptions.xml'
-            configure_path = perf_test + '/gis_2km/configure_files/gis_2km.config'
-            bench_configure_path = perf_test + '/bench/gis_2km/configure_files/gis_2km.config'
-            VV_utilities.confxml(gis2km_case,configure_path,bench_configure_path,xml_path,bench_xml_path)
-
-            large_test_file.write('<TH ALIGN=LEFT><A HREF="gis2km_plot.html">Plots</A>\n')
-            large_test_file.write('<BR>\n')
-            if failedt != 0:
-                gis2_plot.write("<H2>GIS 2km Test failed, plots may not be generated</H2><br>")
-            checkpath = perf_test + '/gis_2km/data/gis_2km.ice2sea.init.nc'
-            noplot = VV_checks.emptycheck(checkpath)
-            if noplot != 1:
-                VV_gis2details.gis2_plot(gis2km_plot,perf_test,ncl_path,html_path,script_path,data_dir)
-
-# Time stamping
-        mode = os.stat(perf_test + '/gis_2km').st_mtime
-        mode = mode - 14400
-        mode = time.gmtime(mode)
-        ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
-        strrand = '<b>Time of Last Simulation: ' + ctime + '</b>\n'
-        large_test_file.write(strrand)
-
-    else:
-        print "NOT RUNNING GIS 2KM TESTCASE"
-
-#apply flag to turn off running test
-    if gis_4km_flag == 1:
-
-# GIS 4km stats
-        print "running gis4km testcase"
-        if dictionary_large['gis4km'] == 0:
-            large_test_file.write('<H2>GIS 4KM Test: <font color="green">Test Within Expected Performance Range</font></H2>')
-        elif dictionary_large['gis4km'] == 1:
-            large_test_file.write('<H2>GIS 4KM Test: <font color="red">Test Slower Than Expected Performance Range</font></H2>')
-        else:
-            large_test_file.write('<H2>GIS 4KM Test: <font color="blue">Test Faster Than Expected Performance Range</font></H2>')
-
-# put something here to flag BFB results between data and bench and pgi and gnu etc.
-        flag_to_plot_gis4km = 1
-        if flag_to_plot_gis4km:
-
-            large_test_file.write('<TH ALIGN=LEFT><A HREF="gis4km_details.html">Velocity Solver Details</A>\n')
-            large_test_file.write('<BR>\n')
-            failedt = VV_gis4details.details(gis4km_file,perf_test,data_dir)
-
-            large_test_file.write('<TH ALIGN=LEFT><A HREF="gis4km_case.html">Case and Parameter Settings Details</A>\n')
-            large_test_file.write('<BR>\n')
-            xml_path = perf_test + '/gis_4km/trilinosOptions.xml'
-            bench_xml_path = perf_test + '/bench/gis_4km/trilinosOptions.xml'
-            configure_path = perf_test + '/gis_4km/configure_files/gis_4km.config'
-            bench_configure_path = perf_test + '/bench/gis_4km/configure_files/gis_4km.config'
-            VV_utilities.confxml(gis4km_case,configure_path,bench_configure_path,xml_path,bench_xml_path)
-
-            large_test_file.write('<TH ALIGN=LEFT><A HREF="gis4km_plot.html">Plots</A>\n')
-            large_test_file.write('<BR>\n')
-            if failedt != 0:
-                gis4_plot.write("<H2>GIS 4km Test failed, plots may not be generated</H2><br>")
-            checkpath = perf_test + '/gis_4km/data/gis_4km.ice2sea.init.nc'
-            noplot = VV_checks.emptycheck(checkpath)
-            if noplot != 1:
-                VV_gis4details.gis4_plot(gis4km_plot,perf_test,ncl_path,html_path,script_path,data_dir)
-
-# Time stamping
-        mode = os.stat(perf_test + '/gis_4km').st_mtime
-        mode = mode - 14400
-        mode = time.gmtime(mode)
-        ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
-        strrand = '<b>Time of Last Simulation: ' + ctime + '</b>\n'
-        large_test_file.write(strrand)
-
-    else:
-        print "NOT RUNNING GIS 4KM TESTCASE"
-
+    large_test_file.write('<BR>\n')
     large_test_file.write('<BR>\n')
     large_test_file.write('<TH ALIGN=LEFT><A HREF="livv_kit_main.html">Home</A>\n')
     large_test_file.write('</HTML>\n')

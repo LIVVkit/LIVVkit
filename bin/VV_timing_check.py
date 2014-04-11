@@ -51,7 +51,7 @@ def timing_averages(file,flag):
         sg_avgs.append(min(list))
         return sg_avgs
 
-def timing_check(file,flag):
+def timing_check(file,flag,test):
     if flag == 0:
         #check if 10 timing files exist, otherwise can't run timing
         t_flag = []
@@ -61,7 +61,7 @@ def timing_check(file,flag):
                 t_flag.append(0)
             else:
                 t_flag.append(1)
-        
+
         #check for current run timing file
         if os.path.isdir(file) == True:
             t_flag.append(0)
@@ -69,8 +69,7 @@ def timing_check(file,flag):
             t_flag.append(1)
         
         if 1 in t_flag:
-            print "Cannot Generate Timing Check: Missing at least one of the 10 timing directories and/or the current run. \
-                    Go to perf_test directory to run the ijob_timing_JFNK and/or ijob scripts."
+            print "Cannot Generate Timing Check for " + test + ": Missing at least one of the 10 timing directories and/or the current run. Go to perf_test directory to run the ijob_timing file and/or ijob scripts."
             sys.exit(0)
         else:
             #call above definitions to get averages of avg, max, and min for each timer across 10 files
