@@ -113,6 +113,7 @@ def web(glide_flag,descript_file,test_file, \
 
 # Diagnostic Dome 30 stats
         print "running diagnostic dome30 testcase"
+        test_file.write('<BR>\n')
         if dictionary['diagnostic'] == 0:
             test_file.write('<H2>Diagnostic Dome 30 Test: <font color="green">Bit-for-Bit</font></H2>')
         else:
@@ -175,6 +176,7 @@ def web(glide_flag,descript_file,test_file, \
         ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
         strrand = '<b>Time of Last Simulation: ' + str(ctime) + '</b>'
         test_file.write(strrand)
+        test_file.write('<BR>\n')
 
     else:
         print "NOT RUNNING DIAGNOSTIC DOME30 TESTCASE"
@@ -185,6 +187,7 @@ def web(glide_flag,descript_file,test_file, \
 
 # Evolving Dome 30 stats
         print "running evolving dome30 testcase"
+        test_file.write('<BR>\n')
         if dictionary['evolving'] == 0:
             test_file.write('<H2>Evolving Dome 30 Test: <font color="green">Bit-for-Bit</font></H2>')
         else:
@@ -246,6 +249,7 @@ def web(glide_flag,descript_file,test_file, \
         ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
         strrand = '<b>Time of Last Simulation: ' + ctime + '</b>'
         test_file.write(strrand)
+        test_file.write('<BR>\n')
 
     else:
         print "NOT RUNNING EVOLVING DOME30 TESTCASE"
@@ -256,6 +260,7 @@ def web(glide_flag,descript_file,test_file, \
 
 # Circular Shelf stats
         print "running circular shelf testcase"
+        test_file.write('<BR>\n')
         if dictionary['circular'] == 0:
             test_file.write('<H2>Circular Shelf Test: <font color="green">Bit-for-Bit</font></H2>')
         else:
@@ -314,6 +319,7 @@ def web(glide_flag,descript_file,test_file, \
         ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
         strrand = '<b>Time of Last Simulation: ' + ctime + '</b>'
         test_file.write(strrand)
+        test_file.write('<BR>\n')
 
     else:
         print "NOT RUNNING CIRCULAR SHELF TESTCASE"
@@ -324,6 +330,7 @@ def web(glide_flag,descript_file,test_file, \
 
 # Confined Shelf stats
         print "running confined shelf testcase"
+        test_file.write('<BR>\n')
         if dictionary['confined'] == 0:
             test_file.write('<H2>Confined Shelf Test: <font color="green">Bit-for-Bit</font></H2>')
         else:
@@ -382,6 +389,7 @@ def web(glide_flag,descript_file,test_file, \
         ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
         strrand = '<b>Time of Last Simulation: ' + ctime + '</b>'
         test_file.write(strrand)
+        test_file.write('<BR>\n')
 
     else:
         print "NOT RUNNING CONFINED SHELF TESTCASE"
@@ -392,6 +400,7 @@ def web(glide_flag,descript_file,test_file, \
 
 # ISMIP HOM A 80km stats
         print "running ismip hom a 80km testcase"
+        test_file.write('<BR>\n')
         if dictionary['ismip-hom-a80'] == 0:
             test_file.write('<H2>ISMIP HOM A 80KM Test: <font color="green">Bit-for-Bit</font></H2>')
         else:
@@ -450,6 +459,7 @@ def web(glide_flag,descript_file,test_file, \
         ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
         strrand = '<b>Time of Last Simulation: ' + ctime + '</b>'
         test_file.write(strrand)
+        test_file.write('<BR>\n')
 
     else:
         print "NOT RUNNING ISMIP HOM A 80KM TESTCASE"
@@ -460,6 +470,7 @@ def web(glide_flag,descript_file,test_file, \
 
 # ISMIP HOM A 20km stats
         print "running ismip hom a 20km testcase"
+        test_file.write('<BR>\n')
         if dictionary['ismip-hom-a20'] == 0:
             test_file.write('<H2>ISMIP HOM A 20KM Test: <font color="green">Bit-for-Bit</font></H2>')
         else:
@@ -518,6 +529,7 @@ def web(glide_flag,descript_file,test_file, \
         ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
         strrand = '<b>Time of Last Simulation: ' + ctime + '</b>'
         test_file.write(strrand)
+        test_file.write('<BR>\n')
 
     else:
         print "NOT RUNNING ISMIP HOM A 20KM TESTCASE"
@@ -528,6 +540,7 @@ def web(glide_flag,descript_file,test_file, \
         if glide_flag == 0:
 # ISMIP HOM C 80km stats
             print "running ismip hom c 80km testcase"
+            test_file.write('<BR>\n')
             if dictionary['ismip-hom-c80'] == 0:
                 test_file.write('<H2>ISMIP HOM C 80KM Test: <font color="green">Bit-for-Bit</font></H2>')
             else:
@@ -585,6 +598,7 @@ def web(glide_flag,descript_file,test_file, \
             ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
             strrand = '<b>Time of Last Simulation: ' + ctime + '</b>'
             test_file.write(strrand)
+            test_file.write('<BR>\n')
 
     else:
         print "NOT RUNNING ISMIP HOM C 80KM TESTCASE"
@@ -595,6 +609,7 @@ def web(glide_flag,descript_file,test_file, \
         if glide_flag == 0:
 # ISMIP HOM C 20km stats
             print "running ismip hom c 20km testcase"
+            test_file.write('<BR>\n')
             if dictionary['ismip-hom-c20'] == 0:
                 test_file.write('<H2>ISMIP HOM C 20KM Test: <font color="green">Bit-for-Bit</font></H2>')
             else:
@@ -652,6 +667,7 @@ def web(glide_flag,descript_file,test_file, \
             ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
             strrand = '<b>Time of Last Simulation: ' + ctime + '</b>'
             test_file.write(strrand)
+            test_file.write('<BR>\n')
 
     else:
         print "NOT RUNNING ISMIP HOM C 20KM TESTCASE"

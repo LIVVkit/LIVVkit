@@ -104,6 +104,7 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_tim
 
 # Dome 60 stats
         print "running dome60 testcase"
+        large_test_file.write('<BR>\n')
         if dictionary_large['dome60'] == 0:
             large_test_file.write('<H2>Diagnostic Dome 60 Test: <font color="green">Test Within Expected Performance Range</font></H2>')
         elif dictionary_large['dome60'] == 1:
@@ -146,6 +147,7 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_tim
         ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
         strrand = '<b>Time of Last Simulation: ' + str(ctime) + '</b>'
         large_test_file.write(strrand)
+        large_test_file.write('<BR>\n')
 
     else:
         print "NOT RUNNING DOME60 TESTCASE"
@@ -156,6 +158,7 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_tim
 
 # Dome 120 stats
         print "running dome120 testcase"
+        large_test_file.write('<BR>\n')
         if dictionary_large['dome120'] == 0:
             large_test_file.write('<H2>Diagnostic Dome 120 Test: <font color="green">Test Within Expected Performance Range</font></H2>')
         elif dictionary_large['dome120'] == 1:
@@ -198,6 +201,7 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_tim
         ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
         strrand = '<b>Time of Last Simulation: ' + str(ctime) + '</b>'
         large_test_file.write(strrand)
+        large_test_file.write('<BR>\n')
 
     else:
         print "NOT RUNNING DOME120 TESTCASE"
@@ -208,6 +212,7 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_tim
 
 # Dome 240 stats
         print "running dome240 testcase"
+        large_test_file.write('<BR>\n')
         if dictionary_large['dome240'] == 0:
             large_test_file.write('<H2>Diagnostic Dome 240 Test: <font color="green">Test Within Expected Performance Range</font></H2>')
         elif dictionary_large['dome240'] == 1:
@@ -250,6 +255,7 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_tim
         ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
         strrand = '<b>Time of Last Simulation: ' + str(ctime) + '</b>'
         large_test_file.write(strrand)
+        large_test_file.write('<BR>\n')
 
     else:
         print "NOT RUNNING DOME240 TESTCASE"
@@ -260,6 +266,7 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_tim
 
 # Dome 500 stats
         print "running dome500 testcase"
+        large_test_file.write('<BR>\n')
         if dictionary_large['dome500'] == 0:
             large_test_file.write('<H2>Diagnostic Dome 500 Test: <font color="green">Test Within Expected Performance Range</font></H2>')
         elif dictionary_large['dome500'] == 1:
@@ -302,6 +309,7 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_tim
         ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
         strrand = '<b>Time of Last Simulation: ' + str(ctime) + '</b>'
         large_test_file.write(strrand)
+        large_test_file.write('<BR>\n')
 
     else:
         print "NOT RUNNING DOME500 TESTCASE"
@@ -312,6 +320,7 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_tim
 
 # Dome 1000 stats
         print "running dome1000 testcase"
+        large_test_file.write('<BR>\n')
         if dictionary_large['dome1000'] == 0:
             large_test_file.write('<H2>Diagnostic Dome 1000 Test: <font color="green">Test Within Expected Performance Range</font></H2>')
         elif dictionary_large['dome1000'] == 1:
@@ -354,6 +363,7 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_tim
         ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
         strrand = '<b>Time of Last Simulation: ' + str(ctime) + '</b>'
         large_test_file.write(strrand)
+        large_test_file.write('<BR>\n')
 
     else:
         print "NOT RUNNING DOME1000 TESTCASE"
@@ -364,6 +374,7 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_tim
 
 # GIS 4km stats
         print "running gis4km testcase"
+        large_test_file.write('<BR>\n')
         if dictionary_large['gis4km'] == 0:
             large_test_file.write('<H2>GIS 4KM Test: <font color="green">Test Within Expected Performance Range</font></H2>')
         elif dictionary_large['gis4km'] == 1:
@@ -374,10 +385,6 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_tim
 # put something here to flag BFB results between data and bench and pgi and gnu etc.
         flag_to_plot_gis4km = 1
         if flag_to_plot_gis4km:
-
-            large_test_file.write('<TH ALIGN=LEFT><A HREF="gis4km_details.html">Velocity Solver Details</A>\n')
-            large_test_file.write('<BR>\n')
-            failedt = VV_largetestdetails.detailsgis4km(gis4km_file,perf_test,data_dir)
 
             large_test_file.write('<TH ALIGN=LEFT><A HREF="gis4km_case.html">Case and Parameter Settings Details</A>\n')
             large_test_file.write('<BR>\n')
@@ -413,6 +420,7 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_tim
         ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
         strrand = '<b>Time of Last Simulation: ' + ctime + '</b>\n'
         large_test_file.write(strrand)
+        large_test_file.write('<BR>\n')
 
     else:
         print "NOT RUNNING GIS 4KM TESTCASE"
@@ -423,6 +431,7 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_tim
 
 # GIS 2km stats
         print "running gis2km testcase"
+        large_test_file.write('<BR>\n')
         if dictionary_large['gis2km'] == 0:
             large_test_file.write('<H2>GIS 2KM Test: <font color="green">Test Within Expected Performance Range</font></H2>')
         elif dictionary_large['gis2km'] == 1:
@@ -433,10 +442,6 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_tim
 # put something here to flag BFB results between data and bench and pgi and gnu etc.
         flag_to_plot_gis2km = 1
         if flag_to_plot_gis2km:
-
-            large_test_file.write('<TH ALIGN=LEFT><A HREF="gis2km_details.html">Velocity Solver Details</A>\n')
-            large_test_file.write('<BR>\n')
-            failedt = VV_largetestdetails.detailsgis2km(gis2km_file,perf_test,data_dir)
 
             large_test_file.write('<TH ALIGN=LEFT><A HREF="gis2km_case.html">Case and Parameter Settings Details</A>\n')
             large_test_file.write('<BR>\n')
@@ -472,6 +477,7 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_tim
         ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
         strrand = '<b>Time of Last Simulation: ' + ctime + '</b>\n'
         large_test_file.write(strrand)
+        large_test_file.write('<BR>\n')
 
     else:
         print "NOT RUNNING GIS 2KM TESTCASE"
@@ -482,6 +488,7 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_tim
 
 # GIS 1km stats
         print "running gis1km testcase"
+        large_test_file.write('<BR>\n')
         if dictionary_large['gis1km'] == 0:
             large_test_file.write('<H2>GIS 1KM Test: <font color="green">Test Within Expected Performance Range</font></H2>')
         elif dictionary_large['gis1km'] == 1:
@@ -492,10 +499,6 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_tim
 # put something here to flag BFB results between data and bench and pgi and gnu etc.
         flag_to_plot_gis1km = 1
         if flag_to_plot_gis1km:
-
-            large_test_file.write('<TH ALIGN=LEFT><A HREF="gis1km_details.html">Velocity Solver Details</A>\n')
-            large_test_file.write('<BR>\n')
-            failedt = VV_largetestdetails.detailsgis1km(gis1km_file,perf_test,data_dir)
 
             large_test_file.write('<TH ALIGN=LEFT><A HREF="gis1km_case.html">Case and Parameter Settings Details</A>\n')
             large_test_file.write('<BR>\n')
@@ -531,6 +534,7 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_tim
         ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
         strrand = '<b>Time of Last Simulation: ' + ctime + '</b>\n'
         large_test_file.write(strrand)
+        large_test_file.write('<BR>\n')
 
     else:
         print "NOT RUNNING GIS 1KM TESTCASE"

@@ -26,7 +26,7 @@ def ddetails(solver_file,reg_test,data_dir): # using data, fill the web page wit
     failedt_list.append(failedt1)
 
     procttl_dd301, nonlist_dd301,avg2_dd301,out_flag_dd301,ndd301_name,ldd301_name = \
-        VV_outprocess.jobprocess(reg_test + '/dome30/diagnostic/' + data_dir + '/gnu.JFNK.1proc', 'domed301')
+        VV_outprocess.jobprocess(reg_test + '/bench/dome30/diagnostic/' + data_dir + '/gnu.JFNK.1proc', 'domed301')
 
     solver_file.write('<H4>New Run: gnu.JFNK.1proc</H4>')
     solver_file.write("Number of Processors = " + str(procttl_dd301[-1]) + "<BR>\n")
@@ -62,7 +62,7 @@ def ddetails(solver_file,reg_test,data_dir): # using data, fill the web page wit
     failedt_list.append(failedt2)
     
     procttl_dd304, nonlist_dd304,avg2_dd304,out_flag_dd304,ndd304_name,ldd304_name = \
-        VV_outprocess.jobprocess(reg_test + '/dome30/diagnostic/' + data_dir + '/gnu.JFNK.4proc','domed304')
+        VV_outprocess.jobprocess(reg_test + '/bench/dome30/diagnostic/' + data_dir + '/gnu.JFNK.4proc','domed304')
 
     solver_file.write('<H4>New Run: gnu.JFNK.4proc</H4>')
     solver_file.write("Number of Processors = " + str(procttl_dd304[-1]) + "<BR>\n")
