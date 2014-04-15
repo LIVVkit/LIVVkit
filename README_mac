@@ -41,16 +41,15 @@ To run the shell script (Mac OS X):
      specified as TEST_DIR in the /PISCEES/trunk/cmake-scripts/master_build_mac.csh file. Go ahead and copy the entire
      /PISCEES/trunk/tests/higher-order/livv directory and place in this new directory as well.
 
-  2. Now run the /PISCEES/trunk/cmake-scripts/master_build_mac.csh file on your mac (see /PISCEES/trunk/cmake-scripts/README
-     for more information on how to run the csh script). Make sure the TEST_DIR is set to the directory that you created
-     in step #1. Also make sure the tests you want to run and analyze on your machine later are selected in the csh file.
-     NOTE: Make sure to wait until all job scripts have completed before running livv.
-     The jobs in reg_test will be automatically run by this csh script (as long as the path is correctly specified) after
-     the model is successfully built. Once the model is built and the jobs are submitted, you will then go into the higher-order
-     directory in the path set above and run livv to post-process all of the tests you just ran. 
+  2. Now run the /PISCEES/trunk/builds/mac-gnu/mac-gnu-build-and-test.csh file (see /PISCEES/trunk/builds/README
+     for more information on how to run the csh script). NOTE: This updated .csh file will now update your job submissions in reg_test
+     to the screen and will not finish until all jobs have finished running. Thus, you can automatically run LIVV once the jobs are finished.
+     Make sure the TEST_DIR is set to the directory that you created in step #2. Also make sure the tests you want to run
+     and analyze on your machine later are selected in the csh file. The jobs in reg_test will be automatically run by this csh
+     script (as long as the path is correctly specified) after the model is successfuly built.
 
 To set up the livv executable /higher-order/livv/mac_VV.bash:
-(This can be done after you run the master_build_mac.csh file.)
+(This can be done after you run the mac-gnu-build-and-test.csh file.)
 
   3. Change MY_PYTHON to wherever your python2.7 package exists on your mac.
   

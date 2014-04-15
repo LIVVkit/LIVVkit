@@ -11,65 +11,139 @@ import VV_testsuite
 
 def valid_conf(details_file,valid_configure_path,land_file,atm_file,icesheet_file):
 
-    #this function allows creation of nested dictionaries on the fly (like PERL autovivification)
-    def makehashdome():
-        return collections.defaultdict(makehashdome)
-    data = makehashdome()
+	#this function allows creation of nested dictionaries on the fly (like PERL autovivification)
+	def makehashdome():
+		return collections.defaultdict(makehashdome)
+	data = makehashdome()
 
-    def makehashbench():
-        return collections.defaultdict(makehashbench)
-    bench = makehashbench()
-
-    con_flag = False
-    keywords = ('Time Management', 'Grid specification', 'Time steps', 'GLIDE options', 'Parameters', 'GLINT climate',)
-    variable, value = '', ''
+	con_flag = False
+	keywords = ('Grid specification', 'Time steps', 'GLIDE options', 'Parameters')
+	variable, value = '', ''
 
     for kw in keywords:
-        try:
-            configlog = open(configure_path, 'r')
-        except:
+    	try:
+        	configlog = open(configure_path, 'r')
+       	except:
             print "error reading" + configure_path
             sys.exit(1)
             raise
+
+	for cfline in configlog:
+    	if cfline.startswith(' + kw + '):
+        	con_flag = True
+            continue
+        if cfline == ('\n'):
+        	con_flag = False
+            continue
+        if con_flag == True:
+        	line = cfline.strip('\r\n')
+            if line == '':
+            	continue
+            else:
+            	variable, value = line.split(':')
+			variable = variable.strip()
+            value = value.strip()
+            datadome[kw][variable] = value
+	
+		if 'IYEAR0' in line:
+			year = int(line.split()[1])
+		if 'IMONTH0' in line:
+			month = int(line.split()[1])
+		if 'IDAY0' in line:
+			day = int(line.split()[1])
+	
+		if 'precip_mode' in line:
+			precip = line.split()[1]
+		if 'acab_mode' in line:
+			acab = line.split()[1]
+		if 'ice_albedo' in line:
+			ice = line.split()[1]
+		if 'lapse_rate' in line:
+			lapse = line.split()[1]
+		if 'data_lapse_rate' in line:
+			dlapse = line.split()[1]
+		if 'Mass-balance accumulation time' in line:
+			mass = line.split()[4]
+		if 'ice_tstep_multiply' in line:
+			tstep = line.split()[1]
+	
+		if 'Global diagnostic output, time' in line:
+			global = line.split()[6]
+		if 'Total ice area (km^2)' in line:
+			ice_area = line.split()[5]
+		if 'Total ice volume (km^3)' in line:
+			ice_vol = line.split()[5]
+		if 'Total ice energy (J)' in line:
+			ice_energy = line.split()[5]
+		if 'Mean thickness (m)' in line:
+			mean_thick = line.split()[4]
+		if 'Max thickness (m)' in line:
+			max_thick = line.split()[6]
+		if 'Mean temperature (C)' in line:
+			mean_temp = line.split()[4]
+		if 'Min temperature,' in line:
+			min_temp = line.split()[6]
+		if 'Mean ice age (yr)' in line:
+			mean_ice = line.split()[5]
+		if 'Max sfc spd' in line:
+			max_sfc = line.split()[7]
+		if 'Max base spd' in line:
+			max_base = line.split()[7]
+	
+	configlog.close()
+
+#Put settings on website, check if they match the benchmark settings
+	details_file.write('<HTML>\n')
+	details_file.write('<BODY BGCOLOR="#CADFE0">\n')
+	details_file.write('<H3>Case Details:</H3>')
+    details_file.write('<HTML>\n')
+    details_file.write('<TITLE>Case Details </TITLE>\n')
+    details_file.write('<TABLE>\n')
+    details_file.write('<TR>\n')
+    details_file.write('<H4>Case Settings </H4>\n')
+    details_file.write('<BR\n>')
+
+    details_file.write('Time Management: ' '<BR>\n')
+    details_file.write('Year 0: ' + year + '<BR>\n')
+    details_file.write('Month 0: ' + month + '<BR>\n')
+    details_file.write('Day 0: ' + day + '<BR>\n')
+    details_file.write('<BR\n>')
+
+    details_file.write('Grid Specification: ' '<BR>\n')
+    details_file.write('ewn: ' + datadome['Grid Specification']['ewn'] '<BR>\n')
+    details_file.write('nsn: ' + datadome['Grid Specification']['nsn'] '<BR>\n')
+    details_file.write('upn: ' + datadome['Grid Specification']['upn'] '<BR>\n')
+    details_file.write('EW Grid Spacing: ' + datadome['Grid Specification']['EW grid spacing'] '<BR>\n')
+    details_file.write('NS Grid Spacing: ' + datadome['Grid Specification']['NS grid spacing'] '<BR>\n')
+    details_file.write('<BR\n>')
+
+    details_file.write('Time Steps: ' '<BR>\n')
+    details_file.write('Main Time Step: ' + datadome['Time steps']['main time step'] '<BR>\n')
+    details_file.write('<BR\n>')
+
+    details_file.write('GLIDE Options: ' '<BR>\n')
+    details_file.write('Temperature Calculation: ' + datadome['GLIDE options']['temperature calculation'] '<BR>\n')
+    details_file.write('Flow Law: ' + datadome['GLIDE options']['flow law'] '<BR>\n')
+    details_file.write('Basal Water: ' + datadome['GLIDE options']['basal_water'] '<BR>\n')
+    details_file.write('Marine Margin: ' + datadome['GLIDE options']['marine_margin'] '<BR>\n')
+    details_file.write('Slip Coeff: ' + datadome['GLIDE options']['slip_coeff'] '<BR>\n')
+    details_file.write('Evolution: ' + datadome['GLIDE options']['evolution'] '<BR>\n')
+    details_file.write('Vertical Integration: ' + datadome['GLIDE options']['vertical_integration'] '<BR>\n')
+    details_file.write('Basal Mass Balance: ' + datadome['GLIDE options']['basal_mass_balance'] '<BR>\n')
+    details_file.write('<BR\n>')
     
-        try:
-            benchlog = open(bench_configure_path, 'r')
-        except:
-            print "error reading" + bench_configure_path
-            sys.exit(1)
-            raise
-
-        for cfline in configlog:
-            if cfline.startswith('[' + kw + ']'):
-                con_flag = True
-                continue
-            if cfline.startswith('['):
-                con_flag = False
-                continue
-            if con_flag == True:
-                line = cfline.strip('\r\n')
-                if '#' in line:
-                    tmp = line.split('#')
-                    line = tmp[0]
-                if line == '':
-                    continue
-                if line.endswith('='):
-                    variable, junk = line.split()
-                    value = ''
-                else:
-                    variable, value = line.split('=')
-                variable = variable.strip()
-                value = value.strip()
-                datadome[kw][variable] = value
-
-        configlog.close()
-
-
-
-
-
-
-
+    details_file.write('Parameters: ' '<BR>\n')
+    details_file.write('Ice Limit: ' + datadome['Parameters']['ice limit'] '<BR>\n')
+    details_file.write('Marine Depth Limit: ' + datadome['Parameters']['marine depth limit'] '<BR>\n')
+    details_file.write('Geothermal Heat Flux: ' + datadome['Parameters']['geothermal heat flux'] '<BR>\n')
+   	details_file.write('Flow Enhancement: ' + datadome['Parameters']['flow enhancement'] '<BR>\n')
+   	details_file.write('Basal Hydro Time Const: ' + datadome['Parameters']['basal hydro time const'] '<BR>\n')
+   	details_file.write('Basal Water Field Smoothing Strength: ' + datadome['Parameters']['basal water field smoothing strength'] '<BR>\n')
+	details_file.write('<BR\n>')
+    	
+	details_file.write('</TABLE>\n')
+   	details_file.write('</HTML>\n')
+    details_file.close()
 
 
 
