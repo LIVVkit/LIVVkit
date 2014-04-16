@@ -18,7 +18,9 @@ def jobprocess(file,job_name): # Reading a job output file for production run
     total    = 0.000
     average  = 0.000
     out_flag = 0
-    linear_flag = 0
+    linear_flag1 = 0
+    linear_flag2 = 0
+    linear_flag3 = 0
 
 # open output file (from job)
     if file:
@@ -43,44 +45,40 @@ def jobprocess(file,job_name): # Reading a job output file for production run
 
         #create linear interations list
         if ('"SOLVE_STATUS_CONVERGED"' in line):
-            linear_flag = 1
+            linear_flag1 = 1
+            linear_flag3 = 1
             phrase = '"SOLVE_STATUS_CONVERGED"'
             split = line.split()
             ind = split.index(phrase)
             ind2 = ind + 2
             list.append(int(line.split()[ind2]))
+        
+        #check if the solver converges at the end of the file
+        if ('Converged!' in line):
+            nonlist.append(current_step)
+            linear_flag2 = 1
+
+        #check if the solver fails to converge at the end of the file
+        if ('Failed!' in line):
+            nonlist.append(str(current_step) + '***')
+            linear_flag2 = 1
+            out_flag = 1
+            
+        #calculate average number of linear iterations if they exist
+        if linear_flag1 == 1 and linear_flag2 == 1:
             for value in list:
                 total += value
             average = total / len(list)
             avg.append(average)
             for n in avg:
                 avg2.append(str(round(n,3)))
-            
-        #calculate average number of linear iterations if time step converges
-        if ('Converged!' in line):
-            nonlist.append(current_step)
-            if linear_flag == 1:
-                for n in avg:
-                    avg2.append(str(round(n,3)))
+            linear_flag1 = 0
+            linear_flag2 = 0
             list    = []
             total   = 0.000
             average = 0.000
             avg     = []
 
-        #calculate average number of linear iterations if there is a time step that fails to converge
-        elif ('Failed!' in line):
-            nonlist.append(str(current_step) + '***')
-            for value in list:
-                total += value
-            average = total / len(list)
-            avg.append(average)
-            for n in avg:
-                avg2.append(str(round(n,3)))
-            list     = []
-            total    = 0.000
-            average  = 0.000
-            avg      = []
-            out_flag = 1
 
     #write nonlinear solver iteration data
     nd_name = '/newton_' + job_name + '.asc'
@@ -109,4 +107,4 @@ def jobprocess(file,job_name): # Reading a job output file for production run
         iter_l.write(savg2 +'\n')
     iter_l.close()
 
-    return procttl, nonlist, avg2, out_flag, nd_name, ld_name
+    return procttl, nonlist, avg2, out_flag, nd_name, ld_name, linear_flag3

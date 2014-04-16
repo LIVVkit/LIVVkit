@@ -25,7 +25,7 @@ def ddetails(solver_file,reg_test,data_dir): # using data, fill the web page wit
     failedt1 = VV_checks.failcheck(reg_test, '/dome30/diagnostic/' + data_dir + '/gnu.JFNK.1proc')
     failedt_list.append(failedt1)
 
-    procttl_dd301, nonlist_dd301,avg2_dd301,out_flag_dd301,ndd301_name,ldd301_name = \
+    procttl_dd301,nonlist_dd301,avg2_dd301,out_flag_dd301,ndd301_name,ldd301_name,linear_flag = \
         VV_outprocess.jobprocess(reg_test + '/bench/dome30/diagnostic/' + data_dir + '/gnu.JFNK.1proc', 'domed301')
 
     solver_file.write('<H4>New Run: gnu.JFNK.1proc</H4>')
@@ -37,11 +37,14 @@ def ddetails(solver_file,reg_test,data_dir): # using data, fill the web page wit
     if out_flag_dd301 == 1:
         solver_file.write('<FONT COLOR="red">***TIME STEP(S) WHICH FAILED TO CONVERGE</FONT> <BR>\n')
     solver_file.write("Average Number of Linear Iterations per Time-Step = ")
-    VV_utilities.format(solver_file, avg2_dd301)
+    if linear_flag == 1:
+        VV_utilities.format(solver_file, avg2_dd301)
+    else:
+        solver_file.write("Linear Iterations not displayed in the output file ")
     solver_file.write('<BR> \n')
 
     solver_file.write('<H4>Benchmark Run: gnu.JFNK.1proc</H4>')
-    procttl_dd301b, nonlist_dd301b,avg2_dd301b,out_flag_dd301b,ndd301b_name,ldd301b_name = \
+    procttl_dd301b,nonlist_dd301b,avg2_dd301b,out_flag_dd301b,ndd301b_name,ldd301b_name,linear_flagb = \
         VV_outprocess.jobprocess(reg_test + '/bench/dome30/diagnostic/' + data_dir + '/gnu.JFNK.1proc', 'domed301b')
 
     solver_file.write("Number of Processors = " + str(procttl_dd301b[-1]) + "<BR>\n")
@@ -52,8 +55,13 @@ def ddetails(solver_file,reg_test,data_dir): # using data, fill the web page wit
     if out_flag_dd301b == 1:
         solver_file.write('<FONT COLOR="red">***TIME STEP(S) WHICH FAILED TO CONVERGE</FONT> <BR>\n')
     solver_file.write("Average Number of Linear Iterations per Time-Step = ")
-    VV_utilities.format(solver_file, avg2_dd301b)
+    if linear_flagb == 1:
+        VV_utilities.format(solver_file, avg2_dd301b)
+    else:
+        solver_file.write("Linear Iterations not displayed in the output file ")
     solver_file.write('<BR> \n')
+    solver_file.write('<BR>\n')
+    solver_file.write('<BR>\n')
 
 # JFNK gnu 4 proc
 
@@ -61,7 +69,7 @@ def ddetails(solver_file,reg_test,data_dir): # using data, fill the web page wit
     failedt2 = VV_checks.failcheck(reg_test, '/dome30/diagnostic/' + data_dir + '/gnu.JFNK.4proc')
     failedt_list.append(failedt2)
     
-    procttl_dd304, nonlist_dd304,avg2_dd304,out_flag_dd304,ndd304_name,ldd304_name = \
+    procttl_dd304,nonlist_dd304,avg2_dd304,out_flag_dd304,ndd304_name,ldd304_name,linear_flag = \
         VV_outprocess.jobprocess(reg_test + '/bench/dome30/diagnostic/' + data_dir + '/gnu.JFNK.4proc','domed304')
 
     solver_file.write('<H4>New Run: gnu.JFNK.4proc</H4>')
@@ -73,11 +81,14 @@ def ddetails(solver_file,reg_test,data_dir): # using data, fill the web page wit
     if out_flag_dd304 == 1:
         solver_file.write('<FONT COLOR="red">***TIME STEP(S) THAT FAILED TO CONVERGE</FONT> <BR>\n')
     solver_file.write("Average Number of Linear Iterations per Time-Step = ")
-    VV_utilities.format(solver_file, avg2_dd304)
+    if linear_flag == 1:
+        VV_utilities.format(solver_file, avg2_dd304)
+    else:
+        solver_file.write("Linear Iterations not displayed in the output file ")
     solver_file.write('<BR> \n')
 
     solver_file.write('<H4>Benchmark Run: gnu.JFNK.4proc</H4>')
-    procttl_dd304b, nonlist_dd304b,avg2_dd304b,out_flag_dd304b,ndd304b_name,ldd304b_name = \
+    procttl_dd304b,nonlist_dd304b,avg2_dd304b,out_flag_dd304b,ndd304b_name,ldd304b_name,linear_flagb = \
         VV_outprocess.jobprocess(reg_test + '/bench/dome30/diagnostic/' + data_dir + '/gnu.JFNK.4proc','domed304b')
 
     solver_file.write("Number of Processors = " + str(procttl_dd304b[-1]) + "<BR>\n")
@@ -88,7 +99,10 @@ def ddetails(solver_file,reg_test,data_dir): # using data, fill the web page wit
     if out_flag_dd304b == 1:
         solver_file.write('<FONT COLOR="red">***TIME STEP(S) THAT FAILED TO CONVERGE</FONT> <BR>\n')
     solver_file.write("Average Number of Linear Iterations per Time-Step = ")
-    VV_utilities.format(solver_file, avg2_dd304b)
+    if linear_flagb == 1:
+        VV_utilities.format(solver_file, avg2_dd304b)
+    else:
+        solver_file.write("Linear Iterations not displayed in the output file ")
     solver_file.write('<BR> \n')
 
     if 1 in failedt_list:
@@ -111,10 +125,10 @@ def edetails(solver_file,test_suite,reg_test,ncl_path,html_path,data_dir): # usi
 #    failedt1 = VV_checks.failcheck(reg_test, '/dome30/evolving/' + data_dir + '/gnu.JFNK.9proc')
 #    failedt_list.append(failedt1)
 
-#    procttl_de309, nonlist_de309,avg2_de309,out_flag_de309,nde309_name,lde309_name = \
+#    procttl_de309,nonlist_de309,avg2_de309,out_flag_de309,nde309_name,lde309_name,linear_flag = \
 #        VV_outprocess.jobprocess(reg_test + '/dome30/evolving/' + data_dir + '/gnu.JFNK.9proc', 'domee309')
     
-#    procttl_de309b, nonlist_de309b,avg2_de309b,out_flag_de309b,nde309b_name,lde309b_name = \
+#    procttl_de309b,nonlist_de309b,avg2_de309b,out_flag_de309b,nde309b_name,lde309b_name,linear_flagb = \
 #        VV_outprocess.jobprocess(reg_test + '/bench/dome30/evolving/' + data_dir + '/gnu.JFNK.9proc', 'domee309b')
     
 # create iteration plot
@@ -179,13 +193,19 @@ def edetails(solver_file,test_suite,reg_test,ncl_path,html_path,data_dir): # usi
 #    if out_flag_de309 == 1:
 #        solver_file.write('<FONT COLOR="red">***TIME STEP(S) WHICH FAILED TO CONVERGE</FONT> <BR>\n')
 #    solver_file.write("Average Number of Linear Iterations per Time-Step = ")
-#    VV_utilities.format(solver_file, avg2_de309)
+#    if linear_flag == 1:   
+#       VV_utilities.format(solver_file, avg2_de309)
+#   else:
+#       solver_file.write("Linear Iterations not displayed in the output file")
 #    solver_file.write('<BR> \n')
 
 #    solver_file.write('<H4>Benchmark Run: gnu.JFNK.9proc</H4>')
 #    solver_file.write("Number of Processors = " + str(procttl_de309b[-1]) + "<BR>\n")
 #    solver_file.write("Number of Nonlinear Iterations = ")
-#    VV_utilities.format(solver_file, nonlist_de309b)
+#   if linear_flagb == 1:
+#       VV_utilities.format(solver_file, nonlist_de309b)
+#   else:
+#       solver_file.write("Linear Iterations not displayed in the output file")
 #    solver_file.write('<BR>\n')
 
 #    if out_flag_de309b == 1:
@@ -202,10 +222,10 @@ def edetails(solver_file,test_suite,reg_test,ncl_path,html_path,data_dir): # usi
     failedt2 = VV_checks.failcheck(reg_test, '/dome30/evolving/' + data_dir + '/gnu.JFNK.15proc')
     failedt_list.append(failedt2)
 
-    procttl_de3015, nonlist_de3015,avg2_de3015,out_flag_de3015,nde3015_name,lde3015_name = \
+    procttl_de3015,nonlist_de3015,avg2_de3015,out_flag_de3015,nde3015_name,lde3015_name,linear_flag = \
         VV_outprocess.jobprocess(reg_test + '/dome30/evolving/' + data_dir + '/gnu.JFNK.15proc', 'domee3015')
 
-    procttl_de3015b, nonlist_de3015b,avg2_de3015b,out_flag_de3015b,nde3015b_name,lde3015b_name = \
+    procttl_de3015b,nonlist_de3015b,avg2_de3015b,out_flag_de3015b,nde3015b_name,lde3015b_name,linear_flagb = \
         VV_outprocess.jobprocess(reg_test + '/bench/dome30/evolving/' + data_dir + '/gnu.JFNK.15proc', 'domee3015b')
 
 # create iteration plot
@@ -270,7 +290,10 @@ def edetails(solver_file,test_suite,reg_test,ncl_path,html_path,data_dir): # usi
     if out_flag_de3015 == 1:
         solver_file.write('<FONT COLOR="red">***TIME STEP(S) WHICH FAILED TO CONVERGE</FONT> <BR>\n')
     solver_file.write("Average Number of Linear Iterations per Time-Step = ")
-    VV_utilities.format(solver_file, avg2_de3015)
+    if linear_flag == 1:
+        VV_utilities.format(solver_file, avg2_de3015)
+    else:
+        solver_file.write("Linear Iterations not displayed in the output file ")
     solver_file.write('<BR> \n')
 
     solver_file.write('<H4>Benchmark Run: gnu.JFNK.15proc</H4>')
@@ -282,7 +305,10 @@ def edetails(solver_file,test_suite,reg_test,ncl_path,html_path,data_dir): # usi
     if out_flag_de3015b == 1:
         solver_file.write('<FONT COLOR="red">***TIME STEP(S) WHICH FAILED TO CONVERGE</FONT> <BR>\n')
     solver_file.write("Average Number of Linear Iterations per Time-Step = ")
-    VV_utilities.format(solver_file, avg2_de3015b)
+    if linear_flagb == 1:
+        VV_utilities.format(solver_file, avg2_de3015b)
+    else:
+        solver_file.write("Linear Iterations not displayed in the output file ")
     solver_file.write('<BR> <BR>\n')
 
     solver_file.write('</HTML>\n')

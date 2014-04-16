@@ -21,9 +21,9 @@ def details(solver_file,perf_test,bench_data):  # using data, fill the web page 
     failedt1 = VV_checks.failcheck(perf_test, '/gis_5km/data/out.gnu')
     failedt_list.append(failedt1)
 
-    procttl_gis5d, nonlist_gis5d, avg2_gis5d, out_flag_gis5d, ndg102_name, ldg102_name = \
+    procttl_gis5d,nonlist_gis5d,avg2_gis5d,out_flag_gis5d,ndg102_name,ldg102_name,linear_flag = \
         VV_outprocess.jobprocess(perf_test + '/gis_5km/data/out.gnu','gis5km')
-    procttl_gis5b, nonlist_gis5b, avg2_gis5b, out_flag_gis5b, ndg102b_name, ldg102b_name = \
+    procttl_gis5b,nonlist_gis5b,avg2_gis5b,out_flag_gis5b,ndg102b_name,ldg102b_name,linear_flagb = \
         VV_outprocess.jobprocess(perf_test + '/bench/gis_5km/'+ bench_data + '/out.gnu','gis5kmb')
 
 # create iteration plots for proudction simulation
@@ -70,7 +70,10 @@ def details(solver_file,perf_test,bench_data):  # using data, fill the web page 
     if out_flag_gis5d == 1:
         solver_file.write('<FONT COLOR="red">***TIME STEP(S) WHICH FAILED TO CONVERGE</FONT> <BR>\n')
     solver_file.write("Average Number of Linear Iterations per Time-Step = ")
-    VV_utilities.format(solver_file, avg2_gis5d)
+    if linear_flag == 1:
+        VV_utilities.format(solver_file, avg2_gis5d)
+    else:
+        solver_file.write("Linear Iterations not displayed in the output file")
     solver_file.write('<BR> \n')
 
     solver_file.write('<H4>Benchmark Run: out.gnu</H4>')
@@ -81,7 +84,10 @@ def details(solver_file,perf_test,bench_data):  # using data, fill the web page 
     if out_flag_gis5b == 1:
         solver_file.write('<FONT COLOR="red">***TIME STEP(S) WHICH FAILED TO CONVERGE</FONT> <BR>\n')
     solver_file.write("Average Number of Linear Iterations per Time-Step = ")
-    VV_utilities.format(solver_file, avg2_gis5b)
+    if linear_flag == 1:
+        VV_utilities.format(solver_file, avg2_gis5b)
+    else:
+        solver_file.write("Linear Iterations not displayed in the output file")
     solver_file.write('<BR> \n')
 
     solver_file.write('</HTML>\n')

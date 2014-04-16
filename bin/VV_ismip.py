@@ -23,7 +23,7 @@ def a80details(solver_file,reg_test,data_dir):  # using data, fill the web page 
     failedt1 = VV_checks.failcheck(reg_test, '/ismip-hom-a/80km/' + data_dir + '/ishom.a.80km.out.1')
     failedt_list.append(failedt1)
 
-    procttl_ih1d, nonlist_ih1d, avg2_ih1d, out_flag_ih1d, ndiha1_name, ldiha1_name = \
+    procttl_ih1d,nonlist_ih1d,avg2_ih1d,out_flag_ih1d,ndiha1_name,ldiha1_name,linear_flag = \
         VV_outprocess.jobprocess(reg_test + '/ismip-hom-a/80km/' + data_dir + '/ishom.a.80km.out.1', 'imhoma1')    
 
     solver_file.write('<H4>New Run: ishom.a.80km.out.1</H4>')
@@ -35,11 +35,14 @@ def a80details(solver_file,reg_test,data_dir):  # using data, fill the web page 
     if out_flag_ih1d == 1:
         solver_file.write('<FONT COLOR="red">***TIME STEP(S) WHICH FAILED TO CONVERGE</FONT> <BR>\n')
     solver_file.write("Average Number of Linear Iterations per Time-Step = ")
-    VV_utilities.format(solver_file, avg2_ih1d)
+    if linear_flag == 1:
+        VV_utilities.format(solver_file, avg2_ih1d)
+    else:
+        solver_file.write("Linear Iterations not displayed in the output file")
     solver_file.write('<BR> \n')
 
     solver_file.write('<H4>Benchmark Run: ishom.a.80km.out.1</H4>')
-    procttl_ih1b, nonlist_ih1b, avg2_ih1b, out_flag_ih1b, ndiha1b_name, ldiha1b_name = \
+    procttl_ih1b,nonlist_ih1b,avg2_ih1b,out_flag_ih1b,ndiha1b_name,ldiha1b_name,linear_flagb = \
         VV_outprocess.jobprocess(reg_test + '/bench/ismip-hom-a/80km/' + data_dir + '/ishom.a.80km.out.1', 'imhoma1b')
 
     solver_file.write("Number of Processors = " + str(procttl_ih1b[-1]) + "<BR>\n")
@@ -50,7 +53,12 @@ def a80details(solver_file,reg_test,data_dir):  # using data, fill the web page 
     if out_flag_ih1b == 1:
         solver_file.write('<FONT COLOR="red">***TIME STEP(S) WHICH FAILED TO CONVERGE</FONT> <BR>\n')
     solver_file.write("Average Number of Linear Iterations per Time-Step = ")
-    VV_utilities.format(solver_file, avg2_ih1b)
+    if linear_flagb == 1:
+        VV_utilities.format(solver_file, avg2_ih1b)
+    else:
+        solver_file.write("Linear Iterations not displayed in the output file")
+    solver_file.write('<BR> \n')
+    solver_file.write('<BR> \n')
     solver_file.write('<BR> \n')
 
 # JFNK gnu 2 proc
@@ -59,7 +67,7 @@ def a80details(solver_file,reg_test,data_dir):  # using data, fill the web page 
     failedt2 = VV_checks.failcheck(reg_test, '/ismip-hom-a/80km/' + data_dir + '/ishom.a.80km.out.2')
     failedt_list.append(failedt2)
 
-    procttl_ih2d, nonlist_ih2d, avg2_ih2d, out_flag_ih2d, ndiha2_name, ldiha2_name = \
+    procttl_ih2d,nonlist_ih2d,avg2_ih2d,out_flag_ih2d,ndiha2_name,ldiha2_name,linear_flag = \
         VV_outprocess.jobprocess(reg_test + '/ismip-hom-a/80km/' + data_dir + '/ishom.a.80km.out.2','imhoma2')
 
     solver_file.write('<H4>New Run: ishom.a.80km.out.2</H4>')
@@ -71,11 +79,14 @@ def a80details(solver_file,reg_test,data_dir):  # using data, fill the web page 
     if out_flag_ih2d == 1:
         solver_file.write('<FONT COLOR="red">***TIME STEP(S) THAT FAILED TO CONVERGE</FONT> <BR>\n')
     solver_file.write("Average Number of Linear Iterations per Time-Step = ")
-    VV_utilities.format(solver_file, avg2_ih2d)
+    if linear_flag == 1:
+        VV_utilities.format(solver_file, avg2_ih2d)
+    else:
+        solver_file.write("Linear Iterations not displayed in the output file")
     solver_file.write('<BR> \n')
 
     solver_file.write('<H4>Benchmark Run: ishom.a.80km.out.2</H4>')
-    procttl_ih2b, nonlist_ih2b, avg2_ih2b, out_flag_ih2b, ndiha2b_name, ldiha2b_name = \
+    procttl_ih2b,nonlist_ih2b,avg2_ih2b,out_flag_ih2b,ndiha2b_name,ldiha2b_name,linear_flagb = \
         VV_outprocess.jobprocess(reg_test + '/bench/ismip-hom-a/80km/' + data_dir + '/ishom.a.80km.out.2','imhoma2b')
 
     solver_file.write("Number of Processors = " + str(procttl_ih2b[-1]) + "<BR>\n")
@@ -86,7 +97,12 @@ def a80details(solver_file,reg_test,data_dir):  # using data, fill the web page 
     if out_flag_ih2b == 1:
         solver_file.write('<FONT COLOR="red">***TIME STEP(S) THAT FAILED TO CONVERGE</FONT> <BR>\n')
     solver_file.write("Average Number of Linear Iterations per Time-Step = ")
-    VV_utilities.format(solver_file, avg2_ih2b)
+    if linear_flagb == 1:
+        VV_utilities.format(solver_file, avg2_ih2b)
+    else:
+        solver_file.write("Linear Iterations not displayed in the output file")
+    solver_file.write('<BR> \n')
+    solver_file.write('<BR> \n')
     solver_file.write('<BR> \n')
 
 # JFNK gnu 4 proc
@@ -95,7 +111,7 @@ def a80details(solver_file,reg_test,data_dir):  # using data, fill the web page 
     failedt3 = VV_checks.failcheck(reg_test, '/ismip-hom-a/80km/' + data_dir + '/ishom.a.80km.out.4')
     failedt_list.append(failedt3)
 
-    procttl_ih4d, nonlist_ih4d, avg2_ih4d, out_flag_ih4d, ndiha4_name, ldiha4_name = \
+    procttl_ih4d,nonlist_ih4d,avg2_ih4d,out_flag_ih4d,ndiha4_name,ldiha4_name,linear_flag = \
         VV_outprocess.jobprocess(reg_test + '/ismip-hom-a/80km/' + data_dir + '/ishom.a.80km.out.4','imhoma4')
     
     solver_file.write('<H4>New Run: ishom.a.80km.out.4</H4>')
@@ -107,11 +123,14 @@ def a80details(solver_file,reg_test,data_dir):  # using data, fill the web page 
     if out_flag_ih4d == 1:
         solver_file.write('<FONT COLOR="red">***TIME STEP(S) WHICH FAILED TO CONVERGE</FONT> <BR>\n')
     solver_file.write("Average Number of Linear Iterations per Time-Step = ")
-    VV_utilities.format(solver_file, avg2_ih4d)
+    if linear_flag == 1:
+        VV_utilities.format(solver_file, avg2_ih4d)
+    else:
+        solver_file.write("Linear Iterations not displayed in the output file")
     solver_file.write('<BR> \n')
     
     solver_file.write('<H4>Benchmark Run: ishom.a.80km.out.4</H4>')
-    procttl_ih4b, nonlist_ih4b, avg2_ih4b, out_flag_ih4b, ndiha4b_name, ldiha4b_name = \
+    procttl_ih4b,nonlist_ih4b,avg2_ih4b,out_flag_ih4b,ndiha4b_name,ldiha4b_name,linear_flagb = \
         VV_outprocess.jobprocess(reg_test + '/bench/ismip-hom-a/80km/' + data_dir + '/ishom.a.80km.out.4','imhoma4b')
 
     solver_file.write("Number of Processors = " + str(procttl_ih4b[-1]) + "<BR>\n")
@@ -122,10 +141,16 @@ def a80details(solver_file,reg_test,data_dir):  # using data, fill the web page 
     if out_flag_ih4b == 1:
         solver_file.write('<FONT COLOR="red">***TIME STEP(S) WHICH FAILED TO CONVERGE</FONT> <BR>\n')
     solver_file.write("Average Number of Linear Iterations per Time-Step = ")
-    VV_utilities.format(solver_file, avg2_ih4b)
+    if linear_flagb == 1:
+        VV_utilities.format(solver_file, avg2_ih4b)
+    else:
+        solver_file.write("Linear Iterations not displayed in the output file")
     solver_file.write('<BR> \n')
 
     solver_file.write('</HTML>\n')
+    solver_file.write('<BR> \n')
+    solver_file.write('<BR> \n')
+    solver_file.write('<BR> \n')
     solver_file.close()
 
     if 1 in failedt_list:
@@ -150,7 +175,7 @@ def a20details(solver_file,reg_test,data_dir):  # using data, fill the web page 
     failedt1 = VV_checks.failcheck(reg_test, '/ismip-hom-a/20km/' + data_dir + '/ishom.a.20km.out.1')
     failedt_list.append(failedt1)
 
-    procttl_ih1d, nonlist_ih1d, avg2_ih1d, out_flag_ih1d, ndiha1_name, ldiha1_name = \
+    procttl_ih1d,nonlist_ih1d,avg2_ih1d,out_flag_ih1d,ndiha1_name,ldiha1_name,linear_flag = \
         VV_outprocess.jobprocess(reg_test + '/ismip-hom-a/20km/' + data_dir + '/ishom.a.20km.out.1', 'imhoma1')
     
     solver_file.write('<H4>New Run: ishom.a.20km.out.1</H4>')
@@ -162,11 +187,14 @@ def a20details(solver_file,reg_test,data_dir):  # using data, fill the web page 
     if out_flag_ih1d == 1:
         solver_file.write('<FONT COLOR="red">***TIME STEP(S) WHICH FAILED TO CONVERGE</FONT> <BR>\n')
     solver_file.write("Average Number of Linear Iterations per Time-Step = ")
-    VV_utilities.format(solver_file, avg2_ih1d)
+    if linear_flag == 1:
+        VV_utilities.format(solver_file, avg2_ih1d)
+    else:
+        solver_file.write("Linear Iterations not displayed in the output file")
     solver_file.write('<BR> \n')
 
     solver_file.write('<H4>Benchmark Run: ishom.a.20km.out.1</H4>')
-    procttl_ih1b, nonlist_ih1b, avg2_ih1b, out_flag_ih1b, ndiha1b_name, ldiha1b_name = \
+    procttl_ih1b,nonlist_ih1b,avg2_ih1b,out_flag_ih1b,ndiha1b_name,ldiha1b_name,linear_flagb = \
         VV_outprocess.jobprocess(reg_test + '/bench/ismip-hom-a/20km/' + data_dir + '/ishom.a.20km.out.1', 'imhoma1b')
 
     solver_file.write("Number of Processors = " + str(procttl_ih1b[-1]) + "<BR>\n")
@@ -177,7 +205,12 @@ def a20details(solver_file,reg_test,data_dir):  # using data, fill the web page 
     if out_flag_ih1b == 1:
         solver_file.write('<FONT COLOR="red">***TIME STEP(S) WHICH FAILED TO CONVERGE</FONT> <BR>\n')
     solver_file.write("Average Number of Linear Iterations per Time-Step = ")
-    VV_utilities.format(solver_file, avg2_ih1b)
+    if linear_flagb == 1:
+        VV_utilities.format(solver_file, avg2_ih1b)
+    else:
+        solver_file.write("Linear Iterations not displayed in the output file")
+    solver_file.write('<BR> \n')
+    solver_file.write('<BR> \n')
     solver_file.write('<BR> \n')
 
 # JFNK gnu 2 proc
@@ -186,7 +219,7 @@ def a20details(solver_file,reg_test,data_dir):  # using data, fill the web page 
     failedt2 = VV_checks.failcheck(reg_test, '/ismip-hom-a/20km/' + data_dir + '/ishom.a.20km.out.2')
     failedt_list.append(failedt2)
 
-    procttl_ih2d, nonlist_ih2d, avg2_ih2d, out_flag_ih2d, ndiha2_name, ldiha2_name = \
+    procttl_ih2d,nonlist_ih2d,avg2_ih2d,out_flag_ih2d,ndiha2_name,ldiha2_name,linear_flag = \
         VV_outprocess.jobprocess(reg_test + '/ismip-hom-a/20km/' + data_dir + '/ishom.a.20km.out.2','imhoma2')
     
     solver_file.write('<H4>New Run: ishom.a.20km.out.2</H4>')
@@ -198,11 +231,14 @@ def a20details(solver_file,reg_test,data_dir):  # using data, fill the web page 
     if out_flag_ih2d == 1:
         solver_file.write('<FONT COLOR="red">***TIME STEP(S) THAT FAILED TO CONVERGE</FONT> <BR>\n')
     solver_file.write("Average Number of Linear Iterations per Time-Step = ")
-    VV_utilities.format(solver_file, avg2_ih2d)
+    if linear_flag == 1:
+        VV_utilities.format(solver_file, avg2_ih2d)
+    else:
+        solver_file.write("Linear Iterations not displayed in the output file")
     solver_file.write('<BR> \n')
 
     solver_file.write('<H4>Benchmark Run: ishom.a.20km.out.2</H4>')
-    procttl_ih2b, nonlist_ih2b, avg2_ih2b, out_flag_ih2b, ndiha2b_name, ldiha2b_name = \
+    procttl_ih2b,nonlist_ih2b,avg2_ih2b,out_flag_ih2b,ndiha2b_name,ldiha2b_name,linear_flagb = \
         VV_outprocess.jobprocess(reg_test + '/bench/ismip-hom-a/20km/' + data_dir + '/ishom.a.20km.out.2','imhoma2b')
 
     solver_file.write("Number of Processors = " + str(procttl_ih2b[-1]) + "<BR>\n")
@@ -213,7 +249,12 @@ def a20details(solver_file,reg_test,data_dir):  # using data, fill the web page 
     if out_flag_ih2b == 1:
         solver_file.write('<FONT COLOR="red">***TIME STEP(S) THAT FAILED TO CONVERGE</FONT> <BR>\n')
     solver_file.write("Average Number of Linear Iterations per Time-Step = ")
-    VV_utilities.format(solver_file, avg2_ih2b)
+    if linear_flagb == 1:
+        VV_utilities.format(solver_file, avg2_ih2b)
+    else:
+        solver_file.write("Linear Iterations not displayed in the output file")
+    solver_file.write('<BR> \n')
+    solver_file.write('<BR> \n')
     solver_file.write('<BR> \n')
 
 # JFNK gnu 4 proc
@@ -222,7 +263,7 @@ def a20details(solver_file,reg_test,data_dir):  # using data, fill the web page 
     failedt3 = VV_checks.failcheck(reg_test, '/ismip-hom-a/20km/' + data_dir + '/ishom.a.20km.out.4')
     failedt_list.append(failedt3)
 
-    procttl_ih4d, nonlist_ih4d, avg2_ih4d, out_flag_ih4d, ndiha4_name, ldiha4_name = \
+    procttl_ih4d,nonlist_ih4d,avg2_ih4d,out_flag_ih4d,ndiha4_name,ldiha4_name,linear_flag = \
         VV_outprocess.jobprocess(reg_test + '/ismip-hom-a/20km/' + data_dir + '/ishom.a.20km.out.4','imhoma4')
 
     solver_file.write('<H4>New Run: ishom.a.20km.out.4</H4>')
@@ -234,11 +275,14 @@ def a20details(solver_file,reg_test,data_dir):  # using data, fill the web page 
     if out_flag_ih4d == 1:
         solver_file.write('<FONT COLOR="red">***TIME STEP(S) WHICH FAILED TO CONVERGE</FONT> <BR>\n')
     solver_file.write("Average Number of Linear Iterations per Time-Step = ")
-    VV_utilities.format(solver_file, avg2_ih4d)
+    if linear_flag == 1:
+        VV_utilities.format(solver_file, avg2_ih4d)
+    else:
+        solver_file.write("Linear Iterations not displayed in the output file")
     solver_file.write('<BR> \n')
 
     solver_file.write('<H4>Benchmark Run: ishom.a.20km.out.4</H4>')
-    procttl_ih4b, nonlist_ih4b, avg2_ih4b, out_flag_ih4b, ndiha4b_name, ldiha4b_name = \
+    procttl_ih4b,nonlist_ih4b,avg2_ih4b,out_flag_ih4b,ndiha4b_name,ldiha4b_name,linear_flagb = \
         VV_outprocess.jobprocess(reg_test + '/bench/ismip-hom-a/20km/' + data_dir + '/ishom.a.20km.out.4','imhoma4b')
 
     solver_file.write("Number of Processors = " + str(procttl_ih4b[-1]) + "<BR>\n")
@@ -249,10 +293,16 @@ def a20details(solver_file,reg_test,data_dir):  # using data, fill the web page 
     if out_flag_ih4b == 1:
         solver_file.write('<FONT COLOR="red">***TIME STEP(S) WHICH FAILED TO CONVERGE</FONT> <BR>\n')
     solver_file.write("Average Number of Linear Iterations per Time-Step = ")
-    VV_utilities.format(solver_file, avg2_ih4b)
+    if linear_flagb == 1:
+        VV_utilities.format(solver_file, avg2_ih4b)
+    else:
+        solver_file.write("Linear Iterations not displayed in the output file")
     solver_file.write('<BR> \n')
 
     solver_file.write('</HTML>\n')
+    solver_file.write('<BR> \n')
+    solver_file.write('<BR> \n')
+    solver_file.write('<BR> \n')
     solver_file.close()
 
     if 1 in failedt_list:
@@ -278,7 +328,7 @@ def c80details(solver_file,reg_test,data_dir):  # using data, fill the web page 
     failedt1 = VV_checks.failcheck(reg_test, '/ismip-hom-c/80km/' + data_dir + '/ishom.c.80km.out.1')
     failedt_list.append(failedt1)
 
-    procttl_ih1d, nonlist_ih1d, avg2_ih1d, out_flag_ih1d, ndihc1_name, ldihc1_name = \
+    procttl_ih1d,nonlist_ih1d,avg2_ih1d,out_flag_ih1d,ndihc1_name,ldihc1_name,linear_flag = \
         VV_outprocess.jobprocess(reg_test + '/ismip-hom-c/80km/' + data_dir + '/ishom.c.80km.out.1','imhomc1')
     
     solver_file.write('<H4>New Run: ishom.c.80km.out.1</H4>')
@@ -290,11 +340,14 @@ def c80details(solver_file,reg_test,data_dir):  # using data, fill the web page 
     if out_flag_ih1d == 1:
         solver_file.write('<FONT COLOR="red">***TIME STEP(S) WHICH FAILED TO CONVERGE</FONT> <BR>\n')
     solver_file.write("Average Number of Linear Iterations per Time-Step = ")
-    VV_utilities.format(solver_file, avg2_ih1d)
+    if linear_flag == 1:
+        VV_utilities.format(solver_file, avg2_ih1d)
+    else:
+        solver_file.write("Linear Iterations not displayed in the output file")
     solver_file.write('<BR> \n')
 
     solver_file.write('<H4>Benchmark Run: ishom.c.80km.out.1</H4>')
-    procttl_ih1b, nonlist_ih1b, avg2_ih1b, out_flag_ih1b, ndihc1b_name, ldihc1b_name = \
+    procttl_ih1b,nonlist_ih1b,avg2_ih1b,out_flag_ih1b,ndihc1b_name,ldihc1b_name,linear_flagb = \
         VV_outprocess.jobprocess(reg_test + '/bench/ismip-hom-c/80km/' + data_dir + '/ishom.c.80km.out.1','imhomc1b')
 
     solver_file.write("Number of Processors = " + str(procttl_ih1b[-1]) + "<BR>\n")
@@ -305,7 +358,12 @@ def c80details(solver_file,reg_test,data_dir):  # using data, fill the web page 
     if out_flag_ih1b == 1:
         solver_file.write('<FONT COLOR="red">***TIME STEP(S) WHICH FAILED TO CONVERGE</FONT> <BR>\n')
     solver_file.write("Average Number of Linear Iterations per Time-Step = ")
-    VV_utilities.format(solver_file, avg2_ih1b)
+    if linear_flagb == 1:
+        VV_utilities.format(solver_file, avg2_ih1b)
+    else:
+        solver_file.write("Linear Iterations not displayed in the output file")
+    solver_file.write('<BR> \n')
+    solver_file.write('<BR> \n')
     solver_file.write('<BR> \n')
 
 # JFNK gnu 2 proc
@@ -314,7 +372,7 @@ def c80details(solver_file,reg_test,data_dir):  # using data, fill the web page 
     failedt2 = VV_checks.failcheck(reg_test, '/ismip-hom-c/80km/' + data_dir + '/ishom.c.80km.out.2')
     failedt_list.append(failedt2)
 
-    procttl_ih2d, nonlist_ih2d, avg2_ih2d, out_flag_ih2d, ndihc2_name, ldihc2_name = \
+    procttl_ih2d,nonlist_ih2d,avg2_ih2d,out_flag_ih2d,ndihc2_name,ldihc2_name,linear_flag = \
         VV_outprocess.jobprocess(reg_test + '/ismip-hom-c/80km/' + data_dir + '/ishom.c.80km.out.2','imhom2')
     
     solver_file.write('<H4>New Run: ishom.c.80km.out.2</H4>')
@@ -326,11 +384,14 @@ def c80details(solver_file,reg_test,data_dir):  # using data, fill the web page 
     if out_flag_ih2d == 1:
         solver_file.write('<FONT COLOR="red">***TIME STEP(S) THAT FAILED TO CONVERGE</FONT> <BR>\n')
     solver_file.write("Average Number of Linear Iterations per Time-Step = ")
-    VV_utilities.format(solver_file, avg2_ih2d)
+    if linear_flag == 1:
+        VV_utilities.format(solver_file, avg2_ih2d)
+    else:
+        solver_file.write("Linear Iterations not displayed in the output file")
     solver_file.write('<BR> \n')
 
     solver_file.write('<H4>Benchmark Run: ishom.c.80km.out.2</H4>')
-    procttl_ih2b, nonlist_ih2b, avg2_ih2b, out_flag_ih2b, ndihc2b_name, ldihc2b_name = \
+    procttl_ih2b,nonlist_ih2b,avg2_ih2b,out_flag_ih2b,ndihc2b_name,ldihc2b_name,linear_flagb = \
         VV_outprocess.jobprocess(reg_test + '/bench/ismip-hom-c/80km/' + data_dir + '/ishom.c.80km.out.2','imhom2b')
 
     solver_file.write("Number of Processors = " + str(procttl_ih2b[-1]) + "<BR>\n")
@@ -341,7 +402,12 @@ def c80details(solver_file,reg_test,data_dir):  # using data, fill the web page 
     if out_flag_ih2b == 1:
         solver_file.write('<FONT COLOR="red">***TIME STEP(S) THAT FAILED TO CONVERGE</FONT> <BR>\n')
     solver_file.write("Average Number of Linear Iterations per Time-Step = ")
-    VV_utilities.format(solver_file, avg2_ih2b)
+    if linear_flagb == 1:
+        VV_utilities.format(solver_file, avg2_ih2b)
+    else:
+        solver_file.write("Linear Iterations not displayed in the output file")
+    solver_file.write('<BR> \n')
+    solver_file.write('<BR> \n')
     solver_file.write('<BR> \n')
 
 # JFNK gnu 4 proc
@@ -350,7 +416,7 @@ def c80details(solver_file,reg_test,data_dir):  # using data, fill the web page 
     failedt3 = VV_checks.failcheck(reg_test, '/ismip-hom-c/80km/' + data_dir + '/ishom.c.80km.out.4')
     failedt_list.append(failedt3)
 
-    procttl_ih4d, nonlist_ih4d, avg2_ih4d, out_flag_ih4d, ndihc4_name, ldihc4_name = \
+    procttl_ih4d,nonlist_ih4d,avg2_ih4d,out_flag_ih4d,ndihc4_name,ldihc4_name,linear_flag = \
         VV_outprocess.jobprocess(reg_test + '/ismip-hom-c/80km/' + data_dir + '/ishom.c.80km.out.4','imhomc4')
     
     solver_file.write('<H4>New Run: ishom.c.80km.out.4</H4>')
@@ -362,11 +428,14 @@ def c80details(solver_file,reg_test,data_dir):  # using data, fill the web page 
     if out_flag_ih4d == 1:
         solver_file.write('<FONT COLOR="red">***TIME STEP(S) WHICH FAILED TO CONVERGE</FONT> <BR>\n')
     solver_file.write("Average Number of Linear Iterations per Time-Step = ")
-    VV_utilities.format(solver_file, avg2_ih4d)
+    if linear_flag == 1:
+        VV_utilities.format(solver_file, avg2_ih4d)
+    else:
+        solver_file.write("Linear Iterations not displayed in the output file")
     solver_file.write('<BR> \n')
 
     solver_file.write('<H4>Benchmark Run: ishom.c.80km.out.4</H4>')
-    procttl_ih4b, nonlist_ih4b, avg2_ih4b, out_flag_ih4b, ndihc4b_name, ldihc4b_name = \
+    procttl_ih4b,nonlist_ih4b,avg2_ih4b,out_flag_ih4b,ndihc4b_name,ldihc4b_name,linear_flagb = \
         VV_outprocess.jobprocess(reg_test + '/bench/ismip-hom-c/80km/' + data_dir + '/ishom.c.80km.out.4','imhomc4b')
 
     solver_file.write("Number of Processors = " + str(procttl_ih4b[-1]) + "<BR>\n")
@@ -377,10 +446,16 @@ def c80details(solver_file,reg_test,data_dir):  # using data, fill the web page 
     if out_flag_ih4b == 1:
         solver_file.write('<FONT COLOR="red">***TIME STEP(S) WHICH FAILED TO CONVERGE</FONT> <BR>\n')
     solver_file.write("Average Number of Linear Iterations per Time-Step = ")
-    VV_utilities.format(solver_file, avg2_ih4b)
+    if linear_flagb == 1: 
+        VV_utilities.format(solver_file, avg2_ih4b)
+    else:
+        solver_file.write("Linear Iterations not displayed in the output file")
     solver_file.write('<BR> \n')
 
     solver_file.write('</HTML>\n')
+    solver_file.write('<BR> \n')
+    solver_file.write('<BR> \n')
+    solver_file.write('<BR> \n')
     solver_file.close()
 
     if 1 in failedt_list:
@@ -406,7 +481,7 @@ def c20details(solver_file,reg_test,data_dir):  # using data, fill the web page 
     failedt1 = VV_checks.failcheck(reg_test, '/ismip-hom-c/20km/' + data_dir + '/ishom.c.20km.out.1')
     failedt_list.append(failedt1)
 
-    procttl_ih1d, nonlist_ih1d, avg2_ih1d, out_flag_ih1d, ndihc1_name, ldihc1_name = \
+    procttl_ih1d,nonlist_ih1d,avg2_ih1d,out_flag_ih1d,ndihc1_name,ldihc1_name,linear_flag = \
         VV_outprocess.jobprocess(reg_test + '/ismip-hom-c/20km/' + data_dir + '/ishom.c.20km.out.1','imhomc1')
     
     solver_file.write('<H4>New Run: ishom.c.20km.out.1</H4>')
@@ -418,11 +493,14 @@ def c20details(solver_file,reg_test,data_dir):  # using data, fill the web page 
     if out_flag_ih1d == 1:
         solver_file.write('<FONT COLOR="red">***TIME STEP(S) WHICH FAILED TO CONVERGE</FONT> <BR>\n')
     solver_file.write("Average Number of Linear Iterations per Time-Step = ")
-    VV_utilities.format(solver_file, avg2_ih1d)
+    if linear_flag == 1:
+        VV_utilities.format(solver_file, avg2_ih1d)
+    else:
+        solver_file.write("Linear Iterations not displayed in the output file")
     solver_file.write('<BR> \n')
 
     solver_file.write('<H4>Benchmark Run: ishom.c.20km.out.1</H4>')
-    procttl_ih1b, nonlist_ih1b, avg2_ih1b, out_flag_ih1b, ndihc1b_name, ldihc1b_name = \
+    procttl_ih1b,nonlist_ih1b,avg2_ih1b,out_flag_ih1b,ndihc1b_name,ldihc1b_name,linear_flagb = \
         VV_outprocess.jobprocess(reg_test + '/bench/ismip-hom-c/20km/' + data_dir + '/ishom.c.20km.out.1','imhomc1b')
 
     solver_file.write("Number of Processors = " + str(procttl_ih1b[-1]) + "<BR>\n")
@@ -433,7 +511,12 @@ def c20details(solver_file,reg_test,data_dir):  # using data, fill the web page 
     if out_flag_ih1b == 1:
         solver_file.write('<FONT COLOR="red">***TIME STEP(S) WHICH FAILED TO CONVERGE</FONT> <BR>\n')
     solver_file.write("Average Number of Linear Iterations per Time-Step = ")
-    VV_utilities.format(solver_file, avg2_ih1b)
+    if linear_flagb == 1: 
+        VV_utilities.format(solver_file, avg2_ih1b)
+    else:
+        solver_file.write("Linear Iterations not displayed in the output file")
+    solver_file.write('<BR> \n')
+    solver_file.write('<BR> \n')
     solver_file.write('<BR> \n')
 
 # JFNK gnu 2 proc
@@ -442,7 +525,7 @@ def c20details(solver_file,reg_test,data_dir):  # using data, fill the web page 
     failedt2 = VV_checks.failcheck(reg_test, '/ismip-hom-c/20km/' + data_dir + '/ishom.c.20km.out.2')
     failedt_list.append(failedt2)
 
-    procttl_ih2d, nonlist_ih2d, avg2_ih2d, out_flag_ih2d, ndihc2_name, ldihc2_name = \
+    procttl_ih2d,nonlist_ih2d,avg2_ih2d,out_flag_ih2d,ndihc2_name,ldihc2_name,linear_flag = \
         VV_outprocess.jobprocess(reg_test + '/ismip-hom-c/20km/' + data_dir + '/ishom.c.20km.out.2','imhom2')
     
     solver_file.write('<H4>New Run: ishom.c.20km.out.2</H4>')
@@ -454,11 +537,14 @@ def c20details(solver_file,reg_test,data_dir):  # using data, fill the web page 
     if out_flag_ih2d == 1:
         solver_file.write('<FONT COLOR="red">***TIME STEP(S) THAT FAILED TO CONVERGE</FONT> <BR>\n')
     solver_file.write("Average Number of Linear Iterations per Time-Step = ")
-    VV_utilities.format(solver_file, avg2_ih2d)
+    if linear_flag == 1:
+        VV_utilities.format(solver_file, avg2_ih2d)
+    else:
+        solver_file.write("Linear Iterations not displayed in the output file")
     solver_file.write('<BR> \n')
 
     solver_file.write('<H4>Benchmark Run: ishom.c.20km.out.2</H4>')
-    procttl_ih2b, nonlist_ih2b, avg2_ih2b, out_flag_ih2b, ndihc2b_name, ldihc2b_name = \
+    procttl_ih2b,nonlist_ih2b,avg2_ih2b,out_flag_ih2b,ndihc2b_name,ldihc2b_name,linear_flagb = \
         VV_outprocess.jobprocess(reg_test + '/bench/ismip-hom-c/20km/' + data_dir + '/ishom.c.20km.out.2','imhom2b')
 
     solver_file.write("Number of Processors = " + str(procttl_ih2b[-1]) + "<BR>\n")
@@ -469,7 +555,12 @@ def c20details(solver_file,reg_test,data_dir):  # using data, fill the web page 
     if out_flag_ih2b == 1:
         solver_file.write('<FONT COLOR="red">***TIME STEP(S) THAT FAILED TO CONVERGE</FONT> <BR>\n')
     solver_file.write("Average Number of Linear Iterations per Time-Step = ")
-    VV_utilities.format(solver_file, avg2_ih2b)
+    if linear_flagb == 1:
+        VV_utilities.format(solver_file, avg2_ih2b)
+    else:
+        solver_file.write("Linear Iterations not displayed in the output file")
+    solver_file.write('<BR> \n')
+    solver_file.write('<BR> \n')
     solver_file.write('<BR> \n')
 
 # JFNK gnu 4 proc
@@ -478,7 +569,7 @@ def c20details(solver_file,reg_test,data_dir):  # using data, fill the web page 
     failedt3 = VV_checks.failcheck(reg_test, '/ismip-hom-c/20km/' + data_dir + '/ishom.c.20km.out.4')
     failedt_list.append(failedt3)
 
-    procttl_ih4d, nonlist_ih4d, avg2_ih4d, out_flag_ih4d, ndihc4_name, ldihc4_name = \
+    procttl_ih4d,nonlist_ih4d,avg2_ih4d,out_flag_ih4d,ndihc4_name,ldihc4_name,linear_flag = \
         VV_outprocess.jobprocess(reg_test + '/ismip-hom-c/20km/' + data_dir + '/ishom.c.20km.out.4','imhomc4')
     
     solver_file.write('<H4>New Run: ishom.c.20km.out.4</H4>')
@@ -490,11 +581,14 @@ def c20details(solver_file,reg_test,data_dir):  # using data, fill the web page 
     if out_flag_ih4d == 1:
         solver_file.write('<FONT COLOR="red">***TIME STEP(S) WHICH FAILED TO CONVERGE</FONT> <BR>\n')
     solver_file.write("Average Number of Linear Iterations per Time-Step = ")
-    VV_utilities.format(solver_file, avg2_ih4d)
+    if linear_flag == 1:
+        VV_utilities.format(solver_file, avg2_ih4d)
+    else:
+        solver_file.write("Linear Iterations not displayed in the output file")
     solver_file.write('<BR> \n')
 
     solver_file.write('<H4>Benchmark Run: ishom.c.20km.out.4</H4>')
-    procttl_ih4b, nonlist_ih4b, avg2_ih4b, out_flag_ih4b, ndihc4b_name, ldihc4b_name = \
+    procttl_ih4b,nonlist_ih4b,avg2_ih4b,out_flag_ih4b,ndihc4b_name,ldihc4b_name,linear_flagb = \
         VV_outprocess.jobprocess(reg_test + '/bench/ismip-hom-c/20km/' + data_dir + '/ishom.c.20km.out.4','imhomc4b')
 
     solver_file.write("Number of Processors = " + str(procttl_ih4b[-1]) + "<BR>\n")
@@ -505,10 +599,16 @@ def c20details(solver_file,reg_test,data_dir):  # using data, fill the web page 
     if out_flag_ih4b == 1:
         solver_file.write('<FONT COLOR="red">***TIME STEP(S) WHICH FAILED TO CONVERGE</FONT> <BR>\n')
     solver_file.write("Average Number of Linear Iterations per Time-Step = ")
-    VV_utilities.format(solver_file, avg2_ih4b)
+    if linear_flagb == 1:
+        VV_utilities.format(solver_file, avg2_ih4b)
+    else:
+        solver_file.write("Linear Iterations not displayed in the output file")
     solver_file.write('<BR> \n')
 
     solver_file.write('</HTML>\n')
+    solver_file.write('<BR> \n')
+    solver_file.write('<BR> \n')
+    solver_file.write('<BR> \n')
     solver_file.close()
 
     if 1 in failedt_list:

@@ -23,7 +23,7 @@ def circdetails(solver_file,reg_test,data_dir): # using data, fill the web page 
     failedt1 = VV_checks.failcheck(reg_test, '/circular-shelf/' + data_dir + '/circular-shelf.out')
     failedt_list.append(failedt1)
 
-    procttl_circd, nonlist_circd, avg2_circd, out_flag_circd, ndcirc_name, ldcirc_name = \
+    procttl_circd,nonlist_circd,avg2_circd,out_flag_circd,ndcirc_name,ldcirc_name,linear_flag = \
         VV_outprocess.jobprocess(reg_test + '/circular-shelf/' + data_dir + '/circular-shelf.out','circ')
 
     solver_file.write('<H4>New Run: circular-shelf.out</H4>')
@@ -35,11 +35,14 @@ def circdetails(solver_file,reg_test,data_dir): # using data, fill the web page 
     if out_flag_circd == 1:
         solver_file.write('<FONT COLOR="red">***TIME STEP(S) WHICH FAILED TO CONVERGE</FONT> <BR>\n')
     solver_file.write("Average Number of Linear Iterations per Time-Step = ")
-    VV_utilities.format(solver_file, avg2_circd)
+    if linear_flag == 1:
+        VV_utilities.format(solver_file, avg2_circd)
+    else:
+        solver_file.write("Linear Iterations not displayed in the output file ")
     solver_file.write('<BR> \n')
 
     solver_file.write('<H4>Benchmark Run: circular-shelf.out</H4>')
-    procttl_circb, nonlist_circb, avg2_circb, out_flag_circb, ndcircb_name, ldcircb_name = \
+    procttl_circb,nonlist_circb,avg2_circb,out_flag_circb,ndcircb_name,ldcircb_name,linear_flagb = \
         VV_outprocess.jobprocess(reg_test + '/bench/circular-shelf/' + data_dir + '/circular-shelf.out','circb')   
 
     solver_file.write("Number of Processors = " + str(procttl_circb[-1]) + "<BR>\n")
@@ -50,7 +53,10 @@ def circdetails(solver_file,reg_test,data_dir): # using data, fill the web page 
     if out_flag_circb == 1:
         solver_file.write('<FONT COLOR="red">***TIME STEP(S) WHICH FAILED TO CONVERGE</FONT> <BR>\n')
     solver_file.write("Average Number of Linear Iterations per Time-Step = ")
-    VV_utilities.format(solver_file, avg2_circb)
+    if linear_flagb == 1:
+        VV_utilities.format(solver_file, avg2_circb)
+    else:
+        solver_file.write("Linear Iterations not displayed in the output file ")
     solver_file.write('<BR> \n')
 
     if 1 in failedt_list:
@@ -77,7 +83,7 @@ def confdetails(solver_file,reg_test,data_dir): # using data, fill the web page 
     failedt1 = VV_checks.failcheck(reg_test, '/confined-shelf/' + data_dir + '/confined-shelf.out')
     failedt_list.append(failedt1)
 
-    procttl_confd, nonlist_confd, avg2_confd, out_flag_confd, ndconf_name, ldconf_name = \
+    procttl_confd,nonlist_confd,avg2_confd,out_flag_confd,ndconf_name,ldconf_name,linear_flag = \
         VV_outprocess.jobprocess(reg_test + '/confined-shelf/' + data_dir + '/confined-shelf.out', 'conf')
 
     solver_file.write('<H4>New Run: confined-shelf.out</H4>')
@@ -89,11 +95,14 @@ def confdetails(solver_file,reg_test,data_dir): # using data, fill the web page 
     if out_flag_confd == 1:
         solver_file.write('<FONT COLOR="red">***TIME STEP(S) WHICH FAILED TO CONVERGE</FONT> <BR>\n')
     solver_file.write("Average Number of Linear Iterations per Time-Step = ")
-    VV_utilities.format(solver_file, avg2_confd)
+    if linear_flag == 1:
+        VV_utilities.format(solver_file, avg2_confd)
+    else:
+        solver_file.write("Linear Iterations not displayed in the output file ")
     solver_file.write('<BR> \n')
 
     solver_file.write('<H4>Benchmark Run: confined-shelf.out</H4>')
-    procttl_confb, nonlist_confb, avg2_confb, out_flag_confb, ndconfb_name, ldconfb_name = \
+    procttl_confb,nonlist_confb,avg2_confb,out_flag_confb,ndconfb_name,ldconfb_name,linear_flagb = \
         VV_outprocess.jobprocess(reg_test + '/bench/confined-shelf/' + data_dir + '/confined-shelf.out','confb')
 
     solver_file.write("Number of Processors = " + str(procttl_confb[-1]) + "<BR>\n")
@@ -104,7 +113,10 @@ def confdetails(solver_file,reg_test,data_dir): # using data, fill the web page 
     if out_flag_confb == 1:
         solver_file.write('<FONT COLOR="red">***TIME STEP(S) WHICH FAILED TO CONVERGE</FONT> <BR>\n')
     solver_file.write("Average Number of Linear Iterations per Time-Step = ")
-    VV_utilities.format(solver_file, avg2_confb)
+    if linear_flagb == 1:
+        VV_utilities.format(solver_file, avg2_confb)
+    else:
+        solver_file.write("Linear Iterations not displayed in the output file ")
     solver_file.write('<BR> \n')
 
     solver_file.write('</HTML>\n')

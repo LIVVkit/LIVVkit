@@ -26,8 +26,9 @@ def details60(solver_file,perf_test,data_dir):  # using data, fill the web page 
     failedt_list.append(failedt1)
 
     solver_file.write('<H4>New Run: out.60.JFNK</H4>')
-    procttl_dd301, nonlist_dd301,avg2_dd301,out_flag_dd301,ndd301_name,ldd301_name = \
+    procttl_dd301, nonlist_dd301,avg2_dd301,out_flag_dd301,ndd301_name,ldd301_name,linear_flag = \
         VV_outprocess.jobprocess(perf_test + '/dome60/' + data_dir + '/out.60.JFNK', 'domed301')
+    
     solver_file.write("Number of Processors = " + str(procttl_dd301[-1]) + "<BR>\n")
     solver_file.write("Number of Nonlinear Iterations = ")
     VV_utilities.format(solver_file, nonlist_dd301)
@@ -36,11 +37,14 @@ def details60(solver_file,perf_test,data_dir):  # using data, fill the web page 
     if out_flag_dd301 == 1:
         solver_file.write('<FONT COLOR="red">***TIME STEP(S) WHICH FAILED TO CONVERGE</FONT> <BR>\n')
     solver_file.write("Average Number of Linear Iterations per Time-Step = ")
-    VV_utilities.format(solver_file, avg2_dd301)
+    if linear_flag == 1:
+        VV_utilities.format(solver_file, avg2_dd301)
+    else:
+        solver_file.write("Linear Iterations not displayed in the output file")
     solver_file.write('<BR> \n')
 
     solver_file.write('<H4>Benchmark Run: out.60.JFNK</H4>')
-    procttl_dd301b, nonlist_dd301b,avg2_dd301b,out_flag_dd301b,ndd301b_name,ldd301b_name = \
+    procttl_dd301b,nonlist_dd301b,avg2_dd301b,out_flag_dd301b,ndd301b_name,ldd301b_name,linear_flagb = \
         VV_outprocess.jobprocess(perf_test + '/bench/dome60/' + data_dir + '/out.60.JFNK', 'domed301b')
 
     solver_file.write("Number of Processors = " + str(procttl_dd301b[-1]) + "<BR>\n")
@@ -51,7 +55,10 @@ def details60(solver_file,perf_test,data_dir):  # using data, fill the web page 
     if out_flag_dd301b == 1:
         solver_file.write('<FONT COLOR="red">***TIME STEP(S) WHICH FAILED TO CONVERGE</FONT> <BR>\n')
     solver_file.write("Average Number of Linear Iterations per Time-Step = ")
-    VV_utilities.format(solver_file, avg2_dd301b)
+    if linear_flagb == 1:
+        VV_utilities.format(solver_file, avg2_dd301b)
+    else:
+        solver_file.write("Linear Iterations not displayed in the output file")
     solver_file.write('<BR> \n')
 
     if 1 in failedt_list:
@@ -76,8 +83,9 @@ def details120(solver_file,perf_test,data_dir):  # using data, fill the web page
     failedt_list.append(failedt1)
 
     solver_file.write('<H4>New Run: out.120.JFNK</H4>')
-    procttl_dd301, nonlist_dd301,avg2_dd301,out_flag_dd301,ndd301_name,ldd301_name = \
+    procttl_dd301,nonlist_dd301,avg2_dd301,out_flag_dd301,ndd301_name,ldd301_name,linear_flag = \
         VV_outprocess.jobprocess(perf_test + '/dome120/' + data_dir + '/out.120.JFNK', 'domed301')
+    
     solver_file.write("Number of Processors = " + str(procttl_dd301[-1]) + "<BR>\n")
     solver_file.write("Number of Nonlinear Iterations = ")
     VV_utilities.format(solver_file, nonlist_dd301)
@@ -86,11 +94,14 @@ def details120(solver_file,perf_test,data_dir):  # using data, fill the web page
     if out_flag_dd301 == 1:
         solver_file.write('<FONT COLOR="red">***TIME STEP(S) WHICH FAILED TO CONVERGE</FONT> <BR>\n')
     solver_file.write("Average Number of Linear Iterations per Time-Step = ")
-    VV_utilities.format(solver_file, avg2_dd301)
+    if linear_flag == 1:
+        VV_utilities.format(solver_file, avg2_dd301)
+    else:
+        solver_file.write("Linear Iterations not displayed in the output file")
     solver_file.write('<BR> \n')
 
     solver_file.write('<H4>Benchmark Run: out.120.JFNK</H4>')
-    procttl_dd301b, nonlist_dd301b,avg2_dd301b,out_flag_dd301b,ndd301b_name,ldd301b_name = \
+    procttl_dd301b,nonlist_dd301b,avg2_dd301b,out_flag_dd301b,ndd301b_name,ldd301b_name,linear_flagb = \
         VV_outprocess.jobprocess(perf_test + '/bench/dome120/' + data_dir + '/out.120.JFNK', 'domed301b')
 
     solver_file.write("Number of Processors = " + str(procttl_dd301b[-1]) + "<BR>\n")
@@ -101,7 +112,10 @@ def details120(solver_file,perf_test,data_dir):  # using data, fill the web page
     if out_flag_dd301b == 1:
         solver_file.write('<FONT COLOR="red">***TIME STEP(S) WHICH FAILED TO CONVERGE</FONT> <BR>\n')
     solver_file.write("Average Number of Linear Iterations per Time-Step = ")
-    VV_utilities.format(solver_file, avg2_dd301b)
+    if linear_flagb == 1:
+        VV_utilities.format(solver_file, avg2_dd301b)
+    else:
+        solver_file.write("Linear Iterations not displayed in the output file")
     solver_file.write('<BR> \n')
 
     if 1 in failedt_list:
@@ -126,8 +140,9 @@ def details240(solver_file,perf_test,data_dir):  # using data, fill the web page
     failedt_list.append(failedt1)
 
     solver_file.write('<H4>New Run: out.240.JFNK</H4>')
-    procttl_dd301, nonlist_dd301,avg2_dd301,out_flag_dd301,ndd301_name,ldd301_name = \
+    procttl_dd301,nonlist_dd301,avg2_dd301,out_flag_dd301,ndd301_name,ldd301_name,linear_flag = \
         VV_outprocess.jobprocess(perf_test + '/dome240/' + data_dir + '/out.240.JFNK', 'domed301')
+    
     solver_file.write("Number of Processors = " + str(procttl_dd301[-1]) + "<BR>\n")
     solver_file.write("Number of Nonlinear Iterations = ")
     VV_utilities.format(solver_file, nonlist_dd301)
@@ -136,11 +151,14 @@ def details240(solver_file,perf_test,data_dir):  # using data, fill the web page
     if out_flag_dd301 == 1:
         solver_file.write('<FONT COLOR="red">***TIME STEP(S) WHICH FAILED TO CONVERGE</FONT> <BR>\n')
     solver_file.write("Average Number of Linear Iterations per Time-Step = ")
-    VV_utilities.format(solver_file, avg2_dd301)
+    if linear_flag == 1:
+        VV_utilities.format(solver_file, avg2_dd301)
+    else:
+        solver_file.write("Linear Iterations not displayed in the output file")
     solver_file.write('<BR> \n')
 
     solver_file.write('<H4>Benchmark Run: out.240.JFNK</H4>')
-    procttl_dd301b, nonlist_dd301b,avg2_dd301b,out_flag_dd301b,ndd301b_name,ldd301b_name = \
+    procttl_dd301b,nonlist_dd301b,avg2_dd301b,out_flag_dd301b,ndd301b_name,ldd301b_name,linear_flagb = \
         VV_outprocess.jobprocess(perf_test + '/bench/dome240/' + data_dir + '/out.240.JFNK', 'domed301b')
 
     solver_file.write("Number of Processors = " + str(procttl_dd301b[-1]) + "<BR>\n")
@@ -151,7 +169,10 @@ def details240(solver_file,perf_test,data_dir):  # using data, fill the web page
     if out_flag_dd301b == 1:
         solver_file.write('<FONT COLOR="red">***TIME STEP(S) WHICH FAILED TO CONVERGE</FONT> <BR>\n')
     solver_file.write("Average Number of Linear Iterations per Time-Step = ")
-    VV_utilities.format(solver_file, avg2_dd301b)
+    if linear_flagb == 1:
+        VV_utilities.format(solver_file, avg2_dd301b)
+    else:
+        solver_file.write("Linear Iterations not displayed in the output file")
     solver_file.write('<BR> \n')
 
     if 1 in failedt_list:
@@ -176,8 +197,9 @@ def details500(solver_file,perf_test,data_dir):  # using data, fill the web page
     failedt_list.append(failedt1)
 
     solver_file.write('<H4>New Run: out.500.JFNK</H4>')
-    procttl_dd301, nonlist_dd301,avg2_dd301,out_flag_dd301,ndd301_name,ldd301_name = \
+    procttl_dd301,nonlist_dd301,avg2_dd301,out_flag_dd301,ndd301_name,ldd301_name,linear_flag = \
         VV_outprocess.jobprocess(perf_test + '/dome500/' + data_dir + '/out.500.JFNK', 'domed301')
+    
     solver_file.write("Number of Processors = " + str(procttl_dd301[-1]) + "<BR>\n")
     solver_file.write("Number of Nonlinear Iterations = ")
     VV_utilities.format(solver_file, nonlist_dd301)
@@ -186,11 +208,14 @@ def details500(solver_file,perf_test,data_dir):  # using data, fill the web page
     if out_flag_dd301 == 1:
         solver_file.write('<FONT COLOR="red">***TIME STEP(S) WHICH FAILED TO CONVERGE</FONT> <BR>\n')
     solver_file.write("Average Number of Linear Iterations per Time-Step = ")
-    VV_utilities.format(solver_file, avg2_dd301)
+    if linear_flag == 1:
+        VV_utilities.format(solver_file, avg2_dd301)
+    else:
+        solver_file.write("Linear Iterations not displayed in the output file")
     solver_file.write('<BR> \n')
 
     solver_file.write('<H4>Benchmark Run: out.500.JFNK</H4>')
-    procttl_dd301b, nonlist_dd301b,avg2_dd301b,out_flag_dd301b,ndd301b_name,ldd301b_name = \
+    procttl_dd301b,nonlist_dd301b,avg2_dd301b,out_flag_dd301b,ndd301b_name,ldd301b_name,linear_flagb = \
         VV_outprocess.jobprocess(perf_test + '/bench/dome500/' + data_dir + '/out.500.JFNK', 'domed301b')
 
     solver_file.write("Number of Processors = " + str(procttl_dd301b[-1]) + "<BR>\n")
@@ -201,7 +226,10 @@ def details500(solver_file,perf_test,data_dir):  # using data, fill the web page
     if out_flag_dd301b == 1:
         solver_file.write('<FONT COLOR="red">***TIME STEP(S) WHICH FAILED TO CONVERGE</FONT> <BR>\n')
     solver_file.write("Average Number of Linear Iterations per Time-Step = ")
-    VV_utilities.format(solver_file, avg2_dd301b)
+    if linear_flagb == 1: 
+        VV_utilities.format(solver_file, avg2_dd301b)
+    else:
+        solver_file.write("Linear Iterations not displayed in the output file")
     solver_file.write('<BR> \n')
 
     if 1 in failedt_list:
@@ -226,8 +254,9 @@ def details1000(solver_file,perf_test,data_dir):  # using data, fill the web pag
     failedt_list.append(failedt1)
 
     solver_file.write('<H4>New Run: out.1000.JFNK</H4>')
-    procttl_dd301, nonlist_dd301,avg2_dd301,out_flag_dd301,ndd301_name,ldd301_name = \
+    procttl_dd301,nonlist_dd301,avg2_dd301,out_flag_dd301,ndd301_name,ldd301_name,linear_flag = \
         VV_outprocess.jobprocess(perf_test + '/dome1000/' + data_dir + '/out.1000.JFNK', 'domed301')
+    
     solver_file.write("Number of Processors = " + str(procttl_dd301[-1]) + "<BR>\n")
     solver_file.write("Number of Nonlinear Iterations = ")
     VV_utilities.format(solver_file, nonlist_dd301)
@@ -236,11 +265,14 @@ def details1000(solver_file,perf_test,data_dir):  # using data, fill the web pag
     if out_flag_dd301 == 1:
         solver_file.write('<FONT COLOR="red">***TIME STEP(S) WHICH FAILED TO CONVERGE</FONT> <BR>\n')
     solver_file.write("Average Number of Linear Iterations per Time-Step = ")
-    VV_utilities.format(solver_file, avg2_dd301)
+    if linear_flag == 1: 
+        VV_utilities.format(solver_file, avg2_dd301)
+    else:
+        solver_file.write("Linear Iterations not displayed in the output file")
     solver_file.write('<BR> \n')
 
     solver_file.write('<H4>Benchmark Run: out.1000.JFNK</H4>')
-    procttl_dd301b, nonlist_dd301b,avg2_dd301b,out_flag_dd301b,ndd301b_name,ldd301b_name = \
+    procttl_dd301b,nonlist_dd301b,avg2_dd301b,out_flag_dd301b,ndd301b_name,ldd301b_name,linear_flagb = \
         VV_outprocess.jobprocess(perf_test + '/bench/dome1000/' + data_dir + '/out.1000.JFNK', 'domed301b')
 
     solver_file.write("Number of Processors = " + str(procttl_dd301b[-1]) + "<BR>\n")
@@ -251,7 +283,10 @@ def details1000(solver_file,perf_test,data_dir):  # using data, fill the web pag
     if out_flag_dd301b == 1:
         solver_file.write('<FONT COLOR="red">***TIME STEP(S) WHICH FAILED TO CONVERGE</FONT> <BR>\n')
     solver_file.write("Average Number of Linear Iterations per Time-Step = ")
-    VV_utilities.format(solver_file, avg2_dd301b)
+    if linear_flagb == 1:
+        VV_utilities.format(solver_file, avg2_dd301b)
+    else:
+        solver_file.write("Linear Iterations not displayed in the output file")
     solver_file.write('<BR> \n')
 
     if 1 in failedt_list:
