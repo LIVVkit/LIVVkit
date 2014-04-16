@@ -18,6 +18,7 @@ def jobprocess(file,job_name): # Reading a job output file for production run
     total    = 0.000
     average  = 0.000
     out_flag = 0
+    linear_flag = 0
 
 # open output file (from job)
     if file:
@@ -42,21 +43,25 @@ def jobprocess(file,job_name): # Reading a job output file for production run
 
         #create linear interations list
         if ('"SOLVE_STATUS_CONVERGED"' in line):
+            linear_flag = 1
             phrase = '"SOLVE_STATUS_CONVERGED"'
             split = line.split()
             ind = split.index(phrase)
             ind2 = ind + 2
             list.append(int(line.split()[ind2]))
-
-        #calculate average number of linear iterations if time step converges
-        if ('Converged!' in line):
-            nonlist.append(current_step)
             for value in list:
                 total += value
             average = total / len(list)
             avg.append(average)
             for n in avg:
                 avg2.append(str(round(n,3)))
+            
+        #calculate average number of linear iterations if time step converges
+        if ('Converged!' in line):
+            nonlist.append(current_step)
+            if linear_flag == 1:
+                for n in avg:
+                    avg2.append(str(round(n,3)))
             list    = []
             total   = 0.000
             average = 0.000
