@@ -39,14 +39,14 @@ export RUN_ISMIP_HOM_C80=1
 export RUN_ISMIP_HOM_C20=1
 
 # flags to select performance analysis
-export RUN_DOME60=0
-export RUN_DOME120=0
-export RUN_DOME240=0
+export RUN_DOME60=1
+export RUN_DOME120=1
+export RUN_DOME240=1
 export RUN_DOME500=0
 export RUN_DOME1000=0
 export RUN_GIS_1KM=0
 export RUN_GIS_2KM=0
-export RUN_GIS_4KM=0
+export RUN_GIS_4KM=1
 
 # flag to select validation analysis
 export RUN_VALIDATION=0

@@ -20,60 +20,60 @@ def time_check(perf_test,dome60_flag,dome120_flag,dome240_flag,dome500_flag,dome
     flag = 0
 #dome60
     if dome60_flag == 1:
-        JFNK_timing_path = perf_test + '/dome60/data/out.60.JFNK.timing'
+        timing_path = perf_test + '/dome60/data/out.60.JFNK.timing'
         test = 'dome60'
-        dictionary_large['dome60'] = VV_timing_check.timing_check(JFNK_timing_path,flag,test)
+        dictionary_large['dome60'] = VV_timing_check.timing_check(timing_path,flag,test)
     else:
         dictionary_large['dome60'] = 0
 #dome120
     if dome120_flag == 1:
-        JFNK_timing_path = perf_test + '/dome120/data/out.120.JFNK.timing'
+        timing_path = perf_test + '/dome120/data/out.120.JFNK.timing'
         test = 'dome120'
-        dictionary_large['dome120'] = VV_timing_check.timing_check(JFNK_timing_path,flag,test)
+        dictionary_large['dome120'] = VV_timing_check.timing_check(timing_path,flag,test)
     else:
         dictionary_large['dome120'] = 0
 #dome240
     if dome240_flag == 1:
-        JFNK_timing_path = perf_test + '/dome240/data/out.240.JFNK.timing'
+        timing_path = perf_test + '/dome240/data/out.240.JFNK.timing'
         test = 'dome240'
-        dictionary_large['dome240'] = VV_timing_check.timing_check(JFNK_timing_path,flag,test)
+        dictionary_large['dome240'] = VV_timing_check.timing_check(timing_path,flag,test)
     else:
         dictionary_large['dome240'] = 0
 #dome500
     if dome500_flag == 1:
-        JFNK_timing_path = perf_test + '/dome500/data/out.500.JFNK.timing'
+        timing_path = perf_test + '/dome500/data/out.500.JFNK.timing'
         test = 'dome500'
-        dictionary_large['dome500'] = VV_timing_check.timing_check(JFNK_timing_path,flag,test)
+        dictionary_large['dome500'] = VV_timing_check.timing_check(timing_path,flag,test)
     else:
         dictionary_large['dome500'] = 0
 #dome1000
     if dome1000_flag == 1:
-        JFNK_timing_path = perf_test + '/dome1000/data/out.1000.JFNK.timing'
+        timing_path = perf_test + '/dome1000/data/out.1000.JFNK.timing'
         test = 'dome1000'
-        dictionary_large['dome1000'] = VV_timing_check.timing_check(JFNK_timing_path,flag,test)
+        dictionary_large['dome1000'] = VV_timing_check.timing_check(timing_path,flag,test)
     else:
         dictionary_large['dome1000'] = 0
-#gis1km
-    if gis_1km_flag == 1:
-        JFNK_timing_path = perf_test + '/gis_1km/data/out.gis.1km.timing'
-        test = 'gis1km'
-        dictionary_large['gis1km'] = VV_timing_check.timing_check(JFNK_timing_path,flag,test)
-    else:
-        dictionary_large['gis1km'] = 0
-#gis2km
-    if gis_2km_flag == 1:
-        JFNK_timing_path = perf_test + '/gis_2km/data/out.gis.2km.timing'
-        test = 'gis2km'
-        dictionary_large['gis2km'] = VV_timing_check.timing_check(JFNK_timing_path,flag,test)
-    else:
-        dictionary_large['gis2km'] = 0
 #gis4km
     if gis_4km_flag == 1:
-        JFNK_timing_path = perf_test + '/gis_4km/data/out.gis.4km.timing'
+        timing_path = perf_test + '/gis_4km/data/out.gis.4km.glissade.timing'
         test = 'gis4km'
-        dictionary_large['gis4km'] = VV_timing_check.timing_check(JFNK_timing_path,flag,test)
+        dictionary_large['gis4km'] = VV_timing_check.timing_check(timing_path,flag,test)
     else:
         dictionary_large['gis4km'] = 0
+#gis2km
+    if gis_2km_flag == 1:
+        timing_path = perf_test + '/gis_2km/data/out.gis.2km.glissade.timing'
+        test = 'gis2km'
+        dictionary_large['gis2km'] = VV_timing_check.timing_check(timing_path,flag,test)
+    else:
+        dictionary_large['gis2km'] = 0
+#gis1km
+    if gis_1km_flag == 1:
+        timing_path = perf_test + '/gis_1km/data/out.gis.1km.glissade.timing'
+        test = 'gis1km'
+        dictionary_large['gis1km'] = VV_timing_check.timing_check(timing_path,flag,test)
+    else:
+        dictionary_large['gis1km'] = 0
     return dictionary_large
 
 def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_time,dome60_plot, \
@@ -391,17 +391,17 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_tim
             xml_path = perf_test + '/gis_4km/trilinosOptions.xml'
             bench_xml_path = perf_test + '/bench/gis_4km/trilinosOptions.xml'
             if os.path.isdir(perf_test + '/gis_4km/configure_files/') == True: 
-                configure_path = perf_test + '/gis_4km/configure_files/gis.4km.config'
-                bench_configure_path = perf_test + '/bench/gis_4km/configure_files/gis.4km.config'
+                configure_path = perf_test + '/gis_4km/configure_files/gis.4km.glissade.config'
+                bench_configure_path = perf_test + '/bench/gis_4km/configure_files/gis.4km.glissade.config'
             else:
-                configure_path = perf_test + '/gis_4km/gis.4km.config'
-                bench_configure_path = perf_test + '/bench/gis_4km/gis.4km.config'
+                configure_path = perf_test + '/gis_4km/gis.4km.glissade.config'
+                bench_configure_path = perf_test + '/bench/gis_4km/gis.4km.glissade.config'
             VV_utilities.confxml(gis4km_case,configure_path,bench_configure_path,xml_path,bench_xml_path)
 
             large_test_file.write('<TH ALIGN=LEFT><A HREF="gis4km_timing.html">Timing Details</A>\n')
             large_test_file.write('<BR>\n')
             flag = 1
-            timing_path = perf_test + '/gis_4km/data/out.gis.4km.timing'
+            timing_path = perf_test + '/gis_4km/data/out.gis.4km.glissade.timing'
             VV_timing.timing_table_current_run(gis4km_time,timing_path,flag)
             
             #large_test_file.write('<TH ALIGN=LEFT><A HREF="gis4km_plot.html">Plots</A>\n')
@@ -448,17 +448,17 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_tim
             xml_path = perf_test + '/gis_2km/trilinosOptions.xml'
             bench_xml_path = perf_test + '/bench/gis_2km/trilinosOptions.xml'
             if os.path.isdir(perf_test + '/gis_2km/configure_files/') == True: 
-                configure_path = perf_test + '/gis_2km/configure_files/gis.2km.config'
-                bench_configure_path = perf_test + '/bench/gis_2km/configure_files/gis.2km.config'
+                configure_path = perf_test + '/gis_2km/configure_files/gis.2km.glissade.config'
+                bench_configure_path = perf_test + '/bench/gis_2km/configure_files/gis.2km.glissade.config'
             else:
-                configure_path = perf_test + '/gis_2km/gis.2km.config'
-                bench_configure_path = perf_test + '/bench/gis_2km/gis.2km.config'
+                configure_path = perf_test + '/gis_2km/gis.2km.glissade.config'
+                bench_configure_path = perf_test + '/bench/gis_2km/gis.2km.glissade.config'
             VV_utilities.confxml(gis2km_case,configure_path,bench_configure_path,xml_path,bench_xml_path)
 
             large_test_file.write('<TH ALIGN=LEFT><A HREF="gis2km_timing.html">Timing Details</A>\n')
             large_test_file.write('<BR>\n')
             flag = 1
-            timing_path = perf_test + '/gis_2km/data/out.gis.2km.timing'
+            timing_path = perf_test + '/gis_2km/data/out.gis.2km.glissade.timing'
             VV_timing.timing_table_current_run(gis2km_time,timing_path,flag)
             
             #large_test_file.write('<TH ALIGN=LEFT><A HREF="gis2km_plot.html">Plots</A>\n')
@@ -505,17 +505,17 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_tim
             xml_path = perf_test + '/gis_1km/trilinosOptions.xml'
             bench_xml_path = perf_test + '/bench/gis_1km/trilinosOptions.xml'
             if os.path.isdir(perf_test + '/gis_1km/configure_files/') == True: 
-                configure_path = perf_test + '/gis_1km/configure_files/gis.1km.config'
-                bench_configure_path = perf_test + '/bench/gis_1km/configure_files/gis.1km.config'
+                configure_path = perf_test + '/gis_1km/configure_files/gis.1km.glissade.config'
+                bench_configure_path = perf_test + '/bench/gis_1km/configure_files/gis.1km.glissade.config'
             else:
-                configure_path = perf_test + '/gis_1km/gis.1km.config'
-                bench_configure_path = perf_test + '/bench/gis_1km/gis.1km.config'
+                configure_path = perf_test + '/gis_1km/gis.1km.glissade.config'
+                bench_configure_path = perf_test + '/bench/gis_1km/gis.1km.glissade.config'
             VV_utilities.confxml(gis1km_case,configure_path,bench_configure_path,xml_path,bench_xml_path)
 
             large_test_file.write('<TH ALIGN=LEFT><A HREF="gis1km_timing.html">Timing Details</A>\n')
             large_test_file.write('<BR>\n')
             flag = 1
-            timing_path = perf_test + '/gis_1km/data/out.gis.1km.timing'
+            timing_path = perf_test + '/gis_1km/data/out.gis.1km.glissade.timing'
             VV_timing.timing_table_current_run(gis1km_time,timing_path,flag)
             
             #large_test_file.write('<TH ALIGN=LEFT><A HREF="gis1km_plot.html">Plots</A>\n')
