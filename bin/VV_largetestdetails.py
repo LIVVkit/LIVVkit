@@ -22,12 +22,12 @@ def details60(solver_file,perf_test,data_dir):  # using data, fill the web page 
 # JFNK gnu 9 proc
 
 # failure checking
-    failedt1 = VV_checks.failcheck(perf_test, '/dome60/' + data_dir + '/out.60.JFNK')
+    failedt1 = VV_checks.failcheck(perf_test, '/dome60/' + data_dir + '/out.60.glide.JFNK')
     failedt_list.append(failedt1)
 
-    solver_file.write('<H4>New Run: out.60.JFNK</H4>')
+    solver_file.write('<H4>New Run: out.60.glide.JFNK</H4>')
     procttl_dd301, nonlist_dd301,avg2_dd301,out_flag_dd301,ndd301_name,ldd301_name,linear_flag = \
-        VV_outprocess.jobprocess(perf_test + '/dome60/' + data_dir + '/out.60.JFNK', 'domed301')
+        VV_outprocess.jobprocess(perf_test + '/dome60/' + data_dir + '/out.60.glide.JFNK', 'domed301')
     
     solver_file.write("Number of Processors = " + str(procttl_dd301[-1]) + "<BR>\n")
     solver_file.write("Number of Nonlinear Iterations = ")
@@ -43,9 +43,9 @@ def details60(solver_file,perf_test,data_dir):  # using data, fill the web page 
         solver_file.write("Linear Iterations not displayed in the output file")
     solver_file.write('<BR> \n')
 
-    solver_file.write('<H4>Benchmark Run: out.60.JFNK</H4>')
+    solver_file.write('<H4>Benchmark Run: out.60.glide.JFNK</H4>')
     procttl_dd301b,nonlist_dd301b,avg2_dd301b,out_flag_dd301b,ndd301b_name,ldd301b_name,linear_flagb = \
-        VV_outprocess.jobprocess(perf_test + '/bench/dome60/' + data_dir + '/out.60.JFNK', 'domed301b')
+        VV_outprocess.jobprocess(perf_test + '/bench/dome60/' + data_dir + '/out.60.glide.JFNK', 'domed301b')
 
     solver_file.write("Number of Processors = " + str(procttl_dd301b[-1]) + "<BR>\n")
     solver_file.write("Number of Nonlinear Iterations = ")
@@ -79,12 +79,12 @@ def details120(solver_file,perf_test,data_dir):  # using data, fill the web page
 # JFNK gnu 9 proc
 
 # failure checking
-    failedt1 = VV_checks.failcheck(perf_test, '/dome120/' + data_dir + '/out.120.JFNK')
+    failedt1 = VV_checks.failcheck(perf_test, '/dome120/' + data_dir + '/out.120.glide.JFNK')
     failedt_list.append(failedt1)
 
-    solver_file.write('<H4>New Run: out.120.JFNK</H4>')
+    solver_file.write('<H4>New Run: out.120.glide.JFNK</H4>')
     procttl_dd301,nonlist_dd301,avg2_dd301,out_flag_dd301,ndd301_name,ldd301_name,linear_flag = \
-        VV_outprocess.jobprocess(perf_test + '/dome120/' + data_dir + '/out.120.JFNK', 'domed301')
+        VV_outprocess.jobprocess(perf_test + '/dome120/' + data_dir + '/out.120.glide.JFNK', 'domed301')
     
     solver_file.write("Number of Processors = " + str(procttl_dd301[-1]) + "<BR>\n")
     solver_file.write("Number of Nonlinear Iterations = ")
@@ -100,9 +100,9 @@ def details120(solver_file,perf_test,data_dir):  # using data, fill the web page
         solver_file.write("Linear Iterations not displayed in the output file")
     solver_file.write('<BR> \n')
 
-    solver_file.write('<H4>Benchmark Run: out.120.JFNK</H4>')
+    solver_file.write('<H4>Benchmark Run: out.120.glide.JFNK</H4>')
     procttl_dd301b,nonlist_dd301b,avg2_dd301b,out_flag_dd301b,ndd301b_name,ldd301b_name,linear_flagb = \
-        VV_outprocess.jobprocess(perf_test + '/bench/dome120/' + data_dir + '/out.120.JFNK', 'domed301b')
+        VV_outprocess.jobprocess(perf_test + '/bench/dome120/' + data_dir + '/out.120.glide.JFNK', 'domed301b')
 
     solver_file.write("Number of Processors = " + str(procttl_dd301b[-1]) + "<BR>\n")
     solver_file.write("Number of Nonlinear Iterations = ")
@@ -136,12 +136,12 @@ def details240(solver_file,perf_test,data_dir):  # using data, fill the web page
 # JFNK gnu 9 proc
 
 # failure checking
-    failedt1 = VV_checks.failcheck(perf_test, '/dome240/' + data_dir + '/out.240.JFNK')
+    failedt1 = VV_checks.failcheck(perf_test, '/dome240/' + data_dir + '/out.240.glide.JFNK')
     failedt_list.append(failedt1)
 
-    solver_file.write('<H4>New Run: out.240.JFNK</H4>')
+    solver_file.write('<H4>New Run: out.240.glide.JFNK</H4>')
     procttl_dd301,nonlist_dd301,avg2_dd301,out_flag_dd301,ndd301_name,ldd301_name,linear_flag = \
-        VV_outprocess.jobprocess(perf_test + '/dome240/' + data_dir + '/out.240.JFNK', 'domed301')
+        VV_outprocess.jobprocess(perf_test + '/dome240/' + data_dir + '/out.240.glide.JFNK', 'domed301')
     
     solver_file.write("Number of Processors = " + str(procttl_dd301[-1]) + "<BR>\n")
     solver_file.write("Number of Nonlinear Iterations = ")
@@ -157,9 +157,9 @@ def details240(solver_file,perf_test,data_dir):  # using data, fill the web page
         solver_file.write("Linear Iterations not displayed in the output file")
     solver_file.write('<BR> \n')
 
-    solver_file.write('<H4>Benchmark Run: out.240.JFNK</H4>')
+    solver_file.write('<H4>Benchmark Run: out.240.glide.JFNK</H4>')
     procttl_dd301b,nonlist_dd301b,avg2_dd301b,out_flag_dd301b,ndd301b_name,ldd301b_name,linear_flagb = \
-        VV_outprocess.jobprocess(perf_test + '/bench/dome240/' + data_dir + '/out.240.JFNK', 'domed301b')
+        VV_outprocess.jobprocess(perf_test + '/bench/dome240/' + data_dir + '/out.240.glide.JFNK', 'domed301b')
 
     solver_file.write("Number of Processors = " + str(procttl_dd301b[-1]) + "<BR>\n")
     solver_file.write("Number of Nonlinear Iterations = ")
@@ -193,12 +193,12 @@ def details500(solver_file,perf_test,data_dir):  # using data, fill the web page
 # JFNK gnu 9 proc
 
 # failure checking
-    failedt1 = VV_checks.failcheck(perf_test, '/dome500/' + data_dir + '/out.500.JFNK')
+    failedt1 = VV_checks.failcheck(perf_test, '/dome500/' + data_dir + '/out.500.glide.JFNK')
     failedt_list.append(failedt1)
 
-    solver_file.write('<H4>New Run: out.500.JFNK</H4>')
+    solver_file.write('<H4>New Run: out.500.glide.JFNK</H4>')
     procttl_dd301,nonlist_dd301,avg2_dd301,out_flag_dd301,ndd301_name,ldd301_name,linear_flag = \
-        VV_outprocess.jobprocess(perf_test + '/dome500/' + data_dir + '/out.500.JFNK', 'domed301')
+        VV_outprocess.jobprocess(perf_test + '/dome500/' + data_dir + '/out.500.glide.JFNK', 'domed301')
     
     solver_file.write("Number of Processors = " + str(procttl_dd301[-1]) + "<BR>\n")
     solver_file.write("Number of Nonlinear Iterations = ")
@@ -214,9 +214,9 @@ def details500(solver_file,perf_test,data_dir):  # using data, fill the web page
         solver_file.write("Linear Iterations not displayed in the output file")
     solver_file.write('<BR> \n')
 
-    solver_file.write('<H4>Benchmark Run: out.500.JFNK</H4>')
+    solver_file.write('<H4>Benchmark Run: out.500.glide.JFNK</H4>')
     procttl_dd301b,nonlist_dd301b,avg2_dd301b,out_flag_dd301b,ndd301b_name,ldd301b_name,linear_flagb = \
-        VV_outprocess.jobprocess(perf_test + '/bench/dome500/' + data_dir + '/out.500.JFNK', 'domed301b')
+        VV_outprocess.jobprocess(perf_test + '/bench/dome500/' + data_dir + '/out.500.glide.JFNK', 'domed301b')
 
     solver_file.write("Number of Processors = " + str(procttl_dd301b[-1]) + "<BR>\n")
     solver_file.write("Number of Nonlinear Iterations = ")
@@ -250,12 +250,12 @@ def details1000(solver_file,perf_test,data_dir):  # using data, fill the web pag
 # JFNK gnu 9 proc
 
 # failure checking
-    failedt1 = VV_checks.failcheck(perf_test, '/dome1000/' + data_dir + '/out.1000.JFNK')
+    failedt1 = VV_checks.failcheck(perf_test, '/dome1000/' + data_dir + '/out.1000.glide.JFNK')
     failedt_list.append(failedt1)
 
-    solver_file.write('<H4>New Run: out.1000.JFNK</H4>')
+    solver_file.write('<H4>New Run: out.1000.glide.JFNK</H4>')
     procttl_dd301,nonlist_dd301,avg2_dd301,out_flag_dd301,ndd301_name,ldd301_name,linear_flag = \
-        VV_outprocess.jobprocess(perf_test + '/dome1000/' + data_dir + '/out.1000.JFNK', 'domed301')
+        VV_outprocess.jobprocess(perf_test + '/dome1000/' + data_dir + '/out.1000.glide.JFNK', 'domed301')
     
     solver_file.write("Number of Processors = " + str(procttl_dd301[-1]) + "<BR>\n")
     solver_file.write("Number of Nonlinear Iterations = ")
@@ -271,9 +271,9 @@ def details1000(solver_file,perf_test,data_dir):  # using data, fill the web pag
         solver_file.write("Linear Iterations not displayed in the output file")
     solver_file.write('<BR> \n')
 
-    solver_file.write('<H4>Benchmark Run: out.1000.JFNK</H4>')
+    solver_file.write('<H4>Benchmark Run: out.1000.glide.JFNK</H4>')
     procttl_dd301b,nonlist_dd301b,avg2_dd301b,out_flag_dd301b,ndd301b_name,ldd301b_name,linear_flagb = \
-        VV_outprocess.jobprocess(perf_test + '/bench/dome1000/' + data_dir + '/out.1000.JFNK', 'domed301b')
+        VV_outprocess.jobprocess(perf_test + '/bench/dome1000/' + data_dir + '/out.1000.glide.JFNK', 'domed301b')
 
     solver_file.write("Number of Processors = " + str(procttl_dd301b[-1]) + "<BR>\n")
     solver_file.write("Number of Nonlinear Iterations = ")

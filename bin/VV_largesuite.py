@@ -20,35 +20,35 @@ def time_check(perf_test,dome60_flag,dome120_flag,dome240_flag,dome500_flag,dome
     flag = 0
 #dome60
     if dome60_flag == 1:
-        timing_path = perf_test + '/dome60/data/out.60.JFNK.timing'
+        timing_path = perf_test + '/dome60/data/out.60.glide.JFNK.timing'
         test = 'dome60'
         dictionary_large['dome60'] = VV_timing_check.timing_check(timing_path,flag,test)
     else:
         dictionary_large['dome60'] = 0
 #dome120
     if dome120_flag == 1:
-        timing_path = perf_test + '/dome120/data/out.120.JFNK.timing'
+        timing_path = perf_test + '/dome120/data/out.120.glide.JFNK.timing'
         test = 'dome120'
         dictionary_large['dome120'] = VV_timing_check.timing_check(timing_path,flag,test)
     else:
         dictionary_large['dome120'] = 0
 #dome240
     if dome240_flag == 1:
-        timing_path = perf_test + '/dome240/data/out.240.JFNK.timing'
+        timing_path = perf_test + '/dome240/data/out.240.glide.JFNK.timing'
         test = 'dome240'
         dictionary_large['dome240'] = VV_timing_check.timing_check(timing_path,flag,test)
     else:
         dictionary_large['dome240'] = 0
 #dome500
     if dome500_flag == 1:
-        timing_path = perf_test + '/dome500/data/out.500.JFNK.timing'
+        timing_path = perf_test + '/dome500/data/out.500.glide.JFNK.timing'
         test = 'dome500'
         dictionary_large['dome500'] = VV_timing_check.timing_check(timing_path,flag,test)
     else:
         dictionary_large['dome500'] = 0
 #dome1000
     if dome1000_flag == 1:
-        timing_path = perf_test + '/dome1000/data/out.1000.JFNK.timing'
+        timing_path = perf_test + '/dome1000/data/out.1000.glide.JFNK.timing'
         test = 'dome1000'
         dictionary_large['dome1000'] = VV_timing_check.timing_check(timing_path,flag,test)
     else:
@@ -136,7 +136,7 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_tim
             large_test_file.write('<TH ALIGN=LEFT><A HREF="dome60_timing.html">Timing Details</A>\n')
             large_test_file.write('<BR>\n')
             flag = 0
-            timing_path = perf_test + '/dome60/data/out.60.JFNK.timing'
+            timing_path = perf_test + '/dome60/data/out.60.glide.JFNK.timing'
             VV_timing.timing_table_current_run(dome60_time,timing_path,flag)
 
 # Time stamping
@@ -190,7 +190,7 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_tim
             large_test_file.write('<TH ALIGN=LEFT><A HREF="dome120_timing.html">Timing Details</A>\n')
             large_test_file.write('<BR>\n')
             flag = 0
-            timing_path = perf_test + '/dome120/data/out.120.JFNK.timing'
+            timing_path = perf_test + '/dome120/data/out.120.glide.JFNK.timing'
             VV_timing.timing_table_current_run(dome120_time,timing_path,flag)
 
 # Time stamping
@@ -244,7 +244,7 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_tim
             large_test_file.write('<TH ALIGN=LEFT><A HREF="dome240_timing.html">Timing Details</A>\n')
             large_test_file.write('<BR>\n')
             flag = 0
-            timing_path = perf_test + '/dome240/data/out.240.JFNK.timing'
+            timing_path = perf_test + '/dome240/data/out.240.glide.JFNK.timing'
             VV_timing.timing_table_current_run(dome240_time,timing_path,flag)
 
 # Time stamping
@@ -298,7 +298,7 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_tim
             large_test_file.write('<TH ALIGN=LEFT><A HREF="dome500_timing.html">Timing Details</A>\n')
             large_test_file.write('<BR>\n')
             flag = 0
-            timing_path = perf_test + '/dome500/data/out.500.JFNK.timing'
+            timing_path = perf_test + '/dome500/data/out.500.glide.JFNK.timing'
             VV_timing.timing_table_current_run(dome500_time,timing_path,flag)
 
 # Time stamping
@@ -352,7 +352,7 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_tim
             large_test_file.write('<TH ALIGN=LEFT><A HREF="dome1000_timing.html">Timing Details</A>\n')
             large_test_file.write('<BR>\n')
             flag = 0
-            timing_path = perf_test + '/dome1000/data/out.1000.JFNK.timing'
+            timing_path = perf_test + '/dome1000/data/out.1000.glide.JFNK.timing'
             VV_timing.timing_table_current_run(dome1000_time,timing_path,flag)
 
 # Time stamping
