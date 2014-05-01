@@ -20,58 +20,66 @@ def time_check(perf_test,dome60_flag,dome120_flag,dome240_flag,dome500_flag,dome
     flag = 0
 #dome60
     if dome60_flag == 1:
-        timing_path = perf_test + '/dome60/data/out.60.glide.JFNK.timing'
+        timing_path_10runs = perf_test + '/dome60/data/out.60.glide.JFNK.timing'
+        current_run_path = perf_test + '/dome60/data/out.60.glissade.timing'
         test = 'dome60'
-        dictionary_large['dome60'] = VV_timing_check.timing_check(timing_path,flag,test)
+        dictionary_large['dome60'] = VV_timing_check.timing_check(timing_path_10runs,current_run_path,flag,test)
     else:
         dictionary_large['dome60'] = 0
 #dome120
     if dome120_flag == 1:
-        timing_path = perf_test + '/dome120/data/out.120.glide.JFNK.timing'
+        timing_path_10runs = perf_test + '/dome120/data/out.120.glide.JFNK.timing'
+        current_run_path = perf_test + '/dome120/data/out.120.glissade.timing'
         test = 'dome120'
-        dictionary_large['dome120'] = VV_timing_check.timing_check(timing_path,flag,test)
+        dictionary_large['dome120'] = VV_timing_check.timing_check(timing_path_10runs,current_run_path,flag,test)
     else:
         dictionary_large['dome120'] = 0
 #dome240
     if dome240_flag == 1:
-        timing_path = perf_test + '/dome240/data/out.240.glide.JFNK.timing'
+        timing_path_10runs = perf_test + '/dome240/data/out.240.glide.JFNK.timing'
+        current_run_path = perf_test + '/dome240/data/out.240.glissade.timing'
         test = 'dome240'
-        dictionary_large['dome240'] = VV_timing_check.timing_check(timing_path,flag,test)
+        dictionary_large['dome240'] = VV_timing_check.timing_check(timing_path_10runs,current_run_path,flag,test)
     else:
         dictionary_large['dome240'] = 0
 #dome500
     if dome500_flag == 1:
-        timing_path = perf_test + '/dome500/data/out.500.glide.JFNK.timing'
+        timing_path_10runs = perf_test + '/dome500/data/out.500.glide.JFNK.timing'
+        current_run_path = perf_test + '/dome500/data/out.500.glissade.timing'
         test = 'dome500'
-        dictionary_large['dome500'] = VV_timing_check.timing_check(timing_path,flag,test)
+        dictionary_large['dome500'] = VV_timing_check.timing_check(timing_path_10runs,current_run_path,flag,test)
     else:
         dictionary_large['dome500'] = 0
 #dome1000
     if dome1000_flag == 1:
-        timing_path = perf_test + '/dome1000/data/out.1000.glide.JFNK.timing'
+        timing_path_10runs = perf_test + '/dome1000/data/out.1000.glide.JFNK.timing'
+        current_run_path = perf_test + '/dome1000/data/out.1000.glissade.timing'
         test = 'dome1000'
-        dictionary_large['dome1000'] = VV_timing_check.timing_check(timing_path,flag,test)
+        dictionary_large['dome1000'] = VV_timing_check.timing_check(timing_path_10runs,current_run_path,flag,test)
     else:
         dictionary_large['dome1000'] = 0
 #gis4km
     if gis_4km_flag == 1:
-        timing_path = perf_test + '/gis_4km/data/out.gis.4km.glissade.timing'
+        timing_path_10runs = perf_test + '/gis_4km/data/out.gis.4km.albany.timing'
+        current_run_path = perf_test + '/gis_4km/data/out.gis.4km.albany.n256_10timesteps.timing'
         test = 'gis4km'
-        dictionary_large['gis4km'] = VV_timing_check.timing_check(timing_path,flag,test)
+        dictionary_large['gis4km'] = VV_timing_check.timing_check(timing_path_10runs,current_run_path,flag,test)
     else:
         dictionary_large['gis4km'] = 0
 #gis2km
     if gis_2km_flag == 1:
-        timing_path = perf_test + '/gis_2km/data/out.gis.2km.glissade.timing'
+        timing_path_10runs = perf_test + '/gis_2km/data/out.gis.2km.glissade.timing'
+        current_run_path = perf_test + '/gis_4km/data/out.gis.4km.glissade.timing'
         test = 'gis2km'
-        dictionary_large['gis2km'] = VV_timing_check.timing_check(timing_path,flag,test)
+        dictionary_large['gis2km'] = VV_timing_check.timing_check(timing_path_10runs,current_run_path,flag,test)
     else:
         dictionary_large['gis2km'] = 0
 #gis1km
     if gis_1km_flag == 1:
-        timing_path = perf_test + '/gis_1km/data/out.gis.1km.glissade.timing'
+        timing_path_10runs = perf_test + '/gis_1km/data/out.gis.1km.glissade.timing'
+        current_run_path = perf_test + '/gis_4km/data/out.gis.4km.albany.timing'
         test = 'gis1km'
-        dictionary_large['gis1km'] = VV_timing_check.timing_check(timing_path,flag,test)
+        dictionary_large['gis1km'] = VV_timing_check.timing_check(timing_path_10runs,current_run_path,flag,test)
     else:
         dictionary_large['gis1km'] = 0
     return dictionary_large
@@ -126,18 +134,19 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_tim
             xml_path = perf_test + '/dome60/trilinosOptions.xml'
             bench_xml_path = perf_test + '/bench/dome60/trilinosOptions.xml'
             if os.path.isdir(perf_test + '/dome60/configure_files/') == True: 
-                configure_path = perf_test + '/dome60/configure_files/dome.60.JFNK.trilinos.config'
+                configure_path = perf_test + '/dome60/configure_files/dome.60.glissade.config'
                 bench_configure_path = perf_test + '/bench/dome60/configure_files/dome.60.JFNK.trilinos.config'
             else:
-                configure_path = perf_test + '/dome60/dome.60.JFNK.trilinos.config'
+                configure_path = perf_test + '/dome60/dome.60.glissade.config'
                 bench_configure_path = perf_test + '/bench/dome60/dome.60.JFNK.trilinos.config'
             VV_utilities.confxml(dome60_case,configure_path,bench_configure_path,xml_path,bench_xml_path)
 
             large_test_file.write('<TH ALIGN=LEFT><A HREF="dome60_timing.html">Timing Details</A>\n')
             large_test_file.write('<BR>\n')
             flag = 0
-            timing_path = perf_test + '/dome60/data/out.60.glide.JFNK.timing'
-            VV_timing.timing_table_current_run(dome60_time,timing_path,flag)
+            timing_path_10runs = perf_test + '/dome60/data/out.60.glide.JFNK.timing'
+            current_run_path = perf_test + '/dome60/data/out.60.glissade.timing'
+            VV_timing.timing_table_current_run(dome60_time,timing_path_10runs,current_run_path,flag,)
 
 # Time stamping
         strrand = ''
@@ -180,18 +189,19 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_tim
             xml_path = perf_test + '/dome120/trilinosOptions.xml'
             bench_xml_path = perf_test + '/bench/dome120/trilinosOptions.xml'
             if os.path.isdir(perf_test + '/dome120/configure_files/') == True: 
-                configure_path = perf_test + '/dome120/configure_files/dome.120.JFNK.trilinos.config'
+                configure_path = perf_test + '/dome120/configure_files/dome.120.glissade.config'
                 bench_configure_path = perf_test + '/bench/dome120/configure_files/dome.120.JFNK.trilinos.config'
             else:
-                configure_path = perf_test + '/dome120/dome.120.JFNK.trilinos.config'
+                configure_path = perf_test + '/dome120/dome.120.glissade.config'
                 bench_configure_path = perf_test + '/bench/dome120/dome.120.JFNK.trilinos.config'
             VV_utilities.confxml(dome120_case,configure_path,bench_configure_path,xml_path,bench_xml_path)
 
             large_test_file.write('<TH ALIGN=LEFT><A HREF="dome120_timing.html">Timing Details</A>\n')
             large_test_file.write('<BR>\n')
             flag = 0
-            timing_path = perf_test + '/dome120/data/out.120.glide.JFNK.timing'
-            VV_timing.timing_table_current_run(dome120_time,timing_path,flag)
+            timing_path_10runs = perf_test + '/dome120/data/out.120.glide.JFNK.timing'
+            current_run_path = perf_test + '/dome120/data/out.120.glissade.timing'
+            VV_timing.timing_table_current_run(dome120_time,timing_path_10runs,current_run_path,flag)
 
 # Time stamping
         strrand = ''
@@ -234,18 +244,19 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_tim
             xml_path = perf_test + '/dome240/trilinosOptions.xml'
             bench_xml_path = perf_test + '/bench/dome240/trilinosOptions.xml'
             if os.path.isdir(perf_test + '/dome240/configure_files/') == True: 
-                configure_path = perf_test + '/dome240/configure_files/dome.240.JFNK.trilinos.config'
+                configure_path = perf_test + '/dome240/configure_files/dome.240.glissade.config'
                 bench_configure_path = perf_test + '/bench/dome240/configure_files/dome.240.JFNK.trilinos.config'
             else:
-                configure_path = perf_test + '/dome240/dome.240.JFNK.trilinos.config'
+                configure_path = perf_test + '/dome240/dome.240.glissade.config'
                 bench_configure_path = perf_test + '/bench/dome240/dome.240.JFNK.trilinos.config'
             VV_utilities.confxml(dome240_case,configure_path,bench_configure_path,xml_path,bench_xml_path)
 
             large_test_file.write('<TH ALIGN=LEFT><A HREF="dome240_timing.html">Timing Details</A>\n')
             large_test_file.write('<BR>\n')
             flag = 0
-            timing_path = perf_test + '/dome240/data/out.240.glide.JFNK.timing'
-            VV_timing.timing_table_current_run(dome240_time,timing_path,flag)
+            timing_path_10runs = perf_test + '/dome240/data/out.240.glide.JFNK.timing'
+            current_run_path = perf_test + '/dome240/data/out.240.glissade.timing'
+            VV_timing.timing_table_current_run(dome240_time,timing_path_10runs,current_run_path,flag)
 
 # Time stamping
         strrand = ''
@@ -288,18 +299,19 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_tim
             xml_path = perf_test + '/dome500/trilinosOptions.xml'
             bench_xml_path = perf_test + '/bench/dome500/trilinosOptions.xml'
             if os.path.isdir(perf_test + '/dome500/configure_files/') == True: 
-                configure_path = perf_test + '/dome500/configure_files/dome.500.JFNK.trilinos.config'
+                configure_path = perf_test + '/dome500/configure_files/dome.500.glissade.config'
                 bench_configure_path = perf_test + '/bench/dome500/configure_files/dome.500.JFNK.trilinos.config'
             else:
-                configure_path = perf_test + '/dome500/dome.500.JFNK.trilinos.config'
+                configure_path = perf_test + '/dome500/dome.500.glissade.config'
                 bench_configure_path = perf_test + '/bench/dome500/dome.500.JFNK.trilinos.config'
             VV_utilities.confxml(dome500_case,configure_path,bench_configure_path,xml_path,bench_xml_path)
             
             large_test_file.write('<TH ALIGN=LEFT><A HREF="dome500_timing.html">Timing Details</A>\n')
             large_test_file.write('<BR>\n')
             flag = 0
-            timing_path = perf_test + '/dome500/data/out.500.glide.JFNK.timing'
-            VV_timing.timing_table_current_run(dome500_time,timing_path,flag)
+            timing_path_10runs = perf_test + '/dome500/data/out.500.glide.JFNK.timing'
+            current_run_path = perf_test + '/dome500/data/out.500.glissade.timing'
+            VV_timing.timing_table_current_run(dome500_time,timing_path_10runs,current_run_path,flag)
 
 # Time stamping
         strrand = ''
@@ -342,18 +354,19 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_tim
             xml_path = perf_test + '/dome1000/trilinosOptions.xml'
             bench_xml_path = perf_test + '/bench/dome1000/trilinosOptions.xml'
             if os.path.isdir(perf_test + '/dome1000/configure_files/') == True: 
-                configure_path = perf_test + '/dome1000/configure_files/dome.1000.JFNK.trilinos.config'
+                configure_path = perf_test + '/dome1000/configure_files/dome.1000.glissade.config'
                 bench_configure_path = perf_test + '/bench/dome1000/configure_files/dome.1000.JFNK.trilinos.config'
             else:
-                configure_path = perf_test + '/dome1000/dome.1000.JFNK.trilinos.config'
+                configure_path = perf_test + '/dome1000/dome.1000.glissade.config'
                 bench_configure_path = perf_test + '/bench/dome1000/dome.1000.JFNK.trilinos.config'
             VV_utilities.confxml(dome1000_case,configure_path,bench_configure_path,xml_path,bench_xml_path)
 
             large_test_file.write('<TH ALIGN=LEFT><A HREF="dome1000_timing.html">Timing Details</A>\n')
             large_test_file.write('<BR>\n')
             flag = 0
-            timing_path = perf_test + '/dome1000/data/out.1000.glide.JFNK.timing'
-            VV_timing.timing_table_current_run(dome1000_time,timing_path,flag)
+            timing_path_10runs = perf_test + '/dome1000/data/out.1000.glide.JFNK.timing'
+            current_run_path = perf_test + '/dome1000/data/out.1000.glissade.timing'
+            VV_timing.timing_table_current_run(dome1000_time,timing_path_10runs,current_run_path,flag)
 
 # Time stamping
         strrand = ''
@@ -391,18 +404,19 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_tim
             xml_path = perf_test + '/gis_4km/trilinosOptions.xml'
             bench_xml_path = perf_test + '/bench/gis_4km/trilinosOptions.xml'
             if os.path.isdir(perf_test + '/gis_4km/configure_files/') == True: 
-                configure_path = perf_test + '/gis_4km/configure_files/gis.4km.glissade.config'
+                configure_path = perf_test + '/gis_4km/configure_files/gis.4km.albany_10timesteps.config'
                 bench_configure_path = perf_test + '/bench/gis_4km/configure_files/gis.4km.glissade.config'
             else:
-                configure_path = perf_test + '/gis_4km/gis.4km.glissade.config'
-                bench_configure_path = perf_test + '/bench/gis_4km/gis.4km.glissade.config'
+                configure_path = perf_test + '/gis_4km/gis.4km.albany_10timesteps.config'
+                bench_configure_path = perf_test + '/bench/gis_4km/gis.4km.albany_10timesteps.config'
             VV_utilities.confxml(gis4km_case,configure_path,bench_configure_path,xml_path,bench_xml_path)
 
             large_test_file.write('<TH ALIGN=LEFT><A HREF="gis4km_timing.html">Timing Details</A>\n')
             large_test_file.write('<BR>\n')
-            flag = 1
-            timing_path = perf_test + '/gis_4km/data/out.gis.4km.glissade.timing'
-            VV_timing.timing_table_current_run(gis4km_time,timing_path,flag)
+            flag = 0
+            timing_path_10runs = perf_test + '/gis_4km/data/out.gis.4km.albany.timing'
+            current_run_path = perf_test + '/gis_4km/data/out.gis.4km.albany.n256_10timesteps.timing'
+            VV_timing.timing_table_current_run(gis4km_time,timing_path_10runs,current_run_path,flag)
             
             #large_test_file.write('<TH ALIGN=LEFT><A HREF="gis4km_plot.html">Plots</A>\n')
             #large_test_file.write('<BR>\n')
@@ -457,9 +471,10 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_tim
 
             large_test_file.write('<TH ALIGN=LEFT><A HREF="gis2km_timing.html">Timing Details</A>\n')
             large_test_file.write('<BR>\n')
-            flag = 1
-            timing_path = perf_test + '/gis_2km/data/out.gis.2km.glissade.timing'
-            VV_timing.timing_table_current_run(gis2km_time,timing_path,flag)
+            flag = 0
+            timing_path_10runs = perf_test + '/gis_2km/data/out.gis.2km.albany.timing'
+            current_run_path = perf_test + '/gis_2km/data/out.gis.2km.albany.timing'
+            VV_timing.timing_table_current_run(gis2km_time,timing_path_10runs,current_run_path,flag)
             
             #large_test_file.write('<TH ALIGN=LEFT><A HREF="gis2km_plot.html">Plots</A>\n')
             #large_test_file.write('<BR>\n')
@@ -514,9 +529,10 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_tim
 
             large_test_file.write('<TH ALIGN=LEFT><A HREF="gis1km_timing.html">Timing Details</A>\n')
             large_test_file.write('<BR>\n')
-            flag = 1
-            timing_path = perf_test + '/gis_1km/data/out.gis.1km.glissade.timing'
-            VV_timing.timing_table_current_run(gis1km_time,timing_path,flag)
+            flag = 0
+            timing_path_10runs = perf_test + '/gis_1km/data/out.gis.1km.albany.timing'
+            current_run_path = perf_test + '/gis_1km/data/out.gis.1km.albany.timing'
+            VV_timing.timing_table_current_run(gis1km_time,timing_path_10runs,current_run_path,flag)
             
             #large_test_file.write('<TH ALIGN=LEFT><A HREF="gis1km_plot.html">Plots</A>\n')
             #large_test_file.write('<BR>\n')

@@ -51,7 +51,7 @@ def timing_averages(file,flag):
         sg_avgs.append(min(list))
         return sg_avgs
 
-def timing_check(file,flag,test):
+def timing_check(file,current,flag,test):
     if flag == 0:
         #check if 10 timing files exist, otherwise can't run timing
         t_flag = []
@@ -63,7 +63,7 @@ def timing_check(file,flag,test):
                 t_flag.append(1)
 
         #check for current run timing file
-        if os.path.isdir(file) == True:
+        if os.path.isdir(current) == True:
             t_flag.append(0)
         else:
             t_flag.append(1)
@@ -76,7 +76,7 @@ def timing_check(file,flag,test):
             sg_avgs = timing_averages(file,flag)
 
             #gather timing data from current run
-            file1 = file + '/seacism_timing_stats'
+            file1 = current + '/seacism_timing_stats'
             sg_avg = timing(file1,flag)
             sg_avgs.append(sg_avg)
 
