@@ -160,7 +160,7 @@ def timing_table_current_run(timing_file,file,current,flag):
         if diff > 0:
             timing_file.write('<TD><font color="red">' + str(list[-1]) + '</font></TD>')
         elif diff2 > 0:
-            timing_file.write('<TD><font color="blue">' + str(list[-1]) + '</font></TD>')
+            timing_file.write('<TD><font color="#4CC417">' + str(list[-1]) + '</font></TD>')
         else:
             timing_file.write('<TD>' + str(list[-1]) + '</TD>')
         timing_file.write('</TR>\n')
@@ -180,7 +180,7 @@ def timing_table_current_run(timing_file,file,current,flag):
         if diff > 0:
             timing_file.write('<TD><font color="red">' + str(list[-1]) + '</font></TD>')
         elif diff2 > 0:
-            timing_file.write('<TD><font color="blue">' + str(list[-1]) + '</font></TD>')
+            timing_file.write('<TD><font color="#4CC417">' + str(list[-1]) + '</font></TD>')
         else:
             timing_file.write('<TD>' + str(list[-1]) + '</TD>')
         timing_file.write('</TR>\n')
@@ -200,7 +200,7 @@ def timing_table_current_run(timing_file,file,current,flag):
         if diff > 0:
             timing_file.write('<TD><font color="red">' + str(list[-1]) + '</font></TD>')
         elif diff2 > 0:
-            timing_file.write('<TD><font color="blue">' + str(list[-1]) + '</font></TD>')
+            timing_file.write('<TD><font color="#4CC417">' + str(list[-1]) + '</font></TD>')
         else:
             timing_file.write('<TD>' + str(list[-1]) + '</TD>')
         timing_file.write('</TR>\n')
@@ -220,13 +220,13 @@ def timing_table_current_run(timing_file,file,current,flag):
         if diff > 0:
             timing_file.write('<TD><font color="red">' + str(list[-1]) + '</font></TD>')
         elif diff2 > 0:
-            timing_file.write('<TD><font color="blue">' + str(list[-1]) + '</font></TD>')
+            timing_file.write('<TD><font color="#4CC417">' + str(list[-1]) + '</font></TD>')
         else:
             timing_file.write('<TD>' + str(list[-1]) + '</TD>')
         timing_file.write('</TR>\n')
 
         timing_file.write('</TABLE>\n')
-        timing_file.write('<H4><font color="blue">Less than the Min</font></H4>')
+        timing_file.write('<H4><font color="#4CC417">Less than the Min</font></H4>')
         timing_file.write('<H4><font color="red">Greater than the Max</font></H4>')
         
         timing_file.write('<BR>\n')

@@ -138,6 +138,7 @@ def web(glide_flag,descript_file,test_file, \
             xml_path = reg_test + '/dome30/diagnostic/trilinosOptions.xml'
             bench_xml_path = reg_test + '/bench/dome30/diagnostic/trilinosOptions.xml'
             if glide_flag == 1:
+                c_flag = 1
                 if os.path.isdir(reg_test + '/dome30/diagnostic/configure_files/') == True:
                     configure_path = reg_test + '/dome30/diagnostic/configure_files/dome.30.JFNK.trilinos.config.1'
                     bench_configure_path = reg_test + '/bench/dome30/diagnostic/configure_files/dome.30.JFNK.trilinos.config.1'
@@ -145,13 +146,14 @@ def web(glide_flag,descript_file,test_file, \
                     configure_path = reg_test + '/dome30/diagnostic/dome.30.JFNK.trilinos.config.1'
                     bench_configure_path = reg_test + '/bench/dome30/diagnostic/dome.30.JFNK.trilinos.config.1'
             else:
+                c_flag = 0
                 if os.path.isdir(reg_test + '/dome30/diagnostic/configure_files/') == True:
                     configure_path = reg_test + '/dome30/diagnostic/configure_files/dome.30.glissade.config.1'
                     bench_configure_path = reg_test + '/bench/dome30/diagnostic/configure_files/dome.30.glissade.config.1'
                 else:
                     configure_path = reg_test + '/dome30/diagnostic/dome.30.glissade.config.1'
                     bench_configure_path = reg_test + '/bench/dome30/diagnostic/dome.30.glissade.config.1'
-            VV_utilities.confxml(dome30d_case,configure_path,bench_configure_path,xml_path,bench_xml_path)
+            VV_utilities.confxml(dome30d_case,configure_path,bench_configure_path,xml_path,bench_xml_path,c_flag)
 
             if glide_flag == 1:
                 test_file.write('<TH ALIGN=LEFT><A HREF="dome30d_plot.html">Plots</A>\n')
@@ -212,6 +214,7 @@ def web(glide_flag,descript_file,test_file, \
             xml_path = reg_test + '/dome30/evolving/trilinosOptions.xml'
             bench_xml_path = reg_test + '/bench/dome30/evolving/trilinosOptions.xml'
             if glide_flag == 1:
+                c_flag = 1
                 if os.path.isdir(reg_test + '/dome30/evolving/configure_files/') == True:
                     configure_path = reg_test + '/dome30/evolving/configure_files/dome.30.JFNK.trilinos.config.15'
                     bench_configure_path = reg_test + '/bench/dome30/evolving/configure_files/dome.30.JFNK.trilinos.config.15'
@@ -219,13 +222,14 @@ def web(glide_flag,descript_file,test_file, \
                     configure_path = reg_test + '/dome30/evolving/dome.30.JFNK.trilinos.config.15'
                     bench_configure_path = reg_test + '/bench/dome30/evolving/dome.30.JFNK.trilinos.config.15'
             else:
+                c_flag = 0
                 if os.path.isdir(reg_test + '/dome30/evolving/configure_files/') == True:
                     configure_path = reg_test + '/dome30/evolving/configure_files/dome.30.glissade.config.15'
                     bench_configure_path = reg_test + '/bench/dome30/evolving/configure_files/dome.30.JFNK.trilinos.config.15'
                 else:
                     configure_path = reg_test + '/dome30/evolving/dome.30.glissade.config.15'
                     bench_configure_path = reg_test + '/bench/dome30/evolving/dome.30.JFNK.trilinos.config.15'
-            VV_utilities.confxml(dome30e_case,configure_path,bench_configure_path,xml_path,bench_xml_path)
+            VV_utilities.confxml(dome30e_case,configure_path,bench_configure_path,xml_path,bench_xml_path,c_flag)
 
             if glide_flag == 1:
                 test_file.write('<TH ALIGN=LEFT><A HREF="dome30e_plot.html">Plots</A>\n')
@@ -285,6 +289,7 @@ def web(glide_flag,descript_file,test_file, \
             xml_path = reg_test + '/circular-shelf/trilinosOptions.xml'
             bench_xml_path = reg_test + '/bench/circular-shelf/trilinosOptions.xml'
             if glide_flag == 1:
+                c_flag = 1
                 if os.path.isdir(reg_test + '/circular-shelf/configure_files/') == True:
                     configure_path = reg_test + '/circular-shelf/configure_files/circular-shelf.JFNK.config'
                     bench_configure_path = reg_test + '/bench/circular-shelf/configure_files/circular-shelf.JFNK.config'
@@ -292,13 +297,14 @@ def web(glide_flag,descript_file,test_file, \
                     configure_path = reg_test + '/circular-shelf/circular-shelf.JFNK.config'
                     bench_configure_path = reg_test + '/bench/circular-shelf/circular-shelf.JFNK.config'
             else:
+                c_flag = 0
                 if os.path.isdir(reg_test + '/circular-shelf/configure_files/') == True:
                     configure_path = reg_test + '/circular-shelf/configure_files/circular-shelf.glissade.config'
                     bench_configure_path = reg_test + '/bench/circular-shelf/configure_files/circular-shelf.JFNK.config'
                 else:
                     configure_path = reg_test + '/circular-shelf/circular-shelf.glissade.config'
                     bench_configure_path = reg_test + '/bench/circular-shelf/circular-shelf.JFNK.config'
-            VV_utilities.confxml(circ_case,configure_path,bench_configure_path,xml_path,bench_xml_path)
+            VV_utilities.confxml(circ_case,configure_path,bench_configure_path,xml_path,bench_xml_path,c_flag)
 
             if glide_flag == 1:
                 test_file.write('<TH ALIGN=LEFT><A HREF="circ_plot.html">Plots</A>\n')
@@ -355,6 +361,7 @@ def web(glide_flag,descript_file,test_file, \
             xml_path = reg_test + '/confined-shelf/trilinosOptions.xml'
             bench_xml_path = reg_test + '/bench/confined-shelf/trilinosOptions.xml'
             if glide_flag == 1:
+                c_flag = 1
                 if os.path.isdir(reg_test + '/confined-shelf/configure_files/') == True:
                     configure_path = reg_test + '/confined-shelf/configure_files/confined-shelf.JFNK.config'
                     bench_configure_path = reg_test + '/bench/confined-shelf/configure_files/confined-shelf.JFNK.config'
@@ -362,13 +369,14 @@ def web(glide_flag,descript_file,test_file, \
                     configure_path = reg_test + '/confined-shelf/confined-shelf.JFNK.config'
                     bench_configure_path = reg_test + '/bench/confined-shelf/confined-shelf.JFNK.config'
             else:
+                c_flag = 0
                 if os.path.isdir(reg_test + '/confined-shelf/configure_files/') == True:
                     configure_path = reg_test + '/confined-shelf/configure_files/confined-shelf.glissade.config'
                     bench_configure_path = reg_test + '/bench/confined-shelf/configure_files/confined-shelf.JFNK.config'
                 else:
                     configure_path = reg_test + '/confined-shelf/confined-shelf.glissade.config'
                     bench_configure_path = reg_test + '/bench/confined-shelf/confined-shelf.JFNK.config'
-            VV_utilities.confxml(conf_case,configure_path,bench_configure_path,xml_path,bench_xml_path)
+            VV_utilities.confxml(conf_case,configure_path,bench_configure_path,xml_path,bench_xml_path,c_flag)
 
             if glide_flag == 1:
                 test_file.write('<TH ALIGN=LEFT><A HREF="conf_plot.html">Plots</A>\n')
@@ -425,6 +433,7 @@ def web(glide_flag,descript_file,test_file, \
             xml_path = reg_test + '/ismip-hom-a/80km/trilinosOptions.xml'
             bench_xml_path = reg_test + '/bench/ismip-hom-a/80km/trilinosOptions.xml'
             if glide_flag == 1:
+                c_flag = 1
                 if os.path.isdir(reg_test + '/ismip-hom-a/80km/configure_files/') == True:
                     configure_path = reg_test + '/ismip-hom-a/80km/configure_files/ishom.a.80km.JFNK.trilinos.config'
                     bench_configure_path = reg_test + '/bench/ismip-hom-a/80km/configure_files/ishom.a.80km.JFNK.trilinos.config'
@@ -432,13 +441,14 @@ def web(glide_flag,descript_file,test_file, \
                     configure_path = reg_test + '/ismip-hom-a/80km/ishom.a.80km.JFNK.trilinos.config'
                     bench_configure_path = reg_test + '/bench/ismip-hom-a/80km/ishom.a.80km.JFNK.trilinos.config'
             else:
+                c_flag = 0
                 if os.path.isdir(reg_test + '/ismip-hom-a/80km/configure_files/') == True:
                     configure_path = reg_test + '/ismip-hom-a/80km/configure_files/ishom.a.80km.glissade.1.config'
                     bench_configure_path = reg_test + '/bench/ismip-hom-a/80km/configure_files/ishom.a.80km.JFNK.trilinos.config'
                 else:
                     configure_path = reg_test + '/ismip-hom-a/80km/ishom.a.80km.glissade.1.config'
                     bench_configure_path = reg_test + '/bench/ismip-hom-a/80km/ishom.a.80km.JFNK.trilinos.config'
-            VV_utilities.confxml(ishoma80_case,configure_path,bench_configure_path,xml_path,bench_xml_path)
+            VV_utilities.confxml(ishoma80_case,configure_path,bench_configure_path,xml_path,bench_xml_path,c_flag)
 
             if glide_flag == 1:
                 test_file.write('<TH ALIGN=LEFT><A HREF="ishoma80_plot.html">Plots</A>\n')
@@ -495,6 +505,7 @@ def web(glide_flag,descript_file,test_file, \
             xml_path = reg_test + '/ismip-hom-a/20km/trilinosOptions.xml'
             bench_xml_path = reg_test + '/bench/ismip-hom-a/20km/trilinosOptions.xml'
             if glide_flag == 1:
+                c_flag = 1
                 if os.path.isdir(reg_test + '/ismip-hom-a/20km/configure_files/') == True:
                     configure_path = reg_test + '/ismip-hom-a/20km/configure_files/ishom.a.20km.JFNK.trilinos.config'
                     bench_configure_path = reg_test + '/bench/ismip-hom-a/20km/configure_files/ishom.a.20km.JFNK.trilinos.config'
@@ -502,13 +513,14 @@ def web(glide_flag,descript_file,test_file, \
                     configure_path = reg_test + '/ismip-hom-a/20km/ishom.a.20km.JFNK.trilinos.config'
                     bench_configure_path = reg_test + '/bench/ismip-hom-a/20km/ishom.a.20km.JFNK.trilinos.config'
             else:
+                c_flag = 0
                 if os.path.isdir(reg_test + '/ismip-hom-a/20km/configure_files/') == True:
                     configure_path = reg_test + '/ismip-hom-a/20km/configure_files/ishom.a.20km.glissade.1.config'
                     bench_configure_path = reg_test + '/bench/ismip-hom-a/20km/configure_files/ishom.a.20km.JFNK.trilinos.config'
                 else:
                     configure_path = reg_test + '/ismip-hom-a/20km/ishom.a.20km.glissade.1.config'
                     bench_configure_path = reg_test + '/bench/ismip-hom-a/20km/ishom.a.20km.JFNK.trilinos.config'
-            VV_utilities.confxml(ishoma20_case,configure_path,bench_configure_path,xml_path,bench_xml_path)
+            VV_utilities.confxml(ishoma20_case,configure_path,bench_configure_path,xml_path,bench_xml_path,c_flag)
 
             if glide_flag == 1:
                 test_file.write('<TH ALIGN=LEFT><A HREF="ishoma20_plot.html">Plots</A>\n')
@@ -564,6 +576,7 @@ def web(glide_flag,descript_file,test_file, \
                 xml_path = reg_test + '/ismip-hom-c/80km/trilinosOptions.xml'
                 bench_xml_path = reg_test + '/bench/ismip-hom-c/80km/trilinosOptions.xml'
                 if glide_flag == 1:
+                    c_flag = 1
                     if os.path.isdir(reg_test + '/ismip-hom-c/80km/configure_files/') == True:
                         configure_path = reg_test + '/ismip-hom-c/80km/configure_files/ishom.c.80km.JFNK.trilinos.config'
                         bench_configure_path = reg_test + '/bench/ismip-hom-c/80km/configure_files/ishom.c.80km.JFNK.trilinos.config'
@@ -571,13 +584,14 @@ def web(glide_flag,descript_file,test_file, \
                         configure_path = reg_test + '/ismip-hom-c/80km/ishom.c.80km.JFNK.trilinos.config'
                         bench_configure_path = reg_test + '/bench/ismip-hom-c/80km/ishom.c.80km.JFNK.trilinos.config'
                 else:
+                    c_flag = 0
                     if os.path.isdir(reg_test + '/ismip-hom-c/80km/configure_files/') == True:
                         configure_path = reg_test + '/ismip-hom-c/80km/configure_files/ishom.c.80km.glissade.1.config'
                         bench_configure_path = reg_test + '/bench/ismip-hom-c/80km/configure_files/ishom.c.80km.JFNK.trilinos.config'
                     else:
                         configure_path = reg_test + '/ismip-hom-c/80km/ishom.c.80km.glissade.1.config'
                         bench_configure_path = reg_test + '/bench/ismip-hom-c/80km/ishom.c.80km.JFNK.trilinos.config'
-                VV_utilities.confxml(ishomc80_case,configure_path,bench_configure_path,xml_path,bench_xml_path)
+                VV_utilities.confxml(ishomc80_case,configure_path,bench_configure_path,xml_path,bench_xml_path,c_flag)
 
                 if glide_flag == 1:
                     test_file.write('<TH ALIGN=LEFT><A HREF="ishomc80_plot.html">Plots</A>\n')
@@ -633,6 +647,7 @@ def web(glide_flag,descript_file,test_file, \
                 xml_path = reg_test + '/ismip-hom-c/20km/trilinosOptions.xml'
                 bench_xml_path = reg_test + '/bench/ismip-hom-c/20km/trilinosOptions.xml'
                 if glide_flag == 1:
+                    c_flag = 1
                     if os.path.isdir(reg_test + '/ismip-hom-c/20km/configure_files/') == True:
                         configure_path = reg_test + '/ismip-hom-c/20km/configure_files/ishom.c.20km.JFNK.trilinos.config'
                         bench_configure_path = reg_test + '/bench/ismip-hom-c/20km/configure_files/ishom.c.20km.JFNK.trilinos.config'
@@ -640,13 +655,14 @@ def web(glide_flag,descript_file,test_file, \
                         configure_path = reg_test + '/ismip-hom-c/20km/ishom.c.20km.JFNK.trilinos.config'
                         bench_configure_path = reg_test + '/bench/ismip-hom-c/20km/ishom.c.20km.JFNK.trilinos.config'
                 else:
+                    c_flag = 0
                     if os.path.isdir(reg_test + '/ismip-hom-c/20km/configure_files/') == True:
                         configure_path = reg_test + '/ismip-hom-c/20km/configure_files/ishom.c.20km.glissade.1.config'
                         bench_configure_path = reg_test + '/bench/ismip-hom-c/20km/configure_files/ishom.c.20km.JFNK.trilinos.config'
                     else:
                         configure_path = reg_test + '/ismip-hom-c/20km/ishom.c.20km.glissade.1.config'
                         bench_configure_path = reg_test + '/bench/ismip-hom-c/20km/ishom.c.20km.JFNK.trilinos.config'
-                VV_utilities.confxml(ishomc20_case,configure_path,bench_configure_path,xml_path,bench_xml_path)
+                VV_utilities.confxml(ishomc20_case,configure_path,bench_configure_path,xml_path,bench_xml_path,c_flag)
 
                 if glide_flag == 1:
                     test_file.write('<TH ALIGN=LEFT><A HREF="ishomc20_plot.html">Plots</A>\n')

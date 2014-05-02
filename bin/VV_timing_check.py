@@ -27,7 +27,6 @@ def timing(file1,flag):
                 sg_avg = sg_walltotal / sg_processes
         return sg_avg
 
-
 #definition to collect the averages from 10 timing runs and relay information to livv
 def timing_averages(file,flag):
     sg_avg_list = [] 

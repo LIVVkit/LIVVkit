@@ -201,5 +201,26 @@ def emptycheck(checkpath):
         return noplot
 
 
+def driver_check(file):
 
+    try:
+        config = open(file, 'r')
+    except:
+        print "error reading" + file
+        sys.exit(1)
+        raise
 
+    for line in config:
+        if "dycore" in line:
+            driver = line.split()[2]
+            if driver == '1':
+                driver = 'glide'
+                c_flag = 1
+            if driver == '0':
+                driver = 'glide'
+                c_flag = 1
+            elif driver == '2':
+                driver = 'glissade'
+                c_flag = 0
+    
+    return driver,c_flag
