@@ -112,7 +112,10 @@ def web(glide_flag,descript_file,test_file, \
     if diagnostic_flag == 1:
 
 # Diagnostic Dome 30 stats
-        print "running diagnostic dome30 testcase"
+        if glide_flag == 1:
+            print "running diagnostic dome30 glide testcase"
+        else:
+            print "running diagnostic dome30 glissade testcase"
         test_file.write('<BR>\n')
         if dictionary['diagnostic'] == 0:
             test_file.write('<H2>Diagnostic Dome 30 Test: <font color="green">Bit-for-Bit</font></H2>')
@@ -188,7 +191,10 @@ def web(glide_flag,descript_file,test_file, \
     if evolving_flag == 1:
 
 # Evolving Dome 30 stats
-        print "running evolving dome30 testcase"
+        if glide_flag == 1:
+            print "running evolving dome30 glide testcase"
+        else:
+            print "running evolving dome30 glissade testcase"
         test_file.write('<BR>\n')
         if dictionary['evolving'] == 0:
             test_file.write('<H2>Evolving Dome 30 Test: <font color="green">Bit-for-Bit</font></H2>')
@@ -225,10 +231,10 @@ def web(glide_flag,descript_file,test_file, \
                 c_flag = 0
                 if os.path.isdir(reg_test + '/dome30/evolving/configure_files/') == True:
                     configure_path = reg_test + '/dome30/evolving/configure_files/dome.30.glissade.config.15'
-                    bench_configure_path = reg_test + '/bench/dome30/evolving/configure_files/dome.30.JFNK.trilinos.config.15'
+                    bench_configure_path = reg_test + '/bench/dome30/evolving/configure_files/dome.30.glissade.config.15'
                 else:
                     configure_path = reg_test + '/dome30/evolving/dome.30.glissade.config.15'
-                    bench_configure_path = reg_test + '/bench/dome30/evolving/dome.30.JFNK.trilinos.config.15'
+                    bench_configure_path = reg_test + '/bench/dome30/evolving/dome.30.glissade.config.15'
             VV_utilities.confxml(dome30e_case,configure_path,bench_configure_path,xml_path,bench_xml_path,c_flag)
 
             if glide_flag == 1:
@@ -263,7 +269,10 @@ def web(glide_flag,descript_file,test_file, \
     if circular_flag == 1:
 
 # Circular Shelf stats
-        print "running circular shelf testcase"
+        if glide_flag == 1:
+            print "running circular shelf glide testcase"
+        else:
+            print "running circular shelf glissade testcase"
         test_file.write('<BR>\n')
         if dictionary['circular'] == 0:
             test_file.write('<H2>Circular Shelf Test: <font color="green">Bit-for-Bit</font></H2>')
@@ -300,10 +309,10 @@ def web(glide_flag,descript_file,test_file, \
                 c_flag = 0
                 if os.path.isdir(reg_test + '/circular-shelf/configure_files/') == True:
                     configure_path = reg_test + '/circular-shelf/configure_files/circular-shelf.glissade.config'
-                    bench_configure_path = reg_test + '/bench/circular-shelf/configure_files/circular-shelf.JFNK.config'
+                    bench_configure_path = reg_test + '/bench/circular-shelf/configure_files/circular-shelf.glissade.config'
                 else:
                     configure_path = reg_test + '/circular-shelf/circular-shelf.glissade.config'
-                    bench_configure_path = reg_test + '/bench/circular-shelf/circular-shelf.JFNK.config'
+                    bench_configure_path = reg_test + '/bench/circular-shelf/circular-shelf.glissade.config'
             VV_utilities.confxml(circ_case,configure_path,bench_configure_path,xml_path,bench_xml_path,c_flag)
 
             if glide_flag == 1:
@@ -335,7 +344,10 @@ def web(glide_flag,descript_file,test_file, \
     if confined_flag == 1:
 
 # Confined Shelf stats
-        print "running confined shelf testcase"
+        if glide_flag == 1:
+            print "running confined shelf glide testcase"
+        else:
+            print "running confined shelf glissade testcase"
         test_file.write('<BR>\n')
         if dictionary['confined'] == 0:
             test_file.write('<H2>Confined Shelf Test: <font color="green">Bit-for-Bit</font></H2>')
@@ -372,10 +384,10 @@ def web(glide_flag,descript_file,test_file, \
                 c_flag = 0
                 if os.path.isdir(reg_test + '/confined-shelf/configure_files/') == True:
                     configure_path = reg_test + '/confined-shelf/configure_files/confined-shelf.glissade.config'
-                    bench_configure_path = reg_test + '/bench/confined-shelf/configure_files/confined-shelf.JFNK.config'
+                    bench_configure_path = reg_test + '/bench/confined-shelf/configure_files/confined-shelf.glissade.config'
                 else:
                     configure_path = reg_test + '/confined-shelf/confined-shelf.glissade.config'
-                    bench_configure_path = reg_test + '/bench/confined-shelf/confined-shelf.JFNK.config'
+                    bench_configure_path = reg_test + '/bench/confined-shelf/confined-shelf.glissade.config'
             VV_utilities.confxml(conf_case,configure_path,bench_configure_path,xml_path,bench_xml_path,c_flag)
 
             if glide_flag == 1:
@@ -407,7 +419,10 @@ def web(glide_flag,descript_file,test_file, \
     if ismip_hom_a80_flag == 1:
 
 # ISMIP HOM A 80km stats
-        print "running ismip hom a 80km testcase"
+        if glide_flag == 1:
+            print "running ismip hom a 80km glide testcase"
+        else:
+            print "running ismip hom a 80km glissade testcase"
         test_file.write('<BR>\n')
         if dictionary['ismip-hom-a80'] == 0:
             test_file.write('<H2>ISMIP HOM A 80KM Test: <font color="green">Bit-for-Bit</font></H2>')
@@ -444,10 +459,10 @@ def web(glide_flag,descript_file,test_file, \
                 c_flag = 0
                 if os.path.isdir(reg_test + '/ismip-hom-a/80km/configure_files/') == True:
                     configure_path = reg_test + '/ismip-hom-a/80km/configure_files/ishom.a.80km.glissade.1.config'
-                    bench_configure_path = reg_test + '/bench/ismip-hom-a/80km/configure_files/ishom.a.80km.JFNK.trilinos.config'
+                    bench_configure_path = reg_test + '/bench/ismip-hom-a/80km/configure_files/ishom.a.80km.glissade.1.config'
                 else:
                     configure_path = reg_test + '/ismip-hom-a/80km/ishom.a.80km.glissade.1.config'
-                    bench_configure_path = reg_test + '/bench/ismip-hom-a/80km/ishom.a.80km.JFNK.trilinos.config'
+                    bench_configure_path = reg_test + '/bench/ismip-hom-a/80km/ishom.a.80km.glissade.1.config'
             VV_utilities.confxml(ishoma80_case,configure_path,bench_configure_path,xml_path,bench_xml_path,c_flag)
 
             if glide_flag == 1:
@@ -479,7 +494,10 @@ def web(glide_flag,descript_file,test_file, \
     if ismip_hom_a20_flag == 1:
 
 # ISMIP HOM A 20km stats
-        print "running ismip hom a 20km testcase"
+        if glide_flag == 1:
+            print "running ismip hom a 20km glide testcase"
+        else:
+            print "running ismip hom a 20km glissade testcase"
         test_file.write('<BR>\n')
         if dictionary['ismip-hom-a20'] == 0:
             test_file.write('<H2>ISMIP HOM A 20KM Test: <font color="green">Bit-for-Bit</font></H2>')
@@ -516,10 +534,10 @@ def web(glide_flag,descript_file,test_file, \
                 c_flag = 0
                 if os.path.isdir(reg_test + '/ismip-hom-a/20km/configure_files/') == True:
                     configure_path = reg_test + '/ismip-hom-a/20km/configure_files/ishom.a.20km.glissade.1.config'
-                    bench_configure_path = reg_test + '/bench/ismip-hom-a/20km/configure_files/ishom.a.20km.JFNK.trilinos.config'
+                    bench_configure_path = reg_test + '/bench/ismip-hom-a/20km/configure_files/ishom.a.20km.glissade.1.config'
                 else:
                     configure_path = reg_test + '/ismip-hom-a/20km/ishom.a.20km.glissade.1.config'
-                    bench_configure_path = reg_test + '/bench/ismip-hom-a/20km/ishom.a.20km.JFNK.trilinos.config'
+                    bench_configure_path = reg_test + '/bench/ismip-hom-a/20km/ishom.a.20km.glissade.1.config'
             VV_utilities.confxml(ishoma20_case,configure_path,bench_configure_path,xml_path,bench_xml_path,c_flag)
 
             if glide_flag == 1:
@@ -551,7 +569,7 @@ def web(glide_flag,descript_file,test_file, \
     if ismip_hom_c80_flag == 1:
         if glide_flag == 0:
 # ISMIP HOM C 80km stats
-            print "running ismip hom c 80km testcase"
+            print "running ismip hom c 80km glissade testcase"
             test_file.write('<BR>\n')
             if dictionary['ismip-hom-c80'] == 0:
                 test_file.write('<H2>ISMIP HOM C 80KM Test: <font color="green">Bit-for-Bit</font></H2>')
@@ -587,10 +605,10 @@ def web(glide_flag,descript_file,test_file, \
                     c_flag = 0
                     if os.path.isdir(reg_test + '/ismip-hom-c/80km/configure_files/') == True:
                         configure_path = reg_test + '/ismip-hom-c/80km/configure_files/ishom.c.80km.glissade.1.config'
-                        bench_configure_path = reg_test + '/bench/ismip-hom-c/80km/configure_files/ishom.c.80km.JFNK.trilinos.config'
+                        bench_configure_path = reg_test + '/bench/ismip-hom-c/80km/configure_files/ishom.c.80km.glissade.1.config'
                     else:
                         configure_path = reg_test + '/ismip-hom-c/80km/ishom.c.80km.glissade.1.config'
-                        bench_configure_path = reg_test + '/bench/ismip-hom-c/80km/ishom.c.80km.JFNK.trilinos.config'
+                        bench_configure_path = reg_test + '/bench/ismip-hom-c/80km/ishom.c.80km.glissade.1..config'
                 VV_utilities.confxml(ishomc80_case,configure_path,bench_configure_path,xml_path,bench_xml_path,c_flag)
 
                 if glide_flag == 1:
@@ -600,7 +618,7 @@ def web(glide_flag,descript_file,test_file, \
                 test_file.write('<BR>\n')
                 #if failedt != 0:
                 #    ishomc80_plot.write("<H2>ISMIP HOM C 80km Test failed, plots may not be generated</H2><br>")
-                checkpath = reg_test + '/ismip-hom-c/80km/' + data_dir + '/ishom.c.80km.glissade.1.nc'
+                checkpath = reg_test + '/ismip-hom-c/80km/' + data_dir + '/ishom.c.80km.glissade.1.out.nc'
                 noplot = VV_checks.emptycheck(checkpath)
                 if noplot != 1:
                     VV_ismip.c80plot(glide_flag,ishomc80_plot,reg_test,ncl_path,html_path,script_path,data_dir)
@@ -622,7 +640,7 @@ def web(glide_flag,descript_file,test_file, \
     if ismip_hom_c20_flag == 1:
         if glide_flag == 0:
 # ISMIP HOM C 20km stats
-            print "running ismip hom c 20km testcase"
+            print "running ismip hom c 20km glissade testcase"
             test_file.write('<BR>\n')
             if dictionary['ismip-hom-c20'] == 0:
                 test_file.write('<H2>ISMIP HOM C 20KM Test: <font color="green">Bit-for-Bit</font></H2>')
@@ -658,10 +676,10 @@ def web(glide_flag,descript_file,test_file, \
                     c_flag = 0
                     if os.path.isdir(reg_test + '/ismip-hom-c/20km/configure_files/') == True:
                         configure_path = reg_test + '/ismip-hom-c/20km/configure_files/ishom.c.20km.glissade.1.config'
-                        bench_configure_path = reg_test + '/bench/ismip-hom-c/20km/configure_files/ishom.c.20km.JFNK.trilinos.config'
+                        bench_configure_path = reg_test + '/bench/ismip-hom-c/20km/configure_files/ishom.c.20km.glissade.1.config'
                     else:
                         configure_path = reg_test + '/ismip-hom-c/20km/ishom.c.20km.glissade.1.config'
-                        bench_configure_path = reg_test + '/bench/ismip-hom-c/20km/ishom.c.20km.JFNK.trilinos.config'
+                        bench_configure_path = reg_test + '/bench/ismip-hom-c/20km/ishom.c.20km.glissade.1.config'
                 VV_utilities.confxml(ishomc20_case,configure_path,bench_configure_path,xml_path,bench_xml_path,c_flag)
 
                 if glide_flag == 1:
@@ -671,7 +689,7 @@ def web(glide_flag,descript_file,test_file, \
                 test_file.write('<BR>\n')
                 #if failedt != 0:
                 #    ishomc20_plot.write("<H2>ISMIP HOM C 20km Test failed, plots may not be generated</H2><br>")
-                checkpath = reg_test + '/ismip-hom-c/20km/' + data_dir + '/ishom.c.20km.glissade.1.nc'
+                checkpath = reg_test + '/ismip-hom-c/20km/' + data_dir + '/ishom.c.20km.glissade.1.out.nc'
                 noplot = VV_checks.emptycheck(checkpath)
                 if noplot != 1:
                     VV_ismip.c20plot(glide_flag,ishomc20_plot,reg_test,ncl_path,html_path,script_path,data_dir)

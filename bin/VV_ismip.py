@@ -635,10 +635,10 @@ def a80plot(glide_flag,plot_file,reg_test,ncl_path,html_path,script_path,data_di
                     +"'  '" + png + "' " + ishoma80u_plotfile + " >> plot_details.out"
     else:
         ishoma80u_plotfile = ''+ ncl_path + '/ismip-a/ismipa80ug.ncl'
-        stock1  = 'STOCK1 = addfile(\"'+ reg_test + '/bench/ismip-hom-a/80km/' + data_dir + '/ishom.a.80km.glissade.1.nc\", \"r\")'
-        stock4  = 'STOCK4 = addfile(\"'+ reg_test + '/bench/ismip-hom-a/80km/' + data_dir + '/ishom.a.80km.glissade.4.nc\", \"r\")'
-        VAR1    = 'VAR1 = addfile(\"' + reg_test + '/ismip-hom-a/80km/' + data_dir + '/ishom.a.80km.glissade.1.nc\", \"r\")'
-        VAR4    = 'VAR4 = addfile(\"' + reg_test + '/ismip-hom-a/80km/' + data_dir + '/ishom.a.80km.glissade.4.nc\", \"r\")'
+        stock1  = 'STOCK1 = addfile(\"'+ reg_test + '/bench/ismip-hom-a/80km/' + data_dir + '/ishom.a.80km.glissade.1.out.nc\", \"r\")'
+        stock4  = 'STOCK4 = addfile(\"'+ reg_test + '/bench/ismip-hom-a/80km/' + data_dir + '/ishom.a.80km.glissade.4.out.nc\", \"r\")'
+        VAR1    = 'VAR1 = addfile(\"' + reg_test + '/ismip-hom-a/80km/' + data_dir + '/ishom.a.80km.glissade.1.out.nc\", \"r\")'
+        VAR4    = 'VAR4 = addfile(\"' + reg_test + '/ismip-hom-a/80km/' + data_dir + '/ishom.a.80km.glissade.4.out.nc\", \"r\")'
         pngnameu= 'ismipa80ug.png'
         png     = 'PNG = "' + ncl_path + '/' + pngnameu + '"'
         plot_ishoma80u = "ncl '" + stock1 + "'  '" + stock4 + "'  '" + VAR1 + "'  '" + VAR4 \
@@ -698,10 +698,10 @@ def a80plot(glide_flag,plot_file,reg_test,ncl_path,html_path,script_path,data_di
                     + png + "' " + ishoma80v_plotfile + " >> plot_details.out"
     else:
         ishoma80v_plotfile = ''+ ncl_path + '/ismip-a/ismipa80vg.ncl'
-        stock1  = 'STOCK1 = addfile(\"'+ reg_test + '/bench/ismip-hom-a/80km/' + data_dir + '/ishom.a.80km.glissade.1.nc\", \"r\")'
-        stock4  = 'STOCK4 = addfile(\"'+ reg_test + '/bench/ismip-hom-a/80km/' + data_dir + '/ishom.a.80km.glissade.4.nc\", \"r\")'
-        VAR1    = 'VAR1 = addfile(\"' + reg_test + '/ismip-hom-a/80km/' + data_dir + '/ishom.a.80km.glissade.1.nc\", \"r\")'
-        VAR4    = 'VAR4 = addfile(\"' + reg_test + '/ismip-hom-a/80km/' + data_dir + '/ishom.a.80km.glissade.4.nc\", \"r\")'
+        stock1  = 'STOCK1 = addfile(\"'+ reg_test + '/bench/ismip-hom-a/80km/' + data_dir + '/ishom.a.80km.glissade.1.out.nc\", \"r\")'
+        stock4  = 'STOCK4 = addfile(\"'+ reg_test + '/bench/ismip-hom-a/80km/' + data_dir + '/ishom.a.80km.glissade.4.out.nc\", \"r\")'
+        VAR1    = 'VAR1 = addfile(\"' + reg_test + '/ismip-hom-a/80km/' + data_dir + '/ishom.a.80km.glissade.1.out.nc\", \"r\")'
+        VAR4    = 'VAR4 = addfile(\"' + reg_test + '/ismip-hom-a/80km/' + data_dir + '/ishom.a.80km.glissade.4.out.nc\", \"r\")'
         pngnamev= 'ismipa80vg.png'
         png     = 'PNG = "' + ncl_path + '/' + pngnamev + '"'
         plot_ishoma80v = "ncl '" + stock1 + "'  '" + stock4 + "'  '" + VAR1 + "'  '" + VAR4 +"'  '" \
@@ -851,10 +851,10 @@ def a20plot(glide_flag,plot_file,reg_test,ncl_path,html_path,script_path,data_di
                     +"'  '" + png + "' " + ishoma20u_plotfile + " >> plot_details.out"
     else:
         ishoma20u_plotfile = ''+ ncl_path + '/ismip-a/ismipa20ug.ncl'
-        stock1  = 'STOCK1 = addfile(\"'+ reg_test + '/bench/ismip-hom-a/20km/' + data_dir + '/ishom.a.20km.glissade.1.nc\", \"r\")'
-        stock4  = 'STOCK4 = addfile(\"'+ reg_test + '/bench/ismip-hom-a/20km/' + data_dir + '/ishom.a.20km.glissade.4.nc\", \"r\")'
-        VAR1    = 'VAR1 = addfile(\"' + reg_test + '/ismip-hom-a/20km/' + data_dir + '/ishom.a.20km.glissade.1.nc\", \"r\")'
-        VAR4    = 'VAR4 = addfile(\"' + reg_test + '/ismip-hom-a/20km/' + data_dir + '/ishom.a.20km.glissade.4.nc\", \"r\")'
+        stock1  = 'STOCK1 = addfile(\"'+ reg_test + '/bench/ismip-hom-a/20km/' + data_dir + '/ishom.a.20km.glissade.1.out.nc\", \"r\")'
+        stock4  = 'STOCK4 = addfile(\"'+ reg_test + '/bench/ismip-hom-a/20km/' + data_dir + '/ishom.a.20km.glissade.4.out.nc\", \"r\")'
+        VAR1    = 'VAR1 = addfile(\"' + reg_test + '/ismip-hom-a/20km/' + data_dir + '/ishom.a.20km.glissade.1.out.nc\", \"r\")'
+        VAR4    = 'VAR4 = addfile(\"' + reg_test + '/ismip-hom-a/20km/' + data_dir + '/ishom.a.20km.glissade.4.out.nc\", \"r\")'
         pngnameu= 'ismipa20ug.png'
         png     = 'PNG = "' + ncl_path + '/' + pngnameu + '"'
         plot_ishoma20u = "ncl '" + stock1 + "'  '" + stock4 + "'  '" + VAR1 + "'  '" + VAR4 \
@@ -914,10 +914,10 @@ def a20plot(glide_flag,plot_file,reg_test,ncl_path,html_path,script_path,data_di
                     + "'  '" + png + "' " + ishoma20v_plotfile + " >> plot_details.out"
     else:
         ishoma20v_plotfile = ''+ ncl_path + '/ismip-a/ismipa20vg.ncl'
-        stock1  = 'STOCK1 = addfile(\"'+ reg_test + '/bench/ismip-hom-a/20km/' + data_dir + '/ishom.a.20km.glissade.1.nc\", \"r\")'
-        stock4  = 'STOCK4 = addfile(\"'+ reg_test + '/bench/ismip-hom-a/20km/' + data_dir + '/ishom.a.20km.glissade.4.nc\", \"r\")'
-        VAR1    = 'VAR1 = addfile(\"' + reg_test + '/ismip-hom-a/20km/' + data_dir + '/ishom.a.20km.glissade.1.nc\", \"r\")'
-        VAR4    = 'VAR4 = addfile(\"' + reg_test + '/ismip-hom-a/20km/' + data_dir + '/ishom.a.20km.glissade.4.nc\", \"r\")'
+        stock1  = 'STOCK1 = addfile(\"'+ reg_test + '/bench/ismip-hom-a/20km/' + data_dir + '/ishom.a.20km.glissade.1.out.nc\", \"r\")'
+        stock4  = 'STOCK4 = addfile(\"'+ reg_test + '/bench/ismip-hom-a/20km/' + data_dir + '/ishom.a.20km.glissade.4.out.nc\", \"r\")'
+        VAR1    = 'VAR1 = addfile(\"' + reg_test + '/ismip-hom-a/20km/' + data_dir + '/ishom.a.20km.glissade.1.out.nc\", \"r\")'
+        VAR4    = 'VAR4 = addfile(\"' + reg_test + '/ismip-hom-a/20km/' + data_dir + '/ishom.a.20km.glissade.4.out.nc\", \"r\")'
         pngnamev= 'ismipa20vg.png'
         png     = 'PNG = "' + ncl_path + '/' + pngnamev + '"'
         plot_ishoma20v = "ncl '" + stock1 + "'  '" + stock4 + "'  '" + VAR1 + "'  '" + VAR4 \
@@ -1067,10 +1067,10 @@ def c80plot(glide_flag,plot_file,reg_test,ncl_path,html_path,script_path,data_di
                 + "'  '" + png + "' " + ishomcu_plotfile + " >> plot_details.out"
     else:
         ishomcu_plotfile = ''+ ncl_path + '/ismip-c/ismipc80ug.ncl'
-        stock1  = 'STOCK1 = addfile(\"'+ reg_test + '/bench/ismip-hom-c/80km/' + data_dir + '/ishom.c.80km.glissade.1.nc\", \"r\")'
-        stock4  = 'STOCK4 = addfile(\"'+ reg_test + '/bench/ismip-hom-c/80km/' + data_dir + '/ishom.c.80km.glissade.4.nc\", \"r\")'
-        VAR1    = 'VAR1 = addfile(\"' + reg_test + '/ismip-hom-c/80km/' + data_dir + '/ishom.c.80km.glissade.1.nc\", \"r\")'
-        VAR4    = 'VAR4 = addfile(\"' + reg_test + '/ismip-hom-c/80km/' + data_dir + '/ishom.c.80km.glissade.4.nc\", \"r\")'
+        stock1  = 'STOCK1 = addfile(\"'+ reg_test + '/bench/ismip-hom-c/80km/' + data_dir + '/ishom.c.80km.glissade.1.out.nc\", \"r\")'
+        stock4  = 'STOCK4 = addfile(\"'+ reg_test + '/bench/ismip-hom-c/80km/' + data_dir + '/ishom.c.80km.glissade.4.out.nc\", \"r\")'
+        VAR1    = 'VAR1 = addfile(\"' + reg_test + '/ismip-hom-c/80km/' + data_dir + '/ishom.c.80km.glissade.1.out.nc\", \"r\")'
+        VAR4    = 'VAR4 = addfile(\"' + reg_test + '/ismip-hom-c/80km/' + data_dir + '/ishom.c.80km.glissade.4.out.nc\", \"r\")'
         pngnameu= 'ismipcug.png'
         png     = 'PNG = "' + ncl_path + '/' + pngnameu + '"'
         plot_ishomcu = "ncl '" + stock1 + "'  '" + stock4 + "'  '" + VAR1 + "'  '" + VAR4 \
@@ -1130,10 +1130,10 @@ def c80plot(glide_flag,plot_file,reg_test,ncl_path,html_path,script_path,data_di
                 + "'  '" + png + "' " + ishomcv_plotfile + " >> plot_details.out"
     else:
         ishomcv_plotfile = ''+ ncl_path + '/ismip-c/ismipc80vg.ncl'
-        stock1  = 'STOCK1 = addfile(\"'+ reg_test + '/bench/ismip-hom-c/80km/' + data_dir + '/ishom.c.80km.glissade.1.nc\", \"r\")'
-        stock4  = 'STOCK4 = addfile(\"'+ reg_test + '/bench/ismip-hom-c/80km/' + data_dir + '/ishom.c.80km.glissade.4.nc\", \"r\")'
-        VAR1    = 'VAR1 = addfile(\"' + reg_test + '/ismip-hom-c/80km/' + data_dir + '/ishom.c.80km.glissade.1.nc\", \"r\")'
-        VAR4    = 'VAR4 = addfile(\"' + reg_test + '/ismip-hom-c/80km/' + data_dir + '/ishom.c.80km.glissade.4.nc\", \"r\")'
+        stock1  = 'STOCK1 = addfile(\"'+ reg_test + '/bench/ismip-hom-c/80km/' + data_dir + '/ishom.c.80km.glissade.1.out.nc\", \"r\")'
+        stock4  = 'STOCK4 = addfile(\"'+ reg_test + '/bench/ismip-hom-c/80km/' + data_dir + '/ishom.c.80km.glissade.4.out.nc\", \"r\")'
+        VAR1    = 'VAR1 = addfile(\"' + reg_test + '/ismip-hom-c/80km/' + data_dir + '/ishom.c.80km.glissade.1.out.nc\", \"r\")'
+        VAR4    = 'VAR4 = addfile(\"' + reg_test + '/ismip-hom-c/80km/' + data_dir + '/ishom.c.80km.glissade.4.out.nc\", \"r\")'
         pngnamev= 'ismipcvg.png'
         png     = 'PNG = "' + ncl_path + '/' + pngnamev + '"'
         plot_ishomcv = "ncl '" + stock1 + "'  '" + stock4 + "'  '" + VAR1 + "'  '" + VAR4 \
@@ -1284,10 +1284,10 @@ def c20plot(glide_flag,plot_file,reg_test,ncl_path,html_path,script_path,data_di
                 + "'  '" + png + "' " + ishomcu_plotfile + " >> plot_details.out"
     else:
         ishomcu_plotfile = ''+ ncl_path + '/ismip-c/ismipc20ug.ncl'
-        stock1  = 'STOCK1 = addfile(\"'+ reg_test + '/bench/ismip-hom-c/20km/' + data_dir + '/ishom.c.20km.glissade.1.nc\", \"r\")'
-        stock4  = 'STOCK4 = addfile(\"'+ reg_test + '/bench/ismip-hom-c/20km/' + data_dir + '/ishom.c.20km.glissade.4.nc\", \"r\")'
-        VAR1    = 'VAR1 = addfile(\"' + reg_test + '/ismip-hom-c/20km/' + data_dir + '/ishom.c.20km.glissade.1.nc\", \"r\")'
-        VAR4    = 'VAR4 = addfile(\"' + reg_test + '/ismip-hom-c/20km/' + data_dir + '/ishom.c.20km.glissade.4.nc\", \"r\")'
+        stock1  = 'STOCK1 = addfile(\"'+ reg_test + '/bench/ismip-hom-c/20km/' + data_dir + '/ishom.c.20km.glissade.1.out.nc\", \"r\")'
+        stock4  = 'STOCK4 = addfile(\"'+ reg_test + '/bench/ismip-hom-c/20km/' + data_dir + '/ishom.c.20km.glissade.4.out.nc\", \"r\")'
+        VAR1    = 'VAR1 = addfile(\"' + reg_test + '/ismip-hom-c/20km/' + data_dir + '/ishom.c.20km.glissade.1.out.nc\", \"r\")'
+        VAR4    = 'VAR4 = addfile(\"' + reg_test + '/ismip-hom-c/20km/' + data_dir + '/ishom.c.20km.glissade.4.out.nc\", \"r\")'
         pngnameu= 'ismipc2ug.png'
         png     = 'PNG = "' + ncl_path + '/' + pngnameu + '"'
         plot_ishomcu = "ncl '" + stock1 + "'  '" + stock4 + "'  '" + VAR1 + "'  '" + VAR4 \
@@ -1347,10 +1347,10 @@ def c20plot(glide_flag,plot_file,reg_test,ncl_path,html_path,script_path,data_di
                 + "'  '" + png + "' " + ishomcv_plotfile + " >> plot_details.out"
     else:
         ishomcv_plotfile = ''+ ncl_path + '/ismip-c/ismipc20vg.ncl'
-        stock1  = 'STOCK1 = addfile(\"'+ reg_test + '/bench/ismip-hom-c/20km/' + data_dir + '/ishom.c.20km.glissade.1.nc\", \"r\")'
-        stock4  = 'STOCK4 = addfile(\"'+ reg_test + '/bench/ismip-hom-c/20km/' + data_dir + '/ishom.c.20km.glissade.4.nc\", \"r\")'
-        VAR1    = 'VAR1 = addfile(\"' + reg_test + '/ismip-hom-c/20km/' + data_dir + '/ishom.c.20km.glissade.1.nc\", \"r\")'
-        VAR4    = 'VAR4 = addfile(\"' + reg_test + '/ismip-hom-c/20km/' + data_dir + '/ishom.c.20km.glissade.4.nc\", \"r\")'
+        stock1  = 'STOCK1 = addfile(\"'+ reg_test + '/bench/ismip-hom-c/20km/' + data_dir + '/ishom.c.20km.glissade.1.out.nc\", \"r\")'
+        stock4  = 'STOCK4 = addfile(\"'+ reg_test + '/bench/ismip-hom-c/20km/' + data_dir + '/ishom.c.20km.glissade.4.out.nc\", \"r\")'
+        VAR1    = 'VAR1 = addfile(\"' + reg_test + '/ismip-hom-c/20km/' + data_dir + '/ishom.c.20km.glissade.1.out.nc\", \"r\")'
+        VAR4    = 'VAR4 = addfile(\"' + reg_test + '/ismip-hom-c/20km/' + data_dir + '/ishom.c.20km.glissade.4.out.nc\", \"r\")'
         pngnamev= 'ismipc2vg.png'
         png     = 'PNG = "' + ncl_path + '/' + pngnamev + '"'
         plot_ishomcv = "ncl '" + stock1 + "'  '" + stock4 + "'  '" + VAR1 + "'  '" + VAR4 \

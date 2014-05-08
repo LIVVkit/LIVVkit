@@ -419,9 +419,17 @@ file.write('<TH ALIGN=LEFT><A HREF="test_suite_glissade.html">Basic Verification
 file.write('<BR>\n')
 file.write('<BR>\n')
 file.write('<BR>\n')
+file.write('<BR>\n')
 
 if options.dome60_flag==1 or options.dome120_flag==1 or options.dome240_flag==1 or options.dome500_flag==1 \
         or options.dome1000_flag==1 or options.gis_1km_flag==1 or options.gis_2km_flag==1 or options.gis_4km_flag==1:
+        
+        if 1 in dictionary_large.values() or 2 in dictionary_large.values():
+                file.write('<font color="red"> Not All Tests Within Expected Performance Range</font><br>')
+                file.write('<BR>\n')
+        else:
+                file.write('<font color="green"> All Tests Within Expected Performance Range</font><br>')
+                file.write('<BR>\n')
         
         file.write('<TH ALIGN=LEFT><A HREF="large_test_suite.html">Performance and Analysis Test Suite (pLIVV)</A>\n')
         
@@ -430,6 +438,8 @@ if options.dome60_flag==1 or options.dome120_flag==1 or options.dome240_flag==1 
         else:
                 file.write('<font color="green"> All Tests Within Expected Performance Range</font><br>')
 
+file.write('<BR>\n')
+file.write('<BR>\n')
 file.write('<BR>\n')
 file.write('<BR>\n')
 if options.validation_flag==1:
