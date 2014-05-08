@@ -22,7 +22,7 @@ module load python_netcdf4/1.0.6
 COMMENT="test run of code"
 
 # /reg_test and /livv needs to be placed in the subdirectory below
-export TEST_FILEPATH="/lustre/atlas/scratch/$USER/cli062/higher-order"
+export TEST_FILEPATH=$TEST_DIR
 
 # specify location where the html files will be sent so they are viewable on the web
 # livv will create the www directory in the HTML_PATH if it does not already exist
