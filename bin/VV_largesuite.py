@@ -113,7 +113,7 @@ def time_check(perf_test,dome60_flag,dome120_flag,dome240_flag,dome500_flag,dome
         dictionary_large_gis['gis2km'] = 0
 #gis1km
     if gis_1km_flag == 1:
-        current_run_path = perf_test + '/gis_1km/data/out.gis.1km.albany.n256_0timesteps.timing'
+        current_run_path = perf_test + '/gis_1km/data/out.gis.1km.albany.timing'
         timing_path_10runs = perf_test + '/bench/gis_1km/data_titan/out.gis.1km.glissade.timing'
         test = 'gis1km'
         dictionary_large_gis['gis1km'] = VV_timing_check.timing_check(timing_path_10runs,current_run_path,flag,test)
@@ -582,7 +582,7 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_tim
             large_test_file.write('<TH ALIGN=LEFT><A HREF="gis1km_timing.html">Timing Details</A>\n')
             large_test_file.write('<BR>\n')
             flag = 0
-            timing_path_10runs = perf_test + '/bench/gis_1km/data_titan/out.gis.1km.albany.timing'
+            timing_path_10runs = perf_test + '/bench/gis_1km/data_titan/out.gis.1km.glissade.timing'
             current_run_path = perf_test + '/gis_1km/data/out.gis.1km.albany.timing'
             VV_timing.timing_table_current_run(gis1km_time,timing_path_10runs,current_run_path,flag)
             
