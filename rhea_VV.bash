@@ -1,10 +1,9 @@
 #!/bin/bash
 
-#KJE, AJB, NRM 02/2014 evanskj@ornl.gov
+#KJE, AJB, NRM, DR 07/2014 contact evanskj@ornl.gov with issues
 #This is the master script to set the parameters and paths to run the LIVV kit on rhea at OLCF
 #Efforts funded by DOE BER PISCEES SciDAC project
-#Currently it is designed specifically for the GLIDE dycore of the CISM model, because it is 
-#designed to read its output
+#Currently it is designed specifically for the GLIDE and GLISSADE dycore of the CISM model
 
 # load these before running (they will automatically load)
 source $MODULESHOME/init/bash #make sure to put "source $MODULESHOME/init/bash" in your .bashrc file

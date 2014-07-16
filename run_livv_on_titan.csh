@@ -11,14 +11,14 @@ echo
 
 if ($skip_build_set == 0) then
  cd ../../../builds/titan-gnu
- csh titan-gnu-build-and-test-serial.csh no-copy skip-tests
- csh titan-gnu-build-and-test.csh no-copy skip-tests
+ csh titan-gnu-build-and-test-serial.csh skip-tests 
+ csh titan-gnu-build-and-test.csh skip-tests 
  cd ../titan-pgi
- csh titan-pgi-build-and-test.csh
+ csh titan-pgi-build-and-test.csh skip-tests 
  exit
 endif
 
-cd ../../../builds/titan-pgi
-csh titan-pgi-build-and-test.csh skip-build no-copy
+cd ../../../tests/higher-order/livv
+csh run_livv_default_tests.csh 
 
 #popd . > /dev/null
