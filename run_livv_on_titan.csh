@@ -11,10 +11,10 @@ echo
 
 if ($skip_build_set == 0) then
  cd ../../../builds/titan-gnu
- csh titan-gnu-build-and-test-serial.csh no_copy skip-tests
+ csh titan-gnu-build-and-test-serial.csh no-copy skip-tests
  csh titan-gnu-build-and-test.csh no-copy skip-tests
  cd ../titan-pgi
- csh titan-pgi-build-and-test.csh no-copy
+ csh titan-pgi-build-and-test.csh run-perf-tests
  exit
 endif
 

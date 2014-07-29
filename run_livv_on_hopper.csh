@@ -11,8 +11,8 @@ echo
 
 if ($skip_build_set == 0) then
  cd ../../../builds/hopper-gnu
-# csh hopper-gnu-build-and-test-serial.csh skip-tests 
- csh hopper-gnu-build-and-test.csh skip-tests 
+ csh hopper-gnu-build-and-test-serial.csh no-copy skip-tests 
+ csh hopper-gnu-build-and-test.csh no-copy skip-tests 
  cd ../hopper-pgi
  csh hopper-pgi-build-and-test.csh
  exit
