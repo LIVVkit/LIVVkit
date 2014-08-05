@@ -17,41 +17,48 @@ endif
    setenv run_all_tests 0 
  endif
 
+ setenv RUN_TEXT qsub
+
+ # should fix this hack:
+ if ($CISM_VV_SCRIPT == "mac_VV.bash") then
+  setenv RUN_TEXT " "
+ endif
+ echo $RUN_TEXT
 
  #diagnostic dome test case
  cd $TEST_DIR/reg_test/dome30/diagnostic
- qsub $CISM_RUN_SCRIPT
+ $RUN_TEXT $CISM_RUN_SCRIPT
 
 
  if ($run_all_tests == 1) then
 
   #evolving dome test case
   cd $TEST_DIR/reg_test/dome30/evolving
-  qsub $CISM_RUN_SCRIPT
+  $RUN_TEXT $CISM_RUN_SCRIPT
 
   # confined shelf to periodic BC
   cd $TEST_DIR/reg_test/confined-shelf
-  qsub $CISM_RUN_SCRIPT
+  $RUN_TEXT $CISM_RUN_SCRIPT
 
   # circular shelf to periodic BC
   cd $TEST_DIR/reg_test/circular-shelf
-  qsub $CISM_RUN_SCRIPT
+  $RUN_TEXT $CISM_RUN_SCRIPT
 
   # ISMIP test case A, 80 km 
   cd $TEST_DIR/reg_test/ismip-hom-a/80km
-  qsub $CISM_RUN_SCRIPT
+  $RUN_TEXT $CISM_RUN_SCRIPT
 
   # ISMIP test case A, 20 km 
   cd $TEST_DIR/reg_test/ismip-hom-a/20km
-  qsub $CISM_RUN_SCRIPT
+  $RUN_TEXT $CISM_RUN_SCRIPT
 
   ## ISMIP test case C, 80 km - not operational for glide
   cd $TEST_DIR/reg_test/ismip-hom-c/80km
-  qsub $CISM_RUN_SCRIPT
+  $RUN_TEXT $CISM_RUN_SCRIPT
   
   ## ISMIP test case C, 20 km - not operational for glide
   cd $TEST_DIR/reg_test/ismip-hom-c/20km
-  qsub $CISM_RUN_SCRIPT
+  $RUN_TEXT $CISM_RUN_SCRIPT
  endif
 
   if ($PERF_TEST == 0 ) then
@@ -62,35 +69,35 @@ endif
 
   #dome 60 test case
     cd $TEST_DIR/perf_test/dome60
-    qsub $CISM_RUN_SCRIPT
+    $RUN_TEXT $CISM_RUN_SCRIPT
 
   #dome 120 test case
     cd $TEST_DIR/perf_test/dome120
-    qsub $CISM_RUN_SCRIPT
+    $RUN_TEXT $CISM_RUN_SCRIPT
 
   #dome 240 test case
     cd $TEST_DIR/perf_test/dome240
-    qsub $CISM_RUN_SCRIPT
+    $RUN_TEXT $CISM_RUN_SCRIPT
 
   #dome 500 test case
     cd $TEST_DIR/perf_test/dome500
-    qsub $CISM_RUN_SCRIPT
+    $RUN_TEXT $CISM_RUN_SCRIPT
 
   #dome 1000 test case - not operational currently
   #  cd $TEST_DIR/perf_test/dome1000
-  #  qsub $CISM_RUN_SCRIPT
+  #  $RUN_TEXT $CISM_RUN_SCRIPT
   
   #gis 4km test case
   #  cd $TEST_DIR/perf_test/gis_4km
-  #  qsub $CISM_RUN_SCRIPT
+  #  $RUN_TEXT $CISM_RUN_SCRIPT
   
   #gis 2km test case
   #  cd $TEST_DIR/perf_test/gis_2km
-  #  qsub $CISM_RUN_SCRIPT
+  #  $RUN_TEXT $CISM_RUN_SCRIPT
   
   #gis 1km test case
   #  cd $TEST_DIR/perf_test/gis_1km
-  #  qsub $CISM_RUN_SCRIPT
+  #  $RUN_TEXT $CISM_RUN_SCRIPT
   endif
 endif
 
@@ -140,7 +147,7 @@ set run_list = "dome_30_test dome_30_evolve conf_shelf circ_shelf ishoma_20 isho
   echo "Call disabled to: $CISM_VV_SCRIPT, which is located in:" 
   echo "$TEST_DIR/livv"
   echo
-  echo "Perform this step on carver after the Test Suite jobs have completed."
+  echo "Perform this step on after the Test Suite jobs have completed."
   # cd $TEST_DIR/livv
   # bash $CISM_VV_SCRIPT from-script $1
  endif
