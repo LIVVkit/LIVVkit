@@ -1,6 +1,6 @@
+# script to run the default livv tests, called by the build-and-test scripts
 
-
-if ($# != 4) then
+if ($# < 4) then
  exit
 endif
  
@@ -13,14 +13,16 @@ endif
  echo 'Submitting default LIVV test jobs to compute nodes.'
 
  setenv run_all_tests 1
- if (($1 == "quick-test") || ($2 == "quick-test") || ($3 == "quick-test") || ($4 == "quick-test")) then
-   setenv run_all_tests 0 
- endif
+ 
+ @ run_all_tests = ($5 != "quick-test")
 
  setenv RUN_TEXT qsub
 
  # should fix this hack:
+ @ on_mac = 0
  if ($CISM_VV_SCRIPT == "mac_VV.bash") then
+  @ on_mac = 1
+  @ timeout_error = 0
   setenv RUN_TEXT " "
  endif
  echo $RUN_TEXT
@@ -101,13 +103,14 @@ endif
   endif
 endif
 
-
+set counter = 0
+if ($on_mac == 0) then
  echo
  echo "Test Suite jobs started -- using qstat to monitor."
  echo 
 
  set still_running = 1
- set counter = 0
+ #set counter = 0
  set timeout_error = 0
 
 set run_list = "dome_30_test dome_30_evolve conf_shelf circ_shelf ishoma_20 ishoma_80 ishomc_20 ishomc_80 dome_60_test dome_120_test dome_240_test dome_500_test dome_1000_test"
@@ -139,11 +142,12 @@ set run_list = "dome_30_test dome_30_evolve conf_shelf circ_shelf ishoma_20 isho
   endif
   if (($counter % 5) == 0) echo "Minutes: $counter"
  end
+endif # on_mac == 0
 
  if ($timeout_error == 0) then
   echo "Total minutes: $counter"
   echo
-
+ 
   echo "Call disabled to: $CISM_VV_SCRIPT, which is located in:" 
   echo "$TEST_DIR/livv"
   echo
