@@ -36,32 +36,76 @@ The command to run the python script along with all of the necessary/optional fi
 
 To run the shell script (Mac OS X):
 
-  1. Copy the reg_test directory from /ccs/proj/cli062/ on rhea or titan (choose the tar file with the most recent date stamp),
-     untar it and place in a new higher-order directory on your mac. This will be the same directory as
-     specified as TEST_DIR in the /PISCEES/trunk/cmake-scripts/master_build_mac.csh file. Go ahead and copy the entire
-     /PISCEES/trunk/tests/higher-order/livv directory and place in this new directory as well.
+  1. Copy the reg_test directory from http://oceans11.lanl.gov/cism/livv/ (choose the tar file with the most recent date
+stamp - generally, the
+     one with the "default" label is the most recent one), untar it and place in a new higher-order directory on your
+mac. This will be the same
+     directory as specified by TEST_DIR in the ./cmake-scripts/master_build_mac.csh file. Go ahead and copy the entire
+     ./tests/higher-order/livv directory and place in this new directory as well.
 
-  2. Now run the /PISCEES/trunk/builds/mac-gnu/mac-gnu-build-and-test.csh file (see /PISCEES/trunk/builds/README
-     for more information on how to run the csh script). NOTE: This updated .csh file will now update your job submissions in reg_test
-     to the screen and will not finish until all jobs have finished running. Thus, you can automatically run LIVV once the jobs are finished.
-     Make sure the TEST_DIR is set to the directory that you created in step #2. Also make sure the tests you want to run
-     and analyze on your machine later are selected in the csh file. The jobs in reg_test will be automatically run by this csh
+*** SFP
+The above needs to be clarified for mac testing. First, you no longer need to download, expand, and copy the reg_test
+dir over, it happens automatically. Also, it would be nice if you didn't have to copy both
+the livv. and reg_test dirs into ./tests/higher-order. In fact, it might be easier to have them in some more general
+location on your machine (e.g, I put them in ~/work/cism/test-livv/ on my machine, which is a location that won't change
+regularly, whereas a path to a specific checkout of the code might (if you have multiple checkouts /versions at one
+time))
+
+In this same dir, it looks like you will need to make a subdir "html", which is where the comparison plots / info will
+go.
+
+A few other things that need to be noted more clearly in the README (as opposed to having to search through the 
+scripts to find them out):
+
+- you need to specify the path for TEST_DIR at the top of the ./builds/mac-gnu/mac-gnu-build-and-test.csh script
+(it is currently commented out). E.g., I have " setenv TEST_DIR "~/work/modeling/cism/test-livv" "
+
+- you need to also specify the path for TEST_DIR in the .bashrc file, e.g.
+"export TEST_DIR=~/work/modeling/cism/test-livv/"
+
+On line 152 of the ./builds/mac-gnu/mac-gnu-build-and-test.csh script, it tries to copy livv from
+./test/higher-order/livv to the TEST_DIR location. But according to the info above in (1), we've already done this. 
+We should decide on one or the other.
+
+***
+
+  2. Now run the ./builds/mac-gnu/mac-gnu-build-and-test.csh file (see ./builds/README for more information on how to
+run the csh script).
+
+*** SFP: clarify that you do this with 'csh mac-gnu-build-and-test.csh'
+
+     NOTE: This updated .csh file will now update your job submissions in reg_test
+     to the screen and will not finish until all jobs have finished running. Thus, you can automatically run LIVV once
+the jobs are finished.
+     Make sure the TEST_DIR is set to the directory that you created in step #2. Also make sure the tests you want to
+run
+     and analyze on your machine later are selected in the csh file. The jobs in reg_test will be automatically run by
+this csh
      script (as long as the path is correctly specified) after the model is successfuly built.
 
 To set up the livv executable /higher-order/livv/mac_VV.bash:
 (This can be done after you run the mac-gnu-build-and-test.csh file.)
 
+*** SFP: Clarify that in the above, you mean that you need to edit these variable specificiations by editing
+'mac_VV.bash"
+
   3. Change MY_PYTHON to wherever your python2.7 package exists on your mac.
-  
+
+*** SFP: If folks are following the mac build instructions, this will always be '/opt/local/bin/python'
+
   4. There is an opportunity to insert a COMMENT to display your reason for running livv on the website.
-  
+
   5. Change the TEST_FILEPATH to the path containing the higher-order directory (the directory mentioned in step #1).
+
+*** SFP: in the current version of the script, this is set to always point to TEST_DIR, which is specified above
 
   6. Change the HTML_PATH to the location of the www directory. If it doesn't already exist, specify the path to where
      you would like it and livv will check the path and create it if it is not already there. An example path is already
      in the bash file that you may try. If you have posted html pages from your mac previously, you can point livv to
      whatever html directory you have used and livv will create a sub-directory where it will store all of its own html
      files, therefore not disrupting the rest of your workspace.
+
+*** SFP: as noted above, it might make sense to just specify that this goes in TEST_DIR/html (which is the default here)
 
   7. The verification flags are pre-set in the bash script for what will be analyzed on the mac. Note that you can
      adjust which testcases you would like livv to run within the mac_VV.bash script by changing the flag from a
