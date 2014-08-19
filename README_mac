@@ -52,16 +52,26 @@ regularly, whereas a path to a specific checkout of the code might (if you have 
 time))
 
 In this same dir, it looks like you will need to make a subdir "html", which is where the comparison plots / info will
-go.
+go (either this, or we should just have the script do a mkdir in "TEST_DIR./" (see below).
 
 A few other things that need to be noted more clearly in the README (as opposed to having to search through the 
 scripts to find them out):
 
 - you need to specify the path for TEST_DIR at the top of the ./builds/mac-gnu/mac-gnu-build-and-test.csh script
-(it is currently commented out). E.g., I have " setenv TEST_DIR "~/work/modeling/cism/test-livv" "
+(it is currently commented out). E.g., I have " setenv TEST_DIR "~/work/modeling/cism/test-livv" " (That, or
+add the 'setenv TEST_DIR "~/work/modeling/cism/test-livv' to a .cshrc file in your home dir)
 
 - you need to also specify the path for TEST_DIR in the .bashrc file, e.g.
 "export TEST_DIR=~/work/modeling/cism/test-livv/"
+
+>> The above two changes to .bashrc and .cshrc are all that is needed <<
+
+>> note that one doesn't have to explicitly run the cmake-build-and-test script from the ./builds dir. 
+Instead, you can just do the above changes and run the "run_livv_on_mac.csh" script in ./tests/higher-order/livv/ <<
+
+>> note that we need to update / reduce the tests being done by altering the mac_job scripts in ./reg_test. Do this on
+oceans11, then put the updated tarball back up there so that when others alter it, they alter from this new template <<
+
 
 On line 152 of the ./builds/mac-gnu/mac-gnu-build-and-test.csh script, it tries to copy livv from
 ./test/higher-order/livv to the TEST_DIR location. But according to the info above in (1), we've already done this. 
