@@ -42,8 +42,8 @@ begin
 ;  vsout = velstockout@scale_factor * velstockout
   vs9   = velstock9@scale_factor  * velstock9
   vs15  = velstock15@scale_factor * velstock15
-  vv9   = velstock9@scale_factor  * velstock9
-  vv15  = velstock15@scale_factor * velstock15
+  vv9   = velstock9@scale_factor  * velvarbl9
+  vv15  = velstock15@scale_factor * velvarbl15
 ;  vdout = velstockout@scale_factor * veldiffout
   vd9   = velstock9@scale_factor  * veldiff9
   vd15  = velstock15@scale_factor * veldiff15
@@ -120,6 +120,10 @@ begin
 ;  resvel3@gsnPanelFigureStrings = (/"bench)","out)"/)
 ;  resvel3@gsnPanelLabelBar = True		; make a common contour bar
 ;  resvel3@lbLabelAngleF = 45			; angle of contour bar labels
+  resvel@cnLevelSelectionMode = "ManualLevels"     ; set manual contour levels
+  resvel@cnLevelSpacingF      = 0.5                  ; contour spacing
+  resvel@cnMinLevelValF       = 0.                 ; min level
+  resvel@cnMaxLevelValF       =  4.                 ; max level
   
 
   gsn_panel(wks,plotvel,(/1,3/),resvel)                  

@@ -20,6 +20,8 @@ def timing(file1,flag):
         sys.exit(1)
         raise
     
+    gv_avg = 9999.
+
     if flag == 0:
         for line in output:
             if "simple glide" in line:

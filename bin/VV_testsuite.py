@@ -191,75 +191,76 @@ def web(glide_flag,descript_file,test_file, \
     if evolving_flag == 1:
 
 # Evolving Dome 30 stats
-        if glide_flag == 1:
-            print "running evolving dome30 glide testcase"
-        else:
+#        if glide_flag == 1:
+#            print "running evolving dome30 glide testcase"
+#        else:
+        if glide_flag == 0:
             print "running evolving dome30 glissade testcase"
-        test_file.write('<BR>\n')
-        if dictionary['evolving'] == 0:
-            test_file.write('<H2>Evolving Dome 30 Test: <font color="green">Bit-for-Bit</font></H2>')
-        else:
-            test_file.write('<H2>Evolving Dome 30 Test: <font color="red">NOT Bit-for-Bit</font></H2>')
+            test_file.write('<BR>\n')
+            if dictionary['evolving'] == 0:
+           	 test_file.write('<H2>Evolving Dome 30 Test: <font color="green">Bit-for-Bit</font></H2>')
+            else:
+            	test_file.write('<H2>Evolving Dome 30 Test: <font color="red">NOT Bit-for-Bit</font></H2>')
 
 # put something here to flag BFB results and no need to do any more calculations
-        flag_to_plot_dome30e = 1 
-        if flag_to_plot_dome30e:
+       	    flag_to_plot_dome30e = 1 
+            if flag_to_plot_dome30e:
 
 # link to dome30e_file with descriptions about the test cases
             # since glissade does not output solver information:
-            if glide_flag == 1:
-                test_file.write('<TH ALIGN=LEFT><A HREF="dome30e_details.html">Velocity Solver Details</A>\n')
+            	if glide_flag == 1:
+                   test_file.write('<TH ALIGN=LEFT><A HREF="dome30e_details.html">Velocity Solver Details</A>\n')
+                   test_file.write('<BR>\n')
+                   failedt = VV_dome30details.edetails(dome30e_file,test_suite,reg_test,ncl_path,html_path,data_dir)
+
+                if glide_flag == 1:
+                   test_file.write('<TH ALIGN=LEFT><A HREF="dome30e_case.html">Case and Parameter Settings Details</A>\n')
+                else:
+                   test_file.write('<TH ALIGN=LEFT><A HREF="dome30e_case_glissade.html">Case and Parameter Settings Details</A>\n')
                 test_file.write('<BR>\n')
-                failedt = VV_dome30details.edetails(dome30e_file,test_suite,reg_test,ncl_path,html_path,data_dir)
-
-            if glide_flag == 1:
-                test_file.write('<TH ALIGN=LEFT><A HREF="dome30e_case.html">Case and Parameter Settings Details</A>\n')
-            else:
-                test_file.write('<TH ALIGN=LEFT><A HREF="dome30e_case_glissade.html">Case and Parameter Settings Details</A>\n')
-            test_file.write('<BR>\n')
-            xml_path = reg_test + '/dome30/evolving/trilinosOptions.xml'
-            bench_xml_path = reg_test + '/bench/dome30/evolving/trilinosOptions.xml'
-            if glide_flag == 1:
-                c_flag = 1
-                if os.path.isdir(reg_test + '/dome30/evolving/configure_files/') == True:
-                    configure_path = reg_test + '/dome30/evolving/configure_files/dome.30.JFNK.trilinos.config.15'
-                    bench_configure_path = reg_test + '/bench/dome30/evolving/configure_files/dome.30.JFNK.trilinos.config.15'
+                xml_path = reg_test + '/dome30/evolving/trilinosOptions.xml'
+                bench_xml_path = reg_test + '/bench/dome30/evolving/trilinosOptions.xml'
+                if glide_flag == 1:
+                   c_flag = 1
+                   if os.path.isdir(reg_test + '/dome30/evolving/configure_files/') == True:
+                      configure_path = reg_test + '/dome30/evolving/configure_files/dome.30.JFNK.trilinos.config.15'
+                      bench_configure_path = reg_test + '/bench/dome30/evolving/configure_files/dome.30.JFNK.trilinos.config.15'
+                   else:
+                      configure_path = reg_test + '/dome30/evolving/dome.30.JFNK.trilinos.config.15'
+                      bench_configure_path = reg_test + '/bench/dome30/evolving/dome.30.JFNK.trilinos.config.15'
                 else:
-                    configure_path = reg_test + '/dome30/evolving/dome.30.JFNK.trilinos.config.15'
-                    bench_configure_path = reg_test + '/bench/dome30/evolving/dome.30.JFNK.trilinos.config.15'
-            else:
-                c_flag = 0
-                if os.path.isdir(reg_test + '/dome30/evolving/configure_files/') == True:
-                    configure_path = reg_test + '/dome30/evolving/configure_files/dome.30.glissade.config.15'
-                    bench_configure_path = reg_test + '/bench/dome30/evolving/configure_files/dome.30.glissade.config.15'
-                else:
-                    configure_path = reg_test + '/dome30/evolving/dome.30.glissade.config.15'
-                    bench_configure_path = reg_test + '/bench/dome30/evolving/dome.30.glissade.config.15'
-            VV_utilities.confxml(dome30e_case,configure_path,bench_configure_path,xml_path,bench_xml_path,c_flag)
+                   c_flag = 0
+                   if os.path.isdir(reg_test + '/dome30/evolving/configure_files/') == True:
+                      configure_path = reg_test + '/dome30/evolving/configure_files/dome.30.glissade.config.15'
+                      bench_configure_path = reg_test + '/bench/dome30/evolving/configure_files/dome.30.glissade.config.15'
+                   else:
+                      configure_path = reg_test + '/dome30/evolving/dome.30.glissade.config.15'
+                      bench_configure_path = reg_test + '/bench/dome30/evolving/dome.30.glissade.config.15'
+                VV_utilities.confxml(dome30e_case,configure_path,bench_configure_path,xml_path,bench_xml_path,c_flag)
 
-            if glide_flag == 1:
-                test_file.write('<TH ALIGN=LEFT><A HREF="dome30e_plot.html">Plots</A>\n')
-            else:
-                test_file.write('<TH ALIGN=LEFT><A HREF="dome30e_plot_glissade.html">Plots</A>\n')
-            test_file.write('<BR>\n')
+                if glide_flag == 1:
+                    test_file.write('<TH ALIGN=LEFT><A HREF="dome30e_plot.html">Plots</A>\n')
+                else:
+                    test_file.write('<TH ALIGN=LEFT><A HREF="dome30e_plot_glissade.html">Plots</A>\n')
+                test_file.write('<BR>\n')
             #if failedt != 0:
             #    dome30e_plot.write("<H2>Evolving Dome 30 Test failed, plots may not be generated</H2><br>")
-            checkpath = reg_test + '/dome30/evolving/' + data_dir + '/dome.9.nc'
-            checkpath2 = reg_test + '/dome30/evolving/' + data_dir + '/dome.15.nc'
-            noplot = VV_checks.emptycheck(checkpath)
-            noplot1 = noplot
-            noplot = VV_checks.emptycheck(checkpath2)
-            if noplot != 1 and noplot != 1:
-                VV_dome30details.eplot(glide_flag,dome30e_plot,reg_test,ncl_path,html_path,script_path,data_dir)
+                checkpath = reg_test + '/dome30/evolving/' + data_dir + '/dome.9.nc'
+                checkpath2 = reg_test + '/dome30/evolving/' + data_dir + '/dome.15.nc'
+                noplot = VV_checks.emptycheck(checkpath)
+                noplot1 = noplot
+                noplot = VV_checks.emptycheck(checkpath2)
+                if noplot != 1 and noplot != 1:
+                    VV_dome30details.eplot(glide_flag,dome30e_plot,reg_test,ncl_path,html_path,script_path,data_dir)
 
 # Time stamping
-        mode = os.stat(reg_test + '/dome30/evolving').st_mtime
-        mode = mode - 18000
-        mode = time.gmtime(mode)
-        ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
-        strrand = '<b>Time of Last Simulation: ' + ctime + '</b>'
-        test_file.write(strrand)
-        test_file.write('<BR>\n')
+            mode = os.stat(reg_test + '/dome30/evolving').st_mtime
+            mode = mode - 18000
+            mode = time.gmtime(mode)
+            ctime = time.strftime("%m/%d/%Y %I:%M %p", mode)
+            strrand = '<b>Time of Last Simulation: ' + ctime + '</b>'
+            test_file.write(strrand)
+            test_file.write('<BR>\n')
 
     else:
         print "NOT RUNNING EVOLVING DOME30 TESTCASE"

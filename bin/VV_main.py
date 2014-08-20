@@ -368,6 +368,8 @@ if options.validation_flag==1:
 
         valid_file = open(target_html + '/validation_plots.html', 'w')
         details_file = open(target_html + 'case_details.html', 'w')
+# table
+        table = open(target_html + '/table.html', 'w')
 # figure1
         figure1_plot = open(target_html + '/figure1_plot.html', 'w')
 # figure2
@@ -381,7 +383,7 @@ if options.validation_flag==1:
 
 #path to python code to create all the test suite pages and data
 
-        VV_validation_suite.web(valid_file,details_file,figure1_plot,figure2_plot,figure3_plot,figure4_plot,figure5_plot, \
+        VV_validation_suite.web(valid_file,details_file,table,figure1_plot,figure2_plot,figure3_plot,figure4_plot,figure5_plot, \
                 options.data_dir,options.ncl_path,target_html,options.script_path)
 
 #writing the main HTML page

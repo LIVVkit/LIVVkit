@@ -67,7 +67,7 @@ endif
     echo "No performance suite jobs were submitted."
   else
     echo 'Submitting performance jobs to compute nodes.'
-    echo 'Go to carver.nersc.gov to complete Visualization and Verification (LIVV)'
+    echo 'Go to vis cluster to complete Visualization and Verification (LIVV)'
 
   #dome 60 test case
     cd $TEST_DIR/perf_test/dome60

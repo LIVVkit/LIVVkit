@@ -54,13 +54,13 @@ def zerocheck(filename):
             x = netcdf.variables['x1']
             y = netcdf.variables['y1']
             change = False
-            if var == 'thk':
+        if var == 'thk':
                 for t in range(time.size):
                     for j in range(y.size):
                         for i in range(x.size): 
                             if data[t, j, i] != 0.0:
                                 change = True
-            else:
+        else:
                 for t in range(time.size):
                     for l in range(level.size):
                         for j in range(y.size):

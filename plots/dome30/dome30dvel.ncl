@@ -67,6 +67,10 @@ begin
   res@lbOrientation          = "Horizontal"  ; horizonal label bar
   res@lbAutoManage           = False         ; allow to change label bar font height
   res@lbLabelFontHeightF     = 0.02          ; make font height uniform for all label bars
+  res@cnLevelSelectionMode = "ManualLevels"     ; set manual contour levels
+  res@cnLevelSpacingF      = 10.0                  ; contour spacing
+  res@cnMinLevelValF       = 0.                 ; min level
+  res@cnMaxLevelValF       =  70.                 ; max level
 ; res@gsnMaximize            = True          ; make as large as possible
 
   plotvel(0) = gsn_contour(wks,vs1,res) 
