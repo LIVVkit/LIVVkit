@@ -21,15 +21,9 @@ begin
 ;************************************************
   wks = gsn_open_wks("png",PNG)                 ; open a png file
 
-;  velstockout  = STOCKout->velnorm(10,1,:,:)
-
   velstock9    = STOCK9->velnorm(10,1,:,:)
 
   velstock15   = STOCK15->velnorm(10,1,:,:)
-
-;  velvarblout  = VARout->velnorm(10,1,:,:)
-;  veldiffout   = new((/30,30/),float);
-;  veldiffout   = velvarblout(:,:)-velstockout(:,:);
 
   velvarbl9    = VAR9->velnorm(10,1,:,:)
   veldiff9     = new((/30,30/),float);
@@ -39,20 +33,16 @@ begin
   veldiff15    = new((/30,30/),float);
   veldiff15    = velvarbl15(:,:)-velstock15(:,:);
 
-;  vsout = velstockout@scale_factor * velstockout
   vs9   = velstock9@scale_factor  * velstock9
   vs15  = velstock15@scale_factor * velstock15
-  vv9   = velstock9@scale_factor  * velvarbl9
-  vv15  = velstock15@scale_factor * velvarbl15
-;  vdout = velstockout@scale_factor * veldiffout
-  vd9   = velstock9@scale_factor  * veldiff9
-  vd15  = velstock15@scale_factor * veldiff15
-;  vsout@long_name  = "Serial Scaled Benchmark"
+  vv9   = velvarbl9@scale_factor  * velvarbl9
+  vv15  = velvarbl15@scale_factor * velvarbl15
+  vd9   = veldiff9@scale_factor  * veldiff9
+  vd15  = veldiff15@scale_factor * veldiff15
   vs9@long_name    = "9 Proc Scaled Benchmark"
   vs15@long_name   = "15 Proc Scaled Benchmark"
   vv9@long_name    = "9 Proc Scaled Current Run"
   vv15@long_name   = "15 Proc Scaled Current Run"
-;  vdout@long_name  = "Serial Scaled Difference"
   vd9@long_name    = "9 Proc Scaled Difference"
   vd15@long_name   = "15 Proc Scaled Difference"
 

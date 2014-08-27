@@ -33,10 +33,10 @@ begin
 
   vsPIC  = velstockPIC@scale_factor  * velstockPIC
   vsJFNK = velstockJFNK@scale_factor * velstockJFNK
-  vvPIC  = velstockPIC@scale_factor  * velvarblPIC
-  vvJFNK = velstockJFNK@scale_factor * velvarblJFNK
-  vdPIC  = velstockPIC@scale_factor  * veldiffPIC
-  vdJFNK = velstockJFNK@scale_factor * veldiffJFNK
+  vvPIC  = velvarblPIC@scale_factor  * velvarblPIC
+  vvJFNK = velvarblJFNK@scale_factor * velvarblJFNK
+  vdPIC  = veldiffPIC@scale_factor  * veldiffPIC
+  vdJFNK = veldiffJFNK@scale_factor * veldiffJFNK
   vsPIC@long_name    = "PIC Scaled Benchmark"
   vsJFNK@long_name   = "JFNK Scaled Benchmark"
   vvPIC@long_name    = "PIC Scaled Current Run"

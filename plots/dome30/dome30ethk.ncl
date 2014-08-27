@@ -39,20 +39,16 @@ begin
   thkdiff15    = new((/31,31/),float);
   thkdiff15    = thkvarbl15(:,:)-thkstock15(:,:);
 
-;  tsout = thkstockout@scale_factor * thkstockout
   ts9   = thkstock9@scale_factor  * thkstock9
   ts15  = thkstock15@scale_factor * thkstock15
-  tv9   = thkstock9@scale_factor  * thkvarbl9
-  tv15  = thkstock15@scale_factor * thkvarbl15
-;  tdout = thkstockout@scale_factor * thkdiffout
-  td9   = thkstock9@scale_factor  * thkdiff9
-  td15= thkstock15@scale_factor   * thkdiff15
-;  tsout@long_name  = "Serial Scaled Benchmark"
+  tv9   = thkvarbl9@scale_factor  * thkvarbl9
+  tv15  = thkvarbl15@scale_factor * thkvarbl15
+  td9   = thkdiff9@scale_factor  * thkdiff9
+  td15= thkdiff15@scale_factor   * thkdiff15
   ts9@long_name    = "9 Proc Scaled Benchmark"
   ts15@long_name   = "15 Proc Scaled Benchmark"
   tv9@long_name    = "9 Proc Scaled Current Run"
   tv15@long_name   = "15 Proc Scaled Current Run"
-;  tdout@long_name  = "Serial Scaled Difference"
   td9@long_name    = "9 Proc Scaled Difference"
   td15@long_name   = "15 Proc Scaled Difference"
 

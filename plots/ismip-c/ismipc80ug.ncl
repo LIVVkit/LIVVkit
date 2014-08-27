@@ -33,10 +33,10 @@ begin
 
   us1   = ustock1@scale_factor  * ustock1
   us4  = ustock4@scale_factor * ustock4
-  uv1   = ustock1@scale_factor  * uvarbl1
-  uv4  = ustock4@scale_factor * uvarbl4
-  ud1   = ustock1@scale_factor  * udiff1
-  ud4  = ustock4@scale_factor * udiff4
+  uv1   = uvarbl1@scale_factor  * uvarbl1
+  uv4  = uvarbl4@scale_factor * uvarbl4
+  ud1   = udiff1@scale_factor  * udiff1
+  ud4  = udiff4@scale_factor * udiff4
   us1@long_name  = "1 Scaled Benchmark"
   us4@long_name = "4 Scaled Benchmark"
   uv1@long_name  = "1 Scaled Current Run"

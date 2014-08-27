@@ -24,8 +24,8 @@ begin
   thkdiffGLS    = thkvarblGLS(:,:)-thkstockGLS(:,:);
 
   tsGLS  = thkstockGLS@scale_factor  * thkstockGLS
-  tvGLS  = thkstockGLS@scale_factor  * thkvarblGLS
-  tdGLS  = thkstockGLS@scale_factor  * thkdiffGLS
+  tvGLS  = thkvarblGLS@scale_factor  * thkvarblGLS
+  tdGLS  = thkdiffGLS@scale_factor  * thkdiffGLS
   tsGLS@long_name   = "Glissade Scaled Benchmark"
   tvGLS@long_name   = "Glissade Scaled Current Run"
   tdGLS@long_name   = "Glissade Scaled Difference"

@@ -14,7 +14,7 @@ if ($skip_build_set == 0) then
  csh hopper-gnu-build-and-test-serial.csh no-copy skip-tests 
  csh hopper-gnu-build-and-test.csh no-copy skip-tests 
  cd ../hopper-pgi
- csh hopper-pgi-build-and-test.csh
+ csh hopper-pgi-build-and-test.csh 
  exit
 endif
 

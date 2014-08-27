@@ -220,33 +220,21 @@ def web(glide_flag,descript_file,test_file, \
                 test_file.write('<BR>\n')
                 xml_path = reg_test + '/dome30/evolving/trilinosOptions.xml'
                 bench_xml_path = reg_test + '/bench/dome30/evolving/trilinosOptions.xml'
-                if glide_flag == 1:
-                   c_flag = 1
-                   if os.path.isdir(reg_test + '/dome30/evolving/configure_files/') == True:
-                      configure_path = reg_test + '/dome30/evolving/configure_files/dome.30.JFNK.trilinos.config.15'
-                      bench_configure_path = reg_test + '/bench/dome30/evolving/configure_files/dome.30.JFNK.trilinos.config.15'
-                   else:
-                      configure_path = reg_test + '/dome30/evolving/dome.30.JFNK.trilinos.config.15'
-                      bench_configure_path = reg_test + '/bench/dome30/evolving/dome.30.JFNK.trilinos.config.15'
+                c_flag = 0
+                if os.path.isdir(reg_test + '/dome30/evolving/configure_files/') == True:
+                   configure_path = reg_test + '/dome30/evolving/configure_files/dome.30.glissade.config.15'
+                   bench_configure_path = reg_test + '/bench/dome30/evolving/configure_files/dome.30.glissade.config.15'
                 else:
-                   c_flag = 0
-                   if os.path.isdir(reg_test + '/dome30/evolving/configure_files/') == True:
-                      configure_path = reg_test + '/dome30/evolving/configure_files/dome.30.glissade.config.15'
-                      bench_configure_path = reg_test + '/bench/dome30/evolving/configure_files/dome.30.glissade.config.15'
-                   else:
-                      configure_path = reg_test + '/dome30/evolving/dome.30.glissade.config.15'
-                      bench_configure_path = reg_test + '/bench/dome30/evolving/dome.30.glissade.config.15'
+                   configure_path = reg_test + '/dome30/evolving/dome.30.glissade.config.15'
+                   bench_configure_path = reg_test + '/bench/dome30/evolving/dome.30.glissade.config.15'
                 VV_utilities.confxml(dome30e_case,configure_path,bench_configure_path,xml_path,bench_xml_path,c_flag)
 
-                if glide_flag == 1:
-                    test_file.write('<TH ALIGN=LEFT><A HREF="dome30e_plot.html">Plots</A>\n')
-                else:
-                    test_file.write('<TH ALIGN=LEFT><A HREF="dome30e_plot_glissade.html">Plots</A>\n')
+                test_file.write('<TH ALIGN=LEFT><A HREF="dome30e_plot_glissade.html">Plots</A>\n')
                 test_file.write('<BR>\n')
             #if failedt != 0:
             #    dome30e_plot.write("<H2>Evolving Dome 30 Test failed, plots may not be generated</H2><br>")
-                checkpath = reg_test + '/dome30/evolving/' + data_dir + '/dome.9.nc'
-                checkpath2 = reg_test + '/dome30/evolving/' + data_dir + '/dome.15.nc'
+                checkpath = reg_test + '/dome30/evolving/' + data_dir + '/dome.9.glissade.nc'
+                checkpath2 = reg_test + '/dome30/evolving/' + data_dir + '/dome.15.glissade.nc'
                 noplot = VV_checks.emptycheck(checkpath)
                 noplot1 = noplot
                 noplot = VV_checks.emptycheck(checkpath2)

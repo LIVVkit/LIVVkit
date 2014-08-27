@@ -33,10 +33,10 @@ begin
 
   ts1   = thkstock1@scale_factor  * thkstock1
   ts4  = thkstock4@scale_factor * thkstock4
-  tv1   = thkstock1@scale_factor  * thkvarbl1
-  tv4  = thkstock4@scale_factor * thkvarbl4
-  td1   = thkstock1@scale_factor  * thkdiff1
-  td4  = thkstock4@scale_factor * thkdiff4
+  tv1   = thkvarbl1@scale_factor  * thkvarbl1
+  tv4  = thkvarbl4@scale_factor * thkvarbl4
+  td1   = thkdiff1@scale_factor  * thkdiff1
+  td4  = thkdiff4@scale_factor * thkdiff4
   ts1@long_name  = "1 Scaled Benchmark"
   ts4@long_name = "4 Scaled Benchmark"
   tv1@long_name  = "1 Scaled Current Run"
