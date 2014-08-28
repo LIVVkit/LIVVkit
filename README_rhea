@@ -1,5 +1,5 @@
 Information on how to run the Land Ice V&V (LIVV) Post-Processing Software.
-KJE, AB, NM 5/2014
+KJE, AB, NM 8/2014
 
 The /PISCEES/trunk/tests/higher-order/livv/ directory contains all the scripts and code to run LIVV.
 The rhea_VV.bash script contains the inputs needed to run on a data processing style machine (OLCF).
@@ -35,59 +35,39 @@ To run the rhea_VV.bash script:
 
 Log onto Titan:
 
-  3. Now run the /PISCEES/trunk/builds/titan-gnu/titan-gnu-build-and-test.csh file on Titan (see /PISCEES/trunk/builds/README
-     for more information on how to run the csh script). NOTE: This updated .csh file will now copy over the most recent
-     /PISCEES/trunk/tests/higher-order/livv directory as well as the latest reg_test and perf_test directories located in /ccs/proj/cli062.
-     You can turn off the copying of these scripts in the titan-gnu-build-and-test.csh file at the beginning if you don't want them
-     copied over. The script will now update your job submissions in reg_test to the screen and will not finish until all jobs have
-     finished running. Thus, you can automatically switch over to rhea and run LIVV once the above file has completed.
-     Make sure the $TEST_DIR is set to the directory that you created in step #2. Also make sure the tests you want to run
-     and analyze on your machine later are selected in the csh file. The jobs in reg_test (and perf_test if the flag is selected)
-     will be automatically run by this csh script (as long as the $TEST_DIR path is correctly specified) after the model is
-     successfuly built.
+  1. Go to the PISCEES code base and cd trunk/tests/higher-order/livv
+  3. Now run the 'csh run_livv_on_titan.csh'
+NOTE: This updated .csh file will now copy over the most recent reg_test and perf_test directories located in /ccs/proj/cli106.
+     You can turn off the copying of reg_test by selecting the no-copy option
+     It will monitor the jobs on titan until they are complete.
+     Next, switch over to rhea and run LIVV once the above file has completed successfully.
 
-Log onto Rhea (We are hoping to incorporate cross-submission capability soon that will allow LIVV to be run automatically from Titan
-after the file in step 3 has finished running):
-  To set up the LIVV executable /higher-order/livv/rhea_VV.bash:
-  (This can be done after you run the titan-gnu-build-and-test.csh file.)
+Log onto Rhea (We are hoping to incorporate cross-submission capability soon that will allow LIVV to be run automatically from Titan after the file in step 3 has finished running):
+  To set up the LIVV executable, copy over livv to your working area in the /higher-order ditrectory and 'cd livv'
+  In rhea_VV.bash
+  1. There is an opportunity to insert a COMMENT to display your reason for running LIVV on the website.
 
-  4. There is an opportunity to insert a COMMENT to display your reason for running LIVV on the website.
-
-  5. Change the TEST_FILEPATH to the path containing the higher-order directory (the directory mentioned in step #2).
+  2. If needed, change the TEST_FILEPATH to the path containing the higher-order directory (the directory mentioned in step #2).
      NOTE: This path is currently set to $TEST_DIR which should require no changing by the user, unless it is not set properly.
 
-  6. Change the HTML_PATH to the location of the www directory. If it doesn't already exist, specify the path to where
+  3. Change the HTML_PATH to the location of the www directory. If it doesn't already exist, specify the path to where
      you would like it and LIVV will check the path and create it if it is not already there. For Titan/Rhea users, this is
      the www directory in your home space where your html files can be viewed on users.nccs.gov. LIVV will also create a
      sub-directory where it will store all of its own html files, therefore not disrupting the rest of your workspace.
 
-  7. The verification flag options are listed and you may set the flags to however you would prefer, 0 = do not run, 1 = run. 
+  4. The verification flag options are listed and you may set the flags to however you would prefer, 0 = do not run, 1 = run. 
 
-  8. The performance flag options are listed and you may set the flags to however you would prefer, 0 = do not run, 1 = run.
+  5. The performance flag options are listed and you may set the flags to however you would prefer, 0 = do not run, 1 = run.
   
-  8. The verification flag option is listed and you may set the flag to however you would prefer, 0 = do not run, 1 = run.
+  6. The validation flag option is listed and you may set the flag to however you would prefer, 0 = do not run, 1 = run- this one is underconstruction so no guarantees it will do anything useful for you.
 
-  9. RUN_ANT should be left as it is since Antartica analysis is not set up yet.
+  7. RUN_ANT should be off since Antartica analysis is not set up yet.
 
-To run LIVV (on Rhea!):
 
-  10. Type "bash rhea_VV.bash" in the command line in the /higher-order/livv/ directory. NOTE: This can only be done once the Titan
+  8. Type "bash rhea_VV.bash" in the command line in the /higher-order/livv/ directory. NOTE: This can only be done once the Titan
       script has finished running, or you will get an error. When it is finished running, the website location will be printed to
-      the screen where you can go look at the output. We have piped the ncl plot output to a file called plot_details.out. So if
-      there is any concern over whether plots have formed correctly after inspecting the website, you can look in that file.
-      Same for the iteration plots in iter_details.out.
+      the screen where you can go look at the output. 
 
+The ncl plot output is sent to a file called plot_details.out. So if there are plot errors, go look in tha tfile for detials. 
+The interation count output is sent to a file called plot_details.out. So if there are plot errors, go look in tha tfile for detials. 
 
-
-
-TODOs (feel free to add to this as needed)
-
-Major:
-*create a more general user interface to process the GIS production output
-*enable the option to read from FELIX data (in exodus format) using visit
-
-Minor:
-*have the input and output information from the benchmark runs set in the software rather than the user 
-specify (or at least have a default)
-*parse more detailed data from the output files about the solver and preconditioner
-n VV_outprocess
