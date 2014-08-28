@@ -43,42 +43,6 @@ mac. This will be the same
      directory as specified by TEST_DIR in the ./cmake-scripts/master_build_mac.csh file. Go ahead and copy the entire
      ./tests/higher-order/livv directory and place in this new directory as well.
 
-*** SFP
-The above needs to be clarified for mac testing. First, you no longer need to download, expand, and copy the reg_test
-dir over, it happens automatically. Also, it would be nice if you didn't have to copy both
-the livv. and reg_test dirs into ./tests/higher-order. In fact, it might be easier to have them in some more general
-location on your machine (e.g, I put them in ~/work/cism/test-livv/ on my machine, which is a location that won't change
-regularly, whereas a path to a specific checkout of the code might (if you have multiple checkouts /versions at one
-time))
-
-In this same dir, it looks like you will need to make a subdir "html", which is where the comparison plots / info will
-go (either this, or we should just have the script do a mkdir in "TEST_DIR./" (see below).
-
-A few other things that need to be noted more clearly in the README (as opposed to having to search through the 
-scripts to find them out):
-
-- you need to specify the path for TEST_DIR at the top of the ./builds/mac-gnu/mac-gnu-build-and-test.csh script
-(it is currently commented out). E.g., I have " setenv TEST_DIR "~/work/modeling/cism/test-livv" " (That, or
-add the 'setenv TEST_DIR "~/work/modeling/cism/test-livv' to a .cshrc file in your home dir)
-
-- you need to also specify the path for TEST_DIR in the .bashrc file, e.g.
-"export TEST_DIR=~/work/modeling/cism/test-livv/"
-
->> The above two changes to .bashrc and .cshrc are all that is needed <<
-
->> note that one doesn't have to explicitly run the cmake-build-and-test script from the ./builds dir. 
-Instead, you can just do the above changes and run the "run_livv_on_mac.csh" script in ./tests/higher-order/livv/ <<
-
->> note that we need to update / reduce the tests being done by altering the mac_job scripts in ./reg_test. Do this on
-oceans11, then put the updated tarball back up there so that when others alter it, they alter from this new template <<
-
-
-On line 152 of the ./builds/mac-gnu/mac-gnu-build-and-test.csh script, it tries to copy livv from
-./test/higher-order/livv to the TEST_DIR location. But according to the info above in (1), we've already done this. 
-We should decide on one or the other.
-
-***
-
   2. Now run the ./builds/mac-gnu/mac-gnu-build-and-test.csh file (see ./builds/README for more information on how to
 run the csh script).
 
@@ -145,3 +109,72 @@ Minor:
 specify (or at least have a default)
 *parse more detailed data from the output files about the solver and preconditioner
 n VV_outprocess
+
+
+***************************************
+
+New, updated short-version of how-to for running / using LIVV on the Mac (SFP, 8-28-2014)
+
+As above, you'll need to appropriate software installed. Python should already be good if you installed according to the
+CISM2 instructions.
+
+For NCL, follow the above instructions.
+
+You'll need to set up the env variable "TEST_DIR" in both your .bashrc and .cshrc shells. Om my machine, all of my
+different CISM builds live in:
+
+/Users/sprice/work/modeling/cism/
+
+I added a new dir there for storing test case data (model outputs, benchmark outputs, LIVV plots / webpages, etc):
+
+/Users/sprice/work/modeling/cism/cism-test/
+
+In there, I also added a subdir "html", where I'm going to (hopefully) see the webpages that LIVV outputs.
+(It looks like LIVV is expecting to find this dir under TEST_DIR/)
+
+In my .bashrc I added the following:
+export TEST_DIR=/Users/sprice/work/modeling/cism/cism-test
+
+And similarly in my .cshrc:
+setenv TEST_DIR "/Users/sprice/work/modeling/cism/cism-test"
+(note that for my .cshrc file, this is the ONLY line in there)
+
+At this point, running Doug's "run_livv_for_mac" script from within ./tests/higher-order/livv/ works to build the code
+and run the test cases. It then stops though, giving the following:
+
+Call disabled to: mac_VV.bash, which is located in:
+/Users/sprice/work/modeling/cism/cism-test/livv
+
+Assuming that the next step would be to run mac_VV.bash, I've tried to do that manually (ideally, this would happen
+automatically as part of Doug's script above, but one thing at a time). What I find is that, if I run it from
+./tests/higher-order/livv/, it doesn't work. I think this is maybe NOT where it is supposed to be run from?
+
+If I instead go to $TEST_DIR/livv/ and try to run it from there, nothing happens initially. This seems to have to do
+with the if/fi construct at the bottom of the script, which is "blocking" anything from happening as far as I can tell
+(at least using the simple syntax of "bash mac_VV.bash" - maybe it needs arguments?). If I comment out the if/fi lines,
+so that the long ugly command there starting with
+rm $HTML_PATH/livv/* runs anyway, I get the following:
+
+08-28-2014-04:49:01 PM test run of code
+rm: /Users/sprice/work/modeling/cism/cism-test/html//livv/*: No such file or directory
+placing HTML files in the sprice subdirectory (check permissions)
+running diagnostic dome30 glide testcase
+mv: rename /Users/sprice/work/modeling/cism/cism-test/livv/plots/dome30dvel.png to
+/Users/sprice/work/modeling/cism/cism-test/html/livv/dome30dvel.png: No such file or directory
+Command '['mv', '-f', '/Users/sprice/work/modeling/cism/cism-test/livv/plots/dome30dvel.png',
+'/Users/sprice/work/modeling/cism/cism-test/html/livv/']' returned non-zero exit status 1, File: VV_dome30details.py,
+Line number: 383
+
+Now it is finally trying to do something, but obviously struggling with the file paths for some reason.
+
+Note that on my machine, in order to get this far, in the mac_VV.bash script, I had to change the following lines:
+
+# set path to python version on mac
+#export MY_PYTHON="/opt/local/bin/python2.7"
+export MY_PYTHON="python"
+
+Even though I've got python2.7 at that path on my machine, it doesn't work for some reason to invoke it that way. Since
+I've got "python" aliased to that location anyway, I just changed MY_PYTHON to point to "python". Now at least the
+python scripts are getting called.
+
+This is as far as I got on 8/28/14.
