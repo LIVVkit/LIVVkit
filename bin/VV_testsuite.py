@@ -86,7 +86,7 @@ def bit_list(reg_test,data_dir,diagnostic_flag,evolving_flag,circular_flag,confi
     return dictionary
 
 
-def web(glide_flag,descript_file,test_file, \
+def web(glam_flag,descript_file,test_file, \
     dome30d_file,dome30d_case,dome30d_plot,dome30e_file,dome30e_case,dome30e_plot, \
     circ_file,circ_case,circ_plot,conf_file,conf_case,conf_plot, \
     ishoma80_file,ishoma80_case,ishoma80_plot,ishoma20_file,ishoma20_case,ishoma20_plot, \
@@ -112,8 +112,8 @@ def web(glide_flag,descript_file,test_file, \
     if diagnostic_flag == 1:
 
 # Diagnostic Dome 30 stats
-        if glide_flag == 1:
-            print "running diagnostic dome30 glide testcase"
+        if glam_flag == 1:
+            print "running diagnostic dome30 glam testcase"
         else:
             print "running diagnostic dome30 glissade testcase"
         test_file.write('<BR>\n')
@@ -128,19 +128,19 @@ def web(glide_flag,descript_file,test_file, \
 
 # link to dome30d_file with descriptions about the test cases
             #since glissade does not output solver information:
-            if glide_flag == 1:
+            if glam_flag == 1:
                 test_file.write('<TH ALIGN=LEFT><A HREF="dome30d_details.html">Velocity Solver Details</A>\n')
                 test_file.write('<BR>\n')
                 failedt = VV_dome30details.ddetails(dome30d_file,reg_test,data_dir)
 
-            if glide_flag == 1:
+            if glam_flag == 1:
                 test_file.write('<TH ALIGN=LEFT><A HREF="dome30d_case.html">Case and Parameter Settings Details</A>\n')
             else:
                 test_file.write('<TH ALIGN=LEFT><A HREF="dome30d_case_glissade.html">Case and Parameter Settings Details</A>\n')
             test_file.write('<BR>\n')
             xml_path = reg_test + '/dome30/diagnostic/trilinosOptions.xml'
             bench_xml_path = reg_test + '/bench/dome30/diagnostic/trilinosOptions.xml'
-            if glide_flag == 1:
+            if glam_flag == 1:
                 c_flag = 1
                 if os.path.isdir(reg_test + '/dome30/diagnostic/configure_files/') == True:
                     configure_path = reg_test + '/dome30/diagnostic/configure_files/dome.30.JFNK.trilinos.config.1'
@@ -158,20 +158,20 @@ def web(glide_flag,descript_file,test_file, \
                     bench_configure_path = reg_test + '/bench/dome30/diagnostic/dome.30.glissade.config.1'
             VV_utilities.confxml(dome30d_case,configure_path,bench_configure_path,xml_path,bench_xml_path,c_flag)
 
-            if glide_flag == 1:
+            if glam_flag == 1:
                 test_file.write('<TH ALIGN=LEFT><A HREF="dome30d_plot.html">Plots</A>\n')
             else:
                 test_file.write('<TH ALIGN=LEFT><A HREF="dome30d_plot_glissade.html">Plots</A>\n')
             test_file.write('<BR>\n')
             #if failedt != 0:
             #    dome30d_plot.write("<H2>Diagnostic Dome 30 Test failed, plots may not be generated</H2><br>")
-            checkpath = reg_test + '/dome30/diagnostic/' + data_dir + '/dome.1.nc'
-            checkpath2 = reg_test + '/dome30/diagnostic/' + data_dir + '/dome.4.nc'
+            checkpath = reg_test + '/dome30/diagnostic/' + data_dir + '/dome.1.glissade.nc'
+            checkpath2 = reg_test + '/dome30/diagnostic/' + data_dir + '/dome.4.glissade.nc'
             noplot = VV_checks.emptycheck(checkpath)
             noplot1 = noplot
             noplot = VV_checks.emptycheck(checkpath2)
             if noplot1 != 1 and noplot != 1:
-                VV_dome30details.dplot(glide_flag,dome30d_plot,reg_test,ncl_path,html_path,script_path,data_dir)
+                VV_dome30details.dplot(glam_flag,dome30d_plot,reg_test,ncl_path,html_path,script_path,data_dir)
 
 # Time stamping
         strrand = ''
@@ -191,10 +191,10 @@ def web(glide_flag,descript_file,test_file, \
     if evolving_flag == 1:
 
 # Evolving Dome 30 stats
-#        if glide_flag == 1:
-#            print "running evolving dome30 glide testcase"
+#        if glam_flag == 1:
+#            print "running evolving dome30 glam testcase"
 #        else:
-        if glide_flag == 0:
+        if glam_flag == 0:
             print "running evolving dome30 glissade testcase"
             test_file.write('<BR>\n')
             if dictionary['evolving'] == 0:
@@ -208,12 +208,12 @@ def web(glide_flag,descript_file,test_file, \
 
 # link to dome30e_file with descriptions about the test cases
             # since glissade does not output solver information:
-            	if glide_flag == 1:
+            	if glam_flag == 1:
                    test_file.write('<TH ALIGN=LEFT><A HREF="dome30e_details.html">Velocity Solver Details</A>\n')
                    test_file.write('<BR>\n')
                    failedt = VV_dome30details.edetails(dome30e_file,test_suite,reg_test,ncl_path,html_path,data_dir)
 
-                if glide_flag == 1:
+                if glam_flag == 1:
                    test_file.write('<TH ALIGN=LEFT><A HREF="dome30e_case.html">Case and Parameter Settings Details</A>\n')
                 else:
                    test_file.write('<TH ALIGN=LEFT><A HREF="dome30e_case_glissade.html">Case and Parameter Settings Details</A>\n')
@@ -239,7 +239,7 @@ def web(glide_flag,descript_file,test_file, \
                 noplot1 = noplot
                 noplot = VV_checks.emptycheck(checkpath2)
                 if noplot != 1 and noplot != 1:
-                    VV_dome30details.eplot(glide_flag,dome30e_plot,reg_test,ncl_path,html_path,script_path,data_dir)
+                    VV_dome30details.eplot(glam_flag,dome30e_plot,reg_test,ncl_path,html_path,script_path,data_dir)
 
 # Time stamping
             mode = os.stat(reg_test + '/dome30/evolving').st_mtime
@@ -258,8 +258,8 @@ def web(glide_flag,descript_file,test_file, \
     if circular_flag == 1:
 
 # Circular Shelf stats
-        if glide_flag == 1:
-            print "running circular shelf glide testcase"
+        if glam_flag == 1:
+            print "running circular shelf glam testcase"
         else:
             print "running circular shelf glissade testcase"
         test_file.write('<BR>\n')
@@ -274,19 +274,19 @@ def web(glide_flag,descript_file,test_file, \
 
 # link to circ_file with descriptions about the test cases
             # since glissade does not output solver information:
-            if glide_flag == 1:
+            if glam_flag == 1:
                 test_file.write('<TH ALIGN=LEFT><A HREF="circ_details.html">Velocity Solver Details</A>\n')
                 test_file.write('<BR>\n')
                 failedt = VV_shelfdetails.circdetails(circ_file,reg_test,data_dir)
 
-            if glide_flag ==1:
+            if glam_flag ==1:
                 test_file.write('<TH ALIGN=LEFT><A HREF="circ_case.html">Case and Parameter Settings Details</A>\n')
             else:
                 test_file.write('<TH ALIGN=LEFT><A HREF="circ_case_glissade.html">Case and Parameter Settings Details</A>\n')
             test_file.write('<BR>\n')
             xml_path = reg_test + '/circular-shelf/trilinosOptions.xml'
             bench_xml_path = reg_test + '/bench/circular-shelf/trilinosOptions.xml'
-            if glide_flag == 1:
+            if glam_flag == 1:
                 c_flag = 1
                 if os.path.isdir(reg_test + '/circular-shelf/configure_files/') == True:
                     configure_path = reg_test + '/circular-shelf/configure_files/circular-shelf.JFNK.config'
@@ -304,17 +304,17 @@ def web(glide_flag,descript_file,test_file, \
                     bench_configure_path = reg_test + '/bench/circular-shelf/circular-shelf.glissade.config'
             VV_utilities.confxml(circ_case,configure_path,bench_configure_path,xml_path,bench_xml_path,c_flag)
 
-            if glide_flag == 1:
+            if glam_flag == 1:
                 test_file.write('<TH ALIGN=LEFT><A HREF="circ_plot.html">Plots</A>\n')
             else:
                 test_file.write('<TH ALIGN=LEFT><A HREF="circ_plot_glissade.html">Plots</A>\n')
             test_file.write('<BR>\n')
             #if failedt != 0:
             #    circ_plot.write("<H2>Circular Shelf Test failed, plots may not be generated</H2><br>")
-            checkpath = reg_test + '/circular-shelf/' + data_dir + '/circular-shelf.gnu.JFNK.nc'
+            checkpath = reg_test + '/circular-shelf/' + data_dir + '/circular-shelf.gnu.glissade.nc'
             noplot = VV_checks.emptycheck(checkpath)
             if noplot != 1:
-                VV_shelfdetails.circplot(glide_flag,circ_plot,reg_test,ncl_path,html_path,script_path,data_dir)
+                VV_shelfdetails.circplot(glam_flag,circ_plot,reg_test,ncl_path,html_path,script_path,data_dir)
 
 # Time stamping
         mode = os.stat(reg_test + '/circular-shelf').st_mtime
@@ -333,8 +333,8 @@ def web(glide_flag,descript_file,test_file, \
     if confined_flag == 1:
 
 # Confined Shelf stats
-        if glide_flag == 1:
-            print "running confined shelf glide testcase"
+        if glam_flag == 1:
+            print "running confined shelf glam testcase"
         else:
             print "running confined shelf glissade testcase"
         test_file.write('<BR>\n')
@@ -349,19 +349,19 @@ def web(glide_flag,descript_file,test_file, \
 
 # link to conf_file with descriptions about the test cases          
             # since glissade does not output solver information:
-            if glide_flag == 1:
+            if glam_flag == 1:
                 test_file.write('<TH ALIGN=LEFT><A HREF="conf_details.html">Velocity Solver Details</A>\n')
                 test_file.write('<BR>\n')
                 failedt = VV_shelfdetails.confdetails(conf_file,reg_test,data_dir)
 
-            if glide_flag == 1:
+            if glam_flag == 1:
                 test_file.write('<TH ALIGN=LEFT><A HREF="conf_case.html">Case and Parameter Settings Details</A>\n')
             else:
                 test_file.write('<TH ALIGN=LEFT><A HREF="conf_case_glissade.html">Case and Parameter Settings Details</A>\n')
             test_file.write('<BR>\n')
             xml_path = reg_test + '/confined-shelf/trilinosOptions.xml'
             bench_xml_path = reg_test + '/bench/confined-shelf/trilinosOptions.xml'
-            if glide_flag == 1:
+            if glam_flag == 1:
                 c_flag = 1
                 if os.path.isdir(reg_test + '/confined-shelf/configure_files/') == True:
                     configure_path = reg_test + '/confined-shelf/configure_files/confined-shelf.JFNK.config'
@@ -379,17 +379,17 @@ def web(glide_flag,descript_file,test_file, \
                     bench_configure_path = reg_test + '/bench/confined-shelf/confined-shelf.glissade.config'
             VV_utilities.confxml(conf_case,configure_path,bench_configure_path,xml_path,bench_xml_path,c_flag)
 
-            if glide_flag == 1:
+            if glam_flag == 1:
                 test_file.write('<TH ALIGN=LEFT><A HREF="conf_plot.html">Plots</A>\n')
             else:
                 test_file.write('<TH ALIGN=LEFT><A HREF="conf_plot_glissade.html">Plots</A>\n')
             test_file.write('<BR>\n')
             #if failedt != 0:
             #    conf_plot.write("<H2>Confined Shelf Test failed, plots may not be generated</H2><br>")
-            checkpath = reg_test + '/confined-shelf/' + data_dir + '/confined-shelf.gnu.JFNK.nc'
+            checkpath = reg_test + '/confined-shelf/' + data_dir + '/confined-shelf.gnu.glissade.nc'
             noplot = VV_checks.emptycheck(checkpath)
             if noplot != 1:
-                VV_shelfdetails.confplot(glide_flag,conf_plot,reg_test,ncl_path,html_path,script_path,data_dir)
+                VV_shelfdetails.confplot(glam_flag,conf_plot,reg_test,ncl_path,html_path,script_path,data_dir)
 
 # Time stamping
         mode = os.stat(reg_test + '/confined-shelf').st_mtime
@@ -408,8 +408,8 @@ def web(glide_flag,descript_file,test_file, \
     if ismip_hom_a80_flag == 1:
 
 # ISMIP HOM A 80km stats
-        if glide_flag == 1:
-            print "running ismip hom a 80km glide testcase"
+        if glam_flag == 1:
+            print "running ismip hom a 80km glam testcase"
         else:
             print "running ismip hom a 80km glissade testcase"
         test_file.write('<BR>\n')
@@ -424,19 +424,19 @@ def web(glide_flag,descript_file,test_file, \
 
 # link to ismip_hom_a80_file with descriptions about the test cases 
             # since glissade does not output solver information:
-            if glide_flag == 1:
+            if glam_flag == 1:
                 test_file.write('<TH ALIGN=LEFT><A HREF="ishoma80_details.html">Velocity Solver Details</A>\n')
                 test_file.write('<BR>\n')
                 failedt = VV_ismip.a80details(ishoma80_file,reg_test,data_dir)
             
-            if glide_flag == 1:
+            if glam_flag == 1:
                 test_file.write('<TH ALIGN=LEFT><A HREF="ishoma80_case.html">Case and Parameter Settings Details</A>\n')
             else:
                 test_file.write('<TH ALIGN=LEFT><A HREF="ishoma80_case_glissade.html">Case and Parameter Settings Details</A>\n')
             test_file.write('<BR>\n')
             xml_path = reg_test + '/ismip-hom-a/80km/trilinosOptions.xml'
             bench_xml_path = reg_test + '/bench/ismip-hom-a/80km/trilinosOptions.xml'
-            if glide_flag == 1:
+            if glam_flag == 1:
                 c_flag = 1
                 if os.path.isdir(reg_test + '/ismip-hom-a/80km/configure_files/') == True:
                     configure_path = reg_test + '/ismip-hom-a/80km/configure_files/ishom.a.80km.JFNK.trilinos.config'
@@ -454,17 +454,17 @@ def web(glide_flag,descript_file,test_file, \
                     bench_configure_path = reg_test + '/bench/ismip-hom-a/80km/ishom.a.80km.glissade.1.config'
             VV_utilities.confxml(ishoma80_case,configure_path,bench_configure_path,xml_path,bench_xml_path,c_flag)
 
-            if glide_flag == 1:
+            if glam_flag == 1:
                 test_file.write('<TH ALIGN=LEFT><A HREF="ishoma80_plot.html">Plots</A>\n')
             else:
                 test_file.write('<TH ALIGN=LEFT><A HREF="ishoma80_plot_glissade.html">Plots</A>\n')
             test_file.write('<BR>\n')
             #if failedt != 0:
             #    ishoma80_plot.write("<H2>ISMIP HOM A 80km Test failed, plots may not be generated</H2><br>")
-            checkpath = reg_test + '/ismip-hom-a/80km/' + data_dir + '/ishom.a.80km.JFNK.out.nc'
+            checkpath = reg_test + '/ismip-hom-a/80km/' + data_dir + '/ishom.a.80km.glissade.1.out.nc'
             noplot = VV_checks.emptycheck(checkpath)
             if noplot != 1:
-                VV_ismip.a80plot(glide_flag,ishoma80_plot,reg_test,ncl_path,html_path,script_path,data_dir)
+                VV_ismip.a80plot(glam_flag,ishoma80_plot,reg_test,ncl_path,html_path,script_path,data_dir)
 
 # Time stamping
         mode = os.stat(reg_test + '/ismip-hom-a/80km').st_mtime
@@ -483,8 +483,8 @@ def web(glide_flag,descript_file,test_file, \
     if ismip_hom_a20_flag == 1:
 
 # ISMIP HOM A 20km stats
-        if glide_flag == 1:
-            print "running ismip hom a 20km glide testcase"
+        if glam_flag == 1:
+            print "running ismip hom a 20km glam testcase"
         else:
             print "running ismip hom a 20km glissade testcase"
         test_file.write('<BR>\n')
@@ -499,19 +499,19 @@ def web(glide_flag,descript_file,test_file, \
 
 # link to ismip_hom_a20_file with descriptions about the test cases 
             # since glissade does not output solver information:
-            if glide_flag == 1:
+            if glam_flag == 1:
                 test_file.write('<TH ALIGN=LEFT><A HREF="ishoma20_details.html">Velocity Solver Details</A>\n')
                 test_file.write('<BR>\n')
                 failedt = VV_ismip.a20details(ishoma20_file,reg_test,data_dir)
 
-            if glide_flag == 1:
+            if glam_flag == 1:
                 test_file.write('<TH ALIGN=LEFT><A HREF="ishoma20_case.html">Case and Parameter Settings Details</A>\n')
             else:
                 test_file.write('<TH ALIGN=LEFT><A HREF="ishoma20_case_glissade.html">Case and Parameter Settings Details</A>\n')
             test_file.write('<BR>\n')
             xml_path = reg_test + '/ismip-hom-a/20km/trilinosOptions.xml'
             bench_xml_path = reg_test + '/bench/ismip-hom-a/20km/trilinosOptions.xml'
-            if glide_flag == 1:
+            if glam_flag == 1:
                 c_flag = 1
                 if os.path.isdir(reg_test + '/ismip-hom-a/20km/configure_files/') == True:
                     configure_path = reg_test + '/ismip-hom-a/20km/configure_files/ishom.a.20km.JFNK.trilinos.config'
@@ -529,17 +529,17 @@ def web(glide_flag,descript_file,test_file, \
                     bench_configure_path = reg_test + '/bench/ismip-hom-a/20km/ishom.a.20km.glissade.1.config'
             VV_utilities.confxml(ishoma20_case,configure_path,bench_configure_path,xml_path,bench_xml_path,c_flag)
 
-            if glide_flag == 1:
+            if glam_flag == 1:
                 test_file.write('<TH ALIGN=LEFT><A HREF="ishoma20_plot.html">Plots</A>\n')
             else:
                 test_file.write('<TH ALIGN=LEFT><A HREF="ishoma20_plot_glissade.html">Plots</A>\n')
             test_file.write('<BR>\n')
             #if failedt != 0:
             #    ishoma20_plot.write("<H2>ISMIP HOM A 20 Test failed, plots may not be generated</H2><br>")
-            checkpath = reg_test + '/ismip-hom-a/20km/' + data_dir + '/ishom.a.20km.JFNK.out.nc'
+            checkpath = reg_test + '/ismip-hom-a/20km/' + data_dir + '/ishom.a.20km.glissade.1.out.nc'
             noplot = VV_checks.emptycheck(checkpath)
             if noplot != 1:
-                VV_ismip.a20plot(glide_flag,ishoma20_plot,reg_test,ncl_path,html_path,script_path,data_dir)
+                VV_ismip.a20plot(glam_flag,ishoma20_plot,reg_test,ncl_path,html_path,script_path,data_dir)
 
 # Time stamping
         mode = os.stat(reg_test + '/ismip-hom-a/20km').st_mtime
@@ -556,7 +556,7 @@ def web(glide_flag,descript_file,test_file, \
 
 #apply flag to turn off running test
     if ismip_hom_c80_flag == 1:
-        if glide_flag == 0:
+        if glam_flag == 0:
 # ISMIP HOM C 80km stats
             print "running ismip hom c 80km glissade testcase"
             test_file.write('<BR>\n')
@@ -570,19 +570,19 @@ def web(glide_flag,descript_file,test_file, \
             if flag_to_plot_ihc:
 
 # link to ismip_hom_c80_file with descriptions about the test cases       
-                if glide_flag == 1:
+                if glam_flag == 1:
                     test_file.write('<TH ALIGN=LEFT><A HREF="ishomc80_details.html">Velocity Solver Details</A>\n')
                     test_file.write('<BR>\n')
                     failedt = VV_ismip.c80details(ishomc80_file,reg_test,data_dir)
 
-                if glide_flag == 1:
+                if glam_flag == 1:
                     test_file.write('<TH ALIGN=LEFT><A HREF="ishomc80_case.html">Case and Parameter Settings Details</A>\n')
                 else:
                     test_file.write('<TH ALIGN=LEFT><A HREF="ishomc80_case_glissade.html">Case and Parameter Settings Details</A>\n')
                 test_file.write('<BR>\n')
                 xml_path = reg_test + '/ismip-hom-c/80km/trilinosOptions.xml'
                 bench_xml_path = reg_test + '/bench/ismip-hom-c/80km/trilinosOptions.xml'
-                if glide_flag == 1:
+                if glam_flag == 1:
                     c_flag = 1
                     if os.path.isdir(reg_test + '/ismip-hom-c/80km/configure_files/') == True:
                         configure_path = reg_test + '/ismip-hom-c/80km/configure_files/ishom.c.80km.JFNK.trilinos.config'
@@ -600,7 +600,7 @@ def web(glide_flag,descript_file,test_file, \
                         bench_configure_path = reg_test + '/bench/ismip-hom-c/80km/ishom.c.80km.glissade.1..config'
                 VV_utilities.confxml(ishomc80_case,configure_path,bench_configure_path,xml_path,bench_xml_path,c_flag)
 
-                if glide_flag == 1:
+                if glam_flag == 1:
                     test_file.write('<TH ALIGN=LEFT><A HREF="ishomc80_plot.html">Plots</A>\n')
                 else:
                     test_file.write('<TH ALIGN=LEFT><A HREF="ishomc80_plot_glissade.html">Plots</A>\n')
@@ -610,7 +610,7 @@ def web(glide_flag,descript_file,test_file, \
                 checkpath = reg_test + '/ismip-hom-c/80km/' + data_dir + '/ishom.c.80km.glissade.1.out.nc'
                 noplot = VV_checks.emptycheck(checkpath)
                 if noplot != 1:
-                    VV_ismip.c80plot(glide_flag,ishomc80_plot,reg_test,ncl_path,html_path,script_path,data_dir)
+                    VV_ismip.c80plot(glam_flag,ishomc80_plot,reg_test,ncl_path,html_path,script_path,data_dir)
 
 # Time stamping
             mode = os.stat(reg_test + '/ismip-hom-c/80km').st_mtime
@@ -627,7 +627,7 @@ def web(glide_flag,descript_file,test_file, \
 
 #apply flag to turn off running test
     if ismip_hom_c20_flag == 1:
-        if glide_flag == 0:
+        if glam_flag == 0:
 # ISMIP HOM C 20km stats
             print "running ismip hom c 20km glissade testcase"
             test_file.write('<BR>\n')
@@ -641,19 +641,19 @@ def web(glide_flag,descript_file,test_file, \
             if flag_to_plot_ihc:
 
 # link to ismip_hom_c20_file with descriptions about the test cases       
-                if glide_flag == 1:
+                if glam_flag == 1:
                     test_file.write('<TH ALIGN=LEFT><A HREF="ishomc20_details.html">Velocity Solver Details</A>\n')
                     test_file.write('<BR>\n')
                     failedt = VV_ismip.c20details(ishomc20_file,reg_test,data_dir)
 
-                if glide_flag == 1:
+                if glam_flag == 1:
                     test_file.write('<TH ALIGN=LEFT><A HREF="ishomc20_case.html">Case and Parameter Settings Details</A>\n')
                 else:
                     test_file.write('<TH ALIGN=LEFT><A HREF="ishomc20_case_glissade.html">Case and Parameter Settings Details</A>\n')
                 test_file.write('<BR>\n')
                 xml_path = reg_test + '/ismip-hom-c/20km/trilinosOptions.xml'
                 bench_xml_path = reg_test + '/bench/ismip-hom-c/20km/trilinosOptions.xml'
-                if glide_flag == 1:
+                if glam_flag == 1:
                     c_flag = 1
                     if os.path.isdir(reg_test + '/ismip-hom-c/20km/configure_files/') == True:
                         configure_path = reg_test + '/ismip-hom-c/20km/configure_files/ishom.c.20km.JFNK.trilinos.config'
@@ -671,7 +671,7 @@ def web(glide_flag,descript_file,test_file, \
                         bench_configure_path = reg_test + '/bench/ismip-hom-c/20km/ishom.c.20km.glissade.1.config'
                 VV_utilities.confxml(ishomc20_case,configure_path,bench_configure_path,xml_path,bench_xml_path,c_flag)
 
-                if glide_flag == 1:
+                if glam_flag == 1:
                     test_file.write('<TH ALIGN=LEFT><A HREF="ishomc20_plot.html">Plots</A>\n')
                 else:
                     test_file.write('<TH ALIGN=LEFT><A HREF="ishomc20_plot_glissade.html">Plots</A>\n')
@@ -681,7 +681,7 @@ def web(glide_flag,descript_file,test_file, \
                 checkpath = reg_test + '/ismip-hom-c/20km/' + data_dir + '/ishom.c.20km.glissade.1.out.nc'
                 noplot = VV_checks.emptycheck(checkpath)
                 if noplot != 1:
-                    VV_ismip.c20plot(glide_flag,ishomc20_plot,reg_test,ncl_path,html_path,script_path,data_dir)
+                    VV_ismip.c20plot(glam_flag,ishomc20_plot,reg_test,ncl_path,html_path,script_path,data_dir)
 
 # Time stamping
             mode = os.stat(reg_test + '/ismip-hom-c/20km').st_mtime

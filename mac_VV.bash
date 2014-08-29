@@ -22,7 +22,7 @@ fi
 export MY_PYTHON="/opt/local/bin/python2.7"
 
 # user added comment of analysis to be performed
-COMMENT="test run of code"
+COMMENT="Test run of glissade code"
 
 # change to the location of the directory that holds the livv and reg_test directory
 export TEST_FILEPATH="$TEST_DIR"
@@ -34,17 +34,19 @@ export HTML_PATH="$TEST_FILEPATH/html/"
 # flags to select verification tests, 1=yes
 # due to the capability of the machine, the only tests that should be run on the machine are:
 # Dome30_Diagnostic, Dome30_Evolving, Circular_Shelf, Confined_Shelf, ISMIP_HOM_A80, and ISMIP_HOM_A20
+export RUN_GLAM=0
+
 export RUN_DOME30_DIAGNOSTIC=1
 export RUN_DOME30_EVOLVING=1
 export RUN_CIRCULAR_SHELF=1
 export RUN_CONFINED_SHELF=1
 export RUN_ISMIP_HOM_A80=1
 export RUN_ISMIP_HOM_A20=1
-export RUN_ISMIP_HOM_C=0
-export RUN_GIS_10KM=0
+export RUN_ISMIP_HOM_C=1
+export RUN_GIS_10KM=1
 
-# leave RUN_ANT=0 since this capability is not ready yet
-export RUN_ANT=0
+export RUN_VALIDATION=0
+
 #*******************************************************************************
 
 # From here below, the commands are set automatically and don't require changing by the user
@@ -80,10 +82,13 @@ export NCL_PATH="$SCRIPT_PATH/plots"
 
 # command to run python script while inputting all of the files listed above
 # NOTE: not all settings are required to run the python script, type "python VV_main -h" in the command line for a full list of options
-# TODO include options if RUN_ANT is turned on, right now only have settings for GIS
 
-if [[ ((($nargs == 1) && ($1 == "quick-test")) || (($nargs == 2) && ($2 == "quick-test"))) ]]; then
- rm $HTML_PATH/livv/*
-		$MY_PYTHON $PY_PATH/VV_main.py -d "$PY_PATH" -j "$HTML_PATH" -l "$HTML_LINK" -k "$NCL_PATH" -d "$DATA_DIR" -t "$TEST_FILEPATH" -i "$NOW" -m "$COMMENT" -u "$USERNAME" -D "$RUN_DOME30_DIAGNOSTIC" 
-fi
+# KJE remove until the full tset suite is running properly.
+#if [[ ((($nargs == 1) && ($1 == "quick-test")) || (($nargs == 2) && ($2 == "quick-test"))) ]]; then
+# rm $HTML_PATH/livv/*
+#		$MY_PYTHON $PY_PATH/VV_main.py -d "$PY_PATH" -j "$HTML_PATH" -l "$HTML_LINK" -k "$NCL_PATH" -d "$DATA_DIR" -t "$TEST_FILEPATH" -i "$NOW" -m "$COMMENT" -u "$USERNAME" -D "$RUN_DOME30_DIAGNOSTIC" 
+#else
+		$MY_PYTHON $PY_PATH/VV_main.py -d "$PY_PATH" -j "$HTML_PATH" -l "$HTML_LINK" -k "$NCL_PATH" -d "$DATA_DIR" -t "$TEST_FILEPATH" -i "$NOW" -m "$COMMENT" -u "$USERNAME" -D "$RUN_DOME30_DIAGNOSTIC" -E "$RUN_DOME30_EVOLVING" -I "$RUN_CIRCULAR_SHELF" -O "$RUN_CONFINED_SHELF" -A "$RUN_ISMIP_HOM_A80" -B "$RUN_ISMIP_HOM_A20" -C "$RUN_ISMIP_HOM_C80" -X "$RUN_ISMIP_HOM_C20" -V "$RUN_VALIDATION" -G "$RUN_GLAM"
+#fi
+
 chmod 744 $HTML_PATH/*

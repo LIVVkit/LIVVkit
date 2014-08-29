@@ -34,6 +34,8 @@ parser.add_option('-m', '--comment', action='store', type='string', dest='commen
                   metavar='FILE', help='information about the test case for user reference')
 parser.add_option('-u', '--username', action='store', type='string', dest='username', \
                   metavar='FILE', help='username used to create subdirectory of web pages of output')
+parser.add_option('-G', '--glam', action='store', type='int', dest='glam_flag', \
+                  metavar='FLAG', help='flag to run glam test (always run glissade)')
 parser.add_option('-D', '--diagnostic', action='store', type='int', dest='diagnostic_flag', \
                   metavar='FLAG', help='flag to run dome30 diagnostic test')
 parser.add_option('-E', '--evolving', action='store', type='int', dest='evolving_flag', \
@@ -191,10 +193,10 @@ if (options.ncl_path + '/alaska_pic.png'):
                 print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                 exit(e.errno)
 
-#create all the test suite diagnostics pages for glide
-if options.test_suite:
+#create all the test suite diagnostics pages for glam
+if options.test_suite and options.glam_flag:
+        glam_flag = options.glam_flag 
 
-        glide_flag = 1
         test_file = open(target_html + '/test_suite.html', 'w')
         descript_file = open(target_html + '/test_descript.html', 'w')
 # diagnostic dome case
@@ -233,7 +235,7 @@ if options.test_suite:
 #path to python code to create all the test suite pages and data
         reg_test = options.test_suite + "/reg_test"
 
-        VV_testsuite.web(glide_flag,descript_file,test_file,dome30d_file,dome30d_case,dome30d_plot, \
+        VV_testsuite.web(glam_flag,descript_file,test_file,dome30d_file,dome30d_case,dome30d_plot, \
                 dome30e_file,dome30e_case,dome30e_plot, \
                 circ_file,circ_case,circ_plot,conf_file,conf_case,conf_plot, \
                 ishoma80_file,ishoma80_case,ishoma80_plot,ishoma20_file,ishoma20_case,ishoma20_plot, \
@@ -248,7 +250,7 @@ if options.test_suite:
 #create all the test suite diagnostics pages for glissade
 if options.test_suite:
 
-        glide_flag = 0
+        glam_flag = 0
         test_file_glissade = open(target_html + '/test_suite_glissade.html', 'w')
         descript_file_glissade = open(target_html + '/test_descript.html', 'w')
 # diagnostic dome case
@@ -287,7 +289,7 @@ if options.test_suite:
 #path to python code to create all the test suite pages and data
         reg_test = options.test_suite + "/reg_test"
 
-        VV_testsuite.web(glide_flag,descript_file_glissade,test_file_glissade, \
+        VV_testsuite.web(glam_flag,descript_file_glissade,test_file_glissade, \
                 dome30d_file_glissade,dome30d_case_glissade,dome30d_plot_glissade,dome30e_file_glissade,dome30e_case_glissade,dome30e_plot_glissade, \
                 circ_file_glissade,circ_case_glissade,circ_plot_glissade,conf_file_glissade,conf_case_glissade,conf_plot_glissade, \
                 ishoma80_file_glissade,ishoma80_case_glissade,ishoma80_plot_glissade,ishoma20_file_glissade,ishoma20_case_glissade,ishoma20_plot_glissade, \

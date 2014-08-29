@@ -321,14 +321,14 @@ def edetails(solver_file,test_suite,reg_test,ncl_path,html_path,data_dir): # usi
 
     return failedt
 
-def dplot(glide_flag,plot_file,reg_test,ncl_path,html_path,script_path,data_dir):  # using data, fill the web page with info 
+def dplot(glam_flag,plot_file,reg_test,ncl_path,html_path,script_path,data_dir):  # using data, fill the web page with info 
     
     plot_file.write('<HTML>\n')
     plot_file.write('<BODY BGCOLOR="#CADFE0">\n')
     plot_file.write('<H3>Diagnostic Dome 30 Plot Details:</H3>')
 
 # creating dome 30d velocity plot
-    if glide_flag == 1:
+    if glam_flag == 1:
         dome30dvel_plotfile = ''+ ncl_path + '/dome30/dome30dvel.ncl'
         stock1      = 'STOCK1 = addfile(\"'+ reg_test + '/bench/dome30/diagnostic/' + data_dir + '/dome.1.nc\", \"r\")'
         stock4      = 'STOCK4 = addfile(\"'+ reg_test + '/bench/dome30/diagnostic/' + data_dir + '/dome.4.nc\", \"r\")'
@@ -415,14 +415,14 @@ def dplot(glide_flag,plot_file,reg_test,ncl_path,html_path,script_path,data_dir)
     plot_file.write('</HTML>\n')
     plot_file.close()
 
-def eplot(glide_flag,plot_file,reg_test,ncl_path,html_path,script_path,data_dir):  # using data, fill the web page with info
+def eplot(glam_flag,plot_file,reg_test,ncl_path,html_path,script_path,data_dir):  # using data, fill the web page with info
 
     plot_file.write('<HTML>\n')
     plot_file.write('<BODY BGCOLOR="#CADFE0">\n')
     plot_file.write('<H3>Evolving Dome 30 Plot Details:</H3>')
 
 # creating dome 30e velocity plot
-    if glide_flag == 1:
+    if glam_flag == 1:
         dome30evel_plotfile = ''+ ncl_path + '/dome30/dome30evel.ncl'
         stock9      = 'STOCK9 = addfile(\"'+ reg_test + '/bench/dome30/evolving/' + data_dir + '/dome.9.nc\", \"r\")'
         stock15     = 'STOCK15 = addfile(\"'+ reg_test + '/bench/dome30/evolving/' + data_dir + '/dome.15.nc\", \"r\")'
@@ -486,7 +486,7 @@ def eplot(glide_flag,plot_file,reg_test,ncl_path,html_path,script_path,data_dir)
             exit(e.errno)
 
 # creating dome 30e thickness plot
-    if glide_flag == 1:
+    if glam_flag == 1:
         dome30ethk_plotfile = ''+ ncl_path + '/dome30/dome30ethk.ncl'
         stock9      = 'STOCK9 = addfile(\"'+ reg_test + '/bench/dome30/evolving/' + data_dir + '/dome.9.nc\", \"r\")'
         stock15     = 'STOCK15 = addfile(\"'+ reg_test + '/bench/dome30/evolving/' + data_dir + '/dome.15.nc\", \"r\")'

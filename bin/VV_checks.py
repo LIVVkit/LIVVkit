@@ -134,7 +134,7 @@ def bit4bit(model_file_path,bench_file_path):
                             + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                     exit(e.errno)
 
-#match up the md5sums in a and b, tell if bit-for-bit for each specific case
+#match up a and b with ncdiff, tell if bit-for-bit for each specific case
     if 1 in flag:
         return 1
     else:
