@@ -45,12 +45,12 @@ begin
   tv15  = thkvarbl15@scale_factor * thkvarbl15
   td9   = thkdiff9@scale_factor  * thkdiff9
   td15= thkdiff15@scale_factor   * thkdiff15
-  ts9@long_name    = "9 Proc Scaled Benchmark"
-  ts15@long_name   = "15 Proc Scaled Benchmark"
-  tv9@long_name    = "9 Proc Scaled Current Run"
-  tv15@long_name   = "15 Proc Scaled Current Run"
-  td9@long_name    = "9 Proc Scaled Difference"
-  td15@long_name   = "15 Proc Scaled Difference"
+  ts9@long_name    = "Small Proc Scaled Benchmark"
+  ts15@long_name   = "Large Proc Scaled Benchmark"
+  tv9@long_name    = "Small Proc Scaled Current Run"
+  tv15@long_name   = "Large Proc Scaled Current Run"
+  td9@long_name    = "Small Proc Scaled Difference"
+  td15@long_name   = "Large Proc Scaled Difference"
 
 ;************************************************
 ; create plots
@@ -99,14 +99,14 @@ begin
   resthk@gsnPanelBottom = 0.53                 
   resthk@gsnMaximize = True                 ; make as large as possible
   resthk@txString    = "Thickness"   ; title string (make blank to remove)
-  resthk@gsnPanelFigureStrings = (/"bench)", "current)", "9)"/)   ; add strings to panel
+  resthk@gsnPanelFigureStrings = (/"bench)", "current)", "Small)"/)   ; add strings to panel
 
   resthk2 = True
   resthk2@gsnFrame = False
   resthk2@gsnPanelTop = 0.49                 
   resthk2@gsnPanelBottom = 0.08                 
   resthk2@txString   = ""
-  resthk2@gsnPanelFigureStrings = (/"bench)", "current)", "15)"/)   ; add strings to panel
+  resthk2@gsnPanelFigureStrings = (/"bench)", "current)", "Large)"/)   ; add strings to panel
 ;  resthk2@gsnPanelLabelBar = True		; make a common contour bar
 ;  resthk2@lbLabelAngleF = 45			; angle of contour bar labels
   

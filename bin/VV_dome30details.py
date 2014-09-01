@@ -119,17 +119,17 @@ def edetails(solver_file,test_suite,reg_test,ncl_path,html_path,data_dir): # usi
     solver_file.write('<H3>Evolving Dome 30 Iteration Count Details:</H3>')
     solver_file.write('<BR> \n')
 
-# JFNK gnu 9 proc
+# JFNK gnu small proc
 
 # Failure checking
-#    failedt1 = VV_checks.failcheck(reg_test, '/dome30/evolving/' + data_dir + '/gnu.JFNK.9proc')
+#    failedt1 = VV_checks.failcheck(reg_test, '/dome30/evolving/' + data_dir + '/gnu.JFNK.small_proc')
 #    failedt_list.append(failedt1)
 
 #    procttl_de309,nonlist_de309,avg2_de309,out_flag_de309,nde309_name,lde309_name,linear_flag = \
-#        VV_outprocess.jobprocess(reg_test + '/dome30/evolving/' + data_dir + '/gnu.JFNK.9proc', 'domee309')
+#        VV_outprocess.jobprocess(reg_test + '/dome30/evolving/' + data_dir + '/gnu.JFNK.small_proc', 'domee309')
     
 #    procttl_de309b,nonlist_de309b,avg2_de309b,out_flag_de309b,nde309b_name,lde309b_name,linear_flagb = \
-#        VV_outprocess.jobprocess(reg_test + '/bench/dome30/evolving/' + data_dir + '/gnu.JFNK.9proc', 'domee309b')
+#        VV_outprocess.jobprocess(reg_test + '/bench/dome30/evolving/' + data_dir + '/gnu.JFNK.small_proc', 'domee309b')
     
 # create iteration plot
 #    dome30e_iter = ''+ ncl_path + '/solver_iterations.ncl'
@@ -138,7 +138,7 @@ def edetails(solver_file,test_suite,reg_test,ncl_path,html_path,data_dir): # usi
 #    nbfile  = 'nbfile = "' + test_suite + '/livv/data' + nde309b_name + '"'
 #    lbfile  = 'lbfile = "' + test_suite + '/livv/data' + lde309b_name + '"'
 #    png     = 'PNG = "' + ncl_path + '/dome30e9_iter"'
-#    name    = 'name = "Dome 30x30, 9 Processors"'
+#    name    = 'name = "Dome 30x30, Smaller Processor Run"'
 #    iter_dome30e = "ncl '" + nfile + "'  '" + lfile + "'  '" + nbfile + "'  '" + lbfile +\
 #                    "' '" + png + "' '" + name + "'  '" + dome30e_iter + "' >> iter_details.out"
 #    try:
@@ -184,7 +184,7 @@ def edetails(solver_file,test_suite,reg_test,ncl_path,html_path,data_dir): # usi
 #    solver_file.write('<OBJECT data="dome30e9_iter.png" type="image/png" width="800" height="600" hspace=5 align=center">\n')
 #    solver_file.write('</OBJECT>\n')
 
-#    solver_file.write('<H4>New Run: gnu.JFNK.9proc</H4>')
+#    solver_file.write('<H4>New Run: gnu.JFNK.small_proc</H4>')
 #    solver_file.write("Number of Processors = " + str(procttl_de309[-1]) + "<BR>\n")
 #    solver_file.write("Number of Nonlinear Iterations = ")
 #    VV_utilities.format(solver_file, nonlist_de309)
@@ -199,7 +199,7 @@ def edetails(solver_file,test_suite,reg_test,ncl_path,html_path,data_dir): # usi
 #       solver_file.write("Linear Iterations not displayed in the output file")
 #    solver_file.write('<BR> \n')
 
-#    solver_file.write('<H4>Benchmark Run: gnu.JFNK.9proc</H4>')
+#    solver_file.write('<H4>Benchmark Run: gnu.JFNK.small_proc</H4>')
 #    solver_file.write("Number of Processors = " + str(procttl_de309b[-1]) + "<BR>\n")
 #    solver_file.write("Number of Nonlinear Iterations = ")
 #   if linear_flagb == 1:
@@ -219,14 +219,14 @@ def edetails(solver_file,test_suite,reg_test,ncl_path,html_path,data_dir): # usi
 # JFNK gnu 15 proc
 
 # Failure checking
-    failedt2 = VV_checks.failcheck(reg_test, '/dome30/evolving/' + data_dir + '/gnu.JFNK.15proc')
+    failedt2 = VV_checks.failcheck(reg_test, '/dome30/evolving/' + data_dir + '/gnu.JFNK.large_proc')
     failedt_list.append(failedt2)
 
     procttl_de3015,nonlist_de3015,avg2_de3015,out_flag_de3015,nde3015_name,lde3015_name,linear_flag = \
-        VV_outprocess.jobprocess(reg_test + '/dome30/evolving/' + data_dir + '/gnu.JFNK.15proc', 'domee3015')
+        VV_outprocess.jobprocess(reg_test + '/dome30/evolving/' + data_dir + '/gnu.JFNK.large_proc', 'domee3015')
 
     procttl_de3015b,nonlist_de3015b,avg2_de3015b,out_flag_de3015b,nde3015b_name,lde3015b_name,linear_flagb = \
-        VV_outprocess.jobprocess(reg_test + '/bench/dome30/evolving/' + data_dir + '/gnu.JFNK.15proc', 'domee3015b')
+        VV_outprocess.jobprocess(reg_test + '/bench/dome30/evolving/' + data_dir + '/gnu.JFNK.large_proc', 'domee3015b')
 
 # create iteration plot
     dome30e_iter = ''+ ncl_path + '/solver_iterations.ncl'
@@ -281,7 +281,7 @@ def edetails(solver_file,test_suite,reg_test,ncl_path,html_path,data_dir): # usi
     solver_file.write('<OBJECT data="dome30e15_iter.png" type="image/png" width="800" height="600" hspace=5 align=center">\n')
     solver_file.write('</OBJECT>\n')
 
-    solver_file.write('<H4>New Run: gnu.JFNK.15proc</H4>')
+    solver_file.write('<H4>New Run: gnu.JFNK.large_proc</H4>')
     solver_file.write("Number of Processors = " + str(procttl_de3015[-1]) + "<BR>\n")
     solver_file.write("Number of Nonlinear Iterations = ")
     VV_utilities.format(solver_file, nonlist_de3015)
@@ -296,7 +296,7 @@ def edetails(solver_file,test_suite,reg_test,ncl_path,html_path,data_dir): # usi
         solver_file.write("Linear Iterations not displayed in the output file ")
     solver_file.write('<BR> \n')
 
-    solver_file.write('<H4>Benchmark Run: gnu.JFNK.15proc</H4>')
+    solver_file.write('<H4>Benchmark Run: gnu.JFNK.large_proc</H4>')
     solver_file.write("Number of Processors = " + str(procttl_de3015b[-1]) + "<BR>\n")
     solver_file.write("Number of Nonlinear Iterations = ")
     VV_utilities.format(solver_file, nonlist_de3015b)
@@ -424,20 +424,20 @@ def eplot(glam_flag,plot_file,reg_test,ncl_path,html_path,script_path,data_dir):
 # creating dome 30e velocity plot
     if glam_flag == 1:
         dome30evel_plotfile = ''+ ncl_path + '/dome30/dome30evel.ncl'
-        stock9      = 'STOCK9 = addfile(\"'+ reg_test + '/bench/dome30/evolving/' + data_dir + '/dome.9.nc\", \"r\")'
-        stock15     = 'STOCK15 = addfile(\"'+ reg_test + '/bench/dome30/evolving/' + data_dir + '/dome.15.nc\", \"r\")'
-        VAR9        = 'VAR9 = addfile(\"' + reg_test + '/dome30/evolving/' + data_dir + '/dome.9.nc\", \"r\")'
-        VAR15       = 'VAR15 = addfile(\"' + reg_test + '/dome30/evolving/' + data_dir + '/dome.15.nc\", \"r\")'
+        stock9      = 'STOCK9 = addfile(\"'+ reg_test + '/bench/dome30/evolving/' + data_dir + '/dome.small.nc\", \"r\")'
+        stock15     = 'STOCK15 = addfile(\"'+ reg_test + '/bench/dome30/evolving/' + data_dir + '/dome.large.nc\", \"r\")'
+        VAR9        = 'VAR9 = addfile(\"' + reg_test + '/dome30/evolving/' + data_dir + '/dome.small.nc\", \"r\")'
+        VAR15       = 'VAR15 = addfile(\"' + reg_test + '/dome30/evolving/' + data_dir + '/dome.large.nc\", \"r\")'
         pngnamevel  = 'dome30evel.png'
         png         = 'PNG = "' + ncl_path + '/' + pngnamevel + '"'
         plot_dome30evel = "ncl '" + stock9 + "'  '" + stock15 + "'  '" + VAR9 + "' '" + VAR15 + \
                     "' '" + png + "' " + dome30evel_plotfile + " >> plot_details.out"
     else:
         dome30evel_plotfile = ''+ ncl_path + '/dome30/dome30evel.ncl'
-        stock9      = 'STOCK9 = addfile(\"'+ reg_test + '/bench/dome30/evolving/' + data_dir + '/dome.9.glissade.nc\", \"r\")'
-        stock15     = 'STOCK15 = addfile(\"'+ reg_test + '/bench/dome30/evolving/' + data_dir + '/dome.15.glissade.nc\", \"r\")'
-        VAR9        = 'VAR9 = addfile(\"' + reg_test + '/dome30/evolving/' + data_dir + '/dome.9.glissade.nc\", \"r\")'
-        VAR15       = 'VAR15 = addfile(\"' + reg_test + '/dome30/evolving/' + data_dir + '/dome.15.glissade.nc\", \"r\")'
+        stock9      = 'STOCK9 = addfile(\"'+ reg_test + '/bench/dome30/evolving/' + data_dir + '/dome.small.glissade.nc\", \"r\")'
+        stock15     = 'STOCK15 = addfile(\"'+ reg_test + '/bench/dome30/evolving/' + data_dir + '/dome.large.glissade.nc\", \"r\")'
+        VAR9        = 'VAR9 = addfile(\"' + reg_test + '/dome30/evolving/' + data_dir + '/dome.small.glissade.nc\", \"r\")'
+        VAR15       = 'VAR15 = addfile(\"' + reg_test + '/dome30/evolving/' + data_dir + '/dome.large.glissade.nc\", \"r\")'
         pngnamevel  = 'dome30evelg.png'
         png         = 'PNG = "' + ncl_path + '/' + pngnamevel + '"'
         plot_dome30evel = "ncl '" + stock9 + "'  '" + stock15 + "'  '" + VAR9 + "' '" + VAR15 + \
@@ -488,20 +488,20 @@ def eplot(glam_flag,plot_file,reg_test,ncl_path,html_path,script_path,data_dir):
 # creating dome 30e thickness plot
     if glam_flag == 1:
         dome30ethk_plotfile = ''+ ncl_path + '/dome30/dome30ethk.ncl'
-        stock9      = 'STOCK9 = addfile(\"'+ reg_test + '/bench/dome30/evolving/' + data_dir + '/dome.9.nc\", \"r\")'
-        stock15     = 'STOCK15 = addfile(\"'+ reg_test + '/bench/dome30/evolving/' + data_dir + '/dome.15.nc\", \"r\")'
-        VAR9        = 'VAR9 = addfile(\"' + reg_test + '/dome30/evolving/' + data_dir + '/dome.9.nc\", \"r\")'
-        VAR15       = 'VAR15 = addfile(\"' + reg_test + '/dome30/evolving/' + data_dir + '/dome.15.nc\", \"r\")'
+        stock9      = 'STOCK9 = addfile(\"'+ reg_test + '/bench/dome30/evolving/' + data_dir + '/dome.small.nc\", \"r\")'
+        stock15     = 'STOCK15 = addfile(\"'+ reg_test + '/bench/dome30/evolving/' + data_dir + '/dome.large.nc\", \"r\")'
+        VAR9        = 'VAR9 = addfile(\"' + reg_test + '/dome30/evolving/' + data_dir + '/dome.small.nc\", \"r\")'
+        VAR15       = 'VAR15 = addfile(\"' + reg_test + '/dome30/evolving/' + data_dir + '/dome.large.nc\", \"r\")'
         pngnamethk  = 'dome30ethk.png'
         png         = 'PNG = "' + ncl_path + '/' + pngnamethk + '"'
         plot_dome30ethk = "ncl '" + stock9 + "'  '" + stock15 + "'  '" + VAR9 + "' '" + VAR15 + \
                     "' '" + png + "' " + dome30ethk_plotfile + " >> plot_details.out"
     else:
         dome30ethk_plotfile = ''+ ncl_path + '/dome30/dome30ethk.ncl'
-        stock9      = 'STOCK9 = addfile(\"'+ reg_test + '/bench/dome30/evolving/' + data_dir + '/dome.9.glissade.nc\", \"r\")'
-        stock15     = 'STOCK15 = addfile(\"'+ reg_test + '/bench/dome30/evolving/' + data_dir + '/dome.15.glissade.nc\", \"r\")'
-        VAR9        = 'VAR9 = addfile(\"' + reg_test + '/dome30/evolving/' + data_dir + '/dome.9.glissade.nc\", \"r\")'
-        VAR15       = 'VAR15 = addfile(\"' + reg_test + '/dome30/evolving/' + data_dir + '/dome.15.glissade.nc\", \"r\")'
+        stock9      = 'STOCK9 = addfile(\"'+ reg_test + '/bench/dome30/evolving/' + data_dir + '/dome.small.glissade.nc\", \"r\")'
+        stock15     = 'STOCK15 = addfile(\"'+ reg_test + '/bench/dome30/evolving/' + data_dir + '/dome.large.glissade.nc\", \"r\")'
+        VAR9        = 'VAR9 = addfile(\"' + reg_test + '/dome30/evolving/' + data_dir + '/dome.small.glissade.nc\", \"r\")'
+        VAR15       = 'VAR15 = addfile(\"' + reg_test + '/dome30/evolving/' + data_dir + '/dome.large.glissade.nc\", \"r\")'
         pngnamethk  = 'dome30ethkg.png'
         png         = 'PNG = "' + ncl_path + '/' + pngnamethk + '"'
         plot_dome30ethk = "ncl '" + stock9 + "'  '" + stock15 + "'  '" + VAR9 + "' '" + VAR15 + \
@@ -564,7 +564,7 @@ def eplot(glam_flag,plot_file,reg_test,ncl_path,html_path,script_path,data_dir):
     plot_file.write('<TITLE>Evolving Dome 30 </TITLE>\n')
     plot_file.write('<TABLE>\n')
     plot_file.write('<TR>\n')
-    plot_file.write('<H4>Difference from Benchmark for 9 and 15 Processors, Velocity Norm and Thickness </H4>\n')
+    plot_file.write('<H4>Difference from Benchmark for 2 Proc Counts, Velocity Norm and Thickness </H4>\n')
     plot_file.write('<OBJECT data="' + pngnamevel + '" type="image/png" width="1100" height="800" hspace=5 align=left alt="Evolving Dome 30 Velocity and Thickness Plots    ">\n')
     plot_file.write('</OBJECT>\n')
     plot_file.write('<OBJECT data="' + pngnamethk + '" type="image/png" width="1100" height="800" hspace=5 align=left alt="Evolving Dome 30 Velocity and Thickness Plots    ">\n')

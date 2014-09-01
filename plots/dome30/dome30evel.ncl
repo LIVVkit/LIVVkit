@@ -39,12 +39,12 @@ begin
   vv15  = velvarbl15@scale_factor * velvarbl15
   vd9   = veldiff9@scale_factor  * veldiff9
   vd15  = veldiff15@scale_factor * veldiff15
-  vs9@long_name    = "9 Proc Scaled Benchmark"
-  vs15@long_name   = "15 Proc Scaled Benchmark"
-  vv9@long_name    = "9 Proc Scaled Current Run"
-  vv15@long_name   = "15 Proc Scaled Current Run"
-  vd9@long_name    = "9 Proc Scaled Difference"
-  vd15@long_name   = "15 Proc Scaled Difference"
+  vs9@long_name    = "Small Proc Scaled Benchmark"
+  vs15@long_name   = "Large Proc Scaled Benchmark"
+  vv9@long_name    = "Small Proc Scaled Current Run"
+  vv15@long_name   = "Large Proc Scaled Current Run"
+  vd9@long_name    = "Small Proc Scaled Difference"
+  vd15@long_name   = "Large Proc Scaled Difference"
 
 ;************************************************
 ; create plots
@@ -93,14 +93,14 @@ begin
   resvel@gsnPanelBottom = 0.53                 
   resvel@gsnMaximize = True                 ; make as large as possible
   resvel@txString = "Velocity Norm"   ; title string (make blank to remove)
-  resvel@gsnPanelFigureStrings = (/"bench)", "current)", "9)"/)   ; add strings to panel
+  resvel@gsnPanelFigureStrings = (/"bench)", "current)", "Small)"/)   ; add strings to panel
   
   resvel2 = True
   resvel2@gsnFrame = False 
   resvel2@gsnPanelTop = 0.49
   resvel2@gsnPanelBottom = 0.08
   resvel2@txString = ""
-  resvel2@gsnPanelFigureStrings = (/"bench)", "current)", "15)"/)   ; add strings to panel
+  resvel2@gsnPanelFigureStrings = (/"bench)", "current)", "Large)"/)   ; add strings to panel
   
 ;  resvel3 = True
 ;  resvel3@gsnFrame = False

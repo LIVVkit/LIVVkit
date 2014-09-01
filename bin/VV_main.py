@@ -70,7 +70,7 @@ parser.add_option('-W', '--gis4km', action='store', type='int', dest='gis_4km_fl
                   metavar='FLAG', help='flag to run gis4km test')
 parser.add_option('-V', '--validation', action='store', type='int', dest='validation_flag', \
                   metavar='FLAG', help='flag to run validation')
-#parser.add_option('-a', '--ant_prod', action='store_true', dest='ant_prod', \
+#parser.add_option('-ANT', '--ant_prod', action='store_true', dest='ant_prod', \
 #                  help='include flag to run the ANT production analysis')
 
 #parse the command line options and arguments and store in lists
@@ -193,11 +193,12 @@ if (options.ncl_path + '/alaska_pic.png'):
                 print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                 exit(e.errno)
 
+
 #create all the test suite diagnostics pages for glam
 if options.test_suite and options.glam_flag:
         glam_flag = options.glam_flag 
 
-        test_file = open(target_html + '/test_suite.html', 'w')
+	test_file = open(target_html + '/test_suite.html', 'w')
         descript_file = open(target_html + '/test_descript.html', 'w')
 # diagnostic dome case
         dome30d_file = open(target_html + '/dome30d_details.html', 'w')
@@ -366,7 +367,7 @@ if options.dome60_flag==1 or options.dome120_flag==1 or options.dome240_flag==1 
                             options.dome500_flag,options.dome1000_flag,options.gis_1km_flag,options.gis_2km_flag,options.gis_4km_flag)
 
 #create all the validation plot pages
-if options.validation_flag==1:
+if options.validation_flag!=0:
 
         valid_file = open(target_html + '/validation_plots.html', 'w')
         details_file = open(target_html + 'case_details.html', 'w')
@@ -416,9 +417,12 @@ if 1 in dictionary.values():
 else:
         file.write('<font color="green"> All Cases Bit-for-Bit</font><br>')
 file.write('<BR>\n')
-file.write('<TH ALIGN=LEFT><A HREF="test_suite.html">Basic Verification Test Suite Diagnostics - Glide</A>\n')
-file.write('<BR>\n')
-file.write('<BR>\n')
+if options.test_suite and options.glam_flag:
+
+	file.write('<TH ALIGN=LEFT><A HREF="test_suite.html">Basic Verification Test Suite Diagnostics - Glide</A>\n')
+	file.write('<BR>\n')
+	file.write('<BR>\n')
+
 file.write('<TH ALIGN=LEFT><A HREF="test_suite_glissade.html">Basic Verification Test Suite Diagnostics - Glissade</A>\n')
 file.write('<BR>\n')
 file.write('<BR>\n')

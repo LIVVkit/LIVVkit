@@ -129,19 +129,19 @@ def confdetails(solver_file,reg_test,data_dir): # using data, fill the web page 
 
     return failedt
 
-def circplot(glide_flag,plot_file,reg_test,ncl_path,html_path,script_path,data_dir):  # using data, fill the web page with info
+def circplot(glam_flag,plot_file,reg_test,ncl_path,html_path,script_path,data_dir):  # using data, fill the web page with info
 
     plot_file.write('<HTML>\n')
     plot_file.write('<BODY BGCOLOR="#CADFE0">\n')
     plot_file.write('<H3>Circular Shelf Plot Details:</H3>')
 
 # creating circular shelf velocity plot 
-    if glide_flag == 1:
+    if glam_flag == 1:
         circvel_plotfile = ''+ ncl_path + '/shelf/circshelfvel.ncl'
-        stockPIC    = 'STOCKPIC = addfile(\"'+ reg_test + '/bench/circular-shelf/' + data_dir + '/circular-shelf.gnu.PIC.nc\", \"r\")'
-        stockJFNK   = 'STOCKJFNK = addfile(\"'+ reg_test + '/bench/circular-shelf/' + data_dir + '/circular-shelf.gnu.JFNK.nc\", \"r\")'
-        VARPIC      = 'VARPIC = addfile(\"' + reg_test + '/circular-shelf/' + data_dir + '/circular-shelf.gnu.PIC.nc\", \"r\")'
-        VARJFNK     = 'VARJFNK = addfile(\"' + reg_test + '/circular-shelf/' + data_dir + '/circular-shelf.gnu.JFNK.nc\", \"r\")'
+        stockPIC    = 'STOCKPIC = addfile(\"'+ reg_test + '/bench/circular-shelf/' + data_dir + '/circular-shelf.gnu.PIC.large.nc\", \"r\")'
+        stockJFNK   = 'STOCKJFNK = addfile(\"'+ reg_test + '/bench/circular-shelf/' + data_dir + '/circular-shelf.gnu.JFNK.large.nc\", \"r\")'
+        VARPIC      = 'VARPIC = addfile(\"' + reg_test + '/circular-shelf/' + data_dir + '/circular-shelf.gnu.PIC.large.nc\", \"r\")'
+        VARJFNK     = 'VARJFNK = addfile(\"' + reg_test + '/circular-shelf/' + data_dir + '/circular-shelf.gnu.JFNK.large.nc\", \"r\")'
         pngnamevel  = 'circshelfvel.png' 
         png         = 'PNG = "' + ncl_path + '/' + pngnamevel + '"'
         plot_circvel = "ncl '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARPIC + "' '" + VARJFNK \
@@ -223,19 +223,19 @@ def circplot(glide_flag,plot_file,reg_test,ncl_path,html_path,script_path,data_d
     plot_file.write('</HTML>\n')
     plot_file.close()
 
-def confplot(glide_flag,plot_file,reg_test,ncl_path,html_path,script_path,data_dir):  # using data, fill the web page with info
+def confplot(glam_flag,plot_file,reg_test,ncl_path,html_path,script_path,data_dir):  # using data, fill the web page with info
 
     plot_file.write('<HTML>\n')
     plot_file.write('<BODY BGCOLOR="#CADFE0">\n')
     plot_file.write('<H3>Confined Shelf Plot Details:</H3>')
 
 # creating confined shelf velocity plot
-    if glide_flag == 1:
+    if glam_flag == 1:
         confvel_plotfile = ''+ ncl_path + '/shelf/confshelfvel.ncl'
-        stockPIC    = 'STOCKPIC = addfile(\"'+ reg_test + '/bench/confined-shelf/' + data_dir + '/confined-shelf.gnu.PIC.nc\", \"r\")'
-        stockJFNK   = 'STOCKJFNK = addfile(\"'+ reg_test + '/bench/confined-shelf/' + data_dir + '/confined-shelf.gnu.JFNK.nc\", \"r\")'
-        VARPIC      = 'VARPIC = addfile(\"' + reg_test + '/confined-shelf/' + data_dir + '/confined-shelf.gnu.PIC.nc\", \"r\")'
-        VARJFNK     = 'VARJFNK = addfile(\"' + reg_test + '/confined-shelf/' + data_dir + '/confined-shelf.gnu.JFNK.nc\", \"r\")'
+        stockPIC    = 'STOCKPIC = addfile(\"'+ reg_test + '/bench/confined-shelf/' + data_dir + '/confined-shelf.gnu.PIC.large.nc\", \"r\")'
+        stockJFNK   = 'STOCKJFNK = addfile(\"'+ reg_test + '/bench/confined-shelf/' + data_dir + '/confined-shelf.gnu.JFNK.large.nc\", \"r\")'
+        VARPIC      = 'VARPIC = addfile(\"' + reg_test + '/confined-shelf/' + data_dir + '/confined-shelf.gnu.PIC.large.nc\", \"r\")'
+        VARJFNK     = 'VARJFNK = addfile(\"' + reg_test + '/confined-shelf/' + data_dir + '/confined-shelf.gnu.JFNK.large.nc\", \"r\")'
         pngnamevel  = 'confshelfvel.png' 
         png         = 'PNG = "' + ncl_path + '/' + pngnamevel + '"'
         plot_confvel = "ncl '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARPIC + "' '" + VARJFNK \

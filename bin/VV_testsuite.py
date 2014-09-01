@@ -222,19 +222,19 @@ def web(glam_flag,descript_file,test_file, \
                 bench_xml_path = reg_test + '/bench/dome30/evolving/trilinosOptions.xml'
                 c_flag = 0
                 if os.path.isdir(reg_test + '/dome30/evolving/configure_files/') == True:
-                   configure_path = reg_test + '/dome30/evolving/configure_files/dome.30.glissade.config.15'
-                   bench_configure_path = reg_test + '/bench/dome30/evolving/configure_files/dome.30.glissade.config.15'
+                   configure_path = reg_test + '/dome30/evolving/configure_files/dome.30.glissade.config.large'
+                   bench_configure_path = reg_test + '/bench/dome30/evolving/configure_files/dome.30.glissade.config.large'
                 else:
-                   configure_path = reg_test + '/dome30/evolving/dome.30.glissade.config.15'
-                   bench_configure_path = reg_test + '/bench/dome30/evolving/dome.30.glissade.config.15'
+                   configure_path = reg_test + '/dome30/evolving/dome.30.glissade.config.large'
+                   bench_configure_path = reg_test + '/bench/dome30/evolving/dome.30.glissade.config.large'
                 VV_utilities.confxml(dome30e_case,configure_path,bench_configure_path,xml_path,bench_xml_path,c_flag)
 
                 test_file.write('<TH ALIGN=LEFT><A HREF="dome30e_plot_glissade.html">Plots</A>\n')
                 test_file.write('<BR>\n')
             #if failedt != 0:
             #    dome30e_plot.write("<H2>Evolving Dome 30 Test failed, plots may not be generated</H2><br>")
-                checkpath = reg_test + '/dome30/evolving/' + data_dir + '/dome.9.glissade.nc'
-                checkpath2 = reg_test + '/dome30/evolving/' + data_dir + '/dome.15.glissade.nc'
+                checkpath = reg_test + '/dome30/evolving/' + data_dir + '/dome.small.glissade.nc'
+                checkpath2 = reg_test + '/dome30/evolving/' + data_dir + '/dome.large.glissade.nc'
                 noplot = VV_checks.emptycheck(checkpath)
                 noplot1 = noplot
                 noplot = VV_checks.emptycheck(checkpath2)
