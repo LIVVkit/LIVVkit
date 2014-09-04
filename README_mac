@@ -139,7 +139,7 @@ And similarly in my .cshrc:
 setenv TEST_DIR "/Users/sprice/work/modeling/cism/cism-test"
 (note that for my .cshrc file, this is the ONLY line in there)
 
-At this point, running Doug's "run_livv_for_mac" script from within ./tests/higher-order/livv/ works to build the code
+At this point, running Doug's "run_livv_on_mac" script from within ./tests/higher-order/livv/ works to build the code
 and run the test cases. It then stops though, giving the following:
 
 Call disabled to: mac_VV.bash, which is located in:
@@ -224,7 +224,7 @@ setenv TEST_DIR "/Users/sprice/work/modeling/cism/cism-test"
 step 2
 --------
 
-At this point, running Doug's "run_livv_for_mac" script from within ./tests/higher-order/livv/ works to build the code
+At this point, running Doug's "run_livv_on_mac" script from within ./tests/higher-order/livv/ works to build the code
 and run the test cases. This should build the exectuables to test from your current code, wget the current reg_test
 tarball from oceans11, and run the various tests we've specified for the mac version of livv. My output looks like this:
 
@@ -343,9 +343,14 @@ benchmarks are in the reg_test tarball, the tests are being run, but the results
 
 
 
-
-
-
-
+Problems related to NCL installation on my Mac.   MJH 9/4/14
+Note that detailed information on installing NCL for Mac is here:  https://www.ncl.ucar.edu/Download/macosx.shtml
+For older versions of OSX, you may need to find an older version of NCL for NCL to work.  For instance, for Snow Leopard (10.6.8) the most recent version of NCL I could get to work was 6.1.2.  
+Even then, I was seeing this error:
+dyld: lazy symbol binding failed: Symbol not found: ___emutls_get_address
+ Referenced from: /usr/local/bin/ncl
+ Expected in: /usr/lib/libSystem.B.dylib
+Looking at the above URL with installation instructions, I was able to resolve this error by adding this to my .bashrc:
+export DYLD_FALLBACK_LIBRARY_PATH=/opt/local/lib/gcc46
 
 
