@@ -178,3 +178,174 @@ I've got "python" aliased to that location anyway, I just changed MY_PYTHON to p
 python scripts are getting called.
 
 This is as far as I got on 8/28/14.
+
+
+
+------------- START HERE FOR NEW README INSTRUCTIONS -------------------
+
+LIVV on the mac is mostly working as of 9/3/14. To get it working on your machine, do the following steps. Note that
+after the initial setup, only steps 2 and 3 need to be done to test code before a checkin (execution of two scripts plus
+looking at the webpage results at the end to make sure all is well). On my machine, the suite of tests included here 
+only took a few minutes to run.
+
+
+--------
+step 0
+--------
+
+As above, you'll need to appropriate software installed. Python should already be good if you installed according to the
+CISM2 instructions. For NCL, follow the above instructions, which worked fine for me.
+
+  
+--------
+step 1
+--------
+
+You'll need to set up the env variable "TEST_DIR" in both your .bashrc and .cshrc shells. On my machine, all of my
+different CISM builds live in: /Users/sprice/work/modeling/cism/
+
+I added a new dir there for storing test case data (model outputs, benchmark outputs, LIVV plots / webpages, etc - 
+essentially, this is where all the LIVV work gets done):
+
+/Users/sprice/work/modeling/cism/cism-test/
+
+In there, I also added a subdir "html", where the webpages that LIVV outputs get built. In the long run, we might want
+to automate this in Doug's script mentioned below (i.e., make and/or clean-out the html dir automatically).
+
+You need to point the TEST_DIR env var to this location. In my .bashrc I added the following:
+export TEST_DIR=/Users/sprice/work/modeling/cism/cism-test
+
+And similarly in my .cshrc:
+setenv TEST_DIR "/Users/sprice/work/modeling/cism/cism-test"
+(note that for my .cshrc file, this is the ONLY line in there)
+
+
+--------
+step 2
+--------
+
+At this point, running Doug's "run_livv_for_mac" script from within ./tests/higher-order/livv/ works to build the code
+and run the test cases. This should build the exectuables to test from your current code, wget the current reg_test
+tarball from oceans11, and run the various tests we've specified for the mac version of livv. My output looks like this:
+
+>>>>>>
+Running LIVV test suite on a Mac.
+
+To run tests without rebuilding, use skip-build.
+
+
+To use this script, type: csh mac-gnu-build-and-test.csh
+
+
+Call with no-copy to prevent copying of the reg_test and livv defaults.
+Call with run-perf-tests to run the performance tests.
+Call with skip-tests to skip testing (builds executable and copies it to TEST_DIR).
+
+See the LIVV documentation for instructions on setting up the test directory (TEST_DIR).
+
+
+Setting TEST_DIR to the location: 
+TEST_DIR = /Users/sprice/work/modeling/cism/cism-test
+TEST_DIR must also be set in your .bashrc file.
+
+Configuring and building in directory:  /Users/sprice/work/modeling/cism/temp/builds/mac-gnu
+
+Configuring gnu cmake build...
+Making parallel gnu...
+Copying gnu parallel cism_driver_gnu to test directory
+Copying default reg_test and LIVV to ~/work/modeling/cism/cism-test
+--2014-09-03 20:04:01--  http://oceans11.lanl.gov/cism/livv/reg_test_default.tgz
+Resolving oceans11.lanl.gov (oceans11.lanl.gov)... 204.121.60.121
+Connecting to oceans11.lanl.gov (oceans11.lanl.gov)|204.121.60.121|:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 33155591 (32M) [application/x-gzip]
+Saving to: ‘reg_test_default.tgz’
+
+100%[=========================================================================================================================================>]
+33,155,591   424KB/s   in 74s    
+
+2014-09-03 20:05:20 (436 KB/s) - ‘reg_test_default.tgz’ saved [33155591/33155591]
+
+Submitting default LIVV test jobs to compute nodes.
+
+GLISSADE 1 proc
+
+real    0m3.056s
+user    0m2.752s
+sys 0m0.061s
+GLISSADE 4 proc
+
+real    0m2.541s
+user    0m5.223s
+sys 0m1.206s
+GLISSADE 1 proc
+
+... lots more like this, the finishing with ...
+
+No performance suite jobs were submitted.
+Total minutes: 0
+
+Call disabled to: mac_VV.bash, which is located in:
+/Users/sprice/work/modeling/cism/cism-test/livv
+
+Perform this step on after the Test Suite jobs have completed.
+>>>>>>>>>
+
+At this point, your TEST_DIR should have more stuff in it. Mine looks like this:
+
+>>>>>>>>>
+-rwx------+  1 sprice  staff   2446712 Sep  3 20:04 cism_driver_gnu*
+drwx------+  3 sprice  staff       102 Sep  3 20:13 html/
+drwx------+ 19 sprice  staff       646 Sep  3 20:13 livv/
+drwx------@ 11 sprice  staff       374 Sep  3 20:05 reg_test/
+-rw-r--r--+  1 sprice  staff  33155591 Sep  3 18:34 reg_test_default.tgz
+-rwx------+  1 sprice  staff   2446712 Sep  3 20:04 simple_glide_gnu*
+>>>>>>>>>
+
+(when we started, it was empty aside from an empty 'html' subdir)
+
+ 
+--------
+step 3
+--------
+
+Run the actual livv part of the code, which compares your recent model outputs to those from the benchmarks stored in
+the reg_test tarball that was downloaded.
+
+To do this, you simply go into the TEST_DIR/livv/ dir and execute the bash script 'mac_VV.bash'. Here's my output:
+
+>>>>>>>
+./mac_VV.bash 
+./mac_VV.bash: line 66: ((: == 1: syntax error: operand expected (error token is "== 1")
+09-03-2014-08:13:14 PM Test run of glissade code
+placing HTML files in the sprice subdirectory (check permissions)
+running diagnostic dome30 glissade testcase
+running evolving dome30 glissade testcase
+running circular shelf glissade testcase
+running confined shelf glissade testcase
+running ismip hom a 80km glissade testcase
+running ismip hom a 20km glissade testcase
+NOT RUNNING ISMIP HOM C 80KM TESTCASE
+NOT RUNNING ISMIP HOM C 20KM TESTCASE
+LIVV Completed. Go to file:///Users/sprice/work/modeling/cism/cism-test/html/livv/livv_kit_main.html to view results
+>>>>>>>
+
+Not sure what the "line 66" error is but it doesn't seem to affect things much.
+
+The URL where the results are is in your TEST_DIR/html/ subdir under ./livv. This is where you can view the comparison
+results of your model output relative to the benchmarks.
+
+Note that we'll need to fix some of the python scripts so that the ismip-hom c tests can be compared. Right now, the
+benchmarks are in the reg_test tarball, the tests are being run, but the results aren't being compared.
+
+
+9/3/2014
+
+
+
+
+
+
+
+
+
