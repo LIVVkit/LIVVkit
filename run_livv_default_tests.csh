@@ -17,11 +17,12 @@ endif
  @ run_all_tests = ($5 != "quick-test")
 
  setenv RUN_TEXT qsub
+ #setenv RUN_TEXT " "
 
  # should fix this hack:
- @ on_mac = 0
- if ($CISM_VV_SCRIPT == "mac_VV.bash") then
-  @ on_mac = 1
+ @ monitor_queue = 1
+ if (($CISM_VV_SCRIPT == "mac_VV.bash") || ($CISM_VV_SCRIPT == "blizzard_VV.bash")) then
+  @ monitor_queue = 0
   @ timeout_error = 0
   setenv RUN_TEXT " "
  endif
@@ -104,7 +105,7 @@ endif
 endif
 
 set counter = 0
-if ($on_mac == 0) then
+if ($monitor_queue == 1) then
  echo
  echo "Test Suite jobs started -- using qstat to monitor."
  echo 
@@ -142,7 +143,7 @@ set run_list = "dome_30_test dome_30_evolve conf_shelf circ_shelf ishoma_20 isho
   endif
   if (($counter % 5) == 0) echo "Minutes: $counter"
  end
-endif # on_mac == 0
+endif # monitor_queue = 1
 
  if ($timeout_error == 0) then
   echo "Total minutes: $counter"
@@ -151,7 +152,7 @@ endif # on_mac == 0
   echo "Call disabled to: $CISM_VV_SCRIPT, which is located in:" 
   echo "$TEST_DIR/livv"
   echo
-  echo "Perform this step on after the Test Suite jobs have completed."
+  echo "Perform this step after the Test Suite jobs have completed."
   # cd $TEST_DIR/livv
   # bash $CISM_VV_SCRIPT from-script $1
  endif
