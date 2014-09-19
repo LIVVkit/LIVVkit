@@ -11,11 +11,11 @@ import VV_utilities
 from stat import *
 import time
 
-def web(valid_file,detiails_file,table,figure1_plot,figure2_plot,figure3_plot,figure4_plot,figure5_plot, \
-        data_dir,ncl_path,html_path,script_path):
+def web(valid_file,valid_file_cam,valid_file_clm,detiails_file,table,figure1_plot,figure2_plot,figure3_plot, \
+	figure4_plot,figure5_plot,data_dir,ncl_path,html_path,script_path):
 
     valid_file.write('<HTML>\n')
-    valid_file.write('<TITLE>Validation Plots</TITLE>\n')
+    valid_file.write('<TITLE>Validation of Continental Ice Sheet Simulation</TITLE>\n')
     valid_file.write('<BODY BGCOLOR="#CADFE0">\n')
     valid_file.write('<H1>Validation Plots</H1>')
     valid_file.write('<BR>\n')
@@ -110,8 +110,6 @@ def web(valid_file,detiails_file,table,figure1_plot,figure2_plot,figure3_plot,fi
     table.write('</TABLE>\n')
     table.write('</HTML>\n')
     table.close()    
-    
-    
     
     
     valid_file.write('<TH ALIGN=LEFT><A HREF="figure1_plot.html">Figure1 Plot</A>\n')

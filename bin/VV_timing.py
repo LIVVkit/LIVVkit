@@ -21,6 +21,10 @@ def timing(file1,flag):
         raise
     
     gv_avg = 9999.
+    sg_avg = 9999.
+    gid_avg = 9999.
+    gio_avg = 9999.
+    whichdriver = dycore
 
     if flag == 0:
         for line in output:

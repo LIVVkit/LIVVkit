@@ -68,8 +68,17 @@ parser.add_option('-U', '--gis2km', action='store', type='int', dest='gis_2km_fl
                   metavar='FLAG', help='flag to run gis2km test')
 parser.add_option('-W', '--gis4km', action='store', type='int', dest='gis_4km_flag', \
                   metavar='FLAG', help='flag to run gis4km test')
-parser.add_option('-V', '--validation', action='store', type='int', dest='validation_flag', \
-                  metavar='FLAG', help='flag to run validation')
+# flags for validation part
+parser.add_option('-v', '--validation', action='store', type='int', dest='validation_flag', \
+                  metavar='FLAG', help='flag to run validation on fully coupled model')
+parser.add_option('-w', '--val_ice', action='store', type='int', dest='val_ice_flag', \
+                  metavar='FLAG', help='flag to run validation on just ice sheet model')
+parser.add_option('-x', '--val_data', action='store', type='string', dest='val_data_location', \
+                  metavar='FLAG', help='point to top level directory of coupled model output for validation')
+parser.add_option('-y', '--val_year', action='store', type='int', dest='val_year_start', \
+                  metavar='FLAG', help='flag to give starting year of simulation')
+parser.add_option('-r', '--val_range', action='store', type='int', dest='val_year_range', \
+                  metavar='FLAG', help='flag to give range of simuation years')
 #parser.add_option('-ANT', '--ant_prod', action='store_true', dest='ant_prod', \
 #                  help='include flag to run the ANT production analysis')
 
@@ -369,7 +378,9 @@ if options.dome60_flag==1 or options.dome120_flag==1 or options.dome240_flag==1 
 #create all the validation plot pages
 if options.validation_flag!=0:
 
-        valid_file = open(target_html + '/validation_plots.html', 'w')
+        valid_file_cism = open(target_html + '/validation_cism.html', 'w')
+        valid_file_cam = open(target_html + '/validation_cam.html', 'w')
+        valid_file_clm = open(target_html + '/validation_clm.html', 'w')
         details_file = open(target_html + 'case_details.html', 'w')
 # table
         table = open(target_html + '/table.html', 'w')
@@ -386,8 +397,9 @@ if options.validation_flag!=0:
 
 #path to python code to create all the test suite pages and data
 
-        VV_validation_suite.web(valid_file,details_file,table,figure1_plot,figure2_plot,figure3_plot,figure4_plot,figure5_plot, \
-                options.data_dir,options.ncl_path,target_html,options.script_path)
+        VV_validation_suite.web(valid_file_cism,valid_file_cam,valid_file_clm,details_file,table,figure1_plot, \
+		figure2_plot,figure3_plot,figure4_plot,figure5_plot,options.data_dir,options.ncl_path,target_html, \
+		options.script_path)
 
 #writing the main HTML page
 
@@ -451,7 +463,10 @@ file.write('<BR>\n')
 file.write('<BR>\n')
 file.write('<BR>\n')
 if options.validation_flag==1:
-        file.write('<TH ALIGN=LEFT><A HREF="validation_plots.html">Validation Plots</A>\n')
+        file.write('Ice Sheet Validation </B></FONT> <BR>\n')
+        file.write('<TH ALIGN=LEFT><A HREF="validation_cism.html">Ice Sheet</A>\n')
+        file.write('<TH ALIGN=LEFT><A HREF="validation_cam.html">Atmosphere</A>\n')
+        file.write('<TH ALIGN=LEFT><A HREF="validation_clm.html">Land</A>\n')
 
 file.write('<h4> For Additional Information: </h4> <p>')
 file.write(' Kate Evans <br>')

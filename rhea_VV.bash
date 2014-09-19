@@ -49,10 +49,14 @@ export RUN_GIS_1KM=0
 export RUN_GIS_2KM=0
 export RUN_GIS_4KM=0
 
-# flag to select validation analysis; 1=CISM only, 2-CISM and CAM
-export RUN_VALIDATION=0
-
 export RUN_ANT=0
+
+# flag to select validation analysis; 
+export RUN_VAL_COUPLED=0
+export RUN_VAL_ICE=0
+export RUN_VAL_DATA=0
+export RUN_VAL_YEARS=0
+export RUN_VAL_RANGE=0
 
 #*******************************************************************************
 
@@ -90,6 +94,30 @@ export NCL_PATH="$SCRIPT_PATH/plots"
 # command to run python script while inputting all of the files listed above
 # NOTE: not all settings are required to run the python script, type "python VV_main -h" in the command line for a full list of options
 		
-python $PY_PATH/VV_main.py -j "$HTML_PATH" -l "$HTML_LINK" -k "$NCL_PATH" -d "$DATA_DIR" -t "$TEST_FILEPATH" -i "$NOW" -m "$COMMENT" -u "$USERNAME" -D "$RUN_DOME30_DIAGNOSTIC" -E "$RUN_DOME30_EVOLVING" -I "$RUN_CIRCULAR_SHELF" -O "$RUN_CONFINED_SHELF" -A "$RUN_ISMIP_HOM_A80" -B "$RUN_ISMIP_HOM_A20" -C "$RUN_ISMIP_HOM_C80" -X "$RUN_ISMIP_HOM_C20" -J "$RUN_DOME60" -K "$RUN_DOME120" -L "$RUN_DOME240" -F "$RUN_DOME500" -M "$RUN_DOME1000" -T "$RUN_GIS_1KM" -U "$RUN_GIS_2KM" -W "$RUN_GIS_4KM" -G "$RUN_GLAM" -V "$RUN_VALIDATION" 
+python $PY_PATH/VV_main.py \
+-j "$HTML_PATH" -l "$HTML_LINK" -k "$NCL_PATH" -d "$DATA_DIR" -t "$TEST_FILEPATH" \
+-i "$NOW" -m "$COMMENT" -u "$USERNAME" \
+-D "$RUN_DOME30_DIAGNOSTIC" \
+-E "$RUN_DOME30_EVOLVING" \
+-I "$RUN_CIRCULAR_SHELF" \
+-O "$RUN_CONFINED_SHELF" \
+-A "$RUN_ISMIP_HOM_A80" \
+-B "$RUN_ISMIP_HOM_A20" \
+-C "$RUN_ISMIP_HOM_C80" \
+-X "$RUN_ISMIP_HOM_C20" \
+-J "$RUN_DOME60" \
+-K "$RUN_DOME120" \
+-L "$RUN_DOME240" \
+-F "$RUN_DOME500" \
+-M "$RUN_DOME1000" \
+-T "$RUN_GIS_1KM" \
+-U "$RUN_GIS_2KM" \
+-W "$RUN_GIS_4KM" \
+-G "$RUN_GLAM" \
+-v "$RUN_VAL_COUPLED" \
+-w "$RUN_VAL_ICE" \
+-x "$RUN_VAL_DATA" \
+-y "$RUN_VAL_YEARS"  \
+-r "$RUN_VAL_RANGE"  
 
 chmod -R 775 $HTML_PATH/*

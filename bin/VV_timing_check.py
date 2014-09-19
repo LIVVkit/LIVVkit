@@ -12,6 +12,9 @@ from optparse import OptionParser
 import subprocess
 
 def timing(file1,flag):
+
+    global sg_avg
+
     try: 
         output = open(file1, 'r') 
     except:

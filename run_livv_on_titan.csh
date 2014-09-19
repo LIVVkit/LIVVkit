@@ -14,7 +14,7 @@ if ($skip_build_set == 0) then
  csh titan-gnu-build-and-test-serial.csh no-copy skip-tests 
  csh titan-gnu-build-and-test.csh no-copy skip-tests 
  cd ../titan-pgi
- csh titan-pgi-build-and-test.csh no-copy 
+ csh titan-pgi-build-and-test.csh no-copy
  exit
 endif
 
