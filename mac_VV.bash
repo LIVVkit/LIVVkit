@@ -47,7 +47,13 @@ export RUN_ISMIP_HOM_C20=0
 
 export RUN_GIS_10KM=0
 
-export RUN_VALIDATION=0
+# flag to select validation analysis; 
+export RUN_VAL_COUPLED=0
+export RUN_VAL_ICE=0
+export RUN_VAL_DATA=0
+export RUN_VAL_YEARS=0
+export RUN_VAL_RANGE=0
+
 
 #*******************************************************************************
 
@@ -85,12 +91,30 @@ export NCL_PATH="$SCRIPT_PATH/plots"
 # command to run python script while inputting all of the files listed above
 # NOTE: not all settings are required to run the python script, type "python VV_main -h" in the command line for a full list of options
 
-# KJE remove until the full tset suite is running properly.
-#if [[ ((($nargs == 1) && ($1 == "quick-test")) || (($nargs == 2) && ($2 == "quick-test"))) ]]; then
-# rm $HTML_PATH/livv/*
-#		$MY_PYTHON $PY_PATH/VV_main.py -d "$PY_PATH" -j "$HTML_PATH" -l "$HTML_LINK" -k "$NCL_PATH" -d "$DATA_DIR" -t "$TEST_FILEPATH" -i "$NOW" -m "$COMMENT" -u "$USERNAME" -D "$RUN_DOME30_DIAGNOSTIC" 
-#else
-		$MY_PYTHON $PY_PATH/VV_main.py -d "$PY_PATH" -j "$HTML_PATH" -l "$HTML_LINK" -k "$NCL_PATH" -d "$DATA_DIR" -t "$TEST_FILEPATH" -i "$NOW" -m "$COMMENT" -u "$USERNAME" -D "$RUN_DOME30_DIAGNOSTIC" -E "$RUN_DOME30_EVOLVING" -I "$RUN_CIRCULAR_SHELF" -O "$RUN_CONFINED_SHELF" -A "$RUN_ISMIP_HOM_A80" -B "$RUN_ISMIP_HOM_A20" -C "$RUN_ISMIP_HOM_C80" -X "$RUN_ISMIP_HOM_C20" -V "$RUN_VALIDATION" -G "$RUN_GLAM"
-#fi
+$MY_PYTHON $PY_PATH/VV_main.py \
+ -j "$HTML_PATH" -l "$HTML_LINK" -k "$NCL_PATH" -d "$DATA_DIR" -t "$TEST_FILEPATH" \
+ -i "$NOW" -m "$COMMENT" -u "$USERNAME" \
+ -D "$RUN_DOME30_DIAGNOSTIC" \
+ -E "$RUN_DOME30_EVOLVING" \
+ -I "$RUN_CIRCULAR_SHELF" \
+ -O "$RUN_CONFINED_SHELF" \
+ -A "$RUN_ISMIP_HOM_A80" \
+ -B "$RUN_ISMIP_HOM_A20" \
+ -C "$RUN_ISMIP_HOM_C80" \
+ -X "$RUN_ISMIP_HOM_C20" \
+ -J "$RUN_DOME60" \
+ -K "$RUN_DOME120" \
+ -L "$RUN_DOME240" \
+ -F "$RUN_DOME500" \
+ -M "$RUN_DOME1000" \
+ -T "$RUN_GIS_1KM" \
+ -U "$RUN_GIS_2KM" \
+ -W "$RUN_GIS_4KM" \
+ -G "$RUN_GLAM" \
+ -v "$RUN_VAL_COUPLED" \
+ -w "$RUN_VAL_ICE" \
+ -x "$RUN_VAL_DATA" \
+ -y "$RUN_VAL_YEARS"  \
+ -r "$RUN_VAL_RANGE"  
 
 chmod 744 $HTML_PATH/*
