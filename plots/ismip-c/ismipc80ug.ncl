@@ -24,11 +24,11 @@ begin
   ustock4   = STOCK4->uvel(0,1,:,:)
 
   uvarbl1    = VAR1->uvel(0,1,:,:)
-  udiff1     = new((/40,40/),float);
+  udiff1     = new((/39,39/),float);
   udiff1     = uvarbl1(:,:)-ustock1(:,:);
 
   uvarbl4   = VAR4->uvel(0,1,:,:)
-  udiff4    = new((/40,40/),float);
+  udiff4    = new((/39,39/),float);
   udiff4    = uvarbl4(:,:)-ustock4(:,:);
 
   us1   = ustock1@scale_factor  * ustock1

@@ -24,11 +24,11 @@ begin
   vstock4   = STOCK4->vvel(0,1,:,:)
   
   vvarbl1    = VAR1->vvel(0,1,:,:)
-  vdiff1     = new((/40,40/),float);
+  vdiff1     = new((/39,39/),float);
   vdiff1     = vvarbl1(:,:)-vstock1(:,:);
 
   vvarbl4   = VAR4->vvel(0,1,:,:)
-  vdiff4    = new((/40,40/),float);
+  vdiff4    = new((/39,39/),float);
   vdiff4    = vvarbl4(:,:)-vstock4(:,:);
 
   vs1   = vstock1@scale_factor  * vstock1

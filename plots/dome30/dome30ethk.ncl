@@ -21,21 +21,15 @@ begin
 ;************************************************
   wks = gsn_open_wks("png",PNG)                 ; open a png file
 
-;  thkstockout  = STOCKout->thk(10,:,:)
+  thkstock9    = STOCK9->thk(40,:,:)
 
-  thkstock9    = STOCK9->thk(10,:,:)
+  thkstock15   = STOCK15->thk(40,:,:)
 
-  thkstock15   = STOCK15->thk(10,:,:)
-
-;  thkvarblout  = VARout->thk(10,:,:);
-;  thkdiffout   = new((/31,31/),float);
-;  thkdiffout   = thkvarblout(:,:)-thkstockout(:,:);
-
-  thkvarbl9    = VAR9->thk(10,:,:)
+  thkvarbl9    = VAR9->thk(40,:,:)
   thkdiff9     = new((/31,31/),float);
   thkdiff9     = thkvarbl9(:,:)-thkstock9(:,:);
 
-  thkvarbl15   = VAR15->thk(10,:,:)
+  thkvarbl15   = VAR15->thk(40,:,:)
   thkdiff15    = new((/31,31/),float);
   thkdiff15    = thkvarbl15(:,:)-thkstock15(:,:);
 

@@ -21,15 +21,15 @@ begin
 ;************************************************
   wks = gsn_open_wks("png",PNG)                 ; open a png file
 
-  velstock9    = STOCK9->velnorm(10,1,:,:)
+  velstock9    = STOCK9->velnorm(40,1,:,:)
 
-  velstock15   = STOCK15->velnorm(10,1,:,:)
+  velstock15   = STOCK15->velnorm(40,1,:,:)
 
-  velvarbl9    = VAR9->velnorm(10,1,:,:)
+  velvarbl9    = VAR9->velnorm(40,1,:,:)
   veldiff9     = new((/30,30/),float);
   veldiff9     = velvarbl9(:,:)-velstock9(:,:);
 
-  velvarbl15   = VAR15->velnorm(10,1,:,:)
+  velvarbl15   = VAR15->velnorm(40,1,:,:)
   veldiff15    = new((/30,30/),float);
   veldiff15    = velvarbl15(:,:)-velstock15(:,:);
 
