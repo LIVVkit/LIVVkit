@@ -24,11 +24,11 @@ def timing(file1,flag):
     sg_avg = 9999.
     gid_avg = 9999.
     gio_avg = 9999.
-    whichdriver = dycore
+    whichdriver = 'dycore not determined'
 
     if flag == 0:
         for line in output:
-            if "simple glide" in line:
+            if "cism" in line:
                 sg_walltotal = float(line.split()[5])
                 sg_processes = float(line.split()[2])
                 sg_avg = sg_walltotal / sg_processes
@@ -41,7 +41,7 @@ def timing(file1,flag):
                 gv_walltotal = float(line.split()[4])
                 gv_processes = float(line.split()[1])
                 gv_avg = gv_walltotal / gv_processes
-            if "glide_io_writeall" in line:
+            if "io_writeall" in line:
                 gio_walltotal = float(line.split()[4])
                 gio_processes = float(line.split()[1])
                 gio_avg = gio_walltotal / gio_processes
