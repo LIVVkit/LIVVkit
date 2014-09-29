@@ -28,6 +28,8 @@ export TEST_FILEPATH="/home/$USER/piscees-trunk/tests/higher-order"
 # livv will create the www directory in the HTML_PATH if it does not already exist
 export HTML_PATH="/home/$USER/public_html/livv_2013_1007_16_22_27/"
 
+export RUN_GLAM=1
+
 # flags to select verification tests
 export RUN_DOME30_DIAGNOSTIC=1
 export RUN_DOME30_EVOLVING=0
