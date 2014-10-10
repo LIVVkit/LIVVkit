@@ -19,7 +19,7 @@ fi
 # the below settings highlighted between the ***'s need to be changed by the user:
 #*******************************************************************************
 # set path to python version on mac
-export MY_PYTHON="/opt/local/bin/python2.7"
+export MY_PYTHON="python"
 
 # user added comment of analysis to be performed
 COMMENT="Test run of glissade code"
@@ -42,9 +42,17 @@ export RUN_CIRCULAR_SHELF=1
 export RUN_CONFINED_SHELF=1
 export RUN_ISMIP_HOM_A80=1
 export RUN_ISMIP_HOM_A20=1
-export RUN_ISMIP_HOM_C80=0
-export RUN_ISMIP_HOM_C20=0
+export RUN_ISMIP_HOM_C80=1
+export RUN_ISMIP_HOM_C20=1
 
+export RUN_DOME60=0
+export RUN_DOME120=0
+export RUN_DOME240=0
+export RUN_DOME500=0
+export RUN_DOME1000=0
+export RUN_GIS_1KM=0
+export RUN_GIS_2KM=0
+export RUN_GIS_4KM=0
 export RUN_GIS_10KM=0
 
 # flag to select validation analysis; 
