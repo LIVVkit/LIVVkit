@@ -37,7 +37,7 @@ def timing_averages(file,flag):
 #collect data from all JFNK timing files
     if flag == 0:
         for i in range(1,10):
-            file1 = file + str(i) + "/seacism_timing_stats"
+            file1 = file + str(i) + "/cism_timing_stats"
             sg_avg = timing(file1,flag)
             sg_avg_list.append(sg_avg)
             
@@ -78,7 +78,7 @@ def timing_check(file,current,flag,test):
             sg_avgs = timing_averages(file,flag)
 
             #gather timing data from current run
-            file1 = current + '/seacism_timing_stats'
+            file1 = current + '/cism_timing_stats'
             sg_avg = timing(file1,flag)
             sg_avgs.append(sg_avg)
 
