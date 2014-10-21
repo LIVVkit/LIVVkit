@@ -35,8 +35,8 @@ begin
   tsJFNK  = thkstockJFNK@scale_factor * thkstockJFNK
   tvPIC   = thkvarblPIC@scale_factor  * thkvarblPIC
   tvJFNK  = thkvarblJFNK@scale_factor * thkvarblJFNK
-  tdPIC   = thkdiffPIC@scale_factor  * thkdiffPIC
-  tdJFNK  = thkdiffJFNK@scale_factor * thkdiffJFNK
+  tdPIC   = thkvarblPIC@scale_factor  * thkdiffPIC
+  tdJFNK  = thkvarblJFNK@scale_factor * thkdiffJFNK
   tsPIC@long_name  = "PIC Scaled Benchmark"
   tsJFNK@long_name = "JFNK Scaled Benchmark"
   tvPIC@long_name  = "PIC Scaled Current Run"

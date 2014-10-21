@@ -37,8 +37,8 @@ begin
   vs15  = velstock15@scale_factor * velstock15
   vv9   = velvarbl9@scale_factor  * velvarbl9
   vv15  = velvarbl15@scale_factor * velvarbl15
-  vd9   = veldiff9@scale_factor  * veldiff9
-  vd15  = veldiff15@scale_factor * veldiff15
+  vd9   = velvarbl9@scale_factor  * veldiff9
+  vd15  = velvarbl15@scale_factor * veldiff15
   vs9@long_name    = "Small Proc Scaled Benchmark"
   vs15@long_name   = "Large Proc Scaled Benchmark"
   vv9@long_name    = "Small Proc Scaled Current Run"

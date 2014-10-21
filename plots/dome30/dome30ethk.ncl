@@ -37,8 +37,8 @@ begin
   ts15  = thkstock15@scale_factor * thkstock15
   tv9   = thkvarbl9@scale_factor  * thkvarbl9
   tv15  = thkvarbl15@scale_factor * thkvarbl15
-  td9   = thkdiff9@scale_factor  * thkdiff9
-  td15= thkdiff15@scale_factor   * thkdiff15
+  td9   = thkvarbl9@scale_factor  * thkdiff9
+  td15= thkvarbl15@scale_factor   * thkdiff15
   ts9@long_name    = "Small Proc Scaled Benchmark"
   ts15@long_name   = "Large Proc Scaled Benchmark"
   tv9@long_name    = "Small Proc Scaled Current Run"

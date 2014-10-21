@@ -28,16 +28,16 @@ export TEST_FILEPATH=$TEST_DIR
 export HTML_PATH="/ccs/home/$USER/www/"
 
 # flags to select verification tests, 1=yes
-export RUN_GLAM=1
+export RUN_GLAM=0
 
-export RUN_DOME30_DIAGNOSTIC=1
-export RUN_DOME30_EVOLVING=1
-export RUN_CIRCULAR_SHELF=1
-export RUN_CONFINED_SHELF=1
-export RUN_ISMIP_HOM_A80=1
-export RUN_ISMIP_HOM_A20=1
-export RUN_ISMIP_HOM_C80=1
-export RUN_ISMIP_HOM_C20=1
+export RUN_DOME30_DIAGNOSTIC=0
+export RUN_DOME30_EVOLVING=0
+export RUN_CIRCULAR_SHELF=0
+export RUN_CONFINED_SHELF=0
+export RUN_ISMIP_HOM_A80=0
+export RUN_ISMIP_HOM_A20=0
+export RUN_ISMIP_HOM_C80=0
+export RUN_ISMIP_HOM_C20=0
 
 # flags to select performance analysis
 export RUN_DOME60=0
@@ -52,11 +52,11 @@ export RUN_GIS_4KM=0
 export RUN_ANT=0
 
 # flag to select validation analysis; 
-#export RUN_VAL_COUPLED=0
-#export RUN_VAL_ICE=0
-#export RUN_VAL_DATA=0
-#export RUN_VAL_YEARS=0
-#export RUN_VAL_RANGE=0
+export RUN_VALIDATION=0
+export RUN_VAL_COUPLED=0
+export RUN_VAL_DATA=0
+export RUN_VAL_YEARS=0
+export RUN_VAL_RANGE=0
 
 #*******************************************************************************
 
@@ -114,10 +114,10 @@ python $PY_PATH/VV_main.py \
 -U "$RUN_GIS_2KM" \
 -W "$RUN_GIS_4KM" \
 -G "$RUN_GLAM" \
-#-v "$RUN_VAL_COUPLED" \
-#-w "$RUN_VAL_ICE" \
-#-x "$RUN_VAL_DATA" \
-#-y "$RUN_VAL_YEARS"  \
-#-r "$RUN_VAL_RANGE"  
+-v "$RUN_VALIDATION" \
+-w "$RUN_VAL_COUPLED" \
+-x "$RUN_VAL_DATA" \
+-y "$RUN_VAL_YEARS"  \
+-r "$RUN_VAL_RANGE"  
 
 chmod -R 775 $HTML_PATH/*

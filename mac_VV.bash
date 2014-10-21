@@ -53,14 +53,13 @@ export RUN_DOME1000=0
 export RUN_GIS_1KM=0
 export RUN_GIS_2KM=0
 export RUN_GIS_4KM=0
-export RUN_GIS_10KM=0
 
 # flag to select validation analysis; 
-#export RUN_VAL_COUPLED=0
-#export RUN_VAL_ICE=0
-#export RUN_VAL_DATA=0
-#export RUN_VAL_YEARS=0
-#export RUN_VAL_RANGE=0
+export RUN_VALIDATION=0
+export RUN_VAL_COUPLED=0
+export RUN_VAL_DATA=0
+export RUN_VAL_YEARS=0
+export RUN_VAL_RANGE=0
 
 
 #*******************************************************************************
@@ -119,10 +118,10 @@ $MY_PYTHON $PY_PATH/VV_main.py \
  -U "$RUN_GIS_2KM" \
  -W "$RUN_GIS_4KM" \
  -G "$RUN_GLAM" \
-# -v "$RUN_VAL_COUPLED" \
-# -w "$RUN_VAL_ICE" \
-# -x "$RUN_VAL_DATA" \
-# -y "$RUN_VAL_YEARS"  \
-# -r "$RUN_VAL_RANGE"  
+ -v "$RUN_VALIDATION" \
+ -w "$RUN_VAL_COUPLED" \
+ -x "$RUN_VAL_DATA" \
+ -y "$RUN_VAL_YEARS"  \
+ -r "$RUN_VAL_RANGE"  
 
 chmod 744 $HTML_PATH/*

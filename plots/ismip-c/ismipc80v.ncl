@@ -45,9 +45,9 @@ begin
   vvout   = vvarblout@scale_factor  * vvarblout
   vvPIC   = vvarblPIC@scale_factor  * vvarblPIC
   vvJFNK  = vvarblJFNK@scale_factor * vvarblJFNK
-  vdout   = vdiffout@scale_factor  * vdiffout
-  vdPIC   = vdiffPIC@scale_factor  * vdiffPIC
-  vdJFNK  = vdiffJFNK@scale_factor * vdiffJFNK
+  vdout   = vvarblout@scale_factor  * vdiffout
+  vdPIC   = vvarblPIC@scale_factor  * vdiffPIC
+  vdJFNK  = vvarblJFNK@scale_factor * vdiffJFNK
   vsout@long_name  = "Serial Scaled Benchmark"
   vsPIC@long_name  = "PIC Scaled Benchmark"
   vsJFNK@long_name = "JFNK Scaled Benchmark"

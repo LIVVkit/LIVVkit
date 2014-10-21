@@ -38,8 +38,8 @@ begin
   usJFNK  = ustockJFNK@scale_factor * ustockJFNK
   uvPIC   = uvarblPIC@scale_factor  * uvarblPIC
   uvJFNK  = uvarblJFNK@scale_factor * uvarblJFNK
-  udPIC   = udiffPIC@scale_factor  * udiffPIC
-  udJFNK  = udiffJFNK@scale_factor * udiffJFNK
+  udPIC   = uvarblPIC@scale_factor  * udiffPIC
+  udJFNK  = uvarblJFNK@scale_factor * udiffJFNK
   usPIC@long_name  = "PIC Scaled Benchmark"
   usJFNK@long_name = "JFNK Scaled Benchmark"
   uvPIC@long_name  = "PIC Scaled Current Run"

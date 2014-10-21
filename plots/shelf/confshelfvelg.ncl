@@ -25,7 +25,7 @@ begin
 
   vsGLS  = velstockGLS@scale_factor  * velstockGLS
   vvGLS  = velvarblGLS@scale_factor  * velvarblGLS
-  vdGLS  = veldiffGLS@scale_factor  * veldiffGLS
+  vdGLS  = velvarblGLS@scale_factor  * veldiffGLS
   vsGLS@long_name  = "Glissade Scaled Benchmark"
   vvGLS@long_name  = "Glissade Scaled Current Run"
   vdGLS@long_name  = "Glissade Scaled Difference"

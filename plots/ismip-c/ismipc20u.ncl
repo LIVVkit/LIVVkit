@@ -44,9 +44,9 @@ begin
   uvout   = uvarblout@scale_factor  * uvarblout
   uvPIC   = uvarblPIC@scale_factor  * uvarblPIC
   uvJFNK  = uvarblJFNK@scale_factor * uvarblJFNK
-  udout   = udiffout@scale_factor  * udiffout
-  udPIC   = udiffPIC@scale_factor  * udiffPIC
-  udJFNK  = udiffJFNK@scale_factor * udiffJFNK
+  udout   = uvarblout@scale_factor  * udiffout
+  udPIC   = uvarblPIC@scale_factor  * udiffPIC
+  udJFNK  = uvarblJFNK@scale_factor * udiffJFNK
   usout@long_name  = "Serial Scaled Benchmark"
   usPIC@long_name  = "PIC Scaled Benchmark"
   usJFNK@long_name = "JFNK Scaled Benchmark"

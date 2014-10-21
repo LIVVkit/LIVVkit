@@ -35,8 +35,8 @@ begin
   vs4  = vstock4@scale_factor * vstock4
   vv1   = vvarbl1@scale_factor  * vvarbl1
   vv4  = vvarbl4@scale_factor * vvarbl4
-  vd1   = vdiff1@scale_factor  * vdiff1
-  vd4  = vdiff4@scale_factor * vdiff4
+  vd1   = vvarbl1@scale_factor  * vdiff1
+  vd4  = vvarbl4@scale_factor * vdiff4
   vs1@long_name  = "1 Scaled Benchmark"
   vs4@long_name = "4 Scaled Benchmark"
   vv1@long_name  = "1 Scaled Current Run"
