@@ -5,20 +5,22 @@ echo
 echo "To run tests without rebuilding, use skip-build."
 echo
 
+setenv CODE_DIR $HOME/cism-piscees
+
 @ skip_build_set = ($1 == skip-build)
 
 #pushd . > /dev/null
 
 if ($skip_build_set == 0) then
- cd ../../../builds/hopper-gnu
- csh hopper-gnu-build-and-test-serial.csh no-copy skip-tests 
- csh hopper-gnu-build-and-test.csh no-copy skip-tests 
+ cd $CODE_DIR/builds/hopper-gnu
+ csh hopper-gnu-build-and-test-serial.csh no-copy skip-build skip-tests 
+ csh hopper-gnu-build-and-test.csh no-copy skip-build skip-tests 
  cd ../hopper-pgi
- csh hopper-pgi-build-and-test.csh no-copy
+ csh hopper-pgi-build-and-test.csh skip-build no-copy
  exit
 endif
 
-cd ../../../builds/hopper-pgi
+cd $CODE_DIR/builds/hopper-pgi
 csh hopper-pgi-build-and-test.csh skip-build no-copy
 
 #popd . > /dev/null

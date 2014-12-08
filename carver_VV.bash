@@ -28,6 +28,7 @@ export COMMENT="evaluating code and test suite for CISM2.0 release"
 
 # /reg_test and /livv needs to be placed in the subdirectory below
 export TEST_FILEPATH=$TEST_DIR
+echo $TEST_DIR
 
 # specify location where the html files will be sent so they are viewable on the web
 # livv wil create the www directory in the HTML_PATH if it does not already exist
@@ -40,7 +41,7 @@ export RUN_GLAM=0
 export RUN_DOME30_DIAGNOSTIC=1
 export RUN_DOME30_EVOLVING=1
 export RUN_CIRCULAR_SHELF=1
-export RUN_CONFINED_SHELF=1
+export RUN_CONFINED_SHELF=0
 export RUN_ISMIP_HOM_A80=1
 export RUN_ISMIP_HOM_A20=1
 export RUN_ISMIP_HOM_C80=1
@@ -70,7 +71,7 @@ export RUN_VAL_RANGE=0
 # From here below, the commands are set automatically and don't require changing by the user
 
 # points to livv in the directory set above
-export SCRIPT_PATH="$TEST_FILEPATH/livv"
+export SCRIPT_PATH="$TEST_FILEPATH/LIVV"
 # data_dir changes based on what machine livv is run on (choices: titan, hopper, mac)
 export DATA_DIR="data_hopper"
 # creates HTML_LINK based on HTML_PATH given above
