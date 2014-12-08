@@ -13,10 +13,10 @@ setenv CODE_DIR $HOME/cism-piscees
 
 if ($skip_build_set == 0) then
  cd $CODE_DIR/builds/hopper-gnu
- csh hopper-gnu-build-and-test-serial.csh no-copy skip-build skip-tests 
- csh hopper-gnu-build-and-test.csh no-copy skip-build skip-tests 
+ csh hopper-gnu-build-and-test-serial.csh no-copy skip-tests 
+ csh hopper-gnu-build-and-test.csh no-copy skip-tests 
  cd ../hopper-pgi
- csh hopper-pgi-build-and-test.csh skip-build no-copy
+ csh hopper-pgi-build-and-test.csh no-copy
  exit
 endif
 

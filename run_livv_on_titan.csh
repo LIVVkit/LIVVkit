@@ -7,10 +7,12 @@ echo
 
 @ skip_build_set = ($1 == skip-build)
 
+setenv CODE_DIR $HOME/cism-piscees
+
 #pushd . > /dev/null
 
 if ($skip_build_set == 0) then
- cd ../../../builds/titan-gnu
+ cd $CODE_DIR/builds/titan-gnu
  csh titan-gnu-build-and-test-serial.csh no-copy skip-tests 
  csh titan-gnu-build-and-test.csh no-copy skip-tests 
  cd ../titan-pgi
@@ -18,7 +20,7 @@ if ($skip_build_set == 0) then
  exit
 endif
 
-cd ../../../builds/titan-pgi
+cd .$CODE_DIR/builds/titan-pgi
 csh titan-pgi-build-and-test.csh skip-build no-copy
 
 #popd . > /dev/null
