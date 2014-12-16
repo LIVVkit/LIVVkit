@@ -21,7 +21,7 @@ def driver_check(perf_test,dome60_flag,dome120_flag,dome240_flag,dome500_flag,do
     dictionary_large = {}
     dictionary_c_flag = {}
     flag = 0
-#dome60
+    #dome60
     if dome60_flag == 1:
         current_run_config = perf_test + '/dome60/configure_files/dome.60.config'
         driver,c_flag = VV_checks.driver_check(current_run_config)
@@ -35,7 +35,7 @@ def driver_check(perf_test,dome60_flag,dome120_flag,dome240_flag,dome500_flag,do
         dictionary_dycore['dome60c'] = 0
         dictionary_large['dome60'] = 0
         
-#dome120
+    #dome120
     if dome120_flag == 1:
         current_run_config = perf_test + '/dome120/configure_files/dome.120.config'
         driver,c_flag = VV_checks.driver_check(current_run_config)
@@ -48,7 +48,8 @@ def driver_check(perf_test,dome60_flag,dome120_flag,dome240_flag,dome500_flag,do
     else:
         dictionary_dycore['dome120c'] = 0
         dictionary_large['dome120'] = 0
-#dome240
+    
+    #dome240
     if dome240_flag == 1:
         current_run_config = perf_test + '/dome240/configure_files/dome.240.config'
         driver,c_flag = VV_checks.driver_check(current_run_config)
@@ -61,7 +62,8 @@ def driver_check(perf_test,dome60_flag,dome120_flag,dome240_flag,dome500_flag,do
     else:
         dictionary_dycore['dome240c'] = 0
         dictionary_large['dome240'] = 0
-#dome500
+
+    #dome500
     if dome500_flag == 1:
         current_run_config = perf_test + '/dome500/configure_files/dome.500.config'
         driver,c_flag = VV_checks.driver_check(current_run_config)
@@ -74,7 +76,8 @@ def driver_check(perf_test,dome60_flag,dome120_flag,dome240_flag,dome500_flag,do
     else:
         dictionary_dycore['dome500c'] = 0
         dictionary_large['dome500'] = 0
-#dome1000
+
+    #dome1000
     if dome1000_flag == 1:
         current_run_config = perf_test + '/dome1000/configure_files/dome.1000.config'
         driver,c_flag = VV_checks.driver_check(current_run_config)
@@ -95,7 +98,8 @@ def time_check(perf_test,dome60_flag,dome120_flag,dome240_flag,dome500_flag,dome
                 gis_1km_flag,gis_2km_flag,gis_4km_flag):
     dictionary_large_gis = {}
     flag = 0
-#gis4km
+    
+    #gis4km
     if gis_4km_flag == 1:
         current_run_path = perf_test + '/gis_4km/data/out.gis.4km.albany.n256_10timesteps.timing'
         timing_path_10runs = perf_test + '/bench/gis_4km/data_titan/out.gis.4km.albany.timing'
@@ -103,7 +107,8 @@ def time_check(perf_test,dome60_flag,dome120_flag,dome240_flag,dome500_flag,dome
         dictionary_large_gis['gis4km'] = VV_timing_check.timing_check(timing_path_10runs,current_run_path,flag,test)
     else:
         dictionary_large_gis['gis4km'] = 0
-#gis2km
+
+    #gis2km
     if gis_2km_flag == 1:
         current_run_path = perf_test + '/gis_4km/data/out.gis.4km.glissade.timing'
         timing_path_10runs = perf_test + '/bench/gis_2km/data_titan/out.gis.2km.glissade.timing'
@@ -111,7 +116,8 @@ def time_check(perf_test,dome60_flag,dome120_flag,dome240_flag,dome500_flag,dome
         dictionary_large_gis['gis2km'] = VV_timing_check.timing_check(timing_path_10runs,current_run_path,flag,test)
     else:
         dictionary_large_gis['gis2km'] = 0
-#gis1km
+
+    #gis1km
     if gis_1km_flag == 1:
         current_run_path = perf_test + '/gis_1km/data/out.gis.1km.albany.timing'
         timing_path_10runs = perf_test + '/bench/gis_1km/data_titan/out.gis.1km.glissade.timing'
@@ -120,6 +126,7 @@ def time_check(perf_test,dome60_flag,dome120_flag,dome240_flag,dome500_flag,dome
     else:
         dictionary_large_gis['gis1km'] = 0
     return dictionary_large_gis
+
 
 def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_time,dome60_plot, \
     dome120_file,dome120_case,dome120_time,dome120_plot,dome240_file,dome240_case,dome240_time,dome240_plot, \
@@ -130,13 +137,13 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_tim
     dome60_flag,dome120_flag,dome240_flag,dome500_flag,dome1000_flag, \
     gis_1km_flag,gis_2km_flag,gis_4km_flag,data_dir):
 
-# using data, fill the web page with info about the cases
+    # using data, fill the web page with info about the cases
     large_test_file.write('<HTML>\n')
     large_test_file.write('<TITLE>Performance and Analysis Test Suite</TITLE>\n')
     large_test_file.write('<BODY BGCOLOR="#CADFE0">\n') 
     large_test_file.write('<H1>Performance and Analysis Test Suite</H1>')
 
-# link to descript_file about the test cases
+    # link to descript_file about the test cases
     large_test_file.write('<TH ALIGN=LEFT><A HREF="largetest_descript.html">Test Suite Descriptions</A>\n')
     large_test_file.write('<BR>\n')
 
@@ -146,10 +153,10 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_tim
     dictionary_dycore,dictionary_large,dictionary_c_flag = driver_check(perf_test,dome60_flag,dome120_flag,dome240_flag, \
                                         dome500_flag,dome1000_flag,gis_1km_flag,gis_2km_flag,gis_4km_flag)
 
-#apply flag to turn off running test
+    #apply flag to turn off running test
     if dome60_flag == 1:
 
-# Dome 60 stats
+        # Dome 60 stats
         print "running dome60 testcase"
         large_test_file.write('<BR>\n')
         if dictionary_large['dome60'] == 0:
@@ -159,11 +166,11 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_tim
         else:
             large_test_file.write('<H2>Diagnostic Dome 60 Test: <font color="#4CC417">Test Faster Than Expected Performance Range</font></H2>')
 
-#put something here to flag BFB results and no need to do any more calculations
+        #put something here to flag BFB results and no need to do any more calculations
         flag_to_plot_dome60 = 1
         if flag_to_plot_dome60:
 
-# link to dome60_file with descriptions about the test cases
+            # link to dome60_file with descriptions about the test cases
             large_test_file.write('<TH ALIGN=LEFT><A HREF="dome60_details.html">Velocity Solver Details</A>\n')
             large_test_file.write('<BR>\n')
             number = '60'
@@ -179,6 +186,7 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_tim
             else:
                 configure_path = perf_test + '/dome60/dome.60.' + dictionary_dycore['dome60c'] + '.config'
                 bench_configure_path = perf_test + '/bench/dome60/dome.60.glide.config'
+            
             c_flag = dictionary_c_flag['dome60']
             VV_utilities.confxml(dome60_case,configure_path,bench_configure_path,xml_path,bench_xml_path,c_flag)
 
@@ -189,7 +197,7 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_tim
             current_run_path = perf_test + '/dome60/data/out.60.' + dictionary_dycore['dome60c'] + '.timing'
             VV_timing.timing_table_current_run(dome60_time,timing_path_10runs,current_run_path,flag)
 
-# Time stamping
+        # Time stamping
         strrand = ''
         mode = os.stat(perf_test + '/dome60/').st_mtime
         mode = mode - 14400
@@ -203,10 +211,10 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_tim
         print "NOT RUNNING DOME60 TESTCASE"
 
 
-#apply flag to turn off running test
+    #apply flag to turn off running test
     if dome120_flag == 1:
 
-# Dome 120 stats
+        # Dome 120 stats
         print "running dome120 testcase"
         large_test_file.write('<BR>\n')
         if dictionary_large['dome120'] == 0:
@@ -216,11 +224,11 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_tim
         else:
             large_test_file.write('<H2>Diagnostic Dome 120 Test: <font color="#4CC417">Test Faster Than Expected Performance Range</font></H2>')
 
-#put something here to flag BFB results and no need to do any more calculations
+        #put something here to flag BFB results and no need to do any more calculations
         flag_to_plot_dome120 = 1
         if flag_to_plot_dome120:
 
-# link to dome120_file with descriptions about the test cases
+            # link to dome120_file with descriptions about the test cases
             large_test_file.write('<TH ALIGN=LEFT><A HREF="dome120_details.html">Velocity Solver Details</A>\n')
             large_test_file.write('<BR>\n')
             number = '120'
@@ -402,7 +410,7 @@ def large_tests(descript_file,large_test_file,dome60_file,dome60_case,dome60_tim
             xml_path = perf_test + '/dome1000/trilinosOptions.xml'
             bench_xml_path = perf_test + '/bench/dome1000/trilinosOptions.xml'
             if os.path.isdir(perf_test + '/dome1000/configure_files/') == True: 
-                configure_path = perf_test + '/dome1000/configure_files/dome.1000.' + dicionary_dycore['dome1000c'] + '.config'
+                configure_path = perf_test + '/dome1000/configure_files/dome.1000.' + dictionary_dycore['dome1000c'] + '.config'
                 bench_configure_path = perf_test + '/bench/dome1000/configure_files/dome.1000.glideconfig'
             else:
                 configure_path = perf_test + '/dome1000/dome.1000.' + dictionary_dycore['dome1000c'] + '.config'

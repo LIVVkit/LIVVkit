@@ -6,11 +6,12 @@ from optparse import OptionParser
 import subprocess
 import collections
 import VV_outprocess
-import test
+from livv_bin import VV_test
 import VV_utilities
 from stat import *
 import time
 
+# Writes a standardized html file with some given options
 def web(valid_file,valid_file_cam,valid_file_clm,detiails_file,table,figure1_plot,figure2_plot,figure3_plot, \
 	figure4_plot,figure5_plot,data_dir,ncl_path,html_path,script_path):
 
@@ -131,6 +132,10 @@ def web(valid_file,valid_file_cam,valid_file_clm,detiails_file,table,figure1_plo
         print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
                 + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
         exit(e.errno)
+        
+##############################
+# NO MORE BEYOND THIS POINT  #      
+##############################
 
 # delete old figure1 pic in www file
 #   if (html_path + '/' + pngnamefigure1):

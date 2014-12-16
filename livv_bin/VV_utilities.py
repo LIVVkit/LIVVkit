@@ -9,65 +9,6 @@ import collections
 import VV_outprocess
 import VV_testsuite
 
-#begining of code to parse the validation configure file
-#def valid_conf(details_file,valid_configure_path,land_file,atm_file,icesheet_file):
-#
-#    #this function allows creation of nested dictionaries on the fly (like PERL autovivification)
-#    def makehashdome():
-#        return collections.defaultdict(makehashdome)
-#    data = makehashdome()
-#
-#    def makehashbench():
-#        return collections.defaultdict(makehashbench)
-#    bench = makehashbench()
-#
-#    con_flag = False
-#    keywords = ('Time Management', 'Grid specification', 'Time steps', 'GLIDE options', 'Parameters', 'GLINT climate',)
-#    variable, value = '', ''
-#
-#    for kw in keywords:
-#        try:
-#            configlog = open(configure_path, 'r')
-#        except:
-#            print "error reading" + configure_path
-#            sys.exit(1)
-#            raise
-#    
-#        try:
-#            benchlog = open(bench_configure_path, 'r')
-#        except:
-#            print "error reading" + bench_configure_path
-#            sys.exit(1)
-#            raise
-#
-#        for cfline in configlog:
-#            if cfline.startswith('[' + kw + ']'):
-#                con_flag = True
-#                continue
-#            if cfline.startswith('['):
-#                con_flag = False
-#                continue
-#            if con_flag == True:
-#                line = cfline.strip('\r\n')
-#                if '#' in line:
-#                    tmp = line.split('#')
-#                    line = tmp[0]
-#                if line == '':
-#                    continue
-#                if line.endswith('='):
-#                    variable, junk = line.split()
-#                    value = ''
-#                else:
-#                    variable, value = line.split('=')
-#                variable = variable.strip()
-#                value = value.strip()
-#                datadome[kw][variable] = value
-#
-#        configlog.close()
-#
-
-
-
 #parse through the configure and xml file and print information
 def confxml(configure_xml_file,configure_path,bench_configure_path,xml_path,bench_xml_path,c_flag):
 
@@ -487,11 +428,74 @@ def confxml(configure_xml_file,configure_path,bench_configure_path,xml_path,benc
     configure_xml_file.close()
 
 
+# TODO FIX LIST ITERATION SYNTAX
+# Writes out list as a comma separated value to file
 def format(file, list):
-    i = 0
-    for item in list:
-        if i != 0:
-            file.write(", " + str(item))
-        else:
-            file.write(str(item))
-        i = 1
+    file.write(str(list[0]))
+    for item in list[1::]:
+        file.write("," + str(item))
+    #i = 0
+    #for item in list:
+    #    if i != 0:
+    #        file.write(", " + str(item))
+    #    else:
+    #        file.write(str(item))
+    #    i = 1
+    
+
+#begining of code to parse the validation configure file
+#def valid_conf(details_file,valid_configure_path,land_file,atm_file,icesheet_file):
+#
+#    #this function allows creation of nested dictionaries on the fly (like PERL autovivification)
+#    def makehashdome():
+#        return collections.defaultdict(makehashdome)
+#    data = makehashdome()
+#
+#    def makehashbench():
+#        return collections.defaultdict(makehashbench)
+#    bench = makehashbench()
+#
+#    con_flag = False
+#    keywords = ('Time Management', 'Grid specification', 'Time steps', 'GLIDE options', 'Parameters', 'GLINT climate',)
+#    variable, value = '', ''
+#
+#    for kw in keywords:
+#        try:
+#            configlog = open(configure_path, 'r')
+#        except:
+#            print "error reading" + configure_path
+#            sys.exit(1)
+#            raise
+#    
+#        try:
+#            benchlog = open(bench_configure_path, 'r')
+#        except:
+#            print "error reading" + bench_configure_path
+#            sys.exit(1)
+#            raise
+#
+#        for cfline in configlog:
+#            if cfline.startswith('[' + kw + ']'):
+#                con_flag = True
+#                continue
+#            if cfline.startswith('['):
+#                con_flag = False
+#                continue
+#            if con_flag == True:
+#                line = cfline.strip('\r\n')
+#                if '#' in line:
+#                    tmp = line.split('#')
+#                    line = tmp[0]
+#                if line == '':
+#                    continue
+#                if line.endswith('='):
+#                    variable, junk = line.split()
+#                    value = ''
+#                else:
+#                    variable, value = line.split('=')
+#                variable = variable.strip()
+#                value = value.strip()
+#                datadome[kw][variable] = value
+#
+#        configlog.close()
+#

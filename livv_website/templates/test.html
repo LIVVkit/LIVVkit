@@ -1,0 +1,30 @@
+<HTML>
+  <HEAD>
+    {% include 'header.html' %}
+    
+    <body>
+      <h2>{{testName}}</h2>
+      
+      <h3>Details</h3>
+      <p>
+        {{testDescription}}
+      </p>
+      
+      <h3>Plots</h3>
+      <p>
+        {% for img in testImages %}
+          <img src="{{img}}" alt="{{img}}">
+          <br>
+        {% endfor %}
+      </p>
+      
+      <h3>Results</h3>
+      <p>
+        Results of the tests.
+      </p>
+      <a href="{{indexDir}}/index.html">Home</a> 
+    </body>
+    
+    {% include 'footer.html' %}
+  </HEAD>
+</HTML>

@@ -9,6 +9,9 @@ import VV_outprocess
 import VV_utilities
 import VV_checks
 
+# TODO: A whole bunch of try: subprocess excepts: in this code, fix these!
+# TODO: Big commentted out section in middle, determine usage
+
 failedt_list = []
 
 def ddetails(solver_file,reg_test,data_dir): # using data, fill the web page with info

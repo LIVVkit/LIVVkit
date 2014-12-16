@@ -1,0 +1,25 @@
+<HTML>
+  <HEAD>
+	{% include 'header.html' %}
+	
+	<body>
+	  <h2>Content Title</h2>
+      <p>This will feature content about the site. </p>
+	  
+	  <h2>Summary</h2>
+	    <p>Tests run:</p>
+	    <ul>
+	      {% for test in testSummary %}
+	          <li>{{test}}</li>
+	      {% endfor %}
+	    </ul>
+	  <h2>Test Cases</h2>
+	    {% for case in testCases %}
+	       <a href="{{indexDir}}/tests/{{case}}.html">Results for {{case}}</a> 
+	       <br>
+	    {% endfor %}
+	</body>
+	
+    {% include 'footer.html' %}
+  </HEAD>
+</HTML>

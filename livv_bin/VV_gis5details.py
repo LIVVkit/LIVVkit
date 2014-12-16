@@ -9,6 +9,19 @@ import VV_outprocess
 import VV_utilities
 import VV_checks
 
+# TODO: A couple of try: subprocess excepts in this and some commented out stuff
+
+# -------------------------------------
+# details - can we name this better???
+#   writes out some html covering the details of the gis5 tests
+#
+#   calls VV_outprocess & VV_utilities functions
+# 
+# input:
+#   solver_file
+#   perf_test
+#   bench_data
+# -------------------------------------
 def details(solver_file,perf_test,bench_data):  # using data, fill the web page with info
         
     failedt_list = []
@@ -100,6 +113,20 @@ def details(solver_file,perf_test,bench_data):  # using data, fill the web page 
 
     return failedt
 
+
+
+# -------------------------------------
+# gis5_plot
+#   creates plots for the gis5 tests
+#
+# inputs:
+#   plot_file
+#   perf_test
+#   ncl_path
+#   html_path
+#   script_path
+#   bench_data
+# -------------------------------------
 def gis5_plot(plot_file,perf_test,ncl_path,html_path,script_path,bench_data):  # using data, fill the web page with info
 
     plot_file.write('<HTML>\n')

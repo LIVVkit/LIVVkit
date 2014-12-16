@@ -1,4 +1,4 @@
-#!/usr/bin/env
+# !/usr/bin/env
 
 import sys
 import os
@@ -14,104 +14,113 @@ import VV_checks
 from stat import *
 import time
 
-#bit-for-bit check for each test case
-def bit_list(reg_test,data_dir,diagnostic_flag,evolving_flag,circular_flag,confined_flag,\
-                ismip_hom_a80_flag,ismip_hom_a20_flag,ismip_hom_c80_flag,ismip_hom_c20_flag):
+# bit-for-bit check for each test case
+# returns a dictionary with each input being either checked bit for bit or defaulted to 0 if 
+# the test is not being run bit for bit
+def bit_list(reg_test, data_dir, diagnostic_flag, evolving_flag, circular_flag, confined_flag, \
+                ismip_hom_a80_flag, ismip_hom_a20_flag, ismip_hom_c80_flag, ismip_hom_c20_flag):
     dictionary = {}
-#diagnostic dome30 case
-    #apply flag to turn off running test
+    # diagnostic dome30 case
+    # apply flag to turn off running test
     if diagnostic_flag == 1:
         data_file_path = reg_test + '/dome30/diagnostic/' + data_dir
         bench_file_path = reg_test + '/bench/dome30/diagnostic/' + data_dir
-        dictionary['diagnostic'] = VV_checks.bit4bit(data_file_path,bench_file_path)
+        dictionary['diagnostic'] = VV_checks.bit4bit(data_file_path, bench_file_path)
     else:
         dictionary['diagnostic'] = 0
-#evolving dome30 case
-    #apply flag to turn off running test
+        
+    # evolving dome30 case
+    # apply flag to turn off running test
     if evolving_flag == 1:
         data_file_path = reg_test + '/dome30/evolving/' + data_dir
         bench_file_path = reg_test + '/bench/dome30/evolving/' + data_dir
-        dictionary['evolving'] = VV_checks.bit4bit(data_file_path,bench_file_path)
+        dictionary['evolving'] = VV_checks.bit4bit(data_file_path, bench_file_path)
     else:
         dictionary['evolving'] = 0
-#circular shelf case
-    #apply flag to turn off running test
+
+    # circular shelf case
+    # apply flag to turn off running test
     if circular_flag == 1:
         data_file_path = reg_test + '/circular-shelf/' + data_dir
         bench_file_path = reg_test + '/bench/circular-shelf/' + data_dir
-        dictionary['circular'] = VV_checks.bit4bit(data_file_path,bench_file_path)
+        dictionary['circular'] = VV_checks.bit4bit(data_file_path, bench_file_path)
     else:
         dictionary['circular'] = 0
-#confined shelf case
-    #apply flag to turn off running test
+    
+    # confined shelf case
+    # apply flag to turn off running test
     if confined_flag == 1:
         data_file_path = reg_test + '/confined-shelf/' + data_dir
         bench_file_path = reg_test + '/bench/confined-shelf/' + data_dir
-        dictionary['confined'] = VV_checks.bit4bit(data_file_path,bench_file_path)
+        dictionary['confined'] = VV_checks.bit4bit(data_file_path, bench_file_path)
     else:
         dictionary['confined'] = 0
-#ismip hom a 80 case
-    #apply flag to turn off running test
+
+    # ismip hom a 80 case
+    # apply flag to turn off running test
     if ismip_hom_a80_flag == 1:
         data_file_path = reg_test + '/ismip-hom-a/80km/' + data_dir
         bench_file_path = reg_test + '/bench/ismip-hom-a/80km/' + data_dir
-        dictionary['ismip-hom-a80'] = VV_checks.bit4bit(data_file_path,bench_file_path)
+        dictionary['ismip-hom-a80'] = VV_checks.bit4bit(data_file_path, bench_file_path)
     else:
         dictionary['ismip-hom-a80'] = 0
-#ismip hom a 20 case
-    #apply flag to turn off running test
+
+    # ismip hom a 20 case
+    # apply flag to turn off running test
     if ismip_hom_a20_flag == 1:
         data_file_path = reg_test + '/ismip-hom-a/20km/' + data_dir
         bench_file_path = reg_test + '/bench/ismip-hom-a/20km/' + data_dir
-        dictionary['ismip-hom-a20'] = VV_checks.bit4bit(data_file_path,bench_file_path)
+        dictionary['ismip-hom-a20'] = VV_checks.bit4bit(data_file_path, bench_file_path)
     else:
         dictionary['ismip-hom-a20'] = 0
-#ismip hom c 80 case
-    #apply flag to turn off running test
+
+    # ismip hom c 80 case
+    # apply flag to turn off running test
     if ismip_hom_c80_flag == 1:
         data_file_path = reg_test + '/ismip-hom-c/80km/' + data_dir
         bench_file_path = reg_test + '/bench/ismip-hom-c/80km/' + data_dir
-        dictionary['ismip-hom-c80'] = VV_checks.bit4bit(data_file_path,bench_file_path)
+        dictionary['ismip-hom-c80'] = VV_checks.bit4bit(data_file_path, bench_file_path)
     else:
         dictionary['ismip-hom-c80'] = 0
-#ismip hom c 20 case
-    #apply flag to turn off running test
+
+    # ismip hom c 20 case
+    # apply flag to turn off running test
     if ismip_hom_c20_flag == 1:
         data_file_path = reg_test + '/ismip-hom-c/20km/' + data_dir
         bench_file_path = reg_test + '/bench/ismip-hom-c/20km/' + data_dir
-        dictionary['ismip-hom-c20'] = VV_checks.bit4bit(data_file_path,bench_file_path)
+        dictionary['ismip-hom-c20'] = VV_checks.bit4bit(data_file_path, bench_file_path)
     else:
         dictionary['ismip-hom-c20'] = 0
 
     return dictionary
 
 
-def web(glam_flag,descript_file,test_file, \
-    dome30d_file,dome30d_case,dome30d_plot,dome30e_file,dome30e_case,dome30e_plot, \
-    circ_file,circ_case,circ_plot,conf_file,conf_case,conf_plot, \
-    ishoma80_file,ishoma80_case,ishoma80_plot,ishoma20_file,ishoma20_case,ishoma20_plot, \
-    ishomc80_file,ishomc80_case,ishomc80_plot,ishomc20_file,ishomc20_case,ishomc20_plot, \
-    reg_test,test_suite,data_dir,ncl_path,html_path,script_path,\
-    diagnostic_flag,evolving_flag,circular_flag,confined_flag, \
-    ismip_hom_a80_flag,ismip_hom_a20_flag,ismip_hom_c80_flag,ismip_hom_c20_flag):
+def web(glam_flag, descript_file, test_file, \
+    dome30d_file, dome30d_case, dome30d_plot, dome30e_file, dome30e_case, dome30e_plot, \
+    circ_file, circ_case, circ_plot, conf_file, conf_case, conf_plot, \
+    ishoma80_file, ishoma80_case, ishoma80_plot, ishoma20_file, ishoma20_case, ishoma20_plot, \
+    ishomc80_file, ishomc80_case, ishomc80_plot, ishomc20_file, ishomc20_case, ishomc20_plot, \
+    reg_test, test_suite, data_dir, ncl_path, html_path, script_path, \
+    diagnostic_flag, evolving_flag, circular_flag, confined_flag, \
+    ismip_hom_a80_flag, ismip_hom_a20_flag, ismip_hom_c80_flag, ismip_hom_c20_flag):
 
-# using data, fill the web page with info about the cases
+    # using data, fill the web page with info about the cases
     test_file.write('<HTML>\n')
     test_file.write('<TITLE>Test Suite Diagnostics</TITLE>\n')
     test_file.write('<BODY BGCOLOR="#CADFE0">\n')
     test_file.write('<H1>Test Suite Diagnostics</H1>')
 
-# link to descript_file about the test cases
+    # link to descript_file about the test cases
     test_file.write('<TH ALIGN=LEFT><A HREF="test_descript.html">Test Suite Descriptions</A>\n')
     test_file.write('<BR>\n')
 
-    dictionary = bit_list(reg_test,data_dir,diagnostic_flag,evolving_flag,circular_flag,confined_flag,\
-                    ismip_hom_a80_flag,ismip_hom_a20_flag,ismip_hom_c80_flag,ismip_hom_c20_flag)
+    dictionary = bit_list(reg_test, data_dir, diagnostic_flag, evolving_flag, circular_flag, confined_flag, \
+                    ismip_hom_a80_flag, ismip_hom_a20_flag, ismip_hom_c80_flag, ismip_hom_c20_flag)
 
-#apply flag to turn off running test
+    # apply flag to turn off running test
     if diagnostic_flag == 1:
 
-# Diagnostic Dome 30 stats
+        # Diagnostic Dome 30 stats
         if glam_flag == 1:
             print "running diagnostic dome30 glam testcase"
         else:
@@ -122,26 +131,30 @@ def web(glam_flag,descript_file,test_file, \
         else:
             test_file.write('<H2>Diagnostic Dome 30 Test: <font color="red">NOT Bit-for-Bit</font></H2>')
 
-#put something here to flag BFB results and no need to do any more calculations
+        # put something here to flag BFB results and no need to do any more calculations
         flag_to_plot_dome30d = 1
+        
         if flag_to_plot_dome30d:
 
-# link to dome30d_file with descriptions about the test cases
-            #since glissade does not output solver information:
+            # link to dome30d_file with descriptions about the test cases
+            # since glissade does not output solver information:
             if glam_flag == 1:
                 test_file.write('<TH ALIGN=LEFT><A HREF="dome30d_details.html">Velocity Solver Details</A>\n')
                 test_file.write('<BR>\n')
-                failedt = VV_dome30details.ddetails(dome30d_file,reg_test,data_dir)
+                failedt = VV_dome30details.ddetails(dome30d_file, reg_test, data_dir)
 
             if glam_flag == 1:
                 test_file.write('<TH ALIGN=LEFT><A HREF="dome30d_case.html">Case and Parameter Settings Details</A>\n')
             else:
                 test_file.write('<TH ALIGN=LEFT><A HREF="dome30d_case_glissade.html">Case and Parameter Settings Details</A>\n')
+            
             test_file.write('<BR>\n')
             xml_path = reg_test + '/dome30/diagnostic/trilinosOptions.xml'
             bench_xml_path = reg_test + '/bench/dome30/diagnostic/trilinosOptions.xml'
+            
             if glam_flag == 1:
                 c_flag = 1
+            
                 if os.path.isdir(reg_test + '/dome30/diagnostic/configure_files/') == True:
                     configure_path = reg_test + '/dome30/diagnostic/configure_files/dome.30.JFNK.trilinos.config.1'
                     bench_configure_path = reg_test + '/bench/dome30/diagnostic/configure_files/dome.30.JFNK.trilinos.config.1'
@@ -150,20 +163,22 @@ def web(glam_flag,descript_file,test_file, \
                     bench_configure_path = reg_test + '/bench/dome30/diagnostic/dome.30.JFNK.trilinos.config.1'
             else:
                 c_flag = 0
+                
                 if os.path.isdir(reg_test + '/dome30/diagnostic/configure_files/') == True:
                     configure_path = reg_test + '/dome30/diagnostic/configure_files/dome.30.glissade.config.1'
                     bench_configure_path = reg_test + '/bench/dome30/diagnostic/configure_files/dome.30.glissade.config.1'
                 else:
                     configure_path = reg_test + '/dome30/diagnostic/dome.30.glissade.config.1'
                     bench_configure_path = reg_test + '/bench/dome30/diagnostic/dome.30.glissade.config.1'
-            VV_utilities.confxml(dome30d_case,configure_path,bench_configure_path,xml_path,bench_xml_path,c_flag)
+            
+            VV_utilities.confxml(dome30d_case, configure_path, bench_configure_path, xml_path, bench_xml_path, c_flag)
 
             if glam_flag == 1:
                 test_file.write('<TH ALIGN=LEFT><A HREF="dome30d_plot.html">Plots</A>\n')
             else:
                 test_file.write('<TH ALIGN=LEFT><A HREF="dome30d_plot_glissade.html">Plots</A>\n')
             test_file.write('<BR>\n')
-            #if failedt != 0:
+            # if failedt != 0:
             #    dome30d_plot.write("<H2>Diagnostic Dome 30 Test failed, plots may not be generated</H2><br>")
             checkpath = reg_test + '/dome30/diagnostic/' + data_dir + '/dome.1.glissade.nc'
             checkpath2 = reg_test + '/dome30/diagnostic/' + data_dir + '/dome.4.glissade.nc'
@@ -171,9 +186,9 @@ def web(glam_flag,descript_file,test_file, \
             noplot1 = noplot
             noplot = VV_checks.emptycheck(checkpath2)
             if noplot1 != 1 and noplot != 1:
-                VV_dome30details.dplot(glam_flag,dome30d_plot,reg_test,ncl_path,html_path,script_path,data_dir)
+                VV_dome30details.dplot(glam_flag, dome30d_plot, reg_test, ncl_path, html_path, script_path, data_dir)
 
-# Time stamping
+        # Time stamping
         strrand = ''
         mode = os.stat(reg_test + '/dome30/diagnostic').st_mtime
         mode = mode - 18000
@@ -187,51 +202,52 @@ def web(glam_flag,descript_file,test_file, \
         print "NOT RUNNING DIAGNOSTIC DOME30 TESTCASE"
 
 
-#apply flag to turn off running test
+    # apply flag to turn off running test
     if evolving_flag == 1:
 
-# Evolving Dome 30 stats
-#        if glam_flag == 1:
-#            print "running evolving dome30 glam testcase"
-#        else:
+        # Evolving Dome 30 stats
+        #        if glam_flag == 1:
+        #            print "running evolving dome30 glam testcase"
+        #        else:
         if glam_flag == 0:
             print "running evolving dome30 glissade testcase"
             test_file.write('<BR>\n')
             if dictionary['evolving'] == 0:
-           	 test_file.write('<H2>Evolving Dome 30 Test: <font color="green">Bit-for-Bit</font></H2>')
+                test_file.write('<H2>Evolving Dome 30 Test: <font color="green">Bit-for-Bit</font></H2>')
             else:
-            	test_file.write('<H2>Evolving Dome 30 Test: <font color="red">NOT Bit-for-Bit</font></H2>')
+                test_file.write('<H2>Evolving Dome 30 Test: <font color="red">NOT Bit-for-Bit</font></H2>')
 
-# put something here to flag BFB results and no need to do any more calculations
-       	    flag_to_plot_dome30e = 1 
+            # put something here to flag BFB results and no need to do any more calculations
+            flag_to_plot_dome30e = 1 
             if flag_to_plot_dome30e:
-
-# link to dome30e_file with descriptions about the test cases
-            # since glissade does not output solver information:
-            	if glam_flag == 1:
-                   test_file.write('<TH ALIGN=LEFT><A HREF="dome30e_details.html">Velocity Solver Details</A>\n')
-                   test_file.write('<BR>\n')
-                   failedt = VV_dome30details.edetails(dome30e_file,test_suite,reg_test,ncl_path,html_path,data_dir)
+                # link to dome30e_file with descriptions about the test cases
+                # since glissade does not output solver information:
+                if glam_flag == 1:
+                    test_file.write('<TH ALIGN=LEFT><A HREF="dome30e_details.html">Velocity Solver Details</A>\n')
+                    test_file.write('<BR>\n')
+                    failedt = VV_dome30details.edetails(dome30e_file, test_suite, reg_test, ncl_path, html_path, data_dir)
 
                 if glam_flag == 1:
-                   test_file.write('<TH ALIGN=LEFT><A HREF="dome30e_case.html">Case and Parameter Settings Details</A>\n')
+                    test_file.write('<TH ALIGN=LEFT><A HREF="dome30e_case.html">Case and Parameter Settings Details</A>\n')
                 else:
-                   test_file.write('<TH ALIGN=LEFT><A HREF="dome30e_case_glissade.html">Case and Parameter Settings Details</A>\n')
+                    test_file.write('<TH ALIGN=LEFT><A HREF="dome30e_case_glissade.html">Case and Parameter Settings Details</A>\n')
+                
                 test_file.write('<BR>\n')
                 xml_path = reg_test + '/dome30/evolving/trilinosOptions.xml'
                 bench_xml_path = reg_test + '/bench/dome30/evolving/trilinosOptions.xml'
                 c_flag = 0
                 if os.path.isdir(reg_test + '/dome30/evolving/configure_files/') == True:
-                   configure_path = reg_test + '/dome30/evolving/configure_files/dome.30.glissade.config.large'
-                   bench_configure_path = reg_test + '/bench/dome30/evolving/configure_files/dome.30.glissade.config.large'
+                    configure_path = reg_test + '/dome30/evolving/configure_files/dome.30.glissade.config.large'
+                    bench_configure_path = reg_test + '/bench/dome30/evolving/configure_files/dome.30.glissade.config.large'
                 else:
-                   configure_path = reg_test + '/dome30/evolving/dome.30.glissade.config.large'
-                   bench_configure_path = reg_test + '/bench/dome30/evolving/dome.30.glissade.config.large'
-                VV_utilities.confxml(dome30e_case,configure_path,bench_configure_path,xml_path,bench_xml_path,c_flag)
+                    configure_path = reg_test + '/dome30/evolving/dome.30.glissade.config.large'
+                    bench_configure_path = reg_test + '/bench/dome30/evolving/dome.30.glissade.config.large'
+                
+                VV_utilities.confxml(dome30e_case, configure_path, bench_configure_path, xml_path, bench_xml_path, c_flag)
 
                 test_file.write('<TH ALIGN=LEFT><A HREF="dome30e_plot_glissade.html">Plots</A>\n')
                 test_file.write('<BR>\n')
-            #if failedt != 0:
+            # if failedt != 0:
             #    dome30e_plot.write("<H2>Evolving Dome 30 Test failed, plots may not be generated</H2><br>")
                 checkpath = reg_test + '/dome30/evolving/' + data_dir + '/dome.small.glissade.nc'
                 checkpath2 = reg_test + '/dome30/evolving/' + data_dir + '/dome.large.glissade.nc'
@@ -239,9 +255,9 @@ def web(glam_flag,descript_file,test_file, \
                 noplot1 = noplot
                 noplot = VV_checks.emptycheck(checkpath2)
                 if noplot != 1 and noplot != 1:
-                    VV_dome30details.eplot(glam_flag,dome30e_plot,reg_test,ncl_path,html_path,script_path,data_dir)
+                    VV_dome30details.eplot(glam_flag, dome30e_plot, reg_test, ncl_path, html_path, script_path, data_dir)
 
-# Time stamping
+            # Time stamping
             mode = os.stat(reg_test + '/dome30/evolving').st_mtime
             mode = mode - 18000
             mode = time.gmtime(mode)
@@ -254,7 +270,7 @@ def web(glam_flag,descript_file,test_file, \
         print "NOT RUNNING EVOLVING DOME30 TESTCASE"
 
 
-#apply flag to turn off running test
+# apply flag to turn off running test
     if circular_flag == 1:
 
 # Circular Shelf stats
@@ -277,9 +293,9 @@ def web(glam_flag,descript_file,test_file, \
             if glam_flag == 1:
                 test_file.write('<TH ALIGN=LEFT><A HREF="circ_details.html">Velocity Solver Details</A>\n')
                 test_file.write('<BR>\n')
-                failedt = VV_shelfdetails.circdetails(circ_file,reg_test,data_dir)
+                failedt = VV_shelfdetails.circdetails(circ_file, reg_test, data_dir)
 
-            if glam_flag ==1:
+            if glam_flag == 1:
                 test_file.write('<TH ALIGN=LEFT><A HREF="circ_case.html">Case and Parameter Settings Details</A>\n')
             else:
                 test_file.write('<TH ALIGN=LEFT><A HREF="circ_case_glissade.html">Case and Parameter Settings Details</A>\n')
@@ -302,19 +318,19 @@ def web(glam_flag,descript_file,test_file, \
                 else:
                     configure_path = reg_test + '/circular-shelf/circular-shelf.glissade.config'
                     bench_configure_path = reg_test + '/bench/circular-shelf/circular-shelf.glissade.config'
-            VV_utilities.confxml(circ_case,configure_path,bench_configure_path,xml_path,bench_xml_path,c_flag)
+            VV_utilities.confxml(circ_case, configure_path, bench_configure_path, xml_path, bench_xml_path, c_flag)
 
             if glam_flag == 1:
                 test_file.write('<TH ALIGN=LEFT><A HREF="circ_plot.html">Plots</A>\n')
             else:
                 test_file.write('<TH ALIGN=LEFT><A HREF="circ_plot_glissade.html">Plots</A>\n')
             test_file.write('<BR>\n')
-            #if failedt != 0:
+            # if failedt != 0:
             #    circ_plot.write("<H2>Circular Shelf Test failed, plots may not be generated</H2><br>")
             checkpath = reg_test + '/circular-shelf/' + data_dir + '/circular-shelf.gnu.glissade.nc'
             noplot = VV_checks.emptycheck(checkpath)
             if noplot != 1:
-                VV_shelfdetails.circplot(glam_flag,circ_plot,reg_test,ncl_path,html_path,script_path,data_dir)
+                VV_shelfdetails.circplot(glam_flag, circ_plot, reg_test, ncl_path, html_path, script_path, data_dir)
 
 # Time stamping
         mode = os.stat(reg_test + '/circular-shelf').st_mtime
@@ -329,7 +345,7 @@ def web(glam_flag,descript_file,test_file, \
         print "NOT RUNNING CIRCULAR SHELF TESTCASE"
 
 
-#apply flag to turn off running test
+# apply flag to turn off running test
     if confined_flag == 1:
 
 # Confined Shelf stats
@@ -352,7 +368,7 @@ def web(glam_flag,descript_file,test_file, \
             if glam_flag == 1:
                 test_file.write('<TH ALIGN=LEFT><A HREF="conf_details.html">Velocity Solver Details</A>\n')
                 test_file.write('<BR>\n')
-                failedt = VV_shelfdetails.confdetails(conf_file,reg_test,data_dir)
+                failedt = VV_shelfdetails.confdetails(conf_file, reg_test, data_dir)
 
             if glam_flag == 1:
                 test_file.write('<TH ALIGN=LEFT><A HREF="conf_case.html">Case and Parameter Settings Details</A>\n')
@@ -377,19 +393,19 @@ def web(glam_flag,descript_file,test_file, \
                 else:
                     configure_path = reg_test + '/confined-shelf/confined-shelf.glissade.config'
                     bench_configure_path = reg_test + '/bench/confined-shelf/confined-shelf.glissade.config'
-            VV_utilities.confxml(conf_case,configure_path,bench_configure_path,xml_path,bench_xml_path,c_flag)
+            VV_utilities.confxml(conf_case, configure_path, bench_configure_path, xml_path, bench_xml_path, c_flag)
 
             if glam_flag == 1:
                 test_file.write('<TH ALIGN=LEFT><A HREF="conf_plot.html">Plots</A>\n')
             else:
                 test_file.write('<TH ALIGN=LEFT><A HREF="conf_plot_glissade.html">Plots</A>\n')
             test_file.write('<BR>\n')
-            #if failedt != 0:
+            # if failedt != 0:
             #    conf_plot.write("<H2>Confined Shelf Test failed, plots may not be generated</H2><br>")
             checkpath = reg_test + '/confined-shelf/' + data_dir + '/confined-shelf.gnu.glissade.nc'
             noplot = VV_checks.emptycheck(checkpath)
             if noplot != 1:
-                VV_shelfdetails.confplot(glam_flag,conf_plot,reg_test,ncl_path,html_path,script_path,data_dir)
+                VV_shelfdetails.confplot(glam_flag, conf_plot, reg_test, ncl_path, html_path, script_path, data_dir)
 
 # Time stamping
         mode = os.stat(reg_test + '/confined-shelf').st_mtime
@@ -404,7 +420,7 @@ def web(glam_flag,descript_file,test_file, \
         print "NOT RUNNING CONFINED SHELF TESTCASE"
 
 
-#apply flag to turn off running test
+# apply flag to turn off running test
     if ismip_hom_a80_flag == 1:
 
 # ISMIP HOM A 80km stats
@@ -427,7 +443,7 @@ def web(glam_flag,descript_file,test_file, \
             if glam_flag == 1:
                 test_file.write('<TH ALIGN=LEFT><A HREF="ishoma80_details.html">Velocity Solver Details</A>\n')
                 test_file.write('<BR>\n')
-                failedt = VV_ismip.a80details(ishoma80_file,reg_test,data_dir)
+                failedt = VV_ismip.a80details(ishoma80_file, reg_test, data_dir)
             
             if glam_flag == 1:
                 test_file.write('<TH ALIGN=LEFT><A HREF="ishoma80_case.html">Case and Parameter Settings Details</A>\n')
@@ -452,19 +468,19 @@ def web(glam_flag,descript_file,test_file, \
                 else:
                     configure_path = reg_test + '/ismip-hom-a/80km/ishom.a.80km.glissade.1.config'
                     bench_configure_path = reg_test + '/bench/ismip-hom-a/80km/ishom.a.80km.glissade.1.config'
-            VV_utilities.confxml(ishoma80_case,configure_path,bench_configure_path,xml_path,bench_xml_path,c_flag)
+            VV_utilities.confxml(ishoma80_case, configure_path, bench_configure_path, xml_path, bench_xml_path, c_flag)
 
             if glam_flag == 1:
                 test_file.write('<TH ALIGN=LEFT><A HREF="ishoma80_plot.html">Plots</A>\n')
             else:
                 test_file.write('<TH ALIGN=LEFT><A HREF="ishoma80_plot_glissade.html">Plots</A>\n')
             test_file.write('<BR>\n')
-            #if failedt != 0:
+            # if failedt != 0:
             #    ishoma80_plot.write("<H2>ISMIP HOM A 80km Test failed, plots may not be generated</H2><br>")
             checkpath = reg_test + '/ismip-hom-a/80km/' + data_dir + '/ishom.a.80km.glissade.1.out.nc'
             noplot = VV_checks.emptycheck(checkpath)
             if noplot != 1:
-                VV_ismip.a80plot(glam_flag,ishoma80_plot,reg_test,ncl_path,html_path,script_path,data_dir)
+                VV_ismip.a80plot(glam_flag, ishoma80_plot, reg_test, ncl_path, html_path, script_path, data_dir)
 
 # Time stamping
         mode = os.stat(reg_test + '/ismip-hom-a/80km').st_mtime
@@ -479,7 +495,7 @@ def web(glam_flag,descript_file,test_file, \
         print "NOT RUNNING ISMIP HOM A 80KM TESTCASE"
 
 
-#apply flag to turn off running test
+# apply flag to turn off running test
     if ismip_hom_a20_flag == 1:
 
 # ISMIP HOM A 20km stats
@@ -502,7 +518,7 @@ def web(glam_flag,descript_file,test_file, \
             if glam_flag == 1:
                 test_file.write('<TH ALIGN=LEFT><A HREF="ishoma20_details.html">Velocity Solver Details</A>\n')
                 test_file.write('<BR>\n')
-                failedt = VV_ismip.a20details(ishoma20_file,reg_test,data_dir)
+                failedt = VV_ismip.a20details(ishoma20_file, reg_test, data_dir)
 
             if glam_flag == 1:
                 test_file.write('<TH ALIGN=LEFT><A HREF="ishoma20_case.html">Case and Parameter Settings Details</A>\n')
@@ -527,19 +543,19 @@ def web(glam_flag,descript_file,test_file, \
                 else:
                     configure_path = reg_test + '/ismip-hom-a/20km/ishom.a.20km.glissade.1.config'
                     bench_configure_path = reg_test + '/bench/ismip-hom-a/20km/ishom.a.20km.glissade.1.config'
-            VV_utilities.confxml(ishoma20_case,configure_path,bench_configure_path,xml_path,bench_xml_path,c_flag)
+            VV_utilities.confxml(ishoma20_case, configure_path, bench_configure_path, xml_path, bench_xml_path, c_flag)
 
             if glam_flag == 1:
                 test_file.write('<TH ALIGN=LEFT><A HREF="ishoma20_plot.html">Plots</A>\n')
             else:
                 test_file.write('<TH ALIGN=LEFT><A HREF="ishoma20_plot_glissade.html">Plots</A>\n')
             test_file.write('<BR>\n')
-            #if failedt != 0:
+            # if failedt != 0:
             #    ishoma20_plot.write("<H2>ISMIP HOM A 20 Test failed, plots may not be generated</H2><br>")
             checkpath = reg_test + '/ismip-hom-a/20km/' + data_dir + '/ishom.a.20km.glissade.1.out.nc'
             noplot = VV_checks.emptycheck(checkpath)
             if noplot != 1:
-                VV_ismip.a20plot(glam_flag,ishoma20_plot,reg_test,ncl_path,html_path,script_path,data_dir)
+                VV_ismip.a20plot(glam_flag, ishoma20_plot, reg_test, ncl_path, html_path, script_path, data_dir)
 
 # Time stamping
         mode = os.stat(reg_test + '/ismip-hom-a/20km').st_mtime
@@ -554,7 +570,7 @@ def web(glam_flag,descript_file,test_file, \
         print "NOT RUNNING ISMIP HOM A 20KM TESTCASE"
 
 
-#apply flag to turn off running test
+# apply flag to turn off running test
     if ismip_hom_c80_flag == 1:
         if glam_flag == 0:
 # ISMIP HOM C 80km stats
@@ -573,7 +589,7 @@ def web(glam_flag,descript_file,test_file, \
                 if glam_flag == 1:
                     test_file.write('<TH ALIGN=LEFT><A HREF="ishomc80_details.html">Velocity Solver Details</A>\n')
                     test_file.write('<BR>\n')
-                    failedt = VV_ismip.c80details(ishomc80_file,reg_test,data_dir)
+                    failedt = VV_ismip.c80details(ishomc80_file, reg_test, data_dir)
 
                 if glam_flag == 1:
                     test_file.write('<TH ALIGN=LEFT><A HREF="ishomc80_case.html">Case and Parameter Settings Details</A>\n')
@@ -598,19 +614,19 @@ def web(glam_flag,descript_file,test_file, \
                     else:
                         configure_path = reg_test + '/ismip-hom-c/80km/ishom.c.80km.glissade.1.config'
                         bench_configure_path = reg_test + '/bench/ismip-hom-c/80km/ishom.c.80km.glissade.1..config'
-                VV_utilities.confxml(ishomc80_case,configure_path,bench_configure_path,xml_path,bench_xml_path,c_flag)
+                VV_utilities.confxml(ishomc80_case, configure_path, bench_configure_path, xml_path, bench_xml_path, c_flag)
 
                 if glam_flag == 1:
                     test_file.write('<TH ALIGN=LEFT><A HREF="ishomc80_plot.html">Plots</A>\n')
                 else:
                     test_file.write('<TH ALIGN=LEFT><A HREF="ishomc80_plot_glissade.html">Plots</A>\n')
                 test_file.write('<BR>\n')
-                #if failedt != 0:
+                # if failedt != 0:
                 #    ishomc80_plot.write("<H2>ISMIP HOM C 80km Test failed, plots may not be generated</H2><br>")
                 checkpath = reg_test + '/ismip-hom-c/80km/' + data_dir + '/ishom.c.80km.glissade.1.out.nc'
                 noplot = VV_checks.emptycheck(checkpath)
                 if noplot != 1:
-                    VV_ismip.c80plot(glam_flag,ishomc80_plot,reg_test,ncl_path,html_path,script_path,data_dir)
+                    VV_ismip.c80plot(glam_flag, ishomc80_plot, reg_test, ncl_path, html_path, script_path, data_dir)
 
 # Time stamping
             mode = os.stat(reg_test + '/ismip-hom-c/80km').st_mtime
@@ -625,7 +641,7 @@ def web(glam_flag,descript_file,test_file, \
         print "NOT RUNNING ISMIP HOM C 80KM TESTCASE"
 
 
-#apply flag to turn off running test
+# apply flag to turn off running test
     if ismip_hom_c20_flag == 1:
         if glam_flag == 0:
 # ISMIP HOM C 20km stats
@@ -644,7 +660,7 @@ def web(glam_flag,descript_file,test_file, \
                 if glam_flag == 1:
                     test_file.write('<TH ALIGN=LEFT><A HREF="ishomc20_details.html">Velocity Solver Details</A>\n')
                     test_file.write('<BR>\n')
-                    failedt = VV_ismip.c20details(ishomc20_file,reg_test,data_dir)
+                    failedt = VV_ismip.c20details(ishomc20_file, reg_test, data_dir)
 
                 if glam_flag == 1:
                     test_file.write('<TH ALIGN=LEFT><A HREF="ishomc20_case.html">Case and Parameter Settings Details</A>\n')
@@ -669,19 +685,19 @@ def web(glam_flag,descript_file,test_file, \
                     else:
                         configure_path = reg_test + '/ismip-hom-c/20km/ishom.c.20km.glissade.1.config'
                         bench_configure_path = reg_test + '/bench/ismip-hom-c/20km/ishom.c.20km.glissade.1.config'
-                VV_utilities.confxml(ishomc20_case,configure_path,bench_configure_path,xml_path,bench_xml_path,c_flag)
+                VV_utilities.confxml(ishomc20_case, configure_path, bench_configure_path, xml_path, bench_xml_path, c_flag)
 
                 if glam_flag == 1:
                     test_file.write('<TH ALIGN=LEFT><A HREF="ishomc20_plot.html">Plots</A>\n')
                 else:
                     test_file.write('<TH ALIGN=LEFT><A HREF="ishomc20_plot_glissade.html">Plots</A>\n')
                 test_file.write('<BR>\n')
-                #if failedt != 0:
+                # if failedt != 0:
                 #    ishomc20_plot.write("<H2>ISMIP HOM C 20km Test failed, plots may not be generated</H2><br>")
                 checkpath = reg_test + '/ismip-hom-c/20km/' + data_dir + '/ishom.c.20km.glissade.1.out.nc'
                 noplot = VV_checks.emptycheck(checkpath)
                 if noplot != 1:
-                    VV_ismip.c20plot(glam_flag,ishomc20_plot,reg_test,ncl_path,html_path,script_path,data_dir)
+                    VV_ismip.c20plot(glam_flag, ishomc20_plot, reg_test, ncl_path, html_path, script_path, data_dir)
 
 # Time stamping
             mode = os.stat(reg_test + '/ismip-hom-c/20km').st_mtime

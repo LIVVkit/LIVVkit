@@ -11,6 +11,7 @@ import numpy as np
 from optparse import OptionParser
 import subprocess
 
+# Calculates the timing information and returns it
 def timing(file1,flag):
     
     try:
@@ -115,6 +116,7 @@ def timing_averages(file,flag):
         return sg_avgs,gid_avgs,gv_avgs,gio_avgs,wd_list
 
 
+# Writes out the html for the timing table of the current run 
 def timing_table_current_run(timing_file,file,current,flag):
 
     timing_file.write('<HTML>\n')
