@@ -19,9 +19,10 @@
       </p>
       
       <h3>Results</h3>
-      <p>
-        Results of the tests.
-      </p>
+        {% for case in testsRun %}
+          <h4>{{case}}</h4> 
+          <p>Results for {{case}} go here.</p>
+        {% endfor %}
       <a href="{{indexDir}}/index.html">Home</a> 
     </body>
     

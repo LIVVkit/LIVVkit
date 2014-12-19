@@ -29,11 +29,12 @@ def generate(indexDir, testSummary):
     imgDir = indexDir + "/imgs"
         
     # Make sure they exist
-    for siteDir in [cssDir, templateDir, testDir, imgDir]:
+    for siteDir in [cssDir, templateDir, indexDir, testDir, imgDir]:
         if not os.path.exists(siteDir):
             os.mkdir(siteDir);
         
     # Record some usage information
+    testsRun = [test for sublist in testSummary[1] for test in sublist]
     timestamp = time.strftime("%m-%d-%Y %H:%M:%S")
     user = getpass.getuser()
     
@@ -45,22 +46,33 @@ def generate(indexDir, testSummary):
     # Set up the variables for the index page
     templateFile = "/index.html"
     template = templateEnv.get_template( templateFile )
+    testDict = { "dome30/diagnostic" : "dome",
+                "dome30/evolving" : "dome",
+                "ismip-hom-a/80km" : "ismip",
+                "ismip-hom-c/80km" : "ismip",
+                "ismip-hom-a/20km" : "ismip",
+                "ismip-hom-c/20km" : "ismip",
+                "RUN_GIS_4KM" : "gis",
+                "RUN_GIS_2KM" : "gis",
+                "RUN_GIS_1KM" : "gis"}
+    
     testNames = [ "dome", "gis", "ismip", "validation" ]
-    testDescriptions = ["3-D paraboloid dome of ice with a circular, 60 km" +
-                        " diameter base sitting on a flat bed. The horizontal" +
-                        " spatial resolution studies are 2 km, 1 km, 0.5 km" + 
-                        " and 0.25 km, and there are 10 vertical levels. For this" +
-                        " set of experiments a quasi no-slip basal condition in" +
-                        " imposed by setting. A zero-flux boundary condition is" +
-                        " applied to the dome margins. ",
-                        "Attributes: This test case represents the Greenland ice" +
-                        " sheet (GIS) at different spatial resolutions (10km and 5km)." +
-                        " A quasi-no slip boundary condition is applied at the bed. As" +
-                        " with the dome test cases, a zero-flux boundary condition is" +
-                        " applied to the lateral margins. In all test cases, the ice" +
-                        " is taken as isothermal with a constant and uniform rate factor of.",
-                        "Simulates steady ice flow over a surface with periodic boundary conditions",
-                        ""]                    
+    testDescriptions = {"dome" : "3-D paraboloid dome of ice with a circular, 60 km" +
+                            " diameter base sitting on a flat bed. The horizontal" +
+                            " spatial resolution studies are 2 km, 1 km, 0.5 km" + 
+                            " and 0.25 km, and there are 10 vertical levels. For this" +
+                            " set of experiments a quasi no-slip basal condition in" +
+                            " imposed by setting. A zero-flux boundary condition is" +
+                            " applied to the dome margins. ",
+                        "gis" : "Attributes: This test case represents the Greenland ice" +
+                            " sheet (GIS) at different spatial resolutions (10km and 5km)." +
+                            " A quasi-no slip boundary condition is applied at the bed. As" +
+                            " with the dome test cases, a zero-flux boundary condition is" +
+                            " applied to the lateral margins. In all test cases, the ice" +
+                            " is taken as isothermal with a constant and uniform rate factor of.",
+                        "ismip" : "Simulates steady ice flow over a surface with periodic boundary conditions",
+                        "validation" : "A description of the validation tests."
+                        }                    
     
     # Set up imgs directory to have sub-directories for each test
     for test in testNames:
@@ -68,6 +80,7 @@ def generate(indexDir, testSummary):
             os.mkdir(imgDir + "/" + test)
     
     templateVars = {"indexDir" : indexDir,
+                    "testsRun" : testsRun,
                     "timestamp" : timestamp,
                     "user" : user,
                     "testSummary" : testSummary,
@@ -85,7 +98,12 @@ def generate(indexDir, testSummary):
     template = templateEnv.get_template( templateFile )
 
     # Process each of the testcases
-    for test, description in zip(testNames, testDescriptions):
+    for i in range(len(testSummary[0])):
+        # Map the test to the output html file and description
+        test = testSummary[0][i]
+        testDescription = testDescriptions[test]
+        testsRun = testSummary[1][i]
+        
         # Grab the images (note: returns the full path)
         testImgDir = imgDir + "/" + test
         testImages = glob.glob(testImgDir + "/*.png")
@@ -96,7 +114,8 @@ def generate(indexDir, testSummary):
         templateVars = {"timestamp" : timestamp,
                         "user" : user,
                         "testName" : test,
-                        "testDescription" : description,
+                        "testDescription" : testDescription,
+                        "testsRun" : testsRun,
                         "indexDir" : indexDir,
                         "cssDir" : cssDir, 
                         "imgDir" : testImgDir,

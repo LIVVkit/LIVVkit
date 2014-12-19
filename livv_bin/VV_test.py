@@ -58,6 +58,13 @@ def run(testCases, testDir, benchDir):
 #   change: Is 0 if no changes were found, 1 otherwise
 #
 def bit4bit(test, modelPath, benchPath):
+    # First, make sure that there is test data, otherwise not it.
+    if not (os.path.exists(modelPath + "/" + test) or os.path.exists(benchPath + "/" + test)):
+        print("Could not find model and benchmark data for " + test + "!  Skipping...")
+        return -1     
+    
+    
+    # Keeps track of whether there has been a change
     change = 0
 
     # Get all of the .nc files in the model directory

@@ -110,7 +110,7 @@ if not os.path.exists(inputDir):
     print("Error: Could not find " + inputDir + " for input")
     exit(1)
 if not os.path.exists(benchmarkDir):
-    print("Error: Could not find " + inputDir + " for input")
+    print("Error: Could not find " + benchmarkDir + " for input")
     exit(1)
     
 ###############################################################################
@@ -151,19 +151,22 @@ validationCases = {'none' : [],
 runValidationCase = validationCases[options.validation]
 
 # TODO: Eventually would like to record successes and failures in the testSummary
-testSummary = [runDomeCase, runIsmipCase, runGisCase, runValidationCase]
+testCases = [runDomeCase, runIsmipCase, runGisCase, runValidationCase]
+testSummary = (("dome","ismip","gis","validation"),(runDomeCase, runIsmipCase, runGisCase, runValidationCase))
 
 ###############################################################################
 #                               Run Test Cases                                #
 ###############################################################################
 # Flattens testSummary to a single list
-tests = [test for sublist in testSummary for test in sublist]
-print("Running " + str(tests) + " in " + inputDir)
+tests = [test for sublist in testCases for test in sublist]
+print("Running tests: "),
+for test in tests: print(test + " "),
+print("")
 vv.run(tests, inputDir, benchmarkDir)
 
 ###############################################################################
 #                              Generate Website                               #
 ###############################################################################
 print("\nGenerating web pages in " + outputDir)
-web.generate(outputDir, tests)
+web.generate(outputDir, testSummary)
 print("\nOpen " + outputDir + "/index.html to see test results")
