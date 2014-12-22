@@ -54,9 +54,11 @@ def generate(indexDir, testSummary):
                 "ismip-hom-c/20km" : "ismip",
                 "RUN_GIS_4KM" : "gis",
                 "RUN_GIS_2KM" : "gis",
-                "RUN_GIS_1KM" : "gis"}
+                "RUN_GIS_1KM" : "gis",
+                "circular-shelf" : "shelf",
+                "confined-shelf" : "shelf"}
     
-    testNames = [ "dome", "gis", "ismip", "validation" ]
+    testNames = [ "dome", "gis", "ismip", "validation", "shelf" ]
     testDescriptions = {"dome" : "3-D paraboloid dome of ice with a circular, 60 km" +
                             " diameter base sitting on a flat bed. The horizontal" +
                             " spatial resolution studies are 2 km, 1 km, 0.5 km" + 
@@ -71,7 +73,8 @@ def generate(indexDir, testSummary):
                             " applied to the lateral margins. In all test cases, the ice" +
                             " is taken as isothermal with a constant and uniform rate factor of.",
                         "ismip" : "Simulates steady ice flow over a surface with periodic boundary conditions",
-                        "validation" : "A description of the validation tests."
+                        "validation" : "A description of the validation tests.",
+                        "shelf" : "A description of the shelf tests."
                         }                    
     
     # Set up imgs directory to have sub-directories for each test

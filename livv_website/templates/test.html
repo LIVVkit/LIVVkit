@@ -20,8 +20,11 @@
       
       <h3>Results</h3>
         {% for case in testsRun %}
-          <h4>{{case}}</h4> 
-          <p>Results for {{case}} go here.</p>
+          <h4>{{case}}</h4>
+          <p id="bold"> Bit for Bit </p>
+            <p>Bit for bit results of {{case}}.</p>
+          <p id="bold"> Standalone </p> 
+            <p>Results for {{case}} go here.</p>
         {% endfor %}
       <a href="{{indexDir}}/index.html">Home</a> 
     </body>

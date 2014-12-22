@@ -60,6 +60,15 @@ parser.add_option('-v', '--validation',
                   default='none', 
                   help='specifies the validation tests to run')
 
+parser.add_option('-s', '--shelf', 
+                  action='store', 
+                  type='choice', 
+                  dest='shelf', 
+                  metavar='PATH', 
+                  choices=['none', 'confined', 'circular', 'large'], 
+                  default='none', 
+                  help='specifies the shelf tests to run')
+
 parser.add_option('-c', '--comment', 
                   action='store', 
                   type='string',
@@ -71,21 +80,21 @@ parser.add_option('-o', '--outputDir',
                   action='store',
                   type='string',
                   dest='outputDir',
-                  default=os.path.dirname(__file__) + "/www",
+                  default=os.path.dirname(os.path.abspath(__file__)) + "/www",
                   help='Location to output the LIVV webpages.')
 
 parser.add_option('-i', '--inputDir',
                   action='store',
                   type='string',
                   dest='inputDir',
-                  default=os.path.dirname(__file__) + "/reg_test",
+                  default=os.path.dirname(os.path.abspath(__file__)) + "/reg_test",
                   help='Location of the input for running tests.')
 
 parser.add_option('-b', '--benchmarkDir',
                   action='store',
                   type='string',
                   dest='benchmarkDir',
-                  default=os.path.dirname(__file__) + "/reg_test/bench",
+                  default=os.path.dirname(os.path.abspath(__file__)) + "/reg_test/bench",
                   help='Location of the input for running tests.')
 
 # More options should go in to deal with things like the RUN_ANT flag and
@@ -150,9 +159,16 @@ validationCases = {'none' : [],
                    'large' : ['RUN_VALIDATION', 'RUN_VAL_COUPLED', 'RUN_VAL_DATA', 'RUN_VAL_YEARS', 'RUN_VAL_RANGE']}
 runValidationCase = validationCases[options.validation]
 
+# shelf tests
+shelfCases = {'none' : [],
+              'confined' : ['confined-shelf'],
+              'circular' : ['circular-shelf'],
+              'all' : ['confined-shelf', 'circular-shelf']}
+runShelfCase = shelfCases[options.shelf]
+
 # TODO: Eventually would like to record successes and failures in the testSummary
-testCases = [runDomeCase, runIsmipCase, runGisCase, runValidationCase]
-testSummary = (("dome","ismip","gis","validation"),(runDomeCase, runIsmipCase, runGisCase, runValidationCase))
+testCases = [runDomeCase, runIsmipCase, runGisCase, runValidationCase, runShelfCase]
+testSummary = (("dome","ismip","gis","validation","shelf"),(runDomeCase, runIsmipCase, runGisCase, runValidationCase, runShelfCase))
 
 ###############################################################################
 #                               Run Test Cases                                #
@@ -160,7 +176,7 @@ testSummary = (("dome","ismip","gis","validation"),(runDomeCase, runIsmipCase, r
 # Flattens testSummary to a single list
 tests = [test for sublist in testCases for test in sublist]
 print("Running tests: "),
-for test in tests: print(test + " "),
+for test in tests: print("  " + test + " "),
 print("")
 vv.run(tests, inputDir, benchmarkDir)
 

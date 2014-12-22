@@ -33,3 +33,7 @@ p, a, li {
 	font-size: medium;
 	text-align: center;
 }
+
+#bold {
+	font-weight: 600;
+}

@@ -8,14 +8,32 @@ Created on Dec 8, 2014
 
 import sys
 import os
+import time
 import fnmatch
-from optparse import OptionParser
 import subprocess
 import collections
 import netCDF4
 from netCDF4 import Dataset
 import glob
 import numpy
+
+import VV_dome
+import VV_ismip
+import VV_shelf
+import VV_gis
+
+testDict = { "dome30/diagnostic" : VV_dome,
+            "dome30/evolving" : VV_dome,
+            "ismip-hom-a/80km" : VV_ismip,
+            "ismip-hom-c/80km" : VV_ismip,
+            "ismip-hom-a/20km" : VV_ismip,
+            "ismip-hom-c/20km" : VV_ismip,
+            "RUN_GIS_4KM" : VV_gis,
+            "RUN_GIS_2KM" : VV_gis,
+            "RUN_GIS_1KM" : VV_gis,
+            "circular-shelf" : VV_shelf,
+            "confined-shelf" : VV_shelf}
+
 
 #
 # Master run for LIVV tests.
@@ -41,9 +59,12 @@ def run(testCases, testDir, benchDir):
     print("\nRunning case specific tests....")
     for test in testCases:
         print("  No tests available for " + test + " at this moment.  Coming soon!")
-    return 'in progress...'
 
     # Run specific test cases
+    for test in testCases:
+        testRunTime = time.strftime("%m/%d/%Y %I:%M %p", 
+                                    time.gmtime(os.stat(testDir + '/' + test).st_mtime - 18000))
+        testDict[test].run(test)
     
 
 #
@@ -71,30 +92,27 @@ def bit4bit(test, modelPath, benchPath):
     modelFiles = []
     for file in os.listdir(modelPath + "/" + test):
         if fnmatch.fnmatch(file, '*.nc'):
-            print(file)
             modelFiles.append(file)
                 
     # Get all of the .nc files in the benchmark directory
     benchFiles = []
     for file in os.listdir(benchPath + "/" + test):
         if fnmatch.fnmatch(file, '*.nc'):
-            print(file)
-            modelFiles.append(file)
+            benchFiles.append(file)
 
     # Get the intersection of the two file lists
     sameList = set(modelFiles).intersection(benchFiles)
    
     if len(sameList) == 0:
-        print("  No benchmarks available for " + test)
+        print("  Benchmark and model data not available for " + test)
         return -1
     else:
-        print("  Running bit for bit tests of " + sameList + "....")
+        print("  Running bit for bit tests of " + test + "....")
     
     # Go through and check if any differences occur
     for same in list(sameList):
-        print("    Bit for bit test: " + same)
-        modelFile = modelPath + os.pathsep + same
-        benchFile = benchPath + os.pathsep + same
+        modelFile = modelPath + '/' + test + '/' + same
+        benchFile = benchPath + '/' + test + '/' + same
         
         # check if they match
         comline = ['ncdiff', modelFile, benchFile, modelPath + os.pathsep + 'temp.nc', '-O']
@@ -116,7 +134,7 @@ def bit4bit(test, modelPath, benchPath):
         # TODO: Could improve the nested loops by using numpy's any function
         # Check if any data in thk has changed, if it exists
         if 'thk' in diffVars:
-            data = diffData.variable['thk'][:]
+            data = diffData.variables['thk'][:]
             x = diffData.variables['x1']
             y = diffData.variables['y1']
             t = diffData.variables['time']
