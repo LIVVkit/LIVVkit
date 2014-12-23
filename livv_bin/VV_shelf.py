@@ -33,7 +33,7 @@ def run(testCase):
 #
 #    
 def runConfined():
-    print("running confined shelf test")
+    print("  Confined shelf test in progress....")
     return
 
 #
@@ -42,5 +42,5 @@ def runConfined():
 #
 #
 def runCircular():
-    print("running circular shelf test")
+    print("  Circular shelf test in progress....")
     return

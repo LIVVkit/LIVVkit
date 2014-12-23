@@ -6,6 +6,12 @@ Created on Dec 8, 2014
 @author: bzq
 '''
 
+import livv
+
+#from old_bin import VV_checks as check
+#from old_bin import VV_utilities as util
+#from old_bin import VV_outprocess as process
+
 #
 # Runs the dome specific test case.  Calls some shared resources and
 # some diagnostic/evolving case specific methods.
@@ -13,8 +19,7 @@ Created on Dec 8, 2014
 #
 #
 def run(testCase):
-    # Common run 
-    name = testCase
+    # Common run     
     
     # Map the case names to the case functions
     callDict = {'dome30/diagnostic' : runDiagnostic,
@@ -33,7 +38,10 @@ def run(testCase):
 #
 #    
 def runDiagnostic():
-    print("running dome diagnostic test")
+    print("  Dome Diagnostic test in progress....")
+    
+    #failedt1 = check.failcheck()
+    
     return
 
 #
@@ -42,5 +50,6 @@ def runDiagnostic():
 #
 #
 def runEvolving():
-    print("running dome evolving test")
+    print("  Dome Diagnostic test in progress....")
     return
+

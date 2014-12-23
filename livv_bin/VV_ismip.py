@@ -34,7 +34,7 @@ def run(testCase):
 #
 #    
 def runLargeA():
-    print("running large ismip-hom-a test")
+    print("  Large ismip-hom-a test in progress....")
     return
 
 #
@@ -43,7 +43,7 @@ def runLargeA():
 #
 #
 def runLargeC():
-    print("running large ismip-hom-c test")
+    print("  Large ismip-hom-c test in progress....")
     return
 
 #
@@ -52,7 +52,7 @@ def runLargeC():
 #
 #
 def runSmallA():
-    print("running small ismip-hom-a test")
+    print("  Small ismip-hom-a test in progress....")
     return
 
 #
@@ -61,5 +61,5 @@ def runSmallA():
 #
 #
 def runSmallC():
-    print("running small ismip-hom-c test")
+    print("  Small ismip-hom-c test in progress....")
     return

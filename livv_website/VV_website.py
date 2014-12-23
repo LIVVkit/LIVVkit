@@ -14,6 +14,8 @@ import time
 import glob
 import os
 
+import livv
+
 #
 # Generates the html for the livv website
 #
@@ -21,10 +23,11 @@ import os
 #   indexDir : the location to write the root of the webpages
 #   testSummary : a basic summary of what tests were run
 #
-def generate(indexDir, testSummary):
+def generate(testSummary):
     # Set up directories
     cssDir = os.path.dirname(__file__) + "/css"
     templateDir = os.path.dirname(__file__) + "/templates"
+    indexDir = livv.outputDir
     testDir = indexDir + "/tests"
     imgDir = indexDir + "/imgs"
         

@@ -6,6 +6,7 @@ Created on Dec 8, 2014
 @author: bzq
 '''
 
+
 import sys
 import os
 import time
@@ -17,6 +18,7 @@ from netCDF4 import Dataset
 import glob
 import numpy
 
+import livv
 import VV_dome
 import VV_ismip
 import VV_shelf
@@ -46,24 +48,22 @@ testDict = { "dome30/diagnostic" : VV_dome,
 # Output:
 #   to be determined
 #
-def run(testCases, testDir, benchDir):
+def run(testCases):
     
     # Run the bit for bit tests and record the results in a dictionary
     print("Running bit for bit tests....")
     result = {-1 : 'N/A', 0 : 'SUCCESS', 1 : 'FAILURE'}
-    bitList = { test : bit4bit(test, testDir, benchDir) for test in testCases}
+    bitList = { test : bit4bit(test) for test in testCases}
     print("\nBit for bit summary: ")
     for test in bitList:
         print("  Test: " + test + "\t Result: " + result[bitList[test]])     
         
     print("\nRunning case specific tests....")
-    for test in testCases:
-        print("  No tests available for " + test + " at this moment.  Coming soon!")
 
     # Run specific test cases
     for test in testCases:
         testRunTime = time.strftime("%m/%d/%Y %I:%M %p", 
-                                    time.gmtime(os.stat(testDir + '/' + test).st_mtime - 18000))
+                                    time.gmtime(os.stat(livv.inputDir + '/' + test).st_mtime - 18000))
         testDict[test].run(test)
     
 
@@ -78,8 +78,10 @@ def run(testCases, testDir, benchDir):
 # Output:
 #   change: Is 0 if no changes were found, 1 otherwise
 #
-def bit4bit(test, modelPath, benchPath):
+def bit4bit(test):
     # First, make sure that there is test data, otherwise not it.
+    modelPath = livv.inputDir
+    benchPath = livv.benchmarkDir
     if not (os.path.exists(modelPath + "/" + test) or os.path.exists(benchPath + "/" + test)):
         print("Could not find model and benchmark data for " + test + "!  Skipping...")
         return -1     

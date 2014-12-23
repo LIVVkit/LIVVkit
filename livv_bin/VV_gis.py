@@ -33,7 +33,7 @@ def run(testCase):
 #
 #    
 def runLarge():
-    print("running large gis test.")
+    print("  Large gis test in progress....")
     return
 
 #
@@ -42,7 +42,7 @@ def runLarge():
 #
 #
 def runMedium():
-    print("running medium gis test.")
+    print("  Medium gis test in progress....")
     return
 
 #
@@ -51,6 +51,6 @@ def runMedium():
 #
 #
 def runSmall():
-    print("running small gis test.")
+    print("  Small gis test in progress....")
     return
 
