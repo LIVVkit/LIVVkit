@@ -27,9 +27,10 @@ from optparse import OptionParser
 
 # Don't try to import these if we are not calling livv.py directly
 if __name__ == '__main__':
+    import livv_bin.VV_machines as machines
     import livv_website.VV_website as web
     import livv_bin.VV_test as vv
-    import livv_bin.VV_machines as machines
+
 
 ###############################################################################
 #                                  Options                                    #
@@ -121,7 +122,6 @@ parser.add_option('-s', '--save',
 
 (options, args) = parser.parse_args()
 
-
 ###############################################################################
 #                                  Variables                                  #
 ###############################################################################
@@ -130,28 +130,29 @@ benchmarkDir = options.benchmarkDir     # The location of the benchmark data
 outputDir = options.outputDir           # Where to output the website
 imgDir = outputDir + "/imgs"            # Where to store output images
 
-# Check if we are saving/loading the configuration and set up the machine name
-if options.machineName == '' and options.save:
-    # Save the configuration with the default host name
-    machineName = socket.gethostname()
-    machines.save(machineName)
-elif options.save:
-    # Save the configuration with the specified host name
-    machineName = options.machineName
-    machines.save(machineName)
-elif options.machineName == '':
-    # Don't save the configuration and use the default host name
-    machineName = socket.gethostname() 
-else:
-    # Try to load the machine name specified
-    machineName = options.machineName
-    machines.load(machineName)
-
 
 ###############################################################################
 #                               Main Execution                                #
 ###############################################################################
 if __name__ == '__main__':
+    
+    # Check if we are saving/loading the configuration and set up the machine name
+    if options.machineName == '' and options.save:
+        # Save the configuration with the default host name
+        machineName = socket.gethostname()
+        machines.save(machineName)
+    elif options.save:
+        # Save the configuration with the specified host name
+        machineName = options.machineName
+        machines.save(machineName)
+    elif options.machineName == '':
+        # Don't save the configuration and use the default host name
+        machineName = socket.gethostname() 
+    else:
+        # Try to load the machine name specified
+        machineName = options.machineName
+        machines.load(machineName)
+    
     # Print out some information
     print("---------------------------------------------")
     print("  Land Ice Verification & Validation (LIVV)")
