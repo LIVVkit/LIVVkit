@@ -12,6 +12,7 @@ Created on Dec 3, 2014
 ###############################################################################
 # 
 # TODO:  if needed the script can auto download jinja2 and/or other dependencies
+# TODO:  learn about dependency management in python
 #
 
 ###############################################################################
