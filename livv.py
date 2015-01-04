@@ -126,16 +126,25 @@ parser.add_option('-s', '--save',
 ###############################################################################
 #                                  Variables                                  #
 ###############################################################################
-inputDir = options.inputDir             # The location where the test data is 
-benchmarkDir = options.benchmarkDir     # The location of the benchmark data
-outputDir = options.outputDir           # Where to output the website
-imgDir = outputDir + "/imgs"            # Where to store output images
-
+cwd = os.path.dirname(os.path.abspath(__file__))  # The location of this file
+inputDir = options.inputDir                       # The location where the test data is 
+benchmarkDir = options.benchmarkDir               # The location of the benchmark data
+outputDir = options.outputDir                     # Where to output the website
+imgDir = outputDir + "/imgs"                      # Where to store output images
+comment = options.comment
+dome = options.dome
+ismip = options.ismip
+gis = options.gis
+shelf = options.shelf
+validation = options.validation
 
 ###############################################################################
 #                               Main Execution                                #
 ###############################################################################
 if __name__ == '__main__':
+    print("---------------------------------------------")
+    print("  Land Ice Verification & Validation (LIVV)")
+    print("---------------------------------------------")
     
     # Check if we are saving/loading the configuration and set up the machine name
     if options.machineName == '' and options.save:
@@ -152,19 +161,17 @@ if __name__ == '__main__':
     else:
         # Try to load the machine name specified
         machineName = options.machineName
-        machines.load(machineName)
+        vars = machines.load(machineName)
+        globals().update(vars)
     
     # Print out some information
-    print("---------------------------------------------")
-    print("  Land Ice Verification & Validation (LIVV)")
-    print("---------------------------------------------")
-    print("\n Current run: " + time.strftime("%m-%d-%Y %H:%M:%S"))
-    print(" User: " + getpass.getuser())
-    print(" Host: " + machineName)
-    print(" OS Type: " + platform.system() + " " + platform.release())
-    print(" " + options.comment)
+    print("\n  Current run: " + time.strftime("%m-%d-%Y %H:%M:%S"))
+    print("  User: " + getpass.getuser())
+    print("  Host: " + machineName)
+    print("  OS Type: " + platform.system() + " " + platform.release())
+    print("  " + comment)
     print("")
-    
+
     # Check to make sure the directory structure is okay
     if not os.path.exists(inputDir):
         print("Error: Could not find " + inputDir + " for input")
@@ -188,34 +195,34 @@ if __name__ == '__main__':
                  'diagnostic' : ['dome30/diagnostic'],
                  'evolving'  : ['dome30/evolving'],
                  'all'    : ['dome30/diagnostic', 'dome30/evolving'],}
-    runDomeCase = domeCases[options.dome]
+    runDomeCase = domeCases[dome]
     
     # ismip tests
     ismipCases = {'none'  : [],
                   'small' : ['ismip-hom-a/80km', 'ismip-hom-c/80km'],
                   'large' : ['ismip-hom-a/20km', 'ismip-hom-c/20km'],
                   'all'   : ['ismip-hom-a/20km', 'ismip-hom-c/20km', 'ismip-hom-a/80km', 'ismip-hom-c/80km']}
-    runIsmipCase = ismipCases[options.ismip]
+    runIsmipCase = ismipCases[ismip]
     
     # gis tests
     gisCases = {'none'   : [],
                 'small'  : ['RUN_GIS_4KM'],
                 'medium' : ['RUN_GIS_2KM'],
                 'large'  : ['RUN_GIS_1KM']}
-    runGisCase = gisCases[options.gis]
+    runGisCase = gisCases[gis]
     
     # validation tests
     validationCases = {'none' : [],
                        'small' : ['RUN_VALIDATION'],
                        'large' : ['RUN_VALIDATION', 'RUN_VAL_COUPLED', 'RUN_VAL_DATA', 'RUN_VAL_YEARS', 'RUN_VAL_RANGE']}
-    runValidationCase = validationCases[options.validation]
+    runValidationCase = validationCases[validation]
     
     # shelf tests
     shelfCases = {'none' : [],
                   'confined' : ['confined-shelf'],
                   'circular' : ['circular-shelf'],
                   'all' : ['confined-shelf', 'circular-shelf']}
-    runShelfCase = shelfCases[options.shelf]
+    runShelfCase = shelfCases[shelf]
     
     # TODO: Eventually would like to record successes and failures in the testSummary
     testCases = [runDomeCase, runIsmipCase, runGisCase, runValidationCase, runShelfCase]
@@ -226,9 +233,9 @@ if __name__ == '__main__':
     ###############################################################################
     # Flattens testSummary to a single list
     tests = [test for sublist in testCases for test in sublist]
-    print("Running tests: "),
-    for test in tests: print("  " + test + " "),
-    print("\n")
+    print("Running tests: \n"),
+    for test in tests: print("  " + test + "\n"),
+    print("")
     vv.run(tests)
     
     ###############################################################################

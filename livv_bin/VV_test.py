@@ -6,7 +6,6 @@ Created on Dec 8, 2014
 @author: bzq
 '''
 
-
 import sys
 import os
 import time
@@ -24,6 +23,8 @@ import VV_ismip
 import VV_shelf
 import VV_gis
 
+# A dictionary describing which module will be called for each test
+# Each of these modules can be found in livv_bin
 testDict = { "dome30/diagnostic" : VV_dome,
             "dome30/evolving" : VV_dome,
             "ismip-hom-a/80km" : VV_ismip,
@@ -35,7 +36,6 @@ testDict = { "dome30/diagnostic" : VV_dome,
             "RUN_GIS_1KM" : VV_gis,
             "circular-shelf" : VV_shelf,
             "confined-shelf" : VV_shelf}
-
 
 #
 # Master run for LIVV tests.
@@ -54,9 +54,10 @@ def run(testCases):
     print("Running bit for bit tests....")
     result = {-1 : 'N/A', 0 : 'SUCCESS', 1 : 'FAILURE'}
     bitList = { test : bit4bit(test) for test in testCases}
+    
     print("\nBit for bit summary: ")
     for test in bitList:
-        print("  Test: " + test + "\t Result: " + result[bitList[test]])     
+        print("  Test: " + '{:25s}'.format(test) + " Result: " + result[bitList[test]])     
         
     print("\nRunning case specific tests....")
 
