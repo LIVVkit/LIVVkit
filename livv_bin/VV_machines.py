@@ -23,7 +23,7 @@ def load(machineName):
     
     # Load up the file
     try:
-        execfile(configFile )
+        execfile(configFile)
     except Exception as e:
         print(e)
         exit()

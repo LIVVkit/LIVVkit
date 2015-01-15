@@ -98,7 +98,13 @@ def generate(testSummary):
     page = open(indexDir + "/index.html", "w")
     page.write(outputText)
     page.close()
-    
+
+
+#===================================================================================================
+#  Below this will go into test specific class modules
+#===================================================================================================
+'''
+
     # Set up and write out each of the test pages
     templateFile = "/test.html"
     template = templateEnv.get_template( templateFile )
@@ -130,4 +136,4 @@ def generate(testSummary):
         page = open(testDir + '/' + test + ".html", "w")
         page.write(outputText)
         page.close()
-        
+   '''      

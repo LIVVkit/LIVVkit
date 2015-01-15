@@ -7,13 +7,6 @@ Created on Dec 3, 2014
 @author: bzq
 '''
 
-###############################################################################
-#                             Dependency Checking                             #
-###############################################################################
-# 
-# TODO:  if needed the script can auto download jinja2 and/or other dependencies
-# TODO:  learn about dependency management in python
-#
 
 ###############################################################################
 #                                  Imports                                    #
@@ -25,13 +18,26 @@ import platform
 import socket
 
 from optparse import OptionParser
+import jinja2
 
 # Don't try to import these if we are not calling livv.py directly
 if __name__ == '__main__':
     import livv_bin.VV_machines as machines
+    import livv_bin.VV_dependencies as dependencies
     import livv_website.VV_website as web
-    import livv_bin.VV_test as vv
-
+    from livv_bin.VV_test import AbstractTest
+    from livv_bin.VV_dome import Dome
+    from livv_bin.VV_ismip import Ismip
+    from livv_bin.VV_gis import Gis
+    from livv_bin.VV_shelf import Shelf
+    
+    # A dictionary describing which module will be called for each test
+    # Each of these modules can be found in livv_bin
+    testDict = { "dome" : Dome,
+                 "ismip" : Ismip,
+                 "gis" : Gis,
+                 "shelf" : Shelf
+               }
 
 ###############################################################################
 #                                  Options                                    #
@@ -126,25 +132,41 @@ parser.add_option('-s', '--save',
 ###############################################################################
 #                                  Variables                                  #
 ###############################################################################
+
+# I/O Related variables
 cwd = os.path.dirname(os.path.abspath(__file__))  # The location of this file
 inputDir = options.inputDir                       # The location where the test data is 
 benchmarkDir = options.benchmarkDir               # The location of the benchmark data
 outputDir = options.outputDir                     # Where to output the website
 imgDir = outputDir + "/imgs"                      # Where to store output images
-comment = options.comment
+comment = options.comment                         # About the current run of LIVV
+timestamp = time.strftime("%m-%d-%Y %H:%M:%S")
+user = getpass.getuser()
+
+# Test related variables
 dome = options.dome
 ismip = options.ismip
 gis = options.gis
 shelf = options.shelf
 validation = options.validation
 
+# Website related variables
+cssDir = os.path.dirname(__file__) + "/livv_website/css"
+templateDir = os.path.dirname(__file__) + "/livv_website/templates"
+indexDir = outputDir
+testDir = indexDir + "/tests"
+imgDir = indexDir + "/imgs"
+
 ###############################################################################
 #                               Main Execution                                #
 ###############################################################################
 if __name__ == '__main__':
-    print("---------------------------------------------")
+    print("------------------------------------------------------------------------------")
     print("  Land Ice Verification & Validation (LIVV)")
-    print("---------------------------------------------")
+    print("------------------------------------------------------------------------------")
+    
+    # Run the dependency checker
+    dependencies.check()
     
     # Check if we are saving/loading the configuration and set up the machine name
     if options.machineName == '' and options.save:
@@ -183,13 +205,7 @@ if __name__ == '__main__':
     ###############################################################################
     #                              Record Test Cases                              #
     ###############################################################################
-    # glam tests
-    # glissade tests
-    # large tests
-    # validation
-    
-    # TODO: Add/edit test cases to reflect LIVV's reality, also the things above
-    # TODO: Which of these are resolution vs size ??
+
     # dome tests
     domeCases = {'none'   : [],
                  'diagnostic' : ['dome30/diagnostic'],
@@ -226,7 +242,12 @@ if __name__ == '__main__':
     
     # TODO: Eventually would like to record successes and failures in the testSummary
     testCases = [runDomeCase, runIsmipCase, runGisCase, runValidationCase, runShelfCase]
-    testSummary = (("dome","ismip","gis","validation","shelf"),(runDomeCase, runIsmipCase, runGisCase, runValidationCase, runShelfCase))
+    testSummary = (("dome","ismip","gis","shelf"),(runDomeCase, runIsmipCase, runGisCase, runShelfCase))
+    testMapping = {"dome" : runDomeCase,
+                   "ismip" : runIsmipCase,
+                   "gis" : runGisCase,
+                   "shelf" : runShelfCase}
+    
     
     ###############################################################################
     #                               Run Test Cases                                #
@@ -236,11 +257,24 @@ if __name__ == '__main__':
     print("Running tests: \n"),
     for test in tests: print("  " + test + "\n"),
     print("")
-    vv.run(tests)
+    
+    # Run the tests
+    print("Beginning test suite....")
+    for test in testSummary[0]:
+        newTest = testDict[test]()
+        for case in testMapping[test]:
+            newTest.run(case)
+            newTest.bit4bit(case)
+        print("")
+        newTest.generate()
     
     ###############################################################################
     #                              Generate Website                               #
     ###############################################################################
-    print("\nGenerating web pages in " + outputDir)
+    print("Generating web pages in " + outputDir)
     web.generate(testSummary)
-    print("\nOpen " + outputDir + "/index.html to see test results")
+    print("------------------------------------------------------------------------------")
+    print("Finished running LIVV.  Results:  ")
+    print("  Open " + outputDir + "/index.html to see test results")
+    print("------------------------------------------------------------------------------")
+

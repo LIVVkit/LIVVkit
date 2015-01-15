@@ -13,8 +13,10 @@
       <h3>Plots</h3>
       <p>
         {% for img in testImages %}
-          <img src="{{img}}" alt="{{img}}">
-          <br>
+          {% if img != [] %} 
+            <img src="{{img}}" alt="{{img}}">
+            <br>
+          {% endif %}
         {% endfor %}
       </p>
       
