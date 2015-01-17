@@ -19,19 +19,24 @@ import jinja2
 
 class Dome(AbstractTest):
 
-    # Keep track of what dome test have been run
-    domeTestsRun = []
-    domeTestDetails = []
-    
-    # Describe what the dome tests are all about
-    name = "Dome"
-    description = "3-D paraboloid dome of ice with a circular, 60 km" + \
-                  " diameter base sitting on a flat bed. The horizontal" + \
-                  " spatial resolution studies are 2 km, 1 km, 0.5 km" + \
-                  " and 0.25 km, and there are 10 vertical levels. For this" + \
-                  " set of experiments a quasi no-slip basal condition in" + \
-                  " imposed by setting. A zero-flux boundary condition is" + \
-                  " applied to the dome margins. "
+    #
+    # Constructor
+    #
+    def __init__(self):
+        # Keep track of what dome test have been run
+        self.domeTestsRun = []
+        self.domeTestDetails = []
+        self.domeFileTestDetails = []
+        
+        # Describe what the dome tests are all about
+        self.name = "Dome"
+        self.description = "3-D paraboloid dome of ice with a circular, 60 km" + \
+                      " diameter base sitting on a flat bed. The horizontal" + \
+                      " spatial resolution studies are 2 km, 1 km, 0.5 km" + \
+                      " and 0.25 km, and there are 10 vertical levels. For this" + \
+                      " set of experiments a quasi no-slip basal condition in" + \
+                      " imposed by setting. A zero-flux boundary condition is" + \
+                      " applied to the dome margins. "
     
     #
     # Returns the name of the test
@@ -48,7 +53,7 @@ class Dome(AbstractTest):
     #
     def run(self, test):
         # Common run     
-        #self.domeTestsRun.append(test)
+        self.domeTestsRun.append(test)
         
         # Map the case names to the case functions
         callDict = {'dome30/diagnostic' : self.runDiagnostic,
@@ -86,7 +91,8 @@ class Dome(AbstractTest):
                         "indexDir" : livv.indexDir,
                         "cssDir" : livv.cssDir,
                         "testDescription" : self.description,
-                        "testDetails" : zip(self.domeTestsRun, self.domeTestDetails),
+                        "testsRun" : self.domeTestsRun,
+                        "testDetails" : self.domeFileTestDetails,
                         "imgDir" : testImgDir,
                         "testImages" : testImages}
         outputText = template.render( templateVars )
@@ -100,14 +106,7 @@ class Dome(AbstractTest):
     #
     #    
     def runDiagnostic(self):
-        print("  Dome Diagnostic test in progress....")
-        
-        # Check for a test failure
-        # Grep the std out of both the test and bench for things like:
-        #    procs used
-        #    nonlinear iterations
-        #    linear iterations
-        #    timesteps which failed to converge
+        print("  Dome Diagnostic test in progress....")  
         
         # Search for the std output files
         files = os.listdir(livv.inputDir + livv.dataDir + '/dome30/diagnostic')
@@ -115,15 +114,15 @@ class Dome(AbstractTest):
         files = filter(test.search, files)
         
         for file in files:
-            self.domeTestsRun.append(file)
             self.domeTestDetails.append(self.parse(livv.inputDir + livv.dataDir + '/dome30/diagnostic/' + file))
+        self.domeFileTestDetails = zip(files, self.domeTestDetails)
         
         # Create the plots
         self.plotDiagnostic()
-        
+
         # Run bit for bit test
-        super(Dome, self).bit4bit('/dome30/diagnostic')
-    
+        self.bit4bit('/dome30/diagnostic')
+
         return 0 # zero returns success
     
     

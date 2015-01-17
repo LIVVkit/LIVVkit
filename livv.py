@@ -283,9 +283,9 @@ if __name__ == '__main__':
         newTest = testDict[test]()
         # Run the specific and bit for bit tests for each case of the test
         for case in testMapping[test]:
-            testResults.append(newTest.run(case))
-            bit4bitResults.append(newTest.bit4bit(case))
+            newTest.run(case)
         print("")
+
         # Generate the test-specific webpage 
         newTest.generate()
         
