@@ -15,7 +15,18 @@ from livv_bin.VV_test import *
 
 class Ismip(AbstractTest):
     
+    ismipTestsRun = []
+    ismipTestDetails = []
+    
+    name = "ismip"
     description = "Simulates steady ice flow over a surface with periodic boundary conditions"
+    
+    #
+    # Return the name of the test
+    #
+    def getName(self):
+        return self.name
+    
     
     #
     # Runs the dome specific test case.  Calls some shared resources and
@@ -25,7 +36,7 @@ class Ismip(AbstractTest):
     #
     def run(self, testCase):
         # Common run 
-        name = testCase
+        self.ismipTestsRun.append(testCase)
         
         # Map the case names to the case functions
         callDict = {'ismip-hom-a/20km' : self.runLargeA,
@@ -45,7 +56,30 @@ class Ismip(AbstractTest):
     #
     #
     def generate(self):
-        print "This is a placeholder method"
+        templateLoader = jinja2.FileSystemLoader( searchpath=livv.templateDir )
+        templateEnv = jinja2.Environment( loader=templateLoader )
+        templateFile = "/test.html"
+        template = templateEnv.get_template( templateFile )
+        
+        testImgDir = imgDir + os.sep + "ismip"
+        testImages = glob.glob(testImgDir + os.sep + "*.png")
+        testImages.append( glob.glob(testImgDir + "/*.jpg") )
+        testImages.append( glob.glob(testImgDir + "/*.svg") )
+
+        # Set up the template variables  
+        templateVars = {"timestamp" : livv.timestamp,
+                        "user" : livv.user,
+                        "testName" : "Dome",
+                        "indexDir" : livv.indexDir,
+                        "cssDir" : livv.cssDir,
+                        "testDescription" : self.description,
+                        "testsRun" : self.ismipTestsRun,
+                        "imgDir" : testImgDir,
+                        "testImages" : testImages}
+        outputText = template.render( templateVars )
+        page = open(testDir + '/ismip.html', "w")
+        page.write(outputText)
+        page.close()        
     
     
     #

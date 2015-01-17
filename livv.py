@@ -26,6 +26,7 @@ if __name__ == '__main__':
     import livv_bin.VV_dependencies as dependencies
     import livv_website.VV_website as web
     from livv_bin.VV_test import AbstractTest
+    from livv_bin.VV_test import GenericTest
     from livv_bin.VV_dome import Dome
     from livv_bin.VV_ismip import Ismip
     from livv_bin.VV_gis import Gis
@@ -112,6 +113,13 @@ parser.add_option('-b', '--benchmarkDir',
                   default=os.path.dirname(os.path.abspath(__file__)) + "/reg_test/bench",
                   help='Location of the input for running tests.')
 
+parser.add_option('-d', '--dataDir',
+                  action='store',
+                  type='string',
+                  dest='dataDir',
+                  default='',
+                  help='Subdirectory where data is stored')
+
 parser.add_option('-m', '--machine',
                   action='store',
                   type='string',
@@ -130,16 +138,17 @@ parser.add_option('-s', '--save',
 (options, args) = parser.parse_args()
 
 ###############################################################################
-#                                  Variables                                  #
+#                              Global Variables                               #
 ###############################################################################
 
 # I/O Related variables
-cwd = os.path.dirname(os.path.abspath(__file__))  # The location of this file
-inputDir = options.inputDir                       # The location where the test data is 
-benchmarkDir = options.benchmarkDir               # The location of the benchmark data
-outputDir = options.outputDir                     # Where to output the website
-imgDir = outputDir + "/imgs"                      # Where to store output images
-comment = options.comment                         # About the current run of LIVV
+cwd = os.path.dirname(os.path.abspath(__file__))  
+inputDir = options.inputDir                       
+benchmarkDir = options.benchmarkDir
+dataDir = options.dataDir
+outputDir = options.outputDir                    
+imgDir = outputDir + "/imgs"                     
+comment = options.comment                         
 timestamp = time.strftime("%m-%d-%Y %H:%M:%S")
 user = getpass.getuser()
 
@@ -151,9 +160,10 @@ shelf = options.shelf
 validation = options.validation
 
 # Website related variables
-cssDir = os.path.dirname(__file__) + "/livv_website/css"
-templateDir = os.path.dirname(__file__) + "/livv_website/templates"
+websiteDir = os.path.dirname(__file__) + "/livv_website"
+templateDir = websiteDir + "/templates"
 indexDir = outputDir
+cssDir = indexDir + "/css"
 testDir = indexDir + "/tests"
 imgDir = indexDir + "/imgs"
 
@@ -239,40 +249,52 @@ if __name__ == '__main__':
                   'circular' : ['circular-shelf'],
                   'all' : ['confined-shelf', 'circular-shelf']}
     runShelfCase = shelfCases[shelf]
-    
-    # TODO: Eventually would like to record successes and failures in the testSummary
-    testCases = [runDomeCase, runIsmipCase, runGisCase, runValidationCase, runShelfCase]
-    testSummary = (("dome","ismip","gis","shelf"),(runDomeCase, runIsmipCase, runGisCase, runShelfCase))
+       
+    # Describes how to group each test case in with more general groupings
+    tests = ["dome", "ismip", "gis", "shelf"]
     testMapping = {"dome" : runDomeCase,
                    "ismip" : runIsmipCase,
                    "gis" : runGisCase,
                    "shelf" : runShelfCase}
-    
+
+    # Group the tests into their respective cases
+    testsRun = []
+    for test in tests:
+        if len(testMapping[test]):
+            testsRun.append(test)
     
     ###############################################################################
     #                               Run Test Cases                                #
     ###############################################################################
-    # Flattens testSummary to a single list
-    tests = [test for sublist in testCases for test in sublist]
+    # Flattens to a list of all test cases being run
+    testCases = [test for sublist in [runDomeCase, runIsmipCase, runGisCase, runValidationCase, runShelfCase] for test in sublist]
     print("Running tests: \n"),
-    for test in tests: print("  " + test + "\n"),
+    for test in testCases: print("  " + test + "\n"),
     print("")
     
     # Run the tests
+    testResults = []
+    bit4bitResults = []
     print("Beginning test suite....")
-    for test in testSummary[0]:
+    newTest = GenericTest()
+    newTest.webSetup(testsRun, testCases)
+    for test in testsRun:
+        # Create a new instance of the specific test class (see testDict for the mapping)
         newTest = testDict[test]()
+        # Run the specific and bit for bit tests for each case of the test
         for case in testMapping[test]:
-            newTest.run(case)
-            newTest.bit4bit(case)
+            testResults.append(newTest.run(case))
+            bit4bitResults.append(newTest.bit4bit(case))
         print("")
+        # Generate the test-specific webpage 
         newTest.generate()
+        
+    # On the last test generate the common web resources
+    print("Generating web pages in " + outputDir)
     
     ###############################################################################
     #                              Generate Website                               #
     ###############################################################################
-    print("Generating web pages in " + outputDir)
-    web.generate(testSummary)
     print("------------------------------------------------------------------------------")
     print("Finished running LIVV.  Results:  ")
     print("  Open " + outputDir + "/index.html to see test results")

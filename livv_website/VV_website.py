@@ -25,8 +25,8 @@ import livv
 #
 def generate(testSummary):
     # Set up directories
-    cssDir = os.path.dirname(__file__) + "/css"
-    templateDir = os.path.dirname(__file__) + "/templates"
+    cssDir = os.path.dirname(__file__) + "/livv_website/css"
+    templateDir = os.path.dirname(__file__) + "/livv_website/templates"
     indexDir = livv.outputDir
     testDir = indexDir + "/tests"
     imgDir = indexDir + "/imgs"
@@ -49,36 +49,7 @@ def generate(testSummary):
     # Set up the variables for the index page
     templateFile = "/index.html"
     template = templateEnv.get_template( templateFile )
-    testDict = { "dome30/diagnostic" : "dome",
-                "dome30/evolving" : "dome",
-                "ismip-hom-a/80km" : "ismip",
-                "ismip-hom-c/80km" : "ismip",
-                "ismip-hom-a/20km" : "ismip",
-                "ismip-hom-c/20km" : "ismip",
-                "RUN_GIS_4KM" : "gis",
-                "RUN_GIS_2KM" : "gis",
-                "RUN_GIS_1KM" : "gis",
-                "circular-shelf" : "shelf",
-                "confined-shelf" : "shelf"}
-    
-    testNames = [ "dome", "gis", "ismip", "validation", "shelf" ]
-    testDescriptions = {"dome" : "3-D paraboloid dome of ice with a circular, 60 km" +
-                            " diameter base sitting on a flat bed. The horizontal" +
-                            " spatial resolution studies are 2 km, 1 km, 0.5 km" + 
-                            " and 0.25 km, and there are 10 vertical levels. For this" +
-                            " set of experiments a quasi no-slip basal condition in" +
-                            " imposed by setting. A zero-flux boundary condition is" +
-                            " applied to the dome margins. ",
-                        "gis" : "Attributes: This test case represents the Greenland ice" +
-                            " sheet (GIS) at different spatial resolutions (10km and 5km)." +
-                            " A quasi-no slip boundary condition is applied at the bed. As" +
-                            " with the dome test cases, a zero-flux boundary condition is" +
-                            " applied to the lateral margins. In all test cases, the ice" +
-                            " is taken as isothermal with a constant and uniform rate factor of.",
-                        "ismip" : "Simulates steady ice flow over a surface with periodic boundary conditions",
-                        "validation" : "A description of the validation tests.",
-                        "shelf" : "A description of the shelf tests."
-                        }                    
+         
     
     # Set up imgs directory to have sub-directories for each test
     for test in testNames:

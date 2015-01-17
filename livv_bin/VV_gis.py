@@ -15,12 +15,19 @@ from livv_bin.VV_test import *
 
 class Gis(AbstractTest):
     
+    name = "gis"
     description = "Attributes: This test case represents the Greenland ice" + \
                   " sheet (GIS) at different spatial resolutions (10km and 5km)." + \
                   " A quasi-no slip boundary condition is applied at the bed. As" + \
                   " with the dome test cases, a zero-flux boundary condition is" + \
                   " applied to the lateral margins. In all test cases, the ice" + \
                   " is taken as isothermal with a constant and uniform rate factor of."
+    
+    #
+    # Return the name of the test
+    #
+    def getName(self):
+        return str(self.name)
     
     #
     # Runs the gis specific test case.  Calls some shared resources and

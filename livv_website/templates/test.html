@@ -21,14 +21,16 @@
       </p>
       
       <h3>Results</h3>
-        {% for case in testsRun %}
+        {% for case, details in testDetails %}
           <h4>{{case}}</h4>
           <p id="bold"> Bit for Bit </p>
             <p>Bit for bit results of {{case}}.</p>
           <p id="bold"> Standalone </p> 
-            <p>Results for {{case}} go here.</p>
+            {%for key, value in details.iteritems() %}
+              <p> {{key}} : {{value}} </p>
+            {% endfor %}
         {% endfor %}
-      <a href="{{indexDir}}/index.html">Home</a> 
+      <a href="../index.html">Home</a> 
     </body>
     
     {% include 'footer.html' %}

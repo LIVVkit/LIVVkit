@@ -14,6 +14,17 @@ import livv_bin.VV_outprocess as process
 from livv_bin.VV_test import *
 
 class Shelf(AbstractTest):
+    
+    
+    name = "shelf"
+    description = "a description"
+    
+    #
+    # Return the name of the test
+    #
+    def getName(self):
+        return self.name
+    
     #
     # Runs the shelf specific test case.  Calls some shared resources and
     # some circular/confined case specific methods.
