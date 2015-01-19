@@ -15,11 +15,16 @@ from livv_bin.VV_test import *
 
 class Ismip(AbstractTest):
     
-    ismipTestsRun = []
-    ismipTestDetails = []
-    
-    name = "ismip"
-    description = "Simulates steady ice flow over a surface with periodic boundary conditions"
+    #
+    # Constructor
+    #
+    def __init__(self):
+        self.ismipTestsRun = []
+        self.ismipBitForBitDetails = dict()
+        self.ismipTestDetails = []
+        
+        self.name = "ismip"
+        self.description = "Simulates steady ice flow over a surface with periodic boundary conditions"
     
     #
     # Return the name of the test
@@ -69,11 +74,12 @@ class Ismip(AbstractTest):
         # Set up the template variables  
         templateVars = {"timestamp" : livv.timestamp,
                         "user" : livv.user,
-                        "testName" : "Dome",
+                        "testName" : self.getName(),
                         "indexDir" : livv.indexDir,
                         "cssDir" : livv.cssDir,
                         "testDescription" : self.description,
                         "testsRun" : self.ismipTestsRun,
+                        "bitForBitDetails" : self.ismipBitForBitDetails,
                         "imgDir" : testImgDir,
                         "testImages" : testImages}
         outputText = template.render( templateVars )

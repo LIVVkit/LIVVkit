@@ -29,8 +29,6 @@ from livv import *
 #
 class AbstractTest(object):
     __metaclass__ = ABCMeta
-    # Mapping of result codes to results
-    result = {-1 : 'N/A', 0 : 'SUCCESS', 1 : 'FAILURE'}
     
     #
     # Should return the name of the test
@@ -65,6 +63,10 @@ class AbstractTest(object):
     #   change: Is 0 if no changes were found, 1 otherwise
     #
     def bit4bit(self, test):
+        # Mapping of result codes to results
+        result = {-1 : 'N/A', 0 : 'SUCCESS', 1 : 'FAILURE'}
+        bitDict = dict()
+                
         # First, make sure that there is test data, otherwise not it.
         modelPath = livv.inputDir + livv.dataDir
         benchPath = livv.benchmarkDir + livv.dataDir
@@ -139,8 +141,9 @@ class AbstractTest(object):
                       + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                 exit(e.errno)
     
+            bitDict[same] = result[change]
         # If anything has changed, return 1, otherwise returns 0
-        return change
+        return bitDict
 
     #
     # Definition for the general parser for standard output

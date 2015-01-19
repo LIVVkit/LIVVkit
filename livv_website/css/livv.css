@@ -37,3 +37,7 @@ p, a, li {
 #bold {
 	font-weight: 600;
 }
+
+#tabbed {
+	margin-left: 50px;
+}

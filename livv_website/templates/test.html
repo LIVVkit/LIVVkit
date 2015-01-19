@@ -24,7 +24,9 @@
         {% for case in testsRun %}
           <h4>{{case}}</h4>
           <p id="bold"> Bit for Bit </p>
-            <p>Bit for bit results of {{case}}.</p>
+            {% for file, details in bitForBitDetails.iteritems() %}
+              <p id="tabbed">{{file}} : {{details}}</p>
+            {% endfor %}
           <p id="bold"> Standalone </p>
             {% for file, details in testDetails %}
               <p>File : {{file}}</p>

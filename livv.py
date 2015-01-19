@@ -270,6 +270,7 @@ if __name__ == '__main__':
     testCases = [test for sublist in [runDomeCase, runIsmipCase, runGisCase, runValidationCase, runShelfCase] for test in sublist]
     print("Running tests: \n"),
     for test in testCases: print("  " + test + "\n"),
+    print("------------------------------------------------------------------------------")
     print("")
     
     # Run the tests

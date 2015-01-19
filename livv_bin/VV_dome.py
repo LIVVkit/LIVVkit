@@ -23,8 +23,12 @@ class Dome(AbstractTest):
     # Constructor
     #
     def __init__(self):
+        # Mapping of result codes to results
+        result = {-1 : 'N/A', 0 : 'SUCCESS', 1 : 'FAILURE'}
+        
         # Keep track of what dome test have been run
         self.domeTestsRun = []
+        self.domeBitForBitDetails = dict()
         self.domeTestDetails = []
         self.domeFileTestDetails = []
         
@@ -92,6 +96,7 @@ class Dome(AbstractTest):
                         "cssDir" : livv.cssDir,
                         "testDescription" : self.description,
                         "testsRun" : self.domeTestsRun,
+                        "bitForBitDetails" : self.domeBitForBitDetails,
                         "testDetails" : self.domeFileTestDetails,
                         "imgDir" : testImgDir,
                         "testImages" : testImages}
@@ -113,6 +118,7 @@ class Dome(AbstractTest):
         test = re.compile(".*[0-9]proc")
         files = filter(test.search, files)
         
+        # Scrape the details from each of the files and store some data for later
         for file in files:
             self.domeTestDetails.append(self.parse(livv.inputDir + livv.dataDir + '/dome30/diagnostic/' + file))
         self.domeFileTestDetails = zip(files, self.domeTestDetails)
@@ -121,7 +127,9 @@ class Dome(AbstractTest):
         self.plotDiagnostic()
 
         # Run bit for bit test
-        self.bit4bit('/dome30/diagnostic')
+        self.domeBitForBitDetails = self.bit4bit('/dome30/diagnostic')
+        for key, value in self.domeBitForBitDetails.iteritems():
+            print ("    {:<30} {:<10}".format(key,value))
 
         return 0 # zero returns success
     
