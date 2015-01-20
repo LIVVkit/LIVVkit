@@ -8,10 +8,8 @@ Created on Dec 8, 2014
 
 import livv
 from livv import *
-import livv_bin.VV_checks as check
-import livv_bin.VV_utilities as util
-import livv_bin.VV_outprocess as process
 from livv_bin.VV_test import *
+import jinja2
 
 class Gis(AbstractTest):
     
