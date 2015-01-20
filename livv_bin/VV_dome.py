@@ -29,6 +29,7 @@ class Dome(AbstractTest):
         # Keep track of what dome test have been run
         self.domeTestsRun = []
         self.domeBitForBitDetails = dict()
+        self.domeTestFiles = []
         self.domeTestDetails = []
         self.domeFileTestDetails = []
         
@@ -88,6 +89,8 @@ class Dome(AbstractTest):
         testImages.append( glob.glob(testImgDir + "/*.jpg") )
         testImages.append( glob.glob(testImgDir + "/*.svg") )
 
+        self.domeFileTestDetails = zip(self.domeTestFiles,self.domeTestDetails)
+
         # Set up the template variables  
         templateVars = {"timestamp" : livv.timestamp,
                         "user" : livv.user,
@@ -121,7 +124,7 @@ class Dome(AbstractTest):
         # Scrape the details from each of the files and store some data for later
         for file in files:
             self.domeTestDetails.append(self.parse(livv.inputDir + livv.dataDir + '/dome30/diagnostic/' + file))
-        self.domeFileTestDetails = zip(files, self.domeTestDetails)
+            self.domeTestFiles.append(file)
         
         # Create the plots
         self.plotDiagnostic()
@@ -180,12 +183,27 @@ class Dome(AbstractTest):
     #
     #
     def runEvolving(self):
-        print("  Dome Diagnostic test in progress....")
+        print("  Dome Evolving test in progress....")  
+        
+        # Search for the std output files
+        files = os.listdir(livv.inputDir + livv.dataDir + '/dome30/evolving')
+        test = re.compile(".*[0-9]proc")
+        files = filter(test.search, files)
+        
+        # Scrape the details from each of the files and store some data for later
+        for file in files:
+            self.domeTestDetails.append(self.parse(livv.inputDir + livv.dataDir + '/dome30/evolving/' + file))
+            self.domeTestFiles.append(file)
         
         # Create the plots
         self.plotEvolving()
-        
-        return
+
+        # Run bit for bit test
+        self.domeBitForBitDetails = self.bit4bit('/dome30/evolving')
+        for key, value in self.domeBitForBitDetails.iteritems():
+            print ("    {:<30} {:<10}".format(key,value))
+
+        return 0 # zero returns success
     
     
     #
@@ -194,23 +212,29 @@ class Dome(AbstractTest):
     #
     #  
     def plotEvolving(self):
+        # Set up where we are going to look for things
         ncl_path = livv.cwd + os.sep + "plots" 
-        dome30dvel_plotfile = ''+ ncl_path + '/dome30/dome30evel.ncl'
-        stock1      = 'STOCK1 = addfile(\"'+ livv.benchmarkDir + '/dome30/evolving/dome.1.nc\", \"r\")'
-        stock4      = 'STOCK4 = addfile(\"'+ livv.benchmarkDir + '/dome30/evolving//dome.4.nc\", \"r\")'
-        VAR1        = 'VAR1 = addfile(\"' + livv.benchmarkDir + '/dome30/evolving/dome.1.nc\", \"r\")'
-        VAR4        = 'VAR4 = addfile(\"' + livv.benchmarkDir + '/dome30/evolving/dome.4.nc\", \"r\")'
-        pngnamevel  = 'dome30evel.png'
-        png         = 'PNG = "' + ncl_path + '/' + pngnamevel + '"'
-        plot_dome30dvel = "ncl '" + stock1 + "'  '" + stock4 + "'  '" + VAR1 + "' '" + VAR4 + \
-                    "' '" + png + "' " + dome30dvel_plotfile + " >> plot_details.out"
+        img_path = livv.imgDir + os.sep + "dome"
+        dome30evel_plotfile = ''+ ncl_path + '/dome30/dome30evel.ncl'
         
-        print("    Saving plot details to " + ncl_path + " as " + pngnamevel)
-    
-        '''
+        # The arguments to pass in to the ncl script
+        bench1 = 'STOCK9 = addfile(\"'+ livv.benchmarkDir + '/dome30/evolving/dome.small.nc\", \"r\")'
+        bench4 = 'STOCK15 = addfile(\"'+ livv.benchmarkDir + '/dome30/evolving//dome.large.nc\", \"r\")'
+        test1  = 'VAR9 = addfile(\"' + livv.benchmarkDir + '/dome30/evolving/dome.small.nc\", \"r\")'
+        test4  = 'VAR15 = addfile(\"' + livv.benchmarkDir + '/dome30/evolving/dome.large.nc\", \"r\")'
+        name = 'dome30evel.png'
+        path = 'PNG = "' + img_path + '/' + name + '"'
+        
+        # The plot command to run
+        plot_dome30evel = "ncl '" + bench1 + "' '" + bench4 + "'  '" + test1 + "' '" + test4 + \
+                    "' '" + path + "' " + dome30evel_plotfile + " >> plot_details.out"
+        
+        # Give the user some feedback
+        print("    Saving plot details to " + img_path + " as " + name)
+        
+        # Be cautious about running subprocesses
         try:
-            subprocess.check_call(plot_dome30dvel, shell=True)
-            #print "creating diagnostic dome 30 velocity plots"
+            subprocess.check_call(plot_dome30evel, shell=True)
         except subprocess.CalledProcessError as e:
             print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
                     + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
@@ -219,6 +243,5 @@ class Dome(AbstractTest):
             print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
                     + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
             exit(e.errno)
-        '''
         
         return
