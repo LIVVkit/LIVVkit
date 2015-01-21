@@ -11,14 +11,6 @@ Created on Dec 3, 2014
 ###############################################################################
 #                                  Imports                                    #
 ###############################################################################
-import os
-import time
-import getpass
-import platform
-import socket
-
-from optparse import OptionParser
-import jinja2
 
 # Don't try to import these if we are not calling livv.py directly
 if __name__ == '__main__':
@@ -32,6 +24,13 @@ if __name__ == '__main__':
     from livv_bin.VV_gis import Gis
     from livv_bin.VV_shelf import Shelf
     
+    print("------------------------------------------------------------------------------")
+    print("  Land Ice Verification & Validation (LIVV)")
+    print("------------------------------------------------------------------------------")
+    
+    # Run the dependency checker
+    dependencies.check()
+    
     # A dictionary describing which module will be called for each test
     # Each of these modules can be found in livv_bin
     testDict = { "dome" : Dome,
@@ -39,6 +38,14 @@ if __name__ == '__main__':
                  "gis" : Gis,
                  "shelf" : Shelf
                }
+import os
+import time
+import getpass
+import platform
+import socket
+
+from optparse import OptionParser
+import jinja2
 
 ###############################################################################
 #                                  Options                                    #
@@ -171,13 +178,6 @@ imgDir = indexDir + "/imgs"
 #                               Main Execution                                #
 ###############################################################################
 if __name__ == '__main__':
-    print("------------------------------------------------------------------------------")
-    print("  Land Ice Verification & Validation (LIVV)")
-    print("------------------------------------------------------------------------------")
-    
-    # Run the dependency checker
-    dependencies.check()
-    
     # Check if we are saving/loading the configuration and set up the machine name
     if options.machineName == '' and options.save:
         # Save the configuration with the default host name
