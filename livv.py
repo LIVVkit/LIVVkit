@@ -117,7 +117,7 @@ parser.add_option('-d', '--dataDir',
                   action='store',
                   type='string',
                   dest='dataDir',
-                  default='',
+                  default='data_titan',
                   help='Subdirectory where data is stored')
 
 parser.add_option('-m', '--machine',
@@ -145,7 +145,7 @@ parser.add_option('-s', '--save',
 cwd = os.path.dirname(os.path.abspath(__file__))  
 inputDir = options.inputDir                       
 benchmarkDir = options.benchmarkDir
-dataDir = options.dataDir
+dataDir = '/' + options.dataDir
 outputDir = options.outputDir                    
 imgDir = outputDir + "/imgs"                     
 comment = options.comment                         

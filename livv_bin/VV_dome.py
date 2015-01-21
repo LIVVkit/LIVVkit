@@ -117,21 +117,21 @@ class Dome(AbstractTest):
         print("  Dome Diagnostic test in progress....")  
         
         # Search for the std output files
-        files = os.listdir(livv.inputDir + livv.dataDir + '/dome30/diagnostic')
+        files = os.listdir(livv.inputDir + '/dome30/diagnostic' + livv.dataDir)
         test = re.compile(".*[0-9]proc")
         files = filter(test.search, files)
         
         # Scrape the details from each of the files and store some data for later
         for file in files:
-            self.domeTestDetails.append(self.parse(livv.inputDir + livv.dataDir + '/dome30/diagnostic/' + file))
+            self.domeTestDetails.append(self.parse(livv.inputDir + '/dome30/diagnostic' + livv.dataDir + "/" +  file))
             self.domeTestFiles.append(file)
         
         # Create the plots
         self.plotDiagnostic()
 
         # Run bit for bit test
-        self.domeBitForBitDetails = self.bit4bit('/dome30/diagnostic')
-        for key, value in self.domeBitForBitDetails.iteritems():
+        self.domeBitForBitDetails['dome30/diagnostic'] = self.bit4bit('/dome30/diagnostic')
+        for key, value in self.domeBitForBitDetails['dome30/diagnostic'].iteritems():
             print ("    {:<30} {:<10}".format(key,value))
 
         return 0 # zero returns success
@@ -149,10 +149,10 @@ class Dome(AbstractTest):
         dome30dvel_plotfile = ''+ ncl_path + '/dome30/dome30dvel.ncl'
         
         # The arguments to pass in to the ncl script
-        bench1 = 'STOCK1 = addfile(\"'+ livv.benchmarkDir + '/dome30/diagnostic/dome.1.nc\", \"r\")'
-        bench4 = 'STOCK4 = addfile(\"'+ livv.benchmarkDir + '/dome30/diagnostic//dome.4.nc\", \"r\")'
-        test1  = 'VAR1 = addfile(\"' + livv.benchmarkDir + '/dome30/diagnostic/dome.1.nc\", \"r\")'
-        test4  = 'VAR4 = addfile(\"' + livv.benchmarkDir + '/dome30/diagnostic/dome.4.nc\", \"r\")'
+        bench1 = 'STOCK1 = addfile(\"'+ livv.benchmarkDir + '/dome30/diagnostic' + livv.dataDir + '/dome.1.nc\", \"r\")'
+        bench4 = 'STOCK4 = addfile(\"'+ livv.benchmarkDir + '/dome30/diagnostic' + livv.dataDir + '/dome.4.nc\", \"r\")'
+        test1  = 'VAR1 = addfile(\"' + livv.inputDir + '/dome30/diagnostic' + livv.dataDir + '/dome.1.nc\", \"r\")'
+        test4  = 'VAR4 = addfile(\"' + livv.inputDir + '/dome30/diagnostic' + livv.dataDir + '/dome.4.nc\", \"r\")'
         name = 'dome30dvel.png'
         path = 'PNG = "' + img_path + '/' + name + '"'
         
@@ -186,21 +186,21 @@ class Dome(AbstractTest):
         print("  Dome Evolving test in progress....")  
         
         # Search for the std output files
-        files = os.listdir(livv.inputDir + livv.dataDir + '/dome30/evolving')
+        files = os.listdir(livv.inputDir + '/dome30/evolving' + livv.dataDir)
         test = re.compile(".*[0-9]proc")
         files = filter(test.search, files)
         
         # Scrape the details from each of the files and store some data for later
         for file in files:
-            self.domeTestDetails.append(self.parse(livv.inputDir + livv.dataDir + '/dome30/evolving/' + file))
+            self.domeTestDetails.append(self.parse(livv.inputDir + '/dome30/evolving/' + livv.dataDir + '/' + file))
             self.domeTestFiles.append(file)
         
         # Create the plots
         self.plotEvolving()
 
         # Run bit for bit test
-        self.domeBitForBitDetails = self.bit4bit('/dome30/evolving')
-        for key, value in self.domeBitForBitDetails.iteritems():
+        self.domeBitForBitDetails['dome30/evolving'] = self.bit4bit('/dome30/evolving')
+        for key, value in self.domeBitForBitDetails['dome30/evolving'].iteritems():
             print ("    {:<30} {:<10}".format(key,value))
 
         return 0 # zero returns success
@@ -218,10 +218,10 @@ class Dome(AbstractTest):
         dome30evel_plotfile = ''+ ncl_path + '/dome30/dome30evel.ncl'
         
         # The arguments to pass in to the ncl script
-        bench1 = 'STOCK9 = addfile(\"'+ livv.benchmarkDir + '/dome30/evolving/dome.small.nc\", \"r\")'
-        bench4 = 'STOCK15 = addfile(\"'+ livv.benchmarkDir + '/dome30/evolving//dome.large.nc\", \"r\")'
-        test1  = 'VAR9 = addfile(\"' + livv.benchmarkDir + '/dome30/evolving/dome.small.nc\", \"r\")'
-        test4  = 'VAR15 = addfile(\"' + livv.benchmarkDir + '/dome30/evolving/dome.large.nc\", \"r\")'
+        bench1 = 'STOCK9 = addfile(\"'+ livv.benchmarkDir + '/dome30/evolving' + livv.dataDir + '/dome.small.nc\", \"r\")'
+        bench4 = 'STOCK15 = addfile(\"'+ livv.benchmarkDir + '/dome30/evolving' + livv.dataDir + '/dome.large.nc\", \"r\")'
+        test1  = 'VAR9 = addfile(\"' + livv.inputDir + '/dome30/evolving' + livv.dataDir + '/dome.small.nc\", \"r\")'
+        test4  = 'VAR15 = addfile(\"' + livv.inputDir + '/dome30/evolving' + livv.dataDir + '/dome.large.nc\", \"r\")'
         name = 'dome30evel.png'
         path = 'PNG = "' + img_path + '/' + name + '"'
         

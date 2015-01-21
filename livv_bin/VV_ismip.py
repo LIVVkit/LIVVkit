@@ -106,21 +106,21 @@ class Ismip(AbstractTest):
         print("  Ismip-hom-A 20km test in progress....")  
         
         # Search for the std output files
-        files = os.listdir(livv.inputDir + livv.dataDir + '/ismip-hom-a/20km')
+        files = os.listdir(livv.inputDir + '/ismip-hom-a/20km' + livv.dataDir)
         test = re.compile(".*out.*[0-9]")
         files = filter(test.search, files)
         
         # Scrape the details from each of the files and store some data for later
         for file in files:
-            self.ismipTestDetails.append(self.parse(livv.inputDir + livv.dataDir + '/ismip-hom-a/20km/' + file))
+            self.ismipTestDetails.append(self.parse(livv.inputDir + '/ismip-hom-a/20km' + livv.dataDir + '/' + file))
             self.ismipTestFiles.append(file)
         
         # Create the plots
         self.plot('a','20')
 
         # Run bit for bit test
-        self.ismipBitForBitDetails = self.bit4bit('/ismip-hom-a/20km')
-        for key, value in self.ismipBitForBitDetails.iteritems():
+        self.ismipBitForBitDetails['ismip-hom-a/20km'] = self.bit4bit('/ismip-hom-a/20km')
+        for key, value in self.ismipBitForBitDetails['ismip-hom-a/20km'].iteritems():
             print ("    {:<30} {:<10}".format(key,value))
 
         return 0 # zero returns success
@@ -134,21 +134,21 @@ class Ismip(AbstractTest):
         print("  Ismip-hom-C 20km test in progress....")  
         
         # Search for the std output files
-        files = os.listdir(livv.inputDir + livv.dataDir + '/ismip-hom-c/20km')
+        files = os.listdir(livv.inputDir + '/ismip-hom-c/20km' + livv.dataDir)
         test = re.compile(".*out.*[0-9]")
         files = filter(test.search, files)
         
         # Scrape the details from each of the files and store some data for later
         for file in files:
-            self.ismipTestDetails.append(self.parse(livv.inputDir + livv.dataDir + '/ismip-hom-c/20km/' + file))
+            self.ismipTestDetails.append(self.parse(livv.inputDir + '/ismip-hom-c/20km' + livv.dataDir + '/' + file))
             self.ismipTestFiles.append(file)
         
         # Create the plots
         self.plot('c','20')
 
         # Run bit for bit test
-        self.ismipBitForBitDetails = self.bit4bit('/ismip-hom-c/20km')
-        for key, value in self.ismipBitForBitDetails.iteritems():
+        self.ismipBitForBitDetails['ismip-hom-c/20km'] = self.bit4bit('/ismip-hom-c/20km')
+        for key, value in self.ismipBitForBitDetails['ismip-hom-c/20km'].iteritems():
             print ("    {:<30} {:<10}".format(key,value))
 
         return 0 # zero returns success
@@ -162,21 +162,21 @@ class Ismip(AbstractTest):
         print("  Ismip-hom-A 80km test in progress....")  
         
         # Search for the std output files
-        files = os.listdir(livv.inputDir + livv.dataDir + '/ismip-hom-a/80km')
+        files = os.listdir(livv.inputDir + '/ismip-hom-a/80km' + livv.dataDir)
         test = re.compile(".*out.*[0-9]")
         files = filter(test.search, files)
         
         # Scrape the details from each of the files and store some data for later
         for file in files:
-            self.ismipTestDetails.append(self.parse(livv.inputDir + livv.dataDir + '/ismip-hom-a/80km/' + file))
+            self.ismipTestDetails.append(self.parse(livv.inputDir + '/ismip-hom-a/80km' + livv.dataDir + '/' + file))
             self.ismipTestFiles.append(file)
         
         # Create the plots
         self.plot('a','80')
 
         # Run bit for bit test
-        self.ismipBitForBitDetails = self.bit4bit('/ismip-hom-a/80km')
-        for key, value in self.ismipBitForBitDetails.iteritems():
+        self.ismipBitForBitDetails['ismip-hom-a/80km'] = self.bit4bit('/ismip-hom-a/80km')
+        for key, value in self.ismipBitForBitDetails['ismip-hom-a/80km'].iteritems():
             print ("    {:<30} {:<10}".format(key,value))
 
         return 0 # zero returns success
@@ -190,21 +190,21 @@ class Ismip(AbstractTest):
         print("  Ismip-hom-C 80km test in progress....")  
         
         # Search for the std output files
-        files = os.listdir(livv.inputDir + livv.dataDir + '/ismip-hom-c/80km')
+        files = os.listdir(livv.inputDir + '/ismip-hom-c/80km' + livv.dataDir)
         test = re.compile(".*out.*[0-9]")
         files = filter(test.search, files)
         
         # Scrape the details from each of the files and store some data for later
         for file in files:
-            self.ismipTestDetails.append(self.parse(livv.inputDir + livv.dataDir + '/ismip-hom-c/80km/' + file))
+            self.ismipTestDetails.append(self.parse(livv.inputDir + '/ismip-hom-c/80km' + livv.dataDir + '/' + file))
             self.ismipTestFiles.append(file)
         
         # Create the plots
         self.plot('c','80')
 
         # Run bit for bit test
-        self.ismipBitForBitDetails = self.bit4bit('/ismip-hom-c/80km')
-        for key, value in self.ismipBitForBitDetails.iteritems():
+        self.ismipBitForBitDetails['ismip-hom-c/80km'] = self.bit4bit('/ismip-hom-c/80km')
+        for key, value in self.ismipBitForBitDetails['ismip-hom-c/80km'].iteritems():
             print ("    {:<30} {:<10}".format(key,value))
 
         return 0 # zero returns success

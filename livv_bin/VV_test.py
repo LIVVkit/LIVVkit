@@ -7,6 +7,7 @@ Created on Dec 8, 2014
 '''
 
 import sys
+import re
 import os
 import time
 import fnmatch
@@ -66,42 +67,33 @@ class AbstractTest(object):
         # Mapping of result codes to results
         result = {-1 : 'N/A', 0 : 'SUCCESS', 1 : 'FAILURE'}
         bitDict = dict()
+        regex = re.compile('^[^\.].*?.nc')
                 
         # First, make sure that there is test data, otherwise not it.
-        modelPath = livv.inputDir + livv.dataDir
-        benchPath = livv.benchmarkDir + livv.dataDir
-        if not (os.path.exists(modelPath + "/" + test) or os.path.exists(benchPath + "/" + test)):
-            print("Could not find model and benchmark data for " + test + "!  Skipping...")
-            return -1     
-           
-        # Keeps track of whether there has been a change
-        change = 0
-    
-        # Get all of the .nc files in the model directory
-        modelFiles = []
-        for file in os.listdir(modelPath + "/" + test):
-            if fnmatch.fnmatch(file, '*.nc'):
-                modelFiles.append(file)
-                    
-        # Get all of the .nc files in the benchmark directory
-        benchFiles = []
-        for file in os.listdir(benchPath + "/" + test):
-            if fnmatch.fnmatch(file, '*.nc'):
-                benchFiles.append(file)
+        modelPath = livv.inputDir
+        benchPath = livv.benchmarkDir
+        if not (os.path.exists(modelPath + test + livv.dataDir ) or 
+                os.path.exists(benchPath + test + livv.dataDir )):
+            return {'No matching benchmark and data files found': ''}     
+             
+        # Get all of the .nc files in the model & benchmark directories
+        modelFiles = filter(regex.search, os.listdir(modelPath + test + livv.dataDir))
+        benchFiles = filter(regex.search, os.listdir(benchPath + test + livv.dataDir))
     
         # Get the intersection of the two file lists
         sameList = set(modelFiles).intersection(benchFiles)
        
         if len(sameList) == 0:
             print("  Benchmark and model data not available for " + test)
-            return -1
+            return {'No matching benchmark and data files found': ''}
         else:
             print("  Running bit for bit tests of " + test + "....")
         
         # Go through and check if any differences occur
         for same in list(sameList):
-            modelFile = modelPath + '/' + test + '/' + same
-            benchFile = benchPath + '/' + test + '/' + same
+            change = 0
+            modelFile = modelPath + test + livv.dataDir + '/' + same
+            benchFile = benchPath + test + livv.dataDir + '/' + same
             
             # check if they match
             comline = ['ncdiff', modelFile, benchFile, modelPath + os.pathsep + 'temp.nc', '-O']
@@ -120,16 +112,17 @@ class AbstractTest(object):
             diffData = Dataset(modelPath + os.pathsep + 'temp.nc', 'r')
             diffVars = diffData.variables.keys()
             
-            # TODO: Could improve the nested loops by using numpy's any function
             # Check if any data in thk has changed, if it exists
             if 'thk' in diffVars:
                 data = diffData.variables['thk'][:]
+                #print sum(sum(sum(data)))
                 if data.any():
                     change = 1
                                                     
             # Check if any data in velnorm has changed, if it exists
             if 'velnorm' in diffVars:
                 data = diffData.variables['velnorm'][:]
+                #print sum(sum(sum(sum(data))))
                 if data.any():
                     change = 1
 
@@ -174,8 +167,11 @@ class AbstractTest(object):
         for line in logfile:
             #Determine the dycore type
             if ('CISM dycore type' in line):
-                testDict['Dycore Type'] = dycoreTypes[line.split()[-1]]
-            
+                if line.split()[-1] == '=':
+                    testDict['Dycore Types'] = dycoreTypes[next(logfile).strip()]
+                else:
+                    testDict['Dycore Type'] = dycoreTypes[line.split()[-1]]
+
             # Calculate the total number of processors used
             if ('total procs' in line):
                 numberProcs += int(line.split()[-1])
