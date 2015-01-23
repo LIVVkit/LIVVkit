@@ -9,6 +9,7 @@ Created on January 6, 2015
 import os
 import sys
 import hashlib
+import shutil
 import urllib2
 import tarfile
 
@@ -89,5 +90,8 @@ def downloadJinja(tryNo):
     tar = tarfile.open(fileName)
     if tarfile.is_tarfile(fileName):
         tar.extractall(".")
-    
+    if os.path.exists("jinja2"): shutil.rmtree("jinja2")
+    shutil.copytree(jinjaDir + os.sep + "jinja2", "jinja2")
+    shutil.rmtree(jinjaDir)
+    os.remove(fileName)
     
