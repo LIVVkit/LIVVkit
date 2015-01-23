@@ -199,7 +199,7 @@ if __name__ == '__main__':
     # Print out some information
     print("\n  Current run: " + time.strftime("%m-%d-%Y %H:%M:%S"))
     print("  User: " + getpass.getuser())
-    print("  Host: " + machineName)
+    print("  Config: " + machineName)
     print("  OS Type: " + platform.system() + " " + platform.release())
     print("  " + comment)
     print("")

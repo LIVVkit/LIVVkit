@@ -67,7 +67,6 @@ class AbstractTest(object):
         # Mapping of result codes to results
         result = {-1 : 'N/A', 0 : 'SUCCESS', 1 : 'FAILURE'}
         bitDict = dict()
-        regex = re.compile('^[^\.].*?.nc')
                 
         # First, make sure that there is test data, otherwise not it.
         modelPath = livv.inputDir
@@ -77,6 +76,7 @@ class AbstractTest(object):
             return {'No matching benchmark and data files found': ''}     
              
         # Get all of the .nc files in the model & benchmark directories
+        regex = re.compile('^[^\.].*?.nc')
         modelFiles = filter(regex.search, os.listdir(modelPath + test + livv.dataDir))
         benchFiles = filter(regex.search, os.listdir(benchPath + test + livv.dataDir))
     
@@ -155,7 +155,6 @@ class AbstractTest(object):
         avgItersToConverge = 0
         convergedIters = []
         itersToConverge = []
-        
         
         # Make sure that we can actually read the file
         try:
