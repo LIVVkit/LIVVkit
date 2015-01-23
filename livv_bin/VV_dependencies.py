@@ -13,6 +13,9 @@ import shutil
 import urllib2
 import tarfile
 
+import livv
+from livv import *
+
 #
 # Run all of the checks for dependencies required by LIVV
 #
@@ -90,8 +93,7 @@ def downloadJinja(tryNo):
     tar = tarfile.open(fileName)
     if tarfile.is_tarfile(fileName):
         tar.extractall(".")
-    if os.path.exists("jinja2"): shutil.rmtree("jinja2")
-    shutil.copytree(jinjaDir + os.sep + "jinja2", "jinja2")
-    shutil.rmtree(jinjaDir)
-    os.remove(fileName)
+    installJinja = "python " + jinjaDir + os.sep + "setup.py install --user"
+    os.system(installJinja)
+    
     
