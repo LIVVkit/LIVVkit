@@ -14,8 +14,6 @@ import urllib2
 import tarfile
 import subprocess
 
-from setuptools.command import easy_install
-
 import livv
 from livv import *
 
@@ -37,6 +35,15 @@ def check():
     # If we need to load modules for LCF machines do so now
     loadModules()
     
+    try:
+        from setuptools.command import easy_install
+    except ImportError:
+        if not os.path_exists(livv.cwd + os.sep + "deps"):
+            os.mkdir(livv.cwd + os.sep + "deps")
+            sys.path.append(livv.cwd + os.sep + "deps")
+        installSetupTools()
+        from setuptools.command import easy_install
+
     # Make sure all imports are going to work
     try:
         __import__("jinja2")
@@ -86,6 +93,27 @@ def loadModules():
 #
 #
 #
+def installSetupTools():
+    url = "https://bootstrap.pypa.io/ez_setup.py"
+    fileName = "ez_setup.py"
+    u = urllib2.urlopen(url)
+    f = open(livv.cwd + os.sep + "deps" + os.sep + fileName, 'wb')
+    urlInfo = u.info()
+    fileSize = int(urlInfo.getheaders("Content-Length")[0])
+    
+    # Download it
+    sizeOnDisk = 0
+    block=8192
+    while True:
+        # We are downloading block by block - if we can't get anymore we must be done
+        buffer = u.read(block)
+        if not buffer: break
+
+        # Keep track of how much we have downloaded
+        sizeOnDisk += len(buffer)
+        f.write(buffer)
+    os.system("python " + livv.cwd + os.sep + "deps" + os.sep + fileName + " --user")
+        
 def downloadJinja(tryNo):
     # If we've failed too many times quit
     if (tryNo > 4):
