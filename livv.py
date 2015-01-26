@@ -47,7 +47,6 @@ import platform
 import socket
 
 from optparse import OptionParser
-import jinja2
 
 ###############################################################################
 #                                  Options                                    #

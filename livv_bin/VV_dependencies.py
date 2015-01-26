@@ -38,7 +38,7 @@ def check():
     try:
         from setuptools.command import easy_install
     except ImportError:
-        if not os.path_exists(livv.cwd + os.sep + "deps"):
+        if not os.path.exists(livv.cwd + os.sep + "deps"):
             os.mkdir(livv.cwd + os.sep + "deps")
             sys.path.append(livv.cwd + os.sep + "deps")
         installSetupTools()
@@ -48,21 +48,21 @@ def check():
     try:
         __import__("jinja2")
     except ImportError:
-        if not os.path_exists(livv.cwd + os.sep + "deps"):
+        if not os.path.exists(livv.cwd + os.sep + "deps"):
             os.mkdir(livv.cwd + os.sep + "deps")
             sys.path.append(livv.cwd + os.sep + "deps")
         easy_install.main(["-U", "--install-dir " + livv.cwd + os.sep + "deps", "jinja2"])       
     try:
         __import__("netCDF4")
     except ImportError:
-        if not os.path_exists(livv.cwd + os.sep + "deps"):
+        if not os.path.exists(livv.cwd + os.sep + "deps"):
             os.mkdir(livv.cwd + os.sep + "deps")
             sys.path.append(livv.cwd + os.sep + "deps")
         easy_install.main(["-U", "--install-dir " + livv.cwd + os.sep + "deps", "netCDF4"])
     try:
         __import__("numpy")
     except ImportError:
-        if not os.path_exists(livv.cwd + os.sep + "deps"):
+        if not os.path.exists(livv.cwd + os.sep + "deps"):
             os.mkdir(livv.cwd + os.sep + "deps")
             sys.path.append(livv.cwd + os.sep + "deps")
         easy_install.main(["-U", "--install-dir " + livv.cwd + os.sep + "deps", "numpy"])
