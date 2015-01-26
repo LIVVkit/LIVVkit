@@ -13,9 +13,16 @@ Created on Dec 3, 2014
 ###############################################################################
 
 # Don't try to import these if we are not calling livv.py directly
-if __name__ == '__main__':
-    import livv_bin.VV_machines as machines
+if __name__ == '__main__':    
+    print("------------------------------------------------------------------------------")
+    print("  Land Ice Verification & Validation (LIVV)")
+    print("------------------------------------------------------------------------------")
+    
+    # Run the dependency checker
     import livv_bin.VV_dependencies as dependencies
+    dependencies.check()
+    
+    import livv_bin.VV_machines as machines
     import livv_website.VV_website as web
     from livv_bin.VV_test import AbstractTest
     from livv_bin.VV_test import GenericTest
@@ -24,12 +31,7 @@ if __name__ == '__main__':
     from livv_bin.VV_gis import Gis
     from livv_bin.VV_shelf import Shelf
     
-    print("------------------------------------------------------------------------------")
-    print("  Land Ice Verification & Validation (LIVV)")
-    print("------------------------------------------------------------------------------")
-    
-    # Run the dependency checker
-    dependencies.check()
+
     
     # A dictionary describing which module will be called for each test
     # Each of these modules can be found in livv_bin
