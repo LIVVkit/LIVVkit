@@ -50,8 +50,8 @@ For a detailed list of options see the Options section, below.
   Options
 ===========
 A variety of options can be used with LIVV.  A detailed list follows:
-|	Option								| Description
-| ------------------------------------- |:-----------------------------------------------------------------:|
+|	Option								| Description														|
+| -------------------------------------:|:----------------------------------------------------------------- |
 |  -h, --help            				| 	Show the help message											|
 |  --dome=DOME           				| 	Specifies the Dome tests to run.								|
 |  --gis=GIS             				| 	Specifies the Greenland Ice Sheet tests to run					|
