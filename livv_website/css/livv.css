@@ -41,3 +41,13 @@ p, a, li {
 #tabbed {
 	margin-left: 50px;
 }
+
+#SUCCESS {
+	color: green;
+	font-weight: 600;
+}
+
+#FAILURE {
+	color: red;
+	font-weight: 600;
+}

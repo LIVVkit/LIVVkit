@@ -67,16 +67,24 @@ class Ismip(AbstractTest):
     #
     #
     def generate(self):
+        # Set up jinja related variables
         templateLoader = jinja2.FileSystemLoader( searchpath=livv.templateDir )
         templateEnv = jinja2.Environment( loader=templateLoader )
         templateFile = "/test.html"
         template = templateEnv.get_template( templateFile )
         
-        testImgDir = imgDir + os.sep + "ismip"
-        testImages = glob.glob(testImgDir + os.sep + "*.png")
-        testImages.append( glob.glob(testImgDir + "/*.jpg") )
-        testImages.append( glob.glob(testImgDir + "/*.svg") )
+        # Set up relative paths
+        indexDir = ".."
+        cssDir = indexDir + "/css"
+        imgDir = indexDir + "/imgs/ismip"
+        
+        # Grab all of our images
+        testImgDir = livv.imgDir + os.sep + "ismip"
+        testImages = [os.path.basename(img) for img in glob.glob(testImgDir + os.sep + "*.png")]
+        testImages.append([os.path.basename(img) for img in glob.glob(testImgDir + "/*.jpg")] )
+        testImages.append([os.path.basename(img) for img in glob.glob(testImgDir + "/*.svg")] )
 
+        # Make an iterable list of the test files and details
         self.ismipFileTestDetails = zip(self.ismipTestFiles, self.ismipTestDetails)
 
         # Set up the template variables  
@@ -89,7 +97,7 @@ class Ismip(AbstractTest):
                         "testsRun" : self.ismipTestsRun,
                         "bitForBitDetails" : self.ismipBitForBitDetails,
                         "testDetails" : self.ismipFileTestDetails,
-                        "imgDir" : testImgDir,
+                        "imgDir" : imgDir,
                         "testImages" : testImages}
         outputText = template.render( templateVars )
         page = open(testDir + '/ismip.html', "w")
@@ -214,5 +222,37 @@ class Ismip(AbstractTest):
     #
     #
     def plot(self, aOrC, size):
-        print "    Generating ismip-hom-" + aOrC + "-" + size + "km plot...." 
-        print "    This is just a dummy method.  Updates coming soon!"
+        #print "    Generating ismip-hom-" + aOrC + "-" + size + "km plot...." 
+        #print "    This is just a dummy method.  Updates coming soon!"
+        
+        ncl_path = livv.cwd + os.sep + "plots" 
+        img_path = livv.imgDir + os.sep + "ismip"
+        ishoma80u_plotfile = ''+ ncl_path + '/ismip-'+aOrC+'/ismip'+aOrC+size+'ug.ncl'
+        bench1  = 'STOCK1 = addfile(\"'+ livv.benchmarkDir + '/ismip-hom-'+aOrC+'/'+size+'km/' + livv.dataDir + '/ishom.'+aOrC+'.'+size+'km.glissade.1.out.nc\", \"r\")'
+        bench4  = 'STOCK4 = addfile(\"'+ livv.benchmarkDir + '/ismip-hom-'+aOrC+'/'+size+'km/' + livv.dataDir + '/ishom.'+aOrC+'.'+size+'km.glissade.4.out.nc\", \"r\")'
+        test1    = 'VAR1 = addfile(\"'+ livv.inputDir + '/ismip-hom-'+aOrC+'/'+size+'km/' + livv.dataDir + '/ishom.'+aOrC+'.'+size+'km.glissade.1.out.nc\", \"r\")'
+        test4    = 'VAR4 = addfile(\"'+ livv.inputDir + '/ismip-hom-'+aOrC+'/'+size+'km/' + livv.dataDir + '/ishom.'+aOrC+'.'+size+'km.glissade.1.out.nc\", \"r\")'
+        name = 'ismip'+aOrC+size+'ug.png'
+        path     = 'PNG = "' + img_path + '/' + name + '"'
+        plot_ishoma80u = "ncl '" + bench1 + "'  '" + bench4 + "'  '" + test1 + "'  '" + test4 \
+                        +"'  '" + path + "' " + ishoma80u_plotfile + " >> plot_details.out"
+    
+        print("    Saving plot details to " + img_path + " as " + name)
+    
+        try:
+            subprocess.check_call(plot_ishoma80u, shell=True)
+            #print "creating ismip hom a 80km uvel plots"
+        except subprocess.CalledProcessError as e:
+            print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
+                    + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+            exit(e.returncode)
+        except OSError as e:
+            print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
+                    + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+            exit(e.errno)    
+        
+        
+        
+        
+        
+        

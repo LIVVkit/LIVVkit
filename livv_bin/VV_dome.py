@@ -84,24 +84,28 @@ class Dome(AbstractTest):
         templateFile = "/test.html"
         template = templateEnv.get_template( templateFile )
         
-        testImgDir = imgDir + os.sep + "dome"
-        testImages = glob.glob(testImgDir + os.sep + "*.png")
-        testImages.append( glob.glob(testImgDir + "/*.jpg") )
-        testImages.append( glob.glob(testImgDir + "/*.svg") )
+        indexDir = ".."
+        cssDir = indexDir + "/css"
+        imgDir = indexDir + "/imgs/dome"
+        
+        testImgDir = livv.imgDir + os.sep + "dome"
+        testImages = [os.path.basename(img) for img in glob.glob(testImgDir + os.sep + "*.png")]
+        testImages.append([os.path.basename(img) for img in glob.glob(testImgDir + "/*.jpg")] )
+        testImages.append([os.path.basename(img) for img in glob.glob(testImgDir + "/*.svg")] )
 
         self.domeFileTestDetails = zip(self.domeTestFiles,self.domeTestDetails)
 
         # Set up the template variables  
         templateVars = {"timestamp" : livv.timestamp,
                         "user" : livv.user,
-                        "testName" : "Dome",
-                        "indexDir" : livv.indexDir,
-                        "cssDir" : livv.cssDir,
+                        "testName" : self.getName(),
+                        "indexDir" : indexDir,
+                        "cssDir" : cssDir,
                         "testDescription" : self.description,
                         "testsRun" : self.domeTestsRun,
                         "bitForBitDetails" : self.domeBitForBitDetails,
                         "testDetails" : self.domeFileTestDetails,
-                        "imgDir" : testImgDir,
+                        "imgDir" : imgDir,
                         "testImages" : testImages}
         outputText = template.render( templateVars )
         page = open(testDir + '/dome.html', "w")

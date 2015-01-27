@@ -21,7 +21,6 @@ from numpy import outer
 #
 # Run all of the checks for dependencies required by LIVV
 #
-#
 def check():
     # Create a list to store all of the errors that were found
     depErrors = []
@@ -30,12 +29,14 @@ def check():
     print("Beginning Dependency Checks........")
     
     # If we need to load modules for LCF machines do so now
-    loadModules()
+    checkModules()
         
     # Make sure all environment variables are set
     if os.environ.get('NCARG_ROOT') == None:
         depErrors.append("  NCARG_ROOT not found in environment")
-           
+     
+    # For the python dependencies we may need easy_install
+    # Make sure we have it, and if not, build it       
     try:
         from setuptools.command import easy_install
     except ImportError:
@@ -46,6 +47,7 @@ def check():
         from setuptools.command import easy_install
 
     # Make sure all imports are going to work
+    # And if they don't build a copy of the ones that are needed
     print("    Checking for external libraries....")
     libraryList = ["jinja2", "netCDF4", "numpy"]
     for lib in libraryList:
@@ -69,34 +71,66 @@ def check():
         exit(len(depErrors))
     else:
         print("Okay!  Setting up environment....")
-     
-def loadModules():
+
+
+#
+#  Checks if the system running LIVV uses modules to load dependencies.  If it does, this method
+#  goes through and makes sure that the correct modules are loaded.  Any modules that are needed
+#  but haven't been loaded are added to a module loader script that the user is prompted to source
+#  before running LIVV again.     
+#
+def checkModules():
+    # Check to see if calling 'module list' is a real command
     print("    Checking if modules need to be loaded"),
     checkCmd = ["bash", "-c", "module list"]
     checkCall = subprocess.Popen(checkCmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out, err = checkCall.communicate()
     
-    if "bash: module: command not found" not in err:
-        print(" yep.  Loading modules....")
+    if "bash: module: command not found" in err:
+        # This system doesn't use modules for dependencies
+        print("nope.  Continuing....")
+    else:
+        # We need to check if all of the correct modules are loaded
         if not os.path.exists(livv.cwd + os.sep + "deps"):
             os.mkdir(livv.cwd + os.sep + "deps")
             sys.path.append(livv.cwd + os.sep + "deps")
         f = open(livv.cwd + os.sep + "deps" + os.sep + "modules", 'w')
+
+        # Record the modules needed, the modules that have been loaded, and start a list for what's missing
         modules = ["ncl/6.1.0", "nco/4.3.9", "python_numpy/1.8.0", "python_matplotlib/1.3.1", "netcdf/4.1.3", "python_netcdf4/1.0.6"]
+        moduleListOutput = out.split()
+        modulesNeeded = []
+        
+        # Go through and find out if anything is missing
         for module in modules:
-            f.write("module load " + module + "\n")
+            if module not in moduleListOutput:
+                f.write("module load " + module + "\n")
+                modulesNeeded.append(module)
         f.close()
-        sourceCmd = ["bash", "-c", " source " + livv.cwd + os.sep + "deps" + os.sep + "modules"]
-        loadModules = subprocess.Popen(sourceCmd, stdout=subprocess.PIPE)
-    else:
-        print(" nope.  Continuing....")
+        
+        # If anything was missing, tell the user what it was and how to fix it
+        if len(modulesNeeded) != 0:
+            print("  ------------------------------------------")
+            print("  | Could not find all necessary modules!  |")
+            print("  ------------------------------------------")
+            print("    Modules missing:")
+            for each in modulesNeeded:
+                print("   * " + each)
+            print("")
+            print("  ------------------------------------------")
+            print("  | Use the command: source deps/modules   |")
+            print("  | to load all of the missing modules.    |")
+            print("  | then try running LIVV again.           |")
+            print("  ------------------------------------------")
+            exit(1)
+
 
 #
-#
-#
-#
+# Installs setuptools so we can access the easy_install command from inside of LIVV if  any 
+# python dependencies aren't satisfied
 #
 def installSetupTools():
+    # Specify where to download from and figure out how big it's going to be
     url = "https://bootstrap.pypa.io/ez_setup.py"
     fileName = "ez_setup.py"
     u = urllib2.urlopen(url)
@@ -111,55 +145,6 @@ def installSetupTools():
         # We are downloading block by block - if we can't get anymore we must be done
         buffer = u.read(block)
         if not buffer: break
-
-        # Keep track of how much we have downloaded
-        sizeOnDisk += len(buffer)
         f.write(buffer)
     os.system("python " + livv.cwd + os.sep + "deps" + os.sep + fileName + " --user")
-        
-def downloadJinja(tryNo):
-    # If we've failed too many times quit
-    if (tryNo > 4):
-        depErrors.append("Too many failures trying to download & build Jinja2.  Try building manually before proceeding.  Exitting....")
-        
-    # Download Jinja2 tar
-    url="https://pypi.python.org/packages/source/J/Jinja2/Jinja2-2.7.3.tar.gz#md5=b9dffd2f3b43d673802fe857c8445b1a"
-    md5=url.split('=')[-1]
-    fileName=url.split('/')[-1].split('#')[0]
-    u = urllib2.urlopen(url)
-    f = open(fileName, 'wb')
-    urlInfo = u.info()
-    fileSize = int(urlInfo.getheaders("Content-Length")[0])
-    print("Downloading: " + fileName + " Size: " + str(fileSize))
-    
-    # Download it
-    sizeOnDisk = 0
-    block=8192
-    while True:
-        # We are downloading block by block - if we can't get anymore we must be done
-        buffer = u.read(block)
-        if not buffer: break
-
-        # Keep track of how much we have downloaded
-        sizeOnDisk += len(buffer)
-        f.write(buffer)
-        status = r"%10d  [%3.2f%%]" % (sizeOnDisk, sizeOnDisk * 100. / fileSize)
-        status = status + chr(8)*(len(status)+1)
-        print status,
-
-    # Should be good to go, check the md5 as a precaution
-    f.close()
-    filemd5 = hashlib.md5(open(fileName, 'rb').read()).hexdigest()
-    # If the checksum didn't go well try again (up to 5 times)
-    if filemd5 != md5:
-        print("Error downloading " + fileName + ".  Attempting download again.")
-        downloadJinja(tryNo+1)
-        
-    jinjaDir = fileName.split(".tar")[0]
-    tar = tarfile.open(fileName)
-    if tarfile.is_tarfile(fileName):
-        tar.extractall(".")
-    installJinja = "python " + jinjaDir + os.sep + "setup.py install --user"
-    os.system(installJinja)
-    
     

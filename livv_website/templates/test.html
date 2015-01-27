@@ -14,7 +14,7 @@
       <p>
         {% for img in testImages %}
           {% if img != [] %} 
-            <img src="{{img}}" alt="{{img}}">
+            <img src="{{imgDir}}/{{img}}" alt="{{imgDir}}/{{img}}">
             <br>
           {% endif %}
         {% endfor %}
@@ -25,7 +25,7 @@
           <h4>{{case}}</h4>
           <p id="bold"> Bit for Bit </p>
             {% for file, details in bitForBitDetails[case].iteritems() %}
-              <p id="tabbed">{{file}} : {{details}}</p>
+              <p id="tabbed">{{file}} : <a id={{details}}>{{details}}</a></p>
             {% endfor %}
           <p id="bold"> Standalone </p>
             {% for file, details in testDetails %}
