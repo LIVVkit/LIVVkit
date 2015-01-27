@@ -16,6 +16,7 @@ import subprocess
 
 import livv
 from livv import *
+from numpy import outer
 
 #
 # Run all of the checks for dependencies required by LIVV
@@ -28,13 +29,13 @@ def check():
     print("")
     print("Beginning Dependency Checks........")
     
+    # If we need to load modules for LCF machines do so now
+    loadModules()
+        
     # Make sure all environment variables are set
     if os.environ.get('NCARG_ROOT') == None:
         depErrors.append("  NCARG_ROOT not found in environment")
-        
-    # If we need to load modules for LCF machines do so now
-    loadModules()
-    
+           
     try:
         from setuptools.command import easy_install
     except ImportError:
@@ -45,27 +46,15 @@ def check():
         from setuptools.command import easy_install
 
     # Make sure all imports are going to work
-    try:
-        __import__("jinja2")
-    except ImportError:
-        if not os.path.exists(livv.cwd + os.sep + "deps"):
-            os.mkdir(livv.cwd + os.sep + "deps")
-            sys.path.append(livv.cwd + os.sep + "deps")
-        easy_install.main(["-U", "--install-dir " + livv.cwd + os.sep + "deps", "jinja2"])       
-    try:
-        __import__("netCDF4")
-    except ImportError:
-        if not os.path.exists(livv.cwd + os.sep + "deps"):
-            os.mkdir(livv.cwd + os.sep + "deps")
-            sys.path.append(livv.cwd + os.sep + "deps")
-        easy_install.main(["-U", "--install-dir " + livv.cwd + os.sep + "deps", "netCDF4"])
-    try:
-        __import__("numpy")
-    except ImportError:
-        if not os.path.exists(livv.cwd + os.sep + "deps"):
-            os.mkdir(livv.cwd + os.sep + "deps")
-            sys.path.append(livv.cwd + os.sep + "deps")
-        easy_install.main(["-U", "--install-dir " + livv.cwd + os.sep + "deps", "numpy"])
+    libraryList = ["jinja2", "netCDF4", "numpy"]
+    for lib in libraryList:
+        try:
+            __import__(lib)
+        except ImportError:
+            if not os.path.exists(livv.cwd + os.sep + "deps"):
+                os.mkdir(livv.cwd + os.sep + "deps")
+                sys.path.append(livv.cwd + os.sep + "deps")
+            easy_install.main(["-U", "--install-dir " + livv.cwd + os.sep + "deps", lib])       
         
     # Show all of the dependency errors that were found
     if len(depErrors) > 0:
@@ -78,15 +67,21 @@ def check():
         print("Okay!")
      
 def loadModules():
-    FNULL = open(os.devnull, 'w')
-    modules = ["ncl/6.1.0", "nco/4.3.9", "python_numpy/1.8.0", "python_matplotlib/1.3.1", "netcdf/4.1.3", "python_netcdf4/1.0.6"]
-    for module in modules:
-        p = subprocess.Popen("module load " + module, stdout=FNULL, stderr=FNULL, shell=True)
-        if p != "":
-            break
-        else:
-            print("Loading " + module + "....")
-
+    checkCmd = ["bash", "-c", "module list"]
+    checkCall = subprocess.Popen(checkCmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    out, err = checkCall.communicate()
+    
+    if "bash: module: command not found" not in err:
+        if not os.path.exists(livv.cwd + os.sep + "deps"):
+            os.mkdir(livv.cwd + os.sep + "deps")
+            sys.path.append(livv.cwd + os.sep + "deps")
+        f = open(livv.cwd + os.sep + "deps" + os.sep + "modules", 'w')
+        modules = ["ncl/6.1.0", "nco/4.3.9", "python_numpy/1.8.0", "python_matplotlib/1.3.1", "netcdf/4.1.3", "python_netcdf4/1.0.6"]
+        for module in modules:
+            f.write("load module " + module + "\n")
+        f.close()
+        sourceCmd = ["bash", "-c", " source " + livv.cwd + os.sep + "deps" + os.sep + "modules"]
+        loadModules = subprocess.Popen(sourceCmd, stdout=subprocess.PIPE)
 
 #
 #

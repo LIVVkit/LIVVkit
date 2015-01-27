@@ -171,9 +171,9 @@ validation = options.validation
 websiteDir = os.path.dirname(__file__) + "/livv_website"
 templateDir = websiteDir + "/templates"
 indexDir = outputDir
-cssDir = "css"
-testDir = "tests"
-imgDir = "imgs"
+cssDir = indexDir + os.sep + "css"
+testDir = indexDir + os.sep + "tests"
+imgDir = indexDir + os.sep + "imgs"
 
 ###############################################################################
 #                               Main Execution                                #

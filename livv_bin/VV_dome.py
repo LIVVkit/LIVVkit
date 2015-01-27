@@ -96,7 +96,7 @@ class Dome(AbstractTest):
                         "user" : livv.user,
                         "testName" : "Dome",
                         "indexDir" : livv.indexDir,
-                        "cssDir" : "css",
+                        "cssDir" : livv.cssDir,
                         "testDescription" : self.description,
                         "testsRun" : self.domeTestsRun,
                         "bitForBitDetails" : self.domeBitForBitDetails,
