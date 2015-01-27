@@ -50,23 +50,20 @@ For a detailed list of options see the Options section, below.
   Options
 ===========
 A variety of options can be used with LIVV.  A detailed list follows:
-  -h, --help            	Show the help message
-  --dome=DOME           	Specifies the Dome tests to run.				
-  --gis=GIS             	Specifies the Greenland Ice Sheet tests to run
-  --ismip=ISMIP         	Specifies the ismip tests to run
-  --shelf=SHELF        		Specifies the shelf tests to run
-  --comment=COMMENT     	Log a comment about this run
-  -o OUTPUTDIR, --outputDir=OUTPUTDIR
-                        	Location to output the LIVV webpages.
-  -i INPUTDIR, --inputDir=INPUTDIR
-                        	Location of the input for running tests.
-  -b BENCHMARKDIR, --benchmarkDir=BENCHMARKDIR
-                        	Location of the input for running tests.
-  -d DATADIR, --dataDir=DATADIR
-                        	Subdirectory where data is stored
-  -m MACHINENAME, --machine=MACHINENAME
-                        	Load a preconfigured set of options for a specific machine.
-  -s, --save            	Store the configuration being run with the given machine name.
+|	Option								| Description
+| ------------------------------------- |:-----------------------------------------------------------------:|
+|  -h, --help            				| 	Show the help message											|
+|  --dome=DOME           				| 	Specifies the Dome tests to run.								|
+|  --gis=GIS             				| 	Specifies the Greenland Ice Sheet tests to run					|
+|  --ismip=ISMIP         				|	Specifies the ismip tests to run								|
+|  --shelf=SHELF  				      	| 	Specifies the shelf tests to run								|
+|  --comment=COMMENT     				| 	Log a comment about this run									|
+|  -o OUTPUTDIR, --outputDir=OUTPUTDIR 	|	Location to output the LIVV webpages.							|
+|  -i INPUTDIR, --inputDir=INPUTDIR 	|	Location of the input for running tests.						|
+|  -b BENCHDIR, --benchmarkDir=BENCHDIR | 	Location of the input for running tests.						|
+|  -d DATADIR, --dataDir=DATADIR		|	Subdirectory where data is stored								|
+|  -m MACHINE, --machine=MACHINE		|	Load a preconfigured set of options for a specific machine.		|
+|  -s, --save            				|	Store the configuration being run with the given machine name.	|
 
 
   Contact
