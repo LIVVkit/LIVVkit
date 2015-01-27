@@ -46,15 +46,19 @@ def check():
         from setuptools.command import easy_install
 
     # Make sure all imports are going to work
+    print("    Checking for external libraries....")
     libraryList = ["jinja2", "netCDF4", "numpy"]
     for lib in libraryList:
         try:
             __import__(lib)
+            print("    Found " + lib + "!")
         except ImportError:
+            print("    Could not find " + lib + ".  Building a copy for you...."),
             if not os.path.exists(livv.cwd + os.sep + "deps"):
                 os.mkdir(livv.cwd + os.sep + "deps")
                 sys.path.append(livv.cwd + os.sep + "deps")
             easy_install.main(["-U", "--install-dir " + livv.cwd + os.sep + "deps", lib])       
+            print(" Done!")
         
     # Show all of the dependency errors that were found
     if len(depErrors) > 0:
@@ -64,24 +68,28 @@ def check():
         for err in depErrors: print(err)
         exit(len(depErrors))
     else:
-        print("Okay!")
+        print("Okay!  Setting up environment....")
      
 def loadModules():
+    print("    Checking if modules need to be loaded"),
     checkCmd = ["bash", "-c", "module list"]
     checkCall = subprocess.Popen(checkCmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out, err = checkCall.communicate()
     
     if "bash: module: command not found" not in err:
+        print(" yep.  Loading modules....")
         if not os.path.exists(livv.cwd + os.sep + "deps"):
             os.mkdir(livv.cwd + os.sep + "deps")
             sys.path.append(livv.cwd + os.sep + "deps")
         f = open(livv.cwd + os.sep + "deps" + os.sep + "modules", 'w')
         modules = ["ncl/6.1.0", "nco/4.3.9", "python_numpy/1.8.0", "python_matplotlib/1.3.1", "netcdf/4.1.3", "python_netcdf4/1.0.6"]
         for module in modules:
-            f.write("load module " + module + "\n")
+            f.write("module load " + module + "\n")
         f.close()
         sourceCmd = ["bash", "-c", " source " + livv.cwd + os.sep + "deps" + os.sep + "modules"]
         loadModules = subprocess.Popen(sourceCmd, stdout=subprocess.PIPE)
+    else:
+        print(" nope.  Continuing....")
 
 #
 #
