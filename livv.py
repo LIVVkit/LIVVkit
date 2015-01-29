@@ -23,7 +23,6 @@ if __name__ == '__main__':
     dependencies.check()
     
     import livv_bin.VV_machines as machines
-    import livv_website.VV_website as web
     from livv_bin.VV_test import AbstractTest
     from livv_bin.VV_test import GenericTest
     from livv_bin.VV_dome import Dome
