@@ -84,9 +84,9 @@ def checkModules():
     print("    Checking if modules need to be loaded"),
     checkCmd = ["bash", "-c", "module list"]
     checkCall = subprocess.Popen(checkCmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    out, err = checkCall.communicate()
+    out, err = checkCall.stdout, checkCall.stderr
     
-    if "bash: module: command not found" in err:
+    if "bash: module: command not found" in (err + out):
         # This system doesn't use modules for dependencies
         print("nope.  Continuing....")
     else:
@@ -97,25 +97,25 @@ def checkModules():
         f = open(livv.cwd + os.sep + "deps" + os.sep + "modules", 'w')
 
         # Record the modules needed, the modules that have been loaded, and start a list for what's missing
-        modules = ["ncl/6.1.0", "nco/4.3.9", "python_numpy/1.8.0", "python_matplotlib/1.3.1", "netcdf/4.1.3", "python_netcdf4/1.0.6"]
-        moduleListOutput = out.split()
+        modules = ["python/2.7.5", "ncl/6.1.0", "nco/4.3.9", "python_matplotlib/1.3.1", "hdf5/1.8.11", "netcdf/4.1.3", "python_numpy/1.8.0", "python_netcdf4/1.0.6"]
+        moduleListOutput = out.split() + err.split()
         modulesNeeded = []
         
         # Go through and find out if anything is missing
         for module in modules:
+            f.write("module load " + module + "\n")
             if module not in moduleListOutput:
-                f.write("module load " + module + "\n")
                 modulesNeeded.append(module)
         f.close()
         
         # If anything was missing, tell the user what it was and how to fix it
         if len(modulesNeeded) != 0:
+            print("")
             print("  ------------------------------------------")
             print("  | Could not find all necessary modules!  |")
             print("  ------------------------------------------")
             print("    Modules missing:")
-            for each in modulesNeeded:
-                print("   * " + each)
+            for each in modulesNeeded: print("   * " + each)
             print("")
             print("  ------------------------------------------")
             print("  | Use the command: source deps/modules   |")

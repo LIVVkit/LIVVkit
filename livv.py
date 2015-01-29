@@ -278,6 +278,9 @@ if __name__ == '__main__':
     testResults = []
     bit4bitResults = []
     print("Beginning test suite....")
+    
+    # Create the site index
+    # TODO: Put this after tests are run so we can display some sort of summary 
     newTest = GenericTest()
     newTest.webSetup(testsRun, testCases)
     for test in testsRun:
@@ -291,11 +294,10 @@ if __name__ == '__main__':
         # Generate the test-specific webpage 
         newTest.generate()
         
-    # On the last test generate the common web resources
     print("Generating web pages in " + outputDir)
     
     ###############################################################################
-    #                              Generate Website                               #
+    #                        Finished.  Tell user about it.                       #
     ###############################################################################
     print("------------------------------------------------------------------------------")
     print("Finished running LIVV.  Results:  ")
