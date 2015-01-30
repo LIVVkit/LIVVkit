@@ -53,9 +53,9 @@ def check():
     for lib in libraryList:
         try:
             __import__(lib)
-            print("    Found " + lib + "!")
+            print("      Found " + lib + "!")
         except ImportError:
-            print("    Could not find " + lib + ".  Building a copy for you...."),
+            print("      Could not find " + lib + ".  Building a copy for you...."),
             if not os.path.exists(livv.cwd + os.sep + "deps"):
                 os.mkdir(livv.cwd + os.sep + "deps")
                 sys.path.append(livv.cwd + os.sep + "deps")
@@ -70,7 +70,8 @@ def check():
         for err in depErrors: print(err)
         exit(len(depErrors))
     else:
-        print("Okay!  Setting up environment....")
+        print("Okay!")
+        print("Setting up environment....")
 
 
 #
@@ -84,11 +85,14 @@ def checkModules():
     print("    Checking if modules need to be loaded"),
     checkCmd = ["bash", "-c", "module list"]
     checkCall = subprocess.Popen(checkCmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    out, err = checkCall.stdout, checkCall.stderr
+    out, err = checkCall.communicate()
     
-    if "bash: module: command not found" in (err + out):
+    # Find out if we need to check if modules are loaded
+    if "bash: module: command not found" in err or \
+            "bash: module: command not found" in out:
         # This system doesn't use modules for dependencies
-        print("nope.  Continuing....")
+        print(" nope.  Continuing....")
+        return
     else:
         # We need to check if all of the correct modules are loaded
         if not os.path.exists(livv.cwd + os.sep + "deps"):
@@ -97,12 +101,12 @@ def checkModules():
         f = open(livv.cwd + os.sep + "deps" + os.sep + "modules", 'w')
 
         # Record the modules needed, the modules that have been loaded, and start a list for what's missing
-        modules = ["python/2.7.5", "ncl/6.1.0", "nco/4.3.9", "python_matplotlib/1.3.1", "hdf5/1.8.11", "netcdf/4.1.3", "python_numpy/1.8.0", "python_netcdf4/1.0.6"]
+        modules = livv.modules
         moduleListOutput = out.split() + err.split()
         modulesNeeded = []
         
         # Go through and find out if anything is missing
-        for module in modules:
+        for module in livv.modules:
             f.write("module load " + module + "\n")
             if module not in moduleListOutput:
                 modulesNeeded.append(module)
@@ -123,6 +127,8 @@ def checkModules():
             print("  | then try running LIVV again.           |")
             print("  ------------------------------------------")
             exit(1)
+        else:
+            print(" found all required modules!")
 
 
 #

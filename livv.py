@@ -88,7 +88,7 @@ parser.add_option('--shelf',
                   action='store', 
                   type='choice', 
                   dest='shelf', 
-                  choices=['none', 'confined', 'circular', 'large'], 
+                  choices=['none', 'confined', 'circular', 'all'], 
                   default='none', 
                   help='specifies the shelf tests to run')
 
@@ -158,6 +158,9 @@ imgDir = outputDir + "/imgs"
 comment = options.comment                         
 timestamp = time.strftime("%m-%d-%Y %H:%M:%S")
 user = getpass.getuser()
+
+# Modules that need to be loaded on big machines
+modules = ["python/2.7.5", "ncl/6.1.0", "nco/4.3.9", "python_matplotlib/1.3.1", "hdf5/1.8.11", "netcdf/4.1.3", "python_numpy/1.8.0", "python_netcdf4/1.0.6"]
 
 # Test related variables
 dome = options.dome

@@ -32,6 +32,13 @@ class AbstractTest(object):
     __metaclass__ = ABCMeta
     
     #
+    # Constructor
+    #
+    @abstractmethod
+    def __init__(self):
+        pass
+
+    #
     # Should return the name of the test
     #
     @abstractmethod
@@ -111,16 +118,16 @@ class AbstractTest(object):
             # Grab the output of ncdiff
             diffData = Dataset(modelPath + os.pathsep + 'temp.nc', 'r')
             diffVars = diffData.variables.keys()
-            
+                            
             # Check if any data in thk has changed, if it exists
-            if 'thk' in diffVars:
+            if 'thk' in diffVars and diffData.variables['thk'].size != 0:
                 data = diffData.variables['thk'][:]
                 #print sum(sum(sum(data)))
                 if data.any():
                     change = 1
                                                     
             # Check if any data in velnorm has changed, if it exists
-            if 'velnorm' in diffVars:
+            if 'velnorm' in diffVars and diffData.variables['velnorm'].size != 0:
                 data = diffData.variables['velnorm'][:]
                 #print sum(sum(sum(sum(data))))
                 if data.any():
@@ -208,6 +215,13 @@ class AbstractTest(object):
 #
 #
 class GenericTest(AbstractTest):
+    
+    #
+    # Constructor
+    #
+    def __init__(self):
+        return
+    
     #
     # Return the name of the test
     # 
