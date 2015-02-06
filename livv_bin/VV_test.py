@@ -23,52 +23,50 @@ from abc import ABCMeta, abstractmethod
 import livv
 from livv import *
 
+
+## AbstractTest provides a description of how a test should work in LIVV.
 #
-#
-#
-#
+#  Each test within LIVV needs to be able to run specific test code, and
+#  generate its output.  Tests inherit a common method of checking for 
+#  bit-for-bittedness as well for parsing the standard output of model output
 #
 class AbstractTest(object):
     __metaclass__ = ABCMeta
     
-    #
-    # Constructor
+    ## Constructor
     #
     @abstractmethod
     def __init__(self):
         pass
 
-    #
-    # Should return the name of the test
+    ## Should return the name of the test
     #
     @abstractmethod
     def getName(self):
         pass
     
-    #
-    # Definition for the general test run
+    ## Definition for the general test run
     #
     @abstractmethod
     def run(self, test):
         pass
       
-    #
-    # Definition for how to generate test specific web pages
+    ## Definition for how to generate test specific web pages
     #
     @abstractmethod
     def generate(self):
         pass  
         
+
+    ## Tests all models and benchmarks against each other in a bit for bit fashion.  
+    #  If any differences are found the method will return 1, otherwise 0.  
     #
-    # Tests all models and benchmarks against each other in a bit for bit fashion.  
-    # If any differences are found the method will return 1, otherwise 0.  
+    #  Input:
+    #    @param modelPath: the path to the model data
+    #    @param benchPath: the path to the benchmark data
     #
-    # Input:
-    #   modelPath: the path to the model data
-    #   benchPath: the path to the benchmark data
-    #
-    # Output:
-    #   change: Is 0 if no changes were found, 1 otherwise
+    #  Output:
+    #    @returns change: Is 0 if no changes were found, 1 otherwise
     #
     def bit4bit(self, test):
         # Mapping of result codes to results
@@ -145,11 +143,11 @@ class AbstractTest(object):
         # If anything has changed, return 1, otherwise returns 0
         return bitDict
 
+
+    ## Definition for the general parser for standard output
     #
-    # Definition for the general parser for standard output
-    #
-    # input:
-    #   file: the file to be parsed
+    #  input:
+    #    @param file: the file to be parsed
     #
     def parse(self, file):
         # Initialize a dictionary that will store all of the information
@@ -174,7 +172,7 @@ class AbstractTest(object):
             #Determine the dycore type
             if ('CISM dycore type' in line):
                 if line.split()[-1] == '=':
-                    testDict['Dycore Types'] = dycoreTypes[next(logfile).strip()]
+                    testDict['Dycore Type'] = dycoreTypes[next(logfile).strip()]
                 else:
                     testDict['Dycore Type'] = dycoreTypes[line.split()[-1]]
 
@@ -210,30 +208,32 @@ class AbstractTest(object):
             testDict['Average iterations to converge'] = avgItersToConverge 
         
         return testDict     
+
+
+## TestSummary provides LIVV the ability to assemble the overview and main page.
 #
+#  The TestSummary class does not strictly fall under the category of a test
+#  but can take advantage of the infrastructure that the AbstractTest class
+#  provides.
 #
-#
-#
-class GenericTest(AbstractTest):
+class TestSummary(AbstractTest):
     
-    #
-    # Constructor
+
+    ## Constructor
     #
     def __init__(self):
         return
     
-    #
-    # Return the name of the test
+    ## Return the name of the test
     # 
     def getName(self):
-        return "generic test"
+        return "test summary"
     
+    ## Prepare the index of the website.
     #
-    # Prepare the index of the website.
-    #
-    # input:
-    #   testsRun: the top level names of each of the tests run
-    #   testCases: the specific test cases being run
+    #  input:
+    #    @param testsRun: the top level names of each of the tests run
+    #    @param testCases: the specific test cases being run
     #
     def webSetup(self, testsRun, testCases):   
         # Create directory structure

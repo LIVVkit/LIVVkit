@@ -1,5 +1,5 @@
 '''
-Master script for dome test cases
+Master module for Ismip tests.  
 
 Created on Dec 8, 2014
 
@@ -17,10 +17,15 @@ from livv import *
 from livv_bin.VV_test import *
 import jinja2
 
+## Main class for handling Ismip test cases.
+#
+#  The Ismip test cases inherit functionality from AbstractTest for checking 
+#  bit-for-bittedness as well as for parsing standard output from a model run.
+#  This class handles the Ismip-hom a and c tests for resolutions of 20km and 80km.
+#
 class Ismip(AbstractTest):
     
-    #
-    # Constructor
+    ## Constructor
     #
     def __init__(self):
         self.ismipTestsRun = []
@@ -32,18 +37,24 @@ class Ismip(AbstractTest):
         self.name = "ismip"
         self.description = "Simulates steady ice flow over a surface with periodic boundary conditions"
     
+    ## Return the name of the test
     #
-    # Return the name of the test
+    #  output:
+    #    @returns name : ismip
     #
     def getName(self):
         return self.name
     
     
+
+    ## Runs the ismip specific test case.  
     #
-    # Runs the dome specific test case.  Calls some shared resources and
-    # some diagnostic/evolving case specific methods.
+    #  When running a test this call will record the specific test case 
+    #  being run.  Each specific test case string is mapped to the 
+    #  method that will be used to run the actual test case.
     #
-    #
+    #  input:
+    #    @param testCase : the string indicator of the test to run
     #
     def run(self, testCase):
         # Common run 
@@ -62,9 +73,10 @@ class Ismip(AbstractTest):
         return
     
     
+    ## Creates the output test page
     #
-    #  Description
-    #
+    #  The generate method will create an ismip.html page in the output directory.
+    #  This page will contain a detailed list of the results from LIVV.  
     #
     def generate(self):
         # Set up jinja related variables
@@ -105,11 +117,8 @@ class Ismip(AbstractTest):
         page.close()        
     
     
-    #
-    # Runs the diagnostic dome specific test case code.  
-    #
-    #
-    #    
+    ## Performs V&V on ismip-hom-a with 20km resolution  
+    #  
     def runLargeA(self):
         print("  Ismip-hom-A 20km test in progress....")  
         
@@ -133,11 +142,9 @@ class Ismip(AbstractTest):
 
         return 0 # zero returns success
     
-    #
-    # Runs the evolving dome specific test case code.
-    #
-    #
-    #
+    
+    ## Performs V&V on ismip-hom-c with 20km resolution  
+    #  
     def runLargeC(self):
         print("  Ismip-hom-C 20km test in progress....")  
         
@@ -161,11 +168,9 @@ class Ismip(AbstractTest):
 
         return 0 # zero returns success
     
-    #
-    # Runs the evolving dome specific test case code.
-    #
-    #
-    #
+    
+    ## Performs V&V on ismip-hom-a with 80km resolution  
+    #  
     def runSmallA(self):
         print("  Ismip-hom-A 80km test in progress....")  
         
@@ -189,11 +194,8 @@ class Ismip(AbstractTest):
 
         return 0 # zero returns success
     
-    #
-    # Runs the evolving dome specific test case code.
-    #
-    #
-    #
+    ## Performs V&V on ismip-hom-c with 80km resolution  
+    #  
     def runSmallC(self):
         print("  Ismip-hom-C 80km test in progress....")  
         
@@ -217,13 +219,14 @@ class Ismip(AbstractTest):
 
         return 0 # zero returns success
 
-    #
-    # Create the plots
-    #
+
+    ## Creates a plot based on the given input.
+    #  
+    #  input:
+    #    @param aOrC : A string containing either "a" or "c" depending on the test case.
+    #    @param size : The spatial resolution of the test in km.
     #
     def plot(self, aOrC, size):
-        #print "    Generating ismip-hom-" + aOrC + "-" + size + "km plot...." 
-        #print "    This is just a dummy method.  Updates coming soon!"
         
         ncl_path = livv.cwd + os.sep + "plots" 
         img_path = livv.imgDir + os.sep + "ismip"
@@ -250,9 +253,4 @@ class Ismip(AbstractTest):
             print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
                     + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
             exit(e.errno)    
-        
-        
-        
-        
-        
-        
+           

@@ -1,5 +1,5 @@
 '''
-Master script for shelf test cases
+Master module for shelf test cases
 
 Created on Dec 8, 2014
 
@@ -11,10 +11,15 @@ from livv import *
 from livv_bin.VV_test import *
 import jinja2
 
+## Main class for handling shelf test cases.
+#
+#  The shelf test cases inherit functionality from AbstractTest for checking 
+#  bit-for-bittedness as well as for parsing standard output from a model run.
+#  This class handles the confined and circular variations of the shelf cases.
+#
 class Shelf(AbstractTest):
     
-    #
-    # Constructor
+    ## Constructor
     #
     def __init__(self):
         # Mapping of result codes to results
@@ -30,17 +35,23 @@ class Shelf(AbstractTest):
         self.name = "shelf"
         self.description = "A blank description"
     
+    ## Return the name of the test
     #
-    # Return the name of the test
+    #  output:
+    #    @returns name : shelf
     #
     def getName(self):
         return self.name
     
+    
+    ## Runs the shelf specific test case.  
     #
-    # Runs the shelf specific test case.  Calls some shared resources and
-    # some circular/confined case specific methods.
+    #  When running a test this call will record the specific test case 
+    #  being run.  Each specific test case string is mapped to the 
+    #  method that will be used to run the actual test case.
     #
-    #
+    #  input:
+    #    @param testCase : the string indicator of the test to run
     #
     def run(self, test):
         # Common run 
@@ -60,9 +71,10 @@ class Shelf(AbstractTest):
         return
         
     
+    ## Creates the output test page
     #
-    #  Description
-    #
+    #  The generate method will create a shelf.html page in the output directory.
+    #  This page will contain a detailed list of the results from LIVV.  
     #
     def generate(self):
         templateLoader = jinja2.FileSystemLoader( searchpath=livv.templateDir )
@@ -99,11 +111,8 @@ class Shelf(AbstractTest):
         page.close()  
     
     
-    #
-    # Runs the diagnostic dome specific test case code.  
-    #
-    #
-    #    
+    ## Perform V&V on the confined shelf case
+    # 
     def runConfined(self):
         print("  Confined Shelf test in progress....")  
         
@@ -127,18 +136,13 @@ class Shelf(AbstractTest):
 
         return 0 # zero returns success
     
-    #
-    #
-    #
-    #
+    ## Plot some details for the confined shelf case
+    # 
     def plotConfined(self):
         print("    This is a placeholder method.")
     
-    #
-    # Runs the evolving dome specific test case code.
-    #
-    #
-    #
+    ## Perform V&V on the circular shelf case
+    # 
     def runCircular(self):
         print("  Circular Shelf test in progress....")  
         
@@ -162,9 +166,7 @@ class Shelf(AbstractTest):
 
         return 0 # zero returns success
     
-    #
-    #
-    #
-    #
+    ## Plot some details from the confined shelf case
+    # 
     def plotCircular(self):
         print("    This is a placeholder method.")

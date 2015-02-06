@@ -9,12 +9,10 @@ Created on Dec 23, 2014
 import os
 import livv
 
+## Load a configuration file from the configurations directory at the root of LIVV.
 #
-# Load a configuration file from the configurations directory at the root
-# of LIVV.
-#
-# Input:
-#    machineName: the name of the file to load from
+#  Input:
+#    @param machineName: the name of the file to load from
 #
 def load(machineName):
     # Tell the user where we are going to load from
@@ -31,12 +29,11 @@ def load(machineName):
     # Return all of the local variables, including what was read in
     return locals()
 
+
+## Write a configuration file to the configurations directory at the root of LIVV.
 #
-# Write a configuration file to the configurations directory at the root
-# of LIVV.
-#
-# Input:
-#    machineName: the name of the file to write to
+#  Input:
+#    @param machineName: the name of the file to write to
 #
 def save(machineName):
 

@@ -1,5 +1,5 @@
 '''
-Master script for dome test cases
+Master module for dome test cases
 
 Created on Dec 8, 2014
 
@@ -17,10 +17,15 @@ from livv import *
 from livv_bin.VV_test import *
 import jinja2
 
+## Main class for handling dome test cases.
+#
+#  The shelf test cases inherit functionality from AbstractTest for checking 
+#  bit-for-bittedness as well as for parsing standard output from a model run.
+#  This class handles evolving and diagnostic variations of the dome30 case.
+#
 class Dome(AbstractTest):
 
-    #
-    # Constructor
+    ## Constructor
     #
     def __init__(self):
         # Mapping of result codes to results
@@ -43,40 +48,47 @@ class Dome(AbstractTest):
                       " imposed by setting. A zero-flux boundary condition is" + \
                       " applied to the dome margins. "
     
+    
+    ## Returns the name of the test
     #
-    # Returns the name of the test
+    #  output:
+    #    @returns name : Dome
     #
     def getName(self):
         return self.name
     
+    
+    ## Runs the dome specific test case.  
     #
-    # Runs the dome specific test case.  Calls some shared resources and
-    # some diagnostic/evolving case specific methods.
+    #  When running a test this call will record the specific test case 
+    #  being run.  Each specific test case string is mapped to the 
+    #  method that will be used to run the actual test case.
     #
-    # Input:
-    #   testCase: the name of the dome test to run
+    #  input:
+    #    @param testCase : the string indicator of the test to run
     #
-    def run(self, test):
+    def run(self, testCase):
         # Common run     
-        self.domeTestsRun.append(test)
+        self.domeTestsRun.append(testCase)
         
         # Map the case names to the case functions
         callDict = {'dome30/diagnostic' : self.runDiagnostic,
                     'dome30/evolving' : self.runEvolving}
         
         # Call the correct function
-        if callDict.has_key(test):
-            callDict[test]()
+        if callDict.has_key(testCase):
+            callDict[testCase]()
         else: 
-            print("  Could not find test code for dome test: " + test)
+            print("  Could not find test code for dome test: " + testCase)
          
         # More common postprocessing
         return
         
     
+    ## Creates the output test page
     #
-    #  Description
-    #
+    #  The generate method will create a dome.html page in the output directory.
+    #  This page will contain a detailed list of the results from LIVV.  
     #
     def generate(self):
         templateLoader = jinja2.FileSystemLoader( searchpath=livv.templateDir )
@@ -112,11 +124,8 @@ class Dome(AbstractTest):
         page.write(outputText)
         page.close()        
     
-    #
-    # Runs the diagnostic dome specific test case code.  
-    #
-    #
-    #    
+    ## Perform V&V on the diagnostic dome30 case
+    # 
     def runDiagnostic(self):
         print("  Dome Diagnostic test in progress....")  
         
@@ -141,11 +150,8 @@ class Dome(AbstractTest):
         return 0 # zero returns success
     
     
-    #
-    # Generates plots for the diagnostic dome test case.  
-    #
-    #
-    #  
+    ## Plot some details from the diagnostic dome30 case
+    # 
     def plotDiagnostic(self):
         # Set up where we are going to look for things
         ncl_path = livv.cwd + os.sep + "plots" 
@@ -181,11 +187,8 @@ class Dome(AbstractTest):
         
         return
     
-    #
-    # Runs the evolving dome specific test case code.
-    #
-    #
-    #
+    ## Perform V&V on the evolving dome30 case
+    # 
     def runEvolving(self):
         print("  Dome Evolving test in progress....")  
         
@@ -210,11 +213,8 @@ class Dome(AbstractTest):
         return 0 # zero returns success
     
     
-    #
-    # Generates plots for the evolving dome test case.  
-    #
-    #
-    #  
+    ## Plot some details from the evolving dome30 case
+    # 
     def plotEvolving(self):
         # Set up where we are going to look for things
         ncl_path = livv.cwd + os.sep + "plots" 

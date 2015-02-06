@@ -24,7 +24,7 @@ if __name__ == '__main__':
     
     import livv_bin.VV_machines as machines
     from livv_bin.VV_test import AbstractTest
-    from livv_bin.VV_test import GenericTest
+    from livv_bin.VV_test import TestSummary
     from livv_bin.VV_dome import Dome
     from livv_bin.VV_ismip import Ismip
     from livv_bin.VV_gis import Gis
@@ -160,7 +160,16 @@ timestamp = time.strftime("%m-%d-%Y %H:%M:%S")
 user = getpass.getuser()
 
 # Modules that need to be loaded on big machines
-modules = ["python/2.7.5", "ncl/6.1.0", "nco/4.3.9", "python_matplotlib/1.3.1", "hdf5/1.8.11", "netcdf/4.1.3", "python_numpy/1.8.0", "python_netcdf4/1.0.6"]
+modules = [
+           "python/2.7.5", 
+           "ncl/6.1.0", 
+           "nco/4.3.9", 
+           "python_matplotlib/1.3.1", 
+           "hdf5/1.8.11", 
+           "netcdf/4.1.3", 
+           "python_numpy/1.8.0", 
+           "python_netcdf4/1.0.6"
+          ]
 
 # Test related variables
 dome = options.dome
@@ -283,7 +292,7 @@ if __name__ == '__main__':
     
     # Create the site index
     # TODO: Put this after tests are run so we can display some sort of summary 
-    newTest = GenericTest()
+    newTest = TestSummary()
     newTest.webSetup(testsRun, testCases)
     for test in testsRun:
         # Create a new instance of the specific test class (see testDict for the mapping)

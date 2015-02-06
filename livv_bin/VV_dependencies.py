@@ -1,5 +1,5 @@
 '''
-Dependency management for LIVV
+Dependency management module for LIVV
 
 Created on January 6, 2015
 
@@ -18,8 +18,8 @@ import livv
 from livv import *
 from numpy import outer
 
-#
-# Run all of the checks for dependencies required by LIVV
+
+## Run all of the checks for dependencies required by LIVV
 #
 def check():
     # Create a list to store all of the errors that were found
@@ -74,11 +74,12 @@ def check():
         print("Setting up environment....")
 
 
+## Checks if the system running LIVV uses modules to load dependencies.  
 #
-#  Checks if the system running LIVV uses modules to load dependencies.  If it does, this method
-#  goes through and makes sure that the correct modules are loaded.  Any modules that are needed
-#  but haven't been loaded are added to a module loader script that the user is prompted to source
-#  before running LIVV again.     
+#  If the system does use modules, this method goes through and makes 
+#  sure that the correct modules are loaded.  Any modules that are needed
+#  but haven't been loaded are added to a module loader script that the 
+#  user is prompted to source before running LIVV again.     
 #
 def checkModules():
     # Check to see if calling 'module list' is a real command
@@ -131,9 +132,12 @@ def checkModules():
             print(" found all required modules!")
 
 
+## Installs setuptools under the user python libraries
 #
-# Installs setuptools so we can access the easy_install command from inside of LIVV if  any 
-# python dependencies aren't satisfied
+#  If setuptools isn't found on a system it is probably the case that other 
+#  packages are also not available.   Once setuptools is installed we can 
+#  access the easy_install command from inside of LIVV if  any python 
+#  dependencies aren't satisfied
 #
 def installSetupTools():
     # Specify where to download from and figure out how big it's going to be

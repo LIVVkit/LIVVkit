@@ -1,5 +1,5 @@
 '''
-Master script for gis test cases
+Master module for Greenland Ice Sheet test cases
 
 Created on Dec 8, 2014
 
@@ -11,10 +11,15 @@ from livv import *
 from livv_bin.VV_test import *
 import jinja2
 
+## Main class for handling Greenland Ice Sheet test cases.
+#
+#  The GIS test cases inherit functionality from AbstractTest for checking 
+#  bit-for-bittedness as well as for parsing standard output from a model run.
+#  This class handles resolutions of 4km, 2km, and 1km.
+#
 class Gis(AbstractTest):
     
-    #
-    # Constructor
+    ## Constructor
     #
     def __init__(self):
         # Mapping of result codes to results
@@ -27,7 +32,8 @@ class Gis(AbstractTest):
         self.gisTestDetails = []
         self.gisFileTestDetails = []
     
-        self.name = "gis"
+        # Some information about the GIS tests
+        self.name = "Greenland Ice Sheet"
         self.description = "Attributes: This test case represents the Greenland ice" + \
                   " sheet (GIS) at different spatial resolutions (10km and 5km)." + \
                   " A quasi-no slip boundary condition is applied at the bed. As" + \
@@ -35,17 +41,24 @@ class Gis(AbstractTest):
                   " applied to the lateral margins. In all test cases, the ice" + \
                   " is taken as isothermal with a constant and uniform rate factor of."
     
+    
+    ## Return the name of the test
     #
-    # Return the name of the test
+    #  output:
+    #    @returns name : Greenland Ice Sheet
     #
     def getName(self):
         return self.name
     
+    
+    ## Runs the gis specific test case.  
     #
-    # Runs the gis specific test case.  Calls some shared resources and
-    # some resolution dependent case specific methods.
+    #  When running a test this call will record the specific test case 
+    #  being run.  Each specific test case string is mapped to the 
+    #  method that will be used to run the actual test case.
     #
-    #
+    #  input:
+    #    @param testCase : the string indicator of the test to run
     #
     def run(self, testCase):
         # Common run 
@@ -63,9 +76,10 @@ class Gis(AbstractTest):
         return
     
     
+    ## Creates the output test page
     #
-    #  Description
-    #
+    #  The generate method will create a gis.html page in the output directory.
+    #  This page will contain a detailed list of the results from LIVV.  
     #
     def generate(self):
         templateLoader = jinja2.FileSystemLoader( searchpath=livv.templateDir )
@@ -102,29 +116,20 @@ class Gis(AbstractTest):
         page.close()  
     
     
-    #
-    # Runs the large gis specific test case code.  
-    #
-    #
+    ## Perform V&V on the Greenland Ice Sheet with 1km resolution.  
     #    
     def runLarge():
         print("  Large gis test in progress....")
         return
     
-    #
-    # Runs the medium gis specific test case code.
-    #
-    #
-    #
+    ## Perform V&V on the Greenland Ice Sheet with 2km resolution.  
+    #    
     def runMedium():
         print("  Medium gis test in progress....")
         return
     
-    #
-    # Runs the small gis specific test case code.
-    #
-    #
-    #
+    ## Perform V&V on the Greenland Ice Sheet with 4km resolution.  
+    #    
     def runSmall():
         print("  Small gis test in progress....")
         return
