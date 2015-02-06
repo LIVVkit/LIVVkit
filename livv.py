@@ -117,7 +117,7 @@ parser.add_option('-b', '--benchmarkDir',
                   action='store',
                   type='string',
                   dest='benchmarkDir',
-                  default=os.path.dirname(os.path.abspath(__file__)) + "/reg_test/bench",
+                  default="NOT A REAL FOLDER",
                   help='Location of the input for running tests.')
 
 parser.add_option('-d', '--dataDir',
@@ -151,13 +151,18 @@ parser.add_option('-s', '--save',
 # I/O Related variables
 cwd = os.path.dirname(os.path.abspath(__file__))  
 inputDir = options.inputDir                       
-benchmarkDir = options.benchmarkDir
 dataDir = '/' + options.dataDir
 outputDir = options.outputDir                    
 imgDir = outputDir + "/imgs"                     
 comment = options.comment                         
 timestamp = time.strftime("%m-%d-%Y %H:%M:%S")
 user = getpass.getuser()
+
+# If the user specifies a benchmark dir honor it, otherwise default to inside of inputDir
+if options.benchmarkDir == "NOT A REAL FOLDER":
+    benchmarkDir = inputDir + os.sep + "bench"
+else:
+    benchmarkDir = options.benchmarkDir
 
 # Modules that need to be loaded on big machines
 modules = [
@@ -218,10 +223,18 @@ if __name__ == '__main__':
 
     # Check to make sure the directory structure is okay
     if not os.path.exists(inputDir):
-        print("Error: Could not find " + inputDir + " for input")
+        print("------------------------------------------------------------------------------")
+        print("ERROR: Could not find " + inputDir + " for input")
+        print("       Use the -i, -b, and -d flags to specify the locations of the model and comparison data.")
+        print("       See README.md for more details.")
+        print("------------------------------------------------------------------------------")
         exit(1)
     if not os.path.exists(benchmarkDir):
-        print("Error: Could not find " + benchmarkDir + " for input")
+        print("------------------------------------------------------------------------------")    
+        print("ERROR: Could not find " + benchmarkDir + " for input")
+        print("       Use the -i, -b, and -d flags to specify the locations of the model and comparison data.")
+        print("       See README.md for more details.")
+        print("------------------------------------------------------------------------------")
         exit(1)
         
     ###############################################################################

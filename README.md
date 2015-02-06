@@ -9,6 +9,7 @@ TODO: A list of things that need to be updated.
  * Detail options more clearly
  * Give some use-cases (ie if the user wants to save a new configuration with a custom name)
  * Add more about dependency management
+ * Give some examples about LIVV's capabilities
  * Add more to the contact section with the github address, etc
  * Add more to contact section for reporting bugs
  * Expand on what exactly LIVV does in the introduction
@@ -51,23 +52,27 @@ For a detailed list of options see the Options section, below.
 ===========
 A variety of options can be used with LIVV.  A detailed list follows:
 
-|	Option								| Description														|
-| ------------------------------------: | :---------------------------------------------------------------- |
-|  -h, --help            				| 	Show the help message											|
-|  --dome=DOME           				| 	Specifies the Dome tests to run.								|
-|  --gis=GIS             				| 	Specifies the Greenland Ice Sheet tests to run					|
-|  --ismip=ISMIP         				|	Specifies the ismip tests to run								|
-|  --shelf=SHELF  				      	| 	Specifies the shelf tests to run								|
-|  --comment=COMMENT     				| 	Log a comment about this run									|
-|  -o OUTPUTDIR, --outputDir=OUTPUTDIR 	|	Location to output the LIVV webpages.							|
-|  -i INPUTDIR, --inputDir=INPUTDIR 	|	Location of the input for running tests.						|
-|  -b BENCHDIR, --benchmarkDir=BENCHDIR | 	Location of the input for running tests.						|
-|  -d DATADIR, --dataDir=DATADIR		|	Subdirectory where data is stored								|
-|  -m MACHINE, --machine=MACHINE		|	Load a preconfigured set of options for a specific machine.		|
-|  -s, --save            				|	Store the configuration being run with the given machine name.	|
+|	Option	| Description |
+| ------------: | :-------------------------------------------------------------------------------------------------------------------------------- |
+|  -h, --help |	Show the help message |
+|  --dome=DOME | Specifies the Dome tests to run. |
+|  --gis=GIS | Specifies the Greenland Ice Sheet tests to run					|
+|  --ismip=ISMIP | Specifies the ismip tests to run								|
+|  --shelf=SHELF | Specifies the shelf tests to run								|
+|  --comment=COMMENT |	Log a comment about this run									|
+|  -o OUTPUTDIR, --outputDir=OUTPUTDIR | Location to output the LIVV webpages.							|
+|  -i INPUTDIR, --inputDir=INPUTDIR | Location of the input for running tests.						|
+|  -b BENCHDIR, --benchmarkDir=BENCHDIR | Location of the input for running tests.						|
+|  -d DATADIR, --dataDir=DATADIR | Subdirectory where data is stored								|
+|  -m MACHINE, --machine=MACHINE | Load a preconfigured set of options for a specific machine.		|
+|  -s, --save |	Store the configuration being run with the given machine name.	|
 
 
   Contact
 ===========
-Kate Evans : evanskj@ornl.gov
 Andrew Bennett : bennettar@ornl.gov
+
+Joseph Kennedy : kennedyjh@ornl.gov
+
+Kate Evans : evanskj@ornl.gov
+
