@@ -1,43 +1,37 @@
-<HTML>
-  <HEAD>
-    {% include 'header.html' %}
-    
-    <body>
-      <h2>{{testName}}</h2>
-      
-      <h3>Details</h3>
-      <p>
-        {{testDescription}}
-      </p>
-      
-      <h3>Plots</h3>
-      <p>
-        {% for img in testImages %}
-          {% if img != [] %} 
-            <img src="{{imgDir}}/{{img}}" alt="{{imgDir}}/{{img}}">
-            <br>
-          {% endif %}
+{% include 'header.html' %}
+
+  <h2>{{testName}}</h2>
+  
+  <h3>Details</h3>
+  <p>
+    {{testDescription}}
+  </p>
+  
+  <h3>Plots</h3>
+  <p>
+    {% for img in testImages %}
+      {% if img != [] %} 
+        <img src="{{imgDir}}/{{img}}" alt="{{imgDir}}/{{img}}" style="height:75%;">
+        <br>
+      {% endif %}
+    {% endfor %}
+  </p>
+  
+  <h3>Results</h3>
+    {% for case in testsRun %}
+      <h4>{{case}}</h4>
+      <p id="bold"> Bit for Bit </p>
+        {% for file, details in bitForBitDetails[case].iteritems() %}
+          <p id="tabbed">{{file}} : <a id={{details}}>{{details}}</a></p>
         {% endfor %}
-      </p>
-      
-      <h3>Results</h3>
-        {% for case in testsRun %}
-          <h4>{{case}}</h4>
-          <p id="bold"> Bit for Bit </p>
-            {% for file, details in bitForBitDetails[case].iteritems() %}
-              <p id="tabbed">{{file}} : <a id={{details}}>{{details}}</a></p>
-            {% endfor %}
-          <p id="bold"> Standalone </p>
-            {% for file, details in testDetails %}
-              <p>File : {{file}}</p>
-              {% for key, value in details.iteritems() %}
-                <p id="tabbed"> {{key}} : {{value}} </p>
-              {% endfor %}
-            {% endfor %}
+      <p id="bold"> Standalone </p>
+        {% for file, details in testDetails %}
+          <p>File : {{file}}</p>
+          {% for key, value in details.iteritems() %}
+            <p id="tabbed"> {{key}} : {{value}} </p>
+          {% endfor %}
         {% endfor %}
-      <a href="../index.html">Home</a> 
-    </body>
+    {% endfor %}
+  <a href="../index.html">Home</a> 
     
-    {% include 'footer.html' %}
-  </HEAD>
-</HTML>
+{% include 'footer.html' %}

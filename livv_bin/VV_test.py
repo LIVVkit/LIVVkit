@@ -237,12 +237,14 @@ class TestSummary(AbstractTest):
     #
     def webSetup(self, testsRun, testCases):   
         # Create directory structure
-        for siteDir in [livv.indexDir, livv.testDir, livv.imgDir]:
+        for siteDir in [livv.indexDir, livv.testDir]:
             if not os.path.exists(siteDir):
                 os.mkdir(siteDir);
-        # Copy over css from source
+        # Copy over css && imgs directories from source
         if os.path.exists(livv.indexDir + "/css"): shutil.rmtree(livv.indexDir + "/css")
         shutil.copytree(livv.websiteDir + "/css", livv.indexDir + "/css")
+        if os.path.exists(livv.indexDir + "/imgs"): shutil.rmtree(livv.indexDir + "/imgs")
+        shutil.copytree(livv.websiteDir + "/imgs", livv.indexDir + "/imgs")
         
         # Where to look for page templates
         templateLoader = jinja2.FileSystemLoader( searchpath=livv.templateDir )
@@ -262,7 +264,8 @@ class TestSummary(AbstractTest):
                         "timestamp" : livv.timestamp,
                         "user" : livv.user,
                         "testCases" : testCases,
-                        "cssDir" : "css" }
+                        "cssDir" : "css", 
+                        "imgDir" : "imgs"}
         
         # Write out the index page
         outputText = template.render( templateVars )
