@@ -1,4 +1,4 @@
-#!/opt/local/bin/python2.7
+# !/opt/local/bin/python2.7
 # #!/usr/bin/env
 
 import sys

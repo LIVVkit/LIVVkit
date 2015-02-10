@@ -1,0 +1,53 @@
+body {
+	background: #ffffff;
+    border-radius: 1em;
+    padding: 1em;
+    position: absolute;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-75%, 0%); 
+    width: 50%;
+}
+
+h1 {
+    color: black;
+    text-align: center;
+    margin-left: 0px;
+}
+
+h2 {
+    color: black;
+    margin-left: 50px;
+}
+
+h3 {
+    color: black;
+    margin-left: 10px;	
+}
+
+p, a, li {
+    margin-left: 30px;	
+}
+
+#fancy {
+	font-size: medium;
+	text-align: center;
+}
+
+#bold {
+	font-weight: 600;
+}
+
+#tabbed {
+	margin-left: 50px;
+}
+
+#SUCCESS {
+	color: green;
+	font-weight: 600;
+}
+
+#FAILURE {
+	color: red;
+	font-weight: 600;
+}
