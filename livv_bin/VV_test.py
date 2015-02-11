@@ -16,6 +16,8 @@ import shutil
 import collections
 import netCDF4
 from netCDF4 import Dataset
+import matplotlib.pyplot as pyplot
+import matplotlib.gridspec as gridspec
 import glob
 import numpy
 import jinja2
@@ -73,6 +75,7 @@ class AbstractTest(object):
         # Mapping of result codes to results
         result = {-1 : 'N/A', 0 : 'SUCCESS', 1 : 'FAILURE'}
         bitDict = dict()
+        
                 
         # First, make sure that there is test data, otherwise not it.
         modelPath = livv.inputDir
@@ -98,6 +101,8 @@ class AbstractTest(object):
         # Go through and check if any differences occur
         for same in list(sameList):
             change = 0
+            absDifference = 0
+            plotVars = []
             modelFile = modelPath + test + livv.dataDir + '/' + same
             benchFile = benchPath + test + livv.dataDir + '/' + same
             
@@ -123,14 +128,21 @@ class AbstractTest(object):
                 data = diffData.variables['thk'][:]
                 #print sum(sum(sum(data)))
                 if data.any():
+                    absDifference += sum(sum(sum(sum(data))))
+                    plotVars.append('thk')
                     change = 1
                                                     
             # Check if any data in velnorm has changed, if it exists
             if 'velnorm' in diffVars and diffData.variables['velnorm'].size != 0:
                 data = diffData.variables['velnorm'][:]
-                #print sum(sum(sum(sum(data))))
                 if data.any():
+                    absDifference += sum(sum(sum(sum(data))))
+                    plotVars.append('velnorm')
                     change = 1
+            
+            # If there were any differences plot them out
+            if change:
+                self.plotDifferences(plotVars, modelFile, benchFile, modelPath + os.pathsep + 'temp.nc')
 
             # Remove the temp file
             try:
@@ -139,11 +151,59 @@ class AbstractTest(object):
                 print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
                       + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                 exit(e.errno)
+
     
-            bitDict[same] = result[change]
+            bitDict[same] = [result[change], "{:.4g}".format(absDifference)]
         # If anything has changed, return 1, otherwise returns 0
         return bitDict
 
+
+    ## plotDifferences
+    #
+    #  When a bit4bit test fails the differences between the datasets need to be
+    #  printed out so that a user can inspect them.  
+    #
+    #  input:
+    #    @param plotVars: the variables which differ between datasets
+    #    @param modelFile: path to the model output NetCDF file
+    #    @param benchFile: path to the benchmark output NetCDF file
+    #
+    def plotDifferences(self, plotVars, modelFile, benchFile, differenceFile):
+        pyplot.figure(1, figsize=(12, 4), dpi=80)
+        pyplot.clf()
+        nSubplots=len(plotVars)
+        for idx, var in enumerate(plotVars):
+            modelData = Dataset(modelFile, 'r').variables[var][:][0][0]
+            benchData = Dataset(benchFile, 'r').variables[var][:][0][0]
+            diffData = Dataset(differenceFile, 'r').variables[var][:][0][0]
+            max = numpy.amax([numpy.amax(modelData), numpy.amax(benchData)])
+            min = numpy.amin([numpy.amin(modelData), numpy.amin(benchData)]) 
+            
+            # Plot the model output
+            pyplot.subplot(nSubplots,3,1+(idx*nSubplots))
+            pyplot.xlabel("Model Data")
+            pyplot.ylabel(var)
+            pyplot.imshow(modelData, vmin=min, vmax=max, interpolation="bessel")
+            pyplot.colorbar()
+            pyplot.tight_layout()
+            
+            # Plot the benchmark data
+            pyplot.subplot(nSubplots,3,2+(idx*nSubplots))
+            pyplot.xlabel("Benchmark Data")
+            pyplot.imshow(benchData, vmin=min, vmax=max, interpolation="bessel")
+            pyplot.colorbar()
+            pyplot.tight_layout()
+            
+            # Plot the difference
+            pyplot.subplot(nSubplots, 3,3+(idx*nSubplots))
+            pyplot.xlabel("Difference")
+            pyplot.imshow(diffData, interpolation="bessel")
+            pyplot.colorbar()
+            pyplot.tight_layout()
+        
+        # Save the figure
+        pyplot.savefig(livv.imgDir + os.sep + self.getName() + os.sep + "bit4bit" + os.sep + modelFile.split(os.sep)[-1] + ".png")
+        
 
     ## Definition for the general parser for standard output
     #
@@ -262,8 +322,10 @@ class TestSummary(AbstractTest):
         
         # Set up imgs directory to have sub-directories for each test
         for test in testsRun:
-            if not os.path.exists(imgDir + "/" + test):
-                os.mkdir(imgDir + "/" + test)
+            if not os.path.exists(imgDir + os.sep + test):
+                os.mkdir(imgDir + os.sep + test)
+                if not os.path.exists(imgDir + os.sep + test + os.sep + "bit4bit"):
+                    os.mkdir(imgDir + os.sep + test + os.sep + "bit4bit")
         
         templateVars = {"indexDir" : livv.indexDir,
                         "testsRun" : testsRun,

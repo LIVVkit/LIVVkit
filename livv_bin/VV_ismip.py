@@ -140,7 +140,7 @@ class Ismip(AbstractTest):
         # Run bit for bit test
         self.ismipBitForBitDetails['ismip-hom-a/20km'] = self.bit4bit('/ismip-hom-a/20km')
         for key, value in self.ismipBitForBitDetails['ismip-hom-a/20km'].iteritems():
-            print ("    {:<30} {:<10}".format(key,value))
+            print ("    {:<30} {:<10}".format(key,value[0]))
 
         return 0 # zero returns success
     
@@ -166,7 +166,7 @@ class Ismip(AbstractTest):
         # Run bit for bit test
         self.ismipBitForBitDetails['ismip-hom-c/20km'] = self.bit4bit('/ismip-hom-c/20km')
         for key, value in self.ismipBitForBitDetails['ismip-hom-c/20km'].iteritems():
-            print ("    {:<30} {:<10}".format(key,value))
+            print ("    {:<30} {:<10}".format(key,value[0]))
 
         return 0 # zero returns success
     
@@ -192,7 +192,7 @@ class Ismip(AbstractTest):
         # Run bit for bit test
         self.ismipBitForBitDetails['ismip-hom-a/80km'] = self.bit4bit('/ismip-hom-a/80km')
         for key, value in self.ismipBitForBitDetails['ismip-hom-a/80km'].iteritems():
-            print ("    {:<30} {:<10}".format(key,value))
+            print ("    {:<30} {:<10}".format(key,value[0]))
 
         return 0 # zero returns success
     
@@ -217,7 +217,7 @@ class Ismip(AbstractTest):
         # Run bit for bit test
         self.ismipBitForBitDetails['ismip-hom-c/80km'] = self.bit4bit('/ismip-hom-c/80km')
         for key, value in self.ismipBitForBitDetails['ismip-hom-c/80km'].iteritems():
-            print ("    {:<30} {:<10}".format(key,value))
+            print ("    {:<30} {:<10}".format(key,value[0]))
 
         return 0 # zero returns success
 

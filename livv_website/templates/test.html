@@ -22,12 +22,37 @@
       <h4>{{case}}</h4>
       
       
-      <p id="bold"> Bit for Bit </p>
-        <table id="tabbed">
-        {% for file, details in bitForBitDetails[case].iteritems() %}
-          <tr><td style="text-align: left">{{file}}</td>  <td><a id={{details}}>{{details}}</a></td></tr>
-        {% endfor %}
-        </table>
+      <p id="bold"> 
+        Bit for Bit 
+        <a style="font-size: small; font-style: italic">
+          Click on failures to see difference plots
+        </a> 
+      </p>
+
+      <table id="tabbed">
+      <tr>
+        <th>Output File</th>
+        <th>Status</th>
+        <th>Total Error</th>
+      </tr>
+      {% for file, details in bitForBitDetails[case].iteritems() %}
+        <tr>
+          <td style="text-align: left">
+            {{file}}
+          </td>
+          <td>
+            <a id={{details[0]}}
+            {% if details[0] == "FAILURE" %}
+            	href={{imgDir}}/bit4bit/{{file}}.png
+            {% endif %}
+            >{{details[0]}}</a>
+          </td>
+          {% if details[0] == "FAILURE" %}
+          	<td>{{details[1]}}</td>
+          {% endif %}
+        </tr>
+      {% endfor %}
+      </table>
         
         
       <p id="bold"> Standalone </p>

@@ -33,7 +33,7 @@ class Gis(AbstractTest):
         self.gisFileTestDetails = []
     
         # Some information about the GIS tests
-        self.name = "Greenland Ice Sheet"
+        self.name = "gis"
         self.description = "Attributes: This test case represents the Greenland ice" + \
                   " sheet (GIS) at different spatial resolutions (10km and 5km)." + \
                   " A quasi-no slip boundary condition is applied at the bed. As" + \

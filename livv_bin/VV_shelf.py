@@ -134,7 +134,7 @@ class Shelf(AbstractTest):
         # Run bit for bit test
         self.shelfBitForBitDetails['confined-shelf'] = self.bit4bit('/confined-shelf')
         for key, value in self.shelfBitForBitDetails['confined-shelf'].iteritems():
-            print ("    {:<30} {:<10}".format(key, value))
+            print ("    {:<30} {:<10}".format(key, value[0]))
 
         return 0  # zero returns success
     
@@ -164,7 +164,7 @@ class Shelf(AbstractTest):
         # Run bit for bit test
         self.shelfBitForBitDetails['circular-shelf'] = self.bit4bit('/circular-shelf')
         for key, value in self.shelfBitForBitDetails['circular-shelf'].iteritems():
-            print ("    {:<30} {:<10}".format(key, value))
+            print ("    {:<30} {:<10}".format(key, value[0]))
 
         return 0  # zero returns success
     

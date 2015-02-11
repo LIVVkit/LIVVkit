@@ -39,7 +39,7 @@ class Dome(AbstractTest):
         self.domeFileTestDetails = []
         
         # Describe what the dome tests are all about
-        self.name = "Dome"
+        self.name = "dome"
         self.description = "3-D paraboloid dome of ice with a circular, 60 km" + \
                       " diameter base sitting on a flat bed. The horizontal" + \
                       " spatial resolution studies are 2 km, 1 km, 0.5 km" + \
@@ -150,7 +150,7 @@ class Dome(AbstractTest):
         # Run bit for bit test
         self.domeBitForBitDetails['dome' + resolution + '/diagnostic'] = self.bit4bit('/dome' + resolution + '/diagnostic')
         for key, value in self.domeBitForBitDetails['dome' + resolution + '/diagnostic'].iteritems():
-            print ("    {:<30} {:<10}".format(key,value))
+            print ("    {:<30} {:<10}".format(key,value[0]))
 
         return 0 # zero returns success
     
@@ -213,7 +213,7 @@ class Dome(AbstractTest):
         # Run bit for bit test
         self.domeBitForBitDetails['dome' + resolution + '/evolving'] = self.bit4bit('/dome' + resolution + '/evolving')
         for key, value in self.domeBitForBitDetails['dome' + resolution + '/evolving'].iteritems():
-            print ("    {:<30} {:<10}".format(key,value))
+            print ("    {:<30} {:<10}".format(key,value[0]))
 
         return 0 # zero returns success
     

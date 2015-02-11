@@ -52,7 +52,7 @@ def check():
     # Make sure all imports are going to work
     # And if they don't build a copy of the ones that are needed
     print("    Checking for external libraries....")
-    libraryList = ["jinja2", "netCDF4", "numpy"]
+    libraryList = ["jinja2", "netCDF4", "numpy", "matplotlib"]
     for lib in libraryList:
         try:
             __import__(lib)
