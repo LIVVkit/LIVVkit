@@ -46,6 +46,7 @@ import platform
 import socket
 
 from optparse import OptionParser
+from collections import OrderedDict
 
 ###############################################################################
 #                                  Options                                    #
@@ -175,6 +176,17 @@ modules = [
            "python_numpy/1.8.0", 
            "python_netcdf4/1.0.6"
           ]
+
+# A list of the information that should be looked for in the stdout of model output
+parserVars = [
+              'Dycore Type', 
+              'Number of processors',
+              'Number of timesteps',
+              'Avg convergence rate'
+              ]
+parserDict = OrderedDict()
+for var in parserVars: parserDict[var] = None
+parserVars = parserDict
 
 # Test related variables
 dome = options.dome

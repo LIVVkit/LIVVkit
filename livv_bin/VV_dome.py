@@ -120,6 +120,7 @@ class Dome(AbstractTest):
                         "testDescription" : self.description,
                         "testsRun" : self.domeTestsRun,
                         "bitForBitDetails" : self.domeBitForBitDetails,
+                        "testHeader" : livv.parserVars,
                         "testDetails" : self.domeFileTestDetails,
                         "imgDir" : imgDir,
                         "testImages" : testImages}

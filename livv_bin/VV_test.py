@@ -20,6 +20,7 @@ import glob
 import numpy
 import jinja2
 from abc import ABCMeta, abstractmethod
+from collections import OrderedDict
 import livv
 from livv import *
 
@@ -151,7 +152,7 @@ class AbstractTest(object):
     #
     def parse(self, file):
         # Initialize a dictionary that will store all of the information
-        testDict = dict()
+        testDict = livv.parserVars.copy()
         
         # Set up variables that we can use to map data and information
         dycoreTypes = {"0" : "Glide", "1" : "Glam", "2" : "Glissade", "3" : "AlbanyFelix", "4" : "BISICLES"}
@@ -206,6 +207,11 @@ class AbstractTest(object):
         testDict['Number of timesteps'] = currentStep
         if avgItersToConverge > 0:
             testDict['Average iterations to converge'] = avgItersToConverge 
+        
+        if testDict['Dycore Type'] == None: testDict['Dycore Type'] = 'Unavailable'
+        for key in testDict.keys():
+            if testDict[key] == None:
+                testDict[key] = 'N/A'
         
         return testDict     
 

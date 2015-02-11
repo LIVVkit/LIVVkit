@@ -106,6 +106,7 @@ class Gis(AbstractTest):
                         "cssDir" : cssDir,
                         "testDescription" : self.description,
                         "testsRun" : self.gisTestsRun,
+                        "testHeader" : livv.parserVars,
                         "bitForBitDetails" : self.gisBitForBitDetails,
                         "testDetails" : self.gisFileTestDetails,
                         "imgDir" : imgDir,

@@ -108,6 +108,7 @@ class Ismip(AbstractTest):
                         "cssDir" : livv.cssDir,
                         "testDescription" : self.description,
                         "testsRun" : self.ismipTestsRun,
+                        "testHeader" : livv.parserVars,
                         "bitForBitDetails" : self.ismipBitForBitDetails,
                         "testDetails" : self.ismipFileTestDetails,
                         "imgDir" : imgDir,
