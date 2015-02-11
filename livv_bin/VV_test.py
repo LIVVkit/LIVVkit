@@ -263,6 +263,7 @@ class TestSummary(AbstractTest):
                         "testsRun" : testsRun,
                         "timestamp" : livv.timestamp,
                         "user" : livv.user,
+                        "comment" : livv.comment,
                         "testCases" : testCases,
                         "cssDir" : "css", 
                         "imgDir" : "imgs"}

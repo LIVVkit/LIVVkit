@@ -6,16 +6,7 @@ html {
     background-size: cover;
 }
 
-body {
-    background: #ffffff;
-    border-radius: 1em;
-    padding: 1em;
-    position: absolute;
-    left: 50%;
-    margin-right: -50%;
-    transform: translate(-75%, 0%); 
-    width: 50%;
-}
+
 
 img { 
 	max-width: 100%;
@@ -26,7 +17,6 @@ img {
 h1 {
     color: black;
     text-align: center;
-    margin-left: 0px;
 }
 
 h2 {
@@ -41,6 +31,39 @@ h3 {
 
 p, a, li {
     margin-left: 30px;	
+}
+
+#page {
+    background-color: rgba(255,255,255,0.8);
+    border-radius: 5px;
+    padding: 5px;
+    margin-left: 15%;
+    width: 60%;
+}
+
+#header {
+    width: calc(100% + 10px);
+    height: 5em;
+    transform: translate(-5px,-5px);   
+}
+
+#header-content {
+	float: left;
+    margin-left: 15%;
+}
+
+#info {
+	float: right;
+	padding: 5px;
+	margin-right: 20%;
+}
+
+#content {
+
+}
+
+#footer {
+	
 }
 
 #fancy {

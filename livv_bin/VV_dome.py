@@ -113,6 +113,7 @@ class Dome(AbstractTest):
         # Set up the template variables  
         templateVars = {"timestamp" : livv.timestamp,
                         "user" : livv.user,
+                        "comment" : livv.comment,
                         "testName" : self.getName(),
                         "indexDir" : indexDir,
                         "cssDir" : cssDir,
