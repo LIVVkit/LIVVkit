@@ -19,7 +19,7 @@ import jinja2
 
 ## Main class for handling dome test cases.
 #
-#  The shelf test cases inherit functionality from AbstractTest for checking 
+#  The dome test cases inherit functionality from AbstractTest for checking 
 #  bit-for-bittedness as well as for parsing standard output from a model run.
 #  This class handles evolving and diagnostic variations of the dome case.
 #

@@ -18,11 +18,10 @@ from livv import *
 from livv_bin.VV_test import *
 import jinja2
 
-## Main class for handling dome test cases.
+## Main class for handling performance test cases.
 #
-#  The shelf test cases inherit functionality from AbstractTest for checking 
+#  The performance test cases inherit functionality from AbstractTest for checking 
 #  bit-for-bittedness as well as for parsing standard output from a model run.
-#  This class handles evolving and diagnostic variations of the dome case.
 #
 class Performance(AbstractTest):
 
@@ -53,7 +52,7 @@ class Performance(AbstractTest):
         return self.name
     
     
-    ## Runs the dome specific test case.  
+    ## Runs the performance specific test case.  
     #
     #  When running a test this call will record the specific test case 
     #  being run.  Each specific test case string is mapped to the 
