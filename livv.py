@@ -29,6 +29,7 @@ if __name__ == '__main__':
     from livv_bin.VV_ismip import Ismip
     from livv_bin.VV_gis import Gis
     from livv_bin.VV_shelf import Shelf
+    from livv_bin.VV_performance import Performance
     
 
     
@@ -37,7 +38,8 @@ if __name__ == '__main__':
     testDict = { "dome" : Dome,
                  "ismip" : Ismip,
                  "gis" : Gis,
-                 "shelf" : Shelf
+                 "shelf" : Shelf,
+                 "perf" : Performance
                }
 import os
 import time
@@ -92,6 +94,14 @@ parser.add_option('--shelf',
                   choices=['none', 'confined', 'circular', 'all'], 
                   default='none', 
                   help='specifies the shelf tests to run')
+
+parser.add_option('--performance', 
+                  action='store', 
+                  type='choice', 
+                  dest='perf', 
+                  choices=['none', 'small', 'medium', 'large'], 
+                  default='none', 
+                  help='specifies the performance tests to run')
 
 parser.add_option('--comment', 
                   action='store', 
@@ -194,6 +204,7 @@ ismip = options.ismip
 gis = options.gis
 shelf = options.shelf
 validation = options.validation
+perf = options.perf
 
 # Website related variables
 websiteDir = os.path.dirname(__file__) + "/livv_website"
@@ -269,9 +280,9 @@ if __name__ == '__main__':
     
     # gis tests
     gisCases = {'none'   : [],
-                'small'  : ['RUN_GIS_4KM'],
-                'medium' : ['RUN_GIS_2KM'],
-                'large'  : ['RUN_GIS_1KM']}
+                'small'  : ['gis_4km'],
+                'medium' : ['gis_2km'],
+                'large'  : ['gis_1km']}
     runGisCase = gisCases[gis]
     
     # validation tests
@@ -286,13 +297,21 @@ if __name__ == '__main__':
                   'circular' : ['circular-shelf'],
                   'all' : ['confined-shelf', 'circular-shelf']}
     runShelfCase = shelfCases[shelf]
+    
+    # performance tests
+    perfCases = {'none' : [],
+                 'small' : ['dome60', 'gis_4km'],
+                 'medium' : ['dome120', 'gis_2km'],
+                 'large' : ['dome240', 'gix_4km']}
+    runPerfCase = perfCases[perf]
        
     # Describes how to group each test case in with more general groupings
-    tests = ["dome", "ismip", "gis", "shelf"]
+    tests = ["dome", "ismip", "gis", "shelf", "perf"]
     testMapping = {"dome" : runDomeCase,
                    "ismip" : runIsmipCase,
                    "gis" : runGisCase,
-                   "shelf" : runShelfCase}
+                   "shelf" : runShelfCase,
+                   "perf" : runPerfCase}
 
     # Group the tests into their respective cases
     testsRun = []
@@ -304,7 +323,7 @@ if __name__ == '__main__':
     #                               Run Test Cases                                #
     ###############################################################################
     # Flattens to a list of all test cases being run
-    testCases = [test for sublist in [runDomeCase, runIsmipCase, runGisCase, runValidationCase, runShelfCase] for test in sublist]
+    testCases = [test for sublist in [runDomeCase, runIsmipCase, runGisCase, runValidationCase, runShelfCase, runPerfCase] for test in sublist]
     print("Running tests: \n"),
     for test in testCases: print("  " + test + "\n"),
     print("------------------------------------------------------------------------------")

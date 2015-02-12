@@ -1,8 +1,8 @@
 {% include 'header.html' %}
-	
-		<h2>Content Title</h2>
-		<p>This will feature content about the site. </p>
-		
+	<br>
+	<a href="http://blizzard.ornl.gov" class="button">Blizzard</a>
+  	<a href="http://oceans11.lanl.gov/cism/" class="button">CISM</a>
+	<hr>
 		<h2>Summary</h2>
 		  <p>Tests run:</p>
 		  <ul>
@@ -12,7 +12,7 @@
 		  </ul>
 		<h2>Test Results</h2>
 		  {% for test in testsRun %}
-		     <a href="tests/{{test}}.html">Results for {{test}}</a> 
+		     <a href="tests/{{test}}.html" class="button">Results for {{test}}</a> 
 		     <br>
 		  {% endfor %}
 	
