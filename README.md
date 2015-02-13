@@ -1,7 +1,7 @@
 ===================================================================================================
-  Land Ice Verification and Validation Test Suite Readme (Experimental Branch)
+  Land Ice Verification and Validation Test Suite Readme
 ===================================================================================================
-Last updated 1/26/2015
+Last updated 2/12/2015
 If this document is out of date send us an email!  See the contact section below for more details.
 
 TODO: A list of things that need to be updated.
@@ -10,8 +10,6 @@ TODO: A list of things that need to be updated.
  * Give some use-cases (ie if the user wants to save a new configuration with a custom name)
  * Add more about dependency management
  * Give some examples about LIVV's capabilities
- * Add more to the contact section with the github address, etc
- * Add more to contact section for reporting bugs
  * Expand on what exactly LIVV does in the introduction
  * ??? Tell us what needs adding! ???
 
@@ -34,6 +32,7 @@ LIVV depends on several software packages and libraries. We are working towards 
  * HDF5 1.8.6
  * NCL (NCAR Command Language) 6.1.2
  * python-netCDF4
+ * python-matplotlib
  * python-numpy
  * python-jinja2
 
@@ -59,9 +58,11 @@ A variety of options can be used with LIVV.  A detailed list follows:
 |  --gis=GIS | Specifies the Greenland Ice Sheet tests to run					|
 |  --ismip=ISMIP | Specifies the ismip tests to run								|
 |  --shelf=SHELF | Specifies the shelf tests to run								|
+|  --performance=PERF | Specifies the performance tests to run                      |
 |  --comment=COMMENT |	Log a comment about this run									|
 |  -o OUTPUTDIR, --outputDir=OUTPUTDIR | Location to output the LIVV webpages.							|
 |  -i INPUTDIR, --inputDir=INPUTDIR | Location of the input for running tests.						|
+|  -p PERFDIR, --performanceDir=PERFDIR | Location of the input for performance tests.                  |
 |  -b BENCHDIR, --benchmarkDir=BENCHDIR | Location of the input for running tests.						|
 |  -d DATADIR, --dataDir=DATADIR | Subdirectory where data is stored								|
 |  -m MACHINE, --machine=MACHINE | Load a preconfigured set of options for a specific machine.		|
@@ -70,9 +71,18 @@ A variety of options can be used with LIVV.  A detailed list follows:
 
   Contact
 ===========
-Andrew Bennett : bennettar@ornl.gov
+Bug reports/Feature Requests:
+  https://github.com/ACME-Climate/LIVV/issues
 
-Joseph Kennedy : kennedyjh@ornl.gov
+Andrew Bennett : 
+  Github: arbennett
+  Email:  bennettar@ornl.gov
 
-Kate Evans : evanskj@ornl.gov
+Joseph Kennedy : 
+  Github: jhkennedy
+  Email:  kennedyjh@ornl.gov
+
+Kate Evans : 
+  Github: kevans32
+  Email: evanskj@ornl.gov
 

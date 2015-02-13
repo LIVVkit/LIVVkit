@@ -137,6 +137,14 @@ parser.add_option('-i', '--inputDir',
                   default=os.path.dirname(os.path.abspath(__file__)) + "/reg_test",
                   help='Location of the input for running tests.')
 
+parser.add_option('-p', '--performanceDir',
+                  action='store',
+                  type='string',
+                  dest='performanceDir',
+                  default=os.path.dirname(os.path.abspath(__file__)) + "/perf_test",
+                  help='Location of the input for running performance tests.')
+
+
 parser.add_option('-b', '--benchmarkDir',
                   action='store',
                   type='string',
@@ -172,7 +180,8 @@ parser.add_option('-s', '--save',
 
 # I/O Related variables
 cwd = os.path.dirname(os.path.abspath(__file__))  
-inputDir = options.inputDir                       
+inputDir = options.inputDir
+performanceDir = options.performanceDir                       
 dataDir = '/' + options.dataDir
 outputDir = options.outputDir                    
 imgDir = outputDir + "/imgs"                     
