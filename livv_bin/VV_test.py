@@ -1,9 +1,18 @@
 '''
-Runs a test
+Contains two classes for generalized testing in LIVV.
+
+The AbstractTest class defines several methods that each test class must implement, 
+as well as provides bit for bit and stdout parsing capabilities which are inherited
+by all derived test classes.  
+
+The TestSummary is a dummy class that is used to generate the index of the output.
+It implements a method called webSetup that creates the index with a short summary
+of the execution stats.  All other methods are dummies.  Further implementations
+similar to TestSummary are discouraged to avoid breaking the AbstractTest template. 
 
 Created on Dec 8, 2014
 
-@author: bzq
+@author: arbennett
 '''
 
 import sys

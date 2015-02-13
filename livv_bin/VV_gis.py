@@ -3,7 +3,7 @@ Master module for Greenland Ice Sheet test cases
 
 Created on Dec 8, 2014
 
-@author: bzq
+@author: arbennett
 '''
 
 import livv

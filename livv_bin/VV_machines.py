@@ -3,7 +3,7 @@ Contains the specifications for how to handle preconfigured machine options.
 
 Created on Dec 23, 2014
 
-@author: bzq
+@author: arbennett
 '''
 
 import os

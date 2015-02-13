@@ -3,7 +3,7 @@ Dependency management module for LIVV
 
 Created on January 6, 2015
 
-@author: bzq
+@author: arbennett
 '''
 
 #
@@ -25,6 +25,9 @@ import livv
 ## Run all of the checks for dependencies required by LIVV
 #
 def check():
+    # The list of nonstandard python libraries that are used 
+    libraryList = ["jinja2", "netCDF4", "numpy", "matplotlib"]
+    
     # Create a list to store all of the errors that were found
     depErrors = []
     
@@ -52,7 +55,7 @@ def check():
     # Make sure all imports are going to work
     # And if they don't build a copy of the ones that are needed
     print("    Checking for external libraries....")
-    libraryList = ["jinja2", "netCDF4", "numpy", "matplotlib"]
+
     for lib in libraryList:
         try:
             __import__(lib)

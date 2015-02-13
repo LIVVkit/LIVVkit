@@ -3,7 +3,7 @@ Master module for dome test cases
 
 Created on Dec 8, 2014
 
-@author: bzq
+@author: arbennett
 '''
 
 import re
@@ -16,6 +16,8 @@ import itertools
 import livv
 from livv import *
 from livv_bin.VV_test import *
+from livv_bin.VV_dome import Dome
+from livv_bin.VV_gis import Gis
 import jinja2
 
 ## Main class for handling performance test cases.
@@ -46,7 +48,7 @@ class Performance(AbstractTest):
     ## Returns the name of the test
     #
     #  output:
-    #    @returns name : Dome
+    #    @returns name : performance
     #
     def getName(self):
         return self.name
@@ -88,6 +90,7 @@ class Performance(AbstractTest):
     #
     def runDomePerformance(self):
         print("    This is a placeholder....")
+        
     
     def runGisPerformance(self):
         print("    This is a placeholder....")

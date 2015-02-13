@@ -2,9 +2,31 @@
 Main script to run LIVV.  This script records some user data, sets up the test 
 suite, runs the tests, and generates a website based on the results of the tests.
 
+This script is broken into several main sections.  The first section defines the imports.
+For each new module added to LIVV they must be added to this section for the script to 
+access them.  Modules that are added internally to LIVV should be added within the __main__
+section o f the imports to prevent data from being incorrectly shared & from breaking LIVV 
+as a whole.  System imports can go outside of __main__, though the libraryList in 
+VV_dependencies should be updated if any functionality from outside the standard library is 
+added. 
+
+To add or modify the test groupings there are several places that will need to be modified.
+First, if adding tests new options will need to be put in place to handle them.  If overall 
+test cases are modified the existing options for that test will need to be updated.  The 
+last place that will need to be modified is in the RECORD TEST CASES section where the 
+tests being run in a particular execution are resolved, and those test cases mapped to the 
+delegate test classes (found in livv_bin).
+
+Execution of LIVV proceeds in the RUN TEST CASES section where the totality of the test 
+cases are recorded and run grouped by their respective delegate classes.  Each test case
+is run using the run method in the class.  This method will run common functionality then
+pass off to specialized methods for each test case.  Finally all of the information is 
+filled into an html template that contains all of the run information for a grouping of 
+tests.
+
 Created on Dec 3, 2014
 
-@author: bzq
+@author: arbennett
 '''
 
 
@@ -31,16 +53,7 @@ if __name__ == '__main__':
     from livv_bin.VV_shelf import Shelf
     from livv_bin.VV_performance import Performance
     
-
-    
-    # A dictionary describing which module will be called for each test
-    # Each of these modules can be found in livv_bin
-    testDict = { "dome" : Dome,
-                 "ismip" : Ismip,
-                 "gis" : Gis,
-                 "shelf" : Shelf,
-                 "perf" : Performance
-               }
+# Standard python imports can be loaded any time
 import os
 import time
 import getpass
@@ -150,9 +163,7 @@ parser.add_option('-s', '--save',
                   dest='save',
                   help='Store the configuration being run with the given machine name.')
 
-# More options should go in to deal with things like the RUN_ANT flag and
-#    RUN_VALIDATION set of flags.
-
+# Get the options and the arguments
 (options, args) = parser.parse_args()
 
 ###############################################################################
@@ -194,6 +205,7 @@ parserVars = [
               'Number of timesteps',
               'Avg convergence rate'
               ]
+# Build an empty ordered dictionary so that the output prints in a nice order
 parserDict = OrderedDict()
 for var in parserVars: parserDict[var] = None
 parserVars = parserDict
@@ -263,7 +275,15 @@ if __name__ == '__main__':
     ###############################################################################
     #                              Record Test Cases                              #
     ###############################################################################
-
+    # A dictionary describing which module will be called for each test
+    # Each of these modules can be found in livv_bin
+    testDict = { "dome" : Dome,
+                 "ismip" : Ismip,
+                 "gis" : Gis,
+                 "shelf" : Shelf,
+                 "perf" : Performance
+               }
+    
     # dome tests
     domeCases = {'none'   : [],
                  'diagnostic' : ['dome30/diagnostic'],

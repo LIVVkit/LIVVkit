@@ -3,7 +3,7 @@ Master module for Ismip tests.
 
 Created on Dec 8, 2014
 
-@author: bzq
+@author: arbennett
 '''
 
 import re
