@@ -56,6 +56,7 @@ def check():
     # And if they don't build a copy of the ones that are needed
     print("    Checking for external libraries....")
 
+    libsInstalled=[]
     for lib in libraryList:
         try:
             __import__(lib)
@@ -65,9 +66,18 @@ def check():
             if not os.path.exists(livv.cwd + os.sep + "deps"):
                 os.mkdir(livv.cwd + os.sep + "deps")
                 sys.path.append(livv.cwd + os.sep + "deps")
-            easy_install.main(["-U", "--install-dir " + livv.cwd + os.sep + "deps", lib])       
-            print(" Done!")
-        
+            easy_install.main(["--user",lib])
+            libsInstalled.append(lib)
+    
+    if len(libsInstalled) > 0:
+        print("------------------------------------------------------------------------------")
+        print "  External Python Libraries have been installed!  Libraries installed:"
+        for lib in libsInstalled:
+            print("    " + lib)
+        print("  Run LIVV again to continue.  ")
+        print("------------------------------------------------------------------------------")
+        exit(0)
+    
     # Show all of the dependency errors that were found
     if len(depErrors) > 0:
         print("Uh oh!")
