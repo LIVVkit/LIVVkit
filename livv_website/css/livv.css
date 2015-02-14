@@ -39,37 +39,47 @@ th, td {
 }
 
 #page {
-    background-color: rgba(255,255,255,0.8);
+    background-color: rgba(255,255,255,1);
     border-radius: 5px;
     padding: 5px;
     margin-left: 15%;
-    margin-right: 10%;
-    width: 800px;
+    margin-right: 5%;
+    width: 1000px;
+    min-height: 80%;
 }
 
 #header {
     width: calc(100% + 10px);
-    height: 5em;
+    height: 2.5em;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
     transform: translate(-5px,-5px);   
+	background-color: rgba(0, 0, 25, 1);
+	color: white;
 }
 
 #header-content {
-	float: left;
-    margin-left: 15%;
+	color: white;
+	position: absolute;
+    margin-left: 4%;
+    height: 0.85em;
+   	line-height: 0.85em;
 }
 
 #info {
-	float: right;
 	padding: 5px;
-	margin-right: 20%;
 }
 
 #content {
-
+	
 }
 
 #footer {
-	
+    width: calc(100% + 10px);
+    height: 4em;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    transform: translate(-5px,-5px);   
 }
 
 #fancy {
@@ -85,34 +95,41 @@ th, td {
 	margin-left: 50px;
 }
 
-#SUCCESS {
+.SUCCESS {
 	color: green;
 	font-weight: 600;
 }
 
-#FAILURE {
+.FAILURE {
 	color: red;
 	font-weight: 600;
 }
 
+#nav {
+    width: calc(100% + 10px);
+    height: 3em;
+    float: left;
+    transform: translate(-5px,-5px);
+    background-color: #47A3FF;
+}
+
 .button {
+	margin-left: 0;
 	style: bold;
-	height: 40px;
-	line-height: 40px;
+	height: 3em;
+	width: 100px;
+	line-height: 3em;
 	text-align: center;
-	vertical-align: middle;
-	display: inline;
-	background-color: #34404C;
+	float: left;
+    background-color: #47A3FF;
 	color: rgba(255,255,255, 1);	
-	padding: 5px;
-	border-radius: 2px;
-    border: 1px solid rgba(0, 0, 0, 1);
 }
 
 a.button {
+	float: left;
     text-decoration: none;
 }
 
 a.button:hover {
-	background-color: #48535E;
+	background-color: #3385FF;
 }

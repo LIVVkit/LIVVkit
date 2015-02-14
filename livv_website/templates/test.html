@@ -1,9 +1,10 @@
 {% include 'header.html' %}
-  <br>
-  <a href="../index.html" class="button">Home</a>
-  <a href="http://blizzard.ornl.gov" class="button">Blizzard</a>
-  <a href="http://oceans11.lanl.gov/cism/" class="button">CISM</a> 
-  <hr>
+  <div id="nav">
+    <a href="../index.html" class="button">Home</a>
+    <a href="http://blizzard.ornl.gov" class="button">Blizzard</a>
+    <a href="http://oceans11.lanl.gov/cism/" class="button">CISM</a> 
+  </div>
+  <div id="content">
   <h2>{{testName}}</h2>
   
   <h3>Details</h3>
@@ -45,7 +46,7 @@
             {{file}}
           </td>
           <td>
-            <a id={{details[0]}}
+            <a class={{details[0]}}
             {% if details[0] == "FAILURE" %}
             	href={{imgDir}}/bit4bit/{{file}}.png
             {% endif %}
