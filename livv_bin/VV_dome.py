@@ -164,6 +164,7 @@ class Dome(AbstractTest):
         print("  Dome Diagnostic test in progress....")  
 
         # Search for the standard output files
+        diagnosticDir = livv.inputDir + os.sep + "dome" + resolution + os.sep + "diagnostic" + os.sep + livv.dataDir 
         files = os.listdir(diagnosticDir)
         test = re.compile(".*[0-9]proc")
         files = filter(test.search, files)
@@ -243,6 +244,7 @@ class Dome(AbstractTest):
         print("  Dome Evolving test in progress....")  \
                         
         # Search for the std output files
+        evolvingDir = livv.inputDir + os.sep + "dome" + resolution + os.sep + "evolving" + os.sep + livv.dataDir 
         files = os.listdir(evolvingDir)
         test = re.compile(".*[0-9]proc")
         files = filter(test.search, files)
