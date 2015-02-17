@@ -102,9 +102,10 @@ class AbstractTest(object):
        
         if len(sameList) == 0:
             print("  Benchmark and model data not available for " + test)
-            return {'No matching benchmark and data files found': ''}
+            return {'No matching benchmark and data files found': ['N/A','0.0']}
         else:
             print("  Running bit for bit tests of " + test + "....")
+        
         
         # Go through and check if any differences occur
         for same in list(sameList):
