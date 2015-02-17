@@ -38,6 +38,14 @@ th, td {
     padding: 1px;
 }
 
+hr {
+	width: 98%;
+	border:0;
+	color: #47A3FF;
+	background-color: #47A3FF;
+	height:2px;
+}
+
 #page {
     background-color: rgba(255,255,255,1);
     border-radius: 5px;
@@ -45,7 +53,9 @@ th, td {
     margin-left: 15%;
     margin-right: 5%;
     width: 1000px;
-    min-height: 80%;
+  	-moz-box-shadow: 5px 5px 4px rgba(30,30,30,0.3);
+  	-webkit-box-shadow: 5px 5px 4px rgba(30,30,30,0.3);
+ 	 box-shadow: 5px 5px 4px rgba(30,30,30,0.3);
 }
 
 #header {
@@ -76,10 +86,18 @@ th, td {
 
 #footer {
     width: calc(100% + 10px);
-    height: 4em;
+    height: 5em;
     border-bottom-right-radius: 5px;
     border-bottom-left-radius: 5px;
-    transform: translate(-5px,-5px);   
+    border-top: 3px;
+    border-left: 0;
+    border-right: 0;
+    border-bottom: 0;
+    border-style: solid;
+    border-color: #47A3FF;
+    color: #FFFFFF;
+    background-color: #000000;
+    transform: translate(-5px,5px);   
 }
 
 #fancy {
@@ -91,7 +109,7 @@ th, td {
 	font-weight: 600;
 }
 
-#tabbed {
+.tabbed {
 	margin-left: 50px;
 }
 
@@ -116,6 +134,33 @@ th, td {
     float: left;
     transform: translate(-5px,-5px);
     background-color: #47A3FF;
+}
+
+div.gallery {
+	margin: 5px;
+	padding: 5px;
+	border: 1px solid #47A3FF;
+	height: auto;
+	width: auto;
+	float: left;
+	text-align: center;
+}
+
+div.gallery img {
+	float: left;
+	margin: 5px;
+	border: 1px solid #FFFFFF;
+}
+
+div.gallery a:hover img {
+	border: 1px solid #47A3FF;
+}
+
+div.description {
+	text-align: center;
+	font-weight: normal;
+	width: 120px;
+	margin: 5px;
 }
 
 .button {

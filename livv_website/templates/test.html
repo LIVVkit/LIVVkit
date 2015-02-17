@@ -13,28 +13,34 @@
   </p>
   
   <h3>Plots</h3>
-  <p>
+
     {% for img in testImages %}
       {% if img != [] %} 
-        <img src="{{imgDir}}/{{img}}" alt="{{imgDir}}/{{img}}" style="height:75%;">
-        <br>
+      <div class="gallery">
+      	<div style="float: left; display: inline;">
+	        <a target="_blank" href="{{imgDir}}/{{img}}">
+	        	<img src="{{imgDir}}/{{img}}" alt="{{imgDir}}/{{img}}" width="110">
+	        </a>
+	        <div class="description">{{img}}</div>
+        </div>
+      </div>
       {% endif %}
     {% endfor %}
-  </p>
   
+  <br style="clear: both" />
   <h3>Results</h3>
     {% for case in testsRun %}
       <h4>{{case}}</h4>
       
       
-      <p id="bold"> 
+      <p style="font-weight: 600;"> 
         Bit for Bit 
         <a style="font-size: small; font-style: italic">
           Click on failures to see difference plots
         </a> 
       </p>
 
-      <table id="tabbed">
+      <table class="tabbed">
       <tr>
         <th>Output File</th>
         <th>Status</th>
