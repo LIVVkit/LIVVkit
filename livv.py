@@ -5,7 +5,7 @@ suite, runs the tests, and generates a website based on the results of the tests
 This script is broken into several main sections.  The first section defines the imports.
 For each new module added to LIVV they must be added to this section for the script to 
 access them.  Modules that are added internally to LIVV should be added within the __main__
-section o f the imports to prevent data from being incorrectly shared & from breaking LIVV 
+section of the imports to prevent data from being incorrectly shared & from breaking LIVV 
 as a whole.  System imports can go outside of __main__, though the libraryList in 
 VV_dependencies should be updated if any functionality from outside the standard library is 
 added. 

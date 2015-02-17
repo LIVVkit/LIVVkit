@@ -1,7 +1,7 @@
 ===================================================================================================
   Land Ice Verification and Validation Test Suite Readme
 ===================================================================================================
-Last updated 2/12/2015
+Last updated 2/16/2015
 If this document is out of date send us an email!  See the contact section below for more details.
 
 TODO: A list of things that need to be updated.
@@ -16,8 +16,6 @@ TODO: A list of things that need to be updated.
 
   Introduction
 ================
-You have found yourself in the Experimental Branch of LIVV.  This means you are on the cutting edge of verification and validation of Ice Sheet models!  
-
 LIVV is a python-based toolkit for verification and validation of Ice Sheet Models.  
 
   Before Using

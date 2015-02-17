@@ -82,21 +82,20 @@ class AbstractTest(object):
     #
     def bit4bit(self, test):
         # Mapping of result codes to results
+        numpy.set_printoptions(threshold='nan')
         result = {-1 : 'N/A', 0 : 'SUCCESS', 1 : 'FAILURE'}
         bitDict = dict()
         
-                
         # First, make sure that there is test data, otherwise not it.
-        modelPath = livv.inputDir
-        benchPath = livv.benchmarkDir
-        if not (os.path.exists(modelPath + test + livv.dataDir ) or 
-                os.path.exists(benchPath + test + livv.dataDir )):
+        modelPath = livv.inputDir + test + livv.dataDir
+        benchPath = livv.benchmarkDir + test + livv.dataDir
+        if not (os.path.exists(modelPath) or os.path.exists(benchPath)):
             return {'No matching benchmark and data files found': ''}     
              
         # Get all of the .nc files in the model & benchmark directories
         regex = re.compile('^[^\.].*?.nc')
-        modelFiles = filter(regex.search, os.listdir(modelPath + test + livv.dataDir))
-        benchFiles = filter(regex.search, os.listdir(benchPath + test + livv.dataDir))
+        modelFiles = filter(regex.search, os.listdir(modelPath))
+        benchFiles = filter(regex.search, os.listdir(benchPath))
     
         # Get the intersection of the two file lists
         sameList = set(modelFiles).intersection(benchFiles)
@@ -110,13 +109,14 @@ class AbstractTest(object):
         # Go through and check if any differences occur
         for same in list(sameList):
             change = 0
-            absDifference = 0
+            absDifference = 0.0
+            maxDifference = 0.0
             plotVars = []
-            modelFile = modelPath + test + livv.dataDir + '/' + same
-            benchFile = benchPath + test + livv.dataDir + '/' + same
+            modelFile = modelPath + os.sep + same
+            benchFile = benchPath + os.sep + same
             
             # check if they match
-            comline = ['ncdiff', modelFile, benchFile, modelPath + os.pathsep + 'temp.nc', '-O']
+            comline = ['ncdiff', modelFile, benchFile, modelPath + os.sep + 'temp.nc', '-O']
             try:
                 subprocess.check_call(comline)
             except subprocess.CalledProcessError as e:
@@ -127,17 +127,17 @@ class AbstractTest(object):
                 print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
                       + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                 exit(e.errno)
-                
+
             # Grab the output of ncdiff
-            diffData = Dataset(modelPath + os.pathsep + 'temp.nc', 'r')
+            diffData = Dataset(modelPath + os.sep + 'temp.nc', 'r')
             diffVars = diffData.variables.keys()
                             
             # Check if any data in thk has changed, if it exists
             if 'thk' in diffVars and diffData.variables['thk'].size != 0:
                 data = diffData.variables['thk'][:]
-                #print sum(sum(sum(data)))
                 if data.any():
-                    absDifference += sum(sum(sum(sum(data))))
+                    absDifference += numpy.sum(numpy.ndarray.flatten(data))
+                    maxDifference = numpy.amax([maxDifference, numpy.amax(data)])
                     plotVars.append('thk')
                     change = 1
                                                     
@@ -145,17 +145,18 @@ class AbstractTest(object):
             if 'velnorm' in diffVars and diffData.variables['velnorm'].size != 0:
                 data = diffData.variables['velnorm'][:]
                 if data.any():
-                    absDifference += sum(sum(sum(sum(data))))
+                    absDifference += numpy.sum(numpy.ndarray.flatten(data))
+                    maxDifference = numpy.amax([maxDifference, numpy.amax(data)])
                     plotVars.append('velnorm')
                     change = 1
             
             # If there were any differences plot them out
             if change:
-                self.plotDifferences(plotVars, modelFile, benchFile, modelPath + os.pathsep + 'temp.nc')
+                self.plotDifferences(plotVars, modelFile, benchFile, modelPath + os.sep + 'temp.nc')
 
             # Remove the temp file
             try:
-                os.remove(modelPath + os.pathsep + 'temp.nc')
+                os.remove(modelPath + os.sep + 'temp.nc')
             except OSError as e:
                 print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
                       + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
@@ -178,18 +179,27 @@ class AbstractTest(object):
     #    @param benchFile: path to the benchmark output NetCDF file
     #
     def plotDifferences(self, plotVars, modelFile, benchFile, differenceFile):
-        pyplot.figure(1, figsize=(12, 4), dpi=80)
+        pyplot.figure(figsize=(12, 4*len(plotVars)), dpi=80)
         pyplot.clf()
         nSubplots=len(plotVars)
         for idx, var in enumerate(plotVars):
-            modelData = Dataset(modelFile, 'r').variables[var][:][0][0]
-            benchData = Dataset(benchFile, 'r').variables[var][:][0][0]
-            diffData = Dataset(differenceFile, 'r').variables[var][:][0][0]
+            # Get the right data
+            if var == 'thk':
+                varData = Dataset(modelFile, 'r').variables[var]
+                modelData = Dataset(modelFile, 'r').variables[var][len(varData)-1]
+                benchData = Dataset(benchFile, 'r').variables[var][len(varData)-1]
+                diffData = Dataset(differenceFile, 'r').variables[var][len(varData)-1]
+            elif var == 'velnorm':
+                modelData = Dataset(modelFile, 'r').variables[var][:][0][0]
+                benchData = Dataset(benchFile, 'r').variables[var][:][0][0]
+                diffData = Dataset(differenceFile, 'r').variables[var][:][0][0]
+
+            # Calculate min and max to scale the colorbars
             max = numpy.amax([numpy.amax(modelData), numpy.amax(benchData)])
             min = numpy.amin([numpy.amin(modelData), numpy.amin(benchData)]) 
-            
+                        
             # Plot the model output
-            pyplot.subplot(nSubplots,3,1+(idx*nSubplots))
+            pyplot.subplot(nSubplots,3,1+idx+(idx*nSubplots))
             pyplot.xlabel("Model Data")
             pyplot.ylabel(var)
             pyplot.imshow(modelData, vmin=min, vmax=max, interpolation="bessel")
@@ -197,14 +207,14 @@ class AbstractTest(object):
             pyplot.tight_layout()
             
             # Plot the benchmark data
-            pyplot.subplot(nSubplots,3,2+(idx*nSubplots))
+            pyplot.subplot(nSubplots,3,2+idx+(idx*nSubplots))
             pyplot.xlabel("Benchmark Data")
             pyplot.imshow(benchData, vmin=min, vmax=max, interpolation="bessel")
             pyplot.colorbar()
             pyplot.tight_layout()
             
             # Plot the difference
-            pyplot.subplot(nSubplots, 3,3+(idx*nSubplots))
+            pyplot.subplot(nSubplots, 3,3+idx+(idx*nSubplots))
             pyplot.xlabel("Difference")
             pyplot.imshow(diffData, interpolation="bessel")
             pyplot.colorbar()

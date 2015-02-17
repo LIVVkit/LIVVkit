@@ -105,6 +105,11 @@ th, td {
 	font-weight: 600;
 }
 
+.SKIPPED {
+	color: orange;
+	font-weight: 600;	
+}
+
 #nav {
     width: calc(100% + 10px);
     height: 3em;

@@ -48,7 +48,7 @@
           <td>
             <a class={{details[0]}}
             {% if details[0] == "FAILURE" %}
-            	href={{imgDir}}/bit4bit/{{file}}.png
+            	target="_blank" href={{imgDir}}/bit4bit/{{file}}.png
             {% endif %}
             >{{details[0]}}</a>
           </td>
@@ -61,6 +61,7 @@
         
         
       <p id="bold"> Standalone </p>
+        {% if testDetails != [] %}
       	<table style="width:100%">
       		<tr>
       			<th>Output File</th>
@@ -77,6 +78,9 @@
       		</tr>
       		{% endfor %}
       	</table>
+      	{% else %}
+      		<p>No data found</p>
+      	{% endif %}
  
     {% endfor %}
     <br>

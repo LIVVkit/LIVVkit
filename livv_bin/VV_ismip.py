@@ -66,8 +66,23 @@ class Ismip(AbstractTest):
                     'ismip-hom-a/80km' : self.runSmallA,
                     'ismip-hom-c/80km' : self.runSmallC }
         
+
+        # Make sure LIVV can find the data
+        ismipDir = livv.inputDir + os.sep + testCase + os.sep + livv.dataDir 
+        ismipBenchDir = livv.benchmarkDir + os.sep + testCase + os.sep + livv.dataDir
+        if not (os.path.exists(ismipDir) or os.path.exists(ismipBenchDir)):
+            print("    Could not find data for " + ismipDir + " tests!  Tried to find data in:")
+            print("      " + ismipDir)
+            print("      " + ismipBenchDir)
+            print("    Continuing with next test....")
+            self.ismipBitForBitDetails[testCase] = {'Data not found': ['SKIPPED', '0.0']}
+            return 1 # zero returns a problem        
+        
         # Call the correct function
-        callDict[testCase]()
+        if callDict.has_key(testCase):
+            callDict[testCase]()
+        else: 
+            print("  Could not find test code for ismip test: " + testCase)
          
         # More common postprocessing
         return
@@ -123,7 +138,7 @@ class Ismip(AbstractTest):
     #  
     def runLargeA(self):
         print("  Ismip-hom-A 20km test in progress....")  
-        
+                
         # Search for the std output files
         files = os.listdir(livv.inputDir + '/ismip-hom-a/20km' + livv.dataDir)
         test = re.compile(".*out.*[0-9]")
@@ -149,7 +164,7 @@ class Ismip(AbstractTest):
     #  
     def runLargeC(self):
         print("  Ismip-hom-C 20km test in progress....")  
-        
+                
         # Search for the std output files
         files = os.listdir(livv.inputDir + '/ismip-hom-c/20km' + livv.dataDir)
         test = re.compile(".*out.*[0-9]")
@@ -199,7 +214,7 @@ class Ismip(AbstractTest):
     ## Performs V&V on ismip-hom-c with 80km resolution  
     #  
     def runSmallC(self):
-        print("  Ismip-hom-C 80km test in progress....")  
+        print("  Ismip-hom-C 80km test in progress....")      
         
         # Search for the std output files
         files = os.listdir(livv.inputDir + '/ismip-hom-c/80km' + livv.dataDir)

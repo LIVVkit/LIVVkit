@@ -16,6 +16,7 @@ import livv
 from livv import *
 from livv_bin.VV_test import *
 import jinja2
+from numpy.f2py import diagnose
 
 ## Main class for handling dome test cases.
 #
@@ -78,6 +79,17 @@ class Dome(AbstractTest):
         callDict = {'diagnostic' : self.runDiagnostic,
                     'evolving' : self.runEvolving}
         
+        # Make sure LIVV can find the data
+        domeDir = livv.inputDir + os.sep + "dome" + resolution + os.sep + type + os.sep + livv.dataDir 
+        domeBenchDir = livv.benchmarkDir + os.sep + "dome" + resolution + os.sep + type + os.sep + livv.dataDir 
+        if not (os.path.exists(domeDir) or os.path.exists(domeBenchDir)):
+            print("    Could not find data for dome" + resolution + " " + type + " tests!  Tried to find data in:")
+            print("      " + domeDir)
+            print("      " + domeBenchDir)
+            print("    Continuing with next test....")
+            self.domeBitForBitDetails['dome' + resolution + os.sep + type] = {'Data not found': ['SKIPPED', '0.0']}
+            return 1 # zero returns a problem        
+        
         # Call the correct function
         if callDict.has_key(type):
             callDict[type](resolution)
@@ -91,7 +103,14 @@ class Dome(AbstractTest):
     ## Creates the output test page
     #
     #  The generate method will create a dome.html page in the output directory.
-    #  This page will contain a detailed list of the results from LIVV.  
+    #  This page will contain a detailed list of the results from LIVV.  Details
+    #  from the run are pulled from two locations.  Global definitions that are 
+    #  displayed on every page, or used for navigation purposes are imported
+    #  from the main livv.py module.  All dome specific information is supplied
+    #  via class variables.
+    #
+    #  \note Paths that are contained in templateVars should not be using os.sep
+    #        since they are for html.
     #
     def generate(self):
         templateLoader = jinja2.FileSystemLoader( searchpath=livv.templateDir )
@@ -105,8 +124,8 @@ class Dome(AbstractTest):
         
         testImgDir = livv.imgDir + os.sep + "dome"
         testImages = [os.path.basename(img) for img in glob.glob(testImgDir + os.sep + "*.png")]
-        testImages.append([os.path.basename(img) for img in glob.glob(testImgDir + "/*.jpg")] )
-        testImages.append([os.path.basename(img) for img in glob.glob(testImgDir + "/*.svg")] )
+        testImages.append([os.path.basename(img) for img in glob.glob(testImgDir + os.sep + "*.jpg")] )
+        testImages.append([os.path.basename(img) for img in glob.glob(testImgDir + os.sep + "*.svg")] )
 
         self.domeFileTestDetails = zip(self.domeTestFiles,self.domeTestDetails)
 
@@ -125,31 +144,41 @@ class Dome(AbstractTest):
                         "imgDir" : imgDir,
                         "testImages" : testImages}
         outputText = template.render( templateVars )
-        page = open(testDir + '/dome.html', "w")
+        page = open(testDir + os.sep + 'dome.html', "w")
         page.write(outputText)
         page.close()        
     
+    
     ## Perform V&V on the diagnostic dome case
+    #
+    #  Runs the dome diagnostic V&V for a given resolution.  First parses through all 
+    #  of the standard output files for the given test case, then generates plots via
+    #  the plotDiagnostic function.  Finishes up by doing bit for bit comparisons with
+    #  the benchmark files.
+    #
+    #  input:
+    #    @param resoultion: The resolution of the test cases to look in. 
+    #                       (eg resolution == 30 -> reg_test/dome30/diagnostic)
     # 
-    def runDiagnostic(self, resolution):
+    def runDiagnostic(self, resolution):        
         print("  Dome Diagnostic test in progress....")  
-        
-        # Search for the std output files
-        files = os.listdir(livv.inputDir + '/dome' + resolution + '/diagnostic' + livv.dataDir)
+
+        # Search for the standard output files
+        files = os.listdir(diagnosticDir)
         test = re.compile(".*[0-9]proc")
         files = filter(test.search, files)
         
         # Scrape the details from each of the files and store some data for later
         for file in files:
-            self.domeTestDetails.append(self.parse(livv.inputDir + '/dome' + resolution + '/diagnostic' + livv.dataDir + "/" +  file))
+            self.domeTestDetails.append(self.parse(diagnosticDir + os.sep +  file))
             self.domeTestFiles.append(file)
         
         # Create the plots
         self.plotDiagnostic(resolution)
 
-        # Run bit for bit test
-        self.domeBitForBitDetails['dome' + resolution + '/diagnostic'] = self.bit4bit('/dome' + resolution + '/diagnostic')
-        for key, value in self.domeBitForBitDetails['dome' + resolution + '/diagnostic'].iteritems():
+        # Run bit for bit tests
+        self.domeBitForBitDetails['dome' + resolution + os.sep + 'diagnostic'] = self.bit4bit(os.sep + 'dome' + resolution + os.sep + 'diagnostic')
+        for key, value in self.domeBitForBitDetails['dome' + resolution + os.sep + 'diagnostic'].iteritems():
             print ("    {:<30} {:<10}".format(key,value[0]))
 
         return 0 # zero returns success
@@ -157,19 +186,26 @@ class Dome(AbstractTest):
     
     ## Plot some details from the diagnostic dome case
     # 
+    #  Plots a comparison of the norm of the velocity for several cases of the evolving
+    #  dome test case.
+    #
+    #  input:
+    #    @param resoultion: The resolution of the test cases to look in. 
+    #                       (eg resolution == 30 -> reg_test/dome30/diagnostic) 
+    #
     def plotDiagnostic(self, resolution):
         # Set up where we are going to look for things
         ncl_path = livv.cwd + os.sep + "plots" 
         img_path = livv.imgDir + os.sep + "dome"
-        domedvel_plotfile = ''+ ncl_path + '/dome30/dome30dvel.ncl'
+        domedvel_plotfile = ''+ ncl_path + os.sep + 'dome30' + os.sep + 'dome30dvel.ncl'
         
         # The arguments to pass in to the ncl script
-        bench1 = 'STOCK1 = addfile(\"'+ livv.benchmarkDir + '/dome' + resolution + '/diagnostic' + livv.dataDir + '/dome.1.nc\", \"r\")'
-        bench4 = 'STOCK4 = addfile(\"'+ livv.benchmarkDir + '/dome' + resolution + '/diagnostic' + livv.dataDir + '/dome.4.nc\", \"r\")'
-        test1  = 'VAR1 = addfile(\"' + livv.inputDir + '/dome' + resolution + '/diagnostic' + livv.dataDir + '/dome.1.nc\", \"r\")'
-        test4  = 'VAR4 = addfile(\"' + livv.inputDir + '/dome' + resolution + '/diagnostic' + livv.dataDir + '/dome.4.nc\", \"r\")'
+        bench1 = 'STOCK1 = addfile(\"'+ livv.benchmarkDir + os.sep + 'dome' + resolution + os.sep + 'diagnostic' + livv.dataDir + os.sep + 'dome.1.nc\", \"r\")'
+        bench4 = 'STOCK4 = addfile(\"'+ livv.benchmarkDir + os.sep + 'dome' + resolution + os.sep + 'diagnostic' + livv.dataDir + os.sep + 'dome.4.nc\", \"r\")'
+        test1  = 'VAR1 = addfile(\"' + livv.inputDir + os.sep + 'dome' + resolution + os.sep + 'diagnostic' + livv.dataDir + os.sep + 'dome.1.nc\", \"r\")'
+        test4  = 'VAR4 = addfile(\"' + livv.inputDir + os.sep + 'dome' + resolution + os.sep + 'diagnostic' + livv.dataDir + os.sep + 'dome.4.nc\", \"r\")'
         name = 'dome30dvel.png'
-        path = 'PNG = "' + img_path + '/' + name + '"'
+        path = 'PNG = "' + img_path + os.sep + name + '"'
         
         # The plot command to run
         plot_dome30dvel = "ncl '" + bench1 + "' '" + bench4 + "'  '" + test1 + "' '" + test4 + \
@@ -177,7 +213,7 @@ class Dome(AbstractTest):
         
         # Give the user some feedback
         print("    Saving plot details to " + img_path + " as " + name)
-        
+            
         # Be cautious about running subprocesses
         try:
             subprocess.check_call(plot_dome30dvel, shell=True)
@@ -193,26 +229,35 @@ class Dome(AbstractTest):
         return
     
     ## Perform V&V on the evolving dome case
+    #
+    #  Runs the dome evolving V&V for a given resolution.  First parses through all 
+    #  of the standard output files for the given test case, then generates plots via
+    #  the plotEvolving function.  Finishes up by doing bit for bit comparisons with
+    #  the benchmark files.
+    #
+    #  input:
+    #    @param resoultion: The resolution of the test cases to look in. 
+    #                       (eg resolution == 30 -> reg_test/dome30/evolving)
     # 
     def runEvolving(self, resolution):
-        print("  Dome Evolving test in progress....")  
-        
+        print("  Dome Evolving test in progress....")  \
+                        
         # Search for the std output files
-        files = os.listdir(livv.inputDir + '/dome' + resolution + '/evolving' + livv.dataDir)
+        files = os.listdir(evolvingDir)
         test = re.compile(".*[0-9]proc")
         files = filter(test.search, files)
         
         # Scrape the details from each of the files and store some data for later
         for file in files:
-            self.domeTestDetails.append(self.parse(livv.inputDir + '/dome' + resolution + '/evolving/' + livv.dataDir + '/' + file))
+            self.domeTestDetails.append(self.parse(evolvingDir + os.sep + file))
             self.domeTestFiles.append(file)
         
         # Create the plots
         self.plotEvolving(resolution)
 
         # Run bit for bit test
-        self.domeBitForBitDetails['dome' + resolution + '/evolving'] = self.bit4bit('/dome' + resolution + '/evolving')
-        for key, value in self.domeBitForBitDetails['dome' + resolution + '/evolving'].iteritems():
+        self.domeBitForBitDetails['dome' + resolution + os.sep +'evolving'] = self.bit4bit(os.sep + 'dome' + resolution + os.sep + 'evolving')
+        for key, value in self.domeBitForBitDetails['dome' + resolution + os.sep + 'evolving'].iteritems():
             print ("    {:<30} {:<10}".format(key,value[0]))
 
         return 0 # zero returns success
@@ -220,19 +265,26 @@ class Dome(AbstractTest):
     
     ## Plot some details from the evolving dome case
     # 
+    #  Plots a comparison of the norm of the velocity for several cases of the evolving
+    #  dome test case.
+    #
+    #  input:
+    #    @param resoultion: The resolution of the test cases to look in. 
+    #                       (eg resolution == 30 -> reg_test/dome30/evolving)
+    #
     def plotEvolving(self, resolution):
         # Set up where we are going to look for things
         ncl_path = livv.cwd + os.sep + "plots" 
         img_path = livv.imgDir + os.sep + "dome"
-        domeevel_plotfile = ''+ ncl_path + '/dome30/dome30evel.ncl'
+        domeevel_plotfile = ''+ ncl_path + os.sep + 'dome30' + os.sep + 'dome30evel.ncl'
         
         # The arguments to pass in to the ncl script
-        bench1 = 'STOCK9 = addfile(\"'+ livv.benchmarkDir + '/dome' + resolution + '/evolving' + livv.dataDir + '/dome.small.nc\", \"r\")'
-        bench4 = 'STOCK15 = addfile(\"'+ livv.benchmarkDir + '/dome' + resolution + '/evolving' + livv.dataDir + '/dome.large.nc\", \"r\")'
-        test1  = 'VAR9 = addfile(\"' + livv.inputDir + '/dome' + resolution + '/evolving' + livv.dataDir + '/dome.small.nc\", \"r\")'
-        test4  = 'VAR15 = addfile(\"' + livv.inputDir + '/dome' + resolution + '/evolving' + livv.dataDir + '/dome.large.nc\", \"r\")'
+        bench1 = 'STOCK9 = addfile(\"'+ livv.benchmarkDir + os.sep + 'dome' + resolution + os.sep + 'evolving' + livv.dataDir + os.sep + 'dome.small.nc\", \"r\")'
+        bench4 = 'STOCK15 = addfile(\"'+ livv.benchmarkDir + os.sep + 'dome' + resolution + os.sep + 'evolving' + livv.dataDir + os.sep + 'dome.large.nc\", \"r\")'
+        test1  = 'VAR9 = addfile(\"' + livv.inputDir + os.sep + 'dome' + resolution + os.sep + 'evolving' + livv.dataDir + os.sep + 'dome.small.nc\", \"r\")'
+        test4  = 'VAR15 = addfile(\"' + livv.inputDir + os.sep + 'dome' + resolution + os.sep + 'evolving' + livv.dataDir + os.sep + 'dome.large.nc\", \"r\")'
         name = 'dome' + resolution + 'evel.png'
-        path = 'PNG = "' + img_path + '/' + name + '"'
+        path = 'PNG = "' + img_path + os.sep + name + '"'
         
         # The plot command to run
         plot_dome30evel = "ncl '" + bench1 + "' '" + bench4 + "'  '" + test1 + "' '" + test4 + \
