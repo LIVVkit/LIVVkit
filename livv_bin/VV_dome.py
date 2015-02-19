@@ -82,7 +82,7 @@ class Dome(AbstractTest):
         # Make sure LIVV can find the data
         domeDir = livv.inputDir + os.sep + "dome" + resolution + os.sep + type + os.sep + livv.dataDir 
         domeBenchDir = livv.benchmarkDir + os.sep + "dome" + resolution + os.sep + type + os.sep + livv.dataDir 
-        if not (os.path.exists(domeDir) or os.path.exists(domeBenchDir)):
+        if not (os.path.exists(domeDir) and os.path.exists(domeBenchDir)):
             print("    Could not find data for dome" + resolution + " " + type + " tests!  Tried to find data in:")
             print("      " + domeDir)
             print("      " + domeBenchDir)
@@ -200,18 +200,20 @@ class Dome(AbstractTest):
         img_path = livv.imgDir + os.sep + "dome"
         domedvel_plotfile = ''+ ncl_path + os.sep + 'dome30' + os.sep + 'dome30dvel.ncl'
         
+        # TODO: Make sure that the files exist before plotting them
+        
         # The arguments to pass in to the ncl script
-        bench1 = 'STOCK1 = addfile(\"'+ livv.benchmarkDir + os.sep + 'dome' + resolution + os.sep + 'diagnostic' + livv.dataDir + os.sep + 'dome.1.nc\", \"r\")'
-        bench4 = 'STOCK4 = addfile(\"'+ livv.benchmarkDir + os.sep + 'dome' + resolution + os.sep + 'diagnostic' + livv.dataDir + os.sep + 'dome.4.nc\", \"r\")'
-        test1  = 'VAR1 = addfile(\"' + livv.inputDir + os.sep + 'dome' + resolution + os.sep + 'diagnostic' + livv.dataDir + os.sep + 'dome.1.nc\", \"r\")'
-        test4  = 'VAR4 = addfile(\"' + livv.inputDir + os.sep + 'dome' + resolution + os.sep + 'diagnostic' + livv.dataDir + os.sep + 'dome.4.nc\", \"r\")'
+        bench1 = 'STOCK1 = addfile(\"'+ livv.benchmarkDir + os.sep + 'dome' + resolution + os.sep + 'diagnostic' + os.sep + livv.dataDir + os.sep + 'dome.1.nc\", \"r\")'
+        bench4 = 'STOCK4 = addfile(\"'+ livv.benchmarkDir + os.sep + 'dome' + resolution + os.sep + 'diagnostic' + os.sep + livv.dataDir + os.sep + 'dome.4.nc\", \"r\")'
+        test1  = 'VAR1 = addfile(\"' + livv.inputDir + os.sep + 'dome' + resolution + os.sep + 'diagnostic' + os.sep + livv.dataDir + os.sep + 'dome.1.nc\", \"r\")'
+        test4  = 'VAR4 = addfile(\"' + livv.inputDir + os.sep + 'dome' + resolution + os.sep + 'diagnostic' + os.sep + livv.dataDir + os.sep + 'dome.4.nc\", \"r\")'
         name = 'dome30dvel.png'
         path = 'PNG = "' + img_path + os.sep + name + '"'
         
         # The plot command to run
         plot_dome30dvel = "ncl '" + bench1 + "' '" + bench4 + "'  '" + test1 + "' '" + test4 + \
                     "' '" + path + "' " + domedvel_plotfile + " >> plot_details.out"
-        
+                
         # Give the user some feedback
         print("    Saving plot details to " + img_path + " as " + name)
             
@@ -279,12 +281,14 @@ class Dome(AbstractTest):
         ncl_path = livv.cwd + os.sep + "plots" 
         img_path = livv.imgDir + os.sep + "dome"
         domeevel_plotfile = ''+ ncl_path + os.sep + 'dome30' + os.sep + 'dome30evel.ncl'
+
+        # TODO: Make sure that the files exist before plotting them
         
         # The arguments to pass in to the ncl script
-        bench1 = 'STOCK9 = addfile(\"'+ livv.benchmarkDir + os.sep + 'dome' + resolution + os.sep + 'evolving' + livv.dataDir + os.sep + 'dome.small.nc\", \"r\")'
-        bench4 = 'STOCK15 = addfile(\"'+ livv.benchmarkDir + os.sep + 'dome' + resolution + os.sep + 'evolving' + livv.dataDir + os.sep + 'dome.large.nc\", \"r\")'
-        test1  = 'VAR9 = addfile(\"' + livv.inputDir + os.sep + 'dome' + resolution + os.sep + 'evolving' + livv.dataDir + os.sep + 'dome.small.nc\", \"r\")'
-        test4  = 'VAR15 = addfile(\"' + livv.inputDir + os.sep + 'dome' + resolution + os.sep + 'evolving' + livv.dataDir + os.sep + 'dome.large.nc\", \"r\")'
+        bench1 = 'STOCK9 = addfile(\"'+ livv.benchmarkDir + os.sep + 'dome' + resolution + os.sep + 'evolving' + os.sep + livv.dataDir + os.sep + 'dome.small.nc\", \"r\")'
+        bench4 = 'STOCK15 = addfile(\"'+ livv.benchmarkDir + os.sep + 'dome' + resolution + os.sep + 'evolving' + os.sep + livv.dataDir + os.sep + 'dome.large.nc\", \"r\")'
+        test1  = 'VAR9 = addfile(\"' + livv.inputDir + os.sep + 'dome' + resolution + os.sep + 'evolving' + os.sep + livv.dataDir + os.sep + 'dome.small.nc\", \"r\")'
+        test4  = 'VAR15 = addfile(\"' + livv.inputDir + os.sep + 'dome' + resolution + os.sep + 'evolving' + os.sep + livv.dataDir + os.sep + 'dome.large.nc\", \"r\")'
         name = 'dome' + resolution + 'evel.png'
         path = 'PNG = "' + img_path + os.sep + name + '"'
         

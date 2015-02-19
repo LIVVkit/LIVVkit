@@ -60,6 +60,17 @@ class Shelf(AbstractTest):
         # Map the case names to the case functions
         callDict = {'confined-shelf' : self.runConfined,
                     'circular-shelf' : self.runCircular}
+
+        # Make sure LIVV can find the data
+        shelfDir = livv.inputDir + os.sep + test + os.sep + livv.dataDir 
+        shelfBenchDir = livv.benchmarkDir + os.sep + test + os.sep + livv.dataDir 
+        if not (os.path.exists(shelfDir) and os.path.exists(shelfBenchDir)):
+            print("    Could not find data for " + type + " tests!  Tried to find data in:")
+            print("      " + shelfDir)
+            print("      " + shelfBenchDir)
+            print("    Continuing with next test....")
+            self.shelfBitForBitDetails[test] = {'Data not found': ['SKIPPED', '0.0']}
+            return 1 # zero returns a problem
         
         # Call the correct function
         if callDict.has_key(test):
@@ -119,13 +130,13 @@ class Shelf(AbstractTest):
         print("  Confined Shelf test in progress....")  
         
         # Search for the std output files
-        files = os.listdir(livv.inputDir + '/confined-shelf' + livv.dataDir)
+        files = os.listdir(livv.inputDir + '/confined-shelf' + os.sep + livv.dataDir)
         test = re.compile("confined-shelf.*out.*")
         files = filter(test.search, files)
         
         # Scrape the details from each of the files and store some data for later
         for file in files:
-            self.shelfTestDetails.append(self.parse(livv.inputDir + '/confined-shelf' + livv.dataDir + "/" + file))
+            self.shelfTestDetails.append(self.parse(livv.inputDir + '/confined-shelf' + os.sep + livv.dataDir + "/" + file))
             self.shelfTestFiles.append(file)
         
         # Create the plots
@@ -141,7 +152,77 @@ class Shelf(AbstractTest):
     # # Plot some details for the confined shelf case
     # 
     def plotConfined(self):
-        print("    This is a placeholder method.")
+        # Setup where we are going to look for things
+        ncl_path = livv.cwd + os.sep + "plots" 
+        img_path = livv.imgDir + os.sep + "shelf"      
+        modelDir = livv.inputDir + os.sep + "confined-shelf" + os.sep + livv.dataDir
+        benchDir = livv.benchmarkDir + os.sep + "confined-shelf" + os.sep + livv.dataDir
+        glamFiles = ['confined-shelf.gnu.PIC.large.nc', 'confined-shelf.gnu.JFNK.large.nc']
+        glissadeFiles = ['confined-shelf.gnu.glissade.nc']
+        glamFlag, glissadeFlag = True, True        
+        
+        # Check if all of the files for plotting Glam output is in place
+        for each in glamFiles:
+            if not (os.path.exists(modelDir + os.sep + each) and os.path.exists(benchDir + os.sep + each)):
+                glamFlag = False
+        
+        # Check if all of the files for plotting Glissade output is in place
+        for each in glissadeFiles:
+            if not (os.path.exists(modelDir + os.sep + each) and os.path.exists(benchDir + os.sep + each)):
+                glissadeFlag = False
+                
+        # Plot Glam
+        if glamFlag:
+            confvel_plotfile = ''+ ncl_path + '/shelf/confshelfvel.ncl'
+            stockPIC = 'STOCKPIC = addfile(\"' + benchDir + os.sep + glamFiles[0] + '\", \"r\")'
+            stockJFNK = 'STOCKJFNK = addfile(\"'+ benchDir + os.sep + glamFiles[1] + '\", \"r\")'
+            VARPIC = 'VARPIC = addfile(\"' + modelDir + os.sep + glamFiles[0] + '\", \"r\")'
+            VARJFNK = 'VARJFNK = addfile(\"' + modelDir + os.sep + glamFiles[1] + '\", \"r\")'
+            name = 'confshelfvel.png' 
+            path = 'PNG = "' + img_path + '/' + name + '"'
+            plot_confvel = "ncl '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARPIC + "' '" + VARJFNK \
+                    + "' '" + path + "' " + confvel_plotfile + " >> plot_details.out"          
+                    
+            # Give the user some feedback
+            print("    Saving plot details to " + img_path + " as " + name)
+            
+            # Be cautious about running subprocesses
+            try:
+                subprocess.check_call(plot_confvel, shell=True)
+            except subprocess.CalledProcessError as e:
+                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
+                        + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                exit(e.returncode)
+            except OSError as e:
+                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
+                        + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                exit(e.errno)
+        
+        # Plot Glissade
+        if glissadeFlag:
+            confvel_plotfile = ''+ ncl_path + '/shelf/confshelfvelg.ncl'
+            stockGLS    = 'STOCKGLS = addfile(\"' + modelDir + os.sep + glissadeFiles[0] + '\", \"r\")'
+            VARGLS      = 'VARGLS = addfile(\"'  + benchDir + os.sep + glissadeFiles[0] + '\", \"r\")'
+            name  = 'confshelfvelg.png' 
+            path         = 'PNG = "' + img_path + '/' + name + '"'
+            plot_confvel = "ncl '" + stockGLS + "'  '" + VARGLS \
+                    + "' '" + path + "' " + confvel_plotfile + " >> plot_details.out"        
+                                
+            # Give the user some feedback
+            print("    Saving plot details to " + img_path + " as " + name)
+            
+            # Be cautious about running subprocesses
+            try:
+                subprocess.check_call(plot_confvel, shell=True)
+            except subprocess.CalledProcessError as e:
+                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
+                        + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                exit(e.returncode)
+            except OSError as e:
+                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
+                        + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                exit(e.errno)
+
     
     # # Perform V&V on the circular shelf case
     # 
@@ -149,17 +230,17 @@ class Shelf(AbstractTest):
         print("  Circular Shelf test in progress....")  
         
         # Search for the std output files
-        files = os.listdir(livv.inputDir + '/circular-shelf' + livv.dataDir)
-        test = re.compile("confined-shelf.*out.*")
+        files = os.listdir(livv.inputDir + '/circular-shelf' + os.sep + livv.dataDir)
+        test = re.compile("circular-shelf.*out.*")
         files = filter(test.search, files)
         
         # Scrape the details from each of the files and store some data for later
         for file in files:
-            self.shelfTestDetails.append(self.parse(livv.inputDir + '/circular-shelf' + livv.dataDir + "/" + file))
+            self.shelfTestDetails.append(self.parse(livv.inputDir + '/circular-shelf' + os.sep + livv.dataDir + "/" + file))
             self.shelfTestFiles.append(file)
         
         # Create the plots
-        self.plotConfined()
+        self.plotCircular()
 
         # Run bit for bit test
         self.shelfBitForBitDetails['circular-shelf'] = self.bit4bit('/circular-shelf')
@@ -171,4 +252,73 @@ class Shelf(AbstractTest):
     # # Plot some details from the confined shelf case
     # 
     def plotCircular(self):
-        print("    This is a placeholder method.")
+        # Setup where we are going to look for things
+        ncl_path = livv.cwd + os.sep + "plots" 
+        img_path = livv.imgDir + os.sep + "shelf"      
+        modelDir = livv.inputDir + os.sep + "circular-shelf" + os.sep + livv.dataDir
+        benchDir = livv.benchmarkDir + os.sep + "circular-shelf" + os.sep + livv.dataDir
+        glamFiles = ['circular-shelf.gnu.PIC.large.nc', 'circular-shelf.gnu.JFNK.large.nc']
+        glissadeFiles = ['circular-shelf.gnu.glissade.nc']
+        glamFlag, glissadeFlag = True, True        
+        
+        # Check if all of the files for plotting Glam output is in place
+        for each in glamFiles:
+            if not (os.path.exists(modelDir + os.sep + each) and os.path.exists(benchDir + os.sep + each)):
+                glamFlag = False
+        
+        # Check if all of the files for plotting Glissade output is in place
+        for each in glissadeFiles:
+            if not (os.path.exists(modelDir + os.sep + each) and os.path.exists(benchDir + os.sep + each)):
+                glissadeFlag = False
+                
+        # Plot Glam
+        if glamFlag:
+            circvel_plotfile = ''+ ncl_path + '/shelf/circshelfvel.ncl'
+            stockPIC    = 'STOCKPIC = addfile(\"'+ benchDir +  '/circular-shelf.gnu.PIC.large.nc\", \"r\")'
+            stockJFNK   = 'STOCKJFNK = addfile(\"'+ benchDir + '/circular-shelf.gnu.JFNK.large.nc\", \"r\")'
+            VARPIC      = 'VARPIC = addfile(\"' + modelDir + '/circular-shelf.gnu.PIC.large.nc\", \"r\")'
+            VARJFNK     = 'VARJFNK = addfile(\"' + modelDir + '/circular-shelf.gnu.JFNK.large.nc\", \"r\")'
+            name  = 'circshelfvel.png' 
+            png         = 'PNG = "' + img_path + '/' + name + '"'
+            plot_circvel = "ncl '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARPIC + "' '" + VARJFNK \
+                    + "' '" + png + "' " + circvel_plotfile + " >> plot_details.out"
+            
+            # Give the user some feedback
+            print("    Saving plot details to " + img_path + " as " + name)
+            
+            # Be cautious about running subprocesses
+            try:
+                subprocess.check_call(plot_circvel, shell=True)
+            except subprocess.CalledProcessError as e:
+                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
+                        + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                exit(e.returncode)
+            except OSError as e:
+                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
+                        + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                exit(e.errno)
+        
+        if glissadeFlag:
+            circvel_plotfile = ''+ ncl_path + '/shelf/circshelfvelg.ncl'
+            stockGLS    = 'STOCKGLS = addfile(\"'+ benchDir + '/circular-shelf.gnu.glissade.nc\", \"r\")'
+            VARGLS      = 'VARGLS = addfile(\"' + modelDir + '/circular-shelf.gnu.glissade.nc\", \"r\")'
+            name  = 'circshelfvelg.png' 
+            png         = 'PNG = "' + img_path + '/' + name + '"'
+            plot_circvel = "ncl '" + stockGLS + "'  '" + VARGLS \
+                    + "' '" + png + "' " + circvel_plotfile + " >> plot_details.out"    
+                        
+            # Give the user some feedback
+            print("    Saving plot details to " + img_path + " as " + name)
+            
+            # Be cautious about running subprocesses
+            try:
+                subprocess.check_call(plot_circvel, shell=True)
+            except subprocess.CalledProcessError as e:
+                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
+                        + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                exit(e.returncode)
+            except OSError as e:
+                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
+                        + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                exit(e.errno)
+            

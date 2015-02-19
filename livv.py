@@ -182,7 +182,7 @@ parser.add_option('-s', '--save',
 cwd = os.path.dirname(os.path.abspath(__file__))  
 inputDir = options.inputDir
 performanceDir = options.performanceDir                       
-dataDir = '/' + options.dataDir
+dataDir = options.dataDir
 outputDir = options.outputDir                    
 imgDir = outputDir + "/imgs"                     
 comment = options.comment                         

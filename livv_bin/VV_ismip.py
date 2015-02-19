@@ -70,7 +70,7 @@ class Ismip(AbstractTest):
         # Make sure LIVV can find the data
         ismipDir = livv.inputDir + os.sep + testCase + os.sep + livv.dataDir 
         ismipBenchDir = livv.benchmarkDir + os.sep + testCase + os.sep + livv.dataDir
-        if not (os.path.exists(ismipDir) or os.path.exists(ismipBenchDir)):
+        if not (os.path.exists(ismipDir) and os.path.exists(ismipBenchDir)):
             print("    Could not find data for " + ismipDir + " tests!  Tried to find data in:")
             print("      " + ismipDir)
             print("      " + ismipBenchDir)
@@ -140,13 +140,13 @@ class Ismip(AbstractTest):
         print("  Ismip-hom-A 20km test in progress....")  
                 
         # Search for the std output files
-        files = os.listdir(livv.inputDir + '/ismip-hom-a/20km' + livv.dataDir)
+        files = os.listdir(livv.inputDir + '/ismip-hom-a/20km' + os.sep + livv.dataDir)
         test = re.compile(".*out.*[0-9]")
         files = filter(test.search, files)
         
         # Scrape the details from each of the files and store some data for later
         for file in files:
-            self.ismipTestDetails.append(self.parse(livv.inputDir + '/ismip-hom-a/20km' + livv.dataDir + '/' + file))
+            self.ismipTestDetails.append(self.parse(livv.inputDir + '/ismip-hom-a/20km' + os.sep + livv.dataDir + '/' + file))
             self.ismipTestFiles.append(file)
         
         # Create the plots
@@ -166,13 +166,13 @@ class Ismip(AbstractTest):
         print("  Ismip-hom-C 20km test in progress....")  
                 
         # Search for the std output files
-        files = os.listdir(livv.inputDir + '/ismip-hom-c/20km' + livv.dataDir)
+        files = os.listdir(livv.inputDir + '/ismip-hom-c/20km' + os.sep + livv.dataDir)
         test = re.compile(".*out.*[0-9]")
         files = filter(test.search, files)
         
         # Scrape the details from each of the files and store some data for later
         for file in files:
-            self.ismipTestDetails.append(self.parse(livv.inputDir + '/ismip-hom-c/20km' + livv.dataDir + '/' + file))
+            self.ismipTestDetails.append(self.parse(livv.inputDir + '/ismip-hom-c/20km' + os.sep + livv.dataDir + '/' + file))
             self.ismipTestFiles.append(file)
         
         # Create the plots
@@ -192,13 +192,13 @@ class Ismip(AbstractTest):
         print("  Ismip-hom-A 80km test in progress....")  
         
         # Search for the std output files
-        files = os.listdir(livv.inputDir + '/ismip-hom-a/80km' + livv.dataDir)
+        files = os.listdir(livv.inputDir + '/ismip-hom-a/80km' + os.sep + livv.dataDir)
         test = re.compile(".*out.*[0-9]")
         files = filter(test.search, files)
         
         # Scrape the details from each of the files and store some data for later
         for file in files:
-            self.ismipTestDetails.append(self.parse(livv.inputDir + '/ismip-hom-a/80km' + livv.dataDir + '/' + file))
+            self.ismipTestDetails.append(self.parse(livv.inputDir + '/ismip-hom-a/80km' + os.sep + livv.dataDir + '/' + file))
             self.ismipTestFiles.append(file)
         
         # Create the plots
@@ -217,13 +217,13 @@ class Ismip(AbstractTest):
         print("  Ismip-hom-C 80km test in progress....")      
         
         # Search for the std output files
-        files = os.listdir(livv.inputDir + '/ismip-hom-c/80km' + livv.dataDir)
+        files = os.listdir(livv.inputDir + '/ismip-hom-c/80km' + os.sep + livv.dataDir)
         test = re.compile(".*out.*[0-9]")
         files = filter(test.search, files)
         
         # Scrape the details from each of the files and store some data for later
         for file in files:
-            self.ismipTestDetails.append(self.parse(livv.inputDir + '/ismip-hom-c/80km' + livv.dataDir + '/' + file))
+            self.ismipTestDetails.append(self.parse(livv.inputDir + '/ismip-hom-c/80km' + os.sep + livv.dataDir + '/' + file))
             self.ismipTestFiles.append(file)
         
         # Create the plots
@@ -248,10 +248,10 @@ class Ismip(AbstractTest):
         ncl_path = livv.cwd + os.sep + "plots" 
         img_path = livv.imgDir + os.sep + "ismip"
         ishoma80u_plotfile = ''+ ncl_path + '/ismip-'+aOrC+'/ismip'+aOrC+size+'ug.ncl'
-        bench1  = 'STOCK1 = addfile(\"'+ livv.benchmarkDir + '/ismip-hom-'+aOrC+'/'+size+'km/' + livv.dataDir + '/ishom.'+aOrC+'.'+size+'km.glissade.1.out.nc\", \"r\")'
-        bench4  = 'STOCK4 = addfile(\"'+ livv.benchmarkDir + '/ismip-hom-'+aOrC+'/'+size+'km/' + livv.dataDir + '/ishom.'+aOrC+'.'+size+'km.glissade.4.out.nc\", \"r\")'
-        test1    = 'VAR1 = addfile(\"'+ livv.inputDir + '/ismip-hom-'+aOrC+'/'+size+'km/' + livv.dataDir + '/ishom.'+aOrC+'.'+size+'km.glissade.1.out.nc\", \"r\")'
-        test4    = 'VAR4 = addfile(\"'+ livv.inputDir + '/ismip-hom-'+aOrC+'/'+size+'km/' + livv.dataDir + '/ishom.'+aOrC+'.'+size+'km.glissade.1.out.nc\", \"r\")'
+        bench1  = 'STOCK1 = addfile(\"'+ livv.benchmarkDir + '/ismip-hom-'+aOrC+'/'+size+'km/' + os.sep + livv.dataDir + '/ishom.'+aOrC+'.'+size+'km.glissade.1.out.nc\", \"r\")'
+        bench4  = 'STOCK4 = addfile(\"'+ livv.benchmarkDir + '/ismip-hom-'+aOrC+'/'+size+'km/' + os.sep + livv.dataDir + '/ishom.'+aOrC+'.'+size+'km.glissade.4.out.nc\", \"r\")'
+        test1    = 'VAR1 = addfile(\"'+ livv.inputDir + '/ismip-hom-'+aOrC+'/'+size+'km/' + os.sep + livv.dataDir + '/ishom.'+aOrC+'.'+size+'km.glissade.1.out.nc\", \"r\")'
+        test4    = 'VAR4 = addfile(\"'+ livv.inputDir + '/ismip-hom-'+aOrC+'/'+size+'km/' + os.sep + livv.dataDir + '/ishom.'+aOrC+'.'+size+'km.glissade.1.out.nc\", \"r\")'
         name = 'ismip'+aOrC+size+'ug.png'
         path     = 'PNG = "' + img_path + '/' + name + '"'
         plot_ishoma80u = "ncl '" + bench1 + "'  '" + bench4 + "'  '" + test1 + "'  '" + test4 \

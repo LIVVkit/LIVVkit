@@ -87,10 +87,10 @@ class AbstractTest(object):
         bitDict = dict()
         
         # First, make sure that there is test data, otherwise not it.
-        modelPath = livv.inputDir + test + livv.dataDir
-        benchPath = livv.benchmarkDir + test + livv.dataDir
+        modelPath = livv.inputDir + test + os.sep + livv.dataDir
+        benchPath = livv.benchmarkDir + test + os.sep + livv.dataDir
         if not (os.path.exists(modelPath) or os.path.exists(benchPath)):
-            return {'No matching benchmark and data files found': ''}     
+            return {'No matching benchmark and data files found': ['SKIPPED','0.0']}     
              
         # Get all of the .nc files in the model & benchmark directories
         regex = re.compile('^[^\.].*?.nc')
@@ -102,7 +102,7 @@ class AbstractTest(object):
        
         if len(sameList) == 0:
             print("  Benchmark and model data not available for " + test)
-            return {'No matching benchmark and data files found': ['N/A','0.0']}
+            return {'No matching benchmark and data files found': ['SKIPPED','0.0']}
         else:
             print("  Running bit for bit tests of " + test + "....")
         
@@ -203,21 +203,21 @@ class AbstractTest(object):
             pyplot.subplot(nSubplots,3,1+idx+(idx*nSubplots))
             pyplot.xlabel("Model Data")
             pyplot.ylabel(var)
-            pyplot.imshow(modelData, vmin=min, vmax=max, interpolation="bessel")
+            pyplot.imshow(modelData, vmin=min, vmax=max, interpolation='nearest')
             pyplot.colorbar()
             pyplot.tight_layout()
             
             # Plot the benchmark data
             pyplot.subplot(nSubplots,3,2+idx+(idx*nSubplots))
             pyplot.xlabel("Benchmark Data")
-            pyplot.imshow(benchData, vmin=min, vmax=max, interpolation="bessel")
+            pyplot.imshow(benchData, vmin=min, vmax=max, interpolation='nearest')
             pyplot.colorbar()
             pyplot.tight_layout()
             
             # Plot the difference
             pyplot.subplot(nSubplots, 3,3+idx+(idx*nSubplots))
             pyplot.xlabel("Difference")
-            pyplot.imshow(diffData, interpolation="bessel")
+            pyplot.imshow(diffData, interpolation='nearest')
             pyplot.colorbar()
             pyplot.tight_layout()
         
