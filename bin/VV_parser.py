@@ -1,15 +1,16 @@
 '''
 A general parser for extracting data from text files
 
-Created on Feb 6, 2015
+Created on Feb 19, 2015
 
-@author: bzq
+@author: arbennett
 '''
 import re
 import os
 import sys
 import glob
 import subprocess
+import ConfigParser
 
 import livv
 from livv import *
@@ -17,24 +18,64 @@ from timeit import itertools
 
 ## 
 #
-class Parser(Object):
+class Parser(object):
     
     ## Constructor
     #
     def __init__(self):
-        self.outputFiles = []
-        self.configFiles = []
+        self.configParser = ConfigParser.ConfigParser()
+        self.benchData = dict()
+        self.modelData = dict()
     
     ##
     #
-    def parseConfigurations(self, modelDir, benchmarkDir):
-        modelFiles = os.listDir(modelDir)
-        modelData = dict()
-        benchmarkFiles = os.listDir(benchmarkDir)
-        benchmarkData = dict()
-        keywords = ['parameters', 'CF output', 'grid', 'time', 'options', 'ho_options']
+    def parseConfigurations(self, modelDir, benchDir):
+        modelFiles = os.listdir(modelDir)
+        benchFiles = os.listdir(benchDir)        
+        sameList = set(modelFiles).intersection(benchFiles)
         
-        # TODO: Use configparser to make this nice and simple
+        # Pull in the information from the model run
+        for modelF in modelFiles:
+            modelFile = modelDir + os.sep + modelF
+            modelFileData = dict()
+            self.configParser.read(modelFile)
+
+            # Go through each header section (ones that look like [section])
+            for section in self.configParser.sections():
+                subDict = dict()
+                
+                # Go through each item in the section and put {var : val} into subDict
+                for entry in self.configParser.items(section):
+                    subDict[[entry[0]]] = entry[1]
+                    
+                # Map the sub-dictionary to the section 
+                modelFileData[section] = subDict.copy()
+            
+            # Associate the data to the file
+            self.modelData[modelF] = modelFileData
+
+        # Pull in the information from the benchmark 
+        for benchF in benchFiles:
+            benchFile = benchDir + os.sep + benchF
+            benchFileData = dict()
+            self.configParser.read(benchFile)
+            
+            # Go through each header section (ones that look like [section])
+            for section in self.configParser.sections():
+                subDict = dict()
+                
+                # Go through each item in the section and put {var : val} into subDict
+                for entry in self.configParser.items(section):
+                    subDict[[entry[0]]] = entry[1] 
+                
+                # Map the sub-dictionary to the section 
+                benchFileData[section] = subDict.copy()
+            
+            # Associate the data with the file
+            self.benchData[benchF] = benchFileData
+        
+        # Return both of the datasets
+        return self.modelData, self.benchData
                     
                 
     ## parseOutput
@@ -89,7 +130,7 @@ class Parser(Object):
             
         # Calculate the average number of iterations it took to converge
         if (len(itersToConverge) > 0):
-             avgItersToConverge = sum(itersToConverge) / len(itersToConverge)
+            avgItersToConverge = sum(itersToConverge) / len(itersToConverge)
     
         # Record some of the data in the testDict
         testDict['Number of processors'] = numberProcs
