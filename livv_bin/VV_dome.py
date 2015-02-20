@@ -35,9 +35,7 @@ class Dome(AbstractTest):
         # Keep track of what dome test have been run
         self.domeTestsRun = []
         self.domeBitForBitDetails = dict()
-        self.domeTestFiles = []
-        self.domeTestDetails = []
-        self.domeFileTestDetails = []
+        self.domeFileTestDetails = dict()
         
         # Describe what the dome tests are all about
         self.name = "dome"
@@ -95,9 +93,6 @@ class Dome(AbstractTest):
             callDict[type](resolution)
         else: 
             print("  Could not find test code for dome test: " + testCase)
-         
-        # More common postprocessing
-        return
         
     
     ## Creates the output test page
@@ -127,8 +122,6 @@ class Dome(AbstractTest):
         testImages.append([os.path.basename(img) for img in glob.glob(testImgDir + os.sep + "*.jpg")] )
         testImages.append([os.path.basename(img) for img in glob.glob(testImgDir + os.sep + "*.svg")] )
 
-        self.domeFileTestDetails = zip(self.domeTestFiles,self.domeTestDetails)
-
         # Set up the template variables  
         templateVars = {"timestamp" : livv.timestamp,
                         "user" : livv.user,
@@ -157,7 +150,7 @@ class Dome(AbstractTest):
     #  the benchmark files.
     #
     #  input:
-    #    @param resoultion: The resolution of the test cases to look in. 
+    #    @param resolution: The resolution of the test cases to look in. 
     #                       (eg resolution == 30 -> reg_test/dome30/diagnostic)
     # 
     def runDiagnostic(self, resolution):        
@@ -170,9 +163,11 @@ class Dome(AbstractTest):
         files = filter(test.search, files)
         
         # Scrape the details from each of the files and store some data for later
+        diagnosticDetails, diagnosticFiles = [], []
         for file in files:
-            self.domeTestDetails.append(self.parse(diagnosticDir + os.sep +  file))
-            self.domeTestFiles.append(file)
+            diagnosticDetails.append(self.parse(diagnosticDir + os.sep +  file))
+            diagnosticFiles.append(file)
+        self.domeFileTestDetails["dome" + resolution + os.sep + "diagnostic"] = zip(diagnosticFiles, diagnosticDetails)
         
         # Create the plots
         self.plotDiagnostic(resolution)
@@ -181,8 +176,6 @@ class Dome(AbstractTest):
         self.domeBitForBitDetails['dome' + resolution + os.sep + 'diagnostic'] = self.bit4bit(os.sep + 'dome' + resolution + os.sep + 'diagnostic')
         for key, value in self.domeBitForBitDetails['dome' + resolution + os.sep + 'diagnostic'].iteritems():
             print ("    {:<30} {:<10}".format(key,value[0]))
-
-        return 0 # zero returns success
     
     
     ## Plot some details from the diagnostic dome case
@@ -191,45 +184,44 @@ class Dome(AbstractTest):
     #  dome test case.
     #
     #  input:
-    #    @param resoultion: The resolution of the test cases to look in. 
+    #    @param resolution: The resolution of the test cases to look in. 
     #                       (eg resolution == 30 -> reg_test/dome30/diagnostic) 
     #
     def plotDiagnostic(self, resolution):
         # Set up where we are going to look for things
         ncl_path = livv.cwd + os.sep + "plots" 
         img_path = livv.imgDir + os.sep + "dome"
-        domedvel_plotfile = ''+ ncl_path + os.sep + 'dome30' + os.sep + 'dome30dvel.ncl'
-        
-        # TODO: Make sure that the files exist before plotting them
+        plotFile = ncl_path + os.sep + 'dome30' + os.sep + 'dome30dvel.ncl'
+        benchDir = livv.benchmarkDir + os.sep + 'dome' + resolution + os.sep + 'diagnostic' + os.sep + livv.dataDir
+        modelDir = livv.inputDir + os.sep + 'dome' + resolution + os.sep + 'diagnostic' + os.sep + livv.dataDir
         
         # The arguments to pass in to the ncl script
-        bench1 = 'STOCK1 = addfile(\"'+ livv.benchmarkDir + os.sep + 'dome' + resolution + os.sep + 'diagnostic' + os.sep + livv.dataDir + os.sep + 'dome.1.nc\", \"r\")'
-        bench4 = 'STOCK4 = addfile(\"'+ livv.benchmarkDir + os.sep + 'dome' + resolution + os.sep + 'diagnostic' + os.sep + livv.dataDir + os.sep + 'dome.4.nc\", \"r\")'
-        test1  = 'VAR1 = addfile(\"' + livv.inputDir + os.sep + 'dome' + resolution + os.sep + 'diagnostic' + os.sep + livv.dataDir + os.sep + 'dome.1.nc\", \"r\")'
-        test4  = 'VAR4 = addfile(\"' + livv.inputDir + os.sep + 'dome' + resolution + os.sep + 'diagnostic' + os.sep + livv.dataDir + os.sep + 'dome.4.nc\", \"r\")'
+        bench1 = 'STOCK1 = addfile(\"'+ benchDir + os.sep + 'dome.1.nc\", \"r\")'
+        bench4 = 'STOCK4 = addfile(\"'+ benchDir + os.sep + 'dome.4.nc\", \"r\")'
+        test1  = 'VAR1 = addfile(\"' + modelDir + os.sep + 'dome.1.nc\", \"r\")'
+        test4  = 'VAR4 = addfile(\"' + modelDir + os.sep + 'dome.4.nc\", \"r\")'
         name = 'dome30dvel.png'
         path = 'PNG = "' + img_path + os.sep + name + '"'
         
         # The plot command to run
-        plot_dome30dvel = "ncl '" + bench1 + "' '" + bench4 + "'  '" + test1 + "' '" + test4 + \
-                    "' '" + path + "' " + domedvel_plotfile + " >> plot_details.out"
-                
-        # Give the user some feedback
-        print("    Saving plot details to " + img_path + " as " + name)
+        plotCommand = "ncl '" + bench1 + "' '" + bench4 + "'  '" + test1 + "' '" + test4 + \
+                    "' '" + path + "' " + plotFile 
             
         # Be cautious about running subprocesses
-        try:
-            subprocess.check_call(plot_dome30dvel, shell=True)
-        except subprocess.CalledProcessError as e:
-            print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
-                    + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
-            exit(e.returncode)
-        except OSError as e:
-            print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
-                    + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
-            exit(e.errno)
-        
-        return
+        call = subprocess.Popen(plotCommand, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        stdOut, stdErr = call.stdout.read(), call.stderr.read()
+            
+        if os.path.exists(img_path + os.sep + name):
+            print("    Plot details saved to " + img_path + " as " + name)
+        else:
+            print("****************************************************************************")
+            print("    Error saving " + name + " to " + img_path)
+            print("    Details of the error follow: ")
+            print("")
+            print(stdOut)
+            print(stdErr)
+            print("****************************************************************************")
+    
     
     ## Perform V&V on the evolving dome case
     #
@@ -239,7 +231,7 @@ class Dome(AbstractTest):
     #  the benchmark files.
     #
     #  input:
-    #    @param resoultion: The resolution of the test cases to look in. 
+    #    @param resolution: The resolution of the test cases to look in. 
     #                       (eg resolution == 30 -> reg_test/dome30/evolving)
     # 
     def runEvolving(self, resolution):
@@ -248,13 +240,15 @@ class Dome(AbstractTest):
         # Search for the std output files
         evolvingDir = livv.inputDir + os.sep + "dome" + resolution + os.sep + "evolving" + os.sep + livv.dataDir 
         files = os.listdir(evolvingDir)
-        test = re.compile(".*[0-9]proc")
+        test = re.compile(".*((small)|(large))_proc")
         files = filter(test.search, files)
         
         # Scrape the details from each of the files and store some data for later
+        evolvingDetails, evolvingFiles = [], []
         for file in files:
-            self.domeTestDetails.append(self.parse(evolvingDir + os.sep + file))
-            self.domeTestFiles.append(file)
+            evolvingDetails.append(self.parse(evolvingDir + os.sep +  file))
+            evolvingFiles.append(file)
+        self.domeFileTestDetails["dome" + resolution + os.sep + "evolving"] = zip(evolvingFiles, evolvingDetails)
         
         # Create the plots
         self.plotEvolving(resolution)
@@ -263,9 +257,7 @@ class Dome(AbstractTest):
         self.domeBitForBitDetails['dome' + resolution + os.sep +'evolving'] = self.bit4bit(os.sep + 'dome' + resolution + os.sep + 'evolving')
         for key, value in self.domeBitForBitDetails['dome' + resolution + os.sep + 'evolving'].iteritems():
             print ("    {:<30} {:<10}".format(key,value[0]))
-
-        return 0 # zero returns success
-    
+                
     
     ## Plot some details from the evolving dome case
     # 
@@ -273,42 +265,41 @@ class Dome(AbstractTest):
     #  dome test case.
     #
     #  input:
-    #    @param resoultion: The resolution of the test cases to look in. 
+    #    @param resolution: The resolution of the test cases to look in. 
     #                       (eg resolution == 30 -> reg_test/dome30/evolving)
     #
     def plotEvolving(self, resolution):
         # Set up where we are going to look for things
         ncl_path = livv.cwd + os.sep + "plots" 
         img_path = livv.imgDir + os.sep + "dome"
-        domeevel_plotfile = ''+ ncl_path + os.sep + 'dome30' + os.sep + 'dome30evel.ncl'
-
-        # TODO: Make sure that the files exist before plotting them
+        plotFile = ''+ ncl_path + os.sep + 'dome30' + os.sep + 'dome30evel.ncl'
+        benchDir = livv.benchmarkDir + os.sep + 'dome' + resolution + os.sep + 'evolving' + os.sep + livv.dataDir
+        modelDir = livv.inputDir + os.sep + 'dome' + resolution + os.sep + 'evolving' + os.sep + livv.dataDir
         
         # The arguments to pass in to the ncl script
-        bench1 = 'STOCK9 = addfile(\"'+ livv.benchmarkDir + os.sep + 'dome' + resolution + os.sep + 'evolving' + os.sep + livv.dataDir + os.sep + 'dome.small.nc\", \"r\")'
-        bench4 = 'STOCK15 = addfile(\"'+ livv.benchmarkDir + os.sep + 'dome' + resolution + os.sep + 'evolving' + os.sep + livv.dataDir + os.sep + 'dome.large.nc\", \"r\")'
-        test1  = 'VAR9 = addfile(\"' + livv.inputDir + os.sep + 'dome' + resolution + os.sep + 'evolving' + os.sep + livv.dataDir + os.sep + 'dome.small.nc\", \"r\")'
-        test4  = 'VAR15 = addfile(\"' + livv.inputDir + os.sep + 'dome' + resolution + os.sep + 'evolving' + os.sep + livv.dataDir + os.sep + 'dome.large.nc\", \"r\")'
+        bench1 = 'STOCK9 = addfile(\"'+ benchDir + os.sep + 'dome.small.nc\", \"r\")'
+        bench4 = 'STOCK15 = addfile(\"'+ benchDir + os.sep + 'dome.large.nc\", \"r\")'
+        test1  = 'VAR9 = addfile(\"' + modelDir + os.sep + 'dome.small.nc\", \"r\")'
+        test4  = 'VAR15 = addfile(\"' + modelDir + os.sep + 'dome.large.nc\", \"r\")'
         name = 'dome' + resolution + 'evel.png'
         path = 'PNG = "' + img_path + os.sep + name + '"'
         
         # The plot command to run
-        plot_dome30evel = "ncl '" + bench1 + "' '" + bench4 + "'  '" + test1 + "' '" + test4 + \
-                    "' '" + path + "' " + domeevel_plotfile + " >> plot_details.out"
-        
-        # Give the user some feedback
-        print("    Saving plot details to " + img_path + " as " + name)
+        plotCommand = "ncl '" + bench1 + "' '" + bench4 + "'  '" + test1 + "' '" + test4 + \
+                    "' '" + path + "' " + plotFile
         
         # Be cautious about running subprocesses
-        try:
-            subprocess.check_call(plot_dome30evel, shell=True)
-        except subprocess.CalledProcessError as e:
-            print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
-                    + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
-            exit(e.returncode)
-        except OSError as e:
-            print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
-                    + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
-            exit(e.errno)
+        call = subprocess.Popen(plotCommand, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        stdOut, stdErr = call.stdout.read(), call.stderr.read()
+
+        if os.path.exists(img_path + os.sep + name):
+            print("    Plot details saved to " + img_path + " as " + name)
+        else:
+            print("****************************************************************************")
+            print("    Error saving " + name + " to " + img_path)
+            print("    Details of the error follow: ")
+            print("")
+            print(stdOut)
+            print(stdErr)
+            print("****************************************************************************")
         
-        return

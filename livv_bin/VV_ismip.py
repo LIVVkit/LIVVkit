@@ -30,9 +30,7 @@ class Ismip(AbstractTest):
     def __init__(self):
         self.ismipTestsRun = []
         self.ismipBitForBitDetails = dict()
-        self.ismipTestFiles = []
-        self.ismipTestDetails = []
-        self.ismipFileTestDetails = []
+        self.ismipFileTestDetails = dict()
         
         self.name = "ismip"
         self.description = "Simulates steady ice flow over a surface with periodic boundary conditions"
@@ -46,7 +44,6 @@ class Ismip(AbstractTest):
         return self.name
     
     
-
     ## Runs the ismip specific test case.  
     #
     #  When running a test this call will record the specific test case 
@@ -60,13 +57,6 @@ class Ismip(AbstractTest):
         # Common run 
         self.ismipTestsRun.append(testCase)
         
-        # Map the case names to the case functions
-        callDict = {'ismip-hom-a/20km' : self.runLargeA,
-                    'ismip-hom-c/20km' : self.runLargeC,
-                    'ismip-hom-a/80km' : self.runSmallA,
-                    'ismip-hom-c/80km' : self.runSmallC }
-        
-
         # Make sure LIVV can find the data
         ismipDir = livv.inputDir + os.sep + testCase + os.sep + livv.dataDir 
         ismipBenchDir = livv.benchmarkDir + os.sep + testCase + os.sep + livv.dataDir
@@ -78,15 +68,14 @@ class Ismip(AbstractTest):
             self.ismipBitForBitDetails[testCase] = {'Data not found': ['SKIPPED', '0.0']}
             return 1 # zero returns a problem        
         
-        # Call the correct function
-        if callDict.has_key(testCase):
-            callDict[testCase]()
-        else: 
-            print("  Could not find test code for ismip test: " + testCase)
-         
-        # More common postprocessing
-        return
-    
+        # Pull some data about the test case
+        splitCase = testCase.split('/')
+        aOrC = splitCase[0][-1]
+        resolution = splitCase[-1]
+        
+        # Pass it onto the specific run
+        self.runIsmip(aOrC,resolution)
+            
     
     ## Creates the output test page
     #
@@ -111,9 +100,6 @@ class Ismip(AbstractTest):
         testImages.append([os.path.basename(img) for img in glob.glob(testImgDir + "/*.jpg")] )
         testImages.append([os.path.basename(img) for img in glob.glob(testImgDir + "/*.svg")] )
 
-        # Make an iterable list of the test files and details
-        self.ismipFileTestDetails = zip(self.ismipTestFiles, self.ismipTestDetails)
-
         # Set up the template variables  
         templateVars = {"timestamp" : livv.timestamp,
                         "user" : livv.user,
@@ -134,108 +120,41 @@ class Ismip(AbstractTest):
         page.close()        
     
     
-    ## Performs V&V on ismip-hom-a with 20km resolution  
-    #  
-    def runLargeA(self):
-        print("  Ismip-hom-A 20km test in progress....")  
+    ## Perform V&V on an ismip-hom test case
+    #
+    #  Runs the ismip V&V for a given case and resolution.  First parses through all 
+    #  of the standard output files for the given test case, then generates plots via
+    #  the plot function.  Finishes up by doing bit for bit comparisons with
+    #  the benchmark files.
+    #
+    #  input:
+    #    @param aOrC: Whether we are running ismip-hom-a or ismip-hom-c
+    #    @param resolution: The resolution of the test cases to look in. 
+    #                       (eg resolution == 30 -> reg_test/dome30/diagnostic)
+    # 
+    def runIsmip(self, aOrC, resolution):
+        print("  Ismip-hom-" + aOrC + os.sep + resolution + " test in progress....")  
                 
         # Search for the std output files
-        files = os.listdir(livv.inputDir + '/ismip-hom-a/20km' + os.sep + livv.dataDir)
+        files = os.listdir(livv.inputDir + '/ismip-hom-' + aOrC + os.sep + resolution + os.sep + livv.dataDir)
         test = re.compile(".*out.*[0-9]")
         files = filter(test.search, files)
         
         # Scrape the details from each of the files and store some data for later
+        ismipDetails, ismipFiles = [], []
         for file in files:
-            self.ismipTestDetails.append(self.parse(livv.inputDir + '/ismip-hom-a/20km' + os.sep + livv.dataDir + '/' + file))
-            self.ismipTestFiles.append(file)
+            ismipDetails.append(self.parse(livv.inputDir + '/ismip-hom-' + aOrC + os.sep + resolution + os.sep + livv.dataDir + '/' + file))
+            ismipFiles.append(file)
+        self.ismipFileTestDetails['ismip-hom-' + aOrC + os.sep + resolution] = zip(ismipFiles, ismipDetails)
         
         # Create the plots
-        self.plot('a','20')
+        self.plot(aOrC,resolution[:2])
 
         # Run bit for bit test
-        self.ismipBitForBitDetails['ismip-hom-a/20km'] = self.bit4bit('/ismip-hom-a/20km')
-        for key, value in self.ismipBitForBitDetails['ismip-hom-a/20km'].iteritems():
+        self.ismipBitForBitDetails['ismip-hom-' + aOrC + os.sep + resolution] = self.bit4bit('/ismip-hom-' + aOrC + os.sep + resolution)
+        for key, value in self.ismipBitForBitDetails['ismip-hom-' + aOrC + os.sep + resolution].iteritems():
             print ("    {:<30} {:<10}".format(key,value[0]))
-
-        return 0 # zero returns success
-    
-    
-    ## Performs V&V on ismip-hom-c with 20km resolution  
-    #  
-    def runLargeC(self):
-        print("  Ismip-hom-C 20km test in progress....")  
-                
-        # Search for the std output files
-        files = os.listdir(livv.inputDir + '/ismip-hom-c/20km' + os.sep + livv.dataDir)
-        test = re.compile(".*out.*[0-9]")
-        files = filter(test.search, files)
-        
-        # Scrape the details from each of the files and store some data for later
-        for file in files:
-            self.ismipTestDetails.append(self.parse(livv.inputDir + '/ismip-hom-c/20km' + os.sep + livv.dataDir + '/' + file))
-            self.ismipTestFiles.append(file)
-        
-        # Create the plots
-        self.plot('c','20')
-
-        # Run bit for bit test
-        self.ismipBitForBitDetails['ismip-hom-c/20km'] = self.bit4bit('/ismip-hom-c/20km')
-        for key, value in self.ismipBitForBitDetails['ismip-hom-c/20km'].iteritems():
-            print ("    {:<30} {:<10}".format(key,value[0]))
-
-        return 0 # zero returns success
-    
-    
-    ## Performs V&V on ismip-hom-a with 80km resolution  
-    #  
-    def runSmallA(self):
-        print("  Ismip-hom-A 80km test in progress....")  
-        
-        # Search for the std output files
-        files = os.listdir(livv.inputDir + '/ismip-hom-a/80km' + os.sep + livv.dataDir)
-        test = re.compile(".*out.*[0-9]")
-        files = filter(test.search, files)
-        
-        # Scrape the details from each of the files and store some data for later
-        for file in files:
-            self.ismipTestDetails.append(self.parse(livv.inputDir + '/ismip-hom-a/80km' + os.sep + livv.dataDir + '/' + file))
-            self.ismipTestFiles.append(file)
-        
-        # Create the plots
-        self.plot('a','80')
-
-        # Run bit for bit test
-        self.ismipBitForBitDetails['ismip-hom-a/80km'] = self.bit4bit('/ismip-hom-a/80km')
-        for key, value in self.ismipBitForBitDetails['ismip-hom-a/80km'].iteritems():
-            print ("    {:<30} {:<10}".format(key,value[0]))
-
-        return 0 # zero returns success
-    
-    ## Performs V&V on ismip-hom-c with 80km resolution  
-    #  
-    def runSmallC(self):
-        print("  Ismip-hom-C 80km test in progress....")      
-        
-        # Search for the std output files
-        files = os.listdir(livv.inputDir + '/ismip-hom-c/80km' + os.sep + livv.dataDir)
-        test = re.compile(".*out.*[0-9]")
-        files = filter(test.search, files)
-        
-        # Scrape the details from each of the files and store some data for later
-        for file in files:
-            self.ismipTestDetails.append(self.parse(livv.inputDir + '/ismip-hom-c/80km' + os.sep + livv.dataDir + '/' + file))
-            self.ismipTestFiles.append(file)
-        
-        # Create the plots
-        self.plot('c','80')
-
-        # Run bit for bit test
-        self.ismipBitForBitDetails['ismip-hom-c/80km'] = self.bit4bit('/ismip-hom-c/80km')
-        for key, value in self.ismipBitForBitDetails['ismip-hom-c/80km'].iteritems():
-            print ("    {:<30} {:<10}".format(key,value[0]))
-
-        return 0 # zero returns success
-
+            
 
     ## Creates a plot based on the given input.
     #  
@@ -244,30 +163,34 @@ class Ismip(AbstractTest):
     #    @param size : The spatial resolution of the test in km.
     #
     def plot(self, aOrC, size):
-        
         ncl_path = livv.cwd + os.sep + "plots" 
         img_path = livv.imgDir + os.sep + "ismip"
-        ishoma80u_plotfile = ''+ ncl_path + '/ismip-'+aOrC+'/ismip'+aOrC+size+'ug.ncl'
-        bench1  = 'STOCK1 = addfile(\"'+ livv.benchmarkDir + '/ismip-hom-'+aOrC+'/'+size+'km/' + os.sep + livv.dataDir + '/ishom.'+aOrC+'.'+size+'km.glissade.1.out.nc\", \"r\")'
-        bench4  = 'STOCK4 = addfile(\"'+ livv.benchmarkDir + '/ismip-hom-'+aOrC+'/'+size+'km/' + os.sep + livv.dataDir + '/ishom.'+aOrC+'.'+size+'km.glissade.4.out.nc\", \"r\")'
-        test1    = 'VAR1 = addfile(\"'+ livv.inputDir + '/ismip-hom-'+aOrC+'/'+size+'km/' + os.sep + livv.dataDir + '/ishom.'+aOrC+'.'+size+'km.glissade.1.out.nc\", \"r\")'
-        test4    = 'VAR4 = addfile(\"'+ livv.inputDir + '/ismip-hom-'+aOrC+'/'+size+'km/' + os.sep + livv.dataDir + '/ishom.'+aOrC+'.'+size+'km.glissade.1.out.nc\", \"r\")'
+        plotFile = ''+ ncl_path + '/ismip-'+aOrC+'/ismip'+aOrC+size+'ug.ncl'
+        benchDir = livv.benchmarkDir + '/ismip-hom-'+aOrC+'/'+size+'km/' + os.sep + livv.dataDir
+        modelDir =  livv.inputDir + '/ismip-hom-'+aOrC+'/'+size+'km/' + os.sep + livv.dataDir
+        
+        bench1 = 'STOCK1 = addfile(\"'+ benchDir + os.sep + 'ishom.'+aOrC+'.'+size+'km.glissade.1.out.nc\", \"r\")'
+        bench4 = 'STOCK4 = addfile(\"'+ benchDir + os.sep + 'ishom.'+aOrC+'.'+size+'km.glissade.4.out.nc\", \"r\")'
+        test1 = 'VAR1 = addfile(\"'+ modelDir + os.sep + 'ishom.'+aOrC+'.'+size+'km.glissade.1.out.nc\", \"r\")'
+        test4 = 'VAR4 = addfile(\"'+ modelDir + os.sep + 'ishom.'+aOrC+'.'+size+'km.glissade.1.out.nc\", \"r\")'
         name = 'ismip'+aOrC+size+'ug.png'
-        path     = 'PNG = "' + img_path + '/' + name + '"'
-        plot_ishoma80u = "ncl '" + bench1 + "'  '" + bench4 + "'  '" + test1 + "'  '" + test4 \
-                        +"'  '" + path + "' " + ishoma80u_plotfile + " >> plot_details.out"
+        path = 'PNG = "' + img_path + '/' + name + '"'
+        plotCommand = "ncl '" + bench1 + "'  '" + bench4 + "'  '" + test1 + "'  '" + test4 \
+                        +"'  '" + path + "' " + plotFile
     
-        print("    Saving plot details to " + img_path + " as " + name)
-    
-        try:
-            subprocess.check_call(plot_ishoma80u, shell=True)
-            #print "creating ismip hom a 80km uvel plots"
-        except subprocess.CalledProcessError as e:
-            print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
-                    + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
-            exit(e.returncode)
-        except OSError as e:
-            print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
-                    + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
-            exit(e.errno)    
-           
+        # Be cautious about running subprocesses
+        call = subprocess.Popen(plotCommand, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        stdOut, stdErr = call.stdout.read(), call.stderr.read()
+
+        if os.path.exists(img_path + os.sep + name):
+            print("    Plot details saved to " + img_path + " as " + name)
+        else:
+            print("****************************************************************************")
+            print("    Error saving " + name + " to " + img_path)
+            print("    Details of the error follow: ")
+            print("")
+            print(stdOut)
+            print(stdErr)
+            print("****************************************************************************")
+        
+        

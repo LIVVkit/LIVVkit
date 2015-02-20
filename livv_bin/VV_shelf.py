@@ -19,7 +19,7 @@ import jinja2
 #
 class Shelf(AbstractTest):
     
-    # # Constructor
+    ## Constructor
     #
     def __init__(self):
         # Mapping of result codes to results
@@ -28,9 +28,7 @@ class Shelf(AbstractTest):
         # Keep track of what shelf test have been run
         self.shelfTestsRun = []
         self.shelfBitForBitDetails = dict()
-        self.shelfTestFiles = []
-        self.shelfTestDetails = []
-        self.shelfFileTestDetails = []
+        self.shelfFileTestDetails = dict()
     
         self.name = "shelf"
         self.description = "A blank description"
@@ -77,9 +75,6 @@ class Shelf(AbstractTest):
             callDict[test]()
         else: 
             print("  Could not find test code for shelf test: " + test)
-         
-        # More common postprocessing
-        return
         
     
     # # Creates the output test page
@@ -101,8 +96,6 @@ class Shelf(AbstractTest):
         testImages = [os.path.basename(img) for img in glob.glob(testImgDir + os.sep + "*.png")]
         testImages.append([os.path.basename(img) for img in glob.glob(testImgDir + "/*.jpg")])
         testImages.append([os.path.basename(img) for img in glob.glob(testImgDir + "/*.svg")])
-
-        self.shelfFileTestDetails = zip(self.shelfTestFiles, self.shelfTestDetails)
 
         # Set up the template variables  
         templateVars = {"timestamp" : livv.timestamp,
@@ -135,9 +128,11 @@ class Shelf(AbstractTest):
         files = filter(test.search, files)
         
         # Scrape the details from each of the files and store some data for later
+        shelfFiles, shelfDetails = [], []
         for file in files:
-            self.shelfTestDetails.append(self.parse(livv.inputDir + '/confined-shelf' + os.sep + livv.dataDir + "/" + file))
-            self.shelfTestFiles.append(file)
+            shelfDetails.append(self.parse(livv.inputDir + '/confined-shelf' + os.sep + livv.dataDir + "/" + file))
+            shelfFiles.append(file)
+        self.shelfFileTestDetails["confined-shelf"] = zip(shelfFiles, shelfDetails)
         
         # Create the plots
         self.plotConfined()
@@ -146,8 +141,7 @@ class Shelf(AbstractTest):
         self.shelfBitForBitDetails['confined-shelf'] = self.bit4bit('/confined-shelf')
         for key, value in self.shelfBitForBitDetails['confined-shelf'].iteritems():
             print ("    {:<30} {:<10}".format(key, value[0]))
-
-        return 0  # zero returns success
+    
     
     # # Plot some details for the confined shelf case
     # 
@@ -173,55 +167,57 @@ class Shelf(AbstractTest):
                 
         # Plot Glam
         if glamFlag:
-            confvel_plotfile = ''+ ncl_path + '/shelf/confshelfvel.ncl'
-            stockPIC = 'STOCKPIC = addfile(\"' + benchDir + os.sep + glamFiles[0] + '\", \"r\")'
-            stockJFNK = 'STOCKJFNK = addfile(\"'+ benchDir + os.sep + glamFiles[1] + '\", \"r\")'
-            VARPIC = 'VARPIC = addfile(\"' + modelDir + os.sep + glamFiles[0] + '\", \"r\")'
-            VARJFNK = 'VARJFNK = addfile(\"' + modelDir + os.sep + glamFiles[1] + '\", \"r\")'
+            plotFile = ncl_path + '/shelf/confshelfvel.ncl'
+            benchPIC = 'STOCKPIC = addfile(\"' + benchDir + os.sep + glamFiles[0] + '\", \"r\")'
+            benchJFNK = 'STOCKJFNK = addfile(\"'+ benchDir + os.sep + glamFiles[1] + '\", \"r\")'
+            modelPIC = 'VARPIC = addfile(\"' + modelDir + os.sep + glamFiles[0] + '\", \"r\")'
+            modelJFNK = 'VARJFNK = addfile(\"' + modelDir + os.sep + glamFiles[1] + '\", \"r\")'
             name = 'confshelfvel.png' 
             path = 'PNG = "' + img_path + '/' + name + '"'
-            plot_confvel = "ncl '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARPIC + "' '" + VARJFNK \
-                    + "' '" + path + "' " + confvel_plotfile + " >> plot_details.out"          
-                    
-            # Give the user some feedback
-            print("    Saving plot details to " + img_path + " as " + name)
+            plotCommand = "ncl '" + benchPIC + "'  '" + benchJFNK + "'  '" + modelPIC + "' '" + modelJFNK \
+                    + "' '" + path + "' " + plotFile          
             
             # Be cautious about running subprocesses
-            try:
-                subprocess.check_call(plot_confvel, shell=True)
-            except subprocess.CalledProcessError as e:
-                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
-                        + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
-                exit(e.returncode)
-            except OSError as e:
-                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
-                        + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
-                exit(e.errno)
+            call = subprocess.Popen(plotCommand, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            stdOut, stdErr = call.stdout.read(), call.stderr.read()
+
+            if os.path.exists(img_path + os.sep + name):
+                print("    Plot details saved to " + img_path + " as " + name)
+            else:
+                print("****************************************************************************")
+                print("*** Error saving " + name + " to " + img_path)
+                print("*** Details of the error follow: ")
+                print("")
+                print(stdOut)
+                print(stdErr)
+                print("****************************************************************************")
         
         # Plot Glissade
         if glissadeFlag:
-            confvel_plotfile = ''+ ncl_path + '/shelf/confshelfvelg.ncl'
-            stockGLS    = 'STOCKGLS = addfile(\"' + modelDir + os.sep + glissadeFiles[0] + '\", \"r\")'
-            VARGLS      = 'VARGLS = addfile(\"'  + benchDir + os.sep + glissadeFiles[0] + '\", \"r\")'
-            name  = 'confshelfvelg.png' 
-            path         = 'PNG = "' + img_path + '/' + name + '"'
-            plot_confvel = "ncl '" + stockGLS + "'  '" + VARGLS \
-                    + "' '" + path + "' " + confvel_plotfile + " >> plot_details.out"        
-                                
-            # Give the user some feedback
-            print("    Saving plot details to " + img_path + " as " + name)
+            plotFile = ncl_path + '/shelf/confshelfvelg.ncl'
+            benchData = 'STOCKGLS = addfile(\"' + benchDir + os.sep + glissadeFiles[0] + '\", \"r\")'
+            modelData = 'VARGLS = addfile(\"'  + modelDir + os.sep + glissadeFiles[0] + '\", \"r\")'
+            name = 'confshelfvelg.png' 
+            path = 'PNG = "' + img_path + '/' + name + '"'
+            plotCommand = "ncl '" + benchData + "'  '" + modelData + "' '" + path + "' " + plotFile
             
             # Be cautious about running subprocesses
-            try:
-                subprocess.check_call(plot_confvel, shell=True)
-            except subprocess.CalledProcessError as e:
-                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
-                        + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
-                exit(e.returncode)
-            except OSError as e:
-                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
-                        + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
-                exit(e.errno)
+            call = subprocess.Popen(plotCommand, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            stdOut, stdErr = call.stdout.read(), call.stderr.read()
+
+            if os.path.exists(img_path + os.sep + name):
+                print("    Plot details saved to " + img_path + " as " + name)
+            else:
+                print("****************************************************************************")
+                print("*** Error saving " + name + " to " + img_path)
+                print("*** Details of the error follow: ")
+                print("")
+                print(stdOut)
+                print(stdErr)
+                print("****************************************************************************")
+          
+        # Done with plotting for confined shelf      
+        return
 
     
     # # Perform V&V on the circular shelf case
@@ -235,9 +231,11 @@ class Shelf(AbstractTest):
         files = filter(test.search, files)
         
         # Scrape the details from each of the files and store some data for later
+        shelfDetails, shelfFiles = [], []
         for file in files:
-            self.shelfTestDetails.append(self.parse(livv.inputDir + '/circular-shelf' + os.sep + livv.dataDir + "/" + file))
-            self.shelfTestFiles.append(file)
+            shelfDetails.append(self.parse(livv.inputDir + '/circular-shelf' + os.sep + livv.dataDir + "/" + file))
+            shelfFiles.append(file)
+        self.shelfFileTestDetails["circular-shelf"] = zip(shelfFiles, shelfDetails)
         
         # Create the plots
         self.plotCircular()
@@ -246,8 +244,7 @@ class Shelf(AbstractTest):
         self.shelfBitForBitDetails['circular-shelf'] = self.bit4bit('/circular-shelf')
         for key, value in self.shelfBitForBitDetails['circular-shelf'].iteritems():
             print ("    {:<30} {:<10}".format(key, value[0]))
-
-        return 0  # zero returns success
+    
     
     # # Plot some details from the confined shelf case
     # 
@@ -273,52 +270,55 @@ class Shelf(AbstractTest):
                 
         # Plot Glam
         if glamFlag:
-            circvel_plotfile = ''+ ncl_path + '/shelf/circshelfvel.ncl'
-            stockPIC    = 'STOCKPIC = addfile(\"'+ benchDir +  '/circular-shelf.gnu.PIC.large.nc\", \"r\")'
-            stockJFNK   = 'STOCKJFNK = addfile(\"'+ benchDir + '/circular-shelf.gnu.JFNK.large.nc\", \"r\")'
-            VARPIC      = 'VARPIC = addfile(\"' + modelDir + '/circular-shelf.gnu.PIC.large.nc\", \"r\")'
-            VARJFNK     = 'VARJFNK = addfile(\"' + modelDir + '/circular-shelf.gnu.JFNK.large.nc\", \"r\")'
+            plotFile = ncl_path + '/shelf/circshelfvel.ncl'
+            benchPIC    = 'STOCKPIC = addfile(\"'+ benchDir +  '/circular-shelf.gnu.PIC.large.nc\", \"r\")'
+            benchJFNK   = 'STOCKJFNK = addfile(\"'+ benchDir + '/circular-shelf.gnu.JFNK.large.nc\", \"r\")'
+            modelPIC      = 'VARPIC = addfile(\"' + modelDir + '/circular-shelf.gnu.PIC.large.nc\", \"r\")'
+            modelJFNK     = 'VARJFNK = addfile(\"' + modelDir + '/circular-shelf.gnu.JFNK.large.nc\", \"r\")'
             name  = 'circshelfvel.png' 
             png         = 'PNG = "' + img_path + '/' + name + '"'
-            plot_circvel = "ncl '" + stockPIC + "'  '" + stockJFNK + "'  '" + VARPIC + "' '" + VARJFNK \
-                    + "' '" + png + "' " + circvel_plotfile + " >> plot_details.out"
-            
-            # Give the user some feedback
-            print("    Saving plot details to " + img_path + " as " + name)
-            
-            # Be cautious about running subprocesses
-            try:
-                subprocess.check_call(plot_circvel, shell=True)
-            except subprocess.CalledProcessError as e:
-                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
-                        + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
-                exit(e.returncode)
-            except OSError as e:
-                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
-                        + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
-                exit(e.errno)
-        
-        if glissadeFlag:
-            circvel_plotfile = ''+ ncl_path + '/shelf/circshelfvelg.ncl'
-            stockGLS    = 'STOCKGLS = addfile(\"'+ benchDir + '/circular-shelf.gnu.glissade.nc\", \"r\")'
-            VARGLS      = 'VARGLS = addfile(\"' + modelDir + '/circular-shelf.gnu.glissade.nc\", \"r\")'
-            name  = 'circshelfvelg.png' 
-            png         = 'PNG = "' + img_path + '/' + name + '"'
-            plot_circvel = "ncl '" + stockGLS + "'  '" + VARGLS \
-                    + "' '" + png + "' " + circvel_plotfile + " >> plot_details.out"    
+            plotCommand = "ncl '" + benchPIC + "'  '" + benchJFNK + "'  '" + modelPIC + "' '" + modelJFNK \
+                    + "' '" + png + "' " + plotFile
                         
-            # Give the user some feedback
-            print("    Saving plot details to " + img_path + " as " + name)
+            # Be cautious about running subprocesses
+            call = subprocess.Popen(plotCommand, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            stdOut, stdErr = call.stdout.read(), call.stderr.read()
+            
+            if os.path.exists(img_path + os.sep + name):
+                print("    Plot details saved to " + img_path + " as " + name)
+            else:
+                print("****************************************************************************")
+                print("*** Error saving " + name + " to " + img_path)
+                print("*** Details of the error follow: ")
+                print("")
+                print(stdOut)
+                print(stdErr)
+                print("****************************************************************************")
+                        
+        if glissadeFlag:
+            plotFile = ''+ ncl_path + '/shelf/circshelfvelg.ncl'
+            benchGLS    = 'STOCKGLS = addfile(\"'+ benchDir + '/circular-shelf.gnu.glissade.nc\", \"r\")'
+            modelGLS = 'VARGLS = addfile(\"' + modelDir + '/circular-shelf.gnu.glissade.nc\", \"r\")'
+            name = 'circshelfvelg.png' 
+            png = 'PNG = "' + img_path + '/' + name + '"'
+            plotCommand = "ncl '" + benchGLS + "'  '" + modelGLS \
+                    + "' '" + png + "' " + plotFile    
             
             # Be cautious about running subprocesses
-            try:
-                subprocess.check_call(plot_circvel, shell=True)
-            except subprocess.CalledProcessError as e:
-                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
-                        + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
-                exit(e.returncode)
-            except OSError as e:
-                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
-                        + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
-                exit(e.errno)
+            call = subprocess.Popen(plotCommand, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            stdOut, stdErr = call.stdout.read(), call.stderr.read()
+            
+            if os.path.exists(img_path + os.sep + name):
+                print("    Plot details saved to " + img_path + " as " + name)
+            else:
+                print("****************************************************************************")
+                print("*** Error saving " + name + " to " + img_path)
+                print("*** Details of the error follow: ")
+                print("")
+                print(stdOut)
+                print(stdErr)
+                print("****************************************************************************")
+    
+        # Done plotting circular-shelf
+        return
             
