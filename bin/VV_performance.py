@@ -15,9 +15,9 @@ import itertools
 
 import livv
 from livv import *
-from livv_bin.VV_test import *
-from livv_bin.VV_dome import Dome
-from livv_bin.VV_gis import Gis
+from bin.VV_test import *
+from bin.VV_dome import Dome
+from bin.VV_gis import Gis
 import jinja2
 
 ## Main class for handling performance test cases.

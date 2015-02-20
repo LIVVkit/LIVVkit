@@ -14,7 +14,7 @@ import subprocess
 
 import livv
 from livv import *
-from livv_bin.VV_test import *
+from bin.VV_test import *
 import jinja2
 
 ## Main class for handling Ismip test cases.
@@ -33,7 +33,10 @@ class Ismip(AbstractTest):
         self.ismipFileTestDetails = dict()
         
         self.name = "ismip"
-        self.description = "Simulates steady ice flow over a surface with periodic boundary conditions"
+        self.description = "Ice Sheet Model Intercomparison Project for Higher-Order Models (ISMIP-HOM)" + \
+                           "prescribes a set of experiments meant to test the implementation of higher-order" + \
+                           " physics.  For more information, see http://homepages.ulb.ac.be/~fpattyn/ismip/ \n" + \
+                           " Simulates steady ice flow over a surface with periodic boundary conditions"
     
     ## Return the name of the test
     #

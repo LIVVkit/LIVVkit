@@ -41,17 +41,17 @@ if __name__ == '__main__':
     print("------------------------------------------------------------------------------")
     
     # Run the dependency checker
-    import livv_bin.VV_dependencies as dependencies
+    import bin.VV_dependencies as dependencies
     dependencies.check()
     
-    import livv_bin.VV_machines as machines
-    from livv_bin.VV_test import AbstractTest
-    from livv_bin.VV_test import TestSummary
-    from livv_bin.VV_dome import Dome
-    from livv_bin.VV_ismip import Ismip
-    from livv_bin.VV_gis import Gis
-    from livv_bin.VV_shelf import Shelf
-    from livv_bin.VV_performance import Performance
+    import bin.VV_machines as machines
+    from bin.VV_test import AbstractTest
+    from bin.VV_test import TestSummary
+    from bin.VV_dome import Dome
+    from bin.VV_ismip import Ismip
+    from bin.VV_gis import Gis
+    from bin.VV_shelf import Shelf
+    from bin.VV_performance import Performance
     
 # Standard python imports can be loaded any time
 import os
@@ -228,7 +228,7 @@ validation = options.validation
 perf = options.perf
 
 # Website related variables
-websiteDir = os.path.dirname(__file__) + "/livv_website"
+websiteDir = os.path.dirname(__file__) + "/web"
 templateDir = websiteDir + "/templates"
 indexDir = outputDir
 cssDir = indexDir + os.sep + "css"

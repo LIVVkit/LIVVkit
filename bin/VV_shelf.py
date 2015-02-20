@@ -8,7 +8,7 @@ Created on Dec 8, 2014
 
 import livv
 from livv import *
-from livv_bin.VV_test import *
+from bin.VV_test import *
 import jinja2
 
 # # Main class for handling shelf test cases.

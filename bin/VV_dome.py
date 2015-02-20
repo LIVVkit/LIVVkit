@@ -14,7 +14,7 @@ import subprocess
 
 import livv
 from livv import *
-from livv_bin.VV_test import *
+from bin.VV_test import *
 import jinja2
 from numpy.f2py import diagnose
 
