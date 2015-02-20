@@ -1,5 +1,15 @@
 '''
-A general parser for extracting data from text files
+A general parser for extracting data from text files.  When using parseConfigurations the 
+resulting dictionaries can be iterated over via the following code:
+  
+            for key1,value1 in modelConfigs.iteritems():
+            fileName = key1
+            for key2,value2 in value1.iteritems():
+                sectionHeader = key2
+                for key3, value3 in value2.iteritems():
+                    variable = key3 
+                    value = value3.split("#")[0]
+
 
 Created on Feb 19, 2015
 
@@ -16,7 +26,11 @@ import livv
 from livv import *
 from timeit import itertools
 
-## 
+## The generalized parser for processing text files associated with a test case
+#
+#  The parser class is to be used within test classes to easily get information
+#  from text files.  The two main pieces of functionality of a parser are for 
+#  reading configuration files and standard output from simulations.
 #
 class Parser(object):
     
@@ -27,11 +41,27 @@ class Parser(object):
         self.benchData = dict()
         self.modelData = dict()
     
-    ##
+    
+    ## Parse through all of the configuration files from a model and benchmark
+    #
+    #  Parses all of the files in the given directories and stores them as 
+    #  nested dictionaries.  The general structure of the dictionaries are
+    #  {filename : {sectionHeaders : {variables : values}}}.  These can be
+    #  looped through for processing using the algorithm listed at the top 
+    #  of this file.
+    #
+    #  input:
+    #    @param modelDir: the directory for the model configuration files
+    #    @param benchDir: the directory for the benchmark configuration files
+    #
+    #  output:
+    #    @returns modelData, benchData: the nested dictionaries corresponding
+    #      to the files found in the input directories
     #
     def parseConfigurations(self, modelDir, benchDir):
-        modelFiles = os.listdir(modelDir)
-        benchFiles = os.listdir(benchDir)        
+        # Pull the files, while filtering out "hidden" ones
+        modelFiles = [f for f in os.listdir(modelDir) if not f.startswith('.')]
+        benchFiles = [f for f in os.listdir(benchDir) if not f.startswith('.')]       
         sameList = set(modelFiles).intersection(benchFiles)
         
         # Pull in the information from the model run
@@ -46,7 +76,7 @@ class Parser(object):
                 
                 # Go through each item in the section and put {var : val} into subDict
                 for entry in self.configParser.items(section):
-                    subDict[[entry[0]]] = entry[1]
+                    subDict[entry[0]] = entry[1]
                     
                 # Map the sub-dictionary to the section 
                 modelFileData[section] = subDict.copy()
@@ -66,19 +96,29 @@ class Parser(object):
                 
                 # Go through each item in the section and put {var : val} into subDict
                 for entry in self.configParser.items(section):
-                    subDict[[entry[0]]] = entry[1] 
+                    subDict[entry[0]] = entry[1] 
                 
                 # Map the sub-dictionary to the section 
                 benchFileData[section] = subDict.copy()
             
             # Associate the data with the file
             self.benchData[benchF] = benchFileData
-        
+            
         # Return both of the datasets
         return self.modelData, self.benchData
                     
                 
-    ## parseOutput
+    ## Scrapes a standard output file for some standard information
+    #
+    #  Searches through a standard output file looking for various
+    #  bits of information about the run.  
+    #
+    #  input:
+    #    @param file: the file to parse through
+    #
+    #  output:
+    #    @param testDict: a mapping of the various parameters to
+    #      their values from the file
     #
     def parseOutput(self, file):
         # Initialize a dictionary that will store all of the information

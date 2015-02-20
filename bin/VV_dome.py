@@ -15,6 +15,7 @@ import subprocess
 import livv
 from livv import *
 from bin.VV_test import *
+from bin.VV_parser import Parser
 import jinja2
 from numpy.f2py import diagnose
 
@@ -156,8 +157,15 @@ class Dome(AbstractTest):
     def runDiagnostic(self, resolution):        
         print("  Dome Diagnostic test in progress....")  
 
-        # Search for the standard output files
         diagnosticDir = livv.inputDir + os.sep + "dome" + resolution + os.sep + "diagnostic" + os.sep + livv.dataDir 
+        diagnosticBenchDir = livv.benchmarkDir + os.sep + "dome" + resolution + os.sep + "diagnostic" + os.sep + livv.dataDir
+
+        # Process the configure files
+        configPath = os.sep + ".." + os.sep + "configure_files"
+        domeParser = Parser()
+        modelConfigs, benchConfigs = domeParser.parseConfigurations(diagnosticDir + configPath, diagnosticBenchDir + configPath)
+        
+        # Search for the standard output files
         files = os.listdir(diagnosticDir)
         test = re.compile(".*[0-9]proc")
         files = filter(test.search, files)
@@ -165,7 +173,7 @@ class Dome(AbstractTest):
         # Scrape the details from each of the files and store some data for later
         diagnosticDetails, diagnosticFiles = [], []
         for file in files:
-            diagnosticDetails.append(self.parse(diagnosticDir + os.sep +  file))
+            diagnosticDetails.append(domeParser.parseOutput(diagnosticDir + os.sep +  file))
             diagnosticFiles.append(file)
         self.domeFileTestDetails["dome" + resolution + os.sep + "diagnostic"] = zip(diagnosticFiles, diagnosticDetails)
         
@@ -239,14 +247,20 @@ class Dome(AbstractTest):
                         
         # Search for the std output files
         evolvingDir = livv.inputDir + os.sep + "dome" + resolution + os.sep + "evolving" + os.sep + livv.dataDir 
+        evolvingBenchDir = livv.benchmarkDir + os.sep + "dome" + resolution + os.sep + "evolving" + os.sep + livv.dataDir
         files = os.listdir(evolvingDir)
         test = re.compile(".*((small)|(large))_proc")
         files = filter(test.search, files)
         
+        # Process the configure files
+        configPath = os.sep + ".." + os.sep + "configure_files"
+        domeParser = Parser()
+        modelConfigs, benchConfigs = domeParser.parseConfigurations(evolvingDir + configPath, evolvingBenchDir + configPath)
+        
         # Scrape the details from each of the files and store some data for later
         evolvingDetails, evolvingFiles = [], []
         for file in files:
-            evolvingDetails.append(self.parse(evolvingDir + os.sep +  file))
+            evolvingDetails.append(domeParser.parseOutput(evolvingDir + os.sep +  file))
             evolvingFiles.append(file)
         self.domeFileTestDetails["dome" + resolution + os.sep + "evolving"] = zip(evolvingFiles, evolvingDetails)
         
