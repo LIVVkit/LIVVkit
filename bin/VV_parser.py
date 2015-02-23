@@ -25,6 +25,7 @@ import ConfigParser
 import livv
 from livv import *
 from timeit import itertools
+from collections import OrderedDict
 
 ## The generalized parser for processing text files associated with a test case
 #
@@ -67,16 +68,16 @@ class Parser(object):
         # Pull in the information from the model run
         for modelF in modelFiles:
             modelFile = modelDir + os.sep + modelF
-            modelFileData = dict()
+            modelFileData = OrderedDict()
             self.configParser.read(modelFile)
 
             # Go through each header section (ones that look like [section])
             for section in self.configParser.sections():
-                subDict = dict()
+                subDict = OrderedDict()
                 
                 # Go through each item in the section and put {var : val} into subDict
                 for entry in self.configParser.items(section):
-                    subDict[entry[0]] = entry[1]
+                    subDict[entry[0]] = entry[1].split('#')[0] 
                     
                 # Map the sub-dictionary to the section 
                 modelFileData[section] = subDict.copy()
@@ -87,16 +88,16 @@ class Parser(object):
         # Pull in the information from the benchmark 
         for benchF in benchFiles:
             benchFile = benchDir + os.sep + benchF
-            benchFileData = dict()
+            benchFileData = OrderedDict()
             self.configParser.read(benchFile)
             
             # Go through each header section (ones that look like [section])
             for section in self.configParser.sections():
-                subDict = dict()
+                subDict = OrderedDict()
                 
                 # Go through each item in the section and put {var : val} into subDict
                 for entry in self.configParser.items(section):
-                    subDict[entry[0]] = entry[1] 
+                    subDict[entry[0]] = entry[1].split('#')[0] 
                 
                 # Map the sub-dictionary to the section 
                 benchFileData[section] = subDict.copy()

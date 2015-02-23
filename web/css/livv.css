@@ -128,6 +128,17 @@ hr {
 	font-weight: 600;	
 }
 
+.section {
+	font-size: small;
+	margin-left: 20px;
+}
+
+.variable {
+	font-size: small;
+	line-height: small;
+	margin-left: 40px;
+}
+
 #nav {
     width: calc(100% + 10px);
     height: 3em;

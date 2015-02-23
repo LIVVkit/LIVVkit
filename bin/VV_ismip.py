@@ -15,6 +15,7 @@ import subprocess
 import livv
 from livv import *
 from bin.VV_test import *
+from bin.VV_parser import Parser
 import jinja2
 
 ## Main class for handling Ismip test cases.
@@ -28,9 +29,10 @@ class Ismip(AbstractTest):
     ## Constructor
     #
     def __init__(self):
-        self.ismipTestsRun = []
-        self.ismipBitForBitDetails = dict()
-        self.ismipFileTestDetails = dict()
+        self.testsRun = []
+        self.bitForBitDetails = dict()
+        self.fileTestDetails = dict()
+        self.modelConfigs, self.benchConfigs = dict(), dict()
         
         self.name = "ismip"
         self.description = "Ice Sheet Model Intercomparison Project for Higher-Order Models (ISMIP-HOM)" + \
@@ -58,7 +60,7 @@ class Ismip(AbstractTest):
     #
     def run(self, testCase):
         # Common run 
-        self.ismipTestsRun.append(testCase)
+        self.testsRun.append(testCase)
         
         # Make sure LIVV can find the data
         ismipDir = livv.inputDir + os.sep + testCase + os.sep + livv.dataDir 
@@ -68,7 +70,7 @@ class Ismip(AbstractTest):
             print("      " + ismipDir)
             print("      " + ismipBenchDir)
             print("    Continuing with next test....")
-            self.ismipBitForBitDetails[testCase] = {'Data not found': ['SKIPPED', '0.0']}
+            self.bitForBitDetails[testCase] = {'Data not found': ['SKIPPED', '0.0']}
             return 1 # zero returns a problem        
         
         # Pull some data about the test case
@@ -79,49 +81,6 @@ class Ismip(AbstractTest):
         # Pass it onto the specific run
         self.runIsmip(aOrC,resolution)
             
-    
-    ## Creates the output test page
-    #
-    #  The generate method will create an ismip.html page in the output directory.
-    #  This page will contain a detailed list of the results from LIVV.  
-    #
-    def generate(self):
-        # Set up jinja related variables
-        templateLoader = jinja2.FileSystemLoader( searchpath=livv.templateDir )
-        templateEnv = jinja2.Environment( loader=templateLoader )
-        templateFile = "/test.html"
-        template = templateEnv.get_template( templateFile )
-        
-        # Set up relative paths
-        indexDir = ".."
-        cssDir = indexDir + "/css"
-        imgDir = indexDir + "/imgs/ismip"
-        
-        # Grab all of our images
-        testImgDir = livv.imgDir + os.sep + "ismip"
-        testImages = [os.path.basename(img) for img in glob.glob(testImgDir + os.sep + "*.png")]
-        testImages.append([os.path.basename(img) for img in glob.glob(testImgDir + "/*.jpg")] )
-        testImages.append([os.path.basename(img) for img in glob.glob(testImgDir + "/*.svg")] )
-
-        # Set up the template variables  
-        templateVars = {"timestamp" : livv.timestamp,
-                        "user" : livv.user,
-                        "comment" : livv.comment,
-                        "testName" : self.getName(),
-                        "indexDir" : livv.indexDir,
-                        "cssDir" : livv.cssDir,
-                        "testDescription" : self.description,
-                        "testsRun" : self.ismipTestsRun,
-                        "testHeader" : livv.parserVars,
-                        "bitForBitDetails" : self.ismipBitForBitDetails,
-                        "testDetails" : self.ismipFileTestDetails,
-                        "imgDir" : imgDir,
-                        "testImages" : testImages}
-        outputText = template.render( templateVars )
-        page = open(testDir + '/ismip.html', "w")
-        page.write(outputText)
-        page.close()        
-    
     
     ## Perform V&V on an ismip-hom test case
     #
@@ -137,25 +96,35 @@ class Ismip(AbstractTest):
     # 
     def runIsmip(self, aOrC, resolution):
         print("  Ismip-hom-" + aOrC + os.sep + resolution + " test in progress....")  
+        
+        testName = 'ismip-hom-' + aOrC + os.sep + resolution
+        ismipDir = livv.inputDir + os.sep + testName + os.sep + livv.dataDir
+        ismipBenchDir = livv.benchmarkDir + os.sep + testName + os.sep + livv.dataDir
+                
+        # Process the configure files
+        configPath = os.sep + ".." + os.sep + "configure_files"
+        ismipParser = Parser()
+        self.modelConfigs[testName], self.benchConfigs[testName] = \
+            ismipParser.parseConfigurations(ismipDir + configPath, ismipBenchDir + configPath)
                 
         # Search for the std output files
-        files = os.listdir(livv.inputDir + '/ismip-hom-' + aOrC + os.sep + resolution + os.sep + livv.dataDir)
+        files = os.listdir(ismipDir)
         test = re.compile(".*out.*[0-9]")
         files = filter(test.search, files)
         
         # Scrape the details from each of the files and store some data for later
         ismipDetails, ismipFiles = [], []
         for file in files:
-            ismipDetails.append(self.parse(livv.inputDir + '/ismip-hom-' + aOrC + os.sep + resolution + os.sep + livv.dataDir + '/' + file))
+            ismipDetails.append(self.parse(ismipDir + '/' + file))
             ismipFiles.append(file)
-        self.ismipFileTestDetails['ismip-hom-' + aOrC + os.sep + resolution] = zip(ismipFiles, ismipDetails)
+        self.fileTestDetails[testName] = zip(ismipFiles, ismipDetails)
         
         # Create the plots
         self.plot(aOrC,resolution[:2])
 
         # Run bit for bit test
-        self.ismipBitForBitDetails['ismip-hom-' + aOrC + os.sep + resolution] = self.bit4bit('/ismip-hom-' + aOrC + os.sep + resolution)
-        for key, value in self.ismipBitForBitDetails['ismip-hom-' + aOrC + os.sep + resolution].iteritems():
+        self.bitForBitDetails[testName] = self.bit4bit(os.sep + testName)
+        for key, value in self.bitForBitDetails[testName].iteritems():
             print ("    {:<30} {:<10}".format(key,value[0]))
             
 

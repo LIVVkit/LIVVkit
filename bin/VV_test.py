@@ -296,6 +296,78 @@ class AbstractTest(object):
         return testDict     
 
 
+    ## Creates the output test page
+    #
+    #  The generate method will create a {{test}}.html page in the output directory.
+    #  This page will contain a detailed list of the results from LIVV.  Details
+    #  from the run are pulled from two locations.  Global definitions that are 
+    #  displayed on every page, or used for navigation purposes are imported
+    #  from the main livv.py module.  All dome specific information is supplied
+    #  via class variables.
+    #
+    #  \note Paths that are contained in templateVars should not be using os.sep
+    #        since they are for html.
+    #
+    def generate(self):
+        # Set up jinja related variables
+        templateLoader = jinja2.FileSystemLoader( searchpath=livv.templateDir )
+        templateEnv = jinja2.Environment( loader=templateLoader )
+        templateFile = "/test.html"
+        template = templateEnv.get_template( templateFile )
+        
+        # Set up relative paths
+        indexDir = ".."
+        cssDir = indexDir + "/css"
+        imgDir = indexDir + "/imgs/" + self.getName()
+        
+        # Grab all of our images
+        testImgDir = livv.imgDir + os.sep + self.getName()
+        testImages = [os.path.basename(img) for img in glob.glob(testImgDir + os.sep + "*.png")]
+        testImages.append([os.path.basename(img) for img in glob.glob(testImgDir + "/*.jpg")] )
+        testImages.append([os.path.basename(img) for img in glob.glob(testImgDir + "/*.svg")] )
+
+        # Set up the template variables  
+        templateVars = {"timestamp" : livv.timestamp,
+                        "user" : livv.user,
+                        "comment" : livv.comment,
+                        "testName" : self.getName(),
+                        "indexDir" : livv.indexDir,
+                        "cssDir" : livv.cssDir,
+                        "testDescription" : self.description,
+                        "testsRun" : self.testsRun,
+                        "testHeader" : livv.parserVars,
+                        "bitForBitDetails" : self.bitForBitDetails,
+                        "testDetails" : self.fileTestDetails,
+                        "modelConfigs" : self.modelConfigs,
+                        "benchConfigs" : self.benchConfigs,
+                        "imgDir" : imgDir,
+                        "testImages" : testImages}
+        outputText = template.render( templateVars )
+        page = open(testDir + '/' + self.getName() + '.html', "w")
+        page.write(outputText)
+        page.close()        
+    
+        templateFile = "/configComparisions.html"
+        template = templateEnv.get_template(templateFile)
+        indexDir = "../.."
+        cssDir = indexDir + "/css"
+        templateVars = {"timestamp" : livv.timestamp,
+                        "user" : livv.user,
+                        "comment" : livv.comment,
+                        "testName" : self.getName(),
+                        "indexDir" : indexDir,
+                        "cssDir" : cssDir,
+                        "testsRun" : self.testsRun,
+                        "modelConfigs" : self.modelConfigs,
+                        "benchConfigs" : self.benchConfigs}
+        outputText = template.render( templateVars )
+        page = open(testDir + os.sep +'configurations' + os.sep + self.getName() + '.html', "w")
+        page.write(outputText)
+        page.close() 
+    
+
+
+
 ## TestSummary provides LIVV the ability to assemble the overview and main page.
 #
 #  The TestSummary class does not strictly fall under the category of a test
@@ -323,7 +395,7 @@ class TestSummary(AbstractTest):
     #
     def webSetup(self, testsRun, testCases):   
         # Create directory structure
-        for siteDir in [livv.indexDir, livv.testDir]:
+        for siteDir in [livv.indexDir, livv.testDir, livv.testDir + os.sep + 'configurations']:
             if not os.path.exists(siteDir):
                 os.mkdir(siteDir);
         # Copy over css && imgs directories from source

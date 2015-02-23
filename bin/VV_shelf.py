@@ -9,6 +9,7 @@ Created on Dec 8, 2014
 import livv
 from livv import *
 from bin.VV_test import *
+from bin.VV_parser import Parser
 import jinja2
 
 # # Main class for handling shelf test cases.
@@ -26,9 +27,10 @@ class Shelf(AbstractTest):
         result = {-1 : 'N/A', 0 : 'SUCCESS', 1 : 'FAILURE'}
         
         # Keep track of what shelf test have been run
-        self.shelfTestsRun = []
-        self.shelfBitForBitDetails = dict()
-        self.shelfFileTestDetails = dict()
+        self.testsRun = []
+        self.bitForBitDetails = dict()
+        self.fileTestDetails = dict()
+        self.modelConfigs, self.benchConfigs = dict(), dict()
     
         self.name = "shelf"
         self.description = "A blank description"
@@ -53,7 +55,7 @@ class Shelf(AbstractTest):
     #
     def run(self, test):
         # Common run 
-        self.shelfTestsRun.append(test)
+        self.testsRun.append(test)
         
         # Map the case names to the case functions
         callDict = {'confined-shelf' : self.runConfined,
@@ -67,7 +69,7 @@ class Shelf(AbstractTest):
             print("      " + shelfDir)
             print("      " + shelfBenchDir)
             print("    Continuing with next test....")
-            self.shelfBitForBitDetails[test] = {'Data not found': ['SKIPPED', '0.0']}
+            self.bitForBitDetails[test] = {'Data not found': ['SKIPPED', '0.0']}
             return 1 # zero returns a problem
         
         # Call the correct function
@@ -77,50 +79,19 @@ class Shelf(AbstractTest):
             print("  Could not find test code for shelf test: " + test)
         
     
-    # # Creates the output test page
-    #
-    #  The generate method will create a shelf.html page in the output directory.
-    #  This page will contain a detailed list of the results from LIVV.  
-    #
-    def generate(self):
-        templateLoader = jinja2.FileSystemLoader(searchpath=livv.templateDir)
-        templateEnv = jinja2.Environment(loader=templateLoader)
-        templateFile = "/test.html"
-        template = templateEnv.get_template(templateFile)
-        
-        indexDir = ".."
-        cssDir = indexDir + "/css"
-        imgDir = indexDir + "/imgs/shelf"
-        
-        testImgDir = livv.imgDir + os.sep + "shelf"
-        testImages = [os.path.basename(img) for img in glob.glob(testImgDir + os.sep + "*.png")]
-        testImages.append([os.path.basename(img) for img in glob.glob(testImgDir + "/*.jpg")])
-        testImages.append([os.path.basename(img) for img in glob.glob(testImgDir + "/*.svg")])
-
-        # Set up the template variables  
-        templateVars = {"timestamp" : livv.timestamp,
-                        "user" : livv.user,
-                        "comment" : livv.comment,
-                        "testName" : self.getName(),
-                        "indexDir" : indexDir,
-                        "cssDir" : cssDir,
-                        "testDescription" : self.description,
-                        "testsRun" : self.shelfTestsRun,
-                        "bitForBitDetails" : self.shelfBitForBitDetails,
-                        "testHeader" : livv.parserVars,
-                        "testDetails" : self.shelfFileTestDetails,
-                        "imgDir" : imgDir,
-                        "testImages" : testImages}
-        outputText = template.render(templateVars)
-        page = open(testDir + '/shelf.html', "w")
-        page.write(outputText)
-        page.close()  
-    
-    
     # # Perform V&V on the confined shelf case
     # 
     def runConfined(self):
         print("  Confined Shelf test in progress....")  
+        
+        confinedDir = livv.inputDir + '/confined-shelf' + os.sep + livv.dataDir
+        confinedBenchDir = livv.benchmarkDir + '/confined-shelf' + os.sep + livv.dataDir
+        
+        # Parse the configure files
+        configPath = os.sep + ".." + os.sep + "configure_files"
+        shelfParser = Parser()
+        self.modelConfigs['confined-shelf'], self.benchConfigs['confined-shelf'] = \
+            shelfParser.parseConfigurations(confinedDir + configPath, confinedBenchDir + configPath)
         
         # Search for the std output files
         files = os.listdir(livv.inputDir + '/confined-shelf' + os.sep + livv.dataDir)
@@ -132,14 +103,14 @@ class Shelf(AbstractTest):
         for file in files:
             shelfDetails.append(self.parse(livv.inputDir + '/confined-shelf' + os.sep + livv.dataDir + "/" + file))
             shelfFiles.append(file)
-        self.shelfFileTestDetails["confined-shelf"] = zip(shelfFiles, shelfDetails)
+        self.fileTestDetails["confined-shelf"] = zip(shelfFiles, shelfDetails)
         
         # Create the plots
         self.plotConfined()
 
         # Run bit for bit test
-        self.shelfBitForBitDetails['confined-shelf'] = self.bit4bit('/confined-shelf')
-        for key, value in self.shelfBitForBitDetails['confined-shelf'].iteritems():
+        self.bitForBitDetails['confined-shelf'] = self.bit4bit('/confined-shelf')
+        for key, value in self.bitForBitDetails['confined-shelf'].iteritems():
             print ("    {:<30} {:<10}".format(key, value[0]))
     
     
@@ -224,7 +195,15 @@ class Shelf(AbstractTest):
     # 
     def runCircular(self):
         print("  Circular Shelf test in progress....")  
+        circularDir = livv.inputDir + '/circular-shelf' + os.sep + livv.dataDir
+        circularBenchDir = livv.benchmarkDir + '/circular-shelf' + os.sep + livv.dataDir
         
+        # Parse the configure files
+        configPath = os.sep + ".." + os.sep + "configure_files"
+        shelfParser = Parser()
+        self.modelConfigs['circular-shelf'], self.benchConfigs['circular-shelf'] = \
+            shelfParser.parseConfigurations(circularDir + configPath, circularBenchDir + configPath)
+            
         # Search for the std output files
         files = os.listdir(livv.inputDir + '/circular-shelf' + os.sep + livv.dataDir)
         test = re.compile("circular-shelf.*out.*")
@@ -235,14 +214,14 @@ class Shelf(AbstractTest):
         for file in files:
             shelfDetails.append(self.parse(livv.inputDir + '/circular-shelf' + os.sep + livv.dataDir + "/" + file))
             shelfFiles.append(file)
-        self.shelfFileTestDetails["circular-shelf"] = zip(shelfFiles, shelfDetails)
+        self.fileTestDetails["circular-shelf"] = zip(shelfFiles, shelfDetails)
         
         # Create the plots
         self.plotCircular()
 
         # Run bit for bit test
-        self.shelfBitForBitDetails['circular-shelf'] = self.bit4bit('/circular-shelf')
-        for key, value in self.shelfBitForBitDetails['circular-shelf'].iteritems():
+        self.bitForBitDetails['circular-shelf'] = self.bit4bit('/circular-shelf')
+        for key, value in self.bitForBitDetails['circular-shelf'].iteritems():
             print ("    {:<30} {:<10}".format(key, value[0]))
     
     

@@ -34,9 +34,10 @@ class Dome(AbstractTest):
         result = {-1 : 'N/A', 0 : 'SUCCESS', 1 : 'FAILURE'}
         
         # Keep track of what dome test have been run
-        self.domeTestsRun = []
-        self.domeBitForBitDetails = dict()
-        self.domeFileTestDetails = dict()
+        self.testsRun = []
+        self.bitForBitDetails = dict()
+        self.fileTestDetails = dict()
+        self.modelConfigs, self.benchConfigs = dict(), dict()
         
         # Describe what the dome tests are all about
         self.name = "dome"
@@ -69,7 +70,7 @@ class Dome(AbstractTest):
     #
     def run(self, testCase):
         # Common run     
-        self.domeTestsRun.append(testCase)
+        self.testsRun.append(testCase)
         
         # Map the case names to the case functions
         splitCase = testCase.split('/')
@@ -86,7 +87,7 @@ class Dome(AbstractTest):
             print("      " + domeDir)
             print("      " + domeBenchDir)
             print("    Continuing with next test....")
-            self.domeBitForBitDetails['dome' + resolution + os.sep + type] = {'Data not found': ['SKIPPED', '0.0']}
+            self.bitForBitDetails['dome' + resolution + os.sep + type] = {'Data not found': ['SKIPPED', '0.0']}
             return 1 # zero returns a problem        
         
         # Call the correct function
@@ -94,53 +95,6 @@ class Dome(AbstractTest):
             callDict[type](resolution)
         else: 
             print("  Could not find test code for dome test: " + testCase)
-        
-    
-    ## Creates the output test page
-    #
-    #  The generate method will create a dome.html page in the output directory.
-    #  This page will contain a detailed list of the results from LIVV.  Details
-    #  from the run are pulled from two locations.  Global definitions that are 
-    #  displayed on every page, or used for navigation purposes are imported
-    #  from the main livv.py module.  All dome specific information is supplied
-    #  via class variables.
-    #
-    #  \note Paths that are contained in templateVars should not be using os.sep
-    #        since they are for html.
-    #
-    def generate(self):
-        templateLoader = jinja2.FileSystemLoader( searchpath=livv.templateDir )
-        templateEnv = jinja2.Environment( loader=templateLoader )
-        templateFile = "/test.html"
-        template = templateEnv.get_template( templateFile )
-        
-        indexDir = ".."
-        cssDir = indexDir + "/css"
-        imgDir = indexDir + "/imgs/dome"
-        
-        testImgDir = livv.imgDir + os.sep + "dome"
-        testImages = [os.path.basename(img) for img in glob.glob(testImgDir + os.sep + "*.png")]
-        testImages.append([os.path.basename(img) for img in glob.glob(testImgDir + os.sep + "*.jpg")] )
-        testImages.append([os.path.basename(img) for img in glob.glob(testImgDir + os.sep + "*.svg")] )
-
-        # Set up the template variables  
-        templateVars = {"timestamp" : livv.timestamp,
-                        "user" : livv.user,
-                        "comment" : livv.comment,
-                        "testName" : self.getName(),
-                        "indexDir" : indexDir,
-                        "cssDir" : cssDir,
-                        "testDescription" : self.description,
-                        "testsRun" : self.domeTestsRun,
-                        "bitForBitDetails" : self.domeBitForBitDetails,
-                        "testHeader" : livv.parserVars,
-                        "testDetails" : self.domeFileTestDetails,
-                        "imgDir" : imgDir,
-                        "testImages" : testImages}
-        outputText = template.render( templateVars )
-        page = open(testDir + os.sep + 'dome.html', "w")
-        page.write(outputText)
-        page.close()        
     
     
     ## Perform V&V on the diagnostic dome case
@@ -163,7 +117,8 @@ class Dome(AbstractTest):
         # Process the configure files
         configPath = os.sep + ".." + os.sep + "configure_files"
         domeParser = Parser()
-        modelConfigs, benchConfigs = domeParser.parseConfigurations(diagnosticDir + configPath, diagnosticBenchDir + configPath)
+        self.modelConfigs['dome' + resolution + os.sep + "diagnostic"], self.benchConfigs['dome' + resolution + os.sep + "diagnostic"] = \
+            domeParser.parseConfigurations(diagnosticDir + configPath, diagnosticBenchDir + configPath)
         
         # Search for the standard output files
         files = os.listdir(diagnosticDir)
@@ -175,14 +130,14 @@ class Dome(AbstractTest):
         for file in files:
             diagnosticDetails.append(domeParser.parseOutput(diagnosticDir + os.sep +  file))
             diagnosticFiles.append(file)
-        self.domeFileTestDetails["dome" + resolution + os.sep + "diagnostic"] = zip(diagnosticFiles, diagnosticDetails)
+        self.fileTestDetails["dome" + resolution + os.sep + "diagnostic"] = zip(diagnosticFiles, diagnosticDetails)
         
         # Create the plots
         self.plotDiagnostic(resolution)
 
         # Run bit for bit tests
-        self.domeBitForBitDetails['dome' + resolution + os.sep + 'diagnostic'] = self.bit4bit(os.sep + 'dome' + resolution + os.sep + 'diagnostic')
-        for key, value in self.domeBitForBitDetails['dome' + resolution + os.sep + 'diagnostic'].iteritems():
+        self.bitForBitDetails['dome' + resolution + os.sep + 'diagnostic'] = self.bit4bit(os.sep + 'dome' + resolution + os.sep + 'diagnostic')
+        for key, value in self.bitForBitDetails['dome' + resolution + os.sep + 'diagnostic'].iteritems():
             print ("    {:<30} {:<10}".format(key,value[0]))
     
     
@@ -255,21 +210,22 @@ class Dome(AbstractTest):
         # Process the configure files
         configPath = os.sep + ".." + os.sep + "configure_files"
         domeParser = Parser()
-        modelConfigs, benchConfigs = domeParser.parseConfigurations(evolvingDir + configPath, evolvingBenchDir + configPath)
+        self.modelConfigs['dome' + resolution + os.sep + "evolving"], self.benchConfigs['dome' + resolution + os.sep + "evolving"] = \
+                domeParser.parseConfigurations(evolvingDir + configPath, evolvingBenchDir + configPath)
         
         # Scrape the details from each of the files and store some data for later
         evolvingDetails, evolvingFiles = [], []
         for file in files:
             evolvingDetails.append(domeParser.parseOutput(evolvingDir + os.sep +  file))
             evolvingFiles.append(file)
-        self.domeFileTestDetails["dome" + resolution + os.sep + "evolving"] = zip(evolvingFiles, evolvingDetails)
+        self.fileTestDetails["dome" + resolution + os.sep + "evolving"] = zip(evolvingFiles, evolvingDetails)
         
         # Create the plots
         self.plotEvolving(resolution)
 
         # Run bit for bit test
-        self.domeBitForBitDetails['dome' + resolution + os.sep +'evolving'] = self.bit4bit(os.sep + 'dome' + resolution + os.sep + 'evolving')
-        for key, value in self.domeBitForBitDetails['dome' + resolution + os.sep + 'evolving'].iteritems():
+        self.bitForBitDetails['dome' + resolution + os.sep +'evolving'] = self.bit4bit(os.sep + 'dome' + resolution + os.sep + 'evolving')
+        for key, value in self.bitForBitDetails['dome' + resolution + os.sep + 'evolving'].iteritems():
             print ("    {:<30} {:<10}".format(key,value[0]))
                 
     
