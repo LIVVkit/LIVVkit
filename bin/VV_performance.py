@@ -9,13 +9,10 @@ Created on Dec 8, 2014
 import re
 import os
 import sys
-import glob
-import subprocess
 import itertools
 
 import livv
-from livv import *
-from bin.VV_test import *
+from bin.VV_test import AbstractTest
 from bin.VV_dome import Dome
 from bin.VV_gis import Gis
 import jinja2

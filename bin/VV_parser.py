@@ -23,29 +23,28 @@ import subprocess
 import ConfigParser
 
 import livv
-from livv import *
 from timeit import itertools
 from collections import OrderedDict
 
 ## The generalized parser for processing text files associated with a test case
 #
 #  The parser class is to be used within test classes to easily get information
-#  from text files.  The two main pieces of functionality of a parser are for 
+#  from text files.  The two main pieces of functionality of a parser are for
 #  reading configuration files and standard output from simulations.
 #
 class Parser(object):
-    
+
     ## Constructor
     #
     def __init__(self):
         self.configParser = ConfigParser.ConfigParser()
         self.benchData = dict()
         self.modelData = dict()
-    
-    
+
+
     ## Parse through all of the configuration files from a model and benchmark
     #
-    #  Parses all of the files in the given directories and stores them as 
+    #  Parses all of the files in the given directories and stores them as
     #  nested dictionaries.  The general structure of the dictionaries are
     #  {filename : {sectionHeaders : {variables : values}}}.  These can be
     #  looped through for processing using the algorithm listed at the top 
@@ -62,7 +61,7 @@ class Parser(object):
     def parseConfigurations(self, modelDir, benchDir):
         # Pull the files, while filtering out "hidden" ones
         modelFiles = [f for f in os.listdir(modelDir) if not f.startswith('.')]
-        benchFiles = [f for f in os.listdir(benchDir) if not f.startswith('.')]       
+        benchFiles = [f for f in os.listdir(benchDir) if not f.startswith('.')]
         sameList = set(modelFiles).intersection(benchFiles)
         
         # Pull in the information from the model run
@@ -184,4 +183,4 @@ class Parser(object):
             if testDict[key] == None:
                 testDict[key] = 'N/A'
         
-        return testDict     
+        return testDict

@@ -9,12 +9,10 @@ Created on Dec 8, 2014
 import re
 import os
 import sys
-import glob
 import subprocess
 
 import livv
-from livv import *
-from bin.VV_test import *
+from bin.VV_test import AbstractTest
 from bin.VV_parser import Parser
 import jinja2
 
@@ -25,7 +23,7 @@ import jinja2
 #  This class handles the Ismip-hom a and c tests for resolutions of 20km and 80km.
 #
 class Ismip(AbstractTest):
-    
+
     ## Constructor
     #
     def __init__(self):
@@ -33,13 +31,13 @@ class Ismip(AbstractTest):
         self.bitForBitDetails = dict()
         self.fileTestDetails = dict()
         self.modelConfigs, self.benchConfigs = dict(), dict()
-        
+
         self.name = "ismip"
         self.description = "Ice Sheet Model Intercomparison Project for Higher-Order Models (ISMIP-HOM)" + \
                            "prescribes a set of experiments meant to test the implementation of higher-order" + \
                            " physics.  For more information, see http://homepages.ulb.ac.be/~fpattyn/ismip/ \n" + \
                            " Simulates steady ice flow over a surface with periodic boundary conditions"
-    
+
     ## Return the name of the test
     #
     #  output:
@@ -47,21 +45,21 @@ class Ismip(AbstractTest):
     #
     def getName(self):
         return self.name
-    
-    
-    ## Runs the ismip specific test case.  
+
+
+    ## Runs the ismip specific test case.
     #
-    #  When running a test this call will record the specific test case 
-    #  being run.  Each specific test case string is mapped to the 
+    #  When running a test this call will record the specific test case
+    #  being run.  Each specific test case string is mapped to the
     #  method that will be used to run the actual test case.
     #
     #  input:
     #    @param testCase : the string indicator of the test to run
     #
     def run(self, testCase):
-        # Common run 
+        # Common run
         self.testsRun.append(testCase)
-        
+
         # Make sure LIVV can find the data
         ismipDir = livv.inputDir + os.sep + testCase + os.sep + livv.dataDir 
         ismipBenchDir = livv.benchmarkDir + os.sep + testCase + os.sep + livv.dataDir
@@ -71,42 +69,42 @@ class Ismip(AbstractTest):
             print("      " + ismipBenchDir)
             print("    Continuing with next test....")
             self.bitForBitDetails[testCase] = {'Data not found': ['SKIPPED', '0.0']}
-            return 1 # zero returns a problem        
-        
+            return 1 # zero returns a problem
+
         # Pull some data about the test case
         splitCase = testCase.split('/')
         aOrC = splitCase[0][-1]
         resolution = splitCase[-1]
-        
+
         # Pass it onto the specific run
         self.runIsmip(aOrC,resolution)
-            
-    
+
+
     ## Perform V&V on an ismip-hom test case
     #
-    #  Runs the ismip V&V for a given case and resolution.  First parses through all 
+    #  Runs the ismip V&V for a given case and resolution.  First parses through all
     #  of the standard output files for the given test case, then generates plots via
     #  the plot function.  Finishes up by doing bit for bit comparisons with
     #  the benchmark files.
     #
     #  input:
     #    @param aOrC: Whether we are running ismip-hom-a or ismip-hom-c
-    #    @param resolution: The resolution of the test cases to look in. 
+    #    @param resolution: The resolution of the test cases to look in.
     #                       (eg resolution == 30 -> reg_test/dome30/diagnostic)
     # 
     def runIsmip(self, aOrC, resolution):
-        print("  Ismip-hom-" + aOrC + os.sep + resolution + " test in progress....")  
-        
+        print("  Ismip-hom-" + aOrC + os.sep + resolution + " test in progress....")
+
         testName = 'ismip-hom-' + aOrC + os.sep + resolution
         ismipDir = livv.inputDir + os.sep + testName + os.sep + livv.dataDir
         ismipBenchDir = livv.benchmarkDir + os.sep + testName + os.sep + livv.dataDir
-                
+
         # Process the configure files
         configPath = os.sep + ".." + os.sep + "configure_files"
         ismipParser = Parser()
         self.modelConfigs[testName], self.benchConfigs[testName] = \
             ismipParser.parseConfigurations(ismipDir + configPath, ismipBenchDir + configPath)
-                
+
         # Search for the std output files
         files = os.listdir(ismipDir)
         test = re.compile(".*out.*[0-9]")

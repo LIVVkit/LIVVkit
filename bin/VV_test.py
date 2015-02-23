@@ -8,7 +8,7 @@ by all derived test classes.
 The TestSummary is a dummy class that is used to generate the index of the output.
 It implements a method called webSetup that creates the index with a short summary
 of the execution stats.  All other methods are dummies.  Further implementations
-similar to TestSummary are discouraged to avoid breaking the AbstractTest template. 
+similar to TestSummary are discouraged to avoid breaking the AbstractTest template.
 
 Created on Dec 8, 2014
 
@@ -33,7 +33,7 @@ import jinja2
 from abc import ABCMeta, abstractmethod
 from collections import OrderedDict
 import livv
-from livv import *
+
 
 
 ## AbstractTest provides a description of how a test should work in LIVV.
@@ -44,7 +44,7 @@ from livv import *
 #
 class AbstractTest(object):
     __metaclass__ = ABCMeta
-    
+
     ## Constructor
     #
     @abstractmethod
@@ -56,22 +56,22 @@ class AbstractTest(object):
     @abstractmethod
     def getName(self):
         pass
-    
+
     ## Definition for the general test run
     #
     @abstractmethod
     def run(self, test):
         pass
-      
+
     ## Definition for how to generate test specific web pages
     #
     @abstractmethod
     def generate(self):
-        pass  
-        
+        pass
 
-    ## Tests all models and benchmarks against each other in a bit for bit fashion.  
-    #  If any differences are found the method will return 1, otherwise 0.  
+
+    ## Tests all models and benchmarks against each other in a bit for bit fashion.
+    #  If any differences are found the method will return 1, otherwise 0.
     #
     #  Input:
     #    @param modelPath: the path to the model data
@@ -85,28 +85,28 @@ class AbstractTest(object):
         numpy.set_printoptions(threshold='nan')
         result = {-1 : 'N/A', 0 : 'SUCCESS', 1 : 'FAILURE'}
         bitDict = dict()
-        
+
         # First, make sure that there is test data, otherwise not it.
         modelPath = livv.inputDir + test + os.sep + livv.dataDir
         benchPath = livv.benchmarkDir + test + os.sep + livv.dataDir
         if not (os.path.exists(modelPath) or os.path.exists(benchPath)):
-            return {'No matching benchmark and data files found': ['SKIPPED','0.0']}     
-             
+            return {'No matching benchmark and data files found': ['SKIPPED','0.0']}
+
         # Get all of the .nc files in the model & benchmark directories
         regex = re.compile('^[^\.].*?.nc')
         modelFiles = filter(regex.search, os.listdir(modelPath))
         benchFiles = filter(regex.search, os.listdir(benchPath))
-    
+
         # Get the intersection of the two file lists
         sameList = set(modelFiles).intersection(benchFiles)
-       
+
         if len(sameList) == 0:
             print("  Benchmark and model data not available for " + test)
             return {'No matching benchmark and data files found': ['SKIPPED','0.0']}
         else:
             print("  Running bit for bit tests of " + test + "....")
-        
-        
+
+
         # Go through and check if any differences occur
         for same in list(sameList):
             change = 0
@@ -115,7 +115,7 @@ class AbstractTest(object):
             plotVars = []
             modelFile = modelPath + os.sep + same
             benchFile = benchPath + os.sep + same
-            
+
             # check if they match
             comline = ['ncdiff', modelFile, benchFile, modelPath + os.sep + 'temp.nc', '-O']
             try:
@@ -132,7 +132,7 @@ class AbstractTest(object):
             # Grab the output of ncdiff
             diffData = Dataset(modelPath + os.sep + 'temp.nc', 'r')
             diffVars = diffData.variables.keys()
-                            
+
             # Check if any data in thk has changed, if it exists
             if 'thk' in diffVars and diffData.variables['thk'].size != 0:
                 data = diffData.variables['thk'][:]
@@ -141,7 +141,7 @@ class AbstractTest(object):
                     maxDifference = numpy.amax([maxDifference, numpy.amax(data)])
                     plotVars.append('thk')
                     change = 1
-                                                    
+
             # Check if any data in velnorm has changed, if it exists
             if 'velnorm' in diffVars and diffData.variables['velnorm'].size != 0:
                 data = diffData.variables['velnorm'][:]
@@ -150,7 +150,7 @@ class AbstractTest(object):
                     maxDifference = numpy.amax([maxDifference, numpy.amax(data)])
                     plotVars.append('velnorm')
                     change = 1
-            
+
             # If there were any differences plot them out
             if change:
                 self.plotDifferences(plotVars, modelFile, benchFile, modelPath + os.sep + 'temp.nc')
@@ -163,7 +163,7 @@ class AbstractTest(object):
                       + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                 exit(e.errno)
 
-    
+
             bitDict[same] = [result[change], "{:.4g}".format(absDifference)]
         # If anything has changed, return 1, otherwise returns 0
         return bitDict
@@ -172,7 +172,7 @@ class AbstractTest(object):
     ## plotDifferences
     #
     #  When a bit4bit test fails the differences between the datasets need to be
-    #  printed out so that a user can inspect them.  
+    #  printed out so that a user can inspect them.
     #
     #  input:
     #    @param plotVars: the variables which differ between datasets
@@ -197,8 +197,8 @@ class AbstractTest(object):
 
             # Calculate min and max to scale the colorbars
             max = numpy.amax([numpy.amax(modelData), numpy.amax(benchData)])
-            min = numpy.amin([numpy.amin(modelData), numpy.amin(benchData)]) 
-                        
+            min = numpy.amin([numpy.amin(modelData), numpy.amin(benchData)])
+
             # Plot the model output
             pyplot.subplot(nSubplots,3,1+idx+(idx*nSubplots))
             pyplot.xlabel("Model Data")
@@ -206,24 +206,24 @@ class AbstractTest(object):
             pyplot.imshow(modelData, vmin=min, vmax=max, interpolation='nearest')
             pyplot.colorbar()
             pyplot.tight_layout()
-            
+
             # Plot the benchmark data
             pyplot.subplot(nSubplots,3,2+idx+(idx*nSubplots))
             pyplot.xlabel("Benchmark Data")
             pyplot.imshow(benchData, vmin=min, vmax=max, interpolation='nearest')
             pyplot.colorbar()
             pyplot.tight_layout()
-            
+
             # Plot the difference
             pyplot.subplot(nSubplots, 3,3+idx+(idx*nSubplots))
             pyplot.xlabel("Difference")
             pyplot.imshow(diffData, interpolation='nearest')
             pyplot.colorbar()
             pyplot.tight_layout()
-        
+
         # Save the figure
         pyplot.savefig(livv.imgDir + os.sep + self.getName() + os.sep + "bit4bit" + os.sep + modelFile.split(os.sep)[-1] + ".png")
-        
+
 
     ## Definition for the general parser for standard output
     #
@@ -233,7 +233,7 @@ class AbstractTest(object):
     def parse(self, file):
         # Initialize a dictionary that will store all of the information
         testDict = livv.parserVars.copy()
-        
+
         # Set up variables that we can use to map data and information
         dycoreTypes = {"0" : "Glide", "1" : "Glam", "2" : "Glissade", "3" : "AlbanyFelix", "4" : "BISICLES"}
         numberProcs = 0
@@ -241,13 +241,13 @@ class AbstractTest(object):
         avgItersToConverge = 0
         convergedIters = []
         itersToConverge = []
-        
+
         # Make sure that we can actually read the file
         try:
             logfile = open(file, 'r')
         except:
             print "ERROR: Could not read " + file + " when parsing for test " + self.getName()
-        
+
         # Go through and build up information about the simulation
         for line in logfile:
             #Determine the dycore type
@@ -260,40 +260,40 @@ class AbstractTest(object):
             # Calculate the total number of processors used
             if ('total procs' in line):
                 numberProcs += int(line.split()[-1])
-            
+
             # Grab the current timestep
             if ('Nonlinear Solver Step' in line):
                 currentStep = int(line.split()[4])
-            
+
             # Get the number of iterations per timestep
             if ('"SOLVE_STATUS_CONVERGED"' in line):
                 splitLine = line.split()
                 itersToConverge.append(int(splitLine[splitLine.index('"SOLVE_STATUS_CONVERGED"') + 2]))
-                
+
             # If the timestep converged mark it with a positive
             if ('Converged!' in line):
                 convergedIters.append(currentStep)
-                
+
             # If the timestep didn't converge mark it with a negative
             if ('Failed!' in line):
                 convergedIters.append(-1*currentStep)
-            
+
         # Calculate the average number of iterations it took to converge
         if (len(itersToConverge) > 0):
              avgItersToConverge = sum(itersToConverge) / len(itersToConverge)
-    
+
         # Record some of the data in the testDict
         testDict['Number of processors'] = numberProcs
         testDict['Number of timesteps'] = currentStep
         if avgItersToConverge > 0:
             testDict['Average iterations to converge'] = avgItersToConverge 
-        
+
         if testDict['Dycore Type'] == None: testDict['Dycore Type'] = 'Unavailable'
         for key in testDict.keys():
             if testDict[key] == None:
                 testDict[key] = 'N/A'
-        
-        return testDict     
+
+        return testDict
 
 
     ## Creates the output test page
@@ -310,21 +310,21 @@ class AbstractTest(object):
     #
     def generate(self):
         # Set up jinja related variables
-        templateLoader = jinja2.FileSystemLoader( searchpath=livv.templateDir )
-        templateEnv = jinja2.Environment( loader=templateLoader )
+        templateLoader = jinja2.FileSystemLoader(searchpath=livv.templateDir)
+        templateEnv = jinja2.Environment(loader=templateLoader)
         templateFile = "/test.html"
-        template = templateEnv.get_template( templateFile )
-        
+        template = templateEnv.get_template(templateFile)
+
         # Set up relative paths
         indexDir = ".."
         cssDir = indexDir + "/css"
         imgDir = indexDir + "/imgs/" + self.getName()
-        
+
         # Grab all of our images
         testImgDir = livv.imgDir + os.sep + self.getName()
         testImages = [os.path.basename(img) for img in glob.glob(testImgDir + os.sep + "*.png")]
-        testImages.append([os.path.basename(img) for img in glob.glob(testImgDir + "/*.jpg")] )
-        testImages.append([os.path.basename(img) for img in glob.glob(testImgDir + "/*.svg")] )
+        testImages.append([os.path.basename(img) for img in glob.glob(testImgDir + "/*.jpg")])
+        testImages.append([os.path.basename(img) for img in glob.glob(testImgDir + "/*.svg")])
 
         # Set up the template variables  
         templateVars = {"timestamp" : livv.timestamp,
@@ -343,10 +343,10 @@ class AbstractTest(object):
                         "imgDir" : imgDir,
                         "testImages" : testImages}
         outputText = template.render( templateVars )
-        page = open(testDir + '/' + self.getName() + '.html', "w")
+        page = open(livv.testDir + '/' + self.getName() + '.html', "w")
         page.write(outputText)
-        page.close()        
-    
+        page.close()
+
         templateFile = "/configComparisions.html"
         template = templateEnv.get_template(templateFile)
         indexDir = "../.."
@@ -360,11 +360,11 @@ class AbstractTest(object):
                         "testsRun" : self.testsRun,
                         "modelConfigs" : self.modelConfigs,
                         "benchConfigs" : self.benchConfigs}
-        outputText = template.render( templateVars )
-        page = open(testDir + os.sep +'configurations' + os.sep + self.getName() + '.html', "w")
+        outputText = template.render(templateVars)
+        page = open(livv.testDir + os.sep +'configurations' + os.sep + self.getName() + '.html', "w")
         page.write(outputText)
         page.close() 
-    
+
 
 
 
@@ -375,25 +375,25 @@ class AbstractTest(object):
 #  provides.
 #
 class TestSummary(AbstractTest):
-    
+
 
     ## Constructor
     #
     def __init__(self):
         return
-    
+
     ## Return the name of the test
     # 
     def getName(self):
         return "test summary"
-    
+
     ## Prepare the index of the website.
     #
     #  input:
     #    @param testsRun: the top level names of each of the tests run
     #    @param testCases: the specific test cases being run
     #
-    def webSetup(self, testsRun, testCases):   
+    def webSetup(self, testsRun, testCases):
         # Create directory structure
         for siteDir in [livv.indexDir, livv.testDir, livv.testDir + os.sep + 'configurations']:
             if not os.path.exists(siteDir):
@@ -403,22 +403,22 @@ class TestSummary(AbstractTest):
         shutil.copytree(livv.websiteDir + "/css", livv.indexDir + "/css")
         if os.path.exists(livv.indexDir + "/imgs"): shutil.rmtree(livv.indexDir + "/imgs")
         shutil.copytree(livv.websiteDir + "/imgs", livv.indexDir + "/imgs")
-        
+
         # Where to look for page templates
         templateLoader = jinja2.FileSystemLoader( searchpath=livv.templateDir )
         templateEnv = jinja2.Environment( loader=templateLoader )
-        
+
         # Create the index page
         templateFile = "/index.html"
         template = templateEnv.get_template( templateFile )
-        
+
         # Set up imgs directory to have sub-directories for each test
         for test in testsRun:
-            if not os.path.exists(imgDir + os.sep + test):
-                os.mkdir(imgDir + os.sep + test)
-                if not os.path.exists(imgDir + os.sep + test + os.sep + "bit4bit"):
-                    os.mkdir(imgDir + os.sep + test + os.sep + "bit4bit")
-        
+            if not os.path.exists(livv.imgDir + os.sep + test):
+                os.mkdir(livv.imgDir + os.sep + test)
+                if not os.path.exists(livv.imgDir + os.sep + test + os.sep + "bit4bit"):
+                    os.mkdir(livv.imgDir + os.sep + test + os.sep + "bit4bit")
+
         templateVars = {"indexDir" : livv.indexDir,
                         "testsRun" : testsRun,
                         "timestamp" : livv.timestamp,
@@ -427,13 +427,13 @@ class TestSummary(AbstractTest):
                         "testCases" : testCases,
                         "cssDir" : "css", 
                         "imgDir" : "imgs"}
-        
+
         # Write out the index page
-        outputText = template.render( templateVars )
-        page = open(indexDir + "/index.html", "w")
+        outputText = template.render(templateVars)
+        page = open(livv.indexDir + "/index.html", "w")
         page.write(outputText)
         page.close()
-    
+
     # Override the abstract methods with empty calls    
     def run(self, test):
         pass
