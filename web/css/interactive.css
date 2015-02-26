@@ -108,6 +108,29 @@ div.gallery a:hover img {
     font-size: 24px;
 }
 
+/******************************************************************************
+  Tab Selector Styling
+******************************************************************************/
+.tabs input {display:none}
+
+.tabs label {
+    background-color:#47A3FF; 
+    color: #fff;
+    border:solid 2px #fff;
+    cursor: pointer;
+    display:inline-block; 
+    padding:5px 15px;
+}
+
+.tabs div.case {
+    display:none;
+    border:solid 2px #3385FF; 
+    padding: 15px;
+}
+
+#select :checked + * + * + * + label { background-color:#3385FF;border-color:#3385FF;color:#fff;}
+#select :checked + * + * + * + * + * + * + * + div { display: block }
+
 
 /******************************************************************************
   Hide/Show Button & Section Styling

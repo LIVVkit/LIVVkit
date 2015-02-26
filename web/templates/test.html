@@ -35,10 +35,17 @@
   
   <br style="clear: both" />
   <h4>Results</h4>
+  <div id="select" class="tabs">
     {% for case in testsRun %}
-      <h2 style="margin-top: 20px;"">{{case}}</h2>
+    <input id="tab-{{case}}" name="tabs" type="radio" checked />
+    {% endfor %}  
+
+    {% for case in testsRun %}
+    <label for="tab-{{case}}">{{case}}</label>  
+    {% endfor %}  
       
-      
+    {% for case in testsRun %}
+    <div class="case">
       <p style="font-weight: 600;"> 
         Bit for Bit 
         <a style="font-size: small; font-style: italic">
@@ -140,8 +147,9 @@
       	{% else %}
       		<p>No data found</p>
       	{% endif %}
- 
+    </div>
     {% endfor %}
+    </div>
     <br>
 
     
