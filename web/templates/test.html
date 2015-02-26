@@ -35,6 +35,12 @@
   
   <br style="clear: both" />
   <h4>Results</h4>
+  
+  <STYLE type="text/css">
+  #select :checked + {% for i in range(testsRun|length -1) %} * + {% endfor %} label { background-color:#3385FF;border-color:#3385FF;color:#fff;}
+  #select :checked + {% for i in range(2*testsRun|length -1) %} * + {% endfor %} div {display: block; }
+  </STYLE>
+  
   <div id="select" class="tabs">
     {% for case in testsRun %}
     <input id="tab-{{case}}" name="tabs" type="radio" checked />

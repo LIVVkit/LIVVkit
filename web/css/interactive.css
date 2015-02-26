@@ -128,9 +128,10 @@ div.gallery a:hover img {
     padding: 15px;
 }
 
+/*
 #select :checked + * + * + * + label { background-color:#3385FF;border-color:#3385FF;color:#fff;}
 #select :checked + * + * + * + * + * + * + * + div { display: block }
-
+*/
 
 /******************************************************************************
   Hide/Show Button & Section Styling
