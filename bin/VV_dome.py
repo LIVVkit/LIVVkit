@@ -28,14 +28,7 @@ class Dome(AbstractTest):
     ## Constructor
     #
     def __init__(self):
-        # Mapping of result codes to results
-        result = {-1 : 'N/A', 0 : 'SUCCESS', 1 : 'FAILURE'}
-
-        # Keep track of what dome test have been run
-        self.testsRun = []
-        self.bitForBitDetails = dict()
-        self.fileTestDetails = dict()
-        self.modelConfigs, self.benchConfigs = dict(), dict()
+        super(self.__class__, self).__init__()
 
         # Describe what the dome tests are all about
         self.name = "dome"

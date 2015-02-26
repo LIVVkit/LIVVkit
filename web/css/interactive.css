@@ -1,0 +1,178 @@
+/******************************************************************************
+  Button Styling
+******************************************************************************/
+.button {
+    margin-left: 0;
+    style: bold;
+    height: 3em;
+    width: 100px;
+    line-height: 3em;
+    text-align: center;
+    float: left;
+    background-color: #47A3FF;
+    color: rgba(255,255,255, 1);    
+}
+
+a.button {
+    float: left;
+    text-decoration: none;
+}
+
+a.button:hover {
+    background-color: #3385FF;
+}
+
+
+/******************************************************************************
+  Image Gallery Styling
+******************************************************************************/
+div.gallery {
+    margin: 5px;
+    padding: 5px;
+    border: 1px solid #47A3FF;
+    height: auto;
+    width: auto;
+    float: left;
+    text-align: center;
+}
+
+div.gallery img {
+    float: left;
+    margin: 5px;
+    border: 1px solid #FFFFFF;
+}
+
+div.gallery a:hover img {
+    border: 1px solid #47A3FF;
+}
+.overlay {
+    background-color: rgba(0, 0, 0, 0.6);
+    bottom: 0;
+    cursor: default;
+    left: 0;
+    opacity: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    visibility: hidden;
+    z-index: 1;
+}
+
+.overlay:target {
+    visibility: visible;
+    opacity: 1;
+}
+
+.popup {
+	position: absolute;
+	top: 10%;
+	left: 25%;
+	
+    background-color: #fff;
+    border: 1px solid #000000;
+    display: inline-block;
+    opacity: 0;
+    padding: 15px;
+    visibility: hidden;
+    width: 50%;
+    height: 80%;
+    z-index: 10;
+}
+
+.imageOverlay{
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+    max-height: 100%;
+    max-width: 100%;
+}
+
+.overlay:target+.popup {
+    opacity: 1;
+    visibility: visible;
+}
+
+.close {
+	font-family: Sans-Serif;
+    background-color:#47A3FF;
+    color: #fff;
+    height: 30px;
+    line-height: 27px;
+    border-radius: 30px;
+    text-align: center;
+    position: absolute;
+    text-decoration: none;
+    top: -15px;
+    width: 30px;
+    border-radius: 15px;
+    font-size: 24px;
+}
+
+
+/******************************************************************************
+  Hide/Show Button & Section Styling
+******************************************************************************/
+.sections {
+    display:none; 
+    height:auto;
+    margin-top: 10px;
+    margin-left: 100px;
+    margin-bottom: 20px;
+}
+.show {
+    display: none; 
+}
+.hide:target + .show {
+    display: block; 
+}
+.hide:target {
+    display: none; 
+}
+
+.hide:target ~ .sections {
+    display: block; 
+}
+
+.hide:target ~ .status {
+	display: none;
+}
+
+.hide, .show {
+	float: left;
+	border-radius:2em;
+	margin-left: 20px;
+    width: 2em;
+    height: 2em;
+    line-height: 2em;
+    font-size: 20px;
+    color: #fff;
+    text-align: center;
+    text-decoration: none;
+    background: #47A3FF;
+}
+
+.hide:hover, .show:hover {
+    background: #3385FF;
+    text-decoration: none;
+}
+
+.status p{
+	float: left;
+	margin-left: 20px;
+	line-height: 5px;
+	margin-top: 1px;
+}
+
+.variable {
+    margin-left: 40px;
+}
+
+.sections p{
+}
+
+.top {
+	display: inline;
+	margin-left: 20px;
+	height: 2em;
+	line-height: 2em;
+}

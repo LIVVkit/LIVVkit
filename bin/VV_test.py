@@ -47,9 +47,12 @@ class AbstractTest(object):
 
     ## Constructor
     #
-    @abstractmethod
     def __init__(self):
-        pass
+        self.testsRun = []
+        self.bitForBitDetails = dict()
+        self.plotDetails = dict()
+        self.fileTestDetails = dict()
+        self.modelConfigs, self.benchConfigs = dict(), dict()
 
     ## Should return the name of the test
     #
@@ -311,7 +314,7 @@ class AbstractTest(object):
     def generate(self):
         # Set up jinja related variables
         templateLoader = jinja2.FileSystemLoader(searchpath=livv.templateDir)
-        templateEnv = jinja2.Environment(loader=templateLoader)
+        templateEnv = jinja2.Environment(loader=templateLoader, extensions=["jinja2.ext.do",])
         templateFile = "/test.html"
         template = templateEnv.get_template(templateFile)
 
@@ -346,26 +349,6 @@ class AbstractTest(object):
         page = open(livv.testDir + '/' + self.getName() + '.html', "w")
         page.write(outputText)
         page.close()
-
-        templateFile = "/configComparisions.html"
-        template = templateEnv.get_template(templateFile)
-        indexDir = "../.."
-        cssDir = indexDir + "/css"
-        templateVars = {"timestamp" : livv.timestamp,
-                        "user" : livv.user,
-                        "comment" : livv.comment,
-                        "testName" : self.getName(),
-                        "indexDir" : indexDir,
-                        "cssDir" : cssDir,
-                        "testsRun" : self.testsRun,
-                        "modelConfigs" : self.modelConfigs,
-                        "benchConfigs" : self.benchConfigs}
-        outputText = template.render(templateVars)
-        page = open(livv.testDir + os.sep +'configurations' + os.sep + self.getName() + '.html', "w")
-        page.write(outputText)
-        page.close() 
-
-
 
 
 ## TestSummary provides LIVV the ability to assemble the overview and main page.

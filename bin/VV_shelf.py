@@ -17,11 +17,6 @@ from bin.VV_parser import Parser
 import jinja2
 from numpy.f2py import diagnose
 
-import livv
-from bin.VV_test import AbstractTest
-from bin.VV_parser import Parser
-import jinja2
-
 # # Main class for handling shelf test cases.
 #
 #  The shelf test cases inherit functionality from AbstractTest for checking 
@@ -33,14 +28,7 @@ class Shelf(AbstractTest):
     ## Constructor
     #
     def __init__(self):
-        # Mapping of result codes to results
-        result = {-1 : 'N/A', 0 : 'SUCCESS', 1 : 'FAILURE'}
-
-        # Keep track of what shelf test have been run
-        self.testsRun = []
-        self.bitForBitDetails = dict()
-        self.fileTestDetails = dict()
-        self.modelConfigs, self.benchConfigs = dict(), dict()
+        super(self.__class__, self).__init__()
 
         self.name = "shelf"
         self.description = "A blank description"

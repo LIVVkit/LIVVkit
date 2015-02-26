@@ -1,3 +1,6 @@
+/******************************************************************************
+  Basic Styling Overrides
+******************************************************************************/
 html {
     background: url(../imgs/temp.jpg) no-repeat center center fixed;
     -webkit-background-size: cover;
@@ -6,31 +9,10 @@ html {
     background-size: cover;
 }
 
-
-
 img { 
 	max-width: 100%;
 	height: auto;
 	width: auto\9;
-}
-
-h1 {
-    color: black;
-    text-align: center;
-}
-
-h2 {
-    color: black;
-    margin-left: 50px;
-}
-
-h3 {
-    color: black;
-    margin-left: 10px;	
-}
-
-p, a, li {
-    margin-left: 30px;	
 }
 
 th, td {
@@ -41,11 +23,16 @@ th, td {
 hr {
 	width: 98%;
 	border:0;
-	color: #47A3FF;
-	background-color: #47A3FF;
-	height:2px;
+	margin-top: 0px;
+	color: #EEEEEE;
+	background-color: #EEEEEE;
+	height:1px;
 }
 
+
+/******************************************************************************
+  LIVV Global Styling
+******************************************************************************/
 #page {
     background-color: rgba(255,255,255,1);
     border-radius: 5px;
@@ -53,11 +40,46 @@ hr {
     margin-left: 15%;
     margin-right: 5%;
     width: 1000px;
-  	-moz-box-shadow: 5px 5px 4px rgba(30,30,30,0.3);
-  	-webkit-box-shadow: 5px 5px 4px rgba(30,30,30,0.3);
- 	 box-shadow: 5px 5px 4px rgba(30,30,30,0.3);
+    -moz-box-shadow: 5px 5px 4px rgba(30,30,30,0.3);
+    -webkit-box-shadow: 5px 5px 4px rgba(30,30,30,0.3);
+     box-shadow: 5px 5px 4px rgba(30,30,30,0.3);
 }
 
+#fancy {
+    font-size: medium;
+    text-align: center;
+}
+
+.tabbed {
+    margin-left: 50px;
+}
+
+.SUCCESS {
+    color: green;
+    font-weight: 600;
+}
+
+.FAILURE {
+    color: red;
+    font-weight: 600;
+}
+
+.SKIPPED {
+    color: orange;
+    font-weight: 600;   
+}
+
+div.description {
+    text-align: center;
+    font-weight: normal;
+    width: 120px;
+    margin: 5px;
+}
+
+
+/******************************************************************************
+  Header/Footer Styling
+******************************************************************************/
 #header {
     width: calc(100% + 10px);
     height: 2.5em;
@@ -80,9 +102,7 @@ hr {
 	padding: 5px;
 }
 
-#content {
-	
-}
+#content {}
 
 #footer {
     width: calc(100% + 10px);
@@ -100,97 +120,10 @@ hr {
     transform: translate(-5px,5px);   
 }
 
-#fancy {
-	font-size: medium;
-	text-align: center;
-}
-
-#bold {
-	font-weight: 600;
-}
-
-.tabbed {
-	margin-left: 50px;
-}
-
-.SUCCESS {
-	color: green;
-	font-weight: 600;
-}
-
-.FAILURE {
-	color: red;
-	font-weight: 600;
-}
-
-.SKIPPED {
-	color: orange;
-	font-weight: 600;	
-}
-
-.section {
-	font-size: small;
-	margin-left: 20px;
-}
-
-.variable {
-	font-size: small;
-	line-height: small;
-	margin-left: 40px;
-}
-
 #nav {
     width: calc(100% + 10px);
     height: 3em;
     float: left;
     transform: translate(-5px,-5px);
     background-color: #47A3FF;
-}
-
-div.gallery {
-	margin: 5px;
-	padding: 5px;
-	border: 1px solid #47A3FF;
-	height: auto;
-	width: auto;
-	float: left;
-	text-align: center;
-}
-
-div.gallery img {
-	float: left;
-	margin: 5px;
-	border: 1px solid #FFFFFF;
-}
-
-div.gallery a:hover img {
-	border: 1px solid #47A3FF;
-}
-
-div.description {
-	text-align: center;
-	font-weight: normal;
-	width: 120px;
-	margin: 5px;
-}
-
-.button {
-	margin-left: 0;
-	style: bold;
-	height: 3em;
-	width: 100px;
-	line-height: 3em;
-	text-align: center;
-	float: left;
-    background-color: #47A3FF;
-	color: rgba(255,255,255, 1);	
-}
-
-a.button {
-	float: left;
-    text-decoration: none;
-}
-
-a.button:hover {
-	background-color: #3385FF;
 }

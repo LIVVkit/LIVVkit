@@ -7,30 +7,36 @@
   <div id="content">
   <h2>{{testName}}</h2>
   
-  <h3>Details</h3>
-  <p>
+  <h4>Details</h4>
+  <p margin-left="20px">
     {{testDescription}}
   </p>
   
-  <h3>Plots</h3>
+  <h4>Plots</h4>
 
     {% for img in testImages %}
       {% if img != [] %} 
       <div class="gallery">
       	<div style="float: left; display: inline;">
-	        <a target="_blank" href="{{imgDir}}/{{img}}">
-	        	<img src="{{imgDir}}/{{img}}" alt="{{imgDir}}/{{img}}" width="110">
-	        </a>
+             <a href="#img_form{{loop.index}}" id="img_pop">
+                <img src="{{imgDir}}/{{img}}" width="100px"></img>
+            </a>
 	        <div class="description">{{img}}</div>
         </div>
+      </div>
+      <a href="{{testName}}.html" class="overlay" id="img_form{{loop.index}}"></a>
+
+      <div class="popup">
+          <img src="{{imgDir}}/{{img}}" class="imageOverlay"></img>
+          <a class="close" href="#close">x</a>
       </div>
       {% endif %}
     {% endfor %}
   
   <br style="clear: both" />
-  <h3>Results</h3>
+  <h4>Results</h4>
     {% for case in testsRun %}
-      <h4>{{case}}</h4>
+      <h2 style="margin-top: 20px;"">{{case}}</h2>
       
       
       <p style="font-weight: 600;"> 
@@ -65,10 +71,55 @@
       {% endfor %}
       </table>
         
-        
-      <p id="bold"> Standalone </p>
-         <a href="configurations/{{testName}}.html#{{case}}" class="button"; style="width: 230px; margin-left: 3%; margin-bottom: 1em;">Config File Comparisons</a>
-      
+      <br height="20px" />
+      <b> Standalone </b>
+      <br height="10px" />
+      <hr style="opacity: 0;">
+          {% if case in modelConfigs %}
+            {% for file in modelConfigs[case] %}
+                <div class="Configuration">
+    
+                  <a href="#hide{{case}}{{loop.index}}" class="hide" id="hide{{case}}{{loop.index}}">+</a>
+                  <a href="#show{{case}}{{loop.index}}" class="show" id="show{{case}}{{loop.index}}">-</a>
+                  <h4 class="top">{{file}}</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    {% set changed = [] %}
+                    {% for section, vars in modelConfigs[case][file].iteritems() %}
+                          <b>[{{section}}]</b>
+                          <div class="variable">
+                          {% for var, val in modelConfigs[case][file][section].iteritems() %}
+                            {% if case in benchConfigs and
+                                file in benchConfigs[case] and
+                                section in benchConfigs[case][file] and
+                                var in benchConfigs[case][file][section]%}
+                              {% if val == benchConfigs[case][file][section][var] %}
+                                  {{var}} = {{val}}<br>
+                              {% else %}
+                                  {{var}} = <p style="color: green; display:inline">{{val}}</p> <p style="color: red; display:inline">{{benchConfigs[case][file][section][var]}}</p> <br>
+                                  {% do changed.append(1) %}
+                              {% endif %}
+                            {% else %}
+                                {{var}} = {{val}} <br>
+                                  {% do changed.append(1) %}
+                            {% endif %}
+                          {% endfor %}
+                          </div>
+                    {% endfor %}
+                  </div>
+                  <div class="status">
+                    {% if changed %}
+                      <p style="float: left; color: red">Files differ</p>
+                    {% else %}
+                      <p style="float: left; color: green">Files match</p>
+                    {% endif %}
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            {% endfor %}
+        {% endif %}
+
         {% if testDetails[case] != [] %}
       	<table style="width:100%">
       		<tr>
