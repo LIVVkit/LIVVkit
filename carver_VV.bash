@@ -26,12 +26,12 @@ module load netcdf4-python/1.0.6
 # user added comment of analysis to be performed
 export COMMENT="evaluating code and test suite for CISM2.0 release"
 
-# /reg_test and /livv needs to be placed in the subdirectory below
+# /reg_test and /LIVV need to be placed in the subdirectory below
 export TEST_FILEPATH=$TEST_DIR
 echo $TEST_DIR
 
 # specify location where the html files will be sent so they are viewable on the web
-# livv wil create the www directory in the HTML_PATH if it does not already exist
+# livv will create the www directory in the HTML_PATH if it does not already exist
 export HTML_PATH="/global/project/projectdirs/piscees/www/$USER/"
 
 # flags to select verification tests, 1=yes
@@ -41,7 +41,7 @@ export RUN_GLAM=0
 export RUN_DOME30_DIAGNOSTIC=1
 export RUN_DOME30_EVOLVING=1
 export RUN_CIRCULAR_SHELF=1
-export RUN_CONFINED_SHELF=0
+export RUN_CONFINED_SHELF=1
 export RUN_ISMIP_HOM_A80=1
 export RUN_ISMIP_HOM_A20=1
 export RUN_ISMIP_HOM_C80=1

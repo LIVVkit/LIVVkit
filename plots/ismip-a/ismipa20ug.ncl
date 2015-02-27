@@ -26,24 +26,23 @@ begin
 
   uvarbl1    = VAR1->uvel(0,1,:,:)
   udiff1     = new((/39,39/),float);
-  udiff1     = uvarbl1(:,:)-ustock1(:,:);
 
   uvarbl4   = VAR4->uvel(0,1,:,:)
   udiff4    = new((/39,39/),float);
-  udiff4    = uvarbl4(:,:)-ustock4(:,:);
 
   us1   = ustock1@scale_factor  * ustock1
   us4  = ustock4@scale_factor * ustock4
   uv1   = uvarbl1@scale_factor  * uvarbl1
   uv4  = uvarbl4@scale_factor * uvarbl4
-  ud1   = uvarbl1@scale_factor  * udiff1
-  ud4  = uvarbl4@scale_factor * udiff4
-  us1@long_name  = "1 Scaled Benchmark"
-  us4@long_name = "4 Scaled Benchmark"
-  uv1@long_name  = "1 Scaled Current Run"
-  uv4@long_name = "4 Scaled Current Run"
-  ud1@long_name  = "1 Scaled Difference"
-  ud4@long_name = "4 Scaled Difference"
+  ud1  = uv1 -us1
+  ud4  = uv4 -us4
+
+  us1@long_name  = "1 Proc Benchmark"
+  us4@long_name = "4 Proc Benchmark"
+  uv1@long_name  = "1 Proc Current Run"
+  uv4@long_name = "4 Proc Current Run"
+  ud1@long_name  = "1 Proc Difference"
+  ud4@long_name = "4 Proc Difference"
 
 ;************************************************
 ; create plots
