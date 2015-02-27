@@ -25,24 +25,22 @@ begin
 
   velvarbl1    = VAR1->velnorm(0,1,:,:)
   veldiff1     = new((/30,30/),float);
-  veldiff1     = velvarbl1(:,:)-velstock1(:,:);
 
   velvarbl4    = VAR4->velnorm(0,1,:,:)
   veldiff4     = new((/30,30/),float);
-  veldiff4     = velvarbl4(:,:)-velstock4(:,:);
 
   vs1   = velstock1@scale_factor   * velstock1
   vs4   = velstock4@scale_factor   * velstock4
   vv1   = velvarbl1@scale_factor   * velvarbl1
   vv4   = velvarbl4@scale_factor   * velvarbl4
-  vd1   = velvarbl1@scale_factor   * veldiff1
-  vd4   = velvarbl4@scale_factor   * veldiff4
+  vd1   = vv1 - vs1
+  vd4   = vv4 - vs4
   vs1@long_name    = "1 Proc Scaled Benchmark"
   vs4@long_name    = "4 Proc Scaled Benchmark"
   vv1@long_name    = "1 Proc Scaled Current Run"
   vv4@long_name    = "4 Proc Scaled Current Run" 
-  vd1@long_name    = "1 Proc Scaled Difference"
-  vd4@long_name    = "4 Proc Scaled Difference"
+  vd1@long_name    = "1 Proc Difference"
+  vd4@long_name    = "4 Proc Difference"
 
 ;************************************************
 ; create plots

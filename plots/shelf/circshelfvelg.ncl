@@ -21,14 +21,14 @@ begin
 
   velvarblGLS   = VARGLS->velnorm(0,1,:,:)
   veldiffGLS    = new((/40,40/),float);
-  veldiffGLS    = velvarblGLS(:,:)-velstockGLS(:,:);
 
   vsGLS  = velstockGLS@scale_factor  * velstockGLS
   vvGLS  = velvarblGLS@scale_factor  * velvarblGLS
-  vdGLS  = velvarblGLS@scale_factor  * veldiffGLS
+  vdGLS  = vvGLS - vsGLS;
+
   vsGLS@long_name    = "Glissade Scaled Benchmark"
   vvGLS@long_name    = "Glissade Scaled Current Run"
-  vdGLS@long_name    = "Glissade Scaled Difference"
+  vdGLS@long_name    = "Glissade Difference"
 
 ;************************************************
 ; create plots
