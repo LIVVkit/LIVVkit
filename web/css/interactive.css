@@ -3,7 +3,6 @@
 ******************************************************************************/
 .button {
     margin-left: 0;
-    style: bold;
     height: 3em;
     width: 100px;
     line-height: 3em;
@@ -14,6 +13,7 @@
 }
 
 a.button {
+	font-family: helvetica;
     float: left;
     text-decoration: none;
 }
@@ -31,7 +31,7 @@ div.gallery {
     padding: 5px;
     border: 1px solid #47A3FF;
     height: auto;
-    width: auto;
+    width: 170px;
     float: left;
     text-align: center;
 }
@@ -45,8 +45,21 @@ div.gallery img {
 div.gallery a:hover img {
     border: 1px solid #47A3FF;
 }
+
+div.galllery p {
+	display: none;
+    text-align: center;
+    font-weight: normal;
+    width: 150px;
+    margin: 5px;
+}
+
+div.gallery p:hover {
+	display: block;
+}
+
 .overlay {
-    background-color: rgba(0, 0, 0, 0.6);
+	background-color: rgba(0, 0, 0, 0.6);
     bottom: 0;
     cursor: default;
     left: 0;
@@ -93,7 +106,7 @@ div.gallery a:hover img {
 }
 
 .close {
-	font-family: Sans-Serif;
+    font-family: helvetica;
     background-color:#47A3FF;
     color: #fff;
     height: 30px;
@@ -114,24 +127,25 @@ div.gallery a:hover img {
 .tabs input {display:none}
 
 .tabs label {
-    background-color:#47A3FF; 
+	font-family: helvetica;
+    background-color:#CFCFCF; 
     color: #fff;
     border:solid 2px #fff;
     cursor: pointer;
     display:inline-block; 
-    padding:5px 15px;
+    padding:5px 5px;
+}
+
+.tabs label:hover {
+	background-color:#47A3FF; 
 }
 
 .tabs div.case {
-    display:none;
-    border:solid 2px #3385FF; 
+    display: none;
+    border-top:solid 2px #47A3FF; 
     padding: 15px;
 }
 
-/*
-#select :checked + * + * + * + label { background-color:#3385FF;border-color:#3385FF;color:#fff;}
-#select :checked + * + * + * + * + * + * + * + div { display: block }
-*/
 
 /******************************************************************************
   Hide/Show Button & Section Styling

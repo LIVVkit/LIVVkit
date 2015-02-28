@@ -5,17 +5,45 @@
   	  <a href="http://oceans11.lanl.gov/cism/" class="button">CISM</a>
 	</div>
 	<div id="content">
-		<h2>Summary</h2>
-		  <p>Tests run:</p>
-		  <ul>
-		    {% for case in testCases %}
-		        <li>{{case}}</li>
+	       <hr style="padding: 10px; opacity: 0; clear: both;"/>
+		    {% for test in testsRun %}
+                {% set outterLoop = loop %}
+		        <a href="tests/{{test}}.html" class="button" style="height: 2em; width: auto; padding-left: 15px; padding-right: 15px; line-height: 2em; margin-left: 10px; margin-right: 5px;">{{test}} summary</a>
+		        <p style="margin-top: 0px; margin-bottom: 0px; font-size: small; font-style: italic; height: 2em; line-height: 3.25em; color: #47A3FF;">Click for details.</p>
+		        <hr style="clear: both; background-color: #47A3FF; height: 2px;"/>
+		        {% for case in testMapping[test] %}
+		          <b style="margin-left: 30px;">{{case}}</b>
+		          <div class="summary">
+		            {% if testSummary[outterLoop.index - 1][case][0] != 1 %}
+		              <p>{{testSummary[outterLoop.index - 1][case][0]}} plots generated</p>
+		            {% else %}
+		              <p>{{testSummary[outterLoop.index - 1][case][0]}} plot generated</p>		              
+		            {% endif %}
+		            
+                    {% if testSummary[outterLoop.index - 1][case][1] != 1 %}
+                      <p>{{testSummary[outterLoop.index - 1][case][1]}} output files analyzed</p>
+                    {% else %}
+                      <p>{{testSummary[outterLoop.index - 1][case][1]}} output file analyzed</p>
+                    {% endif %}
+                    
+                    {% if testSummary[outterLoop.index - 1][case][3] != 1 %}
+		              <p>{{testSummary[outterLoop.index - 1][case][2]}} of 
+		                 {{testSummary[outterLoop.index - 1][case][3]}} configuration files unchanged.</p>
+                    {% else %}
+		              <p>{{testSummary[outterLoop.index - 1][case][2]}} of 
+		                 {{testSummary[outterLoop.index - 1][case][3]}} configuration file unchanged.</p>
+                    {% endif %}
+                    
+                    {% if testSummary[outterLoop.index - 1][case][5] != 1 %}
+		              <p>{{testSummary[outterLoop.index - 1][case][4]}} of 
+		                 {{testSummary[outterLoop.index - 1][case][5]}} output files bit for bit.</p>
+                    {% else %}
+		              <p>{{testSummary[outterLoop.index - 1][case][4]}} of 
+		                 {{testSummary[outterLoop.index - 1][case][5]}} output files bit for bit.</p>
+                    {% endif %}
+
+                  </div>
+		        {% endfor %}
 		    {% endfor %}
-		  </ul>
-		<h2>Test Results</h2>
-		  {% for test in testsRun %}
-		     <a href="tests/{{test}}.html">Results for {{test}}</a> 
-		     <br>
-		  {% endfor %}
 
 {% include 'footer.html' %}

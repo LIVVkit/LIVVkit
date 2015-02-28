@@ -33,7 +33,7 @@ class Shelf(AbstractTest):
         self.name = "shelf"
         self.description = "A blank description"
 
-    # # Return the name of the test
+    ## Return the name of the test
     #
     #  output:
     #    @returns name : shelf
@@ -42,7 +42,7 @@ class Shelf(AbstractTest):
         return self.name
 
 
-    # # Runs the shelf specific test case.  
+    ## Runs the shelf specific test case.  
     #
     #  When running a test this call will record the specific test case 
     #  being run.  Each specific test case string is mapped to the 
@@ -77,7 +77,7 @@ class Shelf(AbstractTest):
             print("  Could not find test code for shelf test: " + test)
 
 
-    # # Perform V&V on the confined shelf case
+    ## Perform V&V on the confined shelf case
     # 
     def runConfined(self):
         print("  Confined Shelf test in progress....")
@@ -99,20 +99,31 @@ class Shelf(AbstractTest):
         # Scrape the details from each of the files and store some data for later
         shelfFiles, shelfDetails = [], []
         for file in files:
-            shelfDetails.append(self.parse(livv.inputDir + '/confined-shelf' + os.sep + livv.dataDir + "/" + file))
+            shelfDetails.append(shelfParser.parseOutput(livv.inputDir + '/confined-shelf' + os.sep + livv.dataDir + "/" + file))
             shelfFiles.append(file)
         self.fileTestDetails["confined-shelf"] = zip(shelfFiles, shelfDetails)
 
+        # Record the data from the parser
+        numberOutputFiles, numberConfigMatches, numberConfigTests = shelfParser.getParserSummary()
+
         # Create the plots
-        self.plotConfined()
+        numberPlots = self.plotConfined()
 
         # Run bit for bit test
+        numberBitTests, numberBitMatches = 0, 0
         self.bitForBitDetails['confined-shelf'] = self.bit4bit('/confined-shelf')
         for key, value in self.bitForBitDetails['confined-shelf'].iteritems():
             print ("    {:<30} {:<10}".format(key, value[0]))
+            if value[0] == "SUCCESS": numberBitMatches+=1
+            numberBitTests+=1
 
+        self.summary["confined-shelf"] = [numberPlots, numberOutputFiles,
+                                  numberConfigMatches, numberConfigTests,
+                                  numberBitMatches, numberBitTests]
 
-    # # Plot some details for the confined shelf case
+    ## Plot some details for the confined shelf case
+    #
+    #  @return the number of plots generated
     # 
     def plotConfined(self):
         # Setup where we are going to look for things
@@ -123,6 +134,7 @@ class Shelf(AbstractTest):
         glamFiles = ['confined-shelf.gnu.PIC.large.nc', 'confined-shelf.gnu.JFNK.large.nc']
         glissadeFiles = ['confined-shelf.gnu.glissade.nc']
         glamFlag, glissadeFlag = True, True
+        imgArr = []
 
         # Check if all of the files for plotting Glam output is in place
         for each in glamFiles:
@@ -136,6 +148,7 @@ class Shelf(AbstractTest):
 
         # Plot Glam
         if glamFlag:
+            description = "Glam Velocity Comparison Plot"
             plotFile = ncl_path + '/shelf/confshelfvel.ncl'
             benchPIC = 'STOCKPIC = addfile(\"' + benchDir + os.sep + glamFiles[0] + '\", \"r\")'
             benchJFNK = 'STOCKJFNK = addfile(\"'+ benchDir + os.sep + glamFiles[1] + '\", \"r\")'
@@ -152,6 +165,7 @@ class Shelf(AbstractTest):
 
             if os.path.exists(img_path + os.sep + name):
                 print("    Plot details saved to " + img_path + " as " + name)
+                imgArr.append([name, description])
             else:
                 print("****************************************************************************")
                 print("*** Error saving " + name + " to " + img_path)
@@ -163,6 +177,7 @@ class Shelf(AbstractTest):
 
         # Plot Glissade
         if glissadeFlag:
+            description = "Glissade Velocity Comparison Plot"
             plotFile = ncl_path + '/shelf/confshelfvelg.ncl'
             benchData = 'STOCKGLS = addfile(\"' + benchDir + os.sep + glissadeFiles[0] + '\", \"r\")'
             modelData = 'VARGLS = addfile(\"'  + modelDir + os.sep + glissadeFiles[0] + '\", \"r\")'
@@ -176,6 +191,7 @@ class Shelf(AbstractTest):
 
             if os.path.exists(img_path + os.sep + name):
                 print("    Plot details saved to " + img_path + " as " + name)
+                imgArr.append([name, description])
             else:
                 print("****************************************************************************")
                 print("*** Error saving " + name + " to " + img_path)
@@ -185,11 +201,13 @@ class Shelf(AbstractTest):
                 print(stdErr)
                 print("****************************************************************************")
 
+        if len(imgArr) != 0:
+            self.plotDetails['confined-shelf'] = imgArr
         # Done with plotting for confined shelf
-        return
+        return len(imgArr)
 
 
-    # # Perform V&V on the circular shelf case
+    ## Perform V&V on the circular shelf case
     #
     def runCircular(self):
         print("  Circular Shelf test in progress....")  
@@ -210,20 +228,31 @@ class Shelf(AbstractTest):
         # Scrape the details from each of the files and store some data for later
         shelfDetails, shelfFiles = [], []
         for file in files:
-            shelfDetails.append(self.parse(livv.inputDir + '/circular-shelf' + os.sep + livv.dataDir + "/" + file))
+            shelfDetails.append(shelfParser.parseOutput(livv.inputDir + '/circular-shelf' + os.sep + livv.dataDir + "/" + file))
             shelfFiles.append(file)
         self.fileTestDetails["circular-shelf"] = zip(shelfFiles, shelfDetails)
 
+        # Record the data from the parser
+        numberOutputFiles, numberConfigMatches, numberConfigTests = shelfParser.getParserSummary()
+
         # Create the plots
-        self.plotCircular()
+        numberPlots = self.plotCircular()
 
         # Run bit for bit test
+        numberBitTests, numberBitMatches = 0, 0
         self.bitForBitDetails['circular-shelf'] = self.bit4bit('/circular-shelf')
         for key, value in self.bitForBitDetails['circular-shelf'].iteritems():
             print ("    {:<30} {:<10}".format(key, value[0]))
+            if value[0] == "SUCCESS": numberBitMatches+=1
+            numberBitTests+=1
 
+        self.summary["circular-shelf"] = [numberPlots, numberOutputFiles,
+                                  numberConfigMatches, numberConfigTests,
+                                  numberBitMatches, numberBitTests]
 
-    # # Plot some details from the confined shelf case
+    ## Plot some details from the confined shelf case
+    #
+    #  @return the number of plots generated
     # 
     def plotCircular(self):
         # Setup where we are going to look for things
@@ -234,6 +263,7 @@ class Shelf(AbstractTest):
         glamFiles = ['circular-shelf.gnu.PIC.large.nc', 'circular-shelf.gnu.JFNK.large.nc']
         glissadeFiles = ['circular-shelf.gnu.glissade.nc']
         glamFlag, glissadeFlag = True, True
+        imgArr = []
 
         # Check if all of the files for plotting Glam output is in place
         for each in glamFiles:
@@ -247,6 +277,7 @@ class Shelf(AbstractTest):
 
         # Plot Glam
         if glamFlag:
+            description = "Glam Velocity Comparison Plot"
             plotFile = ncl_path + '/shelf/circshelfvel.ncl'
             benchPIC    = 'STOCKPIC = addfile(\"'+ benchDir +  '/circular-shelf.gnu.PIC.large.nc\", \"r\")'
             benchJFNK   = 'STOCKJFNK = addfile(\"'+ benchDir + '/circular-shelf.gnu.JFNK.large.nc\", \"r\")'
@@ -263,6 +294,7 @@ class Shelf(AbstractTest):
 
             if os.path.exists(img_path + os.sep + name):
                 print("    Plot details saved to " + img_path + " as " + name)
+                imgArr.append([name, description])
             else:
                 print("****************************************************************************")
                 print("*** Error saving " + name + " to " + img_path)
@@ -273,6 +305,7 @@ class Shelf(AbstractTest):
                 print("****************************************************************************")
 
         if glissadeFlag:
+            description = "Glissade Velocity Comparison Plot"
             plotFile = ''+ ncl_path + '/shelf/circshelfvelg.ncl'
             benchGLS    = 'STOCKGLS = addfile(\"'+ benchDir + '/circular-shelf.gnu.glissade.nc\", \"r\")'
             modelGLS = 'VARGLS = addfile(\"' + modelDir + '/circular-shelf.gnu.glissade.nc\", \"r\")'
@@ -287,6 +320,7 @@ class Shelf(AbstractTest):
 
             if os.path.exists(img_path + os.sep + name):
                 print("    Plot details saved to " + img_path + " as " + name)
+                imgArr.append([name, description])
             else:
                 print("****************************************************************************")
                 print("*** Error saving " + name + " to " + img_path)
@@ -296,5 +330,7 @@ class Shelf(AbstractTest):
                 print(stdErr)
                 print("****************************************************************************")
 
+        if len(imgArr) != 0:
+            self.plotDetails['circular-shelf'] = imgArr
         # Done plotting circular-shelf
-        return
+        return len(imgArr)

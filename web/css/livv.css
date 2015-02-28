@@ -9,6 +9,14 @@ html {
     background-size: cover;
 }
 
+h1, h2, h3, h4 {
+	font-family: helvetica;
+}
+
+table, ul {
+	margin-top: 10px;
+}
+
 img { 
 	max-width: 100%;
 	height: auto;
@@ -69,13 +77,10 @@ hr {
     font-weight: 600;   
 }
 
-div.description {
-    text-align: center;
-    font-weight: normal;
-    width: 120px;
-    margin: 5px;
+.summary {
+	margin-left: 50px;
+	line-height: 1em;
 }
-
 
 /******************************************************************************
   Header/Footer Styling

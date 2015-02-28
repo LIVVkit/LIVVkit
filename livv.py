@@ -39,11 +39,11 @@ if __name__ == '__main__':
     print("------------------------------------------------------------------------------")
     print("  Land Ice Verification & Validation (LIVV)")
     print("------------------------------------------------------------------------------")
-    
+
     # Run the dependency checker
     import bin.VV_dependencies as dependencies
     dependencies.check()
-    
+
     import bin.VV_machines as machines
     from bin.VV_test import AbstractTest
     from bin.VV_test import TestSummary
@@ -73,7 +73,7 @@ parser.add_option('--dome',
                   type='choice', 
                   dest='dome', 
                   choices=['none', 'diagnostic', 'evolving', 'all'], 
-                  default='diagnostic', 
+                  default='all', 
                   help='specifies the dome tests to run')
 
 parser.add_option('--gis', 
@@ -89,7 +89,7 @@ parser.add_option('--ismip',
                   type='choice', 
                   dest='ismip', 
                   choices=['none', 'small', 'large', 'all'], 
-                  default='small', 
+                  default='all', 
                   help='specifies the ismip tests to run')
 
 parser.add_option('--validation', 
@@ -105,7 +105,7 @@ parser.add_option('--shelf',
                   type='choice', 
                   dest='shelf', 
                   choices=['none', 'confined', 'circular', 'all'], 
-                  default='none', 
+                  default='all', 
                   help='specifies the shelf tests to run')
 
 parser.add_option('--performance', 
@@ -179,13 +179,13 @@ parser.add_option('-s', '--save',
 ###############################################################################
 
 # I/O Related variables
-cwd = os.path.dirname(os.path.abspath(__file__))  
+cwd = os.path.dirname(os.path.abspath(__file__))
 inputDir = options.inputDir
-performanceDir = options.performanceDir                       
+performanceDir = options.performanceDir
 dataDir = options.dataDir
-outputDir = options.outputDir                    
-imgDir = outputDir + "/imgs"                     
-comment = options.comment                         
+outputDir = options.outputDir
+imgDir = outputDir + "/imgs"
+comment = options.comment
 timestamp = time.strftime("%m-%d-%Y %H:%M:%S")
 user = getpass.getuser()
 
@@ -256,7 +256,7 @@ if __name__ == '__main__':
         machineName = options.machineName
         vars = machines.load(machineName)
         globals().update(vars)
-    
+
     # Print out some information
     print("\n  Current run: " + time.strftime("%m-%d-%Y %H:%M:%S"))
     print("  User: " + getpass.getuser())
@@ -280,7 +280,7 @@ if __name__ == '__main__':
         print("       See README.md for more details.")
         print("------------------------------------------------------------------------------")
         exit(1)
-        
+
     ###############################################################################
     #                              Record Test Cases                              #
     ###############################################################################
@@ -292,48 +292,48 @@ if __name__ == '__main__':
                  "shelf" : Shelf,
                  "perf" : Performance
                }
-    
+
     # dome tests
     domeCases = {'none'   : [],
                  'diagnostic' : ['dome30/diagnostic'],
                  'evolving'  : ['dome30/evolving'],
                  'all'    : ['dome30/diagnostic', 'dome30/evolving'],}
     runDomeCase = domeCases[dome]
-    
+
     # ismip tests
     ismipCases = {'none'  : [],
                   'small' : ['ismip-hom-a/80km', 'ismip-hom-c/80km'],
                   'large' : ['ismip-hom-a/20km', 'ismip-hom-c/20km'],
                   'all'   : ['ismip-hom-a/20km', 'ismip-hom-c/20km', 'ismip-hom-a/80km', 'ismip-hom-c/80km']}
     runIsmipCase = ismipCases[ismip]
-    
+
     # gis tests
     gisCases = {'none'   : [],
                 'small'  : ['gis_4km'],
                 'medium' : ['gis_2km'],
                 'large'  : ['gis_1km']}
     runGisCase = gisCases[gis]
-    
+
     # validation tests
     validationCases = {'none' : [],
                        'small' : ['RUN_VALIDATION'],
                        'large' : ['RUN_VALIDATION', 'RUN_VAL_COUPLED', 'RUN_VAL_DATA', 'RUN_VAL_YEARS', 'RUN_VAL_RANGE']}
     runValidationCase = validationCases[validation]
-    
+
     # shelf tests
     shelfCases = {'none' : [],
                   'confined' : ['confined-shelf'],
                   'circular' : ['circular-shelf'],
                   'all' : ['confined-shelf', 'circular-shelf']}
     runShelfCase = shelfCases[shelf]
-    
+
     # performance tests
     perfCases = {'none' : [],
                  'small' : ['dome60', 'gis_4km'],
                  'medium' : ['dome120', 'gis_2km'],
                  'large' : ['dome240', 'gix_4km']}
     runPerfCase = perfCases[perf]
-       
+
     # Describes how to group each test case in with more general groupings
     tests = ["dome", "ismip", "gis", "shelf", "perf"]
     testMapping = {"dome" : runDomeCase,
@@ -347,7 +347,7 @@ if __name__ == '__main__':
     for test in tests:
         if len(testMapping[test]):
             testsRun.append(test)
-    
+
     ###############################################################################
     #                               Run Test Cases                                #
     ###############################################################################
@@ -357,29 +357,29 @@ if __name__ == '__main__':
     for test in testCases: print("  " + test + "\n"),
     print("------------------------------------------------------------------------------")
     print("")
-    
+
     # Run the tests
-    testResults = []
-    bit4bitResults = []
+    testResults, bit4bitResults, testSummary = [], [], []
     print("Beginning test suite....")
-    
-    # Create the site index
-    # TODO: Put this after tests are run so we can display some sort of summary 
-    newTest = TestSummary()
-    newTest.webSetup(testsRun, testCases)
+
+    summary = TestSummary()
+    summary.webSetup(testsRun)
     for test in testsRun:
         # Create a new instance of the specific test class (see testDict for the mapping)
         newTest = testDict[test]()
         # Run the specific and bit for bit tests for each case of the test
         for case in testMapping[test]:
             newTest.run(case)
+        testSummary.append(newTest.getSummary())
         print("")
 
         # Generate the test-specific webpage 
         newTest.generate()
-        
-    print("Generating web pages in " + outputDir)
-    
+
+    # Create the site index
+    print("Generating web pages in " + outputDir) 
+    summary.generate(testsRun, testMapping, testSummary)
+
     ###############################################################################
     #                        Finished.  Tell user about it.                       #
     ###############################################################################

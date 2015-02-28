@@ -53,6 +53,7 @@ class AbstractTest(object):
         self.plotDetails = dict()
         self.fileTestDetails = dict()
         self.modelConfigs, self.benchConfigs = dict(), dict()
+        self.summary = dict()
 
     ## Should return the name of the test
     #
@@ -66,12 +67,13 @@ class AbstractTest(object):
     def run(self, test):
         pass
 
-    ## Definition for how to generate test specific web pages
+    ## Get a summary of the tests that have been run 
     #
-    @abstractmethod
-    def generate(self):
-        pass
-
+    #  Output:
+    #    @return a dictionary of the testcases that holds various statistics
+    #
+    def getSummary(self):
+        return self.summary
 
     ## Tests all models and benchmarks against each other in a bit for bit fashion.
     #  If any differences are found the method will return 1, otherwise 0.
@@ -81,7 +83,7 @@ class AbstractTest(object):
     #    @param benchPath: the path to the benchmark data
     #
     #  Output:
-    #    @returns change: Is 0 if no changes were found, 1 otherwise
+    #    @returns [change, err] where change in {0,1}
     #
     def bit4bit(self, test):
         # Mapping of result codes to results
@@ -166,7 +168,6 @@ class AbstractTest(object):
                       + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                 exit(e.errno)
 
-
             bitDict[same] = [result[change], "{:.4g}".format(absDifference)]
         # If anything has changed, return 1, otherwise returns 0
         return bitDict
@@ -228,77 +229,6 @@ class AbstractTest(object):
         pyplot.savefig(livv.imgDir + os.sep + self.getName() + os.sep + "bit4bit" + os.sep + modelFile.split(os.sep)[-1] + ".png")
 
 
-    ## Definition for the general parser for standard output
-    #
-    #  input:
-    #    @param file: the file to be parsed
-    #
-    def parse(self, file):
-        # Initialize a dictionary that will store all of the information
-        testDict = livv.parserVars.copy()
-
-        # Set up variables that we can use to map data and information
-        dycoreTypes = {"0" : "Glide", "1" : "Glam", "2" : "Glissade", "3" : "AlbanyFelix", "4" : "BISICLES"}
-        numberProcs = 0
-        currentStep = 0
-        avgItersToConverge = 0
-        convergedIters = []
-        itersToConverge = []
-
-        # Make sure that we can actually read the file
-        try:
-            logfile = open(file, 'r')
-        except:
-            print "ERROR: Could not read " + file + " when parsing for test " + self.getName()
-
-        # Go through and build up information about the simulation
-        for line in logfile:
-            #Determine the dycore type
-            if ('CISM dycore type' in line):
-                if line.split()[-1] == '=':
-                    testDict['Dycore Type'] = dycoreTypes[next(logfile).strip()]
-                else:
-                    testDict['Dycore Type'] = dycoreTypes[line.split()[-1]]
-
-            # Calculate the total number of processors used
-            if ('total procs' in line):
-                numberProcs += int(line.split()[-1])
-
-            # Grab the current timestep
-            if ('Nonlinear Solver Step' in line):
-                currentStep = int(line.split()[4])
-
-            # Get the number of iterations per timestep
-            if ('"SOLVE_STATUS_CONVERGED"' in line):
-                splitLine = line.split()
-                itersToConverge.append(int(splitLine[splitLine.index('"SOLVE_STATUS_CONVERGED"') + 2]))
-
-            # If the timestep converged mark it with a positive
-            if ('Converged!' in line):
-                convergedIters.append(currentStep)
-
-            # If the timestep didn't converge mark it with a negative
-            if ('Failed!' in line):
-                convergedIters.append(-1*currentStep)
-
-        # Calculate the average number of iterations it took to converge
-        if (len(itersToConverge) > 0):
-             avgItersToConverge = sum(itersToConverge) / len(itersToConverge)
-
-        # Record some of the data in the testDict
-        testDict['Number of processors'] = numberProcs
-        testDict['Number of timesteps'] = currentStep
-        if avgItersToConverge > 0:
-            testDict['Average iterations to converge'] = avgItersToConverge 
-
-        if testDict['Dycore Type'] == None: testDict['Dycore Type'] = 'Unavailable'
-        for key in testDict.keys():
-            if testDict[key] == None:
-                testDict[key] = 'N/A'
-
-        return testDict
-
-
     ## Creates the output test page
     #
     #  The generate method will create a {{test}}.html page in the output directory.
@@ -341,6 +271,7 @@ class AbstractTest(object):
                         "testHeader" : livv.parserVars,
                         "bitForBitDetails" : self.bitForBitDetails,
                         "testDetails" : self.fileTestDetails,
+                        "plotDetails" : self.plotDetails,
                         "modelConfigs" : self.modelConfigs,
                         "benchConfigs" : self.benchConfigs,
                         "imgDir" : imgDir,
@@ -376,7 +307,7 @@ class TestSummary(AbstractTest):
     #    @param testsRun: the top level names of each of the tests run
     #    @param testCases: the specific test cases being run
     #
-    def webSetup(self, testsRun, testCases):
+    def webSetup(self, testsRun):
         # Create directory structure
         for siteDir in [livv.indexDir, livv.testDir, livv.testDir + os.sep + 'configurations']:
             if not os.path.exists(siteDir):
@@ -387,6 +318,15 @@ class TestSummary(AbstractTest):
         if os.path.exists(livv.indexDir + "/imgs"): shutil.rmtree(livv.indexDir + "/imgs")
         shutil.copytree(livv.websiteDir + "/imgs", livv.indexDir + "/imgs")
 
+        # Set up imgs directory to have sub-directories for each test
+        for test in testsRun:
+            if not os.path.exists(livv.imgDir + os.sep + test):
+                os.mkdir(livv.imgDir + os.sep + test)
+                if not os.path.exists(livv.imgDir + os.sep + test + os.sep + "bit4bit"):
+                    os.mkdir(livv.imgDir + os.sep + test + os.sep + "bit4bit")
+
+
+    def generate(self, testsRun, testMapping, testSummary):
         # Where to look for page templates
         templateLoader = jinja2.FileSystemLoader( searchpath=livv.templateDir )
         templateEnv = jinja2.Environment( loader=templateLoader )
@@ -395,19 +335,13 @@ class TestSummary(AbstractTest):
         templateFile = "/index.html"
         template = templateEnv.get_template( templateFile )
 
-        # Set up imgs directory to have sub-directories for each test
-        for test in testsRun:
-            if not os.path.exists(livv.imgDir + os.sep + test):
-                os.mkdir(livv.imgDir + os.sep + test)
-                if not os.path.exists(livv.imgDir + os.sep + test + os.sep + "bit4bit"):
-                    os.mkdir(livv.imgDir + os.sep + test + os.sep + "bit4bit")
-
         templateVars = {"indexDir" : livv.indexDir,
                         "testsRun" : testsRun,
+                        "testMapping" : testMapping,
+                        "testSummary" : testSummary,
                         "timestamp" : livv.timestamp,
                         "user" : livv.user,
                         "comment" : livv.comment,
-                        "testCases" : testCases,
                         "cssDir" : "css", 
                         "imgDir" : "imgs"}
 
@@ -420,5 +354,4 @@ class TestSummary(AbstractTest):
     # Override the abstract methods with empty calls    
     def run(self, test):
         pass
-    def generate(self):
-        pass
+

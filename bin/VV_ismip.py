@@ -30,9 +30,10 @@ class Ismip(AbstractTest):
         super(self.__class__, self).__init__()
 
         self.name = "ismip"
-        self.description = "Ice Sheet Model Intercomparison Project for Higher-Order Models (ISMIP-HOM)" + \
+        self.description = "The Ice Sheet Model Intercomparison Project for Higher-Order Models (ISMIP-HOM) " + \
                            "prescribes a set of experiments meant to test the implementation of higher-order" + \
-                           " physics.  For more information, see http://homepages.ulb.ac.be/~fpattyn/ismip/ \n" + \
+                           " physics.  For more information, see <a href=http://homepages.ulb.ac.be/~fpattyn/ismip/>" +\
+                           "http://homepages.ulb.ac.be/~fpattyn/ismip/</a> \n" + \
                            " Simulates steady ice flow over a surface with periodic boundary conditions"
 
     ## Return the name of the test
@@ -106,22 +107,31 @@ class Ismip(AbstractTest):
         files = os.listdir(ismipDir)
         test = re.compile(".*out.*[0-9]")
         files = filter(test.search, files)
-        
+
         # Scrape the details from each of the files and store some data for later
         ismipDetails, ismipFiles = [], []
         for file in files:
-            ismipDetails.append(self.parse(ismipDir + '/' + file))
+            ismipDetails.append(ismipParser.parseOutput(ismipDir + '/' + file))
             ismipFiles.append(file)
         self.fileTestDetails[testName] = zip(ismipFiles, ismipDetails)
-        
-        # Create the plots
-        self.plot(aOrC,resolution[:2])
+
+        # Record the data from the parser
+        numberOutputFiles, numberConfigMatches, numberConfigTests = ismipParser.getParserSummary()
+
+        # Create the plots & record the number generated
+        numberPlots = self.plot(aOrC,resolution[:2])
 
         # Run bit for bit test
+        numberBitTests, numberBitMatches = 0, 0
         self.bitForBitDetails[testName] = self.bit4bit(os.sep + testName)
         for key, value in self.bitForBitDetails[testName].iteritems():
             print ("    {:<30} {:<10}".format(key,value[0]))
-            
+            if value[0] == "SUCCESS": numberBitMatches+=1
+            numberBitTests+=1
+
+        self.summary[testName] = [numberPlots, numberOutputFiles,
+                                  numberConfigMatches, numberConfigTests,
+                                  numberBitMatches, numberBitTests]
 
     ## Creates a plot based on the given input.
     #  
@@ -135,7 +145,8 @@ class Ismip(AbstractTest):
         plotFile = ''+ ncl_path + '/ismip-'+aOrC+'/ismip'+aOrC+size+'ug.ncl'
         benchDir = livv.benchmarkDir + '/ismip-hom-'+aOrC+'/'+size+'km/' + os.sep + livv.dataDir
         modelDir =  livv.inputDir + '/ismip-hom-'+aOrC+'/'+size+'km/' + os.sep + livv.dataDir
-        
+
+        description = "U Velocity Comparison Plot"
         bench1 = 'STOCK1 = addfile(\"'+ benchDir + os.sep + 'ishom.'+aOrC+'.'+size+'km.glissade.1.out.nc\", \"r\")'
         bench4 = 'STOCK4 = addfile(\"'+ benchDir + os.sep + 'ishom.'+aOrC+'.'+size+'km.glissade.4.out.nc\", \"r\")'
         test1 = 'VAR1 = addfile(\"'+ modelDir + os.sep + 'ishom.'+aOrC+'.'+size+'km.glissade.1.out.nc\", \"r\")'
@@ -144,13 +155,15 @@ class Ismip(AbstractTest):
         path = 'PNG = "' + img_path + '/' + name + '"'
         plotCommand = "ncl '" + bench1 + "'  '" + bench4 + "'  '" + test1 + "'  '" + test4 \
                         +"'  '" + path + "' " + plotFile
-    
+
         # Be cautious about running subprocesses
         call = subprocess.Popen(plotCommand, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdOut, stdErr = call.stdout.read(), call.stderr.read()
 
         if os.path.exists(img_path + os.sep + name):
             print("    Plot details saved to " + img_path + " as " + name)
+            self.plotDetails['ismip-hom-'+aOrC+'/'+size+'km'] = [[name, description]]
+            return 1
         else:
             print("****************************************************************************")
             print("    Error saving " + name + " to " + img_path)
@@ -159,5 +172,5 @@ class Ismip(AbstractTest):
             print(stdOut)
             print(stdErr)
             print("****************************************************************************")
-        
-        
+            return 0
+

@@ -123,13 +123,23 @@ class Dome(AbstractTest):
             diagnosticFiles.append(file)
         self.fileTestDetails["dome" + resolution + os.sep + "diagnostic"] = zip(diagnosticFiles, diagnosticDetails)
 
-        # Create the plots
-        self.plotDiagnostic(resolution)
+        # Record the data from the parser
+        numberOutputFiles, numberConfigMatches, numberConfigTests = domeParser.getParserSummary()
+
+        # Create the plots and record the number of plots
+        numberPlots = self.plotDiagnostic(resolution)
 
         # Run bit for bit tests
+        numberBitTests, numberBitMatches = 0, 0
         self.bitForBitDetails['dome' + resolution + os.sep + 'diagnostic'] = self.bit4bit(os.sep + 'dome' + resolution + os.sep + 'diagnostic')
         for key, value in self.bitForBitDetails['dome' + resolution + os.sep + 'diagnostic'].iteritems():
             print ("    {:<30} {:<10}".format(key,value[0]))
+            if value[0] == "SUCCESS": numberBitMatches+=1
+            numberBitTests+=1
+
+        self.summary['dome' + resolution + os.sep + 'diagnostic'] = [numberPlots, numberOutputFiles,
+                                                                     numberConfigMatches, numberConfigTests,
+                                                                     numberBitMatches, numberBitTests]
 
 
     ## Plot some details from the diagnostic dome case
@@ -138,8 +148,11 @@ class Dome(AbstractTest):
     #  dome test case.
     #
     #  input:
-    #    @param resolution: The resolution of the test cases to look in. 
-    #                       (eg resolution == 30 -> reg_test/dome30/diagnostic) 
+    #    @param resolution: The resolution of the test cases to look in.
+    #                       (eg resolution == 30 -> reg_test/dome30/diagnostic)
+    #
+    #  output:
+    #    @return the number of plots generated
     #
     def plotDiagnostic(self, resolution):
         # Set up where we are going to look for things
@@ -150,6 +163,7 @@ class Dome(AbstractTest):
         modelDir = livv.inputDir + os.sep + 'dome' + resolution + os.sep + 'diagnostic' + os.sep + livv.dataDir
 
         # The arguments to pass in to the ncl script
+        description = "Velocity Comparison Plots"
         bench1 = 'STOCK1 = addfile(\"'+ benchDir + os.sep + 'dome.1.nc\", \"r\")'
         bench4 = 'STOCK4 = addfile(\"'+ benchDir + os.sep + 'dome.4.nc\", \"r\")'
         test1  = 'VAR1 = addfile(\"' + modelDir + os.sep + 'dome.1.nc\", \"r\")'
@@ -167,6 +181,8 @@ class Dome(AbstractTest):
 
         if os.path.exists(img_path + os.sep + name):
             print("    Plot details saved to " + img_path + " as " + name)
+            self.plotDetails['dome' + resolution + os.sep + 'diagnostic'] = [[name, description]]
+            return 1
         else:
             print("****************************************************************************")
             print("    Error saving " + name + " to " + img_path)
@@ -175,7 +191,7 @@ class Dome(AbstractTest):
             print(stdOut)
             print(stdErr)
             print("****************************************************************************")
-
+            return 0
 
     ## Perform V&V on the evolving dome case
     #
@@ -211,13 +227,23 @@ class Dome(AbstractTest):
             evolvingFiles.append(file)
         self.fileTestDetails["dome" + resolution + os.sep + "evolving"] = zip(evolvingFiles, evolvingDetails)
 
+        # Record the data from the parser
+        numberOutputFiles, numberConfigMatches, numberConfigTests = domeParser.getParserSummary()
+
         # Create the plots
-        self.plotEvolving(resolution)
+        numberPlots = self.plotEvolving(resolution)
 
         # Run bit for bit test
+        numberBitMatches, numberBitTests = 0, 0
         self.bitForBitDetails['dome' + resolution + os.sep +'evolving'] = self.bit4bit(os.sep + 'dome' + resolution + os.sep + 'evolving')
         for key, value in self.bitForBitDetails['dome' + resolution + os.sep + 'evolving'].iteritems():
             print ("    {:<30} {:<10}".format(key,value[0]))
+            if value[0] == "SUCCESS": numberBitMatches+=1
+            numberBitTests+=1
+
+        self.summary['dome' + resolution + os.sep + 'evolving'] = [numberPlots, numberOutputFiles,
+                                                                     numberConfigMatches, numberConfigTests,
+                                                                     numberBitMatches, numberBitTests]
 
 
     ## Plot some details from the evolving dome case
@@ -226,8 +252,11 @@ class Dome(AbstractTest):
     #  dome test case.
     #
     #  input:
-    #    @param resolution: The resolution of the test cases to look in. 
+    #    @param resolution: The resolution of the test cases to look in.
     #                       (eg resolution == 30 -> reg_test/dome30/evolving)
+    #
+    #  output:
+    #    @return the number of plots generated
     #
     def plotEvolving(self, resolution):
         # Set up where we are going to look for things
@@ -238,6 +267,7 @@ class Dome(AbstractTest):
         modelDir = livv.inputDir + os.sep + 'dome' + resolution + os.sep + 'evolving' + os.sep + livv.dataDir
 
         # The arguments to pass in to the ncl script
+        description = "Velocity Comparison Plot"
         bench1 = 'STOCK9 = addfile(\"'+ benchDir + os.sep + 'dome.small.nc\", \"r\")'
         bench4 = 'STOCK15 = addfile(\"'+ benchDir + os.sep + 'dome.large.nc\", \"r\")'
         test1  = 'VAR9 = addfile(\"' + modelDir + os.sep + 'dome.small.nc\", \"r\")'
@@ -255,6 +285,8 @@ class Dome(AbstractTest):
 
         if os.path.exists(img_path + os.sep + name):
             print("    Plot details saved to " + img_path + " as " + name)
+            self.plotDetails['dome' + resolution + os.sep + 'evolving'] = [[name, description]]
+            return 1
         else:
             print("****************************************************************************")
             print("    Error saving " + name + " to " + img_path)
@@ -263,3 +295,4 @@ class Dome(AbstractTest):
             print(stdOut)
             print(stdErr)
             print("****************************************************************************")
+            return 0

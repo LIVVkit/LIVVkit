@@ -5,39 +5,15 @@
     <a href="http://oceans11.lanl.gov/cism/" class="button">CISM</a> 
   </div>
   <div id="content">
-  <h2>{{testName}}</h2>
   
-  <h4>Details</h4>
-  <p margin-left="20px">
-    {{testDescription}}
-  </p>
-  
-  <h4>Plots</h4>
-
-    {% for img in testImages %}
-      {% if img != [] %} 
-      <div class="gallery">
-      	<div style="float: left; display: inline;">
-             <a href="#img_form{{loop.index}}" id="img_pop">
-                <img src="{{imgDir}}/{{img}}" width="100px"></img>
-            </a>
-	        <div class="description">{{img}}</div>
-        </div>
-      </div>
-      <a href="{{testName}}.html" class="overlay" id="img_form{{loop.index}}"></a>
-
-      <div class="popup">
-          <img src="{{imgDir}}/{{img}}" class="imageOverlay"></img>
-          <a class="close" href="#close">x</a>
-      </div>
-      {% endif %}
-    {% endfor %}
-  
+  <h2 style="padding-top: 40px; padding-left: 15px;">{{testName}}</h2>
+  <div class="description">
+    <p>{{testDescription}}</p>
+  </div>
   <br style="clear: both" />
-  <h4>Results</h4>
   
   <STYLE type="text/css">
-  #select :checked + {% for i in range(testsRun|length -1) %} * + {% endfor %} label { background-color:#3385FF;border-color:#3385FF;color:#fff;}
+  #select :checked + {% for i in range(testsRun|length -1) %} * + {% endfor %} label { background-color:#47A3FF;border-color:#47A3FF;color:#fff;}
   #select :checked + {% for i in range(2*testsRun|length -1) %} * + {% endfor %} div {display: block; }
   </STYLE>
   
@@ -52,12 +28,40 @@
       
     {% for case in testsRun %}
     <div class="case">
-      <p style="font-weight: 600;"> 
+      <b>Plots</b> <br/>
+      {% if case in plotDetails %}
+        {% for imgArr in plotDetails[case] %}
+        {% if imgArr[0] != [] %}
+        <div class="gallery">
+          <div style="float: left; display: inline;">
+             <a href="#img_form_{{case}}_{{loop.index}}" id="img_pop">
+                <img src="{{imgDir}}/{{imgArr[0]}}" width="150px"></img>
+            </a>
+            <br style="clear: both" />
+            <p>{{imgArr[1]}}</p>
+          </div>
+         </div>
+        <a href="{{testName}}.html" class="overlay" id="img_form_{{case}}_{{loop.index}}"></a>
+
+        <div class="popup">
+          <img src="{{imgDir}}/{{imgArr[0]}}" class="imageOverlay"></img>
+          <a class="close" href="#close">x</a>
+        </div>
+        {% endif %}
+
+      {% endfor %}
+      {% else %}
+        <b margin-left="20px">No plots for {{case}}</b>
+      {% endif %}
+    
+      <br style="clear: both" />
+    
+      <b> 
         Bit for Bit 
         <a style="font-size: small; font-style: italic">
           Click on failures to see difference plots
         </a> 
-      </p>
+      </b>
 
       <table class="tabbed">
       <tr>
@@ -84,10 +88,9 @@
       {% endfor %}
       </table>
         
-      <br height="20px" />
-      <b> Standalone </b>
-      <br height="10px" />
-      <hr style="opacity: 0;">
+      <br height="30px" />
+      <b> Configuration Files </b>
+      <hr style="opacity: 0; height: 10px;">
           {% if case in modelConfigs %}
             {% for file in modelConfigs[case] %}
                 <div class="Configuration">
@@ -113,7 +116,7 @@
                                   {% do changed.append(1) %}
                               {% endif %}
                             {% else %}
-                                {{var}} = {{val}} <br>
+                                {{var}} = {{val}} (Benchmark data missing.)<br>
                                   {% do changed.append(1) %}
                             {% endif %}
                           {% endfor %}
@@ -132,7 +135,9 @@
                 <hr>
             {% endfor %}
         {% endif %}
-
+        
+        <br height="10px" />
+        <b>Output Analysis</b>
         {% if testDetails[case] != [] %}
       	<table style="width:100%">
       		<tr>
