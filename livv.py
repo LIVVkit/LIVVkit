@@ -34,24 +34,7 @@ Created on Dec 3, 2014
 #                                  Imports                                    #
 ###############################################################################
 
-# Don't try to import these if we are not calling livv.py directly
-if __name__ == '__main__':    
-    print("------------------------------------------------------------------------------")
-    print("  Land Ice Verification & Validation (LIVV)")
-    print("------------------------------------------------------------------------------")
 
-    # Run the dependency checker
-    import bin.VV_dependencies as dependencies
-    dependencies.check()
-
-    import bin.VV_machines as machines
-    from bin.VV_test import AbstractTest
-    from bin.VV_test import TestSummary
-    from bin.VV_dome import Dome
-    from bin.VV_ismip import Ismip
-    from bin.VV_gis import Gis
-    from bin.VV_shelf import Shelf
-    from bin.VV_performance import Performance
     
 # Standard python imports can be loaded any time
 import os
@@ -66,6 +49,7 @@ from collections import OrderedDict
 ###############################################################################
 #                                  Options                                    #
 ###############################################################################
+print "before options"
 usage_string = "%prog [options]"
 parser = OptionParser(usage=usage_string)
 parser.add_option('--dome', 
@@ -173,7 +157,7 @@ parser.add_option('-s', '--save',
 
 # Get the options and the arguments
 (options, args) = parser.parse_args()
-
+print "After options"
 ###############################################################################
 #                              Global Variables                               #
 ###############################################################################
@@ -240,6 +224,23 @@ imgDir = indexDir + os.sep + "imgs"
 #                               Main Execution                                #
 ###############################################################################
 if __name__ == '__main__':
+    print("------------------------------------------------------------------------------")
+    print("  Land Ice Verification & Validation (LIVV)")
+    print("------------------------------------------------------------------------------")
+
+    # Run the dependency checker
+    import bin.VV_dependencies as dependencies
+    dependencies.check()
+
+    import bin.VV_machines as machines
+    from bin.VV_test import AbstractTest
+    from bin.VV_test import TestSummary
+    from bin.VV_dome import Dome
+    from bin.VV_ismip import Ismip
+    from bin.VV_gis import Gis
+    from bin.VV_shelf import Shelf
+    from bin.VV_performance import Performance   
+     
     # Check if we are saving/loading the configuration and set up the machine name
     if options.machineName == '' and options.save:
         # Save the configuration with the default host name
