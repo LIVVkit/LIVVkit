@@ -180,6 +180,7 @@ parser.add_option('-s', '--save',
 
 # I/O Related variables
 cwd = os.path.dirname(os.path.abspath(__file__))
+configDir = cwd + os.sep + "configurations"
 inputDir = options.inputDir
 performanceDir = options.performanceDir
 dataDir = options.dataDir
@@ -254,6 +255,12 @@ if __name__ == '__main__':
     else:
         # Try to load the machine name specified
         machineName = options.machineName
+        vars = machines.load(machineName)
+        globals().update(vars)
+
+    # Check if the user has a default config saved and use that if it does
+    if os.path.exists(configDir + os.sep + machineName + "_" + getpass.getuser() + "_default"):
+        machineName = machineName + "_" + getpass.getuser() + "_default"
         vars = machines.load(machineName)
         globals().update(vars)
 

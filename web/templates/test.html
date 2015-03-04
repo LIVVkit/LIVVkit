@@ -35,7 +35,7 @@
         <div class="gallery">
           <div style="float: left; display: inline;">
              <a href="#img_form_{{case}}_{{loop.index}}" id="img_pop">
-                <img src="{{imgDir}}/{{imgArr[0]}}" width="150px"></img>
+                <img src="{{imgDir}}/{{testName}}/{{imgArr[0]}}" width="150px"></img>
             </a>
             <br style="clear: both" />
             <p>{{imgArr[1]}}</p>
@@ -44,7 +44,7 @@
         <a href="{{testName}}.html" class="overlay" id="img_form_{{case}}_{{loop.index}}"></a>
 
         <div class="popup">
-          <img src="{{imgDir}}/{{imgArr[0]}}" class="imageOverlay"></img>
+          <img src="{{imgDir}}/{{testName}}/{{imgArr[0]}}" class="imageOverlay"></img>
           <a class="close" href="#close">x</a>
         </div>
         {% endif %}
@@ -77,7 +77,7 @@
           <td>
             <a class={{details[0]}}
             {% if details[0] == "FAILURE" %}
-            	target="_blank" href={{imgDir}}/bit4bit/{{file}}.png
+            	target="_blank" href={{imgDir}}/{{testName}}/bit4bit/{{file}}.png
             {% endif %}
             >{{details[0]}}</a>
           </td>

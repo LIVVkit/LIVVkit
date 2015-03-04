@@ -27,20 +27,20 @@ import livv
 def check():
     # The list of nonstandard python libraries that are used 
     libraryList = ["jinja2", "netCDF4", "numpy", "matplotlib"]
-    
+
     # Create a list to store all of the errors that were found
     depErrors = []
-    
+
     print("")
     print("Beginning Dependency Checks........")
-    
+
     # If we need to load modules for LCF machines do so now
     checkModules()
-        
+
     # Make sure all environment variables are set
     if os.environ.get('NCARG_ROOT') == None:
         depErrors.append("  NCARG_ROOT not found in environment")
-     
+
     # For the python dependencies we may need easy_install
     # Make sure we have it, and if not, build it       
     try:
@@ -68,7 +68,7 @@ def check():
                 sys.path.append(livv.cwd + os.sep + "deps")
             easy_install.main(["--user",lib])
             libsInstalled.append(lib)
-    
+
     if len(libsInstalled) > 0:
         print("------------------------------------------------------------------------------")
         print "  External Python Libraries have been installed!  Libraries installed:"
@@ -77,7 +77,7 @@ def check():
         print("  Run LIVV again to continue.  ")
         print("------------------------------------------------------------------------------")
         exit(0)
-    
+
     # Show all of the dependency errors that were found
     if len(depErrors) > 0:
         print("Uh oh!")
@@ -90,12 +90,12 @@ def check():
         print("Setting up environment....")
 
 
-## Checks if the system running LIVV uses modules to load dependencies.  
+## Checks if the system running LIVV uses modules to load dependencies.
 #
-#  If the system does use modules, this method goes through and makes 
+#  If the system does use modules, this method goes through and makes
 #  sure that the correct modules are loaded.  Any modules that are needed
-#  but haven't been loaded are added to a module loader script that the 
-#  user is prompted to source before running LIVV again.     
+#  but haven't been loaded are added to a module loader script that the
+#  user is prompted to source before running LIVV again.
 #
 def checkModules():
     # Check to see if calling 'module list' is a real command
@@ -103,7 +103,7 @@ def checkModules():
     checkCmd = ["bash", "-c", "module list"]
     checkCall = subprocess.Popen(checkCmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out, err = checkCall.communicate()
-    
+
     # Find out if we need to check if modules are loaded
     if "bash: module: command not found" in err or \
             "bash: module: command not found" in out:
@@ -121,14 +121,14 @@ def checkModules():
         modules = livv.modules
         moduleListOutput = out.split() + err.split()
         modulesNeeded = []
-        
+
         # Go through and find out if anything is missing
         for module in livv.modules:
             f.write("module load " + module + "\n")
             if module not in moduleListOutput:
                 modulesNeeded.append(module)
         f.close()
-        
+
         # If anything was missing, tell the user what it was and how to fix it
         if len(modulesNeeded) != 0:
             print("")
@@ -150,9 +150,9 @@ def checkModules():
 
 ## Installs setuptools under the user python libraries
 #
-#  If setuptools isn't found on a system it is probably the case that other 
-#  packages are also not available.   Once setuptools is installed we can 
-#  access the easy_install command from inside of LIVV if  any python 
+#  If setuptools isn't found on a system it is probably the case that other
+#  packages are also not available.   Once setuptools is installed we can
+#  access the easy_install command from inside of LIVV if  any python
 #  dependencies aren't satisfied
 #
 def installSetupTools():
@@ -163,7 +163,7 @@ def installSetupTools():
     f = open(livv.cwd + os.sep + "deps" + os.sep + fileName, 'wb')
     urlInfo = u.info()
     fileSize = int(urlInfo.getheaders("Content-Length")[0])
-    
+
     # Download it
     sizeOnDisk = 0
     block=8192
@@ -173,4 +173,4 @@ def installSetupTools():
         if not buffer: break
         f.write(buffer)
     os.system("python " + livv.cwd + os.sep + "deps" + os.sep + fileName + " --user")
-    
+

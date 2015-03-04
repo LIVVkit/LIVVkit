@@ -251,7 +251,7 @@ class AbstractTest(object):
         # Set up relative paths
         indexDir = ".."
         cssDir = indexDir + "/css"
-        imgDir = indexDir + "/imgs/" + self.getName()
+        imgDir = indexDir + "/imgs/"
 
         # Grab all of our images
         testImgDir = livv.imgDir + os.sep + self.getName()
@@ -265,7 +265,7 @@ class AbstractTest(object):
                         "comment" : livv.comment,
                         "testName" : self.getName(),
                         "indexDir" : livv.indexDir,
-                        "cssDir" : livv.cssDir,
+                        "cssDir" : cssDir,
                         "testDescription" : self.description,
                         "testsRun" : self.testsRun,
                         "testHeader" : livv.parserVars,
@@ -308,10 +308,21 @@ class TestSummary(AbstractTest):
     #    @param testCases: the specific test cases being run
     #
     def webSetup(self, testsRun):
+        # Check if we need to back up an old run
+        if os.path.exists(livv.indexDir):
+            response = raw_input("Found a duplicate of the output directory.  Would you like to create a backup before overwriting? (y/n)")
+            if response in ["yes", "Yes", "YES", "YEs", "y", "Y"]:
+                if os.path.exists(livv.indexDir + "_backup"):
+                    shutil.rmtree(livv.indexDir + "_backup")
+                shutil.copytree(livv.indexDir, livv.indexDir + "_backup")
+            else:
+                shutil.rmtree(livv.indexDir)
+
         # Create directory structure
-        for siteDir in [livv.indexDir, livv.testDir, livv.testDir + os.sep + 'configurations']:
+        for siteDir in [livv.indexDir, livv.testDir]:
             if not os.path.exists(siteDir):
                 os.mkdir(siteDir);
+
         # Copy over css && imgs directories from source
         if os.path.exists(livv.indexDir + "/css"): shutil.rmtree(livv.indexDir + "/css")
         shutil.copytree(livv.websiteDir + "/css", livv.indexDir + "/css")
@@ -328,12 +339,12 @@ class TestSummary(AbstractTest):
 
     def generate(self, testsRun, testMapping, testSummary):
         # Where to look for page templates
-        templateLoader = jinja2.FileSystemLoader( searchpath=livv.templateDir )
-        templateEnv = jinja2.Environment( loader=templateLoader )
+        templateLoader = jinja2.FileSystemLoader(searchpath=livv.templateDir)
+        templateEnv = jinja2.Environment(loader=templateLoader)
 
         # Create the index page
         templateFile = "/index.html"
-        template = templateEnv.get_template( templateFile )
+        template = templateEnv.get_template(templateFile)
 
         templateVars = {"indexDir" : livv.indexDir,
                         "testsRun" : testsRun,
