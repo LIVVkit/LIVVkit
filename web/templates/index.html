@@ -12,8 +12,9 @@
 		        <p style="margin-top: 0px; margin-bottom: 0px; font-size: small; font-style: italic; height: 2em; line-height: 3.25em; color: #47A3FF;">Click tab for details.</p>
 		        <hr style="clear: both; background-color: #47A3FF; height: 2px;"/>
 		        {% for case in testMapping[test] %}
-		          <b style="margin-left: 30px;">{{case}}</b>
-		          <div class="summary">
+		          {% if testSummary[outterLoop.index - 1][case]|length != 0 %}
+		            <b style="margin-left: 30px;">{{case}}</b>
+		            <div class="summary">
 		            {% if testSummary[outterLoop.index - 1][case][0] != 1 %}
 		              <p>{{testSummary[outterLoop.index - 1][case][0]}} plots generated</p>
 		            {% else %}
@@ -41,8 +42,12 @@
 		              <p>{{testSummary[outterLoop.index - 1][case][4]}} of 
 		                 {{testSummary[outterLoop.index - 1][case][5]}} output files bit for bit.</p>
                     {% endif %}
-
-                  </div>
+                    </div>
+                  {% else %}
+                    <div class="summary">
+                      <p>No data for {{case}}.</p>
+                    </div>
+                  {% endif %}
 		        {% endfor %}
 		    {% endfor %}
 

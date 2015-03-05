@@ -8,14 +8,11 @@ Created on Dec 8, 2014
 
 import re
 import os
-import sys
 import subprocess
 
 import livv
 from bin.VV_test import AbstractTest
 from bin.VV_parser import Parser
-import jinja2
-from numpy.f2py import diagnose
 
 # # Main class for handling shelf test cases.
 #

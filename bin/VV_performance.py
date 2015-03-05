@@ -15,7 +15,6 @@ import livv
 from bin.VV_test import AbstractTest
 from bin.VV_dome import Dome
 from bin.VV_gis import Gis
-import jinja2
 
 ## Main class for handling performance test cases.
 #
@@ -27,9 +26,6 @@ class Performance(AbstractTest):
     ## Constructor
     #
     def __init__(self):
-        # Mapping of result codes to results
-        result = {-1 : 'N/A', 0 : 'SUCCESS', 1 : 'FAILURE'}
-        
         # Keep track of what dome test have been run
         self.perfTestsRun = []
         self.perfBitForBitDetails = dict()
@@ -66,15 +62,15 @@ class Performance(AbstractTest):
         
         # Map the case names to the case functions
         splitCase = ["".join(x) for _, x in itertools.groupby(testCase, key=str.isdigit)]
-        type = splitCase[0]
+        perfType = splitCase[0]
         resolution = "".join(splitCase[1:])
         callDict = {'dome' : self.runDomePerformance,
                     'gis_' : self.runGisPerformance}
         
         # Call the correct function
-        if callDict.has_key(type):
-            print("  Running " + type + resolution + " performance test....")
-            callDict[type]()
+        if callDict.has_key(perfType):
+            print("  Running " + perfType + resolution + " performance test....")
+            callDict[perfType](resolution)
         else: 
             print("  Could not find test code for performance test: " + testCase)
          
@@ -85,13 +81,16 @@ class Performance(AbstractTest):
     #    
     #  DUMMY METHODS FOLLOW
     #
-    def runDomePerformance(self):
+    def runDomePerformance(self, size):
+        #dome = Dome()
         print("    This is a placeholder....")
-        
     
-    def runGisPerformance(self):
-        print("    This is a placeholder....")
+    def runGisPerformance(self, size):
+        gis = Gis()
+        gis.run(size)
     
     def generate(self):
         print("    This is a placeholder....")
     
+    def summary(self):
+        print("    This is a placeholder....")

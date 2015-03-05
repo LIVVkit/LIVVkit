@@ -10,7 +10,7 @@ import livv
 from bin.VV_test import AbstractTest
 import jinja2
 
-# # Main class for handling Greenland Ice Sheet test cases.
+## Main class for handling Greenland Ice Sheet test cases.
 #
 #  The GIS test cases inherit functionality from AbstractTest for checking 
 #  bit-for-bittedness as well as for parsing standard output from a model run.
@@ -18,7 +18,7 @@ import jinja2
 #
 class Gis(AbstractTest):
     
-    # # Constructor
+    ## Constructor
     #
     def __init__(self):
         # Mapping of result codes to results
@@ -41,7 +41,7 @@ class Gis(AbstractTest):
                   " is taken as isothermal with a constant and uniform rate factor of."
     
     
-    # # Return the name of the test
+    ## Return the name of the test
     #
     #  output:
     #    @returns name : Greenland Ice Sheet
@@ -50,7 +50,7 @@ class Gis(AbstractTest):
         return self.name
     
     
-    # # Runs the gis specific test case.  
+    ## Runs the gis specific test case.  
     #
     #  When running a test this call will record the specific test case 
     #  being run.  Each specific test case string is mapped to the 
@@ -61,35 +61,16 @@ class Gis(AbstractTest):
     #
     def run(self, testCase):
         # Common run 
-        name = testCase
-        
-        # Map the case names to the case functions
-        callDict = {'RUN_GIS_4KM' : self.runSmall,
-                    'RUN_GIS_2KM' : self.runMedium,
-                    'RUN_GIS_1KM' : self.runLarge}
-
-        # Call the correct function
-        callDict[testCase]()
+        resolution = testCase.split("_")[-1][:-2]
+        self.runGIS(resolution)
 
         # More common postprocessing
         return
     
     
-    # # Perform V&V on the Greenland Ice Sheet with 1km resolution.  
+    ## Perform V&V on the Greenland Ice Sheet with given resolution.  
     #    
-    def runLarge():
-        print("  Large gis test in progress....")
-        return
-    
-    # # Perform V&V on the Greenland Ice Sheet with 2km resolution.  
-    #    
-    def runMedium():
-        print("  Medium gis test in progress....")
-        return
-    
-    # # Perform V&V on the Greenland Ice Sheet with 4km resolution.  
-    #    
-    def runSmall():
-        print("  Small gis test in progress....")
+    def runGIS(self, resolution):
+        print("    Placeholder for Greenland Ice Sheet " + resolution + "km")
         return
     

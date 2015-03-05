@@ -15,15 +15,10 @@ Created on Feb 19, 2015
 
 @author: arbennett
 '''
-import re
 import os
-import sys
-import glob
-import subprocess
 import ConfigParser
 
 import livv
-from timeit import itertools
 from collections import OrderedDict
 
 ## The generalized parser for processing text files associated with a test case

@@ -29,12 +29,9 @@ Created on Dec 3, 2014
 @author: arbennett
 '''
 
-
 ###############################################################################
 #                                  Imports                                    #
 ###############################################################################
-
-
     
 # Standard python imports can be loaded any time
 import os
@@ -49,7 +46,6 @@ from collections import OrderedDict
 ###############################################################################
 #                                  Options                                    #
 ###############################################################################
-print "before options"
 usage_string = "%prog [options]"
 parser = OptionParser(usage=usage_string)
 parser.add_option('--dome', 
@@ -157,7 +153,7 @@ parser.add_option('-s', '--save',
 
 # Get the options and the arguments
 (options, args) = parser.parse_args()
-print "After options"
+
 ###############################################################################
 #                              Global Variables                               #
 ###############################################################################
@@ -339,7 +335,7 @@ if __name__ == '__main__':
     perfCases = {'none' : [],
                  'small' : ['dome60', 'gis_4km'],
                  'medium' : ['dome120', 'gis_2km'],
-                 'large' : ['dome240', 'gix_4km']}
+                 'large' : ['dome240', 'gis_1km']}
     runPerfCase = perfCases[perf]
 
     # Describes how to group each test case in with more general groupings

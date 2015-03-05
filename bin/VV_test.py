@@ -18,20 +18,14 @@ Created on Dec 8, 2014
 import sys
 import re
 import os
-import time
-import fnmatch
 import subprocess
 import shutil
-import collections
-import netCDF4
 from netCDF4 import Dataset
 import matplotlib.pyplot as pyplot
-import matplotlib.gridspec as gridspec
 import glob
 import numpy
 import jinja2
 from abc import ABCMeta, abstractmethod
-from collections import OrderedDict
 import livv
 
 
