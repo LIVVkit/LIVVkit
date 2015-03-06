@@ -102,8 +102,12 @@ class Ismip(AbstractTest):
             ismipParser.parseConfigurations(ismipDir + configPath, ismipBenchDir + configPath)
 
         # Search for the std output files
-        files = os.listdir(ismipDir)
         test = re.compile(".*out.*[0-9]")
+        try:
+            files = os.listdir(ismipDir)
+        except:
+            print("    Could not find model and benchmark directories for ismip-hom-" + aOrC + os.sep + resolution)
+            files = []
         files = filter(test.search, files)
 
         # Scrape the details from each of the files and store some data for later

@@ -89,7 +89,11 @@ class Shelf(AbstractTest):
             shelfParser.parseConfigurations(confinedDir + configPath, confinedBenchDir + configPath)
 
         # Search for the std output files
-        files = os.listdir(livv.inputDir + '/confined-shelf' + os.sep + livv.dataDir)
+        try:
+            files = os.listdir(confinedDir)
+        except:
+            print("    Could not find model and benchmark directories for confined-shelf")
+            files = []
         test = re.compile("confined-shelf.*out.*")
         files = filter(test.search, files)
 
@@ -218,7 +222,11 @@ class Shelf(AbstractTest):
             shelfParser.parseConfigurations(circularDir + configPath, circularBenchDir + configPath)
 
         # Search for the std output files
-        files = os.listdir(livv.inputDir + '/circular-shelf' + os.sep + livv.dataDir)
+        try:
+            files = os.listdir(circularDir)
+        except:
+            print("    Could not find model and benchmark directories for circular-shelf")
+            files = []
         test = re.compile("circular-shelf.*out.*")
         files = filter(test.search, files)
 

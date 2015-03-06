@@ -66,6 +66,10 @@ class Parser(object):
     #      to the files found in the input directories
     #
     def parseConfigurations(self, modelDir, benchDir):
+        # Make sure the locations exist, and if not return blank sets
+        if not (os.path.exists(modelDir) and os.path.exists(benchDir)):
+            return dict(), dict()
+
         # Pull the files, while filtering out "hidden" ones
         modelFiles = [f for f in os.listdir(modelDir) if not f.startswith('.')]
         benchFiles = [f for f in os.listdir(benchDir) if not f.startswith('.')]
@@ -159,6 +163,7 @@ class Parser(object):
             self.nOutputParsed += 1
         except:
             print "ERROR: Could not read " + file
+            return
 
         # Go through and build up information about the simulation
         for line in logfile:
@@ -206,3 +211,10 @@ class Parser(object):
                 testDict[key] = 'N/A'
 
         return testDict
+
+
+    ## Search through 
+    #
+    #
+    def parseTimingSummaries(self, basePath):
+        return "Not yet implemented"

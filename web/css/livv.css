@@ -91,7 +91,7 @@ hr {
     border-top-right-radius: 5px;
     border-top-left-radius: 5px;
     transform: translate(-5px,-5px);   
-	background-color: rgba(0, 0, 25, 1);
+	background-color: #111111;
 	color: white;
 }
 
@@ -121,7 +121,7 @@ hr {
     border-style: solid;
     border-color: #47A3FF;
     color: #FFFFFF;
-    background-color: #000000;
+    background-color: #111111;
     transform: translate(-5px,5px);   
 }
 

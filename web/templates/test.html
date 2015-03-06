@@ -29,6 +29,7 @@
     {% for case in testsRun %}
     <div class="case">
       <b>Plots</b> <br/>
+      <hr style="opacity: 0; height: 5px;">
       {% if case in plotDetails %}
         {% for imgArr in plotDetails[case] %}
         {% if imgArr[0] != [] %}
@@ -51,47 +52,54 @@
 
       {% endfor %}
       {% else %}
-        <b margin-left="20px">No plots for {{case}}</b>
+        <a style="padding-left: 20px; color: #696969;">No plots for {{case}}</a>
       {% endif %}
     
       <br style="clear: both" />
-    
-      <b> 
+      <br height="30px" />
+
+      <b>
         Bit for Bit 
         <a style="font-size: small; font-style: italic">
           Click on failures to see difference plots
         </a> 
       </b>
+      <hr style="opacity: 0; height: 5px;">
 
-      <table class="tabbed">
-      <tr>
-        <th>Output File</th>
-        <th>Status</th>
-        <th>Total Error</th>
-      </tr>
-      {% for file, details in bitForBitDetails[case].iteritems() %}
+      {% if bitForBitDetails[case]|length != 0 %}
+        <table class="tabbed">
         <tr>
-          <td style="text-align: left">
-            {{file}}
-          </td>
-          <td>
-            <a class={{details[0]}}
-            {% if details[0] == "FAILURE" %}
-            	target="_blank" href={{imgDir}}/{{testName}}/bit4bit/{{file}}.png
-            {% endif %}
-            >{{details[0]}}</a>
-          </td>
-          {% if details[0] == "FAILURE" %}
-          	<td>{{details[1]}}</td>
-          {% endif %}
+          <th>Output File</th>
+          <th>Status</th>
+          <th>Total Error</th>
         </tr>
-      {% endfor %}
-      </table>
+        {% for file, details in bitForBitDetails[case].iteritems() %}
+          <tr>
+            <td style="text-align: left">
+              {{file}}
+            </td>
+            <td>
+              <a class={{details[0]}}
+              {% if details[0] == "FAILURE" %}
+              	target="_blank" href={{imgDir}}/{{testName}}/bit4bit/{{file}}.png
+              {% endif %}
+              >{{details[0]}}</a>
+            </td>
+            {% if details[0] == "FAILURE" %}
+            	<td>{{details[1]}}</td>
+            {% endif %}
+          </tr>
+        {% endfor %}
+        </table>
+      {% else %}
+        <a style="padding-left: 20px; color: #696969;">No bit for bit tests performed for {{case}}</a>
+        <br />
+      {% endif %}
         
       <br height="30px" />
       <b> Configuration Files </b>
-      <hr style="opacity: 0; height: 10px;">
-          {% if case in modelConfigs %}
+      <hr style="opacity: 0; height: 5px;">
+          {% if case in modelConfigs and modelConfigs[case]|length != 0 %}
             {% for file in modelConfigs[case] %}
                 <div class="Configuration">
     
@@ -134,9 +142,11 @@
                 <div style="clear:both;"></div>
                 <hr>
             {% endfor %}
+        {% else %}
+          <a style="padding-left: 20px; color: #696969;">Could not find any configuration files to check</a>
         {% endif %}
         
-        <br height="10px" />
+        <hr style="opacity: 0; height: 5px;">
         <b>Output Analysis</b>
         {% if testDetails[case] != [] %}
       	<table style="width:100%">
@@ -156,7 +166,7 @@
       		{% endfor %}
       	</table>
       	{% else %}
-      		<p>No data found</p>
+      		<p style="padding-left: 20px; color: #696969;">No data found</p>
       	{% endif %}
     </div>
     {% endfor %}

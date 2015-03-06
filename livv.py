@@ -228,6 +228,7 @@ if __name__ == '__main__':
     import bin.VV_dependencies as dependencies
     dependencies.check()
 
+    # Pull in the LIVV specific modules
     import bin.VV_machines as machines
     from bin.VV_test import AbstractTest
     from bin.VV_test import TestSummary
@@ -235,8 +236,8 @@ if __name__ == '__main__':
     from bin.VV_ismip import Ismip
     from bin.VV_gis import Gis
     from bin.VV_shelf import Shelf
-    from bin.VV_performance import Performance   
-     
+    from bin.VV_performance import Performance
+
     # Check if we are saving/loading the configuration and set up the machine name
     if options.machineName == '' and options.save:
         # Save the configuration with the default host name
@@ -294,7 +295,7 @@ if __name__ == '__main__':
                  "ismip" : Ismip,
                  "gis" : Gis,
                  "shelf" : Shelf,
-                 "perf" : Performance
+                 "performance" : Performance
                }
 
     # dome tests
@@ -339,12 +340,12 @@ if __name__ == '__main__':
     runPerfCase = perfCases[perf]
 
     # Describes how to group each test case in with more general groupings
-    tests = ["dome", "ismip", "gis", "shelf", "perf"]
+    tests = ["dome", "ismip", "gis", "shelf", "performance"]
     testMapping = {"dome" : runDomeCase,
                    "ismip" : runIsmipCase,
                    "gis" : runGisCase,
                    "shelf" : runShelfCase,
-                   "perf" : runPerfCase}
+                   "performance" : runPerfCase}
 
     # Group the tests into their respective cases
     testsRun = []

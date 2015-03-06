@@ -109,7 +109,11 @@ class Dome(AbstractTest):
             domeParser.parseConfigurations(diagnosticDir + configPath, diagnosticBenchDir + configPath)
 
         # Search for the standard output files
-        files = os.listdir(diagnosticDir)
+        try:
+            files = os.listdir(diagnosticDir)
+        except:
+            print("    Could not find model and benchmark directories for dome" + resolution + "/diagnostic")
+            files = []
         test = re.compile(".*[0-9]proc")
         files = filter(test.search, files)
 
@@ -190,6 +194,7 @@ class Dome(AbstractTest):
             print("****************************************************************************")
             return 0
 
+
     ## Perform V&V on the evolving dome case
     #
     #  Runs the dome evolving V&V for a given resolution.  First parses through all 
@@ -207,7 +212,12 @@ class Dome(AbstractTest):
         # Search for the std output files
         evolvingDir = livv.inputDir + os.sep + "dome" + resolution + os.sep + "evolving" + os.sep + livv.dataDir 
         evolvingBenchDir = livv.benchmarkDir + os.sep + "dome" + resolution + os.sep + "evolving" + os.sep + livv.dataDir
-        files = os.listdir(evolvingDir)
+        
+        try:
+            files = os.listdir(evolvingDir)
+        except:
+            print("    Could not find model and benchmark directories for dome" + resolution + "/evolving")
+            files = []
         test = re.compile(".*((small)|(large))_proc")
         files = filter(test.search, files)
 
