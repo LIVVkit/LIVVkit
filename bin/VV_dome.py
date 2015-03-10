@@ -128,7 +128,7 @@ class Dome(AbstractTest):
         numberOutputFiles, numberConfigMatches, numberConfigTests = domeParser.getParserSummary()
 
         # Create the plots and record the number of plots
-        numberPlots = self.plotDiagnostic(resolution)
+        numberPlots = 0 #self.plotDiagnostic(resolution)
 
         # Run bit for bit tests
         numberBitTests, numberBitMatches = 0, 0
@@ -238,7 +238,7 @@ class Dome(AbstractTest):
         numberOutputFiles, numberConfigMatches, numberConfigTests = domeParser.getParserSummary()
 
         # Create the plots
-        numberPlots = self.plotEvolving(resolution)
+        numberPlots = 0 #self.plotEvolving(resolution)
 
         # Run bit for bit test
         numberBitMatches, numberBitTests = 0, 0
