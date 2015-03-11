@@ -100,6 +100,9 @@ class Performance(AbstractTest):
         self.fileTestDetails["dome" + resolution] = zip(perfFiles, perfDetails)
         self.bitForBitDetails["dome" + resolution]= dict()
 
+        # Go through and pull in the timing data
+        domeParser.parseTimingSummaries(perfDir)
+
         # Record the data from the parser
         numberOutputFiles, numberConfigMatches, numberConfigTests = domeParser.getParserSummary()
 
@@ -109,8 +112,8 @@ class Performance(AbstractTest):
         numberBitMatches, numberBitTests = 0, 0
 
         self.summary['dome' + resolution] = [numberPlots, numberOutputFiles,
-                                                                     numberConfigMatches, numberConfigTests,
-                                                                     numberBitMatches, numberBitTests]
+                                             numberConfigMatches, numberConfigTests,
+                                             numberBitMatches, numberBitTests]
 
     def runGisPerformance(self, resolution):
         print("  Greenland Ice Sheet " + resolution + " performance  tests in progress....")  

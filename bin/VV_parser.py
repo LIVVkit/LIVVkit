@@ -16,10 +16,12 @@ Created on Feb 19, 2015
 @author: arbennett
 '''
 import os
+import re
 import ConfigParser
 
 import livv
 from collections import OrderedDict
+from numpy import Infinity
 
 ## The generalized parser for processing text files associated with a test case
 #
@@ -213,8 +215,43 @@ class Parser(object):
         return testDict
 
 
-    ## Search through 
+    ## Search through gptl timing files
     #
     #
     def parseTimingSummaries(self, basePath):
-        return "Not yet implemented"
+        dycores = ["glide", "glam", "glissade", "albany", "bisicles"]
+        timingSummary = dict()
+        timingDetails = dict()
+        for dycore in dycores:
+            minVeloDriver, minDiagSolve, minSimpleGlide, minIOWrite = Infinity, Infinity, Infinity, Infinity
+            maxVeloDriver, maxDiagSolve, maxSimpleGlide, maxIOWrite = 0, 0, 0, 0
+            avgVeloDriver, avgDiagSolve, avgSimpleGlide, avgIOWrite = 0, 0, 0, 0
+
+            regex = re.compile("out.*." + dycore + ".timing.*")
+            subdirs = filter(regex.search, os.listdir(basePath))
+            for dir in subdirs:
+                if not os.path.exists(basePath + os.sep + dir + os.sep + "cism_timing_stats"):
+                    timingDetails[basePath + os.sep + dir + os.sep + "cism_timing_stats"] = None
+                    print("    Could not find timing summary for " + dir)
+                else:
+                    timingFile = open(basePath + os.sep + dir + os.sep + "cism_timing_stats", 'r')
+                    timingHeaders = []
+                    for line in timingFile:
+                        if line.startswith("name"):
+                            timingHeaders = line.replace('(','').replace(')','').split()
+                        elif "cism" in line:
+                            splitLine = line.split()
+                            pass
+                        elif "initial_diag_var_solve" in line:
+                            splitLine = line.split()
+                            pass
+                        elif "_velo_driver" in line:
+                            splitLine = line.split()
+                            pass
+                        elif "io_writeall" in line:
+                            splitLine = line.split()
+                            pass
+                    
+            print timingHeaders
+                        
+
