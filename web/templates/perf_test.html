@@ -1,0 +1,133 @@
+{% include 'header.html' %}
+  <div id="nav">
+    <a href="../index.html" class="button">Home</a>
+    <a href="http://blizzard.ornl.gov" class="button">Blizzard</a>
+    <a href="http://oceans11.lanl.gov/cism/" class="button">CISM</a> 
+  </div>
+  <div id="content">
+  
+  <h2 style="padding-top: 40px; padding-left: 15px;">{{testName}}</h2>
+  <div class="description">
+    <p>{{testDescription}}</p>
+  </div>
+  <br style="clear: both" />
+  
+  <STYLE type="text/css">
+  #select :checked + {% for i in range(testsRun|length -1) %} * + {% endfor %} label { background-color:#47A3FF;border-color:#47A3FF;color:#fff;}
+  #select :checked + {% for i in range(2*testsRun|length -1) %} * + {% endfor %} div {display: block; }
+  </STYLE>
+  
+  <div id="select" class="tabs">
+    {% for case in testsRun %}
+    <input id="tab-{{case}}" name="tabs" type="radio" checked />
+    {% endfor %}  
+
+    {% for case in testsRun %}
+    <label for="tab-{{case}}">{{case}}</label>  
+    {% endfor %}  
+      
+    {% for case in testsRun %}
+    <div class="case">
+      <b>Plots</b> <br/>
+      <hr style="opacity: 0; height: 5px;">
+      {% if case in plotDetails %}
+        {% for imgArr in plotDetails[case] %}
+        {% if imgArr[0] != [] %}
+        <div class="gallery">
+          <div style="float: left; display: inline;">
+             <a href="#img_form_{{case}}_{{loop.index}}" id="img_pop">
+                <img src="{{imgDir}}/{{testName}}/{{imgArr[0]}}" width="150px"></img>
+            </a>
+            <br style="clear: both" />
+            <p>{{imgArr[1]}}</p>
+          </div>
+         </div>
+        <a href="{{testName}}.html" class="overlay" id="img_form_{{case}}_{{loop.index}}"></a>
+
+        <div class="popup">
+          <img src="{{imgDir}}/{{testName}}/{{imgArr[0]}}" class="imageOverlay"></img>
+          <a class="close" href="#close">x</a>
+        </div>
+        {% endif %}
+
+      {% endfor %}
+      {% else %}
+        <a style="padding-left: 20px; color: #696969;">No plots for {{case}}</a>
+      {% endif %}
+
+      <br style="clear: both" />
+      <br height="30px" />
+
+
+      <b> Timing Summary</b>
+      <table style="width=100%;">
+        <tr>
+          <th>Dycore Type</th>
+          <th>Average</th>
+          <th>Minimum</th>
+          <th>Maximum</th>
+        </tr>
+        <tr>
+          <td> In progress.... </td>
+        </tr>
+      </table>
+
+      <br style="clear: both" />
+      <br height="30px" />
+
+      <b> Configuration Files </b>
+      <hr style="opacity: 0; height: 5px;">
+          {% if case in modelConfigs and modelConfigs[case]|length != 0 %}
+            {% for file in modelConfigs[case] %}
+                <div class="Configuration">
+    
+                  <a href="#hide{{case}}{{loop.index}}" class="hide" id="hide{{case}}{{loop.index}}">+</a>
+                  <a href="#show{{case}}{{loop.index}}" class="show" id="show{{case}}{{loop.index}}">-</a>
+                  <h4 class="top">{{file}}</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    {% set changed = [] %}
+                    {% for section, vars in modelConfigs[case][file].iteritems() %}
+                          <b>[{{section}}]</b>
+                          <div class="variable">
+                          {% for var, val in modelConfigs[case][file][section].iteritems() %}
+                            {% if case in benchConfigs and
+                                file in benchConfigs[case] and
+                                section in benchConfigs[case][file] and
+                                var in benchConfigs[case][file][section]%}
+                              {% if val == benchConfigs[case][file][section][var] %}
+                                  {{var}} = {{val}}<br>
+                              {% else %}
+                                  {{var}} = <p style="color: green; display:inline">{{val}}</p> <p style="color: red; display:inline">{{benchConfigs[case][file][section][var]}}</p> <br>
+                                  {% do changed.append(1) %}
+                              {% endif %}
+                            {% else %}
+                                {{var}} = {{val}} (Benchmark data missing.)<br>
+                                  {% do changed.append(1) %}
+                            {% endif %}
+                          {% endfor %}
+                          </div>
+                    {% endfor %}
+                  </div>
+                  <div class="status">
+                    {% if changed %}
+                      <p style="float: left; color: red">Files differ</p>
+                    {% else %}
+                      <p style="float: left; color: green">Files match</p>
+                    {% endif %}
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            {% endfor %}
+        {% else %}
+          <a style="padding-left: 20px; color: #696969;">Could not find any configuration files to check</a>
+        {% endif %}
+        
+    </div>
+    {% endfor %}
+    </div>
+    <br>
+
+    
+{% include 'footer.html' %}

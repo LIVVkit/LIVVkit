@@ -345,7 +345,8 @@ if __name__ == '__main__':
                    "ismip" : runIsmipCase,
                    "gis" : runGisCase,
                    "shelf" : runShelfCase,
-                   "performance" : runPerfCase}
+                   "performance" : runPerfCase
+                   }
 
     # Group the tests into their respective cases
     testsRun = []
