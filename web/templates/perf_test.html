@@ -60,17 +60,36 @@
 
 
       <b> Timing Summary</b>
-      <table style="width=100%;">
-        <tr>
-          <th>Dycore Type</th>
-          <th>Average</th>
-          <th>Minimum</th>
-          <th>Maximum</th>
-        </tr>
-        <tr>
-          <td> In progress.... </td>
-        </tr>
-      </table>
+      <br style="clear:both; height: 10px;" />
+      {% for dycore, data in modelTimingData[case].iteritems() %}
+        <br style="clear:both; height: 10px;" />
+        <b style="display: block;">{{dycore}}</b>
+        <table style="width: 80%;  border-collapse: collapse;">
+          <tr>
+            <th>Variable</th>
+            <th>Average</th>
+            <th>Minimum</th>
+            <th>Maximum</th>
+          </tr>
+          {% for var, vals in data.iteritems() %}
+            {% if vals[0] is defined %}
+            <tr>
+              <td style="text-align: right">{{var}}</td>
+              <td style="text-align: left">{{vals[0]}}</td>
+              <td style="text-align: left">{{vals[1]}}</td>
+              <td style="text-align: left">{{vals[2]}}</td>
+            </tr>
+            {% else %}
+            <tr>
+              <td style="text-align: right">{{var}}</td>
+              <td>N/A</td>
+              <td>N/A</td>
+              <td>N/A</td>
+            </tr>
+            {% endif %}
+          {% endfor %}
+        </table>
+      {% endfor %}
 
       <br style="clear: both" />
       <br height="30px" />

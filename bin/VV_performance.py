@@ -172,11 +172,11 @@ class Performance(AbstractTest):
         print("")
         print("        Model Timing Summary:")
         print("      --------------------------------------------------------------------")
-        self.modelTimingData['gis' + resolution] = gisParser.parseTimingSummaries(perfDir)
+        self.modelTimingData['gis_' + resolution] = gisParser.parseTimingSummaries(perfDir)
         print("")
         print("        Benchmark Timing Summary:")
         print("      --------------------------------------------------------------------")
-        self.benchTimingData['gis' + resolution] = gisParser.parseTimingSummaries(perfBenchDir)
+        self.benchTimingData['gis_' + resolution] = gisParser.parseTimingSummaries(perfBenchDir)
 
         # Record the data from the parser
         numberOutputFiles, numberConfigMatches, numberConfigTests = gisParser.getParserSummary()
@@ -239,6 +239,8 @@ class Performance(AbstractTest):
                         "plotDetails" : self.plotDetails,
                         "modelConfigs" : self.modelConfigs,
                         "benchConfigs" : self.benchConfigs,
+                        "modelTimingData" : self.modelTimingData,
+                        "benchTimingData" : self.benchTimingData,
                         "imgDir" : imgDir,
                         "testImages" : testImages}
         outputText = template.render( templateVars )

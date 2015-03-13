@@ -1,33 +1,47 @@
+<!-- 
+  Template for generating test specific pages.
+-->
+
+<!-- Include the header and some links -->
 {% include 'header.html' %}
   <div id="nav">
     <a href="../index.html" class="button">Home</a>
     <a href="http://blizzard.ornl.gov" class="button">Blizzard</a>
     <a href="http://oceans11.lanl.gov/cism/" class="button">CISM</a> 
   </div>
-  <div id="content">
   
+  <!--   Start the pace specific content -->
+  <div id="content">
   <h2 style="padding-top: 40px; padding-left: 15px;">{{testName}}</h2>
   <div class="description">
     <p>{{testDescription}}</p>
   </div>
   <br style="clear: both" />
   
+  <!--   Some CSS for determining which tab is selected -->
   <STYLE type="text/css">
   #select :checked + {% for i in range(testsRun|length -1) %} * + {% endfor %} label { background-color:#47A3FF;border-color:#47A3FF;color:#fff;}
   #select :checked + {% for i in range(2*testsRun|length -1) %} * + {% endfor %} div {display: block; }
   </STYLE>
   
+  <!-- Generate the tab section -->
   <div id="select" class="tabs">
+    <!-- The part that is hidden from the user -->
     {% for case in testsRun %}
     <input id="tab-{{case}}" name="tabs" type="radio" checked />
     {% endfor %}  
-
+    <!-- The part you can click on -->
     {% for case in testsRun %}
     <label for="tab-{{case}}">{{case}}</label>  
     {% endfor %}  
       
+      
+    <!-- Go through each of the test cases that fall under this specific subcategory -->
     {% for case in testsRun %}
     <div class="case">
+    
+    
+      <!-- BEGIN PLOT SECTION -->
       <b>Plots</b> <br/>
       <hr style="opacity: 0; height: 5px;">
       {% if case in plotDetails %}
@@ -35,10 +49,12 @@
         {% if imgArr[0] != [] %}
         <div class="gallery">
           <div style="float: left; display: inline;">
+             <!-- imgArr[0] is the name of the image -->
              <a href="#img_form_{{case}}_{{loop.index}}" id="img_pop">
                 <img src="{{imgDir}}/{{testName}}/{{imgArr[0]}}" width="150px"></img>
             </a>
             <br style="clear: both" />
+            <!-- imgArr[1] is the description -->
             <p>{{imgArr[1]}}</p>
           </div>
          </div>
@@ -49,15 +65,19 @@
           <a class="close" href="#close">x</a>
         </div>
         {% endif %}
-
       {% endfor %}
+      <!-- No plots were passed to jinja2 -->
       {% else %}
         <a style="padding-left: 20px; color: #696969;">No plots for {{case}}</a>
       {% endif %}
-    
+      <!-- END PLOT SECTION -->
+      
+      
       <br style="clear: both" />
       <br height="30px" />
 
+
+      <!-- BEGIN BIT FOR BIT SECTION -->
       <b>
         Bit for Bit 
         <a style="font-size: small; font-style: italic">
@@ -95,19 +115,25 @@
         <a style="padding-left: 20px; color: #696969;">No bit for bit tests performed for {{case}}</a>
         <br />
       {% endif %}
+      <!-- END BIT FOR BIT SECTION -->
+        
         
       <br height="30px" />
+      
+      
+      <!-- BEGIN CONFIGURATION SECTION -->
       <b> Configuration Files </b>
       <hr style="opacity: 0; height: 5px;">
           {% if case in modelConfigs and modelConfigs[case]|length != 0 %}
             {% for file in modelConfigs[case] %}
                 <div class="Configuration">
-    
+                  <!-- Hide and show buttons to allow the user view data more easily -->
                   <a href="#hide{{case}}{{loop.index}}" class="hide" id="hide{{case}}{{loop.index}}">+</a>
                   <a href="#show{{case}}{{loop.index}}" class="show" id="show{{case}}{{loop.index}}">-</a>
                   <h4 class="top">{{file}}</h4>
                   <div class="sections">
                     <div style="clear:both;"></div>
+                    <!-- The changed variable keeps track of whether the files match -->
                     {% set changed = [] %}
                     {% for section, vars in modelConfigs[case][file].iteritems() %}
                           <b>[{{section}}]</b>
@@ -145,12 +171,18 @@
         {% else %}
           <a style="padding-left: 20px; color: #696969;">Could not find any configuration files to check</a>
         {% endif %}
+        <!-- END CONFIGURATION SECTION -->
+        
         
         <hr style="opacity: 0; height: 5px;">
+        <br style="clear: both" />
+        
+        
+        <!-- BEGIN OUTPUT ANALYSIS SECTION -->
         <b>Output Analysis</b>
         {% if testDetails[case] != [] %}
       	<table style="width:100%">
-      		<tr>
+      		<tr style="background-color: #47A3FF;">
       			<th>Output File</th>
       			{% for var in testHeader %}
       				<th>{{var}}</th>
@@ -168,10 +200,12 @@
       	{% else %}
       		<p style="padding-left: 20px; color: #696969;">No data found</p>
       	{% endif %}
+      	<!-- END OUTPUT ANALYSIS SECTION -->
+      	
     </div>
     {% endfor %}
     </div>
     <br>
 
-    
+<!-- Include the footer -->
 {% include 'footer.html' %}

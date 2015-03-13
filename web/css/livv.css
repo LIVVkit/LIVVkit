@@ -15,6 +15,8 @@ h1, h2, h3, h4 {
 
 table, ul {
 	margin-top: 10px;
+	border-bottom: 1px solid #47A3FF;
+    border-collapse: collapse;
 }
 
 img { 
@@ -25,7 +27,15 @@ img {
 
 th, td {
     text-align: center;
-    padding: 1px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 5px;
+}
+
+th {
+	border: 1px solid #47A3FF;
+	color: #FFFFFF;
+	background-color: #47A3FF;
 }
 
 hr {

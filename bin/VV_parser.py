@@ -239,6 +239,12 @@ class Parser(object):
             # Make sure that there are enough files to parse 
             if nTimingFiles < 9:
                 print("        Could not generate " + dycore + " timing summary.  Need to have at least 10 samples, but only found " + str(len(subDirs)) + "!")
+                # Build the output data-structure
+                timingDetails['Simple Glide'] = None
+                timingDetails['Velocity Driver'] = None
+                timingDetails['Initial Diagonal Solve'] = None
+                timingDetails['IO Writeback'] = None
+                timingSummary[dycore] = timingDetails
             else: 
                 # Go through each subdirectory and parse the cism_timing_stats file
                 for dir in subDirs:
