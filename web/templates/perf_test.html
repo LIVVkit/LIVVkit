@@ -18,17 +18,24 @@
   </STYLE>
   
   <div id="select" class="tabs">
+  
+    <!-- CREATE THE TAB SELECTOR -->
     {% for case in testsRun %}
     <input id="tab-{{case}}" name="tabs" type="radio" checked />
     {% endfor %}  
-
     {% for case in testsRun %}
     <label for="tab-{{case}}">{{case}}</label>  
     {% endfor %}  
-      
+    
+    
+    <!-- GO THROUGH EACH SPECIFIC TEST CASE & DISPLAY THE CONTENT-->  
     {% for case in testsRun %}
     <div class="case">
-      <b>Plots</b> <br/>
+    
+    
+       <!-- BEGIN PLOTS SECTION -->
+      <b class="label-header">Plots</b> <br/>
+      <div class="separator">
       <hr style="opacity: 0; height: 5px;">
       {% if case in plotDetails %}
         {% for imgArr in plotDetails[case] %}
@@ -41,7 +48,7 @@
             <br style="clear: both" />
             <p>{{imgArr[1]}}</p>
           </div>
-         </div>
+        </div>
         <a href="{{testName}}.html" class="overlay" id="img_form_{{case}}_{{loop.index}}"></a>
 
         <div class="popup">
@@ -54,17 +61,22 @@
       {% else %}
         <a style="padding-left: 20px; color: #696969;">No plots for {{case}}</a>
       {% endif %}
+      </div>
+      <!-- END PLOTS SECTION -->
+
 
       <br style="clear: both" />
       <br height="30px" />
 
 
-      <b> Timing Summary</b>
+      <!-- BEGIN TIMING SUMMARY SECTION -->
+      <b class="label-header"> Timing Summary</b>
       <br style="clear:both; height: 10px;" />
+      <div class="separator">
       {% for dycore, data in modelTimingData[case].iteritems() %}
         <br style="clear:both; height: 10px;" />
         <b style="display: block;">{{dycore}}</b>
-        <table style="width: 80%;  border-collapse: collapse;">
+        <table style="width: 100%;  border-collapse: collapse;">
           <tr>
             <th>Variable</th>
             <th>Average</th>
@@ -75,9 +87,33 @@
             {% if vals[0] is defined %}
             <tr>
               <td style="text-align: right">{{var}}</td>
-              <td style="text-align: left">{{vals[0]}}</td>
-              <td style="text-align: left">{{vals[1]}}</td>
-              <td style="text-align: left">{{vals[2]}}</td>
+              {% set diffZero = vals[0] - benchTimingData[case][dycore][var][0] %}
+              {% set diffOne = vals[1] - benchTimingData[case][dycore][var][1] %}
+              {% set diffTwo = vals[2] - benchTimingData[case][dycore][var][2] %}
+              <td style="text-align: left">
+                {{'%0.5f' % vals[0]}} 
+                {% if diffZero > 0 %}
+                  <p style="display: inline; color: red">(+{{'%0.3f' % diffZero}})</p>
+                {% else %}
+                  <p style="display: inline; color: green">({{'%0.3f' % diffZero}})</p>
+                {% endif %}
+              </td>
+              <td style="text-align: left">
+                {{'%0.5f' % vals[1]}} 
+                {% if diffOne > 0 %}
+                  <p style="display: inline; color: red">(+{{'%0.3f' % diffOne}})</p>
+                {% else %}
+                  <p style="display: inline; color: green">({{'%0.3f' % diffOne}})</p>
+                {% endif %}
+              </td>
+              <td style="text-align: left">
+                {{'%0.5f' % vals[2]}} 
+                {% if diffTwo > 0 %}
+                  <p style="display: inline; color: red">(+{{'%0.3f' % diffTwo}})</p>
+                {% else %}
+                  <p style="display: inline; color: green">({{'%0.3f' % diffTwo}})</p>
+                {% endif %}
+              </td>
             </tr>
             {% else %}
             <tr>
@@ -90,11 +126,17 @@
           {% endfor %}
         </table>
       {% endfor %}
+      </div>
+      <!-- END TIMING SUMMARY SECTION -->
+
 
       <br style="clear: both" />
       <br height="30px" />
 
-      <b> Configuration Files </b>
+
+      <!-- BEGIN CONFIGURATION FILE SECTION -->
+      <b class="label-header"> Configuration Files </b>
+      <div class="separator">
       <hr style="opacity: 0; height: 5px;">
           {% if case in modelConfigs and modelConfigs[case]|length != 0 %}
             {% for file in modelConfigs[case] %}
@@ -142,6 +184,10 @@
         {% else %}
           <a style="padding-left: 20px; color: #696969;">Could not find any configuration files to check</a>
         {% endif %}
+        </div>
+       <!-- END CONFIGURATION FILES SECTION -->
+
+        
         
     </div>
     {% endfor %}

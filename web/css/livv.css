@@ -33,7 +33,7 @@ th, td {
 }
 
 th {
-	border: 1px solid #47A3FF;
+    font-family: helvetica;	
 	color: #FFFFFF;
 	background-color: #47A3FF;
 }
@@ -90,6 +90,20 @@ hr {
 .summary {
 	margin-left: 50px;
 	line-height: 1em;
+}
+
+.label-header {
+    font-family: helvetica;
+    background-color: #696969; 
+    color: #fff;
+    display:inline-block; 
+    padding:5px 20px;
+    margin-bottom: 0px;
+}
+
+.separator {
+    border-top:solid 2px #696969; 
+    padding: 15px;
 }
 
 /******************************************************************************
