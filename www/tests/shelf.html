@@ -1,0 +1,2244 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<link rel="stylesheet" type="text/css" href="../css/livv.css">
+<link rel="stylesheet" type="text/css" href="../css/interactive.css">
+<link rel="stylesheet" type="text/css" href="../css/popups.css">
+</head>
+
+<body>	
+
+<div id="page">
+	<div id="header">
+		<img src="../imgs//gicon.svg" style="width: 30px; float: left; padding: 5px;"/>
+		<p id="header-content">
+			LIVV: Land Ice Verification & Validation
+		</p>
+	</div>
+  <div id="nav">
+    <a href="../index.html" class="button">Home</a>
+    <a href="http://blizzard.ornl.gov" class="button">Blizzard</a>
+    <a href="http://oceans11.lanl.gov/cism/" class="button">CISM</a> 
+  </div>
+  <div id="content">
+  
+  <h2 style="padding-top: 40px; padding-left: 15px;">shelf</h2>
+  <div class="description">
+    <p>A blank description</p>
+  </div>
+  <br style="clear: both" />
+  
+  <STYLE type="text/css">
+  #select :checked +  * +  label { background-color:#47A3FF;border-color:#47A3FF;color:#fff;}
+  #select :checked +  * +  * +  * +  div {display: block; }
+  </STYLE>
+  
+  <div id="select" class="tabs">
+    
+    <input id="tab-confined-shelf" name="tabs" type="radio" checked />
+    
+    <input id="tab-circular-shelf" name="tabs" type="radio" checked />
+      
+
+    
+    <label for="tab-confined-shelf">confined-shelf</label>  
+    
+    <label for="tab-circular-shelf">circular-shelf</label>  
+      
+      
+    
+    <div class="case">
+      <b>Plots</b> <br/>
+      
+        <b margin-left="20px">No plots for confined-shelf</b>
+      
+    
+      <br style="clear: both" />
+    
+      <b> 
+        Bit for Bit 
+        <a style="font-size: small; font-style: italic">
+          Click on failures to see difference plots
+        </a> 
+      </b>
+
+      <table class="tabbed">
+      <tr>
+        <th>Output File</th>
+        <th>Status</th>
+        <th>Total Error</th>
+      </tr>
+      
+        <tr>
+          <td style="text-align: left">
+            confined-shelf.gnu.glissade.large.nc
+          </td>
+          <td>
+            <a class=SUCCESS
+            
+            >SUCCESS</a>
+          </td>
+          
+        </tr>
+      
+        <tr>
+          <td style="text-align: left">
+            confined-shelf.nc
+          </td>
+          <td>
+            <a class=SUCCESS
+            
+            >SUCCESS</a>
+          </td>
+          
+        </tr>
+      
+        <tr>
+          <td style="text-align: left">
+            confined-shelf.gnu.PIC.large.nc
+          </td>
+          <td>
+            <a class=SUCCESS
+            
+            >SUCCESS</a>
+          </td>
+          
+        </tr>
+      
+        <tr>
+          <td style="text-align: left">
+            confined-shelf.gnu.JFNK.large.nc
+          </td>
+          <td>
+            <a class=SUCCESS
+            
+            >SUCCESS</a>
+          </td>
+          
+        </tr>
+      
+        <tr>
+          <td style="text-align: left">
+            confined-shelf.gnu.glissade.nc
+          </td>
+          <td>
+            <a class=SUCCESS
+            
+            >SUCCESS</a>
+          </td>
+          
+        </tr>
+      
+      </table>
+        
+      <br height="30px" />
+      <b> Configuration Files </b>
+      <hr style="opacity: 0; height: 10px;">
+          
+            
+                <div class="Configuration">
+    
+                  <a href="#hideconfined-shelf1" class="hide" id="hideconfined-shelf1">+</a>
+                  <a href="#showconfined-shelf1" class="show" id="showconfined-shelf1">-</a>
+                  <h4 class="top">confined-shelf.glissade.config</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    
+                    
+                          <b>[SHELF-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                          <b>[parameters]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  flow_factor = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  default_flwa = 5.7e-18<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF output]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  variables = thk uvel vvel velnorm<br>
+                              
+                            
+                          
+                            
+                              
+                                  frequency = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  name = data/confined-shelf.gnu.glissade.nc<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[grid]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  upn = 5<br>
+                              
+                            
+                          
+                            
+                              
+                                  ewn = 43<br>
+                              
+                            
+                          
+                            
+                              
+                                  nsn = 44<br>
+                              
+                            
+                          
+                            
+                              
+                                  dew = 5000<br>
+                              
+                            
+                          
+                            
+                              
+                                  dns = 5000<br>
+                              
+                            
+                          
+                            
+                              
+                                  sigma_builtin = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[time]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  tstart = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  tend = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt = 1.<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF default]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  comment = Same as experiment 3 from EISMINT-shelf<br>
+                              
+                            
+                          
+                            
+                              
+                                  title = Confined Shelf Experiment (first-order dynamics)<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  dycore = 2                <br>
+                              
+                            
+                          
+                            
+                              
+                                  flow_law = 0              <br>
+                              
+                            
+                          
+                            
+                              
+                                  evolution = 3             <br>
+                              
+                            
+                          
+                            
+                              
+                                  temperature = 0           <br>
+                              
+                            
+                          
+                            
+                              
+                                  marine_margin = 0         <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[ho_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  which_ho_babc = 5         <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_efvs = 2         <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_sparse = 3       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_nonlinear = 0    <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF input]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  name = data/confined-shelf.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  time = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                  </div>
+                  <div class="status">
+                    
+                      <p style="float: left; color: green">Files match</p>
+                    
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            
+                <div class="Configuration">
+    
+                  <a href="#hideconfined-shelf2" class="hide" id="hideconfined-shelf2">+</a>
+                  <a href="#showconfined-shelf2" class="show" id="showconfined-shelf2">-</a>
+                  <h4 class="top">confined-shelf.JFNK.config</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    
+                    
+                          <b>[SHELF-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                          <b>[parameters]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  flow_factor = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  default_flwa = 5.7e-18<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF output]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  variables = thk uvel vvel velnorm<br>
+                              
+                            
+                          
+                            
+                              
+                                  frequency = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  name = data/confined-shelf.gnu.JFNK.large.nc<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[grid]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  upn = 5<br>
+                              
+                            
+                          
+                            
+                              
+                                  ewn = 43<br>
+                              
+                            
+                          
+                            
+                              
+                                  nsn = 44<br>
+                              
+                            
+                          
+                            
+                              
+                                  dew = 5000<br>
+                              
+                            
+                          
+                            
+                              
+                                  dns = 5000<br>
+                              
+                            
+                          
+                            
+                              
+                                  sigma_builtin = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[time]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  tstart = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  tend = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt = 1.<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF default]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  comment = Same as experiment 3 from EISMINT-shelf<br>
+                              
+                            
+                          
+                            
+                              
+                                  title = Confined Shelf Experiment (first-order dynamics)<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  dycore = 1                <br>
+                              
+                            
+                          
+                            
+                              
+                                  flow_law = 0              <br>
+                              
+                            
+                          
+                            
+                              
+                                  evolution = 3             <br>
+                              
+                            
+                          
+                            
+                              
+                                  temperature = 0           <br>
+                              
+                            
+                          
+                            
+                              
+                                  marine_margin = 0         <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[ho_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  which_ho_babc = 5         <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_efvs = 2         <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_sparse = 4       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_nonlinear = 1    <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF input]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  name = data/confined-shelf.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  time = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                  </div>
+                  <div class="status">
+                    
+                      <p style="float: left; color: green">Files match</p>
+                    
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            
+                <div class="Configuration">
+    
+                  <a href="#hideconfined-shelf3" class="hide" id="hideconfined-shelf3">+</a>
+                  <a href="#showconfined-shelf3" class="show" id="showconfined-shelf3">-</a>
+                  <h4 class="top">confined-shelf.glissade.config.large</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    
+                    
+                          <b>[SHELF-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                          <b>[parameters]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  flow_factor = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  default_flwa = 5.7e-18<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF output]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  variables = thk uvel vvel velnorm<br>
+                              
+                            
+                          
+                            
+                              
+                                  frequency = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  name = data/confined-shelf.gnu.glissade.large.nc<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[grid]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  upn = 5<br>
+                              
+                            
+                          
+                            
+                              
+                                  ewn = 43<br>
+                              
+                            
+                          
+                            
+                              
+                                  nsn = 44<br>
+                              
+                            
+                          
+                            
+                              
+                                  dew = 5000<br>
+                              
+                            
+                          
+                            
+                              
+                                  dns = 5000<br>
+                              
+                            
+                          
+                            
+                              
+                                  sigma_builtin = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[time]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  tstart = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  tend = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt = 1.<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF default]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  comment = Same as experiment 3 from EISMINT-shelf<br>
+                              
+                            
+                          
+                            
+                              
+                                  title = Confined Shelf Experiment (first-order dynamics)<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  dycore = 2                <br>
+                              
+                            
+                          
+                            
+                              
+                                  flow_law = 0              <br>
+                              
+                            
+                          
+                            
+                              
+                                  evolution = 3             <br>
+                              
+                            
+                          
+                            
+                              
+                                  temperature = 0           <br>
+                              
+                            
+                          
+                            
+                              
+                                  marine_margin = 0         <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[ho_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  which_ho_babc = 5         <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_efvs = 2         <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_sparse = 3       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_nonlinear = 0    <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF input]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  name = data/confined-shelf.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  time = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                  </div>
+                  <div class="status">
+                    
+                      <p style="float: left; color: green">Files match</p>
+                    
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            
+                <div class="Configuration">
+    
+                  <a href="#hideconfined-shelf4" class="hide" id="hideconfined-shelf4">+</a>
+                  <a href="#showconfined-shelf4" class="show" id="showconfined-shelf4">-</a>
+                  <h4 class="top">confined-shelf.PIC.config</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    
+                    
+                          <b>[SHELF-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                          <b>[parameters]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  flow_factor = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  default_flwa = 5.7e-18<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF output]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  variables = thk uvel vvel velnorm<br>
+                              
+                            
+                          
+                            
+                              
+                                  frequency = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  name = data/confined-shelf.gnu.PIC.large.nc<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[grid]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  upn = 5<br>
+                              
+                            
+                          
+                            
+                              
+                                  ewn = 43<br>
+                              
+                            
+                          
+                            
+                              
+                                  nsn = 44<br>
+                              
+                            
+                          
+                            
+                              
+                                  dew = 5000<br>
+                              
+                            
+                          
+                            
+                              
+                                  dns = 5000<br>
+                              
+                            
+                          
+                            
+                              
+                                  sigma_builtin = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[time]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  tstart = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  tend = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt = 1.<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF default]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  comment = Same as experiment 3 from EISMINT-shelf<br>
+                              
+                            
+                          
+                            
+                              
+                                  title = Confined Shelf Experiment (first-order dynamics)<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  dycore = 1                <br>
+                              
+                            
+                          
+                            
+                              
+                                  flow_law = 0              <br>
+                              
+                            
+                          
+                            
+                              
+                                  evolution = 3             <br>
+                              
+                            
+                          
+                            
+                              
+                                  temperature = 0           <br>
+                              
+                            
+                          
+                            
+                              
+                                  marine_margin = 0         <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[ho_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  which_ho_babc = 5         <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_efvs = 2         <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_sparse = 4       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_nonlinear = 0    <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF input]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  name = data/confined-shelf.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  time = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                  </div>
+                  <div class="status">
+                    
+                      <p style="float: left; color: green">Files match</p>
+                    
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            
+        
+        
+        <br height="10px" />
+        <b>Output Analysis</b>
+        
+      	<table style="width:100%">
+      		<tr>
+      			<th>Output File</th>
+      			
+      				<th>Dycore Type</th>
+      			
+      				<th>Number of processors</th>
+      			
+      				<th>Number of timesteps</th>
+      			
+      				<th>Avg convergence rate</th>
+      			
+      		</tr>
+      		
+      		<tr>
+      			<td style="text-align: left">confined-shelf.outg</td>
+      			
+      			<td>Glissade</td>
+      			
+      			<td>2</td>
+      			
+      			<td>0</td>
+      			
+      			<td>N/A</td>
+      			
+      		</tr>
+      		
+      		<tr>
+      			<td style="text-align: left">confined-shelf.outg.large</td>
+      			
+      			<td>Unavailable</td>
+      			
+      			<td>0</td>
+      			
+      			<td>0</td>
+      			
+      			<td>N/A</td>
+      			
+      		</tr>
+      		
+      		<tr>
+      			<td style="text-align: left">confined-shelf.outp</td>
+      			
+      			<td>Glam</td>
+      			
+      			<td>2</td>
+      			
+      			<td>0</td>
+      			
+      			<td>N/A</td>
+      			
+      		</tr>
+      		
+      		<tr>
+      			<td style="text-align: left">confined-shelf.out</td>
+      			
+      			<td>Glam</td>
+      			
+      			<td>2</td>
+      			
+      			<td>0</td>
+      			
+      			<td>N/A</td>
+      			
+      		</tr>
+      		
+      	</table>
+      	
+    </div>
+    
+    <div class="case">
+      <b>Plots</b> <br/>
+      
+        
+        
+        <div class="gallery">
+          <div style="float: left; display: inline;">
+             <a href="#img_form_circular-shelf_1" id="img_pop">
+                <img src="../imgs//shelf/circshelfvel.png" width="150px"></img>
+            </a>
+            <br style="clear: both" />
+            <p>Glam Velocity Comparison Plot</p>
+          </div>
+         </div>
+        <a href="shelf.html" class="overlay" id="img_form_circular-shelf_1"></a>
+
+        <div class="popup">
+          <img src="../imgs//shelf/circshelfvel.png" class="imageOverlay"></img>
+          <a class="close" href="#close">x</a>
+        </div>
+        
+
+      
+        
+        <div class="gallery">
+          <div style="float: left; display: inline;">
+             <a href="#img_form_circular-shelf_2" id="img_pop">
+                <img src="../imgs//shelf/circshelfvelg.png" width="150px"></img>
+            </a>
+            <br style="clear: both" />
+            <p>Glissade Velocity Comparison Plot</p>
+          </div>
+         </div>
+        <a href="shelf.html" class="overlay" id="img_form_circular-shelf_2"></a>
+
+        <div class="popup">
+          <img src="../imgs//shelf/circshelfvelg.png" class="imageOverlay"></img>
+          <a class="close" href="#close">x</a>
+        </div>
+        
+
+      
+      
+    
+      <br style="clear: both" />
+    
+      <b> 
+        Bit for Bit 
+        <a style="font-size: small; font-style: italic">
+          Click on failures to see difference plots
+        </a> 
+      </b>
+
+      <table class="tabbed">
+      <tr>
+        <th>Output File</th>
+        <th>Status</th>
+        <th>Total Error</th>
+      </tr>
+      
+        <tr>
+          <td style="text-align: left">
+            circular-shelf.gnu.PIC.large.nc
+          </td>
+          <td>
+            <a class=SUCCESS
+            
+            >SUCCESS</a>
+          </td>
+          
+        </tr>
+      
+        <tr>
+          <td style="text-align: left">
+            circular-shelf.nc
+          </td>
+          <td>
+            <a class=SUCCESS
+            
+            >SUCCESS</a>
+          </td>
+          
+        </tr>
+      
+        <tr>
+          <td style="text-align: left">
+            circular-shelf.gnu.glissade.nc
+          </td>
+          <td>
+            <a class=SUCCESS
+            
+            >SUCCESS</a>
+          </td>
+          
+        </tr>
+      
+        <tr>
+          <td style="text-align: left">
+            circular-shelf.gnu.glissade.large.nc
+          </td>
+          <td>
+            <a class=SUCCESS
+            
+            >SUCCESS</a>
+          </td>
+          
+        </tr>
+      
+        <tr>
+          <td style="text-align: left">
+            circular-shelf.gnu.JFNK.large.nc
+          </td>
+          <td>
+            <a class=FAILURE
+            
+            	target="_blank" href=../imgs//shelf/bit4bit/circular-shelf.gnu.JFNK.large.nc.png
+            
+            >FAILURE</a>
+          </td>
+          
+          	<td>-6.76e+06</td>
+          
+        </tr>
+      
+      </table>
+        
+      <br height="30px" />
+      <b> Configuration Files </b>
+      <hr style="opacity: 0; height: 10px;">
+          
+            
+                <div class="Configuration">
+    
+                  <a href="#hidecircular-shelf1" class="hide" id="hidecircular-shelf1">+</a>
+                  <a href="#showcircular-shelf1" class="show" id="showcircular-shelf1">-</a>
+                  <h4 class="top">circular-shelf.glissade.config.large</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    
+                    
+                          <b>[SHELF-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                          <b>[parameters]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  flow_factor = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  default_flwa = 5.7e-18<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF output]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  variables = thk uvel vvel wvel velnorm flwa<br>
+                              
+                            
+                          
+                            
+                              
+                                  frequency = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  name = data/circular-shelf.gnu.glissade.large.nc<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[grid]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  upn = 5<br>
+                              
+                            
+                          
+                            
+                              
+                                  ewn = 41<br>
+                              
+                            
+                          
+                            
+                              
+                                  nsn = 41<br>
+                              
+                            
+                          
+                            
+                              
+                                  dew = 1250<br>
+                              
+                            
+                          
+                            
+                              
+                                  dns = 1250<br>
+                              
+                            
+                          
+                            
+                              
+                                  sigma_builtin = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[time]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  tstart = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  tend = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt = 0.25<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF default]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  comment = created by circular-shelf.py<br>
+                              
+                            
+                          
+                            
+                              
+                                  title = Circular Shelf Experiment (first-order dynamics)<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  dycore = 2                <br>
+                              
+                            
+                          
+                            
+                              
+                                  flow_law = 0              <br>
+                              
+                            
+                          
+                            
+                              
+                                  evolution = 3             <br>
+                              
+                            
+                          
+                            
+                              
+                                  temperature = 0           <br>
+                              
+                            
+                          
+                            
+                              
+                                  marine_margin = 0         <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[ho_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  which_ho_babc = 5         <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_efvs = 2         <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_sparse = 3       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_nonlinear = 0    <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF input]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  name = data/circular-shelf.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  time = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                  </div>
+                  <div class="status">
+                    
+                      <p style="float: left; color: green">Files match</p>
+                    
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            
+                <div class="Configuration">
+    
+                  <a href="#hidecircular-shelf2" class="hide" id="hidecircular-shelf2">+</a>
+                  <a href="#showcircular-shelf2" class="show" id="showcircular-shelf2">-</a>
+                  <h4 class="top">circular-shelf.PIC.config</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    
+                    
+                          <b>[SHELF-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                          <b>[parameters]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  flow_factor = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  default_flwa = 5.7e-18<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF output]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  variables = thk uvel vvel wvel velnorm flwa<br>
+                              
+                            
+                          
+                            
+                              
+                                  frequency = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  name = data/circular-shelf.gnu.PIC.large.nc<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[grid]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  upn = 5<br>
+                              
+                            
+                          
+                            
+                              
+                                  ewn = 41<br>
+                              
+                            
+                          
+                            
+                              
+                                  nsn = 41<br>
+                              
+                            
+                          
+                            
+                              
+                                  dew = 1250<br>
+                              
+                            
+                          
+                            
+                              
+                                  dns = 1250<br>
+                              
+                            
+                          
+                            
+                              
+                                  sigma_builtin = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[time]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  tstart = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  tend = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt = 0.25<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF default]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  comment = created by circular-shelf.py<br>
+                              
+                            
+                          
+                            
+                              
+                                  title = Circular Shelf Experiment (first-order dynamics)<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  dycore = 1                <br>
+                              
+                            
+                          
+                            
+                              
+                                  flow_law = 0              <br>
+                              
+                            
+                          
+                            
+                              
+                                  evolution = 3             <br>
+                              
+                            
+                          
+                            
+                              
+                                  temperature = 0           <br>
+                              
+                            
+                          
+                            
+                              
+                                  marine_margin = 0         <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[ho_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  which_ho_babc = 5         <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_efvs = 2         <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_sparse = 4       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_nonlinear = 0    <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF input]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  name = data/circular-shelf.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  time = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                  </div>
+                  <div class="status">
+                    
+                      <p style="float: left; color: green">Files match</p>
+                    
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            
+                <div class="Configuration">
+    
+                  <a href="#hidecircular-shelf3" class="hide" id="hidecircular-shelf3">+</a>
+                  <a href="#showcircular-shelf3" class="show" id="showcircular-shelf3">-</a>
+                  <h4 class="top">circular-shelf.glissade.config</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    
+                    
+                          <b>[SHELF-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                          <b>[parameters]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  flow_factor = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  default_flwa = 5.7e-18<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF output]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  variables = thk uvel vvel wvel velnorm flwa<br>
+                              
+                            
+                          
+                            
+                              
+                                  frequency = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  name = data/circular-shelf.gnu.glissade.nc<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[grid]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  upn = 5<br>
+                              
+                            
+                          
+                            
+                              
+                                  ewn = 41<br>
+                              
+                            
+                          
+                            
+                              
+                                  nsn = 41<br>
+                              
+                            
+                          
+                            
+                              
+                                  dew = 1250<br>
+                              
+                            
+                          
+                            
+                              
+                                  dns = 1250<br>
+                              
+                            
+                          
+                            
+                              
+                                  sigma_builtin = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[time]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  tstart = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  tend = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt = 0.25<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF default]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  comment = created by circular-shelf.py<br>
+                              
+                            
+                          
+                            
+                              
+                                  title = Circular Shelf Experiment (first-order dynamics)<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  dycore = 2                <br>
+                              
+                            
+                          
+                            
+                              
+                                  flow_law = 0              <br>
+                              
+                            
+                          
+                            
+                              
+                                  evolution = 3             <br>
+                              
+                            
+                          
+                            
+                              
+                                  temperature = 0           <br>
+                              
+                            
+                          
+                            
+                              
+                                  marine_margin = 0         <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[ho_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  which_ho_babc = 5         <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_efvs = 2         <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_sparse = 3       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_nonlinear = 0    <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF input]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  name = data/circular-shelf.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  time = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                  </div>
+                  <div class="status">
+                    
+                      <p style="float: left; color: green">Files match</p>
+                    
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            
+                <div class="Configuration">
+    
+                  <a href="#hidecircular-shelf4" class="hide" id="hidecircular-shelf4">+</a>
+                  <a href="#showcircular-shelf4" class="show" id="showcircular-shelf4">-</a>
+                  <h4 class="top">circular-shelf.JFNK.config</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    
+                    
+                          <b>[SHELF-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                          <b>[parameters]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  flow_factor = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  default_flwa = 5.7e-18<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF output]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  variables = thk uvel vvel wvel velnorm flwa<br>
+                              
+                            
+                          
+                            
+                              
+                                  frequency = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  name = data/circular-shelf.gnu.JFNK.large.nc<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[grid]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  upn = 5<br>
+                              
+                            
+                          
+                            
+                              
+                                  ewn = 41<br>
+                              
+                            
+                          
+                            
+                              
+                                  nsn = 41<br>
+                              
+                            
+                          
+                            
+                              
+                                  dew = 1250<br>
+                              
+                            
+                          
+                            
+                              
+                                  dns = 1250<br>
+                              
+                            
+                          
+                            
+                              
+                                  sigma_builtin = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[time]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  tstart = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  tend = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt = 0.25<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF default]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  comment = created by circular-shelf.py<br>
+                              
+                            
+                          
+                            
+                              
+                                  title = Circular Shelf Experiment (first-order dynamics)<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  dycore = 1                <br>
+                              
+                            
+                          
+                            
+                              
+                                  flow_law = 0              <br>
+                              
+                            
+                          
+                            
+                              
+                                  evolution = 3             <br>
+                              
+                            
+                          
+                            
+                              
+                                  temperature = 0           <br>
+                              
+                            
+                          
+                            
+                              
+                                  marine_margin = 0         <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[ho_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  which_ho_babc = 5         <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_efvs = 2         <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_sparse = 4       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_nonlinear = 1    <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF input]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  name = data/circular-shelf.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  time = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                  </div>
+                  <div class="status">
+                    
+                      <p style="float: left; color: green">Files match</p>
+                    
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            
+        
+        
+        <br height="10px" />
+        <b>Output Analysis</b>
+        
+      	<table style="width:100%">
+      		<tr>
+      			<th>Output File</th>
+      			
+      				<th>Dycore Type</th>
+      			
+      				<th>Number of processors</th>
+      			
+      				<th>Number of timesteps</th>
+      			
+      				<th>Avg convergence rate</th>
+      			
+      		</tr>
+      		
+      		<tr>
+      			<td style="text-align: left">circular-shelf.outg.large</td>
+      			
+      			<td>Glissade</td>
+      			
+      			<td>4</td>
+      			
+      			<td>0</td>
+      			
+      			<td>N/A</td>
+      			
+      		</tr>
+      		
+      		<tr>
+      			<td style="text-align: left">circular-shelf.out</td>
+      			
+      			<td>Glam</td>
+      			
+      			<td>2</td>
+      			
+      			<td>30</td>
+      			
+      			<td>N/A</td>
+      			
+      		</tr>
+      		
+      		<tr>
+      			<td style="text-align: left">circular-shelf.outp</td>
+      			
+      			<td>Glam</td>
+      			
+      			<td>2</td>
+      			
+      			<td>0</td>
+      			
+      			<td>N/A</td>
+      			
+      		</tr>
+      		
+      		<tr>
+      			<td style="text-align: left">circular-shelf.outg</td>
+      			
+      			<td>Glissade</td>
+      			
+      			<td>2</td>
+      			
+      			<td>0</td>
+      			
+      			<td>N/A</td>
+      			
+      		</tr>
+      		
+      	</table>
+      	
+    </div>
+    
+    </div>
+    <br>
+
+    
+	</div>
+
+	<div id="footer">
+		<p id="info">
+			V&V Performed by bzq at 03-04-2015 16:47:03 <br> 
+			Test run of code <br>
+		</p>
+	</div>
+</div>
+</body>
+
+</html>

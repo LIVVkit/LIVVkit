@@ -1,0 +1,134 @@
+/******************************************************************************
+  Basic Styling Overrides
+******************************************************************************/
+html {
+    background: url(../imgs/temp.jpg) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+h1, h2, h3, h4 {
+	font-family: helvetica;
+}
+
+table, ul {
+	margin-top: 10px;
+}
+
+img { 
+	max-width: 100%;
+	height: auto;
+	width: auto\9;
+}
+
+th, td {
+    text-align: center;
+    padding: 1px;
+}
+
+hr {
+	width: 98%;
+	border:0;
+	margin-top: 0px;
+	color: #EEEEEE;
+	background-color: #EEEEEE;
+	height:1px;
+}
+
+
+/******************************************************************************
+  LIVV Global Styling
+******************************************************************************/
+#page {
+    background-color: rgba(255,255,255,1);
+    border-radius: 5px;
+    padding: 5px;
+    margin-left: 15%;
+    margin-right: 5%;
+    width: 1000px;
+    -moz-box-shadow: 5px 5px 4px rgba(30,30,30,0.3);
+    -webkit-box-shadow: 5px 5px 4px rgba(30,30,30,0.3);
+     box-shadow: 5px 5px 4px rgba(30,30,30,0.3);
+}
+
+#fancy {
+    font-size: medium;
+    text-align: center;
+}
+
+.tabbed {
+    margin-left: 50px;
+}
+
+.SUCCESS {
+    color: green;
+    font-weight: 600;
+}
+
+.FAILURE {
+    color: red;
+    font-weight: 600;
+}
+
+.SKIPPED {
+    color: orange;
+    font-weight: 600;   
+}
+
+.summary {
+	margin-left: 50px;
+	line-height: 1em;
+}
+
+/******************************************************************************
+  Header/Footer Styling
+******************************************************************************/
+#header {
+    width: calc(100% + 10px);
+    height: 2.5em;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+    transform: translate(-5px,-5px);   
+	background-color: rgba(0, 0, 25, 1);
+	color: white;
+}
+
+#header-content {
+	color: white;
+	position: absolute;
+    margin-left: 4%;
+    height: 0.85em;
+   	line-height: 0.85em;
+}
+
+#info {
+	padding: 5px;
+}
+
+#content {}
+
+#footer {
+    width: calc(100% + 10px);
+    height: 5em;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-top: 3px;
+    border-left: 0;
+    border-right: 0;
+    border-bottom: 0;
+    border-style: solid;
+    border-color: #47A3FF;
+    color: #FFFFFF;
+    background-color: #000000;
+    transform: translate(-5px,5px);   
+}
+
+#nav {
+    width: calc(100% + 10px);
+    height: 3em;
+    float: left;
+    transform: translate(-5px,-5px);
+    background-color: #47A3FF;
+}

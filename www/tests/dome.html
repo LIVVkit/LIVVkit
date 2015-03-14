@@ -1,0 +1,4530 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<link rel="stylesheet" type="text/css" href="../css/livv.css">
+<link rel="stylesheet" type="text/css" href="../css/interactive.css">
+<link rel="stylesheet" type="text/css" href="../css/popups.css">
+</head>
+
+<body>	
+
+<div id="page">
+	<div id="header">
+		<img src="../imgs//gicon.svg" style="width: 30px; float: left; padding: 5px;"/>
+		<p id="header-content">
+			LIVV: Land Ice Verification & Validation
+		</p>
+	</div>
+  <div id="nav">
+    <a href="../index.html" class="button">Home</a>
+    <a href="http://blizzard.ornl.gov" class="button">Blizzard</a>
+    <a href="http://oceans11.lanl.gov/cism/" class="button">CISM</a> 
+  </div>
+  <div id="content">
+  
+  <h2 style="padding-top: 40px; padding-left: 15px;">dome</h2>
+  <div class="description">
+    <p>3-D paraboloid dome of ice with a circular, 60 km diameter base sitting on a flat bed. The horizontal spatial resolution studies are 2 km, 1 km, 0.5 km and 0.25 km, and there are 10 vertical levels. For this set of experiments a quasi no-slip basal condition in imposed by setting. A zero-flux boundary condition is applied to the dome margins. </p>
+  </div>
+  <br style="clear: both" />
+  
+  <STYLE type="text/css">
+  #select :checked +  * +  label { background-color:#47A3FF;border-color:#47A3FF;color:#fff;}
+  #select :checked +  * +  * +  * +  div {display: block; }
+  </STYLE>
+  
+  <div id="select" class="tabs">
+    
+    <input id="tab-dome30/diagnostic" name="tabs" type="radio" checked />
+    
+    <input id="tab-dome30/evolving" name="tabs" type="radio" checked />
+      
+
+    
+    <label for="tab-dome30/diagnostic">dome30/diagnostic</label>  
+    
+    <label for="tab-dome30/evolving">dome30/evolving</label>  
+      
+      
+    
+    <div class="case">
+      <b>Plots</b> <br/>
+      
+        
+        
+        <div class="gallery">
+          <div style="float: left; display: inline;">
+             <a href="#img_form_dome30/diagnostic_1" id="img_pop">
+                <img src="../imgs//dome/dome30dvel.png" width="150px"></img>
+            </a>
+            <br style="clear: both" />
+            <p>Velocity Comparison Plots</p>
+          </div>
+         </div>
+        <a href="dome.html" class="overlay" id="img_form_dome30/diagnostic_1"></a>
+
+        <div class="popup">
+          <img src="../imgs//dome/dome30dvel.png" class="imageOverlay"></img>
+          <a class="close" href="#close">x</a>
+        </div>
+        
+
+      
+      
+    
+      <br style="clear: both" />
+    
+      <b> 
+        Bit for Bit 
+        <a style="font-size: small; font-style: italic">
+          Click on failures to see difference plots
+        </a> 
+      </b>
+
+      <table class="tabbed">
+      <tr>
+        <th>Output File</th>
+        <th>Status</th>
+        <th>Total Error</th>
+      </tr>
+      
+        <tr>
+          <td style="text-align: left">
+            dome.4.nc
+          </td>
+          <td>
+            <a class=FAILURE
+            
+            	target="_blank" href=../imgs//dome/bit4bit/dome.4.nc.png
+            
+            >FAILURE</a>
+          </td>
+          
+          	<td>-1.134e+05</td>
+          
+        </tr>
+      
+        <tr>
+          <td style="text-align: left">
+            dome.1.glissade.nc
+          </td>
+          <td>
+            <a class=FAILURE
+            
+            	target="_blank" href=../imgs//dome/bit4bit/dome.1.glissade.nc.png
+            
+            >FAILURE</a>
+          </td>
+          
+          	<td>6.026e+04</td>
+          
+        </tr>
+      
+        <tr>
+          <td style="text-align: left">
+            dome.1.nc
+          </td>
+          <td>
+            <a class=FAILURE
+            
+            	target="_blank" href=../imgs//dome/bit4bit/dome.1.nc.png
+            
+            >FAILURE</a>
+          </td>
+          
+          	<td>-0.0002357</td>
+          
+        </tr>
+      
+        <tr>
+          <td style="text-align: left">
+            dome.out.glissade.nc
+          </td>
+          <td>
+            <a class=FAILURE
+            
+            	target="_blank" href=../imgs//dome/bit4bit/dome.out.glissade.nc.png
+            
+            >FAILURE</a>
+          </td>
+          
+          	<td>6.026e+04</td>
+          
+        </tr>
+      
+        <tr>
+          <td style="text-align: left">
+            dome.out.nc
+          </td>
+          <td>
+            <a class=SUCCESS
+            
+            >SUCCESS</a>
+          </td>
+          
+        </tr>
+      
+        <tr>
+          <td style="text-align: left">
+            dome.nc
+          </td>
+          <td>
+            <a class=SUCCESS
+            
+            >SUCCESS</a>
+          </td>
+          
+        </tr>
+      
+        <tr>
+          <td style="text-align: left">
+            dome.4.glissade.nc
+          </td>
+          <td>
+            <a class=FAILURE
+            
+            	target="_blank" href=../imgs//dome/bit4bit/dome.4.glissade.nc.png
+            
+            >FAILURE</a>
+          </td>
+          
+          	<td>6.026e+04</td>
+          
+        </tr>
+      
+      </table>
+        
+      <br height="30px" />
+      <b> Configuration Files </b>
+      <hr style="opacity: 0; height: 10px;">
+          
+            
+                <div class="Configuration">
+    
+                  <a href="#hidedome30/diagnostic1" class="hide" id="hidedome30/diagnostic1">+</a>
+                  <a href="#showdome30/diagnostic1" class="show" id="showdome30/diagnostic1">-</a>
+                  <h4 class="top">dome.30.glissade.config</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    
+                    
+                          <b>[DOME-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                          <b>[grid]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  upn = 10<br>
+                              
+                            
+                          
+                            
+                              
+                                  ewn = 31<br>
+                              
+                            
+                          
+                            
+                              
+                                  nsn = 31<br>
+                              
+                            
+                          
+                            
+                              
+                                  dew = 2000<br>
+                              
+                            
+                          
+                            
+                              
+                                  dns = 2000<br>
+                              
+                            
+                          
+                            
+                              
+                                  sigma_builtin = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[time]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  tstart = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  tend = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt = 1.<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  dycore = 2              <br>
+                              
+                            
+                          
+                            
+                              
+                                  flow_law = 0            <br>
+                              
+                            
+                          
+                            
+                              
+                                  evolution = 3           <br>
+                              
+                            
+                          
+                            
+                              
+                                  temperature = 1         <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[ho_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  which_ho_babc = 4       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_efvs = 2       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_sparse = 3     <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_nonlinear = 0  <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[parameters]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  flow_factor = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  ice_limit = 1.0          <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF default]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  comment = created with dome.py<br>
+                              
+                            
+                          
+                            
+                              
+                                  title = parabolic dome test case using first-order dynamics<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF input]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  name = data/dome.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  time = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF output]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  variables = thk usurf uvel vvel velnorm temp<br>
+                              
+                            
+                          
+                            
+                              
+                                  frequency = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  name = data/dome.glissade.nc<br>
+                              
+                            
+                          
+                          </div>
+                    
+                  </div>
+                  <div class="status">
+                    
+                      <p style="float: left; color: green">Files match</p>
+                    
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            
+                <div class="Configuration">
+    
+                  <a href="#hidedome30/diagnostic2" class="hide" id="hidedome30/diagnostic2">+</a>
+                  <a href="#showdome30/diagnostic2" class="show" id="showdome30/diagnostic2">-</a>
+                  <h4 class="top">dome.30.JFNK.trilinos.config</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    
+                    
+                          <b>[DOME-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                          <b>[grid]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  upn = 10<br>
+                              
+                            
+                          
+                            
+                              
+                                  ewn = 31<br>
+                              
+                            
+                          
+                            
+                              
+                                  nsn = 31<br>
+                              
+                            
+                          
+                            
+                              
+                                  dew = 2000<br>
+                              
+                            
+                          
+                            
+                              
+                                  dns = 2000<br>
+                              
+                            
+                          
+                            
+                              
+                                  sigma_builtin = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[time]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  tstart = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  tend = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt = 1.<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  dycore = 1              <br>
+                              
+                            
+                          
+                            
+                              
+                                  flow_law = 0            <br>
+                              
+                            
+                          
+                            
+                              
+                                  evolution = 3           <br>
+                              
+                            
+                          
+                            
+                              
+                                  temperature = 1         <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[ho_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  which_ho_babc = 4       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_efvs = 2       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_sparse = 4     <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_nonlinear = 1  <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[parameters]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  flow_factor = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  ice_limit = 1.0          <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF default]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  comment = created with dome.py<br>
+                              
+                            
+                          
+                            
+                              
+                                  title = parabolic dome test case using first-order dynamics<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF input]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  name = data/dome.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  time = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF output]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  variables = thk usurf uvel vvel velnorm temp<br>
+                              
+                            
+                          
+                            
+                              
+                                  frequency = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  name = data/dome.out.nc<br>
+                              
+                            
+                          
+                          </div>
+                    
+                  </div>
+                  <div class="status">
+                    
+                      <p style="float: left; color: green">Files match</p>
+                    
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            
+                <div class="Configuration">
+    
+                  <a href="#hidedome30/diagnostic3" class="hide" id="hidedome30/diagnostic3">+</a>
+                  <a href="#showdome30/diagnostic3" class="show" id="showdome30/diagnostic3">-</a>
+                  <h4 class="top">dome.30.glissade.config.1</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    
+                    
+                          <b>[DOME-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                          <b>[grid]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  upn = 10<br>
+                              
+                            
+                          
+                            
+                              
+                                  ewn = 31<br>
+                              
+                            
+                          
+                            
+                              
+                                  nsn = 31<br>
+                              
+                            
+                          
+                            
+                              
+                                  dew = 2000<br>
+                              
+                            
+                          
+                            
+                              
+                                  dns = 2000<br>
+                              
+                            
+                          
+                            
+                              
+                                  sigma_builtin = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[time]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  tstart = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  tend = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt = 1.<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  dycore = 2              <br>
+                              
+                            
+                          
+                            
+                              
+                                  flow_law = 0            <br>
+                              
+                            
+                          
+                            
+                              
+                                  evolution = 3           <br>
+                              
+                            
+                          
+                            
+                              
+                                  temperature = 1         <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[ho_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  which_ho_babc = 4       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_efvs = 2       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_sparse = 3     <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_nonlinear = 0  <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[parameters]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  flow_factor = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  ice_limit = 1.0          <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF default]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  comment = created with dome.py<br>
+                              
+                            
+                          
+                            
+                              
+                                  title = parabolic dome test case using first-order dynamics<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF input]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  name = data/dome.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  time = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF output]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  variables = thk usurf uvel vvel velnorm temp<br>
+                              
+                            
+                          
+                            
+                              
+                                  frequency = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  name = data/dome.1.glissade.nc<br>
+                              
+                            
+                          
+                          </div>
+                    
+                  </div>
+                  <div class="status">
+                    
+                      <p style="float: left; color: green">Files match</p>
+                    
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            
+                <div class="Configuration">
+    
+                  <a href="#hidedome30/diagnostic4" class="hide" id="hidedome30/diagnostic4">+</a>
+                  <a href="#showdome30/diagnostic4" class="show" id="showdome30/diagnostic4">-</a>
+                  <h4 class="top">dome.30.JFNK.trilinos.config.4</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    
+                    
+                          <b>[DOME-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                          <b>[grid]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  upn = 10<br>
+                              
+                            
+                          
+                            
+                              
+                                  ewn = 31<br>
+                              
+                            
+                          
+                            
+                              
+                                  nsn = 31<br>
+                              
+                            
+                          
+                            
+                              
+                                  dew = 2000<br>
+                              
+                            
+                          
+                            
+                              
+                                  dns = 2000<br>
+                              
+                            
+                          
+                            
+                              
+                                  sigma_builtin = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[time]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  tstart = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  tend = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt = 1.<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  dycore = 1              <br>
+                              
+                            
+                          
+                            
+                              
+                                  flow_law = 0            <br>
+                              
+                            
+                          
+                            
+                              
+                                  evolution = 3           <br>
+                              
+                            
+                          
+                            
+                              
+                                  temperature = 1         <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[ho_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  which_ho_babc = 4       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_efvs = 2       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_sparse = 4     <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_nonlinear = 1  <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[parameters]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  flow_factor = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  ice_limit = 1.0          <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF default]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  comment = created with dome.py<br>
+                              
+                            
+                          
+                            
+                              
+                                  title = parabolic dome test case using first-order dynamics<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF input]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  name = data/dome.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  time = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF output]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  variables = thk usurf uvel vvel velnorm temp<br>
+                              
+                            
+                          
+                            
+                              
+                                  frequency = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  name = data/dome.4.nc<br>
+                              
+                            
+                          
+                          </div>
+                    
+                  </div>
+                  <div class="status">
+                    
+                      <p style="float: left; color: green">Files match</p>
+                    
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            
+                <div class="Configuration">
+    
+                  <a href="#hidedome30/diagnostic5" class="hide" id="hidedome30/diagnostic5">+</a>
+                  <a href="#showdome30/diagnostic5" class="show" id="showdome30/diagnostic5">-</a>
+                  <h4 class="top">dome.30.glissade.config.4</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    
+                    
+                          <b>[DOME-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                          <b>[grid]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  upn = 10<br>
+                              
+                            
+                          
+                            
+                              
+                                  ewn = 31<br>
+                              
+                            
+                          
+                            
+                              
+                                  nsn = 31<br>
+                              
+                            
+                          
+                            
+                              
+                                  dew = 2000<br>
+                              
+                            
+                          
+                            
+                              
+                                  dns = 2000<br>
+                              
+                            
+                          
+                            
+                              
+                                  sigma_builtin = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[time]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  tstart = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  tend = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt = 1.<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  dycore = 2              <br>
+                              
+                            
+                          
+                            
+                              
+                                  flow_law = 0            <br>
+                              
+                            
+                          
+                            
+                              
+                                  evolution = 3           <br>
+                              
+                            
+                          
+                            
+                              
+                                  temperature = 1         <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[ho_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  which_ho_babc = 4       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_efvs = 2       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_sparse = 3     <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_nonlinear = 0  <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[parameters]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  flow_factor = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  ice_limit = 1.0          <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF default]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  comment = created with dome.py<br>
+                              
+                            
+                          
+                            
+                              
+                                  title = parabolic dome test case using first-order dynamics<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF input]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  name = data/dome.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  time = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF output]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  variables = thk usurf uvel vvel velnorm temp<br>
+                              
+                            
+                          
+                            
+                              
+                                  frequency = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  name = data/dome.4.glissade.nc<br>
+                              
+                            
+                          
+                          </div>
+                    
+                  </div>
+                  <div class="status">
+                    
+                      <p style="float: left; color: green">Files match</p>
+                    
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            
+                <div class="Configuration">
+    
+                  <a href="#hidedome30/diagnostic6" class="hide" id="hidedome30/diagnostic6">+</a>
+                  <a href="#showdome30/diagnostic6" class="show" id="showdome30/diagnostic6">-</a>
+                  <h4 class="top">dome.30.JFNK.trilinos.config.1</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    
+                    
+                          <b>[DOME-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                          <b>[grid]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  upn = 10<br>
+                              
+                            
+                          
+                            
+                              
+                                  ewn = 31<br>
+                              
+                            
+                          
+                            
+                              
+                                  nsn = 31<br>
+                              
+                            
+                          
+                            
+                              
+                                  dew = 2000<br>
+                              
+                            
+                          
+                            
+                              
+                                  dns = 2000<br>
+                              
+                            
+                          
+                            
+                              
+                                  sigma_builtin = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[time]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  tstart = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  tend = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt = 1.<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  dycore = 1              <br>
+                              
+                            
+                          
+                            
+                              
+                                  flow_law = 0            <br>
+                              
+                            
+                          
+                            
+                              
+                                  evolution = 3           <br>
+                              
+                            
+                          
+                            
+                              
+                                  temperature = 1         <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[ho_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  which_ho_babc = 4       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_efvs = 2       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_sparse = 4     <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_nonlinear = 1  <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[parameters]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  flow_factor = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  ice_limit = 1.0          <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF default]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  comment = created with dome.py<br>
+                              
+                            
+                          
+                            
+                              
+                                  title = parabolic dome test case using first-order dynamics<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF input]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  name = data/dome.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  time = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF output]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  variables = thk usurf uvel vvel velnorm temp<br>
+                              
+                            
+                          
+                            
+                              
+                                  frequency = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  name = data/dome.1.nc<br>
+                              
+                            
+                          
+                          </div>
+                    
+                  </div>
+                  <div class="status">
+                    
+                      <p style="float: left; color: green">Files match</p>
+                    
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            
+                <div class="Configuration">
+    
+                  <a href="#hidedome30/diagnostic7" class="hide" id="hidedome30/diagnostic7">+</a>
+                  <a href="#showdome30/diagnostic7" class="show" id="showdome30/diagnostic7">-</a>
+                  <h4 class="top">dome.30.JFNK.slap.config</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    
+                    
+                          <b>[DOME-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                          <b>[grid]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  upn = 10<br>
+                              
+                            
+                          
+                            
+                              
+                                  ewn = 31<br>
+                              
+                            
+                          
+                            
+                              
+                                  nsn = 31<br>
+                              
+                            
+                          
+                            
+                              
+                                  dew = 2000<br>
+                              
+                            
+                          
+                            
+                              
+                                  dns = 2000<br>
+                              
+                            
+                          
+                            
+                              
+                                  sigma_builtin = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[time]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  tstart = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  tend = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt = 1.<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  dycore = 1              <br>
+                              
+                            
+                          
+                            
+                              
+                                  flow_law = 0            <br>
+                              
+                            
+                          
+                            
+                              
+                                  evolution = 3           <br>
+                              
+                            
+                          
+                            
+                              
+                                  temperature = 1         <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[ho_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  which_ho_babc = 4       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_efvs = 2       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_sparse = 1     <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_nonlinear = 1  <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[parameters]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  flow_factor = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  ice_limit = 1.0          <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF default]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  comment = created with dome.py<br>
+                              
+                            
+                          
+                            
+                              
+                                  title = parabolic dome test case using first-order dynamics<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF input]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  name = data/dome.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  time = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF output]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  variables = thk usurf uvel vvel velnorm temp<br>
+                              
+                            
+                          
+                            
+                              
+                                  frequency = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  name = data/dome.out.nc<br>
+                              
+                            
+                          
+                          </div>
+                    
+                  </div>
+                  <div class="status">
+                    
+                      <p style="float: left; color: green">Files match</p>
+                    
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            
+                <div class="Configuration">
+    
+                  <a href="#hidedome30/diagnostic8" class="hide" id="hidedome30/diagnostic8">+</a>
+                  <a href="#showdome30/diagnostic8" class="show" id="showdome30/diagnostic8">-</a>
+                  <h4 class="top">dome.30.PIC.trilinos.config</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    
+                    
+                          <b>[DOME-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                          <b>[grid]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  upn = 10<br>
+                              
+                            
+                          
+                            
+                              
+                                  ewn = 31<br>
+                              
+                            
+                          
+                            
+                              
+                                  nsn = 31<br>
+                              
+                            
+                          
+                            
+                              
+                                  dew = 2000<br>
+                              
+                            
+                          
+                            
+                              
+                                  dns = 2000<br>
+                              
+                            
+                          
+                            
+                              
+                                  sigma_builtin = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[time]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  tstart = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  tend = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt = 1.<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  dycore = 1              <br>
+                              
+                            
+                          
+                            
+                              
+                                  flow_law = 0            <br>
+                              
+                            
+                          
+                            
+                              
+                                  evolution = 3           <br>
+                              
+                            
+                          
+                            
+                              
+                                  temperature = 1         <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[ho_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  which_ho_babc = 4       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_efvs = 2       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_sparse = 4     <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_nonlinear = 0  <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[parameters]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  flow_factor = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  ice_limit = 1.0          <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF default]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  comment = created with dome.py<br>
+                              
+                            
+                          
+                            
+                              
+                                  title = parabolic dome test case using first-order dynamics<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF input]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  name = data/dome.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  time = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF output]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  variables = thk usurf uvel vvel velnorm temp<br>
+                              
+                            
+                          
+                            
+                              
+                                  frequency = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  name = data/dome.out.nc<br>
+                              
+                            
+                          
+                          </div>
+                    
+                  </div>
+                  <div class="status">
+                    
+                      <p style="float: left; color: green">Files match</p>
+                    
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            
+                <div class="Configuration">
+    
+                  <a href="#hidedome30/diagnostic9" class="hide" id="hidedome30/diagnostic9">+</a>
+                  <a href="#showdome30/diagnostic9" class="show" id="showdome30/diagnostic9">-</a>
+                  <h4 class="top">dome.30.PIC.slap.config</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    
+                    
+                          <b>[DOME-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                          <b>[grid]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  upn = 10<br>
+                              
+                            
+                          
+                            
+                              
+                                  ewn = 31<br>
+                              
+                            
+                          
+                            
+                              
+                                  nsn = 31<br>
+                              
+                            
+                          
+                            
+                              
+                                  dew = 2000<br>
+                              
+                            
+                          
+                            
+                              
+                                  dns = 2000<br>
+                              
+                            
+                          
+                            
+                              
+                                  sigma_builtin = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[time]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  tstart = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  tend = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt = 1.<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  dycore = 1              <br>
+                              
+                            
+                          
+                            
+                              
+                                  flow_law = 0            <br>
+                              
+                            
+                          
+                            
+                              
+                                  evolution = 3           <br>
+                              
+                            
+                          
+                            
+                              
+                                  temperature = 1         <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[ho_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  which_ho_babc = 4       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_efvs = 2       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_sparse = 1     <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_nonlinear = 0  <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[parameters]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  flow_factor = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  ice_limit = 1.0          <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF default]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  comment = created with dome.py<br>
+                              
+                            
+                          
+                            
+                              
+                                  title = parabolic dome test case using first-order dynamics<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF input]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  name = data/dome.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  time = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF output]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  variables = thk usurf uvel vvel velnorm temp<br>
+                              
+                            
+                          
+                            
+                              
+                                  frequency = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  name = data/dome.out.nc<br>
+                              
+                            
+                          
+                          </div>
+                    
+                  </div>
+                  <div class="status">
+                    
+                      <p style="float: left; color: green">Files match</p>
+                    
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            
+                <div class="Configuration">
+    
+                  <a href="#hidedome30/diagnostic10" class="hide" id="hidedome30/diagnostic10">+</a>
+                  <a href="#showdome30/diagnostic10" class="show" id="showdome30/diagnostic10">-</a>
+                  <h4 class="top">dome.30.glissade.slap.config</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    
+                    
+                          <b>[DOME-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                          <b>[grid]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  upn = 10<br>
+                              
+                            
+                          
+                            
+                              
+                                  ewn = 31<br>
+                              
+                            
+                          
+                            
+                              
+                                  nsn = 31<br>
+                              
+                            
+                          
+                            
+                              
+                                  dew = 2000<br>
+                              
+                            
+                          
+                            
+                              
+                                  dns = 2000<br>
+                              
+                            
+                          
+                            
+                              
+                                  sigma_builtin = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[time]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  tstart = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  tend = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt = 1.<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  dycore = 2              <br>
+                              
+                            
+                          
+                            
+                              
+                                  flow_law = 0            <br>
+                              
+                            
+                          
+                            
+                              
+                                  evolution = 3           <br>
+                              
+                            
+                          
+                            
+                              
+                                  temperature = 1         <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[ho_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  which_ho_babc = 4       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_efvs = 2       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_sparse = 3     <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_nonlinear = 0  <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[parameters]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  flow_factor = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  ice_limit = 1.0          <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF default]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  comment = created with dome.py<br>
+                              
+                            
+                          
+                            
+                              
+                                  title = parabolic dome test case using first-order dynamics<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF input]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  name = data/dome.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  time = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF output]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  variables = thk usurf uvel vvel velnorm temp<br>
+                              
+                            
+                          
+                            
+                              
+                                  frequency = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  name = data/dome.out.glissade.nc<br>
+                              
+                            
+                          
+                          </div>
+                    
+                  </div>
+                  <div class="status">
+                    
+                      <p style="float: left; color: green">Files match</p>
+                    
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            
+                <div class="Configuration">
+    
+                  <a href="#hidedome30/diagnostic11" class="hide" id="hidedome30/diagnostic11">+</a>
+                  <a href="#showdome30/diagnostic11" class="show" id="showdome30/diagnostic11">-</a>
+                  <h4 class="top">dome.30.PIC.trilinos.config.4</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    
+                    
+                          <b>[DOME-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                          <b>[grid]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  upn = 10<br>
+                              
+                            
+                          
+                            
+                              
+                                  ewn = 31<br>
+                              
+                            
+                          
+                            
+                              
+                                  nsn = 31<br>
+                              
+                            
+                          
+                            
+                              
+                                  dew = 2000<br>
+                              
+                            
+                          
+                            
+                              
+                                  dns = 2000<br>
+                              
+                            
+                          
+                            
+                              
+                                  sigma_builtin = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[time]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  tstart = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  tend = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt = 1.<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  dycore = 1              <br>
+                              
+                            
+                          
+                            
+                              
+                                  flow_law = 0            <br>
+                              
+                            
+                          
+                            
+                              
+                                  evolution = 3           <br>
+                              
+                            
+                          
+                            
+                              
+                                  temperature = 1         <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[ho_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  which_ho_babc = 4       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_efvs = 2       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_sparse = 4     <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_nonlinear = 0  <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[parameters]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  flow_factor = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  ice_limit = 1.0          <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF default]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  comment = created with dome.py<br>
+                              
+                            
+                          
+                            
+                              
+                                  title = parabolic dome test case using first-order dynamics<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF input]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  name = data/dome.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  time = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF output]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  variables = thk usurf uvel vvel velnorm temp<br>
+                              
+                            
+                          
+                            
+                              
+                                  frequency = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  name = data/dome.4.nc<br>
+                              
+                            
+                          
+                          </div>
+                    
+                  </div>
+                  <div class="status">
+                    
+                      <p style="float: left; color: green">Files match</p>
+                    
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            
+                <div class="Configuration">
+    
+                  <a href="#hidedome30/diagnostic12" class="hide" id="hidedome30/diagnostic12">+</a>
+                  <a href="#showdome30/diagnostic12" class="show" id="showdome30/diagnostic12">-</a>
+                  <h4 class="top">dome.30.PIC.trilinos.config.1</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    
+                    
+                          <b>[DOME-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                          <b>[grid]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  upn = 10<br>
+                              
+                            
+                          
+                            
+                              
+                                  ewn = 31<br>
+                              
+                            
+                          
+                            
+                              
+                                  nsn = 31<br>
+                              
+                            
+                          
+                            
+                              
+                                  dew = 2000<br>
+                              
+                            
+                          
+                            
+                              
+                                  dns = 2000<br>
+                              
+                            
+                          
+                            
+                              
+                                  sigma_builtin = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[time]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  tstart = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  tend = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt = 1.<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  dycore = 1              <br>
+                              
+                            
+                          
+                            
+                              
+                                  flow_law = 0            <br>
+                              
+                            
+                          
+                            
+                              
+                                  evolution = 3           <br>
+                              
+                            
+                          
+                            
+                              
+                                  temperature = 1         <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[ho_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  which_ho_babc = 4       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_efvs = 2       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_sparse = 4     <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_nonlinear = 0  <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[parameters]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  flow_factor = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  ice_limit = 1.0          <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF default]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  comment = created with dome.py<br>
+                              
+                            
+                          
+                            
+                              
+                                  title = parabolic dome test case using first-order dynamics<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF input]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  name = data/dome.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  time = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF output]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  variables = thk usurf uvel vvel velnorm temp<br>
+                              
+                            
+                          
+                            
+                              
+                                  frequency = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  name = data/dome.1.nc<br>
+                              
+                            
+                          
+                          </div>
+                    
+                  </div>
+                  <div class="status">
+                    
+                      <p style="float: left; color: green">Files match</p>
+                    
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            
+        
+        
+        <br height="10px" />
+        <b>Output Analysis</b>
+        
+      	<table style="width:100%">
+      		<tr>
+      			<th>Output File</th>
+      			
+      				<th>Dycore Type</th>
+      			
+      				<th>Number of processors</th>
+      			
+      				<th>Number of timesteps</th>
+      			
+      				<th>Avg convergence rate</th>
+      			
+      		</tr>
+      		
+      		<tr>
+      			<td style="text-align: left">pgi.JFNK.4proc</td>
+      			
+      			<td>Glam</td>
+      			
+      			<td>4</td>
+      			
+      			<td>10</td>
+      			
+      			<td>N/A</td>
+      			
+      		</tr>
+      		
+      		<tr>
+      			<td style="text-align: left">gnu.PIC.1proc</td>
+      			
+      			<td>Glam</td>
+      			
+      			<td>1</td>
+      			
+      			<td>0</td>
+      			
+      			<td>N/A</td>
+      			
+      		</tr>
+      		
+      		<tr>
+      			<td style="text-align: left">pgi.glissade.4proc</td>
+      			
+      			<td>Glissade</td>
+      			
+      			<td>4</td>
+      			
+      			<td>0</td>
+      			
+      			<td>N/A</td>
+      			
+      		</tr>
+      		
+      		<tr>
+      			<td style="text-align: left">gnu.PIC.4proc</td>
+      			
+      			<td>Glam</td>
+      			
+      			<td>4</td>
+      			
+      			<td>0</td>
+      			
+      			<td>N/A</td>
+      			
+      		</tr>
+      		
+      		<tr>
+      			<td style="text-align: left">pgi.JFNK.1proc</td>
+      			
+      			<td>Glam</td>
+      			
+      			<td>1</td>
+      			
+      			<td>10</td>
+      			
+      			<td>N/A</td>
+      			
+      		</tr>
+      		
+      		<tr>
+      			<td style="text-align: left">gnu.JFNK.4proc</td>
+      			
+      			<td>Glam</td>
+      			
+      			<td>4</td>
+      			
+      			<td>30</td>
+      			
+      			<td>N/A</td>
+      			
+      		</tr>
+      		
+      		<tr>
+      			<td style="text-align: left">gnu.glissade.1proc</td>
+      			
+      			<td>Glissade</td>
+      			
+      			<td>1</td>
+      			
+      			<td>0</td>
+      			
+      			<td>N/A</td>
+      			
+      		</tr>
+      		
+      		<tr>
+      			<td style="text-align: left">pgi.glissade.1proc</td>
+      			
+      			<td>Glissade</td>
+      			
+      			<td>1</td>
+      			
+      			<td>0</td>
+      			
+      			<td>N/A</td>
+      			
+      		</tr>
+      		
+      		<tr>
+      			<td style="text-align: left">gnu.JFNK.1proc</td>
+      			
+      			<td>Glam</td>
+      			
+      			<td>1</td>
+      			
+      			<td>11</td>
+      			
+      			<td>N/A</td>
+      			
+      		</tr>
+      		
+      		<tr>
+      			<td style="text-align: left">gnu.glissade.4proc</td>
+      			
+      			<td>Glissade</td>
+      			
+      			<td>4</td>
+      			
+      			<td>0</td>
+      			
+      			<td>N/A</td>
+      			
+      		</tr>
+      		
+      	</table>
+      	
+    </div>
+    
+    <div class="case">
+      <b>Plots</b> <br/>
+      
+        
+        
+        <div class="gallery">
+          <div style="float: left; display: inline;">
+             <a href="#img_form_dome30/evolving_1" id="img_pop">
+                <img src="../imgs//dome/dome30evel.png" width="150px"></img>
+            </a>
+            <br style="clear: both" />
+            <p>Velocity Comparison Plot</p>
+          </div>
+         </div>
+        <a href="dome.html" class="overlay" id="img_form_dome30/evolving_1"></a>
+
+        <div class="popup">
+          <img src="../imgs//dome/dome30evel.png" class="imageOverlay"></img>
+          <a class="close" href="#close">x</a>
+        </div>
+        
+
+      
+      
+    
+      <br style="clear: both" />
+    
+      <b> 
+        Bit for Bit 
+        <a style="font-size: small; font-style: italic">
+          Click on failures to see difference plots
+        </a> 
+      </b>
+
+      <table class="tabbed">
+      <tr>
+        <th>Output File</th>
+        <th>Status</th>
+        <th>Total Error</th>
+      </tr>
+      
+        <tr>
+          <td style="text-align: left">
+            dome.large.nc
+          </td>
+          <td>
+            <a class=FAILURE
+            
+            	target="_blank" href=../imgs//dome/bit4bit/dome.large.nc.png
+            
+            >FAILURE</a>
+          </td>
+          
+          	<td>1.279e+05</td>
+          
+        </tr>
+      
+        <tr>
+          <td style="text-align: left">
+            dome.large.glissade.nc
+          </td>
+          <td>
+            <a class=FAILURE
+            
+            	target="_blank" href=../imgs//dome/bit4bit/dome.large.glissade.nc.png
+            
+            >FAILURE</a>
+          </td>
+          
+          	<td>1418</td>
+          
+        </tr>
+      
+        <tr>
+          <td style="text-align: left">
+            dome.small.nc
+          </td>
+          <td>
+            <a class=FAILURE
+            
+            	target="_blank" href=../imgs//dome/bit4bit/dome.small.nc.png
+            
+            >FAILURE</a>
+          </td>
+          
+          	<td>-1.368e+05</td>
+          
+        </tr>
+      
+        <tr>
+          <td style="text-align: left">
+            dome.small.glissade.nc
+          </td>
+          <td>
+            <a class=FAILURE
+            
+            	target="_blank" href=../imgs//dome/bit4bit/dome.small.glissade.nc.png
+            
+            >FAILURE</a>
+          </td>
+          
+          	<td>1418</td>
+          
+        </tr>
+      
+        <tr>
+          <td style="text-align: left">
+            dome.nc
+          </td>
+          <td>
+            <a class=SUCCESS
+            
+            >SUCCESS</a>
+          </td>
+          
+        </tr>
+      
+      </table>
+        
+      <br height="30px" />
+      <b> Configuration Files </b>
+      <hr style="opacity: 0; height: 10px;">
+          
+            
+                <div class="Configuration">
+    
+                  <a href="#hidedome30/evolving1" class="hide" id="hidedome30/evolving1">+</a>
+                  <a href="#showdome30/evolving1" class="show" id="showdome30/evolving1">-</a>
+                  <h4 class="top">dome.30.glissade.config.small</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    
+                    
+                          <b>[DOME-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                          <b>[parameters]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  flow_factor = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  ice_limit = 1.0<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF output]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  variables = thk usurf uvel vvel wvel velnorm temp<br>
+                              
+                            
+                          
+                            
+                              
+                                  frequency = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  name = data/dome.small.glissade.nc<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[grid]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  upn = 10<br>
+                              
+                            
+                          
+                            
+                              
+                                  ewn = 31<br>
+                              
+                            
+                          
+                            
+                              
+                                  nsn = 31<br>
+                              
+                            
+                          
+                            
+                              
+                                  dew = 2000<br>
+                              
+                            
+                          
+                            
+                              
+                                  dns = 2000<br>
+                              
+                            
+                          
+                            
+                              
+                                  sigma_builtin = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[time]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  tstart = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  tend = 1000.<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt = 25.<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF default]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  comment = created with dome.py<br>
+                              
+                            
+                          
+                            
+                              
+                                  title = parabolic dome test case using first-order dynamics<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  dycore = 2                <br>
+                              
+                            
+                          
+                            
+                              
+                                  flow_law = 2              <br>
+                              
+                            
+                          
+                            
+                              
+                                  evolution = 3             <br>
+                              
+                            
+                          
+                            
+                              
+                                  temperature = 1           <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[ho_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  which_ho_babc = 4         <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_efvs = 2         <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_sparse = 3       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_nonlinear = 0    <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF input]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  name = data/dome.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  time = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                  </div>
+                  <div class="status">
+                    
+                      <p style="float: left; color: green">Files match</p>
+                    
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            
+                <div class="Configuration">
+    
+                  <a href="#hidedome30/evolving2" class="hide" id="hidedome30/evolving2">+</a>
+                  <a href="#showdome30/evolving2" class="show" id="showdome30/evolving2">-</a>
+                  <h4 class="top">dome.30.glissade.config.large</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    
+                    
+                          <b>[DOME-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                          <b>[parameters]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  flow_factor = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  ice_limit = 1.0<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF output]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  variables = thk usurf uvel vvel wvel velnorm temp<br>
+                              
+                            
+                          
+                            
+                              
+                                  frequency = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  name = data/dome.large.glissade.nc<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[grid]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  upn = 10<br>
+                              
+                            
+                          
+                            
+                              
+                                  ewn = 31<br>
+                              
+                            
+                          
+                            
+                              
+                                  nsn = 31<br>
+                              
+                            
+                          
+                            
+                              
+                                  dew = 2000<br>
+                              
+                            
+                          
+                            
+                              
+                                  dns = 2000<br>
+                              
+                            
+                          
+                            
+                              
+                                  sigma_builtin = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[time]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  tstart = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  tend = 1000.<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt = 25.<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF default]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  comment = created with dome.py<br>
+                              
+                            
+                          
+                            
+                              
+                                  title = parabolic dome test case using first-order dynamics<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  dycore = 2                <br>
+                              
+                            
+                          
+                            
+                              
+                                  flow_law = 2              <br>
+                              
+                            
+                          
+                            
+                              
+                                  evolution = 3             <br>
+                              
+                            
+                          
+                            
+                              
+                                  temperature = 1           <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[ho_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  which_ho_babc = 4         <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_efvs = 2         <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_sparse = 3       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_nonlinear = 0    <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF input]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  name = data/dome.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  time = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                  </div>
+                  <div class="status">
+                    
+                      <p style="float: left; color: green">Files match</p>
+                    
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            
+                <div class="Configuration">
+    
+                  <a href="#hidedome30/evolving3" class="hide" id="hidedome30/evolving3">+</a>
+                  <a href="#showdome30/evolving3" class="show" id="showdome30/evolving3">-</a>
+                  <h4 class="top">dome.30.JFNK.trilinos.config</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    
+                    
+                          <b>[DOME-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                          <b>[parameters]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  flow_factor = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  ice_limit = 1.0<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF output]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  variables = thk usurf uvel vvel wvel velnorm temp<br>
+                              
+                            
+                          
+                            
+                              
+                                  frequency = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  name = data/dome.1.nc<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[grid]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  upn = 10<br>
+                              
+                            
+                          
+                            
+                              
+                                  ewn = 31<br>
+                              
+                            
+                          
+                            
+                              
+                                  nsn = 31<br>
+                              
+                            
+                          
+                            
+                              
+                                  dew = 2000<br>
+                              
+                            
+                          
+                            
+                              
+                                  dns = 2000<br>
+                              
+                            
+                          
+                            
+                              
+                                  sigma_builtin = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[time]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  tstart = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  tend = 1000.<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt = 25.<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF default]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  comment = created with dome.py<br>
+                              
+                            
+                          
+                            
+                              
+                                  title = parabolic dome test case using first-order dynamics<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  dycore = 1                <br>
+                              
+                            
+                          
+                            
+                              
+                                  flow_law = 2              <br>
+                              
+                            
+                          
+                            
+                              
+                                  evolution = 3             <br>
+                              
+                            
+                          
+                            
+                              
+                                  temperature = 1           <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[ho_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  which_ho_babc = 4         <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_efvs = 2         <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_sparse = 4       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_nonlinear = 1    <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF input]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  name = data/dome.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  time = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                  </div>
+                  <div class="status">
+                    
+                      <p style="float: left; color: green">Files match</p>
+                    
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            
+                <div class="Configuration">
+    
+                  <a href="#hidedome30/evolving4" class="hide" id="hidedome30/evolving4">+</a>
+                  <a href="#showdome30/evolving4" class="show" id="showdome30/evolving4">-</a>
+                  <h4 class="top">dome.30.glissade.config</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    
+                    
+                          <b>[DOME-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                          <b>[parameters]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  flow_factor = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  ice_limit = 1.0<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF output]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  variables = thk usurf uvel vvel wvel velnorm temp<br>
+                              
+                            
+                          
+                            
+                              
+                                  frequency = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  name = data/dome.1.glissade.nc<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[grid]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  upn = 10<br>
+                              
+                            
+                          
+                            
+                              
+                                  ewn = 31<br>
+                              
+                            
+                          
+                            
+                              
+                                  nsn = 31<br>
+                              
+                            
+                          
+                            
+                              
+                                  dew = 2000<br>
+                              
+                            
+                          
+                            
+                              
+                                  dns = 2000<br>
+                              
+                            
+                          
+                            
+                              
+                                  sigma_builtin = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[time]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  tstart = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  tend = 1000.<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt = 25.<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF default]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  comment = created with dome.py<br>
+                              
+                            
+                          
+                            
+                              
+                                  title = parabolic dome test case using first-order dynamics<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  dycore = 2                <br>
+                              
+                            
+                          
+                            
+                              
+                                  flow_law = 2              <br>
+                              
+                            
+                          
+                            
+                              
+                                  evolution = 3             <br>
+                              
+                            
+                          
+                            
+                              
+                                  temperature = 1           <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[ho_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  which_ho_babc = 4         <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_efvs = 2         <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_sparse = 3       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_nonlinear = 0    <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF input]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  name = data/dome.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  time = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                  </div>
+                  <div class="status">
+                    
+                      <p style="float: left; color: green">Files match</p>
+                    
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            
+                <div class="Configuration">
+    
+                  <a href="#hidedome30/evolving5" class="hide" id="hidedome30/evolving5">+</a>
+                  <a href="#showdome30/evolving5" class="show" id="showdome30/evolving5">-</a>
+                  <h4 class="top">dome.30.JFNK.trilinos.config.large</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    
+                    
+                          <b>[DOME-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                          <b>[parameters]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  flow_factor = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  ice_limit = 1.0<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF output]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  variables = thk usurf uvel vvel wvel velnorm temp<br>
+                              
+                            
+                          
+                            
+                              
+                                  frequency = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  name = data/dome.large.nc<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[grid]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  upn = 10<br>
+                              
+                            
+                          
+                            
+                              
+                                  ewn = 31<br>
+                              
+                            
+                          
+                            
+                              
+                                  nsn = 31<br>
+                              
+                            
+                          
+                            
+                              
+                                  dew = 2000<br>
+                              
+                            
+                          
+                            
+                              
+                                  dns = 2000<br>
+                              
+                            
+                          
+                            
+                              
+                                  sigma_builtin = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[time]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  tstart = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  tend = 1000.<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt = 25.<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF default]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  comment = created with dome.py<br>
+                              
+                            
+                          
+                            
+                              
+                                  title = parabolic dome test case using first-order dynamics<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  dycore = 1                <br>
+                              
+                            
+                          
+                            
+                              
+                                  flow_law = 2              <br>
+                              
+                            
+                          
+                            
+                              
+                                  evolution = 3             <br>
+                              
+                            
+                          
+                            
+                              
+                                  temperature = 1           <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[ho_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  which_ho_babc = 4         <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_efvs = 2         <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_sparse = 4       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_nonlinear = 1    <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF input]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  name = data/dome.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  time = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                  </div>
+                  <div class="status">
+                    
+                      <p style="float: left; color: green">Files match</p>
+                    
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            
+                <div class="Configuration">
+    
+                  <a href="#hidedome30/evolving6" class="hide" id="hidedome30/evolving6">+</a>
+                  <a href="#showdome30/evolving6" class="show" id="showdome30/evolving6">-</a>
+                  <h4 class="top">dome.30.JFNK.trilinos.config.small</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    
+                    
+                          <b>[DOME-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                          <b>[parameters]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  flow_factor = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  ice_limit = 1.0<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF output]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  variables = thk usurf uvel vvel wvel velnorm temp<br>
+                              
+                            
+                          
+                            
+                              
+                                  frequency = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  name = data/dome.small.nc<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[grid]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  upn = 10<br>
+                              
+                            
+                          
+                            
+                              
+                                  ewn = 31<br>
+                              
+                            
+                          
+                            
+                              
+                                  nsn = 31<br>
+                              
+                            
+                          
+                            
+                              
+                                  dew = 2000<br>
+                              
+                            
+                          
+                            
+                              
+                                  dns = 2000<br>
+                              
+                            
+                          
+                            
+                              
+                                  sigma_builtin = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[time]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  tstart = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  tend = 1000.<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt = 25.<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF default]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  comment = created with dome.py<br>
+                              
+                            
+                          
+                            
+                              
+                                  title = parabolic dome test case using first-order dynamics<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  dycore = 1              <br>
+                              
+                            
+                          
+                            
+                              
+                                  flow_law = 2            <br>
+                              
+                            
+                          
+                            
+                              
+                                  evolution = 3           <br>
+                              
+                            
+                          
+                            
+                              
+                                  temperature = 1         <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[ho_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  which_ho_babc = 4       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_efvs = 2       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_sparse = 4     <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_nonlinear = 1  <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF input]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  name = data/dome.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  time = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                  </div>
+                  <div class="status">
+                    
+                      <p style="float: left; color: green">Files match</p>
+                    
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            
+        
+        
+        <br height="10px" />
+        <b>Output Analysis</b>
+        
+      	<table style="width:100%">
+      		<tr>
+      			<th>Output File</th>
+      			
+      				<th>Dycore Type</th>
+      			
+      				<th>Number of processors</th>
+      			
+      				<th>Number of timesteps</th>
+      			
+      				<th>Avg convergence rate</th>
+      			
+      		</tr>
+      		
+      		<tr>
+      			<td style="text-align: left">gnu.JFNK.large_proc</td>
+      			
+      			<td>Glam</td>
+      			
+      			<td>15</td>
+      			
+      			<td>2</td>
+      			
+      			<td>N/A</td>
+      			
+      		</tr>
+      		
+      		<tr>
+      			<td style="text-align: left">gnu.glissade.small_proc</td>
+      			
+      			<td>Glissade</td>
+      			
+      			<td>8</td>
+      			
+      			<td>0</td>
+      			
+      			<td>N/A</td>
+      			
+      		</tr>
+      		
+      		<tr>
+      			<td style="text-align: left">gnu.glissade.large_proc</td>
+      			
+      			<td>Glissade</td>
+      			
+      			<td>15</td>
+      			
+      			<td>0</td>
+      			
+      			<td>N/A</td>
+      			
+      		</tr>
+      		
+      		<tr>
+      			<td style="text-align: left">gnu.JFNK.small_proc</td>
+      			
+      			<td>Glam</td>
+      			
+      			<td>8</td>
+      			
+      			<td>30</td>
+      			
+      			<td>N/A</td>
+      			
+      		</tr>
+      		
+      	</table>
+      	
+    </div>
+    
+    </div>
+    <br>
+
+    
+	</div>
+
+	<div id="footer">
+		<p id="info">
+			V&V Performed by bzq at 03-04-2015 16:47:03 <br> 
+			Test run of code <br>
+		</p>
+	</div>
+</div>
+</body>
+
+</html>
