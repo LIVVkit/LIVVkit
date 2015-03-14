@@ -1,3 +1,8 @@
+<!-- 
+  Template for generating test specific pages.
+-->
+
+<!-- Include the header and some links -->
 <!DOCTYPE html>
 <html>
 
@@ -21,129 +26,158 @@
     <a href="http://blizzard.ornl.gov" class="button">Blizzard</a>
     <a href="http://oceans11.lanl.gov/cism/" class="button">CISM</a> 
   </div>
-  <div id="content">
   
+  <!--   Start the pace specific content -->
+  <div id="content">
   <h2 style="padding-top: 40px; padding-left: 15px;">shelf</h2>
   <div class="description">
     <p>A blank description</p>
   </div>
   <br style="clear: both" />
   
+  <!--   Some CSS for determining which tab is selected -->
   <STYLE type="text/css">
   #select :checked +  * +  label { background-color:#47A3FF;border-color:#47A3FF;color:#fff;}
   #select :checked +  * +  * +  * +  div {display: block; }
   </STYLE>
   
+  <!-- Generate the tab section -->
   <div id="select" class="tabs">
+    <!-- The part that is hidden from the user -->
     
     <input id="tab-confined-shelf" name="tabs" type="radio" checked />
     
     <input id="tab-circular-shelf" name="tabs" type="radio" checked />
       
-
+    <!-- The part you can click on -->
     
     <label for="tab-confined-shelf">confined-shelf</label>  
     
     <label for="tab-circular-shelf">circular-shelf</label>  
       
       
+      
+    <!-- Go through each of the test cases that fall under this specific subcategory -->
     
     <div class="case">
-      <b>Plots</b> <br/>
-      
-        <b margin-left="20px">No plots for confined-shelf</b>
-      
     
+    
+      <!-- BEGIN PLOT SECTION -->
+      <b class="label-header">Plots</b> <br/>
+      <div class="separator">
+      <hr style="opacity: 0; height: 5px;">
+      
+        <a style="padding-left: 20px; color: #696969;">No plots for confined-shelf</a>
+      
+      </div>
+      <!-- END PLOT SECTION -->
+      
+      
       <br style="clear: both" />
-    
-      <b> 
+      <br height="30px" />
+
+
+      <!-- BEGIN BIT FOR BIT SECTION -->
+      <b class="label-header">
         Bit for Bit 
         <a style="font-size: small; font-style: italic">
           Click on failures to see difference plots
         </a> 
       </b>
+      <div class="separator">
+      <hr style="opacity: 0; height: 5px;">
 
-      <table class="tabbed">
-      <tr>
-        <th>Output File</th>
-        <th>Status</th>
-        <th>Total Error</th>
-      </tr>
       
+        <table class="tabbed">
         <tr>
-          <td style="text-align: left">
-            confined-shelf.gnu.glissade.large.nc
-          </td>
-          <td>
-            <a class=SUCCESS
-            
-            >SUCCESS</a>
-          </td>
-          
+          <th>Output File</th>
+          <th>Status</th>
+          <th>Total Error</th>
         </tr>
-      
-        <tr>
-          <td style="text-align: left">
-            confined-shelf.nc
-          </td>
-          <td>
-            <a class=SUCCESS
+        
+          <tr>
+            <td style="text-align: left">
+              confined-shelf.gnu.glissade.large.nc
+            </td>
+            <td>
+              <a class=SUCCESS
+              
+              >SUCCESS</a>
+            </td>
             
-            >SUCCESS</a>
-          </td>
-          
-        </tr>
-      
-        <tr>
-          <td style="text-align: left">
-            confined-shelf.gnu.PIC.large.nc
-          </td>
-          <td>
-            <a class=SUCCESS
+          </tr>
+        
+          <tr>
+            <td style="text-align: left">
+              confined-shelf.nc
+            </td>
+            <td>
+              <a class=SUCCESS
+              
+              >SUCCESS</a>
+            </td>
             
-            >SUCCESS</a>
-          </td>
-          
-        </tr>
-      
-        <tr>
-          <td style="text-align: left">
-            confined-shelf.gnu.JFNK.large.nc
-          </td>
-          <td>
-            <a class=SUCCESS
+          </tr>
+        
+          <tr>
+            <td style="text-align: left">
+              confined-shelf.gnu.PIC.large.nc
+            </td>
+            <td>
+              <a class=SUCCESS
+              
+              >SUCCESS</a>
+            </td>
             
-            >SUCCESS</a>
-          </td>
-          
-        </tr>
-      
-        <tr>
-          <td style="text-align: left">
-            confined-shelf.gnu.glissade.nc
-          </td>
-          <td>
-            <a class=SUCCESS
+          </tr>
+        
+          <tr>
+            <td style="text-align: left">
+              confined-shelf.gnu.JFNK.large.nc
+            </td>
+            <td>
+              <a class=SUCCESS
+              
+              >SUCCESS</a>
+            </td>
             
-            >SUCCESS</a>
-          </td>
-          
-        </tr>
+          </tr>
+        
+          <tr>
+            <td style="text-align: left">
+              confined-shelf.gnu.glissade.nc
+            </td>
+            <td>
+              <a class=SUCCESS
+              
+              >SUCCESS</a>
+            </td>
+            
+          </tr>
+        
+        </table>
       
-      </table>
+      </div>
+      <!-- END BIT FOR BIT SECTION -->
+        
         
       <br height="30px" />
-      <b> Configuration Files </b>
-      <hr style="opacity: 0; height: 10px;">
+      
+      
+      <!-- BEGIN CONFIGURATION SECTION -->
+      <b class="label-header"> Configuration Files </b>
+      <div class="separator">
+      <hr style="opacity: 0; height: 5px;">
           
             
                 <div class="Configuration">
-    
+                  <!-- Hide and show buttons to allow the user view data more easily -->
                   <a href="#hideconfined-shelf1" class="hide" id="hideconfined-shelf1">+</a>
                   <a href="#showconfined-shelf1" class="show" id="showconfined-shelf1">-</a>
                   <h4 class="top">confined-shelf.glissade.config</h4>
                   <div class="sections">
                     <div style="clear:both;"></div>
+                    <!-- The changed variable keeps track of whether the files match -->
                     
                     
                           <b>[SHELF-TEST]</b>
@@ -364,12 +398,13 @@
                 <hr>
             
                 <div class="Configuration">
-    
+                  <!-- Hide and show buttons to allow the user view data more easily -->
                   <a href="#hideconfined-shelf2" class="hide" id="hideconfined-shelf2">+</a>
                   <a href="#showconfined-shelf2" class="show" id="showconfined-shelf2">-</a>
                   <h4 class="top">confined-shelf.JFNK.config</h4>
                   <div class="sections">
                     <div style="clear:both;"></div>
+                    <!-- The changed variable keeps track of whether the files match -->
                     
                     
                           <b>[SHELF-TEST]</b>
@@ -590,12 +625,13 @@
                 <hr>
             
                 <div class="Configuration">
-    
+                  <!-- Hide and show buttons to allow the user view data more easily -->
                   <a href="#hideconfined-shelf3" class="hide" id="hideconfined-shelf3">+</a>
                   <a href="#showconfined-shelf3" class="show" id="showconfined-shelf3">-</a>
                   <h4 class="top">confined-shelf.glissade.config.large</h4>
                   <div class="sections">
                     <div style="clear:both;"></div>
+                    <!-- The changed variable keeps track of whether the files match -->
                     
                     
                           <b>[SHELF-TEST]</b>
@@ -816,12 +852,13 @@
                 <hr>
             
                 <div class="Configuration">
-    
+                  <!-- Hide and show buttons to allow the user view data more easily -->
                   <a href="#hideconfined-shelf4" class="hide" id="hideconfined-shelf4">+</a>
                   <a href="#showconfined-shelf4" class="show" id="showconfined-shelf4">-</a>
                   <h4 class="top">confined-shelf.PIC.config</h4>
                   <div class="sections">
                     <div style="clear:both;"></div>
+                    <!-- The changed variable keeps track of whether the files match -->
                     
                     
                           <b>[SHELF-TEST]</b>
@@ -1042,12 +1079,20 @@
                 <hr>
             
         
+        </div>
+        <!-- END CONFIGURATION SECTION -->
         
-        <br height="10px" />
-        <b>Output Analysis</b>
+        
+        <hr style="opacity: 0; height: 5px;">
+        <br style="clear: both" />
+        
+        
+        <!-- BEGIN OUTPUT ANALYSIS SECTION -->
+        <b class="label-header">Output Analysis</b>
+        <div class="separator">
         
       	<table style="width:100%">
-      		<tr>
+      		<tr style="background-color: #47A3FF;">
       			<th>Output File</th>
       			
       				<th>Dycore Type</th>
@@ -1114,19 +1159,29 @@
       		
       	</table>
       	
+      	</div>
+      	<!-- END OUTPUT ANALYSIS SECTION -->
+      	
     </div>
     
     <div class="case">
-      <b>Plots</b> <br/>
+    
+    
+      <!-- BEGIN PLOT SECTION -->
+      <b class="label-header">Plots</b> <br/>
+      <div class="separator">
+      <hr style="opacity: 0; height: 5px;">
       
         
         
         <div class="gallery">
           <div style="float: left; display: inline;">
+             <!-- imgArr[0] is the name of the image -->
              <a href="#img_form_circular-shelf_1" id="img_pop">
                 <img src="../imgs//shelf/circshelfvel.png" width="150px"></img>
             </a>
             <br style="clear: both" />
+            <!-- imgArr[1] is the description -->
             <p>Glam Velocity Comparison Plot</p>
           </div>
          </div>
@@ -1137,15 +1192,16 @@
           <a class="close" href="#close">x</a>
         </div>
         
-
       
         
         <div class="gallery">
           <div style="float: left; display: inline;">
+             <!-- imgArr[0] is the name of the image -->
              <a href="#img_form_circular-shelf_2" id="img_pop">
                 <img src="../imgs//shelf/circshelfvelg.png" width="150px"></img>
             </a>
             <br style="clear: both" />
+            <!-- imgArr[1] is the description -->
             <p>Glissade Velocity Comparison Plot</p>
           </div>
          </div>
@@ -1156,104 +1212,122 @@
           <a class="close" href="#close">x</a>
         </div>
         
-
+      
+      <!-- No plots were passed to jinja2 -->
+      
+      </div>
+      <!-- END PLOT SECTION -->
       
       
-    
       <br style="clear: both" />
-    
-      <b> 
+      <br height="30px" />
+
+
+      <!-- BEGIN BIT FOR BIT SECTION -->
+      <b class="label-header">
         Bit for Bit 
         <a style="font-size: small; font-style: italic">
           Click on failures to see difference plots
         </a> 
       </b>
+      <div class="separator">
+      <hr style="opacity: 0; height: 5px;">
 
-      <table class="tabbed">
-      <tr>
-        <th>Output File</th>
-        <th>Status</th>
-        <th>Total Error</th>
-      </tr>
       
+        <table class="tabbed">
         <tr>
-          <td style="text-align: left">
-            circular-shelf.gnu.PIC.large.nc
-          </td>
-          <td>
-            <a class=SUCCESS
-            
-            >SUCCESS</a>
-          </td>
-          
+          <th>Output File</th>
+          <th>Status</th>
+          <th>Total Error</th>
         </tr>
-      
-        <tr>
-          <td style="text-align: left">
-            circular-shelf.nc
-          </td>
-          <td>
-            <a class=SUCCESS
+        
+          <tr>
+            <td style="text-align: left">
+              circular-shelf.gnu.PIC.large.nc
+            </td>
+            <td>
+              <a class=SUCCESS
+              
+              >SUCCESS</a>
+            </td>
             
-            >SUCCESS</a>
-          </td>
-          
-        </tr>
-      
-        <tr>
-          <td style="text-align: left">
-            circular-shelf.gnu.glissade.nc
-          </td>
-          <td>
-            <a class=SUCCESS
+          </tr>
+        
+          <tr>
+            <td style="text-align: left">
+              circular-shelf.nc
+            </td>
+            <td>
+              <a class=SUCCESS
+              
+              >SUCCESS</a>
+            </td>
             
-            >SUCCESS</a>
-          </td>
-          
-        </tr>
-      
-        <tr>
-          <td style="text-align: left">
-            circular-shelf.gnu.glissade.large.nc
-          </td>
-          <td>
-            <a class=SUCCESS
+          </tr>
+        
+          <tr>
+            <td style="text-align: left">
+              circular-shelf.gnu.glissade.nc
+            </td>
+            <td>
+              <a class=SUCCESS
+              
+              >SUCCESS</a>
+            </td>
             
-            >SUCCESS</a>
-          </td>
-          
-        </tr>
-      
-        <tr>
-          <td style="text-align: left">
-            circular-shelf.gnu.JFNK.large.nc
-          </td>
-          <td>
-            <a class=FAILURE
+          </tr>
+        
+          <tr>
+            <td style="text-align: left">
+              circular-shelf.gnu.glissade.large.nc
+            </td>
+            <td>
+              <a class=SUCCESS
+              
+              >SUCCESS</a>
+            </td>
             
-            	target="_blank" href=../imgs//shelf/bit4bit/circular-shelf.gnu.JFNK.large.nc.png
+          </tr>
+        
+          <tr>
+            <td style="text-align: left">
+              circular-shelf.gnu.JFNK.large.nc
+            </td>
+            <td>
+              <a class=FAILURE
+              
+              	target="_blank" href=../imgs//shelf/bit4bit/circular-shelf.gnu.JFNK.large.nc.png
+              
+              >FAILURE</a>
+            </td>
             
-            >FAILURE</a>
-          </td>
-          
-          	<td>-6.76e+06</td>
-          
-        </tr>
+            	<td>-6.76e+06</td>
+            
+          </tr>
+        
+        </table>
       
-      </table>
+      </div>
+      <!-- END BIT FOR BIT SECTION -->
+        
         
       <br height="30px" />
-      <b> Configuration Files </b>
-      <hr style="opacity: 0; height: 10px;">
+      
+      
+      <!-- BEGIN CONFIGURATION SECTION -->
+      <b class="label-header"> Configuration Files </b>
+      <div class="separator">
+      <hr style="opacity: 0; height: 5px;">
           
             
                 <div class="Configuration">
-    
+                  <!-- Hide and show buttons to allow the user view data more easily -->
                   <a href="#hidecircular-shelf1" class="hide" id="hidecircular-shelf1">+</a>
                   <a href="#showcircular-shelf1" class="show" id="showcircular-shelf1">-</a>
                   <h4 class="top">circular-shelf.glissade.config.large</h4>
                   <div class="sections">
                     <div style="clear:both;"></div>
+                    <!-- The changed variable keeps track of whether the files match -->
                     
                     
                           <b>[SHELF-TEST]</b>
@@ -1474,12 +1548,13 @@
                 <hr>
             
                 <div class="Configuration">
-    
+                  <!-- Hide and show buttons to allow the user view data more easily -->
                   <a href="#hidecircular-shelf2" class="hide" id="hidecircular-shelf2">+</a>
                   <a href="#showcircular-shelf2" class="show" id="showcircular-shelf2">-</a>
                   <h4 class="top">circular-shelf.PIC.config</h4>
                   <div class="sections">
                     <div style="clear:both;"></div>
+                    <!-- The changed variable keeps track of whether the files match -->
                     
                     
                           <b>[SHELF-TEST]</b>
@@ -1700,12 +1775,13 @@
                 <hr>
             
                 <div class="Configuration">
-    
+                  <!-- Hide and show buttons to allow the user view data more easily -->
                   <a href="#hidecircular-shelf3" class="hide" id="hidecircular-shelf3">+</a>
                   <a href="#showcircular-shelf3" class="show" id="showcircular-shelf3">-</a>
                   <h4 class="top">circular-shelf.glissade.config</h4>
                   <div class="sections">
                     <div style="clear:both;"></div>
+                    <!-- The changed variable keeps track of whether the files match -->
                     
                     
                           <b>[SHELF-TEST]</b>
@@ -1926,12 +2002,13 @@
                 <hr>
             
                 <div class="Configuration">
-    
+                  <!-- Hide and show buttons to allow the user view data more easily -->
                   <a href="#hidecircular-shelf4" class="hide" id="hidecircular-shelf4">+</a>
                   <a href="#showcircular-shelf4" class="show" id="showcircular-shelf4">-</a>
                   <h4 class="top">circular-shelf.JFNK.config</h4>
                   <div class="sections">
                     <div style="clear:both;"></div>
+                    <!-- The changed variable keeps track of whether the files match -->
                     
                     
                           <b>[SHELF-TEST]</b>
@@ -2152,12 +2229,20 @@
                 <hr>
             
         
+        </div>
+        <!-- END CONFIGURATION SECTION -->
         
-        <br height="10px" />
-        <b>Output Analysis</b>
+        
+        <hr style="opacity: 0; height: 5px;">
+        <br style="clear: both" />
+        
+        
+        <!-- BEGIN OUTPUT ANALYSIS SECTION -->
+        <b class="label-header">Output Analysis</b>
+        <div class="separator">
         
       	<table style="width:100%">
-      		<tr>
+      		<tr style="background-color: #47A3FF;">
       			<th>Output File</th>
       			
       				<th>Dycore Type</th>
@@ -2224,17 +2309,20 @@
       		
       	</table>
       	
+      	</div>
+      	<!-- END OUTPUT ANALYSIS SECTION -->
+      	
     </div>
     
     </div>
     <br>
 
-    
+<!-- Include the footer -->
 	</div>
 
 	<div id="footer">
 		<p id="info">
-			V&V Performed by bzq at 03-04-2015 16:47:03 <br> 
+			V&V Performed by bzq at 03-14-2015 16:07:48 <br> 
 			Test run of code <br>
 		</p>
 	</div>

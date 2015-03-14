@@ -1,0 +1,2905 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<link rel="stylesheet" type="text/css" href="../css/livv.css">
+<link rel="stylesheet" type="text/css" href="../css/interactive.css">
+<link rel="stylesheet" type="text/css" href="../css/popups.css">
+</head>
+
+<body>	
+
+<div id="page">
+	<div id="header">
+		<img src="../imgs//gicon.svg" style="width: 30px; float: left; padding: 5px;"/>
+		<p id="header-content">
+			LIVV: Land Ice Verification & Validation
+		</p>
+	</div>
+  <div id="nav">
+    <a href="../index.html" class="button">Home</a>
+    <a href="http://blizzard.ornl.gov" class="button">Blizzard</a>
+    <a href="http://oceans11.lanl.gov/cism/" class="button">CISM</a> 
+  </div>
+  <div id="content">
+  
+  <h2 style="padding-top: 40px; padding-left: 15px;">performance</h2>
+  <div class="description">
+    <p>Tests the performance of various test cases.</p>
+  </div>
+  <br style="clear: both" />
+  
+  <STYLE type="text/css">
+  #select :checked +  * +  label { background-color:#47A3FF;border-color:#47A3FF;color:#fff;}
+  #select :checked +  * +  * +  * +  div {display: block; }
+  </STYLE>
+  
+  <div id="select" class="tabs">
+  
+    <!-- CREATE THE TAB SELECTOR -->
+    
+    <input id="tab-dome60" name="tabs" type="radio" checked />
+    
+    <input id="tab-gis_4km" name="tabs" type="radio" checked />
+      
+    
+    <label for="tab-dome60">dome60</label>  
+    
+    <label for="tab-gis_4km">gis_4km</label>  
+      
+    
+    
+    <!-- GO THROUGH EACH SPECIFIC TEST CASE & DISPLAY THE CONTENT-->  
+    
+    <div class="case">
+    
+    
+       <!-- BEGIN PLOTS SECTION -->
+      <b class="label-header">Plots</b> <br/>
+      <div class="separator">
+      <hr style="opacity: 0; height: 5px;">
+      
+        <a style="padding-left: 20px; color: #696969;">No plots for dome60</a>
+      
+      </div>
+      <!-- END PLOTS SECTION -->
+
+
+      <br style="clear: both" />
+      <br height="30px" />
+
+
+      <!-- BEGIN TIMING SUMMARY SECTION -->
+      <b class="label-header"> Timing Summary</b>
+      <br style="clear:both; height: 10px;" />
+      <div class="separator">
+      
+        <br style="clear:both; height: 10px;" />
+        <b style="display: block;">glissade</b>
+        <table style="width: 100%;  border-collapse: collapse;">
+          <tr>
+            <th>Variable</th>
+            <th>Average</th>
+            <th>Minimum</th>
+            <th>Maximum</th>
+          </tr>
+          
+            
+            <tr>
+              <td style="text-align: right">IO Writeback</td>
+              
+              
+              
+              <td style="text-align: left">
+                0.01100 
+                
+                  <p style="display: inline; color: green">(-0.000)</p>
+                
+              </td>
+              <td style="text-align: left">
+                0.01100 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+              <td style="text-align: left">
+                0.01100 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">Simple Glide</td>
+              
+              
+              
+              <td style="text-align: left">
+                7.01400 
+                
+                  <p style="display: inline; color: red">(+7.014)</p>
+                
+              </td>
+              <td style="text-align: left">
+                7.01400 
+                
+                  <p style="display: inline; color: red">(+7.014)</p>
+                
+              </td>
+              <td style="text-align: left">
+                7.01400 
+                
+                  <p style="display: inline; color: red">(+7.014)</p>
+                
+              </td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">Initial Diagonal Solve</td>
+              
+              
+              
+              <td style="text-align: left">
+                7.51127 
+                
+                  <p style="display: inline; color: green">(-0.055)</p>
+                
+              </td>
+              <td style="text-align: left">
+                6.96500 
+                
+                  <p style="display: inline; color: green">(-0.588)</p>
+                
+              </td>
+              <td style="text-align: left">
+                7.59100 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">Velocity Driver</td>
+              
+              
+              
+              <td style="text-align: left">
+                7.50909 
+                
+                  <p style="display: inline; color: green">(-0.055)</p>
+                
+              </td>
+              <td style="text-align: left">
+                6.96400 
+                
+                  <p style="display: inline; color: green">(-0.587)</p>
+                
+              </td>
+              <td style="text-align: left">
+                7.58800 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+            </tr>
+            
+          
+        </table>
+      
+        <br style="clear:both; height: 10px;" />
+        <b style="display: block;">glide</b>
+        <table style="width: 100%;  border-collapse: collapse;">
+          <tr>
+            <th>Variable</th>
+            <th>Average</th>
+            <th>Minimum</th>
+            <th>Maximum</th>
+          </tr>
+          
+            
+            <tr>
+              <td style="text-align: right">IO Writeback</td>
+              
+              
+              
+              <td style="text-align: left">
+                0.01082 
+                
+                  <p style="display: inline; color: red">(+0.000)</p>
+                
+              </td>
+              <td style="text-align: left">
+                0.01000 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+              <td style="text-align: left">
+                0.01100 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">Simple Glide</td>
+              
+              
+              
+              <td style="text-align: left">
+                212.75800 
+                
+                  <p style="display: inline; color: red">(+212.758)</p>
+                
+              </td>
+              <td style="text-align: left">
+                212.75800 
+                
+                  <p style="display: inline; color: red">(+212.758)</p>
+                
+              </td>
+              <td style="text-align: left">
+                212.75800 
+                
+                  <p style="display: inline; color: red">(+212.758)</p>
+                
+              </td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">Initial Diagonal Solve</td>
+              
+              
+              
+              <td style="text-align: left">
+                42.06864 
+                
+                  <p style="display: inline; color: red">(+17.062)</p>
+                
+              </td>
+              <td style="text-align: left">
+                24.96900 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+              <td style="text-align: left">
+                212.68800 
+                
+                  <p style="display: inline; color: red">(+187.639)</p>
+                
+              </td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">Velocity Driver</td>
+              
+              
+              
+              <td style="text-align: left">
+                212.68700 
+                
+                  <p style="display: inline; color: red">(+212.687)</p>
+                
+              </td>
+              <td style="text-align: left">
+                212.68700 
+                
+                  <p style="display: inline; color: red">(+212.687)</p>
+                
+              </td>
+              <td style="text-align: left">
+                212.68700 
+                
+                  <p style="display: inline; color: red">(+212.687)</p>
+                
+              </td>
+            </tr>
+            
+          
+        </table>
+      
+      </div>
+      <!-- END TIMING SUMMARY SECTION -->
+
+
+      <br style="clear: both" />
+      <br height="30px" />
+
+
+      <!-- BEGIN CONFIGURATION FILE SECTION -->
+      <b class="label-header"> Configuration Files </b>
+      <div class="separator">
+      <hr style="opacity: 0; height: 5px;">
+          
+            
+                <div class="Configuration">
+    
+                  <a href="#hidedome601" class="hide" id="hidedome601">+</a>
+                  <a href="#showdome601" class="show" id="showdome601">-</a>
+                  <h4 class="top">dome.60.glissade.config</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    
+                    
+                          <b>[DOME-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                          <b>[grid]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  upn = 10<br>
+                              
+                            
+                          
+                            
+                              
+                                  ewn = 60<br>
+                              
+                            
+                          
+                            
+                              
+                                  nsn = 60<br>
+                              
+                            
+                          
+                            
+                              
+                                  dew = 1000<br>
+                              
+                            
+                          
+                            
+                              
+                                  dns = 1000<br>
+                              
+                            
+                          
+                            
+                              
+                                  sigma_builtin = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[time]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  tstart = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  tend = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt = 1.<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  dycore = 2              <br>
+                              
+                            
+                          
+                            
+                              
+                                  flow_law = 0            <br>
+                              
+                            
+                          
+                            
+                              
+                                  evolution = 3           <br>
+                              
+                            
+                          
+                            
+                              
+                                  temperature = 1         <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[ho_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  which_ho_babc = 4       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_efvs = 2       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_sparse = 3     <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_nonlinear = 0  <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[parameters]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  flow_factor = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  ice_limit = 1          <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF default]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  comment = created with dome.py<br>
+                              
+                            
+                          
+                            
+                              
+                                  title = parabolic dome test case using first-order dynamics<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF input]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  name = data/dome.60.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  time = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF output]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  variables = thk usurf uvel vvel velnorm temp<br>
+                              
+                            
+                          
+                            
+                              
+                                  frequency = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  name = data/dome.60.glissade.out.nc<br>
+                              
+                            
+                          
+                          </div>
+                    
+                  </div>
+                  <div class="status">
+                    
+                      <p style="float: left; color: green">Files match</p>
+                    
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            
+                <div class="Configuration">
+    
+                  <a href="#hidedome602" class="hide" id="hidedome602">+</a>
+                  <a href="#showdome602" class="show" id="showdome602">-</a>
+                  <h4 class="top">dome.60.config</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    
+                    
+                          <b>[DOME-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                          <b>[grid]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  upn = 10<br>
+                              
+                            
+                          
+                            
+                              
+                                  ewn = 60<br>
+                              
+                            
+                          
+                            
+                              
+                                  nsn = 60<br>
+                              
+                            
+                          
+                            
+                              
+                                  dew = 1000<br>
+                              
+                            
+                          
+                            
+                              
+                                  dns = 1000<br>
+                              
+                            
+                          
+                            
+                              
+                                  sigma_builtin = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[time]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  tstart = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  tend = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt = 1.<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  dycore = 2              <br>
+                              
+                            
+                          
+                            
+                              
+                                  flow_law = 0            <br>
+                              
+                            
+                          
+                            
+                              
+                                  evolution = 3           <br>
+                              
+                            
+                          
+                            
+                              
+                                  temperature = 1         <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[ho_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  which_ho_babc = 4       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_efvs = 2       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_sparse = 3     <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_nonlinear = 0  <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[parameters]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  flow_factor = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  ice_limit = 1          <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF default]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  comment = created with dome.py<br>
+                              
+                            
+                          
+                            
+                              
+                                  title = parabolic dome test case using first-order dynamics<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF input]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  name = data/dome.60.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  time = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF output]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  variables = thk usurf uvel vvel velnorm temp<br>
+                              
+                            
+                          
+                            
+                              
+                                  frequency = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  name = data/dome.60.out.nc<br>
+                              
+                            
+                          
+                          </div>
+                    
+                  </div>
+                  <div class="status">
+                    
+                      <p style="float: left; color: green">Files match</p>
+                    
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            
+                <div class="Configuration">
+    
+                  <a href="#hidedome603" class="hide" id="hidedome603">+</a>
+                  <a href="#showdome603" class="show" id="showdome603">-</a>
+                  <h4 class="top">dome.60.glide.config</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    
+                    
+                          <b>[DOME-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                          <b>[grid]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  upn = 10<br>
+                              
+                            
+                          
+                            
+                              
+                                  ewn = 60<br>
+                              
+                            
+                          
+                            
+                              
+                                  nsn = 60<br>
+                              
+                            
+                          
+                            
+                              
+                                  dew = 1000<br>
+                              
+                            
+                          
+                            
+                              
+                                  dns = 1000<br>
+                              
+                            
+                          
+                            
+                              
+                                  sigma_builtin = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[time]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  tstart = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  tend = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt = 1.<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  dycore = 1              <br>
+                              
+                            
+                          
+                            
+                              
+                                  flow_law = 0            <br>
+                              
+                            
+                          
+                            
+                              
+                                  evolution = 3           <br>
+                              
+                            
+                          
+                            
+                              
+                                  temperature = 1         <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[ho_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  which_ho_babc = 4       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_efvs = 2       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_sparse = 4     <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_nonlinear = 1  <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[parameters]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  flow_factor = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  ice_limit = 1          <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF default]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  comment = created with dome.py<br>
+                              
+                            
+                          
+                            
+                              
+                                  title = parabolic dome test case using first-order dynamics<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF input]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  name = data/dome.60.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  time = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF output]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  variables = thk usurf uvel vvel velnorm temp<br>
+                              
+                            
+                          
+                            
+                              
+                                  frequency = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  name = data/dome.60.glide.out.nc<br>
+                              
+                            
+                          
+                          </div>
+                    
+                  </div>
+                  <div class="status">
+                    
+                      <p style="float: left; color: green">Files match</p>
+                    
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            
+        
+        </div>
+       <!-- END CONFIGURATION FILES SECTION -->
+
+        
+        
+    </div>
+    
+    <div class="case">
+    
+    
+       <!-- BEGIN PLOTS SECTION -->
+      <b class="label-header">Plots</b> <br/>
+      <div class="separator">
+      <hr style="opacity: 0; height: 5px;">
+      
+        <a style="padding-left: 20px; color: #696969;">No plots for gis_4km</a>
+      
+      </div>
+      <!-- END PLOTS SECTION -->
+
+
+      <br style="clear: both" />
+      <br height="30px" />
+
+
+      <!-- BEGIN TIMING SUMMARY SECTION -->
+      <b class="label-header"> Timing Summary</b>
+      <br style="clear:both; height: 10px;" />
+      <div class="separator">
+      
+        <br style="clear:both; height: 10px;" />
+        <b style="display: block;">glissade</b>
+        <table style="width: 100%;  border-collapse: collapse;">
+          <tr>
+            <th>Variable</th>
+            <th>Average</th>
+            <th>Minimum</th>
+            <th>Maximum</th>
+          </tr>
+          
+            
+            <tr>
+              <td style="text-align: right">IO Writeback</td>
+              <td>N/A</td>
+              <td>N/A</td>
+              <td>N/A</td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">Simple Glide</td>
+              <td>N/A</td>
+              <td>N/A</td>
+              <td>N/A</td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">Initial Diagonal Solve</td>
+              <td>N/A</td>
+              <td>N/A</td>
+              <td>N/A</td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">Velocity Driver</td>
+              <td>N/A</td>
+              <td>N/A</td>
+              <td>N/A</td>
+            </tr>
+            
+          
+        </table>
+      
+        <br style="clear:both; height: 10px;" />
+        <b style="display: block;">glide</b>
+        <table style="width: 100%;  border-collapse: collapse;">
+          <tr>
+            <th>Variable</th>
+            <th>Average</th>
+            <th>Minimum</th>
+            <th>Maximum</th>
+          </tr>
+          
+            
+            <tr>
+              <td style="text-align: right">IO Writeback</td>
+              <td>N/A</td>
+              <td>N/A</td>
+              <td>N/A</td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">Simple Glide</td>
+              <td>N/A</td>
+              <td>N/A</td>
+              <td>N/A</td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">Initial Diagonal Solve</td>
+              <td>N/A</td>
+              <td>N/A</td>
+              <td>N/A</td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">Velocity Driver</td>
+              <td>N/A</td>
+              <td>N/A</td>
+              <td>N/A</td>
+            </tr>
+            
+          
+        </table>
+      
+      </div>
+      <!-- END TIMING SUMMARY SECTION -->
+
+
+      <br style="clear: both" />
+      <br height="30px" />
+
+
+      <!-- BEGIN CONFIGURATION FILE SECTION -->
+      <b class="label-header"> Configuration Files </b>
+      <div class="separator">
+      <hr style="opacity: 0; height: 5px;">
+          
+            
+                <div class="Configuration">
+    
+                  <a href="#hidegis_4km1" class="hide" id="hidegis_4km1">+</a>
+                  <a href="#showgis_4km1" class="show" id="showgis_4km1">-</a>
+                  <h4 class="top">gis.4km.albany_0timesteps.config</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    
+                    
+                          <b>[GIS-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                          <b>[grid]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  upn = 11<br>
+                              
+                            
+                          
+                            
+                              
+                                  ewn = 376<br>
+                              
+                            
+                          
+                            
+                              
+                                  nsn = 701<br>
+                              
+                            
+                          
+                            
+                              
+                                  dew = 4000<br>
+                              
+                            
+                          
+                            
+                              
+                                  dns = 4000<br>
+                              
+                            
+                          
+                            
+                              
+                                  sigma_builtin = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  sigma_file = <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[time]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  tstart = 0.0<br>
+                              
+                            
+                          
+                            
+                              
+                                  tend = 0.0<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt = 0.1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  ioparams = <br>
+                              
+                            
+                          
+                            
+                              
+                                  flow_law = 0            <br>
+                              
+                            
+                          
+                            
+                              
+                                  evolution = 3           <br>
+                              
+                            
+                          
+                            
+                              
+                                  temperature = 2         <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[ho_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  which_ho_babc = 4       <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[parameters]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  flow_factor = 1.<br>
+                              
+                            
+                          
+                            
+                              
+                                  ice_limit = 10.          <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF default]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  comment = 4 km res. Greenland init. cond. file, using newest datasets assembled under PISCEES<br>
+                              
+                            
+                          
+                            
+                              
+                                  title = Greenland 4 km resolution init. cond. input file for PISCEES<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF input]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  name = data/gis_4km_2013_09_25_time.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  time = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF output]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  variables = thk topg artm acab beta bheatflx temp uvel vvel velnorm thkmask<br>
+                              
+                            
+                          
+                            
+                              
+                                  name = data/gis_4km_2013_09_25_time_0yr_dt0_1_albany.out.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  frequency = 1.<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[external_dycore_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  external_dycore_type = 2 <br>
+                              
+                            
+                          
+                            
+                              
+                                  dycore_input_file = data/input_albany-cism_gis4km.xml<br>
+                              
+                            
+                          
+                          </div>
+                    
+                  </div>
+                  <div class="status">
+                    
+                      <p style="float: left; color: green">Files match</p>
+                    
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            
+                <div class="Configuration">
+    
+                  <a href="#hidegis_4km2" class="hide" id="hidegis_4km2">+</a>
+                  <a href="#showgis_4km2" class="show" id="showgis_4km2">-</a>
+                  <h4 class="top">gis.4km.albany_100timesteps.config</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    
+                    
+                          <b>[GIS-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                          <b>[grid]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  upn = 11<br>
+                              
+                            
+                          
+                            
+                              
+                                  ewn = 376<br>
+                              
+                            
+                          
+                            
+                              
+                                  nsn = 701<br>
+                              
+                            
+                          
+                            
+                              
+                                  dew = 4000<br>
+                              
+                            
+                          
+                            
+                              
+                                  dns = 4000<br>
+                              
+                            
+                          
+                            
+                              
+                                  sigma_builtin = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  sigma_file = <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[time]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  tstart = 0.0<br>
+                              
+                            
+                          
+                            
+                              
+                                  tend = 10.0<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt = 0.1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  ioparams = <br>
+                              
+                            
+                          
+                            
+                              
+                                  flow_law = 0            <br>
+                              
+                            
+                          
+                            
+                              
+                                  evolution = 3           <br>
+                              
+                            
+                          
+                            
+                              
+                                  temperature = 2         <br>
+                              
+                            
+                          
+                            
+                              
+                                  dycore = 2              <br>
+                              
+                            
+                          
+                            
+                              
+                                  temp_init = 2           <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[ho_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  which_ho_babc = 4       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_efvs = 2       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_sparse = 3     <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_nonlinear = 0  <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[parameters]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  flow_factor = 1.<br>
+                              
+                            
+                          
+                            
+                              
+                                  ice_limit = 10.          <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF default]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  comment = 4 km res. Greenland init. cond. file, using newest datasets assembled under PISCEES<br>
+                              
+                            
+                          
+                            
+                              
+                                  title = Greenland 4 km resolution init. cond. input file for PISCEES<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF input]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  name = data/gis_4km_2013_09_25_time.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  time = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF output]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  variables = thk topg artm acab beta bheatflx temp uvel vvel velnorm thkmask<br>
+                              
+                            
+                          
+                            
+                              
+                                  name = data/gis_4km_2013_09_25_time_100yr_dt0_1_albany.out.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  frequency = 1.<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[external_dycore_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  external_dycore_type = 2 <br>
+                              
+                            
+                          
+                            
+                              
+                                  dycore_input_file = data/input_albany-cism_gis4km.xml<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[DOME-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                  </div>
+                  <div class="status">
+                    
+                      <p style="float: left; color: green">Files match</p>
+                    
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            
+                <div class="Configuration">
+    
+                  <a href="#hidegis_4km3" class="hide" id="hidegis_4km3">+</a>
+                  <a href="#showgis_4km3" class="show" id="showgis_4km3">-</a>
+                  <h4 class="top">gis.4km.glissade_10timesteps.config</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    
+                    
+                          <b>[GIS-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                          <b>[grid]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  upn = 11<br>
+                              
+                            
+                          
+                            
+                              
+                                  ewn = 376<br>
+                              
+                            
+                          
+                            
+                              
+                                  nsn = 701<br>
+                              
+                            
+                          
+                            
+                              
+                                  dew = 4000<br>
+                              
+                            
+                          
+                            
+                              
+                                  dns = 4000<br>
+                              
+                            
+                          
+                            
+                              
+                                  sigma_builtin = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  sigma_file = <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[time]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  tstart = 0.0<br>
+                              
+                            
+                          
+                            
+                              
+                                  tend = 10.0<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt = 1.<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  ioparams = <br>
+                              
+                            
+                          
+                            
+                              
+                                  flow_law = 2            <br>
+                              
+                            
+                          
+                            
+                              
+                                  evolution = 3           <br>
+                              
+                            
+                          
+                            
+                              
+                                  temperature = 1         <br>
+                              
+                            
+                          
+                            
+                              
+                                  dycore = 2              <br>
+                              
+                            
+                          
+                            
+                              
+                                  temp_init = 2           <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[ho_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  which_ho_babc = 4       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_efvs = 2       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_sparse = 3     <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_nonlinear = 0  <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[parameters]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  flow_factor = 1.<br>
+                              
+                            
+                          
+                            
+                              
+                                  ice_limit = 10.          <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF default]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  comment = 4 km res. Greenland init. cond. file, using newest datasets assembled under PISCEES<br>
+                              
+                            
+                          
+                            
+                              
+                                  title = Greenland 4 km resolution init. cond. input file for PISCEES<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF input]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  name = data/greenland_4km_2013_10_01.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  time = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF output]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  variables = thk topg artm acab beta bheatflx temp uvel vvel velnorm<br>
+                              
+                            
+                          
+                            
+                              
+                                  name = data/gis_4km.glissade.out.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  frequency = 1.<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[external_dycore_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  external_dycore_type = 2 <br>
+                              
+                            
+                          
+                            
+                              
+                                  dycore_input_file = data/input_albany-cism_gis4km.xml<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[DOME-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                  </div>
+                  <div class="status">
+                    
+                      <p style="float: left; color: green">Files match</p>
+                    
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            
+                <div class="Configuration">
+    
+                  <a href="#hidegis_4km4" class="hide" id="hidegis_4km4">+</a>
+                  <a href="#showgis_4km4" class="show" id="showgis_4km4">-</a>
+                  <h4 class="top">gis.4km.glissade_100timesteps.config</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    
+                    
+                          <b>[GIS-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                          <b>[grid]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  upn = 11<br>
+                              
+                            
+                          
+                            
+                              
+                                  ewn = 376<br>
+                              
+                            
+                          
+                            
+                              
+                                  nsn = 701<br>
+                              
+                            
+                          
+                            
+                              
+                                  dew = 4000<br>
+                              
+                            
+                          
+                            
+                              
+                                  dns = 4000<br>
+                              
+                            
+                          
+                            
+                              
+                                  sigma_builtin = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  sigma_file = <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[time]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  tstart = 0.0<br>
+                              
+                            
+                          
+                            
+                              
+                                  tend = 100.0<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt = 1.<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  ioparams = <br>
+                              
+                            
+                          
+                            
+                              
+                                  flow_law = 2            <br>
+                              
+                            
+                          
+                            
+                              
+                                  evolution = 3           <br>
+                              
+                            
+                          
+                            
+                              
+                                  temperature = 1         <br>
+                              
+                            
+                          
+                            
+                              
+                                  dycore = 2              <br>
+                              
+                            
+                          
+                            
+                              
+                                  temp_init = 2           <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[ho_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  which_ho_babc = 4       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_efvs = 2       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_sparse = 3     <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_nonlinear = 0  <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[parameters]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  flow_factor = 1.<br>
+                              
+                            
+                          
+                            
+                              
+                                  ice_limit = 10.          <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF default]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  comment = 4 km res. Greenland init. cond. file, using newest datasets assembled under PISCEES<br>
+                              
+                            
+                          
+                            
+                              
+                                  title = Greenland 4 km resolution init. cond. input file for PISCEES<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF input]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  name = data/greenland_4km_2013_10_01.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  time = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF output]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  variables = thk topg artm acab beta bheatflx temp uvel vvel velnorm<br>
+                              
+                            
+                          
+                            
+                              
+                                  name = data/gis_4km.glissade.out.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  frequency = 1.<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[external_dycore_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  external_dycore_type = 2 <br>
+                              
+                            
+                          
+                            
+                              
+                                  dycore_input_file = data/input_albany-cism_gis4km.xml<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[DOME-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                  </div>
+                  <div class="status">
+                    
+                      <p style="float: left; color: green">Files match</p>
+                    
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            
+                <div class="Configuration">
+    
+                  <a href="#hidegis_4km5" class="hide" id="hidegis_4km5">+</a>
+                  <a href="#showgis_4km5" class="show" id="showgis_4km5">-</a>
+                  <h4 class="top">gis.4km.config</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    
+                    
+                          <b>[GIS-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                          <b>[grid]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  upn = 11<br>
+                              
+                            
+                          
+                            
+                              
+                                  ewn = 376<br>
+                              
+                            
+                          
+                            
+                              
+                                  nsn = 701<br>
+                              
+                            
+                          
+                            
+                              
+                                  dew = 4000<br>
+                              
+                            
+                          
+                            
+                              
+                                  dns = 4000<br>
+                              
+                            
+                          
+                            
+                              
+                                  sigma_builtin = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  sigma_file = <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[time]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  tstart = 0.0<br>
+                              
+                            
+                          
+                            
+                              
+                                  tend = 1.0<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt = 0.1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  ioparams = <br>
+                              
+                            
+                          
+                            
+                              
+                                  flow_law = 0            <br>
+                              
+                            
+                          
+                            
+                              
+                                  evolution = 3           <br>
+                              
+                            
+                          
+                            
+                              
+                                  temperature = 2         <br>
+                              
+                            
+                          
+                            
+                              
+                                  dycore = 2              <br>
+                              
+                            
+                          
+                            
+                              
+                                  temp_init = 2           <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[ho_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  which_ho_babc = 4       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_efvs = 2       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_sparse = 3     <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_nonlinear = 0  <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[parameters]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  flow_factor = 1.<br>
+                              
+                            
+                          
+                            
+                              
+                                  ice_limit = 10.          <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF default]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  comment = 4 km res. Greenland init. cond. file, using newest datasets assembled under PISCEES<br>
+                              
+                            
+                          
+                            
+                              
+                                  title = Greenland 4 km resolution init. cond. input file for PISCEES<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF input]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  name = data/gis_4km_2013_09_25_time.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  time = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF output]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  variables = thk topg artm acab beta bheatflx temp uvel vvel velnorm thkmask<br>
+                              
+                            
+                          
+                            
+                              
+                                  name = data/gis_4km_2013_09_25_time_10yr_dt0_1_albany.out.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  frequency = 1.<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[external_dycore_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  external_dycore_type = 2 <br>
+                              
+                            
+                          
+                            
+                              
+                                  dycore_input_file = data/input_albany-cism_gis4km.xml<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[DOME-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                  </div>
+                  <div class="status">
+                    
+                      <p style="float: left; color: green">Files match</p>
+                    
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            
+                <div class="Configuration">
+    
+                  <a href="#hidegis_4km6" class="hide" id="hidegis_4km6">+</a>
+                  <a href="#showgis_4km6" class="show" id="showgis_4km6">-</a>
+                  <h4 class="top">gis.4km.glissade_0timesteps.config</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    
+                    
+                          <b>[GIS-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                          <b>[grid]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  upn = 11<br>
+                              
+                            
+                          
+                            
+                              
+                                  ewn = 376<br>
+                              
+                            
+                          
+                            
+                              
+                                  nsn = 701<br>
+                              
+                            
+                          
+                            
+                              
+                                  dew = 4000<br>
+                              
+                            
+                          
+                            
+                              
+                                  dns = 4000<br>
+                              
+                            
+                          
+                            
+                              
+                                  sigma_builtin = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  sigma_file = <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[time]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  tstart = 0.0<br>
+                              
+                            
+                          
+                            
+                              
+                                  tend = 0.0<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt = 1.<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  ioparams = <br>
+                              
+                            
+                          
+                            
+                              
+                                  flow_law = 2            <br>
+                              
+                            
+                          
+                            
+                              
+                                  evolution = 3           <br>
+                              
+                            
+                          
+                            
+                              
+                                  temperature = 1         <br>
+                              
+                            
+                          
+                            
+                              
+                                  dycore = 2              <br>
+                              
+                            
+                          
+                            
+                              
+                                  temp_init = 2           <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[ho_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  which_ho_babc = 4       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_efvs = 2       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_sparse = 3     <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_nonlinear = 0  <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[parameters]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  flow_factor = 1.<br>
+                              
+                            
+                          
+                            
+                              
+                                  ice_limit = 10.          <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF default]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  comment = 4 km res. Greenland init. cond. file, using newest datasets assembled under PISCEES<br>
+                              
+                            
+                          
+                            
+                              
+                                  title = Greenland 4 km resolution init. cond. input file for PISCEES<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF input]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  name = data/greenland_4km_2013_10_01.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  time = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF output]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  variables = thk topg artm acab beta bheatflx temp uvel vvel velnorm<br>
+                              
+                            
+                          
+                            
+                              
+                                  name = data/gis_4km.glissade.out.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  frequency = 1.<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[external_dycore_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  external_dycore_type = 2 <br>
+                              
+                            
+                          
+                            
+                              
+                                  dycore_input_file = data/input_albany-cism_gis4km.xml<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[DOME-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                  </div>
+                  <div class="status">
+                    
+                      <p style="float: left; color: green">Files match</p>
+                    
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            
+                <div class="Configuration">
+    
+                  <a href="#hidegis_4km7" class="hide" id="hidegis_4km7">+</a>
+                  <a href="#showgis_4km7" class="show" id="showgis_4km7">-</a>
+                  <h4 class="top">gis.4km.albany_10timesteps.config</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    
+                    
+                          <b>[GIS-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                          <b>[grid]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  upn = 11<br>
+                              
+                            
+                          
+                            
+                              
+                                  ewn = 376<br>
+                              
+                            
+                          
+                            
+                              
+                                  nsn = 701<br>
+                              
+                            
+                          
+                            
+                              
+                                  dew = 4000<br>
+                              
+                            
+                          
+                            
+                              
+                                  dns = 4000<br>
+                              
+                            
+                          
+                            
+                              
+                                  sigma_builtin = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  sigma_file = <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[time]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  tstart = 0.0<br>
+                              
+                            
+                          
+                            
+                              
+                                  tend = 1.0<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt = 0.1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  ioparams = <br>
+                              
+                            
+                          
+                            
+                              
+                                  flow_law = 0            <br>
+                              
+                            
+                          
+                            
+                              
+                                  evolution = 3           <br>
+                              
+                            
+                          
+                            
+                              
+                                  temperature = 2         <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[ho_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  which_ho_babc = 4       <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[parameters]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  flow_factor = 1.<br>
+                              
+                            
+                          
+                            
+                              
+                                  ice_limit = 10.          <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF default]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  comment = 4 km res. Greenland init. cond. file, using newest datasets assembled under PISCEES<br>
+                              
+                            
+                          
+                            
+                              
+                                  title = Greenland 4 km resolution init. cond. input file for PISCEES<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF input]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  name = data/gis_4km_2013_09_25_time.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  time = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF output]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  variables = thk topg artm acab beta bheatflx temp uvel vvel velnorm thkmask<br>
+                              
+                            
+                          
+                            
+                              
+                                  name = data/gis_4km_2013_09_25_time_10yr_dt0_1_albany.out.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  frequency = 1.<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[external_dycore_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  external_dycore_type = 2 <br>
+                              
+                            
+                          
+                            
+                              
+                                  dycore_input_file = data/input_albany-cism_gis4km.xml<br>
+                              
+                            
+                          
+                          </div>
+                    
+                  </div>
+                  <div class="status">
+                    
+                      <p style="float: left; color: green">Files match</p>
+                    
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            
+        
+        </div>
+       <!-- END CONFIGURATION FILES SECTION -->
+
+        
+        
+    </div>
+    
+    </div>
+    <br>
+
+    
+	</div>
+
+	<div id="footer">
+		<p id="info">
+			V&V Performed by bzq at 03-14-2015 16:07:48 <br> 
+			Test run of code <br>
+		</p>
+	</div>
+</div>
+</body>
+
+</html>
