@@ -347,8 +347,8 @@ if __name__ == '__main__':
     #                               Run Test Cases                                #
     ###############################################################################
     print("Running tests:")
-    for test in itertools.chain.from_iterable( [testMapping[tt][1] for tt in testsRun] ): 
-        print("  " + test)
+    for case in itertools.chain.from_iterable( [testMapping[test][1] for test in testsRun] ): 
+        print("  " + case)
     print("------------------------------------------------------------------------------")
     print("")
 
