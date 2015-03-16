@@ -290,15 +290,6 @@ if __name__ == '__main__':
     ###############################################################################
     #                              Record Test Cases                              #
     ###############################################################################
-    # A dictionary describing which module will be called for each test
-    # Each of these modules can be found in livv_bin
-    testDict = { "dome" : Dome,
-                 "ismip" : Ismip,
-                 "gis" : Gis,
-                 "shelf" : Shelf,
-                 "performance" : Performance
-               }
-
     # dome tests
     domeCases = {'none'   : [],
                  'diagnostic' : ['dome30/diagnostic'],
@@ -340,20 +331,28 @@ if __name__ == '__main__':
                  'large' : ['dome240', 'gis_1km']}
     runPerfCase = perfCases[perf]
 
+    #### Test dictionaries #### 
     # Describes how to group each test case in with more general groupings
-    tests = ["dome", "ismip", "gis", "shelf", "performance"]
     testMapping = {"dome" : runDomeCase,
                    "ismip" : runIsmipCase,
                    "gis" : runGisCase,
                    "shelf" : runShelfCase,
                    "performance" : runPerfCase
                    }
+    # Describes which module will be called for each test
+    #NOTE: Each of these modules can be found in livv_bin
+    testDict = { "dome" : Dome,
+                 "ismip" : Ismip,
+                 "gis" : Gis,
+                 "shelf" : Shelf,
+                 "performance" : Performance
+               }
 
     # Group the tests into their respective cases
     testsRun = []
-    for test in tests:
-        if len(testMapping[test]):
-            testsRun.append(test)
+    for key in testMapping.keys():
+        if len(testMapping[key]):
+            testsRun.append(key)
 
     ###############################################################################
     #                               Run Test Cases                                #
