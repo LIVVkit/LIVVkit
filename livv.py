@@ -39,6 +39,7 @@ import time
 import getpass
 import platform
 import socket
+import itertools
 
 from optparse import OptionParser
 from collections import OrderedDict
@@ -357,10 +358,9 @@ if __name__ == '__main__':
     ###############################################################################
     #                               Run Test Cases                                #
     ###############################################################################
-    # Flattens to a list of all test cases being run
-    testCases = [test for sublist in [runDomeCase, runIsmipCase, runGisCase, runValidationCase, runShelfCase, runPerfCase] for test in sublist]
     print("Running tests: \n"),
-    for test in testCases: print("  " + test + "\n"),
+    for test in itertools.chain(runDomeCase, runIsmipCase, runGisCase, runValidationCase, runShelfCase, runPerfCase): 
+        print("  " + test + "\n"),
     print("------------------------------------------------------------------------------")
     print("")
 
