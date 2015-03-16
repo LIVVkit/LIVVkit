@@ -299,7 +299,6 @@ class TestSummary(AbstractTest):
     #
     #  input:
     #    @param testsRun: the top level names of each of the tests run
-    #    @param testCases: the specific test cases being run
     #
     def webSetup(self, testsRun):
         # Check if we need to back up an old run

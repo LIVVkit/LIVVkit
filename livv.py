@@ -39,6 +39,7 @@ import time
 import getpass
 import platform
 import socket
+import itertools
 
 from optparse import OptionParser
 from collections import OrderedDict
@@ -289,15 +290,6 @@ if __name__ == '__main__':
     ###############################################################################
     #                              Record Test Cases                              #
     ###############################################################################
-    # A dictionary describing which module will be called for each test
-    # Each of these modules can be found in livv_bin
-    testDict = { "dome" : Dome,
-                 "ismip" : Ismip,
-                 "gis" : Gis,
-                 "shelf" : Shelf,
-                 "performance" : Performance
-               }
-
     # dome tests
     domeCases = {'none'   : [],
                  'diagnostic' : ['dome30/diagnostic'],
@@ -339,28 +331,24 @@ if __name__ == '__main__':
                  'large' : ['dome240', 'gis_1km']}
     runPerfCase = perfCases[perf]
 
-    # Describes how to group each test case in with more general groupings
-    tests = ["dome", "ismip", "gis", "shelf", "performance"]
-    testMapping = {"dome" : runDomeCase,
-                   "ismip" : runIsmipCase,
-                   "gis" : runGisCase,
-                   "shelf" : runShelfCase,
-                   "performance" : runPerfCase
+    # Describes the test module and the cases to run for said module
+    #NOTE: Each of these modules can be found in livv_bin
+    testMapping = {"dome" : (Dome, runDomeCase),
+                   "ismip" : (Ismip, runIsmipCase),
+                   "gis" : (Gis, runGisCase),
+                   "shelf" : (Shelf, runShelfCase),
+                   "performance" : (Performance, runPerfCase),
                    }
-
-    # Group the tests into their respective cases
-    testsRun = []
-    for test in tests:
-        if len(testMapping[test]):
-            testsRun.append(test)
-
+    
+    # git the keys for all non-empty test cases
+    testsRun = list( itertools.compress( testMapping.keys(), [val[1] for val in testMapping.values()]) )
+    
     ###############################################################################
     #                               Run Test Cases                                #
     ###############################################################################
-    # Flattens to a list of all test cases being run
-    testCases = [test for sublist in [runDomeCase, runIsmipCase, runGisCase, runValidationCase, runShelfCase, runPerfCase] for test in sublist]
-    print("Running tests: \n"),
-    for test in testCases: print("  " + test + "\n"),
+    print("Running tests:")
+    for case in itertools.chain.from_iterable( [testMapping[test][1] for test in testsRun] ): 
+        print("  " + case)
     print("------------------------------------------------------------------------------")
     print("")
 
@@ -371,10 +359,10 @@ if __name__ == '__main__':
     summary = TestSummary()
     summary.webSetup(testsRun)
     for test in testsRun:
-        # Create a new instance of the specific test class (see testDict for the mapping)
-        newTest = testDict[test]()
+        # Create a new instance of the specific test class (see testMapping for the mapping)
+        newTest = testMapping[test][0]()
         # Run the specific and bit for bit tests for each case of the test
-        for case in testMapping[test]:
+        for case in testMapping[test][1]:
             newTest.run(case)
         testSummary.append(newTest.getSummary())
         print("")
