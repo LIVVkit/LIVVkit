@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # This script will install the LIVV dependencies on debian systems such as
-# ubunatu. These are IN ADDITION to the Community Ice Sheet Model (CISM)
+# ubuntu. These are IN ADDITION to the Community Ice Sheet Model (CISM)
 # dependencies.
 
 # NOTE: Make sure to read over this script as it will use sudo to install
