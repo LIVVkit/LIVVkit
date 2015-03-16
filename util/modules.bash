@@ -2,7 +2,7 @@
 # Load modules for big machines
 
 # Make sure usage of this script is appropriate
-`which module` >> /dev/null
+`module list` >> /dev/null
 if [ $? != 0 ]; then
 	echo "This machine does not use modules to load packages."
 else 
