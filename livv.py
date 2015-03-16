@@ -331,35 +331,24 @@ if __name__ == '__main__':
                  'large' : ['dome240', 'gis_1km']}
     runPerfCase = perfCases[perf]
 
-    #### Test dictionaries #### 
-    # Describes how to group each test case in with more general groupings
-    testMapping = {"dome" : runDomeCase,
-                   "ismip" : runIsmipCase,
-                   "gis" : runGisCase,
-                   "shelf" : runShelfCase,
-                   "performance" : runPerfCase
-                   }
-    # Describes which module will be called for each test
+    # Describes the test module and the cases to run for said module
     #NOTE: Each of these modules can be found in livv_bin
-    testDict = { "dome" : Dome,
-                 "ismip" : Ismip,
-                 "gis" : Gis,
-                 "shelf" : Shelf,
-                 "performance" : Performance
-               }
-
-    # Group the tests into their respective cases
-    testsRun = []
-    for key in testMapping.keys():
-        if len(testMapping[key]):
-            testsRun.append(key)
-
+    testMapping = {"dome" : (Dome, runDomeCase),
+                   "ismip" : (Ismip, runIsmipCase),
+                   "gis" : (Gis, runGisCase),
+                   "shelf" : (Shelf, runShelfCase),
+                   "performance" : (Performance, runPerfCase),
+                   }
+    
+    # git the keys for all non-empty test cases
+    testsRun = list( itertools.compress( testMapping.keys(), [val[1] for val in testMapping.values()]) )
+    
     ###############################################################################
     #                               Run Test Cases                                #
     ###############################################################################
-    print("Running tests: \n"),
-    for test in itertools.chain(runDomeCase, runIsmipCase, runGisCase, runValidationCase, runShelfCase, runPerfCase): 
-        print("  " + test + "\n"),
+    print("Running tests:")
+    for test in itertools.chain.from_iterable( [testMapping[tt][1] for tt in testsRun] ): 
+        print("  " + test)
     print("------------------------------------------------------------------------------")
     print("")
 
@@ -370,10 +359,10 @@ if __name__ == '__main__':
     summary = TestSummary()
     summary.webSetup(testsRun)
     for test in testsRun:
-        # Create a new instance of the specific test class (see testDict for the mapping)
-        newTest = testDict[test]()
+        # Create a new instance of the specific test class (see testMapping for the mapping)
+        newTest = testMapping[test][0]()
         # Run the specific and bit for bit tests for each case of the test
-        for case in testMapping[test]:
+        for case in testMapping[test][1]:
             newTest.run(case)
         testSummary.append(newTest.getSummary())
         print("")
