@@ -135,7 +135,7 @@ class AbstractTest(object):
 
             # Check if any data in thk has changed, if it exists
             if 'thk' in diffVars and diffData.variables['thk'].size != 0:
-                data = numpy.diffData.variables['thk'][:]
+                data = diffData.variables['thk'][:]
                 if data.any():
                     thkDifference[0] = numpy.amin( data )
                     thkDifference[1] = numpy.amax( data )
