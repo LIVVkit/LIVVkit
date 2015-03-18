@@ -109,8 +109,7 @@ class AbstractTest(object):
         # Go through and check if any differences occur
         for same in list(sameList):
             change = 0
-            absDifference = 0.0
-            maxDifference = 0.0
+            difference = [0.0, 0.0, 0.0, 0.0] # thk max abs, thk RMS, velnorm max abs, velnorm RMS
             plotVars = []
             modelFile = modelPath + os.sep + same
             benchFile = benchPath + os.sep + same
@@ -136,8 +135,8 @@ class AbstractTest(object):
             if 'thk' in diffVars and diffData.variables['thk'].size != 0:
                 data = diffData.variables['thk'][:]
                 if data.any():
-                    absDifference += numpy.sum(numpy.ndarray.flatten(data))
-                    maxDifference = numpy.amax([maxDifference, numpy.amax(data)])
+                    difference[0] = numpy.amax( numpy.absolute(data) )
+                    difference[1] = numpy.sqrt(numpy.sum( numpy.square(data).flatten() ) / data.size )
                     plotVars.append('thk')
                     change = 1
 
@@ -145,8 +144,8 @@ class AbstractTest(object):
             if 'velnorm' in diffVars and diffData.variables['velnorm'].size != 0:
                 data = diffData.variables['velnorm'][:]
                 if data.any():
-                    absDifference += numpy.sum(numpy.ndarray.flatten(data))
-                    maxDifference = numpy.amax([maxDifference, numpy.amax(data)])
+                    difference[2] = numpy.amax( numpy.absolute(data) )
+                    difference[3] = numpy.sqrt(numpy.sum( numpy.square(data).flatten() ) / data.size )
                     plotVars.append('velnorm')
                     change = 1
 
@@ -162,8 +161,12 @@ class AbstractTest(object):
                       + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                 exit(e.errno)
 
-            bitDict[same] = [result[change], "{:.4g}".format(absDifference)]
-        # If anything has changed, return 1, otherwise returns 0
+            bitDict[same] = [result[change], 
+                             "{:.4g}".format(difference[0]),
+                             "{:.4g}".format(difference[1]),
+                             "{:.4g}".format(difference[2]),
+                             "{:.4g}".format(difference[3])
+                            ]
         return bitDict
 
 
