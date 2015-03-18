@@ -109,9 +109,7 @@ class AbstractTest(object):
         # Go through and check if any differences occur
         for same in list(sameList):
             change = 0
-            thkDifference = [0.0, 0.0, 0.0] # min, max, RMS
-            velnormDifference = [0.0, 0.0, 0.0] # min, max, RMS
-            difference = [0.0, 0.0, 0.0, 0.0] # min, max, thk RMS, velnorm RMS
+            difference = [0.0, 0.0, 0.0, 0.0] # thk max abs, thk RMS, velnorm max abs, velnorm RMS
             plotVars = []
             modelFile = modelPath + os.sep + same
             benchFile = benchPath + os.sep + same
@@ -137,9 +135,8 @@ class AbstractTest(object):
             if 'thk' in diffVars and diffData.variables['thk'].size != 0:
                 data = diffData.variables['thk'][:]
                 if data.any():
-                    thkDifference[0] = numpy.amin( data )
-                    thkDifference[1] = numpy.amax( data )
-                    thkDifference[2] = numpy.sqrt(numpy.sum( numpy.square(data).flatten() ) / data.size )
+                    difference[0] = numpy.amax( numpy.absolute(data) )
+                    difference[1] = numpy.sqrt(numpy.sum( numpy.square(data).flatten() ) / data.size )
                     plotVars.append('thk')
                     change = 1
 
@@ -147,9 +144,8 @@ class AbstractTest(object):
             if 'velnorm' in diffVars and diffData.variables['velnorm'].size != 0:
                 data = diffData.variables['velnorm'][:]
                 if data.any():
-                    velnormDifference[0] = numpy.amin( data )
-                    velnormDifference[1] = numpy.amax( data )
-                    velnormDifference[2] = numpy.sqrt(numpy.sum( numpy.square(data).flatten() ) / data.size )
+                    difference[2] = numpy.amax( numpy.absolute(data) )
+                    difference[3] = numpy.sqrt(numpy.sum( numpy.square(data).flatten() ) / data.size )
                     plotVars.append('velnorm')
                     change = 1
 
@@ -164,11 +160,6 @@ class AbstractTest(object):
                 print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
                       + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                 exit(e.errno)
-
-            difference[0] = numpy.amin( [thkDifference[0], velnormDifference[0]] )  
-            difference[1] = numpy.amax( [thkDifference[1], velnormDifference[1]] )
-            difference[2] = thkDifference[2]   # thk RMS
-            difference[3] = velnormDifference[2]   # velnorm RMS
 
             bitDict[same] = [result[change], 
                              "{:.4g}".format(difference[0]),
