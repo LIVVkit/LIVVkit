@@ -109,8 +109,9 @@ class AbstractTest(object):
         # Go through and check if any differences occur
         for same in list(sameList):
             change = 0
-            absDifference = 0.0
-            maxDifference = 0.0
+            thkDifference = [0.0, 0.0, 0.0] # min, max, RMS
+            velnormDifference = [0.0, 0.0, 0.0] # min, max, RMS
+            difference = [0.0, 0.0, 0.0, 0.0] # min, max, thk RMS, velnorm RMS
             plotVars = []
             modelFile = modelPath + os.sep + same
             benchFile = benchPath + os.sep + same
@@ -134,10 +135,11 @@ class AbstractTest(object):
 
             # Check if any data in thk has changed, if it exists
             if 'thk' in diffVars and diffData.variables['thk'].size != 0:
-                data = diffData.variables['thk'][:]
+                data = numpy.diffData.variables['thk'][:]
                 if data.any():
-                    absDifference += numpy.sum(numpy.ndarray.flatten(data))
-                    maxDifference = numpy.amax([maxDifference, numpy.amax(data)])
+                    thkDifference[0] = numpy.amin( data )
+                    thkDifference[1] = numpy.amax( data )
+                    thkDifference[2] = numpy.sqrt(numpy.sum( numpy.square(data).flatten() ) / data.size )
                     plotVars.append('thk')
                     change = 1
 
@@ -145,8 +147,9 @@ class AbstractTest(object):
             if 'velnorm' in diffVars and diffData.variables['velnorm'].size != 0:
                 data = diffData.variables['velnorm'][:]
                 if data.any():
-                    absDifference += numpy.sum(numpy.ndarray.flatten(data))
-                    maxDifference = numpy.amax([maxDifference, numpy.amax(data)])
+                    velnormDifference[0] = numpy.amin( data )
+                    velnormDifference[1] = numpy.amax( data )
+                    velnormDifference[2] = numpy.sqrt(numpy.sum( numpy.square(data).flatten() ) / data.size )
                     plotVars.append('velnorm')
                     change = 1
 
@@ -162,8 +165,17 @@ class AbstractTest(object):
                       + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                 exit(e.errno)
 
-            bitDict[same] = [result[change], "{:.4g}".format(absDifference)]
-        # If anything has changed, return 1, otherwise returns 0
+            difference[0] = numpy.amin( [thkDifference[0], velnormDifference[0]] )  
+            difference[1] = numpy.amax( [thkDifference[1], velnormDifference[1]] )
+            difference[2] = thkDifference[2]   # thk RMS
+            difference[3] = velnormDifference[2]   # velnorm RMS
+
+            bitDict[same] = [result[change], 
+                             "{:.4g}".format(difference[0]),
+                             "{:.4g}".format(difference[1]),
+                             "{:.4g}".format(difference[2]),
+                             "{:.4g}".format(difference[3])
+                            ]
         return bitDict
 
 

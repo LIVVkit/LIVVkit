@@ -94,7 +94,10 @@
         <tr>
           <th>Output File</th>
           <th>Status</th>
-          <th>Total Error</th>
+          <th>Min Error</th>
+          <th>Max Error</th>
+          <th>thk RMSE</th>
+          <th>velnorm RMSE</th>
         </tr>
         {% for file, details in bitForBitDetails[case].iteritems() %}
           <tr>
@@ -110,6 +113,9 @@
             </td>
             {% if details[0] == "FAILURE" %}
             	<td>{{details[1]}}</td>
+            	<td>{{details[2]}}</td>
+            	<td>{{details[3]}}</td>
+            	<td>{{details[4]}}</td>
             {% endif %}
           </tr>
         {% endfor %}
