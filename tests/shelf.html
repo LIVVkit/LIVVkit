@@ -67,7 +67,48 @@
       <div class="separator">
       <hr style="opacity: 0; height: 5px;">
       
-        <a style="padding-left: 20px; color: #696969;">No plots for confined-shelf</a>
+        
+        
+        <div class="gallery">
+          <div style="float: left; display: inline;">
+             <!-- imgArr[0] is the name of the image -->
+             <a href="#img_form_confined-shelf_1" id="img_pop">
+                <img src="../imgs//shelf/confshelfvel.png" width="150px"></img>
+            </a>
+            <br style="clear: both" />
+            <!-- imgArr[1] is the description -->
+            <p>Glam Velocity Comparison Plot</p>
+          </div>
+         </div>
+        <a href="shelf.html" class="overlay" id="img_form_confined-shelf_1"></a>
+
+        <div class="popup">
+          <img src="../imgs//shelf/confshelfvel.png" class="imageOverlay"></img>
+          <a class="close" href="#close">x</a>
+        </div>
+        
+      
+        
+        <div class="gallery">
+          <div style="float: left; display: inline;">
+             <!-- imgArr[0] is the name of the image -->
+             <a href="#img_form_confined-shelf_2" id="img_pop">
+                <img src="../imgs//shelf/confshelfvelg.png" width="150px"></img>
+            </a>
+            <br style="clear: both" />
+            <!-- imgArr[1] is the description -->
+            <p>Glissade Velocity Comparison Plot</p>
+          </div>
+         </div>
+        <a href="shelf.html" class="overlay" id="img_form_confined-shelf_2"></a>
+
+        <div class="popup">
+          <img src="../imgs//shelf/confshelfvelg.png" class="imageOverlay"></img>
+          <a class="close" href="#close">x</a>
+        </div>
+        
+      
+      <!-- No plots were passed to jinja2 -->
       
       </div>
       <!-- END PLOT SECTION -->
@@ -92,20 +133,11 @@
         <tr>
           <th>Output File</th>
           <th>Status</th>
-          <th>Total Error</th>
+          <th>thk Max |Error| </th>
+          <th>thk RMSE</th>
+          <th>velnorm Max |Error| </th>
+          <th>velnorm RMSE</th>
         </tr>
-        
-          <tr>
-            <td style="text-align: left">
-              confined-shelf.gnu.glissade.large.nc
-            </td>
-            <td>
-              <a class=SUCCESS
-              
-              >SUCCESS</a>
-            </td>
-            
-          </tr>
         
           <tr>
             <td style="text-align: left">
@@ -121,7 +153,7 @@
         
           <tr>
             <td style="text-align: left">
-              confined-shelf.gnu.PIC.large.nc
+              confined-shelf.gnu.glissade.nc
             </td>
             <td>
               <a class=SUCCESS
@@ -145,7 +177,43 @@
         
           <tr>
             <td style="text-align: left">
-              confined-shelf.gnu.glissade.nc
+              confined-shelf.gnu.PIC.nc
+            </td>
+            <td>
+              <a class=SUCCESS
+              
+              >SUCCESS</a>
+            </td>
+            
+          </tr>
+        
+          <tr>
+            <td style="text-align: left">
+              confined-shelf.gnu.PIC.large.nc
+            </td>
+            <td>
+              <a class=SUCCESS
+              
+              >SUCCESS</a>
+            </td>
+            
+          </tr>
+        
+          <tr>
+            <td style="text-align: left">
+              confined-shelf.gnu.glissade.large.nc
+            </td>
+            <td>
+              <a class=SUCCESS
+              
+              >SUCCESS</a>
+            </td>
+            
+          </tr>
+        
+          <tr>
+            <td style="text-align: left">
+              confined-shelf.gnu.JFNK.nc
             </td>
             <td>
               <a class=SUCCESS
@@ -485,12 +553,6 @@
                               
                             
                           
-                            
-                              
-                                  sigma_builtin = 1<br>
-                              
-                            
-                          
                           </div>
                     
                           <b>[time]</b>
@@ -628,233 +690,6 @@
                   <!-- Hide and show buttons to allow the user view data more easily -->
                   <a href="#hideconfined-shelf3" class="hide" id="hideconfined-shelf3">+</a>
                   <a href="#showconfined-shelf3" class="show" id="showconfined-shelf3">-</a>
-                  <h4 class="top">confined-shelf.glissade.config.large</h4>
-                  <div class="sections">
-                    <div style="clear:both;"></div>
-                    <!-- The changed variable keeps track of whether the files match -->
-                    
-                    
-                          <b>[SHELF-TEST]</b>
-                          <div class="variable">
-                          
-                          </div>
-                    
-                          <b>[parameters]</b>
-                          <div class="variable">
-                          
-                            
-                              
-                                  flow_factor = 1<br>
-                              
-                            
-                          
-                            
-                              
-                                  default_flwa = 5.7e-18<br>
-                              
-                            
-                          
-                          </div>
-                    
-                          <b>[CF output]</b>
-                          <div class="variable">
-                          
-                            
-                              
-                                  variables = thk uvel vvel velnorm<br>
-                              
-                            
-                          
-                            
-                              
-                                  frequency = 1<br>
-                              
-                            
-                          
-                            
-                              
-                                  name = data/confined-shelf.gnu.glissade.large.nc<br>
-                              
-                            
-                          
-                          </div>
-                    
-                          <b>[grid]</b>
-                          <div class="variable">
-                          
-                            
-                              
-                                  upn = 5<br>
-                              
-                            
-                          
-                            
-                              
-                                  ewn = 43<br>
-                              
-                            
-                          
-                            
-                              
-                                  nsn = 44<br>
-                              
-                            
-                          
-                            
-                              
-                                  dew = 5000<br>
-                              
-                            
-                          
-                            
-                              
-                                  dns = 5000<br>
-                              
-                            
-                          
-                            
-                              
-                                  sigma_builtin = 1<br>
-                              
-                            
-                          
-                          </div>
-                    
-                          <b>[time]</b>
-                          <div class="variable">
-                          
-                            
-                              
-                                  tstart = 0.<br>
-                              
-                            
-                          
-                            
-                              
-                                  tend = 0.<br>
-                              
-                            
-                          
-                            
-                              
-                                  dt = 1.<br>
-                              
-                            
-                          
-                          </div>
-                    
-                          <b>[CF default]</b>
-                          <div class="variable">
-                          
-                            
-                              
-                                  comment = Same as experiment 3 from EISMINT-shelf<br>
-                              
-                            
-                          
-                            
-                              
-                                  title = Confined Shelf Experiment (first-order dynamics)<br>
-                              
-                            
-                          
-                          </div>
-                    
-                          <b>[options]</b>
-                          <div class="variable">
-                          
-                            
-                              
-                                  dycore = 2                <br>
-                              
-                            
-                          
-                            
-                              
-                                  flow_law = 0              <br>
-                              
-                            
-                          
-                            
-                              
-                                  evolution = 3             <br>
-                              
-                            
-                          
-                            
-                              
-                                  temperature = 0           <br>
-                              
-                            
-                          
-                            
-                              
-                                  marine_margin = 0         <br>
-                              
-                            
-                          
-                          </div>
-                    
-                          <b>[ho_options]</b>
-                          <div class="variable">
-                          
-                            
-                              
-                                  which_ho_babc = 5         <br>
-                              
-                            
-                          
-                            
-                              
-                                  which_ho_efvs = 2         <br>
-                              
-                            
-                          
-                            
-                              
-                                  which_ho_sparse = 3       <br>
-                              
-                            
-                          
-                            
-                              
-                                  which_ho_nonlinear = 0    <br>
-                              
-                            
-                          
-                          </div>
-                    
-                          <b>[CF input]</b>
-                          <div class="variable">
-                          
-                            
-                              
-                                  name = data/confined-shelf.nc<br>
-                              
-                            
-                          
-                            
-                              
-                                  time = 1<br>
-                              
-                            
-                          
-                          </div>
-                    
-                  </div>
-                  <div class="status">
-                    
-                      <p style="float: left; color: green">Files match</p>
-                    
-                  </div>
-                </div>
-                <div style="clear:both;"></div>
-                <hr>
-            
-                <div class="Configuration">
-                  <!-- Hide and show buttons to allow the user view data more easily -->
-                  <a href="#hideconfined-shelf4" class="hide" id="hideconfined-shelf4">+</a>
-                  <a href="#showconfined-shelf4" class="show" id="showconfined-shelf4">-</a>
                   <h4 class="top">confined-shelf.PIC.config</h4>
                   <div class="sections">
                     <div style="clear:both;"></div>
@@ -1078,6 +913,233 @@
                 <div style="clear:both;"></div>
                 <hr>
             
+                <div class="Configuration">
+                  <!-- Hide and show buttons to allow the user view data more easily -->
+                  <a href="#hideconfined-shelf4" class="hide" id="hideconfined-shelf4">+</a>
+                  <a href="#showconfined-shelf4" class="show" id="showconfined-shelf4">-</a>
+                  <h4 class="top">confined-shelf.glissade.config.large</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    <!-- The changed variable keeps track of whether the files match -->
+                    
+                    
+                          <b>[SHELF-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                          <b>[parameters]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  flow_factor = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  default_flwa = 5.7e-18<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF output]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  variables = thk uvel vvel velnorm<br>
+                              
+                            
+                          
+                            
+                              
+                                  frequency = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  name = data/confined-shelf.gnu.glissade.large.nc<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[grid]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  upn = 5<br>
+                              
+                            
+                          
+                            
+                              
+                                  ewn = 43<br>
+                              
+                            
+                          
+                            
+                              
+                                  nsn = 44<br>
+                              
+                            
+                          
+                            
+                              
+                                  dew = 5000<br>
+                              
+                            
+                          
+                            
+                              
+                                  dns = 5000<br>
+                              
+                            
+                          
+                            
+                              
+                                  sigma_builtin = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[time]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  tstart = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  tend = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt = 1.<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF default]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  comment = Same as experiment 3 from EISMINT-shelf<br>
+                              
+                            
+                          
+                            
+                              
+                                  title = Confined Shelf Experiment (first-order dynamics)<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  dycore = 2                <br>
+                              
+                            
+                          
+                            
+                              
+                                  flow_law = 0              <br>
+                              
+                            
+                          
+                            
+                              
+                                  evolution = 3             <br>
+                              
+                            
+                          
+                            
+                              
+                                  temperature = 0           <br>
+                              
+                            
+                          
+                            
+                              
+                                  marine_margin = 0         <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[ho_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  which_ho_babc = 5         <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_efvs = 2         <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_sparse = 3       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_nonlinear = 0    <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF input]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  name = data/confined-shelf.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  time = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                  </div>
+                  <div class="status">
+                    
+                      <p style="float: left; color: green">Files match</p>
+                    
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            
         
         </div>
         <!-- END CONFIGURATION SECTION -->
@@ -1106,7 +1168,7 @@
       		</tr>
       		
       		<tr>
-      			<td style="text-align: left">confined-shelf.outg</td>
+      			<td style="text-align: left">confined-shelf.outg.large</td>
       			
       			<td>Glissade</td>
       			
@@ -1119,22 +1181,9 @@
       		</tr>
       		
       		<tr>
-      			<td style="text-align: left">confined-shelf.outg.large</td>
+      			<td style="text-align: left">confined-shelf.out</td>
       			
-      			<td>Unavailable</td>
-      			
-      			<td>0</td>
-      			
-      			<td>0</td>
-      			
-      			<td>N/A</td>
-      			
-      		</tr>
-      		
-      		<tr>
-      			<td style="text-align: left">confined-shelf.outp</td>
-      			
-      			<td>Glam</td>
+      			<td>Glissade</td>
       			
       			<td>2</td>
       			
@@ -1145,9 +1194,74 @@
       		</tr>
       		
       		<tr>
-      			<td style="text-align: left">confined-shelf.out</td>
+      			<td style="text-align: left">confined-shelf.outp</td>
       			
-      			<td>Glam</td>
+      			<td>Glissade</td>
+      			
+      			<td>2</td>
+      			
+      			<td>0</td>
+      			
+      			<td>N/A</td>
+      			
+      		</tr>
+      		
+      		<tr>
+      			<td style="text-align: left">._confined-shelf.outg.large</td>
+      			
+      			<td>Glissade</td>
+      			
+      			<td>2</td>
+      			
+      			<td>0</td>
+      			
+      			<td>N/A</td>
+      			
+      		</tr>
+      		
+      		<tr>
+      			<td style="text-align: left">._confined-shelf.outg</td>
+      			
+      			<td>Glissade</td>
+      			
+      			<td>2</td>
+      			
+      			<td>0</td>
+      			
+      			<td>N/A</td>
+      			
+      		</tr>
+      		
+      		<tr>
+      			<td style="text-align: left">._confined-shelf.out</td>
+      			
+      			<td>Glissade</td>
+      			
+      			<td>2</td>
+      			
+      			<td>0</td>
+      			
+      			<td>N/A</td>
+      			
+      		</tr>
+      		
+      		<tr>
+      			<td style="text-align: left">._confined-shelf.outp</td>
+      			
+      			<td>Glissade</td>
+      			
+      			<td>2</td>
+      			
+      			<td>0</td>
+      			
+      			<td>N/A</td>
+      			
+      		</tr>
+      		
+      		<tr>
+      			<td style="text-align: left">confined-shelf.outg</td>
+      			
+      			<td>Glissade</td>
       			
       			<td>2</td>
       			
@@ -1238,7 +1352,10 @@
         <tr>
           <th>Output File</th>
           <th>Status</th>
-          <th>Total Error</th>
+          <th>thk Max |Error| </th>
+          <th>thk RMSE</th>
+          <th>velnorm Max |Error| </th>
+          <th>velnorm RMSE</th>
         </tr>
         
           <tr>
@@ -1301,7 +1418,10 @@
               >FAILURE</a>
             </td>
             
-            	<td>-6.76e+06</td>
+            	<td>0</td>
+            	<td>0</td>
+            	<td>1937</td>
+            	<td>1109</td>
             
           </tr>
         
@@ -2256,11 +2376,11 @@
       		</tr>
       		
       		<tr>
-      			<td style="text-align: left">circular-shelf.outg.large</td>
+      			<td style="text-align: left">circular-shelf.out</td>
       			
       			<td>Glissade</td>
       			
-      			<td>4</td>
+      			<td>2</td>
       			
       			<td>0</td>
       			
@@ -2269,13 +2389,13 @@
       		</tr>
       		
       		<tr>
-      			<td style="text-align: left">circular-shelf.out</td>
+      			<td style="text-align: left">circular-shelf.outg.large</td>
       			
-      			<td>Glam</td>
+      			<td>Glissade</td>
       			
       			<td>2</td>
       			
-      			<td>30</td>
+      			<td>0</td>
       			
       			<td>N/A</td>
       			
@@ -2284,7 +2404,7 @@
       		<tr>
       			<td style="text-align: left">circular-shelf.outp</td>
       			
-      			<td>Glam</td>
+      			<td>Glissade</td>
       			
       			<td>2</td>
       			
@@ -2322,7 +2442,7 @@
 
 	<div id="footer">
 		<p id="info">
-			V&V Performed by bzq at 03-14-2015 16:07:48 <br> 
+			V&V Performed by bzq at 03-20-2015 14:56:46 <br> 
 			Test run of code <br>
 		</p>
 	</div>

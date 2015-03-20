@@ -93,7 +93,7 @@
               <td style="text-align: left">
                 0.01100 
                 
-                  <p style="display: inline; color: green">(-0.000)</p>
+                  <p style="display: inline; color: green">(0.000)</p>
                 
               </td>
               <td style="text-align: left">
@@ -332,7 +332,7 @@
     
                   <a href="#hidedome601" class="hide" id="hidedome601">+</a>
                   <a href="#showdome601" class="show" id="showdome601">-</a>
-                  <h4 class="top">dome.60.glissade.config</h4>
+                  <h4 class="top">dome.60.glide.config</h4>
                   <div class="sections">
                     <div style="clear:both;"></div>
                     
@@ -411,7 +411,7 @@
                           
                             
                               
-                                  dycore = 2              <br>
+                                  dycore = 1              <br>
                               
                             
                           
@@ -452,13 +452,13 @@
                           
                             
                               
-                                  which_ho_sparse = 3     <br>
+                                  which_ho_sparse = 4     <br>
                               
                             
                           
                             
                               
-                                  which_ho_nonlinear = 0  <br>
+                                  which_ho_nonlinear = 1  <br>
                               
                             
                           
@@ -532,7 +532,7 @@
                           
                             
                               
-                                  name = data/dome.60.glissade.out.nc<br>
+                                  name = data/dome.60.glide.out.nc<br>
                               
                             
                           
@@ -772,7 +772,7 @@
     
                   <a href="#hidedome603" class="hide" id="hidedome603">+</a>
                   <a href="#showdome603" class="show" id="showdome603">-</a>
-                  <h4 class="top">dome.60.glide.config</h4>
+                  <h4 class="top">dome.60.glissade.config</h4>
                   <div class="sections">
                     <div style="clear:both;"></div>
                     
@@ -851,7 +851,7 @@
                           
                             
                               
-                                  dycore = 1              <br>
+                                  dycore = 2              <br>
                               
                             
                           
@@ -892,13 +892,13 @@
                           
                             
                               
-                                  which_ho_sparse = 4     <br>
+                                  which_ho_sparse = 3     <br>
                               
                             
                           
                             
                               
-                                  which_ho_nonlinear = 1  <br>
+                                  which_ho_nonlinear = 0  <br>
                               
                             
                           
@@ -972,7 +972,7 @@
                           
                             
                               
-                                  name = data/dome.60.glide.out.nc<br>
+                                  name = data/dome.60.glissade.out.nc<br>
                               
                             
                           
@@ -2245,18 +2245,6 @@
                               
                             
                           
-                            
-                              
-                                  dycore = 2              <br>
-                              
-                            
-                          
-                            
-                              
-                                  temp_init = 2           <br>
-                              
-                            
-                          
                           </div>
                     
                           <b>[ho_options]</b>
@@ -2265,24 +2253,6 @@
                             
                               
                                   which_ho_babc = 4       <br>
-                              
-                            
-                          
-                            
-                              
-                                  which_ho_efvs = 2       <br>
-                              
-                            
-                          
-                            
-                              
-                                  which_ho_sparse = 3     <br>
-                              
-                            
-                          
-                            
-                              
-                                  which_ho_nonlinear = 0  <br>
                               
                             
                           
@@ -2376,11 +2346,6 @@
                                   dycore_input_file = data/input_albany-cism_gis4km.xml<br>
                               
                             
-                          
-                          </div>
-                    
-                          <b>[DOME-TEST]</b>
-                          <div class="variable">
                           
                           </div>
                     
@@ -2765,6 +2730,18 @@
                               
                             
                           
+                            
+                              
+                                  dycore = 2              <br>
+                              
+                            
+                          
+                            
+                              
+                                  temp_init = 2           <br>
+                              
+                            
+                          
                           </div>
                     
                           <b>[ho_options]</b>
@@ -2773,6 +2750,24 @@
                             
                               
                                   which_ho_babc = 4       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_efvs = 2       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_sparse = 3     <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_nonlinear = 0  <br>
                               
                             
                           
@@ -2869,6 +2864,11 @@
                           
                           </div>
                     
+                          <b>[DOME-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
                   </div>
                   <div class="status">
                     
@@ -2895,7 +2895,7 @@
 
 	<div id="footer">
 		<p id="info">
-			V&V Performed by bzq at 03-14-2015 16:07:48 <br> 
+			V&V Performed by bzq at 03-20-2015 14:56:46 <br> 
 			Test run of code <br>
 		</p>
 	</div>

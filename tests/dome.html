@@ -92,7 +92,10 @@
         <tr>
           <th>Output File</th>
           <th>Status</th>
-          <th>Total Error</th>
+          <th>thk Max |Error| </th>
+          <th>thk RMSE</th>
+          <th>velnorm Max |Error| </th>
+          <th>velnorm RMSE</th>
         </tr>
         
           <tr>
@@ -107,7 +110,10 @@
               >FAILURE</a>
             </td>
             
-            	<td>-1.134e+05</td>
+            	<td>0</td>
+            	<td>0</td>
+            	<td>70.04</td>
+            	<td>24.91</td>
             
           </tr>
         
@@ -123,7 +129,10 @@
               >FAILURE</a>
             </td>
             
-            	<td>6.026e+04</td>
+            	<td>0</td>
+            	<td>0</td>
+            	<td>359.1</td>
+            	<td>32.61</td>
             
           </tr>
         
@@ -139,7 +148,10 @@
               >FAILURE</a>
             </td>
             
-            	<td>-0.0002357</td>
+            	<td>0</td>
+            	<td>0</td>
+            	<td>7.451e-06</td>
+            	<td>3.888e-07</td>
             
           </tr>
         
@@ -155,7 +167,10 @@
               >FAILURE</a>
             </td>
             
-            	<td>6.026e+04</td>
+            	<td>0</td>
+            	<td>0</td>
+            	<td>359.1</td>
+            	<td>32.61</td>
             
           </tr>
         
@@ -195,7 +210,10 @@
               >FAILURE</a>
             </td>
             
-            	<td>6.026e+04</td>
+            	<td>0</td>
+            	<td>0</td>
+            	<td>359.1</td>
+            	<td>32.61</td>
             
           </tr>
         
@@ -234,7 +252,8 @@
                           
                             
                               
-                                  upn = 10<br>
+                                  upn = <p style="color: green; display:inline">10000</p> <p style="color: red; display:inline">10</p> <br>
+                                  
                               
                             
                           
@@ -428,7 +447,7 @@
                   </div>
                   <div class="status">
                     
-                      <p style="float: left; color: green">Files match</p>
+                      <p style="float: left; color: red">Files differ</p>
                     
                   </div>
                 </div>
@@ -2894,26 +2913,26 @@
       		</tr>
       		
       		<tr>
-      			<td style="text-align: left">pgi.JFNK.4proc</td>
-      			
-      			<td>Glam</td>
-      			
-      			<td>4</td>
-      			
-      			<td>10</td>
-      			
-      			<td>N/A</td>
-      			
-      		</tr>
-      		
-      		<tr>
       			<td style="text-align: left">gnu.PIC.1proc</td>
       			
       			<td>Glam</td>
       			
       			<td>1</td>
       			
-      			<td>0</td>
+      			<td>11</td>
+      			
+      			<td>N/A</td>
+      			
+      		</tr>
+      		
+      		<tr>
+      			<td style="text-align: left">pgi.JFNK.4proc</td>
+      			
+      			<td>Glam</td>
+      			
+      			<td>1</td>
+      			
+      			<td>11</td>
       			
       			<td>N/A</td>
       			
@@ -2922,11 +2941,11 @@
       		<tr>
       			<td style="text-align: left">pgi.glissade.4proc</td>
       			
-      			<td>Glissade</td>
+      			<td>Glam</td>
       			
-      			<td>4</td>
+      			<td>1</td>
       			
-      			<td>0</td>
+      			<td>11</td>
       			
       			<td>N/A</td>
       			
@@ -2937,35 +2956,9 @@
       			
       			<td>Glam</td>
       			
-      			<td>4</td>
-      			
-      			<td>0</td>
-      			
-      			<td>N/A</td>
-      			
-      		</tr>
-      		
-      		<tr>
-      			<td style="text-align: left">pgi.JFNK.1proc</td>
-      			
-      			<td>Glam</td>
-      			
       			<td>1</td>
       			
-      			<td>10</td>
-      			
-      			<td>N/A</td>
-      			
-      		</tr>
-      		
-      		<tr>
-      			<td style="text-align: left">gnu.JFNK.4proc</td>
-      			
-      			<td>Glam</td>
-      			
-      			<td>4</td>
-      			
-      			<td>30</td>
+      			<td>11</td>
       			
       			<td>N/A</td>
       			
@@ -2974,11 +2967,11 @@
       		<tr>
       			<td style="text-align: left">gnu.glissade.1proc</td>
       			
-      			<td>Glissade</td>
+      			<td>Glam</td>
       			
       			<td>1</td>
       			
-      			<td>0</td>
+      			<td>11</td>
       			
       			<td>N/A</td>
       			
@@ -2986,19 +2979,6 @@
       		
       		<tr>
       			<td style="text-align: left">pgi.glissade.1proc</td>
-      			
-      			<td>Glissade</td>
-      			
-      			<td>1</td>
-      			
-      			<td>0</td>
-      			
-      			<td>N/A</td>
-      			
-      		</tr>
-      		
-      		<tr>
-      			<td style="text-align: left">gnu.JFNK.1proc</td>
       			
       			<td>Glam</td>
       			
@@ -3013,11 +2993,50 @@
       		<tr>
       			<td style="text-align: left">gnu.glissade.4proc</td>
       			
-      			<td>Glissade</td>
+      			<td>Glam</td>
       			
-      			<td>4</td>
+      			<td>1</td>
       			
-      			<td>0</td>
+      			<td>11</td>
+      			
+      			<td>N/A</td>
+      			
+      		</tr>
+      		
+      		<tr>
+      			<td style="text-align: left">pgi.JFNK.1proc</td>
+      			
+      			<td>Glam</td>
+      			
+      			<td>1</td>
+      			
+      			<td>11</td>
+      			
+      			<td>N/A</td>
+      			
+      		</tr>
+      		
+      		<tr>
+      			<td style="text-align: left">gnu.JFNK.4proc</td>
+      			
+      			<td>Glam</td>
+      			
+      			<td>1</td>
+      			
+      			<td>11</td>
+      			
+      			<td>N/A</td>
+      			
+      		</tr>
+      		
+      		<tr>
+      			<td style="text-align: left">gnu.JFNK.1proc</td>
+      			
+      			<td>Glam</td>
+      			
+      			<td>1</td>
+      			
+      			<td>11</td>
       			
       			<td>N/A</td>
       			
@@ -3063,7 +3082,10 @@
         <tr>
           <th>Output File</th>
           <th>Status</th>
-          <th>Total Error</th>
+          <th>thk Max |Error| </th>
+          <th>thk RMSE</th>
+          <th>velnorm Max |Error| </th>
+          <th>velnorm RMSE</th>
         </tr>
         
           <tr>
@@ -3078,7 +3100,10 @@
               >FAILURE</a>
             </td>
             
-            	<td>1.279e+05</td>
+            	<td>184.7</td>
+            	<td>42.36</td>
+            	<td>5.94</td>
+            	<td>0.802</td>
             
           </tr>
         
@@ -3094,7 +3119,10 @@
               >FAILURE</a>
             </td>
             
-            	<td>1418</td>
+            	<td>70.04</td>
+            	<td>4.767</td>
+            	<td>30.14</td>
+            	<td>0.5679</td>
             
           </tr>
         
@@ -3110,7 +3138,10 @@
               >FAILURE</a>
             </td>
             
-            	<td>-1.368e+05</td>
+            	<td>220.2</td>
+            	<td>46.16</td>
+            	<td>5.94</td>
+            	<td>0.8551</td>
             
           </tr>
         
@@ -3126,7 +3157,10 @@
               >FAILURE</a>
             </td>
             
-            	<td>1418</td>
+            	<td>70.04</td>
+            	<td>4.767</td>
+            	<td>30.14</td>
+            	<td>0.5679</td>
             
           </tr>
         
@@ -4511,26 +4545,13 @@
       		</tr>
       		
       		<tr>
-      			<td style="text-align: left">gnu.JFNK.large_proc</td>
+      			<td style="text-align: left">gnu.glissade.small_proc</td>
       			
       			<td>Glam</td>
       			
-      			<td>15</td>
-      			
-      			<td>2</td>
-      			
-      			<td>N/A</td>
-      			
-      		</tr>
-      		
-      		<tr>
-      			<td style="text-align: left">gnu.glissade.small_proc</td>
-      			
-      			<td>Glissade</td>
-      			
       			<td>8</td>
       			
-      			<td>0</td>
+      			<td>30</td>
       			
       			<td>N/A</td>
       			
@@ -4539,11 +4560,24 @@
       		<tr>
       			<td style="text-align: left">gnu.glissade.large_proc</td>
       			
-      			<td>Glissade</td>
+      			<td>Glam</td>
       			
-      			<td>15</td>
+      			<td>8</td>
       			
-      			<td>0</td>
+      			<td>30</td>
+      			
+      			<td>N/A</td>
+      			
+      		</tr>
+      		
+      		<tr>
+      			<td style="text-align: left">gnu.JFNK.large_proc</td>
+      			
+      			<td>Glam</td>
+      			
+      			<td>8</td>
+      			
+      			<td>30</td>
       			
       			<td>N/A</td>
       			
@@ -4577,7 +4611,7 @@
 
 	<div id="footer">
 		<p id="info">
-			V&V Performed by bzq at 03-14-2015 16:07:48 <br> 
+			V&V Performed by bzq at 03-20-2015 14:56:46 <br> 
 			Test run of code <br>
 		</p>
 	</div>
