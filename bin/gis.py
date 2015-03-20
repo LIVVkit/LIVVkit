@@ -7,7 +7,7 @@ Created on Dec 8, 2014
 '''
 
 import livv
-from bin.VV_test import AbstractTest
+from bin.test import AbstractTest
 import jinja2
 
 ## Main class for handling Greenland Ice Sheet test cases.

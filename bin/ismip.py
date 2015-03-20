@@ -11,8 +11,8 @@ import os
 import subprocess
 
 import livv
-from bin.VV_test import AbstractTest
-from bin.VV_parser import Parser
+from bin.test import AbstractTest
+from bin.parser import Parser
 
 ## Main class for handling Ismip test cases.
 #

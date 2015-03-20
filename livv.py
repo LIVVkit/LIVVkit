@@ -7,7 +7,7 @@ For each new module added to LIVV they must be added to this section for the scr
 access them.  Modules that are added internally to LIVV should be added within the __main__
 section of the imports to prevent data from being incorrectly shared & from breaking LIVV 
 as a whole.  System imports can go outside of __main__, though the libraryList in 
-VV_dependencies should be updated if any functionality from outside the standard library is 
+dependencies should be updated if any functionality from outside the standard library is 
 added. 
 
 To add or modify the test groupings there are several places that will need to be modified.
@@ -226,18 +226,18 @@ if __name__ == '__main__':
     print("------------------------------------------------------------------------------")
 
     # Run the dependency checker
-    import bin.VV_dependencies as dependencies
+    import bin.dependencies as dependencies
     dependencies.check()
 
     # Pull in the LIVV specific modules
-    import bin.VV_machines as machines
-    from bin.VV_test import AbstractTest
-    from bin.VV_test import TestSummary
-    from bin.VV_dome import Dome
-    from bin.VV_ismip import Ismip
-    from bin.VV_gis import Gis
-    from bin.VV_shelf import Shelf
-    from bin.VV_performance import Performance
+    import bin.machines as machines
+    from bin.test import AbstractTest
+    from bin.test import TestSummary
+    from bin.dome import Dome
+    from bin.ismip import Ismip
+    from bin.gis import Gis
+    from bin.shelf import Shelf
+    from bin.performance import Performance
 
     # Check if we are saving/loading the configuration and set up the machine name
     if options.machineName == '' and options.save:

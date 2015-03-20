@@ -14,10 +14,10 @@ import itertools
 import jinja2
 
 import livv
-from bin.VV_test import AbstractTest
-from bin.VV_dome import Dome
-from bin.VV_gis import Gis
-from bin.VV_parser import Parser
+from bin.test import AbstractTest
+from bin.dome import Dome
+from bin.gis import Gis
+from bin.parser import Parser
 
 ## Main class for handling performance test cases.
 #
