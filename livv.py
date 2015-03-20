@@ -48,8 +48,8 @@ from collections import OrderedDict
 #                                  Options                                    #
 ###############################################################################
 
-# Carefull here! We just want to get our optional argument choices. Everything 
-# else should be imported in __main__!
+#NOTE: be careful here! We just want to get our optional argument choices. 
+# Everything else should be imported in __main__!
 from bin.dome import choices as dome_choices
 from bin.ismip import choices as ismip_choices
 from bin.gis import choices as gis_choices

@@ -15,8 +15,36 @@ def choose(key):
 
 
 #import livv
-#from bin.test import AbstractTest
+from bin.test import AbstractTest
 
-#class Test(AbstractTest):
-class Test():
-    pass
+class Test(AbstractTest):
+    
+    ## Constructor
+    #
+    def __init__(self):
+        super(self.__class__, self).__init__()
+
+        # Describe what the dome tests are all about
+        self.name = "validation"
+        self.description = "A good description."
+
+    
+    ## Returns the name of the test
+    #
+    #  output:
+    #    @returns name : Dome
+    #
+    def getName(self):
+        return self.name
+
+
+    ## Runs the validation specific test case.  
+    #
+    #  input:
+    #    @param testCase : the string indicator of the test to run
+    #
+    def run(self, testCase):
+        pass
+
+
+
