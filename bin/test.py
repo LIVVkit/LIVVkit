@@ -327,7 +327,7 @@ class TestSummary(AbstractTest):
         # Set up imgs directory to have sub-directories for each test
         for test in testsRun:
             if not os.path.exists(livv.imgDir + os.sep + test + os.sep + "bit4bit"):
-                os.mkdirs(livv.imgDir + os.sep + test + os.sep + "bit4bit")
+                os.makedirs(livv.imgDir + os.sep + test + os.sep + "bit4bit")
 
 
     def generate(self, testsRun, testMapping, testSummary):
