@@ -32,8 +32,6 @@ from numpy import Infinity, mean
 #
 class Parser(object):
 
-
-
     ## Constructor
     #
     def __init__(self):
