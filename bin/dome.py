@@ -10,6 +10,18 @@ import re
 import os
 import subprocess
 
+
+cases = {'none'   : [],
+         'diagnostic' : ['dome30/diagnostic'],
+         'evolving'  : ['dome30/evolving'],
+         'all'    : ['dome30/diagnostic', 'dome30/evolving'],}
+
+def choices():
+    return list( cases.keys() )
+
+def choose(key):
+    return cases[key]
+
 import livv
 from bin.test import AbstractTest
 from bin.parser import Parser

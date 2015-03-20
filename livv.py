@@ -47,13 +47,18 @@ from collections import OrderedDict
 ###############################################################################
 #                                  Options                                    #
 ###############################################################################
+
+# Carefull here! We just want to get our optional argument choices. Everything 
+# else should be imported in __main__!
+from bin.dome import choices as dome_choices
+
 usage_string = "%prog [options]"
 parser = OptionParser(usage=usage_string)
 parser.add_option('--dome', 
                   action='store', 
                   type='choice', 
                   dest='dome', 
-                  choices=['none', 'diagnostic', 'evolving', 'all'], 
+                  choices=dome_choices(), 
                   default='all', 
                   help='specifies the dome tests to run')
 
@@ -291,11 +296,8 @@ if __name__ == '__main__':
     #                              Record Test Cases                              #
     ###############################################################################
     # dome tests
-    domeCases = {'none'   : [],
-                 'diagnostic' : ['dome30/diagnostic'],
-                 'evolving'  : ['dome30/evolving'],
-                 'all'    : ['dome30/diagnostic', 'dome30/evolving'],}
-    runDomeCase = domeCases[dome]
+    from bin.dome import choose as dome_choose
+    runDomeCase = dome_choose(dome)
 
     # ismip tests
     ismipCases = {'none'  : [],
