@@ -118,14 +118,13 @@ class AbstractTest(object):
             comline = ['ncdiff', modelFile, benchFile, modelPath + os.sep + 'temp.nc', '-O']
             try:
                 subprocess.check_call(comline)
-            except subprocess.CalledProcessError as e:
+            except Exception as e:
                 print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
                       + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
-                exit(e.returncode)
-            except OSError as e:
-                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
-                      + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
-                exit(e.errno)
+                try:
+                    exit(e.returncode)
+                except AttributeError:
+                    exit(e.errno)
 
             # Grab the output of ncdiff
             diffData = Dataset(modelPath + os.sep + 'temp.nc', 'r')
@@ -327,10 +326,8 @@ class TestSummary(AbstractTest):
 
         # Set up imgs directory to have sub-directories for each test
         for test in testsRun:
-            if not os.path.exists(livv.imgDir + os.sep + test):
-                os.mkdir(livv.imgDir + os.sep + test)
-                if not os.path.exists(livv.imgDir + os.sep + test + os.sep + "bit4bit"):
-                    os.mkdir(livv.imgDir + os.sep + test + os.sep + "bit4bit")
+            if not os.path.exists(livv.imgDir + os.sep + test + os.sep + "bit4bit"):
+                os.mkdirs(livv.imgDir + os.sep + test + os.sep + "bit4bit")
 
 
     def generate(self, testsRun, testMapping, testSummary):

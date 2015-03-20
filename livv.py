@@ -233,7 +233,6 @@ if __name__ == '__main__':
 
     # Pull in the LIVV specific modules
     import bin.machines as machines
-    from bin.test import AbstractTest
     from bin.test import TestSummary
     from bin import dome
     from bin import ismip
@@ -261,14 +260,14 @@ if __name__ == '__main__':
         globals().update(vars)
 
     # Check if the user has a default config saved and use that if it does
-    if os.path.exists(configDir + os.sep + machineName + "_" + getpass.getuser() + "_default"):
-        machineName = machineName + "_" + getpass.getuser() + "_default"
+    if os.path.exists(configDir + os.sep + machineName + "_" + user + "_default"):
+        machineName = machineName + "_" + user + "_default"
         vars = machines.load(machineName)
         globals().update(vars)
 
     # Print out some information
     print("\n  Current run: " + time.strftime("%m-%d-%Y %H:%M:%S"))
-    print("  User: " + getpass.getuser())
+    print("  User: " + user)
     print("  Config: " + machineName)
     print("  OS Type: " + platform.system() + " " + platform.release())
     print("  " + comment)
@@ -317,7 +316,7 @@ if __name__ == '__main__':
     print("")
 
     # Run the tests
-    testResults, bit4bitResults, testSummary = [], [], []
+    testSummary = []
     print("Beginning test suite....")
 
     summary = TestSummary()
