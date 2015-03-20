@@ -13,18 +13,29 @@ import glob
 import itertools
 import jinja2
 
+
+cases = {'none' : [],
+         'small' : ['dome60', 'gis_4km'],
+         'medium' : ['dome120', 'gis_2km'],
+         'large' : ['dome240', 'gis_1km']}
+
+def choices():
+    return list( cases.keys() )
+
+def choose(key):
+    return cases[key]
+
+
 import livv
-from bin.VV_test import AbstractTest
-from bin.VV_dome import Dome
-from bin.VV_gis import Gis
-from bin.VV_parser import Parser
+from bin.test import AbstractTest
+from bin.parser import Parser
 
 ## Main class for handling performance test cases.
 #
 #  The performance test cases inherit functionality from AbstractTest for checking
 #  bit-for-bittedness as well as for parsing standard output from a model run.
 #
-class Performance(AbstractTest):
+class Test(AbstractTest):
 
     ## Constructor
     #

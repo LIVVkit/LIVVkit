@@ -10,9 +10,21 @@ import re
 import os
 import subprocess
 
+cases = {'none' : [],
+         'confined' : ['confined-shelf'],
+         'circular' : ['circular-shelf'],
+         'all' : ['confined-shelf', 'circular-shelf']}
+
+def choices():
+    return list( cases.keys() )
+
+def choose(key):
+    return cases[key]
+
+
 import livv
-from bin.VV_test import AbstractTest
-from bin.VV_parser import Parser
+from bin.test import AbstractTest
+from bin.parser import Parser
 
 # # Main class for handling shelf test cases.
 #
@@ -20,7 +32,7 @@ from bin.VV_parser import Parser
 #  bit-for-bittedness as well as for parsing standard output from a model run.
 #  This class handles the confined and circular variations of the shelf cases.
 #
-class Shelf(AbstractTest):
+class Test(AbstractTest):
 
     ## Constructor
     #

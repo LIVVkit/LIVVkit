@@ -10,9 +10,22 @@ import re
 import os
 import subprocess
 
+
+cases = {'none'  : [],
+         'small' : ['ismip-hom-a/80km', 'ismip-hom-c/80km'],
+         'large' : ['ismip-hom-a/20km', 'ismip-hom-c/20km'],
+         'all'   : ['ismip-hom-a/20km', 'ismip-hom-c/20km', 'ismip-hom-a/80km', 'ismip-hom-c/80km']}
+
+def choices():
+    return list( cases.keys() )
+
+def choose(key):
+    return cases[key]
+
+
 import livv
-from bin.VV_test import AbstractTest
-from bin.VV_parser import Parser
+from bin.test import AbstractTest
+from bin.parser import Parser
 
 ## Main class for handling Ismip test cases.
 #
@@ -20,7 +33,7 @@ from bin.VV_parser import Parser
 #  bit-for-bittedness as well as for parsing standard output from a model run.
 #  This class handles the Ismip-hom a and c tests for resolutions of 20km and 80km.
 #
-class Ismip(AbstractTest):
+class Test(AbstractTest):
 
     ## Constructor
     #

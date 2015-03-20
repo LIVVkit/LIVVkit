@@ -7,7 +7,7 @@ For each new module added to LIVV they must be added to this section for the scr
 access them.  Modules that are added internally to LIVV should be added within the __main__
 section of the imports to prevent data from being incorrectly shared & from breaking LIVV 
 as a whole.  System imports can go outside of __main__, though the libraryList in 
-VV_dependencies should be updated if any functionality from outside the standard library is 
+dependencies should be updated if any functionality from outside the standard library is 
 added. 
 
 To add or modify the test groupings there are several places that will need to be modified.
@@ -47,13 +47,23 @@ from collections import OrderedDict
 ###############################################################################
 #                                  Options                                    #
 ###############################################################################
+
+#NOTE: be careful here! We just want to get our optional argument choices. 
+# Everything else should be imported in __main__!
+from bin.dome import choices as dome_choices
+from bin.ismip import choices as ismip_choices
+from bin.gis import choices as gis_choices
+from bin.shelf import choices as shelf_choices
+from bin.performance import choices as perf_choices
+from bin.validation import choices as validation_choices
+
 usage_string = "%prog [options]"
 parser = OptionParser(usage=usage_string)
 parser.add_option('--dome', 
                   action='store', 
                   type='choice', 
                   dest='dome', 
-                  choices=['none', 'diagnostic', 'evolving', 'all'], 
+                  choices=dome_choices(), 
                   default='all', 
                   help='specifies the dome tests to run')
 
@@ -61,7 +71,7 @@ parser.add_option('--gis',
                   action='store', 
                   type='choice',
                   dest='gis', 
-                  choices=['none', 'small', 'medium', 'large'], 
+                  choices=gis_choices(), 
                   default='none', 
                   help='specifies the gis tests to run')
 
@@ -69,7 +79,7 @@ parser.add_option('--ismip',
                   action='store', 
                   type='choice', 
                   dest='ismip', 
-                  choices=['none', 'small', 'large', 'all'], 
+                  choices=ismip_choices(), 
                   default='all', 
                   help='specifies the ismip tests to run')
 
@@ -77,7 +87,7 @@ parser.add_option('--validation',
                   action='store', 
                   type='choice', 
                   dest='validation', 
-                  choices=['none', 'small', 'large'], 
+                  choices=validation_choices(), 
                   default='none', 
                   help='specifies the validation tests to run')
 
@@ -85,7 +95,7 @@ parser.add_option('--shelf',
                   action='store', 
                   type='choice', 
                   dest='shelf', 
-                  choices=['none', 'confined', 'circular', 'all'], 
+                  choices=shelf_choices(), 
                   default='all', 
                   help='specifies the shelf tests to run')
 
@@ -93,7 +103,7 @@ parser.add_option('--performance',
                   action='store', 
                   type='choice', 
                   dest='perf', 
-                  choices=['none', 'small', 'medium', 'large'], 
+                  choices=perf_choices(), 
                   default='none', 
                   help='specifies the performance tests to run')
 
@@ -201,14 +211,6 @@ parserDict = OrderedDict()
 for var in parserVars: parserDict[var] = None
 parserVars = parserDict
 
-# Test related variables
-dome = options.dome
-ismip = options.ismip
-gis = options.gis
-shelf = options.shelf
-validation = options.validation
-perf = options.perf
-
 # Website related variables
 websiteDir = os.path.dirname(__file__) + "/web"
 templateDir = websiteDir + "/templates"
@@ -226,18 +228,18 @@ if __name__ == '__main__':
     print("------------------------------------------------------------------------------")
 
     # Run the dependency checker
-    import bin.VV_dependencies as dependencies
+    import bin.dependencies as dependencies
     dependencies.check()
 
     # Pull in the LIVV specific modules
-    import bin.VV_machines as machines
-    from bin.VV_test import AbstractTest
-    from bin.VV_test import TestSummary
-    from bin.VV_dome import Dome
-    from bin.VV_ismip import Ismip
-    from bin.VV_gis import Gis
-    from bin.VV_shelf import Shelf
-    from bin.VV_performance import Performance
+    import bin.machines as machines
+    from bin.test import TestSummary
+    from bin import dome
+    from bin import ismip
+    from bin import gis
+    from bin import shelf
+    from bin import performance
+    from bin import validation
 
     # Check if we are saving/loading the configuration and set up the machine name
     if options.machineName == '' and options.save:
@@ -258,14 +260,14 @@ if __name__ == '__main__':
         globals().update(vars)
 
     # Check if the user has a default config saved and use that if it does
-    if os.path.exists(configDir + os.sep + machineName + "_" + getpass.getuser() + "_default"):
-        machineName = machineName + "_" + getpass.getuser() + "_default"
+    if os.path.exists(configDir + os.sep + machineName + "_" + user + "_default"):
+        machineName = machineName + "_" + user + "_default"
         vars = machines.load(machineName)
         globals().update(vars)
 
     # Print out some information
     print("\n  Current run: " + time.strftime("%m-%d-%Y %H:%M:%S"))
-    print("  User: " + getpass.getuser())
+    print("  User: " + user)
     print("  Config: " + machineName)
     print("  OS Type: " + platform.system() + " " + platform.release())
     print("  " + comment)
@@ -290,54 +292,15 @@ if __name__ == '__main__':
     ###############################################################################
     #                              Record Test Cases                              #
     ###############################################################################
-    # dome tests
-    domeCases = {'none'   : [],
-                 'diagnostic' : ['dome30/diagnostic'],
-                 'evolving'  : ['dome30/evolving'],
-                 'all'    : ['dome30/diagnostic', 'dome30/evolving'],}
-    runDomeCase = domeCases[dome]
-
-    # ismip tests
-    ismipCases = {'none'  : [],
-                  'small' : ['ismip-hom-a/80km', 'ismip-hom-c/80km'],
-                  'large' : ['ismip-hom-a/20km', 'ismip-hom-c/20km'],
-                  'all'   : ['ismip-hom-a/20km', 'ismip-hom-c/20km', 'ismip-hom-a/80km', 'ismip-hom-c/80km']}
-    runIsmipCase = ismipCases[ismip]
-
-    # gis tests
-    gisCases = {'none'   : [],
-                'small'  : ['gis_4km'],
-                'medium' : ['gis_2km'],
-                'large'  : ['gis_1km']}
-    runGisCase = gisCases[gis]
-
-    # validation tests
-    validationCases = {'none' : [],
-                       'small' : ['RUN_VALIDATION'],
-                       'large' : ['RUN_VALIDATION', 'RUN_VAL_COUPLED', 'RUN_VAL_DATA', 'RUN_VAL_YEARS', 'RUN_VAL_RANGE']}
-    runValidationCase = validationCases[validation]
-
-    # shelf tests
-    shelfCases = {'none' : [],
-                  'confined' : ['confined-shelf'],
-                  'circular' : ['circular-shelf'],
-                  'all' : ['confined-shelf', 'circular-shelf']}
-    runShelfCase = shelfCases[shelf]
-
-    # performance tests
-    perfCases = {'none' : [],
-                 'small' : ['dome60', 'gis_4km'],
-                 'medium' : ['dome120', 'gis_2km'],
-                 'large' : ['dome240', 'gis_1km']}
-    runPerfCase = perfCases[perf]
 
     # Describes the test module and the cases to run for said module
     #NOTE: Each of these modules can be found in livv_bin
-    testMapping = {"dome" : (Dome, runDomeCase),
-                   "ismip" : (Ismip, runIsmipCase),
-                   "gis" : (Gis, runGisCase),
-                   "shelf" : (Shelf, runShelfCase),
-                   "performance" : (Performance, runPerfCase),
+    testMapping = {"dome" : ( dome.Test, dome.choose(options.dome) ),
+                   "ismip" : ( ismip.Test, ismip.choose(options.ismip) ),
+                   "gis" : ( gis.Test, gis.choose(options.gis) ),
+                   "shelf" : ( shelf.Test, shelf.choose(options.shelf) ),
+                   "performance" : ( performance.Test, performance.choose(options.perf) ),
+                   "validation" : ( validation.Test, validation.choose(options.validation) ),
                    }
     
     # git the keys for all non-empty test cases
@@ -353,7 +316,7 @@ if __name__ == '__main__':
     print("")
 
     # Run the tests
-    testResults, bit4bitResults, testSummary = [], [], []
+    testSummary = []
     print("Beginning test suite....")
 
     summary = TestSummary()

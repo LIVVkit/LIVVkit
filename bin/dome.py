@@ -10,9 +10,22 @@ import re
 import os
 import subprocess
 
+
+cases = {'none'   : [],
+         'diagnostic' : ['dome30/diagnostic'],
+         'evolving'  : ['dome30/evolving'],
+         'all'    : ['dome30/diagnostic', 'dome30/evolving'],}
+
+def choices():
+    return list( cases.keys() )
+
+def choose(key):
+    return cases[key]
+
+
 import livv
-from bin.VV_test import AbstractTest
-from bin.VV_parser import Parser
+from bin.test import AbstractTest
+from bin.parser import Parser
 
 ## Main class for handling dome test cases.
 #
@@ -20,7 +33,7 @@ from bin.VV_parser import Parser
 #  bit-for-bittedness as well as for parsing standard output from a model run.
 #  This class handles evolving and diagnostic variations of the dome case.
 #
-class Dome(AbstractTest):
+class Test(AbstractTest):
 
     ## Constructor
     #
