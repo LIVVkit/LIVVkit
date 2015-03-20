@@ -225,7 +225,7 @@ class Test(AbstractTest):
         # Search for the std output files
         evolvingDir = livv.inputDir + os.sep + "dome" + resolution + os.sep + "evolving" + os.sep + livv.dataDir 
         evolvingBenchDir = livv.benchmarkDir + os.sep + "dome" + resolution + os.sep + "evolving" + os.sep + livv.dataDir
-        
+
         try:
             files = os.listdir(evolvingDir)
         except:

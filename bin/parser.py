@@ -32,6 +32,8 @@ from numpy import Infinity, mean
 #
 class Parser(object):
 
+
+
     ## Constructor
     #
     def __init__(self):
@@ -42,6 +44,9 @@ class Parser(object):
         self.nConfigParsed = 0
         self.nConfigMatched = 0
 
+        # Build an empty ordered dictionary so that the output prints in a nice order
+        self.stdOutData = OrderedDict()
+        for var in livv.parserVars: self.stdOutData[var] = None
 
     ## Get some details about what was parsed
     #
@@ -145,13 +150,10 @@ class Parser(object):
     #    @param file: the file to parse through
     #
     #  output:
-    #    @param testDict: a mapping of the various parameters to
+    #    @param stdOutData: a mapping of the various parameters to
     #      their values from the file
     #
     def parseOutput(self, file):
-        # Initialize a dictionary that will store all of the information
-        testDict = livv.parserVars.copy()
-
         # Set up variables that we can use to map data and information
         dycoreTypes = {"0" : "Glide", "1" : "Glam", "2" : "Glissade", "3" : "AlbanyFelix", "4" : "BISICLES"}
         numberProcs = 0
@@ -173,9 +175,9 @@ class Parser(object):
             #Determine the dycore type
             if ('CISM dycore type' in line):
                 if line.split()[-1] == '=':
-                    testDict['Dycore Type'] = dycoreTypes[next(logfile).strip()]
+                    self.stdOutData['Dycore Type'] = dycoreTypes[next(logfile).strip()]
                 else:
-                    testDict['Dycore Type'] = dycoreTypes[line.split()[-1]]
+                    self.stdOutData['Dycore Type'] = dycoreTypes[line.split()[-1]]
 
             # Calculate the total number of processors used
             if ('total procs' in line):
@@ -202,18 +204,18 @@ class Parser(object):
         if (len(itersToConverge) > 0):
             avgItersToConverge = sum(itersToConverge) / len(itersToConverge)
 
-        # Record some of the data in the testDict
-        testDict['Number of processors'] = numberProcs
-        testDict['Number of timesteps'] = currentStep
+        # Record some of the data in the self.stdOutData
+        self.stdOutData['Number of processors'] = numberProcs
+        self.stdOutData['Number of timesteps'] = currentStep
         if avgItersToConverge > 0:
-            testDict['Average iterations to converge'] = avgItersToConverge 
+            self.stdOutData['Average iterations to converge'] = avgItersToConverge 
 
-        if testDict['Dycore Type'] == None: testDict['Dycore Type'] = 'Unavailable'
-        for key in testDict.keys():
-            if testDict[key] == None:
-                testDict[key] = 'N/A'
+        if self.stdOutData['Dycore Type'] == None: self.stdOutData['Dycore Type'] = 'Unavailable'
+        for key in self.stdOutData.keys():
+            if self.stdOutData[key] == None:
+                self.stdOutData[key] = 'N/A'
 
-        return testDict
+        return self.stdOutData
 
 
     ## Search through gptl timing files

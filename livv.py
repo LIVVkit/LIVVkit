@@ -17,6 +17,12 @@ last place that will need to be modified is in the RECORD TEST CASES section whe
 tests being run in a particular execution are resolved, and those test cases mapped to the 
 delegate test classes (found in livv_bin).
 
+Some information stored in the GLOBAL VARIABLES section may be of interest.  If modifications to
+LIVV require that new modules be loaded on LCF machines they can be defined in the modules variable.
+These modules are automatically checked by the dependency checker before running the test cases.
+The definitions for the variables pulled from standard output files is also recorded here.  If the
+parser needs to look for new information the variables of interest should be added to this list.
+
 Execution of LIVV proceeds in the RUN TEST CASES section where the totality of the test 
 cases are recorded and run grouped by their respective delegate classes.  Each test case
 is run using the run method in the class.  This method will run common functionality then
@@ -26,13 +32,13 @@ tests.
 
 Created on Dec 3, 2014
 
-@author: arbennett
+@authors: arbennett, jhkennedy
 '''
 
 ###############################################################################
 #                                  Imports                                    #
 ###############################################################################
-    
+
 # Standard python imports can be loaded any time
 import os
 import time
@@ -205,11 +211,7 @@ parserVars = [
               'Number of processors',
               'Number of timesteps',
               'Avg convergence rate'
-              ]
-# Build an empty ordered dictionary so that the output prints in a nice order
-parserDict = OrderedDict()
-for var in parserVars: parserDict[var] = None
-parserVars = parserDict
+             ]
 
 # Website related variables
 websiteDir = os.path.dirname(__file__) + "/web"
@@ -234,12 +236,7 @@ if __name__ == '__main__':
     # Pull in the LIVV specific modules
     import bin.machines as machines
     from bin.test import TestSummary
-    from bin import dome
-    from bin import ismip
-    from bin import gis
-    from bin import shelf
-    from bin import performance
-    from bin import validation
+    from bin import dome, ismip, gis, shelf, performance, validation
 
     # Check if we are saving/loading the configuration and set up the machine name
     if options.machineName == '' and options.save:
@@ -302,10 +299,10 @@ if __name__ == '__main__':
                    "performance" : ( performance.Test, performance.choose(options.perf) ),
                    "validation" : ( validation.Test, validation.choose(options.validation) ),
                    }
-    
-    # git the keys for all non-empty test cases
+
+    # Get the keys for all non-empty test cases
     testsRun = list( itertools.compress( testMapping.keys(), [val[1] for val in testMapping.values()]) )
-    
+
     ###############################################################################
     #                               Run Test Cases                                #
     ###############################################################################
