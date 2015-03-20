@@ -51,6 +51,11 @@ from collections import OrderedDict
 # Carefull here! We just want to get our optional argument choices. Everything 
 # else should be imported in __main__!
 from bin.dome import choices as dome_choices
+from bin.ismip import choices as ismip_choices
+from bin.gis import choices as gis_choices
+from bin.shelf import choices as shelf_choices
+from bin.performance import choices as perf_choices
+from bin.validation import choices as validation_choices
 
 usage_string = "%prog [options]"
 parser = OptionParser(usage=usage_string)
@@ -66,7 +71,7 @@ parser.add_option('--gis',
                   action='store', 
                   type='choice',
                   dest='gis', 
-                  choices=['none', 'small', 'medium', 'large'], 
+                  choices=gis_choices(), 
                   default='none', 
                   help='specifies the gis tests to run')
 
@@ -74,7 +79,7 @@ parser.add_option('--ismip',
                   action='store', 
                   type='choice', 
                   dest='ismip', 
-                  choices=['none', 'small', 'large', 'all'], 
+                  choices=ismip_choices(), 
                   default='all', 
                   help='specifies the ismip tests to run')
 
@@ -82,7 +87,7 @@ parser.add_option('--validation',
                   action='store', 
                   type='choice', 
                   dest='validation', 
-                  choices=['none', 'small', 'large'], 
+                  choices=validation_choices(), 
                   default='none', 
                   help='specifies the validation tests to run')
 
@@ -90,7 +95,7 @@ parser.add_option('--shelf',
                   action='store', 
                   type='choice', 
                   dest='shelf', 
-                  choices=['none', 'confined', 'circular', 'all'], 
+                  choices=shelf_choices(), 
                   default='all', 
                   help='specifies the shelf tests to run')
 
@@ -98,7 +103,7 @@ parser.add_option('--performance',
                   action='store', 
                   type='choice', 
                   dest='perf', 
-                  choices=['none', 'small', 'medium', 'large'], 
+                  choices=perf_choices(), 
                   default='none', 
                   help='specifies the performance tests to run')
 
@@ -206,14 +211,6 @@ parserDict = OrderedDict()
 for var in parserVars: parserDict[var] = None
 parserVars = parserDict
 
-# Test related variables
-dome = options.dome
-ismip = options.ismip
-gis = options.gis
-shelf = options.shelf
-validation = options.validation
-perf = options.perf
-
 # Website related variables
 websiteDir = os.path.dirname(__file__) + "/web"
 templateDir = websiteDir + "/templates"
@@ -238,11 +235,12 @@ if __name__ == '__main__':
     import bin.machines as machines
     from bin.test import AbstractTest
     from bin.test import TestSummary
-    from bin.dome import Dome
-    from bin.ismip import Ismip
-    from bin.gis import Gis
-    from bin.shelf import Shelf
-    from bin.performance import Performance
+    from bin import dome
+    from bin import ismip
+    from bin import gis
+    from bin import shelf
+    from bin import performance
+    from bin import validation
 
     # Check if we are saving/loading the configuration and set up the machine name
     if options.machineName == '' and options.save:
@@ -295,51 +293,15 @@ if __name__ == '__main__':
     ###############################################################################
     #                              Record Test Cases                              #
     ###############################################################################
-    # dome tests
-    from bin.dome import choose as dome_choose
-    runDomeCase = dome_choose(dome)
-
-    # ismip tests
-    ismipCases = {'none'  : [],
-                  'small' : ['ismip-hom-a/80km', 'ismip-hom-c/80km'],
-                  'large' : ['ismip-hom-a/20km', 'ismip-hom-c/20km'],
-                  'all'   : ['ismip-hom-a/20km', 'ismip-hom-c/20km', 'ismip-hom-a/80km', 'ismip-hom-c/80km']}
-    runIsmipCase = ismipCases[ismip]
-
-    # gis tests
-    gisCases = {'none'   : [],
-                'small'  : ['gis_4km'],
-                'medium' : ['gis_2km'],
-                'large'  : ['gis_1km']}
-    runGisCase = gisCases[gis]
-
-    # validation tests
-    validationCases = {'none' : [],
-                       'small' : ['RUN_VALIDATION'],
-                       'large' : ['RUN_VALIDATION', 'RUN_VAL_COUPLED', 'RUN_VAL_DATA', 'RUN_VAL_YEARS', 'RUN_VAL_RANGE']}
-    runValidationCase = validationCases[validation]
-
-    # shelf tests
-    shelfCases = {'none' : [],
-                  'confined' : ['confined-shelf'],
-                  'circular' : ['circular-shelf'],
-                  'all' : ['confined-shelf', 'circular-shelf']}
-    runShelfCase = shelfCases[shelf]
-
-    # performance tests
-    perfCases = {'none' : [],
-                 'small' : ['dome60', 'gis_4km'],
-                 'medium' : ['dome120', 'gis_2km'],
-                 'large' : ['dome240', 'gis_1km']}
-    runPerfCase = perfCases[perf]
 
     # Describes the test module and the cases to run for said module
     #NOTE: Each of these modules can be found in livv_bin
-    testMapping = {"dome" : (Dome, runDomeCase),
-                   "ismip" : (Ismip, runIsmipCase),
-                   "gis" : (Gis, runGisCase),
-                   "shelf" : (Shelf, runShelfCase),
-                   "performance" : (Performance, runPerfCase),
+    testMapping = {"dome" : ( dome.Test, dome.choose(options.dome) ),
+                   "ismip" : ( ismip.Test, ismip.choose(options.ismip) ),
+                   "gis" : ( gis.Test, gis.choose(options.gis) ),
+                   "shelf" : ( shelf.Test, shelf.choose(options.shelf) ),
+                   "performance" : ( performance.Test, performance.choose(options.perf) ),
+                   "validation" : ( validation.Test, validation.choose(options.validation) ),
                    }
     
     # git the keys for all non-empty test cases

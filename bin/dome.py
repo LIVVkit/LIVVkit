@@ -22,6 +22,7 @@ def choices():
 def choose(key):
     return cases[key]
 
+
 import livv
 from bin.test import AbstractTest
 from bin.parser import Parser
@@ -32,7 +33,7 @@ from bin.parser import Parser
 #  bit-for-bittedness as well as for parsing standard output from a model run.
 #  This class handles evolving and diagnostic variations of the dome case.
 #
-class Dome(AbstractTest):
+class Test(AbstractTest):
 
     ## Constructor
     #

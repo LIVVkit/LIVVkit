@@ -5,6 +5,17 @@ Created on Dec 8, 2014
 
 @author: arbennett
 '''
+cases = {'none'   : [],
+         'small'  : ['gis_4km'],
+         'medium' : ['gis_2km'],
+         'large'  : ['gis_1km']}
+
+def choices():
+    return list( cases.keys() )
+
+def choose(key):
+    return cases[key]
+
 
 import livv
 from bin.test import AbstractTest
@@ -16,7 +27,7 @@ import jinja2
 #  bit-for-bittedness as well as for parsing standard output from a model run.
 #  This class handles resolutions of 4km, 2km, and 1km.
 #
-class Gis(AbstractTest):
+class Test(AbstractTest):
     
     ## Constructor
     #
