@@ -27,24 +27,22 @@ begin
 
   velvarbl9    = VAR9->velnorm(40,1,:,:)
   veldiff9     = new((/30,30/),float);
-  veldiff9     = velvarbl9(:,:)-velstock9(:,:);
 
   velvarbl15   = VAR15->velnorm(40,1,:,:)
   veldiff15    = new((/30,30/),float);
-  veldiff15    = velvarbl15(:,:)-velstock15(:,:);
 
   vs9   = velstock9@scale_factor  * velstock9
   vs15  = velstock15@scale_factor * velstock15
   vv9   = velvarbl9@scale_factor  * velvarbl9
   vv15  = velvarbl15@scale_factor * velvarbl15
-  vd9   = velvarbl9@scale_factor  * veldiff9
-  vd15  = velvarbl15@scale_factor * veldiff15
+  vd9   = vv9 - vs9
+  vd15  = vv15 - vs15
   vs9@long_name    = "Small Proc Scaled Benchmark"
   vs15@long_name   = "Large Proc Scaled Benchmark"
   vv9@long_name    = "Small Proc Scaled Current Run"
   vv15@long_name   = "Large Proc Scaled Current Run"
-  vd9@long_name    = "Small Proc Scaled Difference"
-  vd15@long_name   = "Large Proc Scaled Difference"
+  vd9@long_name    = "Small Proc Difference"
+  vd15@long_name   = "Large Proc Difference"
 
 ;************************************************
 ; create plots
