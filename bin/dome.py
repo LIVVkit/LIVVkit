@@ -189,6 +189,10 @@ class Test(AbstractTest):
         plotCommand = "ncl '" + bench1 + "' '" + bench4 + "'  '" + test1 + "' '" + test4 + \
                     "' '" + path + "' " + plotFile 
 
+        with open(livv.f_com,'a') as f:
+            f.write('# Dome:\n')
+            f.write(plotCommand+'\n')
+
         # Be cautious about running subprocesses
         call = subprocess.Popen(plotCommand, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdOut, stdErr = call.stdout.read(), call.stderr.read()
@@ -298,6 +302,10 @@ class Test(AbstractTest):
         # The plot command to run
         plotCommand = "ncl '" + bench1 + "' '" + bench4 + "'  '" + test1 + "' '" + test4 + \
                     "' '" + path + "' " + plotFile
+
+        with open(livv.f_com,'a') as f:
+            f.write('# Dome:\n')
+            f.write(plotCommand+'\n')
 
         # Be cautious about running subprocesses
         call = subprocess.Popen(plotCommand, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
