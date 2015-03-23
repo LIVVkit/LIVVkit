@@ -238,7 +238,7 @@ class Parser(object):
 
             # Make sure that there are enough files to parse 
             if nTimingFiles < 9:
-                print("        Could not generate " + dycore + " timing summary.  Need to have at least 10 samples, but only found " + str(len(subDirs)) + "!")
+                print("        Could not generate " + dycore + " timing summary.  Need to have at least 10 samples, but only found " + str(nTimingFiles) + "!")
                 # Build the output data-structure
                 timingDetails['Simple Glide'] = None
                 timingDetails['Velocity Driver'] = None

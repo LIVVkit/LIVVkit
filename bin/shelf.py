@@ -126,7 +126,7 @@ class Test(AbstractTest):
         numberBitTests, numberBitMatches = 0, 0
         self.bitForBitDetails['confined-shelf'] = self.bit4bit('/confined-shelf')
         for key, value in self.bitForBitDetails['confined-shelf'].iteritems():
-            print ("    {:<30} {:<10}".format(key, value[0]))
+            print ("    {:<40} {:<10}".format(key, value[0]))
             if value[0] == "SUCCESS": numberBitMatches+=1
             numberBitTests+=1
 
@@ -259,7 +259,7 @@ class Test(AbstractTest):
         numberBitTests, numberBitMatches = 0, 0
         self.bitForBitDetails['circular-shelf'] = self.bit4bit('/circular-shelf')
         for key, value in self.bitForBitDetails['circular-shelf'].iteritems():
-            print ("    {:<30} {:<10}".format(key, value[0]))
+            print ("    {:<40} {:<10}".format(key, value[0]))
             if value[0] == "SUCCESS": numberBitMatches+=1
             numberBitTests+=1
 

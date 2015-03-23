@@ -140,7 +140,7 @@ class Test(AbstractTest):
         numberBitTests, numberBitMatches = 0, 0
         self.bitForBitDetails[testName] = self.bit4bit(os.sep + testName)
         for key, value in self.bitForBitDetails[testName].iteritems():
-            print ("    {:<30} {:<10}".format(key,value[0]))
+            print ("    {:<40} {:<10}".format(key,value[0]))
             if value[0] == "SUCCESS": numberBitMatches+=1
             numberBitTests+=1
 

@@ -147,7 +147,7 @@ class Test(AbstractTest):
         numberBitTests, numberBitMatches = 0, 0
         self.bitForBitDetails['dome' + resolution + os.sep + 'diagnostic'] = self.bit4bit(os.sep + 'dome' + resolution + os.sep + 'diagnostic')
         for key, value in self.bitForBitDetails['dome' + resolution + os.sep + 'diagnostic'].iteritems():
-            print ("    {:<30} {:<10}".format(key,value[0]))
+            print ("    {:<40} {:<10}".format(key,value[0]))
             if value[0] == "SUCCESS": numberBitMatches+=1
             numberBitTests+=1
 
@@ -257,7 +257,7 @@ class Test(AbstractTest):
         numberBitMatches, numberBitTests = 0, 0
         self.bitForBitDetails['dome' + resolution + os.sep +'evolving'] = self.bit4bit(os.sep + 'dome' + resolution + os.sep + 'evolving')
         for key, value in self.bitForBitDetails['dome' + resolution + os.sep + 'evolving'].iteritems():
-            print ("    {:<30} {:<10}".format(key,value[0]))
+            print ("    {:<40} {:<10}".format(key,value[0]))
             if value[0] == "SUCCESS": numberBitMatches+=1
             numberBitTests+=1
 

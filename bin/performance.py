@@ -41,7 +41,7 @@ class Test(AbstractTest):
     #
     def __init__(self):
         super(self.__class__, self).__init__()
-        
+
         # Structure for these is:
         #  {*TimingData : {testName : {dycoreType : {solverVariable : [avg, min, max] } } } } 
         self.modelTimingData = dict()
@@ -50,11 +50,6 @@ class Test(AbstractTest):
         # Describe what the performance tests are all about
         self.name = "performance"
         self.description = "Tests the performance of various test cases." 
-
-        print("--------------------------------------------------------------------------")
-        print("  Beginning performance testing....")
-        print("--------------------------------------------------------------------------")
-
 
 
     ## Returns the name of the test
@@ -160,7 +155,7 @@ class Test(AbstractTest):
         if os.path.exists(perfDir) and os.path.exists(perfBenchDir):
             files = os.listdir(perfDir)
             test = re.compile("^out.gis." + resolution + ".((albany)|(glissade))$")
-            files = filter(test.search, files)            
+            files = filter(test.search, files)
         else:
             files = []
             print("    Could not find model and benchmark directories for gis_" + resolution +".")

@@ -296,33 +296,57 @@ if __name__ == '__main__':
                    "ismip" : ( ismip.Test, ismip.choose(options.ismip) ),
                    "gis" : ( gis.Test, gis.choose(options.gis) ),
                    "shelf" : ( shelf.Test, shelf.choose(options.shelf) ),
-                   "performance" : ( performance.Test, performance.choose(options.perf) ),
                    "validation" : ( validation.Test, validation.choose(options.validation) ),
                    }
 
+    perfMapping = {"performance" : ( performance.Test, performance.choose(options.perf) )}
+
     # Get the keys for all non-empty test cases
     testsRun = list( itertools.compress( testMapping.keys(), [val[1] for val in testMapping.values()]) )
+    perfTestsRun = list( itertools.compress( perfMapping.keys(), [val[1] for val in perfMapping.values()]) )
 
     ###############################################################################
     #                               Run Test Cases                                #
     ###############################################################################
-    print("Running tests:")
+    print("Running V&V tests:")
     for case in itertools.chain.from_iterable( [testMapping[test][1] for test in testsRun] ): 
         print("  " + case)
-    print("------------------------------------------------------------------------------")
+    print("")
+    print("Running performance tests:")
+    for case in itertools.chain.from_iterable( [perfMapping[test][1] for test in perfTestsRun] ): 
+        print("  " + case)
     print("")
 
     # Run the tests
     testSummary = []
-    print("Beginning test suite....")
-
     summary = TestSummary()
     summary.webSetup(testsRun)
+
+    print("--------------------------------------------------------------------------")
+    print("  Beginning V&V test suite....")
+    print("--------------------------------------------------------------------------")
+    # Run the V&V Tests
     for test in testsRun:
         # Create a new instance of the specific test class (see testMapping for the mapping)
         newTest = testMapping[test][0]()
         # Run the specific and bit for bit tests for each case of the test
         for case in testMapping[test][1]:
+            newTest.run(case)
+        testSummary.append(newTest.getSummary())
+        print("")
+
+        # Generate the test-specific webpage 
+        newTest.generate()
+
+    # Run the performance tests
+    print("--------------------------------------------------------------------------")
+    print("  Beginning performance test suite....")
+    print("--------------------------------------------------------------------------")
+    for test in perfTestsRun:
+        # Create a new instance of the specific test class (see testMapping for the mapping)
+        newTest = perfMapping[test][0]()
+        # Run the specific and bit for bit tests for each case of the test
+        for case in perfMapping[test][1]:
             newTest.run(case)
         testSummary.append(newTest.getSummary())
         print("")
