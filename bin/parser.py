@@ -220,10 +220,9 @@ class Parser(object):
     #
     #
     def parseTimingSummaries(self, basePath):
-        dycores = ["glide", "glissade"] #, "glam", "albany", "bisicles"]
         timingSummary = dict()
 
-        for dycore in dycores:
+        for dycore in livv.dycores:
             timingDetails = dict()
             veloDriverList, diagSolveList, simpleGlideList, ioWriteList = [], [], [], []
 
@@ -240,10 +239,8 @@ class Parser(object):
             if nTimingFiles < 9:
                 print("        Could not generate " + dycore + " timing summary.  Need to have at least 10 samples, but only found " + str(nTimingFiles) + "!")
                 # Build the output data-structure
-                timingDetails['Simple Glide'] = None
-                timingDetails['Velocity Driver'] = None
-                timingDetails['Initial Diagonal Solve'] = None
-                timingDetails['IO Writeback'] = None
+                for var in livv.timingVars:
+                    timingDetails[var] = None
                 timingSummary[dycore] = timingDetails
             else: 
                 # Go through each subdirectory and parse the cism_timing_stats file

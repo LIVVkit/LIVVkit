@@ -213,8 +213,18 @@ parserVars = [
               'Avg convergence rate'
              ]
 
+timingVars = [
+              'Simple Glide',
+              'Velocity Driver',
+              'Initial Diagonal Solve',
+              'IO Writeback'
+             ]
+
+dycores = ["glide", "glissade"] #, "glam", "albany", "bisicles"]
+
+
 # Website related variables
-websiteDir = os.path.dirname(__file__) + "/web"
+websiteDir = cwd + "/web"
 templateDir = websiteDir + "/templates"
 indexDir = outputDir
 cssDir = indexDir + os.sep + "css"
@@ -320,7 +330,7 @@ if __name__ == '__main__':
     # Run the tests
     testSummary = []
     summary = TestSummary()
-    summary.webSetup(testsRun)
+    summary.webSetup(testsRun + perfTestsRun)
 
     print("--------------------------------------------------------------------------")
     print("  Beginning V&V test suite....")
@@ -356,7 +366,7 @@ if __name__ == '__main__':
 
     # Create the site index
     print("Generating web pages in " + outputDir) 
-    summary.generate(testsRun, testMapping, testSummary)
+    summary.generate(testsRun + perfTestsRun, dict(testMapping, **perfMapping), testSummary)
 
     ###############################################################################
     #                        Finished.  Tell user about it.                       #

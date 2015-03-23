@@ -12,23 +12,31 @@ import sys
 import glob
 import itertools
 import jinja2
-
-
-cases = {'none' : [],
-         'small' : ['dome60', 'gis_4km'],
-         'medium' : ['dome120', 'gis_2km'],
-         'large' : ['dome240', 'gis_1km']}
-
-def choices():
-    return list( cases.keys() )
-
-def choose(key):
-    return cases[key]
-
+import matplotlib.pyplot as pyplot
 
 import livv
 from bin.test import AbstractTest
 from bin.parser import Parser
+
+
+##
+#
+cases = {'none' : [],
+         'small' : ['dome60', 'gis_4km'],
+         'medium' : ['dome120', 'gis_2km'],
+         'large' : ['dome240', 'gis_1km'],
+         'scaling' : ['dome60', 'dome120', 'dome240', 'dome500', 'dome1000', 'scalingDome']
+        }
+
+##
+#
+def choices():
+    return list( cases.keys() )
+
+##
+#
+def choose(key):
+    return cases[key]
 
 ## Main class for handling performance test cases.
 #
@@ -76,10 +84,13 @@ class Test(AbstractTest):
 
         # Map the case names to the case functions
         splitCase = ["".join(x) for _, x in itertools.groupby(testCase, key=str.isdigit)]
+        if len(splitCase) == 1: 
+            splitCase = filter(None, re.split("([A-Z][^A-Z]*)", testCase))
         perfType = splitCase[0]
         resolution = "".join(splitCase[1:])
         callDict = {'dome' : self.runDomePerformance,
-                    'gis_' : self.runGisPerformance}
+                    'gis_' : self.runGisPerformance,
+                    'scaling' : self.runScaling}
 
         # Call the correct function
         if callDict.has_key(perfType):
@@ -147,10 +158,10 @@ class Test(AbstractTest):
     #
     def runGisPerformance(self, resolution):
         print("")
-        print("  Greenland Ice Sheet " + resolution + " performance  tests in progress....")  
+        print("  Greenland Ice Sheet " + resolution + " performance  tests in progress....")
 
         # Search for the std output files
-        perfDir = livv.performanceDir + os.sep + "gis_" + resolution + os.sep + livv.dataDir 
+        perfDir = livv.performanceDir + os.sep + "gis_" + resolution + os.sep + livv.dataDir
         perfBenchDir = livv.performanceDir + os.sep + "bench" + os.sep + 'gis_' + resolution + os.sep + livv.dataDir
         if os.path.exists(perfDir) and os.path.exists(perfBenchDir):
             files = os.listdir(perfDir)
@@ -197,6 +208,37 @@ class Test(AbstractTest):
                                              numberBitMatches, numberBitTests]
 
 
+    ## Generate a scaling plot 
+    #
+    def runScaling(self, type):
+        self.modelTimingData['scaling' + type] = dict()
+        self.benchTimingData['scaling' + type] = dict()
+        type = type.lower()
+        print("")
+        print("  Generating scaling plots for " + type + "....")
+        tests = filter(re.compile(type + ".*").search, self.modelTimingData.keys())
+        resolutions = sorted([int(re.findall(r'\d+', s)[0]) for s in tests])
+        for var in livv.timingVars:
+            for dycore in livv.dycores:
+                mins, avgs, maxs = [], [], []
+                for res in resolutions:
+                    test = type + str(res)
+                    if self.modelTimingData[test][dycore][var] != None and len(self.modelTimingData[test][dycore][var]) == 3:
+                        avgs.append(self.modelTimingData[test][dycore][var][0])
+                        mins.append(self.modelTimingData[test][dycore][var][1])
+                        maxs.append(self.modelTimingData[test][dycore][var][2])
+                    else:
+                        avgs.append(0.0)
+                        mins.append(0.0)
+                        maxs.append(0.0)
+                fig, ax = pyplot.subplots(1)
+                ax.plot(resolutions, avgs, color='black', ls='--')
+                ax.fill_between(resolutions, mins, maxs, alpha=0.25)
+                pyplot.savefig(livv.imgDir + os.sep + self.getName() + os.sep + type + "_" + dycore + "_" + var + "_" + "_scaling" + ".png")
+
+
+    ## This is a placeholder
+    #
     def summary(self):
         print("    This is a placeholder....")
 
