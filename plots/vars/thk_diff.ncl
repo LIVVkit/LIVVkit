@@ -13,11 +13,13 @@ begin
     ;************************************************
     ; Get plot data
     ;************************************************
-    bench_thk = bench->thk(0,:,:)
+    dims = dimsizes(bench->thk(:,:,:))
+   
+    bench_thk = bench->thk(dims(0)-1,:,:)
     bench_scaled = bench_thk@scale_factor * bench_thk
     bench_scaled@long_name  = "Scaled Benchmark"
 
-    test_thk = test->thk(0,:,:)
+    test_thk = test->thk(dims(0)-1,:,:)
     test_scaled = test_thk@scale_factor * test_thk
     test_scaled@long_name  = "Scaled Test Run"
 

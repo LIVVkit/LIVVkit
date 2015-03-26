@@ -13,11 +13,13 @@ begin
     ;************************************************
     ; Get plot data
     ;************************************************
-    bench_temp = bench->tempstag(0,:,:)
+    dims = dimsizes(bench->tempstag(:,:,:,:))
+
+    bench_temp = bench->tempstag(dims(0)-1,1,:,:)
     bench_scaled = bench_temp@scale_factor * bench_temp
     bench_scaled@long_name  = "Scaled Benchmark"
 
-    test_temp = test->tempstag(0,:,:)
+    test_temp = test->tempstag(dims(0)-1,1,:,:)
     test_scaled = test_temp@scale_factor * test_temp
     test_scaled@long_name  = "Scaled Test Run"
 

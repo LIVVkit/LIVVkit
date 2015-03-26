@@ -13,11 +13,13 @@ begin
     ;************************************************
     ; Get plot data
     ;************************************************
-    bench_vel = bench->vvel(0,1,:,:)
+    dims = dimsizes(bench->vvel(:,:,:,:))
+   
+    bench_vel = bench->vvel(dims(0)-1,1,:,:)
     bench_scaled = bench_vel@scale_factor * bench_vel
     bench_scaled@long_name  = "Scaled Benchmark"
 
-    test_vel = test->vvel(0,1,:,:)
+    test_vel = test->vvel(dims(0)-1,1,:,:)
     test_scaled = test_vel@scale_factor * test_vel
     test_scaled@long_name  = "Scaled Test Run"
 
