@@ -97,8 +97,8 @@ class Test(AbstractTest):
     #  the benchmark files.
     #
     #  input:
-    #    @param testDir: location of the test data
-    #    @param benchDir: location of the bench data
+    #    @param testDir: The path to the test data
+    #    @param benchDir: The path to the benchmark data
     #    @param aOrC: Whether we are running ismip-hom-a or ismip-hom-c
     #    @param resolution: The resolution of the test cases to look in.
     #                       (eg resolution == 30 -> reg_test/dome30/diagnostic)

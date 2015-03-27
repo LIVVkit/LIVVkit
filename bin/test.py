@@ -57,6 +57,9 @@ class AbstractTest(object):
 
     ## Definition for the general test run
     #
+    #  input:
+    #    @param test : the string indicator of the test to run
+    #
     @abstractmethod
     def run(self, test):
         pass

@@ -59,7 +59,7 @@ class Test(AbstractTest):
     #  method that will be used to run the actual test case.
     #
     #  input:
-    #    @param testCase : the string indicator of the test to run
+    #    @param test : the string indicator of the test to run
     #
     def run(self, test):
         # Common run 
@@ -88,7 +88,11 @@ class Test(AbstractTest):
 
 
     ## Perform V&V on the confined shelf case
-    # 
+    #
+    #  input:
+    #    @param testDir: The path to the test data
+    #    @param benchDir: The path to the benchmark data
+    #
     def runConfined(self, testDir, benchDir):
         print("  Confined Shelf test in progress....")
 
@@ -135,9 +139,13 @@ class Test(AbstractTest):
 
     ## Plot some details for the confined shelf case
     #
+    #  input:
+    #    @param testDir: The path to the test data
+    #    @param benchDir: The path to the benchmark data
+    #
     #  @return the number of plots generated
     # 
-    def plotConfined(selfi, testDir, benchDir):
+    def plotConfined(self, testDir, benchDir):
         # Setup where we are going to look for things
         ncl_path = livv.cwd + os.sep + "plots" 
         img_path = livv.imgDir + os.sep + "shelf"
@@ -218,6 +226,10 @@ class Test(AbstractTest):
 
 
     ## Perform V&V on the circular shelf case
+    #
+    #  input:
+    #    @param testDir: The path to the test data
+    #    @param benchDir: The path to the benchmark data
     #
     def runCircular(self, testDir, benchDir):
         print("  Circular Shelf test in progress....")  

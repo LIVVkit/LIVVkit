@@ -217,6 +217,8 @@ class Test(AbstractTest):
     #  the benchmark files.
     #
     #  input:
+    #    @param testDir: The path to the test data
+    #    @param benchDir: The path to the benchmark data
     #    @param resolution: The resolution of the test cases to look in. 
     #                       (eg resolution == 30 -> reg_test/dome30/evolving)
     # 
