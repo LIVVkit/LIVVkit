@@ -3,16 +3,10 @@
 import os
 import subprocess
 
-import livv
-
 def plot_diff(var, testFile, benchFile, outFile):
 
     ncl_command = 'ncl \'bench = addfile("'+benchFile+'", "r")\' \'test = addfile("'+testFile+'", "r")\' \'plotFile = "'+outFile+'"\'  plots/vars/'+var+'_diff.ncl'
 
-    with open(livv.f_com,'a') as f:
-        f.write('# '+var+':\n')
-        f.write(ncl_command+'\n')
-    
     # Be cautious about running subprocesses
     call = subprocess.Popen(ncl_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     stdOut, stdErr = call.stdout.read(), call.stderr.read()

@@ -29,14 +29,6 @@ Created on Dec 3, 2014
 @author: arbennett
 '''
 
-import datetime
-stamp = datetime.date.today().strftime("%Y_%m_%d")
-f_com = 'plot_commands_'+stamp+'.bash'
-with open(f_com,'w') as f:
-    f.write('#!/bin/bash \n')
-    f.write('# NCL PLOT COMMANDS FROM RUN ON '+stamp+'\n')
-    f.write('##########################################\n')
-
 ###############################################################################
 #                                  Imports                                    #
 ###############################################################################
