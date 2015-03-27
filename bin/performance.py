@@ -155,6 +155,10 @@ class Test(AbstractTest):
 
     ## Greenland Ice Sheet Performance Testing
     #
+    #  
+    #
+    #  input:
+    #    @param resolution : the resolution of the test data
     #
     def runGisPerformance(self, resolution):
         print("")
@@ -208,7 +212,13 @@ class Test(AbstractTest):
                                              numberBitMatches, numberBitTests]
 
 
-    ## Generate a scaling plot 
+    ## Generate scaling plots
+    #
+    #  Generates scaling plots for each variable and dycore combination of a given
+    #  type.
+    #
+    #  input:
+    #    @param type : the overarching test category to generate scaling plots for (ie dome/gis)
     #
     def runScaling(self, type):
         self.modelTimingData['scaling' + type] = dict()
