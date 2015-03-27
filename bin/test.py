@@ -28,7 +28,7 @@ import jinja2
 from abc import ABCMeta, abstractmethod
 import livv
 
-
+from plots import nclfunc
 
 ## AbstractTest provides a description of how a test should work in LIVV.
 #
@@ -57,6 +57,9 @@ class AbstractTest(object):
 
     ## Definition for the general test run
     #
+    #  input:
+    #    @param test : the string indicator of the test to run
+    #
     @abstractmethod
     def run(self, test):
         pass
@@ -73,49 +76,47 @@ class AbstractTest(object):
     #  If any differences are found the method will return 1, otherwise 0.
     #
     #  Input:
-    #    @param modelPath: the path to the model data
-    #    @param benchPath: the path to the benchmark data
+    #    @param test: the test case to check bitness
+    #    @param testDir: the path to the model data
+    #    @param benchDir: the path to the benchmark data
     #
     #  Output:
     #    @returns [change, err] where change in {0,1}
     #
-    def bit4bit(self, test):
+    def bit4bit(self, test, testDir, benchDir):
         # Mapping of result codes to results
         numpy.set_printoptions(threshold='nan')
         result = {-1 : 'N/A', 0 : 'SUCCESS', 1 : 'FAILURE'}
         bitDict = dict()
 
         # First, make sure that there is test data, otherwise not it.
-        modelPath = livv.inputDir + test + os.sep + livv.dataDir
-        benchPath = livv.benchmarkDir + test + os.sep + livv.dataDir
-        if not (os.path.exists(modelPath) or os.path.exists(benchPath)):
+        if not (os.path.exists(testDir) or os.path.exists(benchDir)):
             return {'No matching benchmark and data files found': ['SKIPPED','0.0']}
 
         # Get all of the .nc files in the model & benchmark directories
         regex = re.compile('^[^\.].*?.nc')
-        modelFiles = filter(regex.search, os.listdir(modelPath))
-        benchFiles = filter(regex.search, os.listdir(benchPath))
+        testFiles = filter(regex.search, os.listdir(testDir))
+        benchFiles = filter(regex.search, os.listdir(benchDir))
 
         # Get the intersection of the two file lists
-        sameList = set(modelFiles).intersection(benchFiles)
+        sameList = set(testFiles).intersection(benchFiles)
 
+        # If the intersection is empty just return a blank entry
         if len(sameList) == 0:
             print("  Benchmark and model data not available for " + test)
             return {'No matching benchmark and data files found': ['SKIPPED','0.0']}
         else:
             print("  Running bit for bit tests of " + test + "....")
 
-
         # Go through and check if any differences occur
         for same in list(sameList):
             change = 0
-            difference = [0.0, 0.0, 0.0, 0.0] # thk max abs, thk RMS, velnorm max abs, velnorm RMS
-            plotVars = []
-            modelFile = modelPath + os.sep + same
-            benchFile = benchPath + os.sep + same
+            plotVars = dict()
+            testFile = testDir + os.sep + same
+            benchFile = benchDir + os.sep + same
 
             # check if they match
-            comline = ['ncdiff', modelFile, benchFile, modelPath + os.sep + 'temp.nc', '-O']
+            comline = ['ncdiff', testFile, benchFile, testDir + os.sep + 'temp.nc', '-O']
             try:
                 subprocess.check_call(comline)
             except Exception as e:
@@ -127,102 +128,49 @@ class AbstractTest(object):
                     exit(e.errno)
 
             # Grab the output of ncdiff
-            diffData = Dataset(modelPath + os.sep + 'temp.nc', 'r')
+            diffData = Dataset(testDir + os.sep + 'temp.nc', 'r')
             diffVars = diffData.variables.keys()
 
             # Check if any data in thk has changed, if it exists
             if 'thk' in diffVars and diffData.variables['thk'].size != 0:
                 data = diffData.variables['thk'][:]
                 if data.any():
-                    difference[0] = numpy.amax( numpy.absolute(data) )
-                    difference[1] = numpy.sqrt(numpy.sum( numpy.square(data).flatten() ) / data.size )
-                    plotVars.append('thk')
+                    # Record the maximum difference and root mean square of the error 
+                    max = numpy.amax( numpy.absolute(data) )
+                    rmse = numpy.sqrt(numpy.sum( numpy.square(data).flatten() ) / data.size )
+                    plotVars['thk'] = [max, rmse]
                     change = 1
 
             # Check if any data in velnorm has changed, if it exists
             if 'velnorm' in diffVars and diffData.variables['velnorm'].size != 0:
                 data = diffData.variables['velnorm'][:]
                 if data.any():
-                    difference[2] = numpy.amax( numpy.absolute(data) )
-                    difference[3] = numpy.sqrt(numpy.sum( numpy.square(data).flatten() ) / data.size )
-                    plotVars.append('velnorm')
+                    # Record the maximum difference and root mean square of the error 
+                    max = numpy.amax( numpy.absolute(data) )
+                    rmse = numpy.sqrt(numpy.sum( numpy.square(data).flatten() ) / data.size )
+                    plotVars['velnorm'] = [max, rmse]
                     change = 1
 
-            # If there were any differences plot them out
-            if change:
-                self.plotDifferences(plotVars, modelFile, benchFile, modelPath + os.sep + 'temp.nc')
 
             # Remove the temp file
             try:
-                os.remove(modelPath + os.sep + 'temp.nc')
+                os.remove(testDir + os.sep + 'temp.nc')
             except OSError as e:
                 print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
                       + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                 exit(e.errno)
 
+            # Record the status and details of the test
             bitDict[same] = [result[change], 
-                             "{:.4g}".format(difference[0]),
-                             "{:.4g}".format(difference[1]),
-                             "{:.4g}".format(difference[2]),
-                             "{:.4g}".format(difference[3])
+                             plotVars
                             ]
+
+            # Generate the plots for each of the failed variables
+            for var in plotVars.keys():
+                outFile = livv.imgDir + os.sep + self.getName() + os.sep + "bit4bit" + os.sep + testFile.split(os.sep)[-1] + "." + var + ".png"
+                nclfunc.plot_diff(var, testFile, benchFile, outFile)
+
         return bitDict
-
-
-    ## plotDifferences
-    #
-    #  When a bit4bit test fails the differences between the datasets need to be
-    #  printed out so that a user can inspect them.
-    #
-    #  input:
-    #    @param plotVars: the variables which differ between datasets
-    #    @param modelFile: path to the model output NetCDF file
-    #    @param benchFile: path to the benchmark output NetCDF file
-    #
-    def plotDifferences(self, plotVars, modelFile, benchFile, differenceFile):
-        pyplot.figure(figsize=(12, 4*len(plotVars)), dpi=80)
-        pyplot.clf()
-        nSubplots=len(plotVars)
-        for idx, var in enumerate(plotVars):
-            # Get the right data
-            if var == 'thk':
-                varData = Dataset(modelFile, 'r').variables[var]
-                modelData = Dataset(modelFile, 'r').variables[var][len(varData)-1]
-                benchData = Dataset(benchFile, 'r').variables[var][len(varData)-1]
-                diffData = Dataset(differenceFile, 'r').variables[var][len(varData)-1]
-            elif var == 'velnorm':
-                modelData = Dataset(modelFile, 'r').variables[var][:][0][0]
-                benchData = Dataset(benchFile, 'r').variables[var][:][0][0]
-                diffData = Dataset(differenceFile, 'r').variables[var][:][0][0]
-
-            # Calculate min and max to scale the colorbars
-            max = numpy.amax([numpy.amax(modelData), numpy.amax(benchData)])
-            min = numpy.amin([numpy.amin(modelData), numpy.amin(benchData)])
-
-            # Plot the model output
-            pyplot.subplot(nSubplots,3,1+idx+(idx*nSubplots))
-            pyplot.xlabel("Model Data")
-            pyplot.ylabel(var)
-            pyplot.imshow(modelData, vmin=min, vmax=max, interpolation='nearest')
-            pyplot.colorbar()
-            pyplot.tight_layout()
-
-            # Plot the benchmark data
-            pyplot.subplot(nSubplots,3,2+idx+(idx*nSubplots))
-            pyplot.xlabel("Benchmark Data")
-            pyplot.imshow(benchData, vmin=min, vmax=max, interpolation='nearest')
-            pyplot.colorbar()
-            pyplot.tight_layout()
-
-            # Plot the difference
-            pyplot.subplot(nSubplots, 3,3+idx+(idx*nSubplots))
-            pyplot.xlabel("Difference")
-            pyplot.imshow(diffData, interpolation='nearest')
-            pyplot.colorbar()
-            pyplot.tight_layout()
-
-        # Save the figure
-        pyplot.savefig(livv.imgDir + os.sep + self.getName() + os.sep + "bit4bit" + os.sep + modelFile.split(os.sep)[-1] + ".png")
 
 
     ## Creates the output test page
@@ -247,13 +195,13 @@ class AbstractTest(object):
         # Set up relative paths
         indexDir = ".."
         cssDir = indexDir + "/css"
-        imgDir = indexDir + "/imgs/"
+        imgDir = indexDir + "/imgs"
 
         # Grab all of our images
         testImgDir = livv.imgDir + os.sep + self.getName()
         testImages = [os.path.basename(img) for img in glob.glob(testImgDir + os.sep + "*.png")]
-        testImages.append([os.path.basename(img) for img in glob.glob(testImgDir + "/*.jpg")])
-        testImages.append([os.path.basename(img) for img in glob.glob(testImgDir + "/*.svg")])
+        testImages.append([os.path.basename(img) for img in glob.glob(testImgDir + "*.jpg")])
+        testImages.append([os.path.basename(img) for img in glob.glob(testImgDir + "*.svg")])
 
         # Set up the template variables  
         templateVars = {"timestamp" : livv.timestamp,

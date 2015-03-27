@@ -63,30 +63,30 @@ class Test(AbstractTest):
     #  method that will be used to run the actual test case.
     #
     #  input:
-    #    @param testCase : the string indicator of the test to run
+    #    @param test : the string indicator of the test to run
     #
-    def run(self, testCase):
+    def run(self, test):
         # Common run
-        self.testsRun.append(testCase)
+        self.testsRun.append(test)
 
         # Make sure LIVV can find the data
-        ismipDir = livv.inputDir + os.sep + testCase + os.sep + livv.dataDir 
-        ismipBenchDir = livv.benchmarkDir + os.sep + testCase + os.sep + livv.dataDir
-        if not (os.path.exists(ismipDir) and os.path.exists(ismipBenchDir)):
-            print("    Could not find data for " + ismipDir + " tests!  Tried to find data in:")
-            print("      " + ismipDir)
-            print("      " + ismipBenchDir)
+        testDir = livv.inputDir + os.sep + test + os.sep + livv.dataDir 
+        benchDir = livv.benchmarkDir + os.sep + test + os.sep + livv.dataDir
+        if not (os.path.exists(testDir) and os.path.exists(benchDir)):
+            print("    Could not find data for " + testDir + " tests!  Tried to find data in:")
+            print("      " + testDir)
+            print("      " + benchDir)
             print("    Continuing with next test....")
-            self.bitForBitDetails[testCase] = {'Data not found': ['SKIPPED', '0.0']}
+            self.bitForBitDetails[test] = {'Data not found': ['SKIPPED', '0.0']}
             return 1 # zero returns a problem
 
         # Pull some data about the test case
-        splitCase = testCase.split('/')
+        splitCase = test.split('/')
         aOrC = splitCase[0][-1]
         resolution = splitCase[-1]
 
         # Pass it onto the specific run
-        self.runIsmip(aOrC,resolution)
+        self.runIsmip(testDir, benchDir, aOrC, resolution)
 
 
     ## Perform V&V on an ismip-hom test case
@@ -97,36 +97,36 @@ class Test(AbstractTest):
     #  the benchmark files.
     #
     #  input:
+    #    @param testDir: The path to the test data
+    #    @param benchDir: The path to the benchmark data
     #    @param aOrC: Whether we are running ismip-hom-a or ismip-hom-c
     #    @param resolution: The resolution of the test cases to look in.
     #                       (eg resolution == 30 -> reg_test/dome30/diagnostic)
     # 
-    def runIsmip(self, aOrC, resolution):
+    def runIsmip(self, testDir, benchDir, aOrC, resolution):
         print("  Ismip-hom-" + aOrC + os.sep + resolution + " test in progress....")
 
         testName = 'ismip-hom-' + aOrC + os.sep + resolution
-        ismipDir = livv.inputDir + os.sep + testName + os.sep + livv.dataDir
-        ismipBenchDir = livv.benchmarkDir + os.sep + testName + os.sep + livv.dataDir
 
         # Process the configure files
         configPath = os.sep + ".." + os.sep + "configure_files"
         ismipParser = Parser()
         self.modelConfigs[testName], self.benchConfigs[testName] = \
-            ismipParser.parseConfigurations(ismipDir + configPath, ismipBenchDir + configPath)
+            ismipParser.parseConfigurations(testDir + configPath, benchDir + configPath)
 
         # Search for the std output files
         test = re.compile(".*out.*[0-9]")
         try:
-            files = os.listdir(ismipDir)
+            files = os.listdir(testDir)
         except:
-            print("    Could not find model and benchmark directories for ismip-hom-" + aOrC + os.sep + resolution)
+            print("    Could not find model and benchmark directories for " + testName)
             files = []
         files = filter(test.search, files)
 
         # Scrape the details from each of the files and store some data for later
         ismipDetails, ismipFiles = [], []
         for file in files:
-            ismipDetails.append(ismipParser.parseOutput(ismipDir + '/' + file))
+            ismipDetails.append(ismipParser.parseOutput(testDir + '/' + file))
             ismipFiles.append(file)
         self.fileTestDetails[testName] = zip(ismipFiles, ismipDetails)
 
@@ -134,11 +134,12 @@ class Test(AbstractTest):
         numberOutputFiles, numberConfigMatches, numberConfigTests = ismipParser.getParserSummary()
 
         # Create the plots & record the number generated
-        numberPlots = self.plot(aOrC,resolution[:2])
+        #numberPlots = self.plot(aOrC,resolution[:2])
+        numberPlots = 0
 
         # Run bit for bit test
         numberBitTests, numberBitMatches = 0, 0
-        self.bitForBitDetails[testName] = self.bit4bit(os.sep + testName)
+        self.bitForBitDetails[testName] = self.bit4bit(os.sep + testName, testDir, benchDir)
         for key, value in self.bitForBitDetails[testName].iteritems():
             print ("    {:<40} {:<10}".format(key,value[0]))
             if value[0] == "SUCCESS": numberBitMatches+=1

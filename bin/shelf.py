@@ -10,6 +10,7 @@ import re
 import os
 import subprocess
 
+# the test cases that can be run
 cases = {'none' : [],
          'confined' : ['confined-shelf'],
          'circular' : ['circular-shelf'],
@@ -58,7 +59,7 @@ class Test(AbstractTest):
     #  method that will be used to run the actual test case.
     #
     #  input:
-    #    @param testCase : the string indicator of the test to run
+    #    @param test : the string indicator of the test to run
     #
     def run(self, test):
         # Common run 
@@ -69,40 +70,41 @@ class Test(AbstractTest):
                     'circular-shelf' : self.runCircular}
 
         # Make sure LIVV can find the data
-        shelfDir = livv.inputDir + os.sep + test + os.sep + livv.dataDir 
-        shelfBenchDir = livv.benchmarkDir + os.sep + test + os.sep + livv.dataDir 
-        if not (os.path.exists(shelfDir) and os.path.exists(shelfBenchDir)):
+        testDir = livv.inputDir + os.sep + test + os.sep + livv.dataDir 
+        benchDir = livv.benchmarkDir + os.sep + test + os.sep + livv.dataDir 
+        if not (os.path.exists(testDir) and os.path.exists(benchDir)):
             print("    Could not find data for " + type + " tests!  Tried to find data in:")
-            print("      " + shelfDir)
-            print("      " + shelfBenchDir)
+            print("      " + testDir)
+            print("      " + benchDir)
             print("    Continuing with next test....")
             self.bitForBitDetails[test] = {'Data not found': ['SKIPPED', '0.0']}
             return 1 # zero returns a problem
 
         # Call the correct function
         if callDict.has_key(test):
-            callDict[test]()
+            callDict[test](testDir, benchDir)
         else:
             print("  Could not find test code for shelf test: " + test)
 
 
     ## Perform V&V on the confined shelf case
-    # 
-    def runConfined(self):
+    #
+    #  input:
+    #    @param testDir: The path to the test data
+    #    @param benchDir: The path to the benchmark data
+    #
+    def runConfined(self, testDir, benchDir):
         print("  Confined Shelf test in progress....")
-
-        confinedDir = livv.inputDir + '/confined-shelf' + os.sep + livv.dataDir
-        confinedBenchDir = livv.benchmarkDir + '/confined-shelf' + os.sep + livv.dataDir
 
         # Parse the configure files
         configPath = os.sep + ".." + os.sep + "configure_files"
         shelfParser = Parser()
         self.modelConfigs['confined-shelf'], self.benchConfigs['confined-shelf'] = \
-            shelfParser.parseConfigurations(confinedDir + configPath, confinedBenchDir + configPath)
+            shelfParser.parseConfigurations(testDir + configPath, benchDir + configPath)
 
         # Search for the std output files
         try:
-            files = os.listdir(confinedDir)
+            files = os.listdir(testDir)
         except:
             print("    Could not find model and benchmark directories for confined-shelf")
             files = []
@@ -112,7 +114,7 @@ class Test(AbstractTest):
         # Scrape the details from each of the files and store some data for later
         shelfFiles, shelfDetails = [], []
         for file in files:
-            shelfDetails.append(shelfParser.parseOutput(livv.inputDir + '/confined-shelf' + os.sep + livv.dataDir + "/" + file))
+            shelfDetails.append(shelfParser.parseOutput(testDir + "/" + file))
             shelfFiles.append(file)
         self.fileTestDetails["confined-shelf"] = zip(shelfFiles, shelfDetails)
 
@@ -120,11 +122,12 @@ class Test(AbstractTest):
         numberOutputFiles, numberConfigMatches, numberConfigTests = shelfParser.getParserSummary()
 
         # Create the plots
-        numberPlots = self.plotConfined()
+        # numberPlots = self.plotConfined(testDir, benchDir, shelfFiles)
+        numberPlots = 0
 
         # Run bit for bit test
         numberBitTests, numberBitMatches = 0, 0
-        self.bitForBitDetails['confined-shelf'] = self.bit4bit('/confined-shelf')
+        self.bitForBitDetails['confined-shelf'] = self.bit4bit('/confined-shelf', testDir, benchDir)
         for key, value in self.bitForBitDetails['confined-shelf'].iteritems():
             print ("    {:<40} {:<10}".format(key, value[0]))
             if value[0] == "SUCCESS": numberBitMatches+=1
@@ -136,14 +139,16 @@ class Test(AbstractTest):
 
     ## Plot some details for the confined shelf case
     #
+    #  input:
+    #    @param testDir: The path to the test data
+    #    @param benchDir: The path to the benchmark data
+    #
     #  @return the number of plots generated
     # 
-    def plotConfined(self):
+    def plotConfined(self, testDir, benchDir):
         # Setup where we are going to look for things
         ncl_path = livv.cwd + os.sep + "plots" 
         img_path = livv.imgDir + os.sep + "shelf"
-        modelDir = livv.inputDir + os.sep + "confined-shelf" + os.sep + livv.dataDir
-        benchDir = livv.benchmarkDir + os.sep + "confined-shelf" + os.sep + livv.dataDir
         glamFiles = ['confined-shelf.gnu.PIC.large.nc', 'confined-shelf.gnu.JFNK.large.nc']
         glissadeFiles = ['confined-shelf.gnu.glissade.nc']
         glamFlag, glissadeFlag = True, True
@@ -151,12 +156,12 @@ class Test(AbstractTest):
 
         # Check if all of the files for plotting Glam output is in place
         for each in glamFiles:
-            if not (os.path.exists(modelDir + os.sep + each) and os.path.exists(benchDir + os.sep + each)):
+            if not (os.path.exists(testDir + os.sep + each) and os.path.exists(benchDir + os.sep + each)):
                 glamFlag = False
 
         # Check if all of the files for plotting Glissade output is in place
         for each in glissadeFiles:
-            if not (os.path.exists(modelDir + os.sep + each) and os.path.exists(benchDir + os.sep + each)):
+            if not (os.path.exists(testDir + os.sep + each) and os.path.exists(benchDir + os.sep + each)):
                 glissadeFlag = False
 
         # Plot Glam
@@ -165,8 +170,8 @@ class Test(AbstractTest):
             plotFile = ncl_path + '/shelf/confshelfvel.ncl'
             benchPIC = 'STOCKPIC = addfile(\"' + benchDir + os.sep + glamFiles[0] + '\", \"r\")'
             benchJFNK = 'STOCKJFNK = addfile(\"'+ benchDir + os.sep + glamFiles[1] + '\", \"r\")'
-            modelPIC = 'VARPIC = addfile(\"' + modelDir + os.sep + glamFiles[0] + '\", \"r\")'
-            modelJFNK = 'VARJFNK = addfile(\"' + modelDir + os.sep + glamFiles[1] + '\", \"r\")'
+            modelPIC = 'VARPIC = addfile(\"' + testDir + os.sep + glamFiles[0] + '\", \"r\")'
+            modelJFNK = 'VARJFNK = addfile(\"' + testDir + os.sep + glamFiles[1] + '\", \"r\")'
             name = 'confshelfvel.png' 
             path = 'PNG = "' + img_path + '/' + name + '"'
             plotCommand = "ncl '" + benchPIC + "'  '" + benchJFNK + "'  '" + modelPIC + "' '" + modelJFNK \
@@ -193,7 +198,7 @@ class Test(AbstractTest):
             description = "Glissade Velocity Comparison Plot"
             plotFile = ncl_path + '/shelf/confshelfvelg.ncl'
             benchData = 'STOCKGLS = addfile(\"' + benchDir + os.sep + glissadeFiles[0] + '\", \"r\")'
-            modelData = 'VARGLS = addfile(\"'  + modelDir + os.sep + glissadeFiles[0] + '\", \"r\")'
+            modelData = 'VARGLS = addfile(\"'  + testDir + os.sep + glissadeFiles[0] + '\", \"r\")'
             name = 'confshelfvelg.png' 
             path = 'PNG = "' + img_path + '/' + name + '"'
             plotCommand = "ncl '" + benchData + "'  '" + modelData + "' '" + path + "' " + plotFile
@@ -222,20 +227,22 @@ class Test(AbstractTest):
 
     ## Perform V&V on the circular shelf case
     #
-    def runCircular(self):
+    #  input:
+    #    @param testDir: The path to the test data
+    #    @param benchDir: The path to the benchmark data
+    #
+    def runCircular(self, testDir, benchDir):
         print("  Circular Shelf test in progress....")  
-        circularDir = livv.inputDir + '/circular-shelf' + os.sep + livv.dataDir
-        circularBenchDir = livv.benchmarkDir + '/circular-shelf' + os.sep + livv.dataDir
 
         # Parse the configure files
         configPath = os.sep + ".." + os.sep + "configure_files"
         shelfParser = Parser()
         self.modelConfigs['circular-shelf'], self.benchConfigs['circular-shelf'] = \
-            shelfParser.parseConfigurations(circularDir + configPath, circularBenchDir + configPath)
+            shelfParser.parseConfigurations(testDir + configPath, benchDir + configPath)
 
         # Search for the std output files
         try:
-            files = os.listdir(circularDir)
+            files = os.listdir(testDir)
         except:
             print("    Could not find model and benchmark directories for circular-shelf")
             files = []
@@ -243,9 +250,9 @@ class Test(AbstractTest):
         files = filter(test.search, files)
 
         # Scrape the details from each of the files and store some data for later
-        shelfDetails, shelfFiles = [], []
+        shelfFiles, shelfDetails = [], []
         for file in files:
-            shelfDetails.append(shelfParser.parseOutput(livv.inputDir + '/circular-shelf' + os.sep + livv.dataDir + "/" + file))
+            shelfDetails.append(shelfParser.parseOutput(testDir + "/" + file))
             shelfFiles.append(file)
         self.fileTestDetails["circular-shelf"] = zip(shelfFiles, shelfDetails)
 
@@ -253,11 +260,12 @@ class Test(AbstractTest):
         numberOutputFiles, numberConfigMatches, numberConfigTests = shelfParser.getParserSummary()
 
         # Create the plots
-        numberPlots = self.plotCircular()
+        # numberPlots = self.plotCircular(testDir, benchDir, shelfFiles)
+        numberPlots = 0
 
         # Run bit for bit test
         numberBitTests, numberBitMatches = 0, 0
-        self.bitForBitDetails['circular-shelf'] = self.bit4bit('/circular-shelf')
+        self.bitForBitDetails['circular-shelf'] = self.bit4bit('/circular-shelf', testDir, benchDir)
         for key, value in self.bitForBitDetails['circular-shelf'].iteritems():
             print ("    {:<40} {:<10}".format(key, value[0]))
             if value[0] == "SUCCESS": numberBitMatches+=1

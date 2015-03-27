@@ -81,19 +81,19 @@ class Test(AbstractTest):
                     'evolving' : self.runEvolving}
 
         # Make sure LIVV can find the data
-        domeDir = livv.inputDir + os.sep + "dome" + resolution + os.sep + type + os.sep + livv.dataDir 
-        domeBenchDir = livv.benchmarkDir + os.sep + "dome" + resolution + os.sep + type + os.sep + livv.dataDir
-        if not (os.path.exists(domeDir) and os.path.exists(domeBenchDir)):
+        testDir = livv.inputDir + os.sep + "dome" + resolution + os.sep + type + os.sep + livv.dataDir 
+        benchDir = livv.benchmarkDir + os.sep + "dome" + resolution + os.sep + type + os.sep + livv.dataDir
+        if not (os.path.exists(testDir) and os.path.exists(benchDir)):
             print("    Could not find data for dome" + resolution + " " + type + " tests!  Tried to find data in:")
-            print("      " + domeDir)
-            print("      " + domeBenchDir)
+            print("      " + testDir)
+            print("      " + benchDir)
             print("    Continuing with next test....")
             self.bitForBitDetails['dome' + resolution + os.sep + type] = {'Data not found': ['SKIPPED', '0.0']}
             return 1 # zero returns a problem        
 
         # Call the correct function
         if callDict.has_key(type):
-            callDict[type](resolution)
+            callDict[type](resolution, testDir, benchDir)
         else: 
             print("  Could not find test code for dome test: " + testCase)
 
@@ -109,7 +109,7 @@ class Test(AbstractTest):
     #    @param resolution: The resolution of the test cases to look in. 
     #                       (eg resolution == 30 -> reg_test/dome30/diagnostic)
     # 
-    def runDiagnostic(self, resolution):
+    def runDiagnostic(self, resolution, testDir, benchDir):
         print("  Dome Diagnostic test in progress....")
 
         diagnosticDir = livv.inputDir + os.sep + "dome" + resolution + os.sep + "diagnostic" + os.sep + livv.dataDir
@@ -145,7 +145,7 @@ class Test(AbstractTest):
 
         # Run bit for bit tests
         numberBitTests, numberBitMatches = 0, 0
-        self.bitForBitDetails['dome' + resolution + os.sep + 'diagnostic'] = self.bit4bit(os.sep + 'dome' + resolution + os.sep + 'diagnostic')
+        self.bitForBitDetails['dome' + resolution + os.sep + 'diagnostic'] = self.bit4bit(self.getName(), testDir, benchDir)
         for key, value in self.bitForBitDetails['dome' + resolution + os.sep + 'diagnostic'].iteritems():
             print ("    {:<40} {:<10}".format(key,value[0]))
             if value[0] == "SUCCESS": numberBitMatches+=1
@@ -154,58 +154,6 @@ class Test(AbstractTest):
         self.summary['dome' + resolution + os.sep + 'diagnostic'] = [numberPlots, numberOutputFiles,
                                                                      numberConfigMatches, numberConfigTests,
                                                                      numberBitMatches, numberBitTests]
-
-
-    ## Plot some details from the diagnostic dome case
-    # 
-    #  Plots a comparison of the norm of the velocity for several cases of the evolving
-    #  dome test case.
-    #
-    #  input:
-    #    @param resolution: The resolution of the test cases to look in.
-    #                       (eg resolution == 30 -> reg_test/dome30/diagnostic)
-    #
-    #  output:
-    #    @return the number of plots generated
-    #
-    def plotDiagnostic(self, resolution):
-        # Set up where we are going to look for things
-        ncl_path = livv.cwd + os.sep + "plots"
-        img_path = livv.imgDir + os.sep + "dome"
-        plotFile = ncl_path + os.sep + 'dome30' + os.sep + 'dome30dvel.ncl'
-        benchDir = livv.benchmarkDir + os.sep + 'dome' + resolution + os.sep + 'diagnostic' + os.sep + livv.dataDir
-        modelDir = livv.inputDir + os.sep + 'dome' + resolution + os.sep + 'diagnostic' + os.sep + livv.dataDir
-
-        # The arguments to pass in to the ncl script
-        description = "Velocity Comparison Plots"
-        bench1 = 'STOCK1 = addfile(\"'+ benchDir + os.sep + 'dome.1.nc\", \"r\")'
-        bench4 = 'STOCK4 = addfile(\"'+ benchDir + os.sep + 'dome.4.nc\", \"r\")'
-        test1  = 'VAR1 = addfile(\"' + modelDir + os.sep + 'dome.1.nc\", \"r\")'
-        test4  = 'VAR4 = addfile(\"' + modelDir + os.sep + 'dome.4.nc\", \"r\")'
-        name = 'dome30dvel.png'
-        path = 'PNG = "' + img_path + os.sep + name + '"'
-
-        # The plot command to run
-        plotCommand = "ncl '" + bench1 + "' '" + bench4 + "'  '" + test1 + "' '" + test4 + \
-                    "' '" + path + "' " + plotFile 
-
-        # Be cautious about running subprocesses
-        call = subprocess.Popen(plotCommand, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        stdOut, stdErr = call.stdout.read(), call.stderr.read()
-
-        if os.path.exists(img_path + os.sep + name):
-            print("    Plot details saved to " + img_path + " as " + name)
-            self.plotDetails['dome' + resolution + os.sep + 'diagnostic'] = [[name, description]]
-            return 1
-        else:
-            print("****************************************************************************")
-            print("    Error saving " + name + " to " + img_path)
-            print("    Details of the error follow: ")
-            print("")
-            print(stdOut)
-            print(stdErr)
-            print("****************************************************************************")
-            return 0
 
 
     ## Perform V&V on the evolving dome case
@@ -219,7 +167,7 @@ class Test(AbstractTest):
     #    @param resolution: The resolution of the test cases to look in. 
     #                       (eg resolution == 30 -> reg_test/dome30/evolving)
     # 
-    def runEvolving(self, resolution):
+    def runEvolving(self, resolution, testDir, benchDir):
         print("  Dome Evolving test in progress....")  
 
         # Search for the std output files
@@ -255,7 +203,7 @@ class Test(AbstractTest):
 
         # Run bit for bit test
         numberBitMatches, numberBitTests = 0, 0
-        self.bitForBitDetails['dome' + resolution + os.sep +'evolving'] = self.bit4bit(os.sep + 'dome' + resolution + os.sep + 'evolving')
+        self.bitForBitDetails['dome' + resolution + os.sep +'evolving'] = self.bit4bit(self.getName(), testDir, benchDir)
         for key, value in self.bitForBitDetails['dome' + resolution + os.sep + 'evolving'].iteritems():
             print ("    {:<40} {:<10}".format(key,value[0]))
             if value[0] == "SUCCESS": numberBitMatches+=1
@@ -264,55 +212,3 @@ class Test(AbstractTest):
         self.summary['dome' + resolution + os.sep + 'evolving'] = [numberPlots, numberOutputFiles,
                                                                      numberConfigMatches, numberConfigTests,
                                                                      numberBitMatches, numberBitTests]
-
-
-    ## Plot some details from the evolving dome case
-    # 
-    #  Plots a comparison of the norm of the velocity for several cases of the evolving
-    #  dome test case.
-    #
-    #  input:
-    #    @param resolution: The resolution of the test cases to look in.
-    #                       (eg resolution == 30 -> reg_test/dome30/evolving)
-    #
-    #  output:
-    #    @return the number of plots generated
-    #
-    def plotEvolving(self, resolution):
-        # Set up where we are going to look for things
-        ncl_path = livv.cwd + os.sep + "plots"
-        img_path = livv.imgDir + os.sep + "dome"
-        plotFile = ''+ ncl_path + os.sep + 'dome30' + os.sep + 'dome30evel.ncl'
-        benchDir = livv.benchmarkDir + os.sep + 'dome' + resolution + os.sep + 'evolving' + os.sep + livv.dataDir
-        modelDir = livv.inputDir + os.sep + 'dome' + resolution + os.sep + 'evolving' + os.sep + livv.dataDir
-
-        # The arguments to pass in to the ncl script
-        description = "Velocity Comparison Plot"
-        bench1 = 'STOCK9 = addfile(\"'+ benchDir + os.sep + 'dome.small.nc\", \"r\")'
-        bench4 = 'STOCK15 = addfile(\"'+ benchDir + os.sep + 'dome.large.nc\", \"r\")'
-        test1  = 'VAR9 = addfile(\"' + modelDir + os.sep + 'dome.small.nc\", \"r\")'
-        test4  = 'VAR15 = addfile(\"' + modelDir + os.sep + 'dome.large.nc\", \"r\")'
-        name = 'dome' + resolution + 'evel.png'
-        path = 'PNG = "' + img_path + os.sep + name + '"'
-
-        # The plot command to run
-        plotCommand = "ncl '" + bench1 + "' '" + bench4 + "'  '" + test1 + "' '" + test4 + \
-                    "' '" + path + "' " + plotFile
-
-        # Be cautious about running subprocesses
-        call = subprocess.Popen(plotCommand, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        stdOut, stdErr = call.stdout.read(), call.stderr.read()
-
-        if os.path.exists(img_path + os.sep + name):
-            print("    Plot details saved to " + img_path + " as " + name)
-            self.plotDetails['dome' + resolution + os.sep + 'evolving'] = [[name, description]]
-            return 1
-        else:
-            print("****************************************************************************")
-            print("    Error saving " + name + " to " + img_path)
-            print("    Details of the error follow: ")
-            print("")
-            print(stdOut)
-            print(stdErr)
-            print("****************************************************************************")
-            return 0

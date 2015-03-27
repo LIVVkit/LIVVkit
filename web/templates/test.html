@@ -90,39 +90,29 @@
       <hr style="opacity: 0; height: 5px;">
 
       {% if bitForBitDetails[case]|length != 0 %}
-        <table class="tabbed">
-        <tr>
-          <th>Output File</th>
-          <th>Status</th>
-          <th>thk Max |Error| </th>
-          <th>thk RMSE</th>
-          <th>velnorm Max |Error| </th>
-          <th>velnorm RMSE</th>
-        </tr>
-        {% for file, details in bitForBitDetails[case].iteritems() %}
-          <tr>
-            <td style="text-align: left">
-              {{file}}
-            </td>
-            <td>
-              <a class={{details[0]}}
-              {% if details[0] == "FAILURE" %}
-              	target="_blank" href={{imgDir}}/{{testName}}/bit4bit/{{file}}.png
-              {% endif %}
-              >{{details[0]}}</a>
-            </td>
-            {% if details[0] == "FAILURE" %}
-            	<td>{{details[1]}}</td>
-            	<td>{{details[2]}}</td>
-            	<td>{{details[3]}}</td>
-            	<td>{{details[4]}}</td>
-            {% endif %}
-          </tr>
+        {% for fileName, details in bitForBitDetails[case].iteritems() %}
+          <b>{{fileName}}</b>
+          {% if details[0] == "SUCCESS" %}
+            <p class='SUCCESS' style="margin-left: 40px;"">SUCCESS</p>
+          {% elif details[0] == "SKIPPED" %}
+            <p class='SKIPPED' style="margin-left: 40px;">SKIPPED</p>
+          {% elif details[0] == "FAILURE" %}
+            <table style="clear: both; width: 75%; margin-left: 40px; margin-bottom: 20px; margin-top: 20px;">
+              <tr>
+                <th>Variable</th>
+                <th>Max |Error|</th>
+                <th>RMSE</th>
+              </tr>
+              {% for var, vals in details[1].iteritems() %}
+                <tr>
+                  <td><a target="_blank" href="{{imgDir}}/{{testName}}/bit4bit/{{fileName}}.{{var}}.png">{{var}}</a></td>
+                  <td>{{vals[0]}}</td>
+                  <td>{{vals[1]}}</td>
+                </tr>
+              {% endfor %}
+            </table>
+          {% endif %}
         {% endfor %}
-        </table>
-      {% else %}
-        <a style="padding-left: 20px; color: #696969;">No bit for bit tests performed for {{case}}</a>
-        <br />
       {% endif %}
       </div>
       <!-- END BIT FOR BIT SECTION -->
