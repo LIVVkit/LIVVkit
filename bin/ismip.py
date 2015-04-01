@@ -105,7 +105,6 @@ class Test(AbstractTest):
     # 
     def runIsmip(self, testDir, benchDir, aOrC, resolution):
         print("  Ismip-hom-" + aOrC + os.sep + resolution + " test in progress....")
-
         testName = 'ismip-hom-' + aOrC + os.sep + resolution
 
         # Process the configure files
@@ -114,7 +113,7 @@ class Test(AbstractTest):
         self.modelConfigs[testName], self.benchConfigs[testName] = \
             ismipParser.parseConfigurations(testDir + configPath, benchDir + configPath)
 
-        # Search for the std output files
+        # Scrape the details from each of the files and store some data for later
         test = re.compile(".*out.*[0-9]")
         try:
             files = os.listdir(testDir)
@@ -122,8 +121,6 @@ class Test(AbstractTest):
             print("    Could not find model and benchmark directories for " + testName)
             files = []
         files = filter(test.search, files)
-
-        # Scrape the details from each of the files and store some data for later
         ismipDetails, ismipFiles = [], []
         for file in files:
             ismipDetails.append(ismipParser.parseOutput(testDir + '/' + file))
@@ -134,8 +131,7 @@ class Test(AbstractTest):
         numberOutputFiles, numberConfigMatches, numberConfigTests = ismipParser.getParserSummary()
 
         # Create the plots & record the number generated
-        #numberPlots = self.plot(aOrC,resolution[:2])
-        numberPlots = 0
+        numberPlots = 0 # self.plot(aOrC,resolution[:2])
 
         # Run bit for bit test
         numberBitTests, numberBitMatches = 0, 0
@@ -145,159 +141,7 @@ class Test(AbstractTest):
             if value[0] == "SUCCESS": numberBitMatches+=1
             numberBitTests+=1
 
+        # Record the summary
         self.summary[testName] = [numberPlots, numberOutputFiles,
                                   numberConfigMatches, numberConfigTests,
                                   numberBitMatches, numberBitTests]
-
-    ## Creates a plot based on the given input.
-    #  
-    #  input:
-    #    @param aOrC : A string containing either "a" or "c" depending on the test case.
-    #    @param size : The spatial resolution of the test in km.
-    #
-    def plot(self, aOrC, size):
-        ncl_path = livv.cwd + os.sep + "plots" 
-        img_path = livv.imgDir + os.sep + "ismip"
-        benchDir = livv.benchmarkDir + '/ismip-hom-'+aOrC+'/'+size+'km/' + os.sep + livv.dataDir
-        modelDir =  livv.inputDir + '/ismip-hom-'+aOrC+'/'+size+'km/' + os.sep + livv.dataDir
-        glamFiles = ["ishom."+aOrC+"."+size+"km.PIC.out.nc", "ishom."+aOrC+"."+size+"km.JFNK.out.nc"]
-        #filter(re.compile("ishom." + aOrC + '.' + size + "km.((JFNK)|(PIC)).out.nc").search, os.listdir(modelDir))
-        glissadeFiles = ["ishom."+aOrC+"."+size+"km.glissade.1.out.nc", "ishom."+aOrC+"."+size+"km.glissade.4.out.nc"]
-        #filter(re.compile("ishom." + aOrC + '.' + size + "km.glissade.\d.out.nc").search, os.listdir(modelDir))
-        glamFlag, glissadeFlag = True, True
-        imgArr = []
-
-        # Check if all of the files for plotting Glam output is in place
-        if len(glamFiles) != 0:
-            for each in glamFiles:
-                if not (os.path.exists(modelDir + os.sep + each) and os.path.exists(benchDir + os.sep + each)):
-                    glamFlag = False
-        else:
-            glamFlag = False
-
-        # Check if all of the files for plotting Glissade output is in place
-        if len(glissadeFiles) != 0:
-            for each in glissadeFiles:
-                if not (os.path.exists(modelDir + os.sep + each) and os.path.exists(benchDir + os.sep + each)):
-                    glissadeFlag = False
-        else: 
-            glissadeFlag = False
-
-        if glamFlag:
-            description = "Glam U Velocity Comparison Plot"
-            plotFile = ''+ ncl_path + '/ismip-'+aOrC+'/ismip'+aOrC+size+'u.ncl'
-            bench1 = 'STOCKPIC = addfile(\"'+ benchDir + os.sep + glamFiles[0]+'\", \"r\")'
-            bench4 = 'STOCKJFNK = addfile(\"'+ benchDir + os.sep + glamFiles[1]+'\", \"r\")'
-            test1 = 'VARPIC = addfile(\"'+ modelDir + os.sep + glamFiles[0]+'\", \"r\")'
-            test4 = 'VARJFNK = addfile(\"'+ modelDir + os.sep + glamFiles[1]+'\", \"r\")'
-            name = 'ismip'+aOrC+size+'u.png'
-            path = 'PNG = "' + img_path + '/' + name + '"'
-            plotCommand = "ncl '" + bench1 + "'  '" + bench4 + "'  '" + test1 + "'  '" + test4 \
-                            +"'  '" + path + "' " + plotFile
-
-            # Be cautious about running subprocesses
-            call = subprocess.Popen(plotCommand, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            stdOut, stdErr = call.stdout.read(), call.stderr.read()
-
-            if os.path.exists(img_path + os.sep + name):
-                print("    Plot details saved to " + img_path + " as " + name)
-                imgArr.append([name, description])
-            else:
-                print("****************************************************************************")
-                print("    Error saving " + name + " to " + img_path)
-                print("    Details of the error follow: ")
-                print("")
-                print(stdOut)
-                print(stdErr)
-                print("****************************************************************************")
-                return 0
-
-            description = "Glam V Velocity Comparison Plot"
-            plotFile = ''+ ncl_path + '/ismip-'+aOrC+'/ismip'+aOrC+size+'v.ncl'
-            bench1 = 'STOCKPIC = addfile(\"'+ benchDir + os.sep + glamFiles[0]+'\", \"r\")'
-            bench4 = 'STOCKJFNK = addfile(\"'+ benchDir + os.sep + glamFiles[1]+'\", \"r\")'
-            test1 = 'VARPIC = addfile(\"'+ modelDir + os.sep + glamFiles[0]+'\", \"r\")'
-            test4 = 'VARJFNK = addfile(\"'+ modelDir + os.sep + glamFiles[1]+'\", \"r\")'
-            name = 'ismip'+aOrC+size+'v.png'
-            path = 'PNG = "' + img_path + '/' + name + '"'
-            plotCommand = "ncl '" + bench1 + "'  '" + bench4 + "'  '" + test1 + "'  '" + test4 \
-                            +"'  '" + path + "' " + plotFile
-
-            # Be cautious about running subprocesses
-            call = subprocess.Popen(plotCommand, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            stdOut, stdErr = call.stdout.read(), call.stderr.read()
-
-            if os.path.exists(img_path + os.sep + name):
-                print("    Plot details saved to " + img_path + " as " + name)
-                imgArr.append([name, description])
-            else:
-                print("****************************************************************************")
-                print("    Error saving " + name + " to " + img_path)
-                print("    Details of the error follow: ")
-                print("")
-                print(stdOut)
-                print(stdErr)
-                print("****************************************************************************")
-                return 0
-
-        if glissadeFlag:
-            description = "Glissade U Velocity Comparison Plot"
-            plotFile = ''+ ncl_path + '/ismip-'+aOrC+'/ismip'+aOrC+size+'ug.ncl'
-            bench1 = 'STOCK1 = addfile(\"'+ benchDir + os.sep + glissadeFiles[0]+'\", \"r\")'
-            bench4 = 'STOCK4 = addfile(\"'+ benchDir + os.sep + glissadeFiles[1]+'\", \"r\")'
-            test1 = 'VAR1 = addfile(\"'+ modelDir + os.sep + glissadeFiles[0]+'\", \"r\")'
-            test4 = 'VAR4 = addfile(\"'+ modelDir + os.sep + glissadeFiles[1]+'\", \"r\")'
-            name = 'ismip'+aOrC+size+'ug.png'
-            path = 'PNG = "' + img_path + '/' + name + '"'
-            plotCommand = "ncl '" + bench1 + "'  '" + bench4 + "'  '" + test1 + "'  '" + test4 \
-                            +"'  '" + path + "' " + plotFile
-
-            # Be cautious about running subprocesses
-            call = subprocess.Popen(plotCommand, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            stdOut, stdErr = call.stdout.read(), call.stderr.read()
-
-            if os.path.exists(img_path + os.sep + name):
-                print("    Plot details saved to " + img_path + " as " + name)
-                imgArr.append([name, description])
-            else:
-                print("****************************************************************************")
-                print("    Error saving " + name + " to " + img_path)
-                print("    Details of the error follow: ")
-                print("")
-                print(stdOut)
-                print(stdErr)
-                print("****************************************************************************")
-                return 0
-
-            description = "Glissade V Velocity Comparison Plot"
-            plotFile = ''+ ncl_path + '/ismip-'+aOrC+'/ismip'+aOrC+size+'vg.ncl'
-            bench1 = 'STOCK1 = addfile(\"'+ benchDir + os.sep + glissadeFiles[0]+'\", \"r\")'
-            bench4 = 'STOCK4 = addfile(\"'+ benchDir + os.sep + glissadeFiles[1]+'\", \"r\")'
-            test1 = 'VAR1 = addfile(\"'+ modelDir + os.sep + glissadeFiles[0]+'\", \"r\")'
-            test4 = 'VAR4 = addfile(\"'+ modelDir + os.sep + glissadeFiles[1]+'\", \"r\")'
-            name = 'ismip'+aOrC+size+'vg.png'
-            path = 'PNG = "' + img_path + '/' + name + '"'
-            plotCommand = "ncl '" + bench1 + "'  '" + bench4 + "'  '" + test1 + "'  '" + test4 \
-                            +"'  '" + path + "' " + plotFile
-
-            # Be cautious about running subprocesses
-            call = subprocess.Popen(plotCommand, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            stdOut, stdErr = call.stdout.read(), call.stderr.read()
-
-            if os.path.exists(img_path + os.sep + name):
-                print("    Plot details saved to " + img_path + " as " + name)
-                imgArr.append([name, description])
-            else:
-                print("****************************************************************************")
-                print("    Error saving " + name + " to " + img_path)
-                print("    Details of the error follow: ")
-                print("")
-                print(stdOut)
-                print(stdErr)
-                print("****************************************************************************")
-                return 0
-
-        if len(imgArr) != 0:
-            self.plotDetails['ismip-hom-'+aOrC+'/'+size+'km'] = imgArr
-        # Done with plotting for ismip case
-        return len(imgArr)

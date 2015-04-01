@@ -19,7 +19,7 @@ from bin.test import AbstractTest
 from bin.parser import Parser
 
 
-##
+## A mapping between the options available at runtime and the test cases to run
 #
 cases = {'none' : [],
          'small' : ['dome60', 'gis_4km'],
@@ -28,12 +28,12 @@ cases = {'none' : [],
          'scaling' : ['dome60', 'dome120', 'dome240', 'dome500', 'dome1000', 'scalingDome']
         }
 
-##
+## Get the available options for performance testing
 #
 def choices():
     return list( cases.keys() )
 
-##
+## Get the tests that will be run for performance testing
 #
 def choose(key):
     return cases[key]
@@ -79,10 +79,8 @@ class Test(AbstractTest):
     #    @param testCase : the string indicator of the test to run
     #
     def run(self, testCase):
-        # Common run     
-        self.testsRun.append(testCase)
-
         # Map the case names to the case functions
+        self.testsRun.append(testCase)
         splitCase = ["".join(x) for _, x in itertools.groupby(testCase, key=str.isdigit)]
         if len(splitCase) == 1: 
             splitCase = filter(None, re.split("([A-Z][^A-Z]*)", testCase))
@@ -97,9 +95,6 @@ class Test(AbstractTest):
             callDict[perfType](resolution)
         else: 
             print("  Could not find test code for performance test: " + testCase)
-
-        # More common postprocessing
-        return
 
 
     ## Dome Performance Testing
@@ -154,8 +149,6 @@ class Test(AbstractTest):
 
 
     ## Greenland Ice Sheet Performance Testing
-    #
-    #  
     #
     #  input:
     #    @param resolution : the resolution of the test data

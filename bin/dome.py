@@ -70,90 +70,22 @@ class Test(AbstractTest):
     #    @param testCase : the string indicator of the test to run
     #
     def run(self, testCase):
-        # Common run     
-        self.testsRun.append(testCase)
-
         # Map the case names to the case functions
+        self.testsRun.append(testCase)
         splitCase = testCase.split('/')
-        type = splitCase[-1]
-        resolution = splitCase[0][4:]
-        callDict = {'diagnostic' : self.runDiagnostic,
-                    'evolving' : self.runEvolving}
+        type, resolution = splitCase[-1], splitCase[0][4:]
 
         # Make sure LIVV can find the data
-        testDir = livv.inputDir + os.sep + "dome" + resolution + os.sep + type + os.sep + livv.dataDir 
+        modelDir = livv.inputDir + os.sep + "dome" + resolution + os.sep + type + os.sep + livv.dataDir
         benchDir = livv.benchmarkDir + os.sep + "dome" + resolution + os.sep + type + os.sep + livv.dataDir
-        if not (os.path.exists(testDir) and os.path.exists(benchDir)):
+        if not (os.path.exists(modelDir) and os.path.exists(benchDir)):
             print("    Could not find data for dome" + resolution + " " + type + " tests!  Tried to find data in:")
-            print("      " + testDir)
+            print("      " + modelDir)
             print("      " + benchDir)
             print("    Continuing with next test....")
             self.bitForBitDetails['dome' + resolution + os.sep + type] = {'Data not found': ['SKIPPED', '0.0']}
             return 1 # zero returns a problem        
-
-        # Call the correct function
-        if callDict.has_key(type):
-            callDict[type](resolution, testDir, benchDir)
-        else: 
-            print("  Could not find test code for dome test: " + testCase)
-
-
-    ## Perform V&V on the diagnostic dome case
-    #
-    #  Runs the dome diagnostic V&V for a given resolution.  First parses through all 
-    #  of the standard output files for the given test case, then generates plots via
-    #  the plotDiagnostic function.  Finishes up by doing bit for bit comparisons with
-    #  the benchmark files.
-    #
-    #  input:
-    #    @param resolution: The resolution of the test cases to look in. 
-    #                       (eg resolution == 30 -> reg_test/dome30/diagnostic)
-    # 
-    def runDiagnostic(self, resolution, testDir, benchDir):
-        print("  Dome Diagnostic test in progress....")
-
-        diagnosticDir = livv.inputDir + os.sep + "dome" + resolution + os.sep + "diagnostic" + os.sep + livv.dataDir
-        diagnosticBenchDir = livv.benchmarkDir + os.sep + "dome" + resolution + os.sep + "diagnostic" + os.sep + livv.dataDir
-
-        # Process the configure files
-        configPath = os.sep + ".." + os.sep + "configure_files"
-        domeParser = Parser()
-        self.modelConfigs['dome' + resolution + os.sep + "diagnostic"], self.benchConfigs['dome' + resolution + os.sep + "diagnostic"] = \
-            domeParser.parseConfigurations(diagnosticDir + configPath, diagnosticBenchDir + configPath)
-
-        # Search for the standard output files
-        try:
-            files = os.listdir(diagnosticDir)
-        except:
-            print("    Could not find model and benchmark directories for dome" + resolution + "/diagnostic")
-            files = []
-        test = re.compile(".*[0-9]proc")
-        files = filter(test.search, files)
-
-        # Scrape the details from each of the files and store some data for later
-        diagnosticDetails, diagnosticFiles = [], []
-        for file in files:
-            diagnosticDetails.append(domeParser.parseOutput(diagnosticDir + os.sep +  file))
-            diagnosticFiles.append(file)
-        self.fileTestDetails["dome" + resolution + os.sep + "diagnostic"] = zip(diagnosticFiles, diagnosticDetails)
-
-        # Record the data from the parser
-        numberOutputFiles, numberConfigMatches, numberConfigTests = domeParser.getParserSummary()
-
-        # Create the plots and record the number of plots
-        numberPlots = 0 #self.plotDiagnostic(resolution)
-
-        # Run bit for bit tests
-        numberBitTests, numberBitMatches = 0, 0
-        self.bitForBitDetails['dome' + resolution + os.sep + 'diagnostic'] = self.bit4bit(self.getName(), testDir, benchDir)
-        for key, value in self.bitForBitDetails['dome' + resolution + os.sep + 'diagnostic'].iteritems():
-            print ("    {:<40} {:<10}".format(key,value[0]))
-            if value[0] == "SUCCESS": numberBitMatches+=1
-            numberBitTests+=1
-
-        self.summary['dome' + resolution + os.sep + 'diagnostic'] = [numberPlots, numberOutputFiles,
-                                                                     numberConfigMatches, numberConfigTests,
-                                                                     numberBitMatches, numberBitTests]
+        self.runDome(resolution, type, modelDir, benchDir)
 
 
     ## Perform V&V on the evolving dome case
@@ -164,36 +96,33 @@ class Test(AbstractTest):
     #  the benchmark files.
     #
     #  input:
-    #    @param resolution: The resolution of the test cases to look in. 
+    #    @param resolution: The resolution of the test cases to look in.
     #                       (eg resolution == 30 -> reg_test/dome30/evolving)
-    # 
-    def runEvolving(self, resolution, testDir, benchDir):
-        print("  Dome Evolving test in progress....")  
+    #    @param type: The type of test case (evolving, diagnostic, etc)
+    #    @param modelDir: the location of the model run data
+    #    @param benchDir: the location of the benchmark data
+    #
+    def runDome(self, resolution, type, modelDir, benchDir):
+        # Process the configure files
+        print("  Dome " + type + " test in progress....")
+        configPath = os.sep + ".." + os.sep + "configure_files"
+        domeParser = Parser()
+        self.modelConfigs['dome' + resolution + os.sep + type], self.benchConfigs['dome' + resolution + os.sep + type] = \
+                domeParser.parseConfigurations(modelDir + configPath, benchDir + configPath)
 
-        # Search for the std output files
-        evolvingDir = livv.inputDir + os.sep + "dome" + resolution + os.sep + "evolving" + os.sep + livv.dataDir 
-        evolvingBenchDir = livv.benchmarkDir + os.sep + "dome" + resolution + os.sep + "evolving" + os.sep + livv.dataDir
-
+        # Scrape the details from each of the files and store some data for later
         try:
-            files = os.listdir(evolvingDir)
+            files = os.listdir(modelDir)
         except:
-            print("    Could not find model and benchmark directories for dome" + resolution + "/evolving")
+            print("    Could not find model and benchmark directories for dome" + resolution + "/" + type)
             files = []
         test = re.compile(".*((small)|(large))_proc")
         files = filter(test.search, files)
-
-        # Process the configure files
-        configPath = os.sep + ".." + os.sep + "configure_files"
-        domeParser = Parser()
-        self.modelConfigs['dome' + resolution + os.sep + "evolving"], self.benchConfigs['dome' + resolution + os.sep + "evolving"] = \
-                domeParser.parseConfigurations(evolvingDir + configPath, evolvingBenchDir + configPath)
-
-        # Scrape the details from each of the files and store some data for later
-        evolvingDetails, evolvingFiles = [], []
+        domeDetails, domeFiles = [], []
         for file in files:
-            evolvingDetails.append(domeParser.parseOutput(evolvingDir + os.sep +  file))
-            evolvingFiles.append(file)
-        self.fileTestDetails["dome" + resolution + os.sep + "evolving"] = zip(evolvingFiles, evolvingDetails)
+            domeDetails.append(domeParser.parseOutput(modelDir + os.sep +  file))
+            domeFiles.append(file)
+        self.fileTestDetails["dome" + resolution + os.sep + type] = zip(domeFiles, domeDetails)
 
         # Record the data from the parser
         numberOutputFiles, numberConfigMatches, numberConfigTests = domeParser.getParserSummary()
@@ -203,12 +132,12 @@ class Test(AbstractTest):
 
         # Run bit for bit test
         numberBitMatches, numberBitTests = 0, 0
-        self.bitForBitDetails['dome' + resolution + os.sep +'evolving'] = self.bit4bit(self.getName(), testDir, benchDir)
-        for key, value in self.bitForBitDetails['dome' + resolution + os.sep + 'evolving'].iteritems():
+        self.bitForBitDetails['dome' + resolution + os.sep + type] = self.bit4bit(self.getName(), modelDir, benchDir)
+        for key, value in self.bitForBitDetails['dome' + resolution + os.sep + type].iteritems():
             print ("    {:<40} {:<10}".format(key,value[0]))
             if value[0] == "SUCCESS": numberBitMatches+=1
             numberBitTests+=1
 
-        self.summary['dome' + resolution + os.sep + 'evolving'] = [numberPlots, numberOutputFiles,
-                                                                     numberConfigMatches, numberConfigTests,
-                                                                     numberBitMatches, numberBitTests]
+        self.summary['dome' + resolution + os.sep + type] = [numberPlots, numberOutputFiles,
+                                                             numberConfigMatches, numberConfigTests,
+                                                             numberBitMatches, numberBitTests]

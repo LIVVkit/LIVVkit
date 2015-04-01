@@ -11,13 +11,11 @@ def plot_diff(var, testFile, benchFile, outFile):
     call = subprocess.Popen(ncl_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     stdOut, stdErr = call.stdout.read(), call.stderr.read()
 
-    if os.path.exists(outFile):
-        print("    Bit4Bit plot details saved to "+outFile)
-    else:
+    if not os.path.exists(outFile):
         print("****************************************************************************")
         print("*** Error saving "+outFile)
         print("*** Details of the error follow: ")
         print("")
         print(stdOut)
         print(stdErr)
-        print("****************************************************************************")
+        print("****************************************************************************")       

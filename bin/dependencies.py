@@ -7,11 +7,9 @@ Created on January 6, 2015
 '''
 
 #
-#
 # TODO : Try to import urllib2 before checking for setuptools.  If it's not available try using something
 #        like curl or wget from a subprocess to download setuptools and then add urllib2 to the list of
 #        dependencies to check (and obviously install)
-#
 #
 
 import os
@@ -20,7 +18,6 @@ import urllib2
 import subprocess
 
 import livv
-
 
 ## Run all of the checks for dependencies required by LIVV
 #

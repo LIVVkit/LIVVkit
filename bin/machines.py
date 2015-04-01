@@ -14,10 +14,13 @@ import livv
 #  Input:
 #    @param machineName: the name of the file to load from
 #
+#  Output:
+#    @returns locals: The list of variables loaded from the file
+#
 def load(machineName):
     # Tell the user where we are going to load from
     configFile = livv.cwd + os.sep + "configurations" + os.sep + machineName
-    print("Loading configuration file from " + configFile )\
+    print("Loading configuration file from " + configFile )
 
     # Load up the file
     try:

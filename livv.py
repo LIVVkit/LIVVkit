@@ -176,16 +176,16 @@ parser.add_option('-s', '--save',
 ###############################################################################
 
 # I/O Related variables
-cwd = os.path.dirname(os.path.abspath(__file__))
-configDir = cwd + os.sep + "configurations"
-inputDir = options.inputDir
+cwd            = os.path.dirname(os.path.abspath(__file__))
+configDir      = cwd + os.sep + "configurations"
+inputDir       = options.inputDir
 performanceDir = options.performanceDir
-dataDir = options.dataDir
-outputDir = options.outputDir
-imgDir = outputDir + "/imgs"
-comment = options.comment
-timestamp = time.strftime("%m-%d-%Y %H:%M:%S")
-user = getpass.getuser()
+dataDir        = options.dataDir
+outputDir      = options.outputDir
+imgDir         = outputDir + "/imgs"
+comment        = options.comment
+timestamp      = time.strftime("%m-%d-%Y %H:%M:%S")
+user           = getpass.getuser()
 
 # If the user specifies a benchmark dir honor it, otherwise default to inside of inputDir
 if options.benchmarkDir == "NOT A REAL FOLDER":
@@ -224,12 +224,12 @@ dycores = ["glide", "glissade"] #, "glam", "albany", "bisicles"]
 
 
 # Website related variables
-websiteDir = cwd + "/web"
+websiteDir  = cwd + "/web"
 templateDir = websiteDir + "/templates"
-indexDir = outputDir
-cssDir = indexDir + os.sep + "css"
-testDir = indexDir + os.sep + "tests"
-imgDir = indexDir + os.sep + "imgs"
+indexDir    = outputDir
+cssDir      = indexDir + os.sep + "css"
+testDir     = indexDir + os.sep + "tests"
+imgDir      = indexDir + os.sep + "imgs"
 
 ###############################################################################
 #                               Main Execution                                #
@@ -301,7 +301,7 @@ if __name__ == '__main__':
     ###############################################################################
 
     # Describes the test module and the cases to run for said module
-    #NOTE: Each of these modules can be found in livv_bin
+    #NOTE: Each of these modules can be found in bin
     testMapping = {"dome" : ( dome.Test, dome.choose(options.dome) ),
                    "ismip" : ( ismip.Test, ismip.choose(options.ismip) ),
                    "gis" : ( gis.Test, gis.choose(options.gis) ),
