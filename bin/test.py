@@ -151,7 +151,6 @@ class AbstractTest(object):
                     plotVars['velnorm'] = [max, rmse]
                     change = 1
 
-
             # Remove the temp file
             try:
                 os.remove(testDir + os.sep + 'temp.nc')
@@ -161,9 +160,7 @@ class AbstractTest(object):
                 exit(e.errno)
 
             # Record the status and details of the test
-            bitDict[same] = [result[change], 
-                             plotVars
-                            ]
+            bitDict[same] = [result[change],  plotVars]
 
             # Generate the plots for each of the failed variables
             for var in plotVars.keys():
@@ -234,7 +231,6 @@ class AbstractTest(object):
 #
 class TestSummary(AbstractTest):
 
-
     ## Constructor
     #
     def __init__(self):
@@ -278,6 +274,13 @@ class TestSummary(AbstractTest):
                 os.makedirs(livv.imgDir + os.sep + test + os.sep + "bit4bit")
 
 
+    ## Build the index
+    #
+    #  input:
+    #    @param testsRun: The list of which tests were run
+    #    @param testMapping: The grouping of test cases to the overall test
+    #    @param testSummary: A summary of the plots generated, bit for bit tests, etc
+    #
     def generate(self, testsRun, testMapping, testSummary):
         # Where to look for page templates
         templateLoader = jinja2.FileSystemLoader(searchpath=livv.templateDir)

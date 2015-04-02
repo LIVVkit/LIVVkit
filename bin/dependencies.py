@@ -21,6 +21,12 @@ import livv
 
 ## Run all of the checks for dependencies required by LIVV
 #
+#  Checks if modules are used, and if they are checks to see
+#  if they are loaded.  Then, checks for the necessary Python
+#  libraries.  If any are missing they are installed via 
+#  easy_install.  If easy_install isn't installed, that is 
+#  also built.
+#
 def check():
     # The list of nonstandard python libraries that are used 
     libraryList = ["jinja2", "netCDF4", "numpy", "matplotlib"]

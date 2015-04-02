@@ -1,5 +1,8 @@
 '''
-Master module for dome test cases
+Master module for dome test cases.  Inherits methods from the AbstractTest
+class from the Test module.  Dome specific tests are performed by calling
+the run() method, which passes the necessary information to the runDome()
+method.
 
 Created on Dec 8, 2014
 
@@ -10,7 +13,7 @@ import re
 import os
 import subprocess
 
-
+# Map of the options to the test cases
 cases = {'none'   : [],
          'diagnostic' : ['dome30/diagnostic'],
          'evolving'  : ['dome30/evolving'],

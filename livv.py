@@ -65,107 +65,70 @@ from bin.validation import choices as validation_choices
 
 usage_string = "%prog [options]"
 parser = OptionParser(usage=usage_string)
-parser.add_option('--dome', 
-                  action='store', 
-                  type='choice', 
-                  dest='dome', 
-                  choices=dome_choices(), 
-                  default='all', 
+parser.add_option('--dome', action='store', 
+                  type='choice', dest='dome', 
+                  choices=dome_choices(), default='all', 
                   help='specifies the dome tests to run')
 
-parser.add_option('--gis', 
-                  action='store', 
-                  type='choice',
-                  dest='gis', 
-                  choices=gis_choices(), 
-                  default='none', 
+parser.add_option('--gis', action='store', 
+                  type='choice', dest='gis', 
+                  choices=gis_choices(), default='none', 
                   help='specifies the gis tests to run')
 
-parser.add_option('--ismip', 
-                  action='store', 
-                  type='choice', 
-                  dest='ismip', 
-                  choices=ismip_choices(), 
-                  default='all', 
+parser.add_option('--ismip', action='store', 
+                  type='choice', dest='ismip', 
+                  choices=ismip_choices(), default='all', 
                   help='specifies the ismip tests to run')
 
-parser.add_option('--validation', 
-                  action='store', 
-                  type='choice', 
-                  dest='validation', 
-                  choices=validation_choices(), 
-                  default='none', 
+parser.add_option('--validation', action='store', 
+                  type='choice', dest='validation', 
+                  choices=validation_choices(), default='none', 
                   help='specifies the validation tests to run')
 
-parser.add_option('--shelf', 
-                  action='store', 
-                  type='choice', 
-                  dest='shelf', 
-                  choices=shelf_choices(), 
-                  default='all', 
+parser.add_option('--shelf', action='store', 
+                  type='choice', dest='shelf', 
+                  choices=shelf_choices(), default='all', 
                   help='specifies the shelf tests to run')
 
-parser.add_option('--performance', 
-                  action='store', 
-                  type='choice', 
-                  dest='perf', 
-                  choices=perf_choices(), 
-                  default='none', 
+parser.add_option('--performance', action='store', 
+                  type='choice', dest='perf', 
+                  choices=perf_choices(), default='none', 
                   help='specifies the performance tests to run')
 
-parser.add_option('--comment', 
-                  action='store', 
-                  type='string',
-                  dest='comment',
+parser.add_option('--comment', action='store', 
+                  type='string', dest='comment',
                   default='Test run of code', 
                   help='Log a comment about this run')
 
-parser.add_option('-o', '--outputDir',
-                  action='store',
-                  type='string',
-                  dest='outputDir',
+parser.add_option('-o', '--outputDir', action='store',
+                  type='string', dest='outputDir',
                   default=os.path.dirname(os.path.abspath(__file__)) + "/www",
                   help='Location to output the LIVV webpages.')
 
-parser.add_option('-i', '--inputDir',
-                  action='store',
-                  type='string',
-                  dest='inputDir',
+parser.add_option('-i', '--inputDir', action='store',
+                  type='string', dest='inputDir',
                   default=os.path.dirname(os.path.abspath(__file__)) + "/reg_test",
                   help='Location of the input for running tests.')
 
-parser.add_option('-p', '--performanceDir',
-                  action='store',
-                  type='string',
-                  dest='performanceDir',
+parser.add_option('-p', '--performanceDir', action='store',
+                  type='string', dest='performanceDir',
                   default=os.path.dirname(os.path.abspath(__file__)) + "/perf_test",
                   help='Location of the input for running performance tests.')
 
-
-parser.add_option('-b', '--benchmarkDir',
-                  action='store',
-                  type='string',
-                  dest='benchmarkDir',
+parser.add_option('-b', '--benchmarkDir', action='store',
+                  type='string', dest='benchmarkDir',
                   default="NOT A REAL FOLDER",
                   help='Location of the input for running tests.')
 
-parser.add_option('-d', '--dataDir',
-                  action='store',
-                  type='string',
-                  dest='dataDir',
-                  default='data_titan',
+parser.add_option('-d', '--dataDir', action='store',
+                  type='string', dest='dataDir', default='data_titan',
                   help='Subdirectory where data is stored')
 
-parser.add_option('-m', '--machine',
-                  action='store',
-                  type='string',
-                  dest='machineName',
-                  default='',
+parser.add_option('-m', '--machine', action='store',
+                  type='string', dest='machineName', default='',
                   help='Load a preconfigured set of options for a specific machine.')
 
-parser.add_option('-s', '--save',
-                  action="store_true", 
-                  dest='save',
+parser.add_option('-s', '--save', action="store_true", dest='save',
                   help='Store the configuration being run with the given machine name.')
 
 # Get the options and the arguments
@@ -344,7 +307,6 @@ if __name__ == '__main__':
             newTest.run(case)
         testSummary.append(newTest.getSummary())
         print("")
-
         # Generate the test-specific webpage 
         newTest.generate()
 
@@ -360,7 +322,6 @@ if __name__ == '__main__':
             newTest.run(case)
         testSummary.append(newTest.getSummary())
         print("")
-
         # Generate the test-specific webpage 
         newTest.generate()
 
@@ -375,4 +336,3 @@ if __name__ == '__main__':
     print("Finished running LIVV.  Results:  ")
     print("  Open " + outputDir + "/index.html to see test results")
     print("------------------------------------------------------------------------------")
-

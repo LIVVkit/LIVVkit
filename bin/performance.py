@@ -99,6 +99,8 @@ class Test(AbstractTest):
 
     ## Dome Performance Testing
     #
+    #  input:
+    #    @param resolution: the size of the test being analyzed
     #
     def runDomePerformance(self, resolution):
         print("")
