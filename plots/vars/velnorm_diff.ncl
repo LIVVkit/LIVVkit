@@ -31,26 +31,33 @@ begin
     ; create plots
     ;************************************************
     wks = gsn_open_wks("png",plotFile)         ; open a png file
-    gsn_define_colormap(wks,"wgne15")          ; choose a colormap
+    gsn_define_colormap(wks,"ncview_defualt")  ; choose a colormap
 
     plot  = new(3,graphic)
 
-    res                        = True          ; plot mods desired
-    res@cnFillOn               = True          ; turn on color
-    res@gsnSpreadColors        = True          ; use full range of colormap
-    res@cnLinesOn              = False         ; turn off contour lines
-    res@gsnDraw                = False         ; don't draw
-    res@gsnFrame               = False         ; don't advance frame
-    res@cnMaxLevelCount        = 8             ; limit number of contours to 8
-    res@pmLabelBarDisplayMode  = "Always"      ; enable individual label bars
-    res@pmLabelBarSide         = "Bottom"      ; place individual bar below each graph
-    res@lbOrientation          = "Horizontal"  ; horizonal label bar
-    res@lbAutoManage           = False         ; allow to change label bar font height
-    res@lbLabelFontHeightF     = 0.02          ; make font height uniform for all label bars
-    res@cnInfoLabelOn          = False         ; turn off cn info label
+    res                        = True                ; plot mods desired
+    res@cnFillOn               = True                ; turn on color
+    res@cnFillMode             = "RasterFill"        ; fill array cells individually
+    res@gsnSpreadColors        = True                ; use full range of colormap
+    res@cnLinesOn              = False               ; turn off contour lines
+    res@cnLineLabelsOn         = False               ; turn off contour line labels
+    res@gsnDraw                = False               ; don't draw
+    res@gsnFrame               = False               ; don't advance frame
+    res@cnLevelSelectionMode   = "EqualSpacedLevels" ; Set equal spaced contour levels
+    res@cnMaxLevelCount        = 40                  ; limit number of contours to 40
+    res@pmLabelBarDisplayMode  = "Always"            ; enable individual label bars
+    res@pmLabelBarSide         = "Bottom"            ; place individual bar below each graph
+    res@lbOrientation          = "Horizontal"        ; horizonal label bar
+    res@lbAutoManage           = False               ; allow to change label bar font height
+    res@lbLabelFontHeightF     = 0.02                ; make font height uniform for all label bars
+    res@lbBoxLinesOn           = False               ; turn off label bar box lines
+    res@cnInfoLabelOn          = False               ; turn off cn info label
 
     plot(0) = gsn_contour(wks,bench_scaled,res)
     plot(1) = gsn_contour(wks,test_scaled,res)
+
+    res@cnLineLabelFormat      = "*+.2e"               ; use exponential format for diff plot
+
     plot(2) = gsn_contour(wks,diff_scaled,res)
 
 
