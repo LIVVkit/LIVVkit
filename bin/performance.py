@@ -25,7 +25,7 @@ cases = {'none' : [],
          'small' : ['dome60', 'gis_4km'],
          'medium' : ['dome120', 'gis_2km'],
          'large' : ['dome240', 'gis_1km'],
-         'scaling' : ['dome60', 'dome120', 'dome240', 'dome500', 'dome1000', 'scalingDome']
+         'scaling' : ['dome60', 'dome120', 'dome240', 'dome500', 'scalingDome']
         }
 
 ## Get the available options for performance testing
@@ -109,6 +109,7 @@ class Test(AbstractTest):
         # Search for the std output files
         perfDir = livv.performanceDir + os.sep + "dome" + resolution + os.sep + livv.dataDir 
         perfBenchDir = livv.performanceDir + os.sep + "bench" + os.sep + "dome" + resolution + os.sep + livv.dataDir
+
         files = os.listdir(perfDir)
         test = re.compile("^out." + resolution + ".((glide)|(glissade))$")
         files = filter(test.search, files)
@@ -162,13 +163,9 @@ class Test(AbstractTest):
         # Search for the std output files
         perfDir = livv.performanceDir + os.sep + "gis_" + resolution + os.sep + livv.dataDir
         perfBenchDir = livv.performanceDir + os.sep + "bench" + os.sep + 'gis_' + resolution + os.sep + livv.dataDir
-        if os.path.exists(perfDir) and os.path.exists(perfBenchDir):
-            files = os.listdir(perfDir)
-            test = re.compile("^out.gis." + resolution + ".((albany)|(glissade))$")
-            files = filter(test.search, files)
-        else:
-            files = []
-            print("    Could not find model and benchmark directories for gis_" + resolution +".")
+        files = os.listdir(perfDir)
+        test = re.compile("^out.gis." + resolution + ".((albany)|(glissade))$")
+        files = filter(test.search, files)
 
         # Process the configure files
         configPath = os.sep + ".." + os.sep + "configure_files"
@@ -233,10 +230,13 @@ class Test(AbstractTest):
                         mins.append(self.modelTimingData[test][dycore][var][1])
                         maxs.append(self.modelTimingData[test][dycore][var][2])
                     else:
-                        avgs.append(0.0)
-                        mins.append(0.0)
-                        maxs.append(0.0)
+                        resolutions.remove(res)
                 fig, ax = pyplot.subplots(1)
+                pyplot.title((type + " " + " scaling plot for " + var + "(" + dycore + ")").title())
+                pyplot.xlabel("Problem Size")
+                pyplot.ylabel("Time (s)")
+                pyplot.xticks()
+                pyplot.yticks()
                 ax.plot(resolutions, avgs, color='black', ls='--')
                 ax.fill_between(resolutions, mins, maxs, alpha=0.25)
                 pyplot.savefig(livv.imgDir + os.sep + self.getName() + os.sep + type + "_" + dycore + "_" + var + "_" + "_scaling" + ".png")

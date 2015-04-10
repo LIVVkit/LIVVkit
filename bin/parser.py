@@ -221,6 +221,8 @@ class Parser(object):
     #
     def parseTimingSummaries(self, basePath):
         timingSummary = dict()
+        if not os.path.exists(basePath):
+            return timingSummary
 
         for dycore in livv.dycores:
             timingDetails = dict()
@@ -228,7 +230,10 @@ class Parser(object):
 
             # Find all of the timing files
             regex = re.compile("out.*." + dycore + ".timing.*")
-            subDirs = filter(regex.search, os.listdir(basePath))
+            if os.path.exists(basePath):
+                subDirs = filter(regex.search, os.listdir(basePath))
+            else:
+                subDirs = []
             nTimingFiles = 0
             for dir in subDirs:
                 if "cism_timing_stats" in os.listdir(basePath + os.sep + dir):
