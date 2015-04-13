@@ -15,23 +15,25 @@ begin
     ;************************************************
     dims = dimsizes(bench->tempstag(:,:,:,:))
 
-    bench_temp = bench->tempstag(dims(0)-1,1,:,:)
+    bench_temp = bench->tempstag(:,:,:,:)
     bench_scaled = bench_temp@scale_factor * bench_temp
+    bench_sum = dim_sum_n(bench_scaled, (/0,1/) )
     bench_scaled@long_name  = "Scaled Benchmark"
 
-    test_temp = test->tempstag(dims(0)-1,1,:,:)
+    test_temp = test->tempstag(:,:,:,:)
     test_scaled = test_temp@scale_factor * test_temp
+    test_sum = dim_sum_n(test_scaled, (/0,1/) )
     test_scaled@long_name  = "Scaled Test Run"
 
-    diff_scaled = test_scaled - bench_scaled
-    diff_scaled@long_name  = "Scaled Difference"
+    diff_sum = (test_sum - bench_sum) / (dims(0) * dims(1))
+    diff_sum@long_name  = "Sum of Difference"
 
 
     ;************************************************
     ; create plots
     ;************************************************
     wks = gsn_open_wks("png",plotFile)         ; open a png file
-    gsn_define_colormap(wks,"ncview_defualt")  ; choose a colormap
+    gsn_define_colormap(wks,"ncview_default")  ; choose a colormap
 
     plot  = new(3,graphic)
 
@@ -53,12 +55,12 @@ begin
     res@lbBoxLinesOn           = False               ; turn off label bar box lines
     res@cnInfoLabelOn          = False               ; turn off cn info label
 
-    plot(0) = gsn_contour(wks,bench_scaled,res)
-    plot(1) = gsn_contour(wks,test_scaled,res)
+    plot(0) = gsn_contour(wks,bench_scaled(dims(0)-1,1,:,:),res)
+    plot(1) = gsn_contour(wks,test_scaled(dims(0)-1,1,:,:),res)
 
     res@cnLineLabelFormat      = "*+.2e"               ; use exponential format for diff plot
 
-    plot(2) = gsn_contour(wks,diff_scaled,res)
+    plot(2) = gsn_contour(wks,diff_sum,res)
 
 
     ;************************************************
