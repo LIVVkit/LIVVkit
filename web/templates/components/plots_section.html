@@ -1,0 +1,39 @@
+
+
+      <!-- BEGIN PLOT SECTION -->
+      <b class="label-header">Plots</b> <br/>
+      <div class="separator">
+      <hr style="opacity: 0; height: 5px;">
+      {% if case in plotDetails %}
+        {% for imgArr in plotDetails[case] %}
+        {% if imgArr[0] != [] %}
+        <div class="gallery">
+          <div style="float: left; display: inline;">
+             <!-- imgArr[0] is the name of the image -->
+             <a href="#img_form_{{case}}_{{loop.index}}" id="img_pop">
+                <img src="{{imgDir}}/{{testName}}/{{imgArr[0]}}" width="150px"></img>
+            </a>
+            <br style="clear: both" />
+            <!-- imgArr[1] is the description -->
+            <p>{{imgArr[1]}}</p>
+          </div>
+         </div>
+        <a href="{{testName}}.html" class="overlay" id="img_form_{{case}}_{{loop.index}}"></a>
+
+        <div class="popup">
+          <img src="{{imgDir}}/{{testName}}/{{imgArr[0]}}" class="imageOverlay"></img>
+          <a class="close" href="#close">x</a>
+        </div>
+        {% endif %}
+      {% endfor %}
+      <!-- No plots were passed to jinja2 -->
+      {% else %}
+        <a style="padding-left: 20px; color: #696969;">No plots for {{case}}</a>
+      {% endif %}
+      </div>
+      
+      <br style="clear: both" />
+      <br height="30px" />
+      <!-- END PLOT SECTION -->
+      
+      

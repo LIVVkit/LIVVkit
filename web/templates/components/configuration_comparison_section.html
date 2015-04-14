@@ -1,0 +1,59 @@
+      
+
+      <!-- BEGIN CONFIGURATION SECTION -->
+      <b class="label-header"> Configuration Files </b>
+      <div class="separator">
+      <hr style="opacity: 0; height: 5px;">
+          {% if case in modelConfigs and modelConfigs[case]|length != 0 %}
+            {% for file in modelConfigs[case] %}
+                <div class="Configuration">
+                  <!-- Hide and show buttons to allow the user view data more easily -->
+                  <a href="#hide{{case}}{{loop.index}}" class="hide" id="hide{{case}}{{loop.index}}">+</a>
+                  <a href="#show{{case}}{{loop.index}}" class="show" id="show{{case}}{{loop.index}}">-</a>
+                  <h4 class="top">{{file}}</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    <!-- The changed variable keeps track of whether the files match -->
+                    {% set changed = [] %}
+                    {% for section, vars in modelConfigs[case][file].iteritems() %}
+                          <b>[{{section}}]</b>
+                          <div class="variable">
+                          {% for var, val in modelConfigs[case][file][section].iteritems() %}
+                            {% if case in benchConfigs and
+                                file in benchConfigs[case] and
+                                section in benchConfigs[case][file] and
+                                var in benchConfigs[case][file][section]%}
+                              {% if val == benchConfigs[case][file][section][var] %}
+                                  {{var}} = {{val}}<br>
+                              {% else %}
+                                  {{var}} = <p style="color: green; display:inline">{{val}}</p> <p style="color: red; display:inline">{{benchConfigs[case][file][section][var]}}</p> <br>
+                                  {% do changed.append(1) %}
+                              {% endif %}
+                            {% else %}
+                                {{var}} = {{val}} (Benchmark data missing.)<br>
+                                  {% do changed.append(1) %}
+                            {% endif %}
+                          {% endfor %}
+                          </div>
+                    {% endfor %}
+                  </div>
+                  <div class="status">
+                    {% if changed %}
+                      <p style="float: left; color: red">Files differ</p>
+                    {% else %}
+                      <p style="float: left; color: green">Files match</p>
+                    {% endif %}
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            {% endfor %}
+        {% else %}
+          <a style="padding-left: 20px; color: #696969;">Could not find any configuration files to check</a>
+        {% endif %}
+        </div>
+        <hr style="opacity: 0; height: 5px;">
+        <br style="clear: both" />
+        <!-- END CONFIGURATION SECTION -->
+        
+        

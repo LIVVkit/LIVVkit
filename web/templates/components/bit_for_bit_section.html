@@ -1,0 +1,47 @@
+
+
+      <!-- BEGIN BIT FOR BIT SECTION -->
+      <b class="label-header">
+        Bit for Bit 
+      </b>
+      <div class="separator">
+      <hr style="opacity: 0; height: 5px;">
+
+      {% if bitForBitDetails[case]|length != 0 %}
+        {% for fileName, details in bitForBitDetails[case].iteritems() %}
+          <b>{{fileName}}</b>
+          {% if details[0] == "SUCCESS" %}
+            <p class='SUCCESS' style="margin-left: 40px;"">SUCCESS</p>
+          {% elif details[0] == "SKIPPED" %}
+            <p class='SKIPPED' style="margin-left: 40px;">SKIPPED</p>
+          {% elif details[0] == "FAILURE" %}
+            <table style="clear: both; width: 80%; margin-left: 40px; margin-bottom: 20px; margin-top: 20px;">
+              <tr>
+                <th>Variable</th>
+                <th>Max |Error|</th>
+                <th>RMSE</th>
+                <th>Plot (Click to enlarge)</th>
+              </tr>
+              {% for var, vals in details[1].iteritems() %}
+                <tr>
+                  <td><a target="_blank" href="{{imgDir}}/{{testName}}/bit4bit/{{fileName}}.{{var}}.png"><b>{{var}}</b></a></td>
+                  <td>{{vals[0]}}</td>
+                  <td>{{vals[1]}}</td>
+                  <td>
+                    <a target="_blank" href="{{imgDir}}/{{testName}}/bit4bit/{{fileName}}.{{var}}.png">
+                      <div class="bitforbit">
+                        <img src="{{imgDir}}/{{testName}}/bit4bit/{{fileName}}.{{var}}.png" class="bitforbit">
+                      </div>
+                    </a>
+                  </td>                  
+                </tr>
+              {% endfor %}
+            </table>
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+      </div>
+      <br height="30px" />
+      <!-- END BIT FOR BIT SECTION -->
+      
+      

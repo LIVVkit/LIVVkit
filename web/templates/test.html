@@ -3,7 +3,7 @@
 -->
 
 <!-- Include the header and some links -->
-{% include 'header.html' %}
+{% include 'components/header.html' %}
   <div id="nav">
     <a href="../index.html" class="button">Home</a>
     <a href="http://blizzard.ornl.gov" class="button">Blizzard</a>
@@ -35,186 +35,17 @@
     <label for="tab-{{case}}">{{case}}</label>  
     {% endfor %}  
       
-      
     <!-- Go through each of the test cases that fall under this specific subcategory -->
     {% for case in testsRun %}
     <div class="case">
-    
-    
-      <!-- BEGIN PLOT SECTION -->
-      <b class="label-header">Plots</b> <br/>
-      <div class="separator">
-      <hr style="opacity: 0; height: 5px;">
-      {% if case in plotDetails %}
-        {% for imgArr in plotDetails[case] %}
-        {% if imgArr[0] != [] %}
-        <div class="gallery">
-          <div style="float: left; display: inline;">
-             <!-- imgArr[0] is the name of the image -->
-             <a href="#img_form_{{case}}_{{loop.index}}" id="img_pop">
-                <img src="{{imgDir}}/{{testName}}/{{imgArr[0]}}" width="150px"></img>
-            </a>
-            <br style="clear: both" />
-            <!-- imgArr[1] is the description -->
-            <p>{{imgArr[1]}}</p>
-          </div>
-         </div>
-        <a href="{{testName}}.html" class="overlay" id="img_form_{{case}}_{{loop.index}}"></a>
-
-        <div class="popup">
-          <img src="{{imgDir}}/{{testName}}/{{imgArr[0]}}" class="imageOverlay"></img>
-          <a class="close" href="#close">x</a>
-        </div>
-        {% endif %}
-      {% endfor %}
-      <!-- No plots were passed to jinja2 -->
-      {% else %}
-        <a style="padding-left: 20px; color: #696969;">No plots for {{case}}</a>
-      {% endif %}
-      </div>
-      <!-- END PLOT SECTION -->
-      
-      
-      <br style="clear: both" />
-      <br height="30px" />
-
-
-      <!-- BEGIN BIT FOR BIT SECTION -->
-      <b class="label-header">
-        Bit for Bit 
-      </b>
-      <div class="separator">
-      <hr style="opacity: 0; height: 5px;">
-
-      {% if bitForBitDetails[case]|length != 0 %}
-        {% for fileName, details in bitForBitDetails[case].iteritems() %}
-          <b>{{fileName}}</b>
-          {% if details[0] == "SUCCESS" %}
-            <p class='SUCCESS' style="margin-left: 40px;"">SUCCESS</p>
-          {% elif details[0] == "SKIPPED" %}
-            <p class='SKIPPED' style="margin-left: 40px;">SKIPPED</p>
-          {% elif details[0] == "FAILURE" %}
-            <table style="clear: both; width: 80%; margin-left: 40px; margin-bottom: 20px; margin-top: 20px;">
-              <tr>
-                <th>Variable</th>
-                <th>Max |Error|</th>
-                <th>RMSE</th>
-                <th>Plot (Click to enlarge)</th>
-              </tr>
-              {% for var, vals in details[1].iteritems() %}
-                <tr>
-                  <td><a target="_blank" href="{{imgDir}}/{{testName}}/bit4bit/{{fileName}}.{{var}}.png"><b>{{var}}</b></a></td>
-                  <td>{{vals[0]}}</td>
-                  <td>{{vals[1]}}</td>
-                  <td>
-                    <a target="_blank" href="{{imgDir}}/{{testName}}/bit4bit/{{fileName}}.{{var}}.png">
-                      <div class="bitforbit">
-                        <img src="{{imgDir}}/{{testName}}/bit4bit/{{fileName}}.{{var}}.png" class="bitforbit">
-                      </div>
-                    </a>
-                  </td>                  
-                </tr>
-              {% endfor %}
-            </table>
-          {% endif %}
-        {% endfor %}
-      {% endif %}
-      </div>
-      <!-- END BIT FOR BIT SECTION -->
-        
-        
-      <br height="30px" />
-      
-      
-      <!-- BEGIN CONFIGURATION SECTION -->
-      <b class="label-header"> Configuration Files </b>
-      <div class="separator">
-      <hr style="opacity: 0; height: 5px;">
-          {% if case in modelConfigs and modelConfigs[case]|length != 0 %}
-            {% for file in modelConfigs[case] %}
-                <div class="Configuration">
-                  <!-- Hide and show buttons to allow the user view data more easily -->
-                  <a href="#hide{{case}}{{loop.index}}" class="hide" id="hide{{case}}{{loop.index}}">+</a>
-                  <a href="#show{{case}}{{loop.index}}" class="show" id="show{{case}}{{loop.index}}">-</a>
-                  <h4 class="top">{{file}}</h4>
-                  <div class="sections">
-                    <div style="clear:both;"></div>
-                    <!-- The changed variable keeps track of whether the files match -->
-                    {% set changed = [] %}
-                    {% for section, vars in modelConfigs[case][file].iteritems() %}
-                          <b>[{{section}}]</b>
-                          <div class="variable">
-                          {% for var, val in modelConfigs[case][file][section].iteritems() %}
-                            {% if case in benchConfigs and
-                                file in benchConfigs[case] and
-                                section in benchConfigs[case][file] and
-                                var in benchConfigs[case][file][section]%}
-                              {% if val == benchConfigs[case][file][section][var] %}
-                                  {{var}} = {{val}}<br>
-                              {% else %}
-                                  {{var}} = <p style="color: green; display:inline">{{val}}</p> <p style="color: red; display:inline">{{benchConfigs[case][file][section][var]}}</p> <br>
-                                  {% do changed.append(1) %}
-                              {% endif %}
-                            {% else %}
-                                {{var}} = {{val}} (Benchmark data missing.)<br>
-                                  {% do changed.append(1) %}
-                            {% endif %}
-                          {% endfor %}
-                          </div>
-                    {% endfor %}
-                  </div>
-                  <div class="status">
-                    {% if changed %}
-                      <p style="float: left; color: red">Files differ</p>
-                    {% else %}
-                      <p style="float: left; color: green">Files match</p>
-                    {% endif %}
-                  </div>
-                </div>
-                <div style="clear:both;"></div>
-                <hr>
-            {% endfor %}
-        {% else %}
-          <a style="padding-left: 20px; color: #696969;">Could not find any configuration files to check</a>
-        {% endif %}
-        </div>
-        <!-- END CONFIGURATION SECTION -->
-        
-        
-        <hr style="opacity: 0; height: 5px;">
-        <br style="clear: both" />
-        
-        
-        <!-- BEGIN OUTPUT ANALYSIS SECTION -->
-        <b class="label-header">Output Analysis</b>
-        <div class="separator">
-        {% if testDetails[case] != [] %}
-      	<table style="width:100%">
-      		<tr style="background-color: #47A3FF;">
-      			<th>Output File</th>
-      			{% for var in testHeader %}
-      				<th>{{var}}</th>
-      			{% endfor %}
-      		</tr>
-      		{% for file, details in testDetails[case] %}
-      		<tr>
-      			<td style="text-align: left">{{file}}</td>
-      			{% for key, value in details.iteritems() %}
-      			<td>{{value}}</td>
-      			{% endfor %}
-      		</tr>
-      		{% endfor %}
-      	</table>
-      	{% else %}
-      		<p style="padding-left: 20px; color: #696969;">No data found</p>
-      	{% endif %}
-      	</div>
-      	<!-- END OUTPUT ANALYSIS SECTION -->
-      	
+      {% include 'components/plots_section.html' %}
+      {% include 'components/bit_for_bit_section.html' %}
+      {% include 'components/configuration_comparison_section.html' %}
+      {% include 'components/output_analysis_section.html' %}
     </div>
     {% endfor %}
-    </div>
-    <br>
+  </div>
+  <br>
 
 <!-- Include the footer -->
-{% include 'footer.html' %}
+{% include 'components/footer.html' %}

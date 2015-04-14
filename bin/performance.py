@@ -245,6 +245,7 @@ class Test(AbstractTest):
         for var in livv.timingVars:
             for dycore in livv.dycores:
                 mins, avgs, maxs, ress = [], [], [], []
+                bmins, bavgs, bmaxs, bress = [], [], [], []
                 for res in sorted(resolutions):
                     test = type + str(res) + 'km' if typeString == 'scalingGIS' else type + str(res)
                     if self.modelTimingData[test] != {} and \
