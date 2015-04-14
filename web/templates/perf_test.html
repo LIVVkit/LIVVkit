@@ -37,7 +37,7 @@
       <b class="label-header">Plots</b> <br/>
       <div class="separator">
       <hr style="opacity: 0; height: 5px;">
-      {% if case in plotDetails %}
+      {% if case in plotDetails and plotDetails[case] != [] %}
         {% for imgArr in plotDetails[case] %}
         {% if imgArr[0] != [] %}
         <div class="gallery">
@@ -73,6 +73,7 @@
       <b class="label-header"> Timing Summary</b>
       <br style="clear:both; height: 10px;" />
       <div class="separator">
+      {% if case in modelTimingData %}
       {% for dycore, data in modelTimingData[case].iteritems() %}
         <br style="clear:both; height: 10px;" />
         <b style="display: block;">{{dycore}}</b>
@@ -126,6 +127,7 @@
           {% endfor %}
         </table>
       {% endfor %}
+      {% endif %}
       </div>
       <!-- END TIMING SUMMARY SECTION -->
 

@@ -315,7 +315,7 @@ if __name__ == '__main__':
     print("  Beginning performance test suite....")
     print("--------------------------------------------------------------------------")
     for test in perfTestsRun:
-        # Create a new instance of the specific test class (see testMapping for the mapping)
+        # Create a new instance of the specific test class (see testMapping fo    r the mapping)
         newTest = perfMapping[test][0]()
         # Run the specific and bit for bit tests for each case of the test
         for case in perfMapping[test][1]:

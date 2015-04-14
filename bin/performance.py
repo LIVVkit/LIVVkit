@@ -25,7 +25,9 @@ cases = {'none' : [],
          'small' : ['dome60', 'gis_4km'],
          'medium' : ['dome120', 'gis_2km'],
          'large' : ['dome240', 'gis_1km'],
-         'scaling' : ['dome60', 'dome120', 'dome240', 'dome500', 'scalingDome']
+         'scalingDome' : ['dome60', 'dome120', 'dome240', 'dome500', 'scalingDome'],
+         'scalingGIS' : ['gis_4km', 'gis_2km', 'gis_1km', 'scalingGIS'],
+         'scalingAll' : ['dome60', 'dome120', 'dome240', 'dome500', 'scalingDome', 'gis_4km', 'gis_2km', 'gis_1km', 'scalingGIS']
         }
 
 ## Get the available options for performance testing
@@ -110,6 +112,13 @@ class Test(AbstractTest):
         perfDir = livv.performanceDir + os.sep + "dome" + resolution + os.sep + livv.dataDir 
         perfBenchDir = livv.performanceDir + os.sep + "bench" + os.sep + "dome" + resolution + os.sep + livv.dataDir
 
+        if not (os.path.exists(perfDir) and os.path.exists(perfBenchDir)):
+            print("    Could not find data for Dome " + resolution + " tests!  Tried to find data in:")
+            print("      " + perfDir)
+            print("      " + perfBenchDir)
+            print("    Continuing with next test....")
+            return 1
+
         files = os.listdir(perfDir)
         test = re.compile("^out." + resolution + ".((glide)|(glissade))$")
         files = filter(test.search, files)
@@ -160,9 +169,19 @@ class Test(AbstractTest):
         print("")
         print("  Greenland Ice Sheet " + resolution + " performance  tests in progress....")
 
-        # Search for the std output files
+        # The locations for the data
         perfDir = livv.performanceDir + os.sep + "gis_" + resolution + os.sep + livv.dataDir
         perfBenchDir = livv.performanceDir + os.sep + "bench" + os.sep + 'gis_' + resolution + os.sep + livv.dataDir
+
+        # Make sure that there is some data
+        if not (os.path.exists(perfDir) and os.path.exists(perfBenchDir)):
+            print("    Could not find data for GIS " + resolution + " tests!  Tried to find data in:")
+            print("      " + perfDir)
+            print("      " + perfBenchDir)
+            print("    Continuing with next test....")
+            return 1
+
+        # Search for the std output files
         files = os.listdir(perfDir)
         test = re.compile("^out.gis." + resolution + ".((albany)|(glissade))$")
         files = filter(test.search, files)
@@ -213,34 +232,41 @@ class Test(AbstractTest):
     #    @param type : the overarching test category to generate scaling plots for (ie dome/gis)
     #
     def runScaling(self, type):
-        self.modelTimingData['scaling' + type] = dict()
-        self.benchTimingData['scaling' + type] = dict()
-        type = type.lower()
+        typeString = 'scaling' + type
+        self.modelTimingData[typeString] = dict()
+        self.benchTimingData[typeString] = dict()
+        imagesGenerated = []
         print("")
         print("  Generating scaling plots for " + type + "....")
+        type = type.lower() + '_' if typeString == "scalingGIS" else type.lower()
         tests = filter(re.compile(type + ".*").search, self.modelTimingData.keys())
         resolutions = sorted([int(re.findall(r'\d+', s)[0]) for s in tests])
+
         for var in livv.timingVars:
             for dycore in livv.dycores:
-                mins, avgs, maxs = [], [], []
-                for res in resolutions:
-                    test = type + str(res)
-                    if self.modelTimingData[test][dycore][var] != None and len(self.modelTimingData[test][dycore][var]) == 3:
+                mins, avgs, maxs, ress = [], [], [], []
+                for res in sorted(resolutions):
+                    test = type + str(res) + 'km' if typeString == 'scalingGIS' else type + str(res)
+                    if self.modelTimingData[test] != {} and \
+                            self.modelTimingData[test][dycore] != {} and \
+                            self.modelTimingData[test][dycore][var] != {} and \
+                            len(self.modelTimingData[test][dycore][var]) == 3:
                         avgs.append(self.modelTimingData[test][dycore][var][0])
                         mins.append(self.modelTimingData[test][dycore][var][1])
                         maxs.append(self.modelTimingData[test][dycore][var][2])
-                    else:
-                        resolutions.remove(res)
-                fig, ax = pyplot.subplots(1)
-                pyplot.title((type + " " + " scaling plot for " + var + "(" + dycore + ")").title())
-                pyplot.xlabel("Problem Size")
-                pyplot.ylabel("Time (s)")
-                pyplot.xticks()
-                pyplot.yticks()
-                ax.plot(resolutions, avgs, color='black', ls='--')
-                ax.fill_between(resolutions, mins, maxs, alpha=0.25)
-                pyplot.savefig(livv.imgDir + os.sep + self.getName() + os.sep + type + "_" + dycore + "_" + var + "_" + "_scaling" + ".png")
-
+                        ress.append(res)
+                if len(ress) != 0:
+                    fig, ax = pyplot.subplots(1)
+                    pyplot.title((type + " " + " scaling plot for " + var + "(" + dycore + ")").title())
+                    pyplot.xlabel("Problem Size")
+                    pyplot.ylabel("Time (s)")
+                    pyplot.xticks()
+                    pyplot.yticks()
+                    ax.plot(ress, avgs, color='black', ls='--')
+                    ax.fill_between(ress, mins, maxs, alpha=0.25)
+                    pyplot.savefig(livv.imgDir + os.sep + self.getName() + os.sep + type + "_" + dycore + "_" + var + "_" + "_scaling" + ".png")
+                    imagesGenerated.append( [type + "_" + dycore + "_" + var + "_" + "_scaling" + ".png", "Scaling plot for " + dycore + " " + var])
+        self.plotDetails[typeString] = imagesGenerated
 
     ## This is a placeholder
     #
@@ -270,13 +296,13 @@ class Test(AbstractTest):
         # Set up relative paths
         indexDir = ".."
         cssDir = indexDir + "/css"
-        imgDir = indexDir + "/imgs/"
+        imgDir = indexDir + "/imgs"
 
         # Grab all of our images
         testImgDir = livv.imgDir + os.sep + self.getName()
         testImages = [os.path.basename(img) for img in glob.glob(testImgDir + os.sep + "*.png")]
-        testImages.append([os.path.basename(img) for img in glob.glob(testImgDir + "/*.jpg")])
-        testImages.append([os.path.basename(img) for img in glob.glob(testImgDir + "/*.svg")])
+        testImages.append([os.path.basename(img) for img in glob.glob(testImgDir + os.sep +"*.jpg")])
+        testImages.append([os.path.basename(img) for img in glob.glob(testImgDir + os.sep +"*.svg")])
 
         # Set up the template variables  
         templateVars = {"timestamp" : livv.timestamp,
