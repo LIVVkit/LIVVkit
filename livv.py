@@ -56,12 +56,11 @@ from collections import OrderedDict
 
 #NOTE: be careful here! We just want to get our optional argument choices. 
 # Everything else should be imported in __main__!
-from bin.dome import choices as dome_choices
-from bin.ismip import choices as ismip_choices
-from bin.gis import choices as gis_choices
-from bin.shelf import choices as shelf_choices
-from bin.performance import choices as perf_choices
-from bin.validation import choices as validation_choices
+from tests.dome import choices as dome_choices
+from tests.ismip import choices as ismip_choices
+from tests.gis import choices as gis_choices
+from tests.shelf import choices as shelf_choices
+from performance.performance import choices as perf_choices
 
 usage_string = "%prog [options]"
 parser = OptionParser(usage=usage_string)
@@ -79,11 +78,6 @@ parser.add_option('--ismip', action='store',
                   type='choice', dest='ismip', 
                   choices=ismip_choices(), default='all', 
                   help='specifies the ismip tests to run')
-
-parser.add_option('--validation', action='store', 
-                  type='choice', dest='validation', 
-                  choices=validation_choices(), default='none', 
-                  help='specifies the validation tests to run')
 
 parser.add_option('--shelf', action='store', 
                   type='choice', dest='shelf', 
@@ -203,14 +197,15 @@ if __name__ == '__main__':
     print("------------------------------------------------------------------------------")
 
     # Run the dependency checker
-    import bin.dependencies as dependencies
+    import util.dependencies as dependencies
     dependencies.check()
 
     # Pull in the LIVV specific modules
-    import bin.machines as machines
-    from bin.test import TestSummary
-    from bin import dome, ismip, gis, shelf, performance, validation
-
+    import util.machines as machines
+    from tests.test import TestSummary
+    from tests import dome, ismip, gis, shelf
+    from performance import performance
+    
     # Check if we are saving/loading the configuration and set up the machine name
     if options.machineName == '' and options.save:
         # Save the configuration with the default host name
@@ -268,8 +263,7 @@ if __name__ == '__main__':
     testMapping = {"dome" : ( dome.Test, dome.choose(options.dome) ),
                    "ismip" : ( ismip.Test, ismip.choose(options.ismip) ),
                    "gis" : ( gis.Test, gis.choose(options.gis) ),
-                   "shelf" : ( shelf.Test, shelf.choose(options.shelf) ),
-                   "validation" : ( validation.Test, validation.choose(options.validation) ),
+                   "shelf" : ( shelf.Test, shelf.choose(options.shelf) )
                    }
 
     perfMapping = {"performance" : ( performance.Test, performance.choose(options.perf) )}

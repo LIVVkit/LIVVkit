@@ -24,8 +24,8 @@ def choose(key):
 
 
 import livv
-from bin.test import AbstractTest
-from bin.parser import Parser
+from tests.test import AbstractTest
+from util.parser import Parser
 
 # # Main class for handling shelf test cases.
 #

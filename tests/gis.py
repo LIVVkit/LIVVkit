@@ -18,7 +18,7 @@ def choose(key):
 
 
 import livv
-from bin.test import AbstractTest
+from tests.test import AbstractTest
 import jinja2
 
 ## Main class for handling Greenland Ice Sheet test cases.

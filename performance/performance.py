@@ -15,8 +15,8 @@ import jinja2
 import matplotlib.pyplot as pyplot
 
 import livv
-from bin.test import AbstractTest
-from bin.parser import Parser
+from tests.test import AbstractTest
+from util.parser import Parser
 
 
 ## A mapping between the options available at runtime and the test cases to run
