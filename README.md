@@ -1,7 +1,9 @@
+[[docs/livv.png]]
+
 ===================================================================================================
-  Land Ice Verification and Validation Test Suite Readme
+  Land Ice Verification and Validation Toolkit
 ===================================================================================================
-Last updated 4/2/2015
+Last updated 4/17/2015
 If this document is out of date send us an email!  See the contact section below for more details.
 
 
