@@ -1,4 +1,4 @@
-[[docs/livv.png]]
+![](https://github.com/ACME-Climate/LIVV/blob/develop/docs/livv.png)
 
 ===================================================================================================
   Land Ice Verification and Validation Toolkit
