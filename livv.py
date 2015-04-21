@@ -260,68 +260,96 @@ if __name__ == '__main__':
 
     # Describes the test module and the cases to run for said module
     #NOTE: Each of these modules can be found in bin
-    testMapping = {"dome" : ( dome.Test, dome.choose(options.dome) ),
+    verificationMapping = {"dome" : ( dome.Test, dome.choose(options.dome) ),
                    "ismip" : ( ismip.Test, ismip.choose(options.ismip) ),
                    "gis" : ( gis.Test, gis.choose(options.gis) ),
                    "shelf" : ( shelf.Test, shelf.choose(options.shelf) )
                    }
 
     perfMapping = {"performance" : ( performance.Test, performance.choose(options.perf) )}
+    validationMapping = {"validation" : (0,0)}
+    
+    testMapping = {"Verification" : verificationMapping,
+                   "Performance" : perfMapping,
+                   "Validation" : validationMapping}
 
     # Get the keys for all non-empty test cases
-    testsRun = list( itertools.compress( testMapping.keys(), [val[1] for val in testMapping.values()]) )
+    testsRun = list( itertools.compress( verificationMapping.keys(), [val[1] for val in verificationMapping.values()]) )
     perfTestsRun = list( itertools.compress( perfMapping.keys(), [val[1] for val in perfMapping.values()]) )
+    validationTestsRun = list( itertools.compress( validationMapping.keys(), [val[1] for val in validationMapping.values()]))
 
     ###############################################################################
     #                               Run Test Cases                                #
     ###############################################################################
     print("Running V&V tests:")
-    for case in itertools.chain.from_iterable( [testMapping[test][1] for test in testsRun] ): 
+    for case in itertools.chain.from_iterable( [verificationMapping[test][1] for test in testsRun] ): 
         print("  " + case)
     print("")
     print("Running performance tests:")
     for case in itertools.chain.from_iterable( [perfMapping[test][1] for test in perfTestsRun] ): 
         print("  " + case)
     print("")
+    print("Running validation tests:")
+    for case in itertools.chain.from_iterable( [validationMapping[test][1] for test in validationTestsRun] ): 
+        print("  " + case)
+    print("")
 
     # Run the tests
-    testSummary = []
+    verificationSummary, performanceSummary, validationSummary = dict(), dict(), dict()
     summary = TestSummary()
-    summary.webSetup(testsRun + perfTestsRun)
+    summary.webSetup(testsRun + perfTestsRun + validationTestsRun)
 
-    print("--------------------------------------------------------------------------")
-    print("  Beginning V&V test suite....")
-    print("--------------------------------------------------------------------------")
     # Run the V&V Tests
+    if len(testsRun) > 0:
+        print("--------------------------------------------------------------------------")
+        print("  Beginning verification test suite....")
+        print("--------------------------------------------------------------------------")
     for test in testsRun:
-        # Create a new instance of the specific test class (see testMapping for the mapping)
-        newTest = testMapping[test][0]()
+        # Create a new instance of the specific test class (see verificationMapping for the mapping)
+        newTest = verificationMapping[test][0]()
         # Run the specific and bit for bit tests for each case of the test
-        for case in testMapping[test][1]:
+        for case in verificationMapping[test][1]:
             newTest.run(case)
-        testSummary.append(newTest.getSummary())
+        verificationSummary[test] = newTest.getSummary()
         print("")
         # Generate the test-specific webpage 
         newTest.generate()
 
     # Run the performance tests
-    print("--------------------------------------------------------------------------")
-    print("  Beginning performance test suite....")
-    print("--------------------------------------------------------------------------")
+    if len(perfTestsRun) > 0:
+        print("--------------------------------------------------------------------------")
+        print("  Beginning performance analysis....")
+        print("--------------------------------------------------------------------------")
     for test in perfTestsRun:
-        # Create a new instance of the specific test class (see testMapping fo    r the mapping)
+        # Create a new instance of the specific test class (see verificationMapping for the mapping)
         newTest = perfMapping[test][0]()
         # Run the specific and bit for bit tests for each case of the test
         for case in perfMapping[test][1]:
             newTest.run(case)
-        testSummary.append(newTest.getSummary())
+        performanceSummary[test] = newTest.getSummary()
+        print("")
+        # Generate the test-specific webpage 
+        newTest.generate()
+
+    # Run the validation tests
+    if len(validationTestsRun) > 0:
+        print("--------------------------------------------------------------------------")
+        print("  Beginning validation test suite....")
+        print("--------------------------------------------------------------------------")
+    for test in validationTestsRun:
+        # Create a new instance of the specific test class (see verificationMapping for the mapping)
+        newTest = validationMapping[test][0]()
+        # Run the specific and bit for bit tests for each case of the test
+        for case in validationMapping[test][1]:
+            newTest.run(case)
+        validationSummary[test] = newTest.getSummary()
         print("")
         # Generate the test-specific webpage 
         newTest.generate()
 
     # Create the site index
     print("Generating web pages in " + outputDir) 
-    summary.generate(testsRun + perfTestsRun, dict(testMapping, **perfMapping), testSummary)
+    summary.generate(verificationSummary, performanceSummary, validationSummary)
 
     ###############################################################################
     #                        Finished.  Tell user about it.                       #

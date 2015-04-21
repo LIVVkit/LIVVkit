@@ -218,7 +218,7 @@ class AbstractTest(object):
                         "imgDir" : imgDir,
                         "testImages" : testImages}
         outputText = template.render( templateVars )
-        page = open(livv.testDir + '/' + self.getName() + '.html', "w")
+        page = open(livv.indexDir + os.sep + "verification" + os.sep + self.getName() + '.html', "w")
         page.write(outputText)
         page.close()
 
@@ -258,42 +258,46 @@ class TestSummary(AbstractTest):
                 shutil.rmtree(livv.indexDir)
 
         # Create directory structure
-        for siteDir in [livv.indexDir, livv.testDir]:
+        testDirs = [livv.indexDir, 
+                    livv.indexDir + os.sep + "validation", 
+                    livv.indexDir + os.sep + "verification", 
+                    livv.indexDir + os.sep + "performance"]
+        for siteDir in testDirs:
             if not os.path.exists(siteDir):
                 os.mkdir(siteDir);
 
         # Copy over css && imgs directories from source
-        if os.path.exists(livv.indexDir + "/css"): shutil.rmtree(livv.indexDir + "/css")
-        shutil.copytree(livv.websiteDir + "/css", livv.indexDir + "/css")
-        if os.path.exists(livv.indexDir + "/imgs"): shutil.rmtree(livv.indexDir + "/imgs")
-        shutil.copytree(livv.websiteDir + "/imgs", livv.indexDir + "/imgs")
+        if os.path.exists(livv.indexDir + os.sep + "css"): shutil.rmtree(livv.indexDir + os.sep + "css")
+        shutil.copytree(livv.websiteDir + os.sep + "css", livv.indexDir + os.sep + "css")
+        if os.path.exists(livv.indexDir + os.sep + "imgs"): shutil.rmtree(livv.indexDir + os.sep + "imgs")
+        shutil.copytree(livv.websiteDir + os.sep + "imgs", livv.indexDir + os.sep + "imgs")
 
         # Set up imgs directory to have sub-directories for each test
         for test in testsRun:
-            if not os.path.exists(livv.imgDir + os.sep + test + os.sep + "bit4bit"):
+            if not os.path.exists(livv.indexDir + os.sep + "imgs" + os.sep + test + os.sep + "bit4bit"):
                 os.makedirs(livv.imgDir + os.sep + test + os.sep + "bit4bit")
 
 
     ## Build the index
     #
     #  input:
-    #    @param testsRun: The list of which tests were run
-    #    @param testMapping: The grouping of test cases to the overall test
-    #    @param testSummary: A summary of the plots generated, bit for bit tests, etc
+    #    @param verificationSummary: A summary of the verification tests run
+    #    @param performanceSummary: A summary of the performance tests run
+    #    @param validationSummary: A summary of the validation tests run
     #
-    def generate(self, testsRun, testMapping, testSummary):
+    def generate(self, verificationSummary, performanceSummary, validationSummary):
         # Where to look for page templates
         templateLoader = jinja2.FileSystemLoader(searchpath=livv.templateDir)
         templateEnv = jinja2.Environment(loader=templateLoader)
 
         # Create the index page
-        templateFile = "/index.html"
+        templateFile = os.sep + "index.html"
         template = templateEnv.get_template(templateFile)
 
         templateVars = {"indexDir" : livv.indexDir,
-                        "testsRun" : testsRun,
-                        "testMapping" : testMapping,
-                        "testSummary" : testSummary,
+                        "verificationSummary" : verificationSummary,
+                        "performanceSummary" : performanceSummary,
+                        "validationSummary" : validationSummary,
                         "timestamp" : livv.timestamp,
                         "user" : livv.user,
                         "comment" : livv.comment,
@@ -302,7 +306,7 @@ class TestSummary(AbstractTest):
 
         # Write out the index page
         outputText = template.render(templateVars)
-        page = open(livv.indexDir + "/index.html", "w")
+        page = open(livv.indexDir + os.sep + "index.html", "w")
         page.write(outputText)
         page.close()
 
