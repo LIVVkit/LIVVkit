@@ -10,7 +10,7 @@ html {
 }
 
 h1, h2, h3, h4 {
-	font-family: helvetica;
+	font-family: helvetica, sans-serif;
 }
 
 table, ul {
@@ -33,7 +33,7 @@ th, td {
 }
 
 th {
-    font-family: helvetica;	
+    font-family: helvetica, sans-serif;	
 	color: #FFFFFF;
 	background-color: #47A3FF;
 }
@@ -87,13 +87,8 @@ hr {
     font-weight: 600;
 }
 
-.summary {
-	margin-left: 50px;
-	line-height: 1em;
-}
-
 .label-header {
-    font-family: helvetica;
+    font-family: helvetica, sans-serif;
     background-color: #696969; 
     color: #fff;
     display:inline-block; 
@@ -105,6 +100,7 @@ hr {
     border-top:solid 2px #696969; 
     padding: 15px;
 }
+
 
 /******************************************************************************
   Header/Footer Styling

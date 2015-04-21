@@ -1,40 +1,68 @@
 {% include 'components/header.html' %}
 
-	<div id="content">
-	       <hr style="padding: 10px; opacity: 0; clear: both;"/>
-	       
-	       
-		    <div class="verification">
-		      {% for test, summary in verificationSummary.iteritems() %}
-		        <a href="{{indexDir}}/verification/{{test}}.html">{{test}}</a>
-		        <br>
-		        {% for case, details in summary.iteritems() %}
-		          <b>{{case}}</b> <p>{{details}}</p>
-		        {% endfor %}
-		      {% endfor %}
-		    </div>
+<div id="content">
+	<hr style="padding: 10px; opacity: 0; clear: both;" />
+
+	<div class="verification">
+	  <h2>Verification Summary</h2>
+	  {% if verificationSummary == {} %}
+	  <p style="margin-left: 20px;">No verification tests run</p>
+	  {% else %}
+		<table class="summary">
+			<tr>
+				<th></th>
+				<th>Plots</th>
+				<th>StdOut</th>
+				<th>Config Matches</th>
+				<th>Bit for Bit</th>
+			</tr>
+			{% for test, summary in verificationSummary.iteritems() %}
+			  <tr">
+			  <td><a class="tableLink" href="{{indexDir}}/verification/{{test}}.html">{{test}}</a></td>
+			  </tr>
+			{% for case, details in summary.iteritems() %}
+			<tr>
+				<td><b>{{case}}</b></td>
+				<td>{{details[0]}}</td>
+				<td>{{details[1]}}</td>
+				<td>{{details[2]}}/{{details[3]}}</td>
+				<td>{{details[4]}}/{{details[5]}}</td>
+			</tr>
+			{% endfor %} 
+			{% endfor %}
+		</table>
+		{% endif %}
+	</div>
 
 
-			<div class="performance">
-			  {% for test, summary in performanceSummary.iteritems() %}
-		        <a href="{{indexDir}}/performance/{{test}}.html">{{test}}</a>
-		        <br>
-		        {% for case, details in summary.iteritems() %}
-		          <b>{{case}}</b> <p>{{details}}</p>
-		        {% endfor %}
-		      {% endfor %}
-			</div>
+	<div class="performance">
+	  <h2>Performance Summary</h2>
+	  	{% if performanceSummary == {} %}
+	  	<p style="margin-left: 20px;">No performance tests run</p>
+	  	{% else %}
+		{% for test, summary in performanceSummary.iteritems() %} <a
+			href="{{indexDir}}/performance/{{test}}.html">{{test}}</a> <br>
+		{% for case, details in summary.iteritems() %} <b>{{case}}</b>
+		<p>{{details}}</p>
+		{% endfor %} 
+		{% endfor %}
+		{% endif %}
+	</div>
 
 
-			<div class="validation">
-			  {% for test, summary in validationSummary.iteritems() %}
-		        <a href="{{indexDir}}/validtion/{{test}}.html">{{test}}</a>
-		        <br>
-		        {% for case, details in summary.iteritems() %}
-		          <b>{{case}}</b> <p>{{details}}</p>
-		        {% endfor %}
-		      {% endfor %}
-			</div>
+	<div class="validation">
+	  <h2>Validation Summary</h2>
+	    {% if validationSummary == {} %}
+	  	<p style="margin-left: 20px;">No validation tests run</p>	    
+	    {% else %}
+		{% for test, summary in validationSummary.iteritems() %} <a
+			href="{{indexDir}}/validtion/{{test}}.html">{{test}}</a> <br> {%
+		for case, details in summary.iteritems() %} <b>{{case}}</b>
+		<p>{{details}}</p>
+		{% endfor %} 
+		{% endfor %}
+		{% endif %}
+	</div>
 
 
-{% include 'components/footer.html' %}
+	{% include 'components/footer.html' %}

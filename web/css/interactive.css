@@ -13,13 +13,35 @@
 }
 
 a.button {
-	font-family: helvetica;
+	font-family: helvetica, sans-serif;
     float: left;
     text-decoration: none;
 }
 
 a.button:hover {
     background-color: #3385FF;
+}
+
+
+/******************************************************************************
+  Summary Table Styling
+******************************************************************************/
+table.summary {
+	width: 100%;
+}
+
+.tableLink {
+	width: 100%;
+	font-family: helvetica, sans-serif;
+	color: #3385FF;
+	height: 1.5em;
+	line-height: 1.5em;
+	text-align: left;
+    font-weight: 600;	
+}
+
+.tableLink:hover {
+	color: #47A3FF;
 }
 
 
@@ -38,6 +60,8 @@ div.bitforbit img {
 	left: 60px; 
 	width: 100px;
 }
+
+
 /******************************************************************************
   Image Gallery Styling
 ******************************************************************************/
@@ -121,7 +145,7 @@ div.gallery p:hover {
 }
 
 .close {
-    font-family: helvetica;
+    font-family: helvetica, sans-serif;
     background-color:#47A3FF;
     color: #fff;
     height: 30px;
@@ -136,13 +160,14 @@ div.gallery p:hover {
     font-size: 24px;
 }
 
+
 /******************************************************************************
   Tab Selector Styling
 ******************************************************************************/
 .tabs input {display:none}
 
 .tabs label {
-	font-family: helvetica;
+	font-family: helvetica, sans-serif;
     background-color:#696969; 
     color: #fff;
     border:solid 2px #fff;
