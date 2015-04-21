@@ -1,5 +1,5 @@
 '''
-Master module for Ismip tests.  
+Master module for Ismip verification.  
 
 Created on Dec 8, 2014
 
@@ -24,14 +24,14 @@ def choose(key):
 
 
 import livv
-from tests.test import AbstractTest
+from verification.base import AbstractTest
 from util.parser import Parser
 
 ## Main class for handling Ismip test cases.
 #
 #  The Ismip test cases inherit functionality from AbstractTest for checking 
 #  bit-for-bittedness as well as for parsing standard output from a model run.
-#  This class handles the Ismip-hom a and c tests for resolutions of 20km and 80km.
+#  This class handles the Ismip-hom a and c verification for resolutions of 20km and 80km.
 #
 class Test(AbstractTest):
 
@@ -73,7 +73,7 @@ class Test(AbstractTest):
         testDir = livv.inputDir + os.sep + test + os.sep + livv.dataDir 
         benchDir = livv.benchmarkDir + os.sep + test + os.sep + livv.dataDir
         if not (os.path.exists(testDir) and os.path.exists(benchDir)):
-            print("    Could not find data for " + testDir + " tests!  Tried to find data in:")
+            print("    Could not find data for " + testDir + " verification!  Tried to find data in:")
             print("      " + testDir)
             print("      " + benchDir)
             print("    Continuing with next test....")

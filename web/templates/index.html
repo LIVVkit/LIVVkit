@@ -40,12 +40,29 @@
 	  	{% if performanceSummary == {} %}
 	  	<p style="margin-left: 20px;">No performance tests run</p>
 	  	{% else %}
-		{% for test, summary in performanceSummary.iteritems() %} <a
-			href="{{indexDir}}/performance/{{test}}.html">{{test}}</a> <br>
-		{% for case, details in summary.iteritems() %} <b>{{case}}</b>
-		<p>{{details}}</p>
-		{% endfor %} 
-		{% endfor %}
+		<table class="summary">
+			<tr>
+				<th></th>
+				<th>Plots</th>
+				<th>StdOut</th>
+				<th>Config Matches</th>
+				<th>Bit for Bit</th>
+			</tr>
+			{% for test, summary in performanceSummary.iteritems() %}
+			  <tr">
+			  <td><a class="tableLink" href="{{indexDir}}/performance/{{test}}.html">{{test}}</a></td>
+			  </tr>
+			{% for case, details in summary.iteritems() %}
+			<tr>
+				<td><b>{{case}}</b></td>
+				<td>{{details[0]}}</td>
+				<td>{{details[1]}}</td>
+				<td>{{details[2]}}/{{details[3]}}</td>
+				<td>{{details[4]}}/{{details[5]}}</td>
+			</tr>
+			{% endfor %} 
+			{% endfor %}
+		</table>
 		{% endif %}
 	</div>
 

@@ -64,7 +64,7 @@ class AbstractTest(object):
     def run(self, test):
         pass
 
-    ## Get a summary of the tests that have been run 
+    ## Get a summary of the verification that have been run 
     #
     #  Output:
     #    @return a dictionary of the testcases that holds various statistics
@@ -106,7 +106,7 @@ class AbstractTest(object):
             print("  Benchmark and model data not available for " + test)
             return {'No matching benchmark and data files found': ['SKIPPED','0.0']}
         else:
-            print("  Running bit for bit tests of " + test + "....")
+            print("  Running bit for bit verification of " + test + "....")
 
         # Go through and check if any differences occur
         for same in list(sameList):
@@ -223,94 +223,4 @@ class AbstractTest(object):
         page.close()
 
 
-## TestSummary provides LIVV the ability to assemble the overview and main page.
-#
-#  The TestSummary class does not strictly fall under the category of a test
-#  but can take advantage of the infrastructure that the AbstractTest class
-#  provides.
-#
-class TestSummary(AbstractTest):
-
-    ## Constructor
-    #
-    def __init__(self):
-        return
-
-    ## Return the name of the test
-    # 
-    def getName(self):
-        return "test summary"
-
-    ## Prepare the index of the website.
-    #
-    #  input:
-    #    @param testsRun: the top level names of each of the tests run
-    #
-    def webSetup(self, testsRun):
-        # Check if we need to back up an old run
-        if os.path.exists(livv.indexDir):
-            response = raw_input("Found a duplicate of the output directory.  Would you like to create a backup before overwriting? (y/n)")
-            if response in ["yes", "Yes", "YES", "YEs", "y", "Y"]:
-                if os.path.exists(livv.indexDir + "_backup"):
-                    shutil.rmtree(livv.indexDir + "_backup")
-                shutil.copytree(livv.indexDir, livv.indexDir + "_backup")
-            else:
-                shutil.rmtree(livv.indexDir)
-
-        # Create directory structure
-        testDirs = [livv.indexDir, 
-                    livv.indexDir + os.sep + "validation", 
-                    livv.indexDir + os.sep + "verification", 
-                    livv.indexDir + os.sep + "performance"]
-        for siteDir in testDirs:
-            if not os.path.exists(siteDir):
-                os.mkdir(siteDir);
-
-        # Copy over css && imgs directories from source
-        if os.path.exists(livv.indexDir + os.sep + "css"): shutil.rmtree(livv.indexDir + os.sep + "css")
-        shutil.copytree(livv.websiteDir + os.sep + "css", livv.indexDir + os.sep + "css")
-        if os.path.exists(livv.indexDir + os.sep + "imgs"): shutil.rmtree(livv.indexDir + os.sep + "imgs")
-        shutil.copytree(livv.websiteDir + os.sep + "imgs", livv.indexDir + os.sep + "imgs")
-
-        # Set up imgs directory to have sub-directories for each test
-        for test in testsRun:
-            if not os.path.exists(livv.indexDir + os.sep + "imgs" + os.sep + test + os.sep + "bit4bit"):
-                os.makedirs(livv.imgDir + os.sep + test + os.sep + "bit4bit")
-
-
-    ## Build the index
-    #
-    #  input:
-    #    @param verificationSummary: A summary of the verification tests run
-    #    @param performanceSummary: A summary of the performance tests run
-    #    @param validationSummary: A summary of the validation tests run
-    #
-    def generate(self, verificationSummary, performanceSummary, validationSummary):
-        # Where to look for page templates
-        templateLoader = jinja2.FileSystemLoader(searchpath=livv.templateDir)
-        templateEnv = jinja2.Environment(loader=templateLoader)
-
-        # Create the index page
-        templateFile = os.sep + "index.html"
-        template = templateEnv.get_template(templateFile)
-
-        templateVars = {"indexDir" : livv.indexDir,
-                        "verificationSummary" : verificationSummary,
-                        "performanceSummary" : performanceSummary,
-                        "validationSummary" : validationSummary,
-                        "timestamp" : livv.timestamp,
-                        "user" : livv.user,
-                        "comment" : livv.comment,
-                        "cssDir" : "css", 
-                        "imgDir" : "imgs"}
-
-        # Write out the index page
-        outputText = template.render(templateVars)
-        page = open(livv.indexDir + os.sep + "index.html", "w")
-        page.write(outputText)
-        page.close()
-
-    # Override the abstract methods with empty calls    
-    def run(self, test):
-        pass
 

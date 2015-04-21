@@ -24,7 +24,7 @@ def choose(key):
 
 
 import livv
-from tests.test import AbstractTest
+from verification.base import AbstractTest
 from util.parser import Parser
 
 # # Main class for handling shelf test cases.
@@ -67,7 +67,7 @@ class Test(AbstractTest):
         testDir = livv.inputDir + os.sep + test + os.sep + livv.dataDir 
         benchDir = livv.benchmarkDir + os.sep + test + os.sep + livv.dataDir 
         if not (os.path.exists(testDir) and os.path.exists(benchDir)):
-            print("    Could not find data for " + test + " tests!  Tried to find data in:")
+            print("    Could not find data for " + test + " verification!  Tried to find data in:")
             print("      " + testDir)
             print("      " + benchDir)
             print("    Continuing with next test....")
