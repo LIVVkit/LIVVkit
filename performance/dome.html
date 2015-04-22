@@ -1,0 +1,4122 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<link rel="stylesheet" type="text/css" href="../css/livv.css">
+<link rel="stylesheet" type="text/css" href="../css/interactive.css">
+<link rel="stylesheet" type="text/css" href="../css/popups.css">
+</head>
+
+<body>	
+
+<div id="page">
+	<div id="header">
+		<img src="../imgs/gicon.svg" style="width: 30px; float: left; padding: 5px;"/>
+		<a id="header-content" href="/home/bzq/livv-dev/LIVV/www/index.html">
+			LIVV: Land Ice Verification & Validation
+		</a>
+	</div>
+
+  <div id="content">
+  
+  <h2 style="padding-top: 40px; padding-left: 15px;">dome</h2>
+  <div class="description">
+    <p>3-D paraboloid dome of ice with a circular, 60 km diameter base sitting on a flat bed. The horizontal spatial resolution studies are 2 km, 1 km, 0.5 km and 0.25 km, and there are 10 vertical levels. For this set of experiments a quasi no-slip basal condition in imposed by setting. A zero-flux boundary condition is applied to the dome margins. </p>
+  </div>
+  <br style="clear: both" />
+  
+  <STYLE type="text/css">
+  #select :checked +  * +  * +  * +  * +  label { background-color:#47A3FF;border-color:#47A3FF;color:#fff;}
+  #select :checked +  * +  * +  * +  * +  * +  * +  * +  * +  * +  div {display: block; }
+  </STYLE>
+  
+  <div id="select" class="tabs">
+  
+    <!-- CREATE THE TAB SELECTOR -->
+    
+    <input id="tab-dome60" name="tabs" type="radio" checked />
+    
+    <input id="tab-dome120" name="tabs" type="radio" checked />
+    
+    <input id="tab-dome240" name="tabs" type="radio" checked />
+    
+    <input id="tab-dome500" name="tabs" type="radio" checked />
+    
+    <input id="tab-scalingDome" name="tabs" type="radio" checked />
+      
+    
+    <label for="tab-dome60">dome60</label>  
+    
+    <label for="tab-dome120">dome120</label>  
+    
+    <label for="tab-dome240">dome240</label>  
+    
+    <label for="tab-dome500">dome500</label>  
+    
+    <label for="tab-scalingDome">scalingDome</label>  
+      
+    
+    
+    <!-- GO THROUGH EACH SPECIFIC TEST CASE & DISPLAY THE CONTENT-->  
+    
+    <div class="case">
+      
+
+      <!-- BEGIN PLOT SECTION -->
+      <b class="label-header">Plots</b> <br/>
+      <div class="separator">
+      <hr style="opacity: 0; height: 5px;">
+      
+        <a style="padding-left: 20px; color: #696969;">No plots for dome60</a>
+      
+      </div>
+      
+      <br style="clear: both" />
+      <br height="30px" />
+      <!-- END PLOT SECTION -->
+      
+      
+      
+
+      <!-- BEGIN TIMING SUMMARY SECTION -->
+      <b class="label-header"> Timing Summary</b>
+      <br style="clear:both; height: 10px;" />
+      <div class="separator">
+      
+      
+        <br style="clear:both; height: 10px;" />
+        <b style="display: block;">glissade</b>
+        <table style="width: 100%;  border-collapse: collapse;">
+          <tr>
+            <th>Variable</th>
+            <th>Average</th>
+            <th>Minimum</th>
+            <th>Maximum</th>
+          </tr>
+          
+            
+            <tr>
+              <td style="text-align: right">IO Writeback</td>
+              
+              
+              
+              <td style="text-align: left">
+                0.01100 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+              <td style="text-align: left">
+                0.01100 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+              <td style="text-align: left">
+                0.01100 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">Simple Glide</td>
+              
+              
+              
+              <td style="text-align: left">
+                7.01400 
+                
+                  <p style="display: inline; color: red">(+7.014)</p>
+                
+              </td>
+              <td style="text-align: left">
+                7.01400 
+                
+                  <p style="display: inline; color: red">(+7.014)</p>
+                
+              </td>
+              <td style="text-align: left">
+                7.01400 
+                
+                  <p style="display: inline; color: red">(+7.014)</p>
+                
+              </td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">Initial Diagonal Solve</td>
+              
+              
+              
+              <td style="text-align: left">
+                7.51127 
+                
+                  <p style="display: inline; color: green">(-0.055)</p>
+                
+              </td>
+              <td style="text-align: left">
+                6.96500 
+                
+                  <p style="display: inline; color: green">(-0.588)</p>
+                
+              </td>
+              <td style="text-align: left">
+                7.59100 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">Velocity Driver</td>
+              
+              
+              
+              <td style="text-align: left">
+                7.50909 
+                
+                  <p style="display: inline; color: green">(-0.055)</p>
+                
+              </td>
+              <td style="text-align: left">
+                6.96400 
+                
+                  <p style="display: inline; color: green">(-0.587)</p>
+                
+              </td>
+              <td style="text-align: left">
+                7.58800 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+            </tr>
+            
+          
+        </table>
+      
+        <br style="clear:both; height: 10px;" />
+        <b style="display: block;">glide</b>
+        <table style="width: 100%;  border-collapse: collapse;">
+          <tr>
+            <th>Variable</th>
+            <th>Average</th>
+            <th>Minimum</th>
+            <th>Maximum</th>
+          </tr>
+          
+            
+            <tr>
+              <td style="text-align: right">IO Writeback</td>
+              
+              
+              
+              <td style="text-align: left">
+                0.01082 
+                
+                  <p style="display: inline; color: red">(+0.000)</p>
+                
+              </td>
+              <td style="text-align: left">
+                0.01000 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+              <td style="text-align: left">
+                0.01100 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">Simple Glide</td>
+              
+              
+              
+              <td style="text-align: left">
+                212.75800 
+                
+                  <p style="display: inline; color: red">(+212.758)</p>
+                
+              </td>
+              <td style="text-align: left">
+                212.75800 
+                
+                  <p style="display: inline; color: red">(+212.758)</p>
+                
+              </td>
+              <td style="text-align: left">
+                212.75800 
+                
+                  <p style="display: inline; color: red">(+212.758)</p>
+                
+              </td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">Initial Diagonal Solve</td>
+              
+              
+              
+              <td style="text-align: left">
+                42.06864 
+                
+                  <p style="display: inline; color: red">(+17.062)</p>
+                
+              </td>
+              <td style="text-align: left">
+                24.96900 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+              <td style="text-align: left">
+                212.68800 
+                
+                  <p style="display: inline; color: red">(+187.639)</p>
+                
+              </td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">Velocity Driver</td>
+              
+              
+              
+              <td style="text-align: left">
+                212.68700 
+                
+                  <p style="display: inline; color: red">(+212.687)</p>
+                
+              </td>
+              <td style="text-align: left">
+                212.68700 
+                
+                  <p style="display: inline; color: red">(+212.687)</p>
+                
+              </td>
+              <td style="text-align: left">
+                212.68700 
+                
+                  <p style="display: inline; color: red">(+212.687)</p>
+                
+              </td>
+            </tr>
+            
+          
+        </table>
+      
+      
+      </div>
+      <br style="clear: both" />
+      <br height="30px" />
+      <!-- END TIMING SUMMARY SECTION -->
+
+
+            
+
+      <!-- BEGIN CONFIGURATION SECTION -->
+      <b class="label-header"> Configuration Files </b>
+      <div class="separator">
+      <hr style="opacity: 0; height: 5px;">
+          
+            
+                <div class="Configuration">
+                  <!-- Hide and show buttons to allow the user view data more easily -->
+                  <a href="#hidedome601" class="hide" id="hidedome601">+</a>
+                  <a href="#showdome601" class="show" id="showdome601">-</a>
+                  <h4 class="top">dome.60.glide.config</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    <!-- The changed variable keeps track of whether the files match -->
+                    
+                    
+                          <b>[DOME-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                          <b>[grid]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  upn = 10<br>
+                              
+                            
+                          
+                            
+                              
+                                  ewn = 60<br>
+                              
+                            
+                          
+                            
+                              
+                                  nsn = 60<br>
+                              
+                            
+                          
+                            
+                              
+                                  dew = 1000<br>
+                              
+                            
+                          
+                            
+                              
+                                  dns = 1000<br>
+                              
+                            
+                          
+                            
+                              
+                                  sigma_builtin = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[time]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  tstart = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  tend = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt = 1.<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  dycore = 1              <br>
+                              
+                            
+                          
+                            
+                              
+                                  flow_law = 0            <br>
+                              
+                            
+                          
+                            
+                              
+                                  evolution = 3           <br>
+                              
+                            
+                          
+                            
+                              
+                                  temperature = 1         <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[ho_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  which_ho_babc = 4       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_efvs = 2       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_sparse = 4     <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_nonlinear = 1  <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[parameters]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  flow_factor = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  ice_limit = 1          <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF default]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  comment = created with dome.py<br>
+                              
+                            
+                          
+                            
+                              
+                                  title = parabolic dome test case using first-order dynamics<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF input]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  name = data/dome.60.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  time = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF output]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  variables = thk usurf uvel vvel velnorm temp<br>
+                              
+                            
+                          
+                            
+                              
+                                  frequency = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  name = data/dome.60.glide.out.nc<br>
+                              
+                            
+                          
+                          </div>
+                    
+                  </div>
+                  <div class="status">
+                    
+                      <p style="float: left; color: green">Files match</p>
+                    
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            
+                <div class="Configuration">
+                  <!-- Hide and show buttons to allow the user view data more easily -->
+                  <a href="#hidedome602" class="hide" id="hidedome602">+</a>
+                  <a href="#showdome602" class="show" id="showdome602">-</a>
+                  <h4 class="top">dome.60.config</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    <!-- The changed variable keeps track of whether the files match -->
+                    
+                    
+                          <b>[DOME-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                          <b>[grid]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  upn = 10<br>
+                              
+                            
+                          
+                            
+                              
+                                  ewn = 60<br>
+                              
+                            
+                          
+                            
+                              
+                                  nsn = 60<br>
+                              
+                            
+                          
+                            
+                              
+                                  dew = 1000<br>
+                              
+                            
+                          
+                            
+                              
+                                  dns = 1000<br>
+                              
+                            
+                          
+                            
+                              
+                                  sigma_builtin = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[time]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  tstart = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  tend = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt = 1.<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  dycore = 2              <br>
+                              
+                            
+                          
+                            
+                              
+                                  flow_law = 0            <br>
+                              
+                            
+                          
+                            
+                              
+                                  evolution = 3           <br>
+                              
+                            
+                          
+                            
+                              
+                                  temperature = 1         <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[ho_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  which_ho_babc = 4       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_efvs = 2       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_sparse = 3     <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_nonlinear = 0  <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[parameters]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  flow_factor = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  ice_limit = 1          <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF default]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  comment = created with dome.py<br>
+                              
+                            
+                          
+                            
+                              
+                                  title = parabolic dome test case using first-order dynamics<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF input]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  name = data/dome.60.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  time = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF output]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  variables = thk usurf uvel vvel velnorm temp<br>
+                              
+                            
+                          
+                            
+                              
+                                  frequency = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  name = data/dome.60.out.nc<br>
+                              
+                            
+                          
+                          </div>
+                    
+                  </div>
+                  <div class="status">
+                    
+                      <p style="float: left; color: green">Files match</p>
+                    
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            
+                <div class="Configuration">
+                  <!-- Hide and show buttons to allow the user view data more easily -->
+                  <a href="#hidedome603" class="hide" id="hidedome603">+</a>
+                  <a href="#showdome603" class="show" id="showdome603">-</a>
+                  <h4 class="top">dome.60.glissade.config</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    <!-- The changed variable keeps track of whether the files match -->
+                    
+                    
+                          <b>[DOME-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                          <b>[grid]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  upn = 10<br>
+                              
+                            
+                          
+                            
+                              
+                                  ewn = 60<br>
+                              
+                            
+                          
+                            
+                              
+                                  nsn = 60<br>
+                              
+                            
+                          
+                            
+                              
+                                  dew = 1000<br>
+                              
+                            
+                          
+                            
+                              
+                                  dns = 1000<br>
+                              
+                            
+                          
+                            
+                              
+                                  sigma_builtin = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[time]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  tstart = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  tend = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt = 1.<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  dycore = 2              <br>
+                              
+                            
+                          
+                            
+                              
+                                  flow_law = 0            <br>
+                              
+                            
+                          
+                            
+                              
+                                  evolution = 3           <br>
+                              
+                            
+                          
+                            
+                              
+                                  temperature = 1         <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[ho_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  which_ho_babc = 4       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_efvs = 2       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_sparse = 3     <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_nonlinear = 0  <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[parameters]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  flow_factor = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  ice_limit = 1          <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF default]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  comment = created with dome.py<br>
+                              
+                            
+                          
+                            
+                              
+                                  title = parabolic dome test case using first-order dynamics<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF input]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  name = data/dome.60.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  time = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF output]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  variables = thk usurf uvel vvel velnorm temp<br>
+                              
+                            
+                          
+                            
+                              
+                                  frequency = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  name = data/dome.60.glissade.out.nc<br>
+                              
+                            
+                          
+                          </div>
+                    
+                  </div>
+                  <div class="status">
+                    
+                      <p style="float: left; color: green">Files match</p>
+                    
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            
+        
+        </div>
+        <hr style="opacity: 0; height: 5px;">
+        <br style="clear: both" />
+        <!-- END CONFIGURATION SECTION -->
+        
+                
+    </div>
+    
+    <div class="case">
+      
+
+      <!-- BEGIN PLOT SECTION -->
+      <b class="label-header">Plots</b> <br/>
+      <div class="separator">
+      <hr style="opacity: 0; height: 5px;">
+      
+        <a style="padding-left: 20px; color: #696969;">No plots for dome120</a>
+      
+      </div>
+      
+      <br style="clear: both" />
+      <br height="30px" />
+      <!-- END PLOT SECTION -->
+      
+      
+      
+
+      <!-- BEGIN TIMING SUMMARY SECTION -->
+      <b class="label-header"> Timing Summary</b>
+      <br style="clear:both; height: 10px;" />
+      <div class="separator">
+      
+      
+        <br style="clear:both; height: 10px;" />
+        <b style="display: block;">glissade</b>
+        <table style="width: 100%;  border-collapse: collapse;">
+          <tr>
+            <th>Variable</th>
+            <th>Average</th>
+            <th>Minimum</th>
+            <th>Maximum</th>
+          </tr>
+          
+            
+            <tr>
+              <td style="text-align: right">IO Writeback</td>
+              
+              
+              
+              <td style="text-align: left">
+                0.04391 
+                
+                  <p style="display: inline; color: red">(+0.000)</p>
+                
+              </td>
+              <td style="text-align: left">
+                0.04300 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+              <td style="text-align: left">
+                0.04800 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">Simple Glide</td>
+              
+              
+              
+              <td style="text-align: left">
+                9.52200 
+                
+                  <p style="display: inline; color: red">(+9.522)</p>
+                
+              </td>
+              <td style="text-align: left">
+                9.52200 
+                
+                  <p style="display: inline; color: red">(+9.522)</p>
+                
+              </td>
+              <td style="text-align: left">
+                9.52200 
+                
+                  <p style="display: inline; color: red">(+9.522)</p>
+                
+              </td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">Initial Diagonal Solve</td>
+              
+              
+              
+              <td style="text-align: left">
+                9.49000 
+                
+                  <p style="display: inline; color: green">(-0.008)</p>
+                
+              </td>
+              <td style="text-align: left">
+                9.38500 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+              <td style="text-align: left">
+                9.72500 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">Velocity Driver</td>
+              
+              
+              
+              <td style="text-align: left">
+                9.48736 
+                
+                  <p style="display: inline; color: green">(-0.008)</p>
+                
+              </td>
+              <td style="text-align: left">
+                9.38200 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+              <td style="text-align: left">
+                9.72200 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+            </tr>
+            
+          
+        </table>
+      
+        <br style="clear:both; height: 10px;" />
+        <b style="display: block;">glide</b>
+        <table style="width: 100%;  border-collapse: collapse;">
+          <tr>
+            <th>Variable</th>
+            <th>Average</th>
+            <th>Minimum</th>
+            <th>Maximum</th>
+          </tr>
+          
+            
+            <tr>
+              <td style="text-align: right">IO Writeback</td>
+              
+              
+              
+              <td style="text-align: left">
+                0.04340 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+              <td style="text-align: left">
+                0.04300 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+              <td style="text-align: left">
+                0.04500 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">Simple Glide</td>
+              
+              
+              
+              <td style="text-align: left">
+                0.00000 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+              <td style="text-align: left">
+                0.00000 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+              <td style="text-align: left">
+                0.00000 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">Initial Diagonal Solve</td>
+              
+              
+              
+              <td style="text-align: left">
+                27.64150 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+              <td style="text-align: left">
+                27.58500 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+              <td style="text-align: left">
+                27.72400 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">/home/bzq/livv-dev/LIVV/perf_test/dome120/data_titan/out.120.glide.timing/cism_timing_stats</td>
+              <td>N/A</td>
+              <td>N/A</td>
+              <td>N/A</td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">Velocity Driver</td>
+              
+              
+              
+              <td style="text-align: left">
+                0.00000 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+              <td style="text-align: left">
+                0.00000 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+              <td style="text-align: left">
+                0.00000 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+            </tr>
+            
+          
+        </table>
+      
+      
+      </div>
+      <br style="clear: both" />
+      <br height="30px" />
+      <!-- END TIMING SUMMARY SECTION -->
+
+
+            
+
+      <!-- BEGIN CONFIGURATION SECTION -->
+      <b class="label-header"> Configuration Files </b>
+      <div class="separator">
+      <hr style="opacity: 0; height: 5px;">
+          
+            
+                <div class="Configuration">
+                  <!-- Hide and show buttons to allow the user view data more easily -->
+                  <a href="#hidedome1201" class="hide" id="hidedome1201">+</a>
+                  <a href="#showdome1201" class="show" id="showdome1201">-</a>
+                  <h4 class="top">dome.120.glide.config</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    <!-- The changed variable keeps track of whether the files match -->
+                    
+                    
+                          <b>[DOME-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                          <b>[grid]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  upn = 10<br>
+                              
+                            
+                          
+                            
+                              
+                                  ewn = 120<br>
+                              
+                            
+                          
+                            
+                              
+                                  nsn = 120<br>
+                              
+                            
+                          
+                            
+                              
+                                  dew = 500<br>
+                              
+                            
+                          
+                            
+                              
+                                  dns = 500<br>
+                              
+                            
+                          
+                            
+                              
+                                  sigma_builtin = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[time]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  tstart = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  tend = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt = 1.<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  dycore = 1              <br>
+                              
+                            
+                          
+                            
+                              
+                                  flow_law = 0            <br>
+                              
+                            
+                          
+                            
+                              
+                                  evolution = 3           <br>
+                              
+                            
+                          
+                            
+                              
+                                  temperature = 1         <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[ho_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  which_ho_babc = 4       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_efvs = 2       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_sparse = 4     <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_nonlinear = 1  <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[parameters]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  flow_factor = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  ice_limit = 1          <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF default]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  comment = created with dome.py<br>
+                              
+                            
+                          
+                            
+                              
+                                  title = parabolic dome test case using first-order dynamics<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF input]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  name = data/dome.120.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  time = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF output]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  variables = thk usurf uvel vvel velnorm temp<br>
+                              
+                            
+                          
+                            
+                              
+                                  frequency = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  name = data/dome.120.glide.out.nc<br>
+                              
+                            
+                          
+                          </div>
+                    
+                  </div>
+                  <div class="status">
+                    
+                      <p style="float: left; color: green">Files match</p>
+                    
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            
+                <div class="Configuration">
+                  <!-- Hide and show buttons to allow the user view data more easily -->
+                  <a href="#hidedome1202" class="hide" id="hidedome1202">+</a>
+                  <a href="#showdome1202" class="show" id="showdome1202">-</a>
+                  <h4 class="top">dome.120.config</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    <!-- The changed variable keeps track of whether the files match -->
+                    
+                    
+                          <b>[DOME-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                          <b>[grid]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  upn = 10<br>
+                              
+                            
+                          
+                            
+                              
+                                  ewn = 120<br>
+                              
+                            
+                          
+                            
+                              
+                                  nsn = 120<br>
+                              
+                            
+                          
+                            
+                              
+                                  dew = 500<br>
+                              
+                            
+                          
+                            
+                              
+                                  dns = 500<br>
+                              
+                            
+                          
+                            
+                              
+                                  sigma_builtin = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[time]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  tstart = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  tend = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt = 1.<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  dycore = 2              <br>
+                              
+                            
+                          
+                            
+                              
+                                  flow_law = 0            <br>
+                              
+                            
+                          
+                            
+                              
+                                  evolution = 3           <br>
+                              
+                            
+                          
+                            
+                              
+                                  temperature = 1         <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[ho_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  which_ho_babc = 4       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_efvs = 2       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_sparse = 3     <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_nonlinear = 0  <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[parameters]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  flow_factor = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  ice_limit = 1          <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF default]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  comment = created with dome.py<br>
+                              
+                            
+                          
+                            
+                              
+                                  title = parabolic dome test case using first-order dynamics<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF input]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  name = data/dome.120.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  time = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF output]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  variables = thk usurf uvel vvel velnorm temp<br>
+                              
+                            
+                          
+                            
+                              
+                                  frequency = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  name = data/dome.120.out.nc<br>
+                              
+                            
+                          
+                          </div>
+                    
+                  </div>
+                  <div class="status">
+                    
+                      <p style="float: left; color: green">Files match</p>
+                    
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            
+                <div class="Configuration">
+                  <!-- Hide and show buttons to allow the user view data more easily -->
+                  <a href="#hidedome1203" class="hide" id="hidedome1203">+</a>
+                  <a href="#showdome1203" class="show" id="showdome1203">-</a>
+                  <h4 class="top">dome.120.glissade.config</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    <!-- The changed variable keeps track of whether the files match -->
+                    
+                    
+                          <b>[DOME-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                          <b>[grid]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  upn = 10<br>
+                              
+                            
+                          
+                            
+                              
+                                  ewn = 120<br>
+                              
+                            
+                          
+                            
+                              
+                                  nsn = 120<br>
+                              
+                            
+                          
+                            
+                              
+                                  dew = 500<br>
+                              
+                            
+                          
+                            
+                              
+                                  dns = 500<br>
+                              
+                            
+                          
+                            
+                              
+                                  sigma_builtin = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[time]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  tstart = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  tend = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt = 1.<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  dycore = 2              <br>
+                              
+                            
+                          
+                            
+                              
+                                  flow_law = 0            <br>
+                              
+                            
+                          
+                            
+                              
+                                  evolution = 3           <br>
+                              
+                            
+                          
+                            
+                              
+                                  temperature = 1         <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[ho_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  which_ho_babc = 4       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_efvs = 2       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_sparse = 3     <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_nonlinear = 0  <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[parameters]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  flow_factor = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  ice_limit = 1          <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF default]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  comment = created with dome.py<br>
+                              
+                            
+                          
+                            
+                              
+                                  title = parabolic dome test case using first-order dynamics<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF input]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  name = data/dome.120.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  time = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF output]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  variables = thk usurf uvel vvel velnorm temp<br>
+                              
+                            
+                          
+                            
+                              
+                                  frequency = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  name = data/dome.120.glissade.out.nc<br>
+                              
+                            
+                          
+                          </div>
+                    
+                  </div>
+                  <div class="status">
+                    
+                      <p style="float: left; color: green">Files match</p>
+                    
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            
+        
+        </div>
+        <hr style="opacity: 0; height: 5px;">
+        <br style="clear: both" />
+        <!-- END CONFIGURATION SECTION -->
+        
+                
+    </div>
+    
+    <div class="case">
+      
+
+      <!-- BEGIN PLOT SECTION -->
+      <b class="label-header">Plots</b> <br/>
+      <div class="separator">
+      <hr style="opacity: 0; height: 5px;">
+      
+        <a style="padding-left: 20px; color: #696969;">No plots for dome240</a>
+      
+      </div>
+      
+      <br style="clear: both" />
+      <br height="30px" />
+      <!-- END PLOT SECTION -->
+      
+      
+      
+
+      <!-- BEGIN TIMING SUMMARY SECTION -->
+      <b class="label-header"> Timing Summary</b>
+      <br style="clear:both; height: 10px;" />
+      <div class="separator">
+      
+      
+        <br style="clear:both; height: 10px;" />
+        <b style="display: block;">glissade</b>
+        <table style="width: 100%;  border-collapse: collapse;">
+          <tr>
+            <th>Variable</th>
+            <th>Average</th>
+            <th>Minimum</th>
+            <th>Maximum</th>
+          </tr>
+          
+            
+            <tr>
+              <td style="text-align: right">IO Writeback</td>
+              
+              
+              
+              <td style="text-align: left">
+                0.22400 
+                
+                  <p style="display: inline; color: green">(-0.001)</p>
+                
+              </td>
+              <td style="text-align: left">
+                0.21100 
+                
+                  <p style="display: inline; color: green">(-0.010)</p>
+                
+              </td>
+              <td style="text-align: left">
+                0.23000 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">Simple Glide</td>
+              
+              
+              
+              <td style="text-align: left">
+                15.15800 
+                
+                  <p style="display: inline; color: red">(+15.158)</p>
+                
+              </td>
+              <td style="text-align: left">
+                15.15800 
+                
+                  <p style="display: inline; color: red">(+15.158)</p>
+                
+              </td>
+              <td style="text-align: left">
+                15.15800 
+                
+                  <p style="display: inline; color: red">(+15.158)</p>
+                
+              </td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">Initial Diagonal Solve</td>
+              
+              
+              
+              <td style="text-align: left">
+                15.52000 
+                
+                  <p style="display: inline; color: green">(-0.068)</p>
+                
+              </td>
+              <td style="text-align: left">
+                14.84300 
+                
+                  <p style="display: inline; color: green">(-0.562)</p>
+                
+              </td>
+              <td style="text-align: left">
+                15.78600 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">Velocity Driver</td>
+              
+              
+              
+              <td style="text-align: left">
+                15.51727 
+                
+                  <p style="display: inline; color: green">(-0.068)</p>
+                
+              </td>
+              <td style="text-align: left">
+                14.84200 
+                
+                  <p style="display: inline; color: green">(-0.561)</p>
+                
+              </td>
+              <td style="text-align: left">
+                15.78300 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+            </tr>
+            
+          
+        </table>
+      
+        <br style="clear:both; height: 10px;" />
+        <b style="display: block;">glide</b>
+        <table style="width: 100%;  border-collapse: collapse;">
+          <tr>
+            <th>Variable</th>
+            <th>Average</th>
+            <th>Minimum</th>
+            <th>Maximum</th>
+          </tr>
+          
+            
+            <tr>
+              <td style="text-align: right">IO Writeback</td>
+              
+              
+              
+              <td style="text-align: left">
+                0.26670 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+              <td style="text-align: left">
+                0.24900 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+              <td style="text-align: left">
+                0.34600 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">Simple Glide</td>
+              
+              
+              
+              <td style="text-align: left">
+                0.00000 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+              <td style="text-align: left">
+                0.00000 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+              <td style="text-align: left">
+                0.00000 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">/home/bzq/livv-dev/LIVV/perf_test/dome240/data_titan/out.240.glide.timing/cism_timing_stats</td>
+              <td>N/A</td>
+              <td>N/A</td>
+              <td>N/A</td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">Initial Diagonal Solve</td>
+              
+              
+              
+              <td style="text-align: left">
+                64.33670 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+              <td style="text-align: left">
+                47.50900 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+              <td style="text-align: left">
+                131.54500 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">Velocity Driver</td>
+              
+              
+              
+              <td style="text-align: left">
+                64.33380 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+              <td style="text-align: left">
+                47.50600 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+              <td style="text-align: left">
+                131.54200 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+            </tr>
+            
+          
+        </table>
+      
+      
+      </div>
+      <br style="clear: both" />
+      <br height="30px" />
+      <!-- END TIMING SUMMARY SECTION -->
+
+
+            
+
+      <!-- BEGIN CONFIGURATION SECTION -->
+      <b class="label-header"> Configuration Files </b>
+      <div class="separator">
+      <hr style="opacity: 0; height: 5px;">
+          
+            
+                <div class="Configuration">
+                  <!-- Hide and show buttons to allow the user view data more easily -->
+                  <a href="#hidedome2401" class="hide" id="hidedome2401">+</a>
+                  <a href="#showdome2401" class="show" id="showdome2401">-</a>
+                  <h4 class="top">dome.240.config</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    <!-- The changed variable keeps track of whether the files match -->
+                    
+                    
+                          <b>[DOME-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                          <b>[grid]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  upn = 10<br>
+                              
+                            
+                          
+                            
+                              
+                                  ewn = 240<br>
+                              
+                            
+                          
+                            
+                              
+                                  nsn = 240<br>
+                              
+                            
+                          
+                            
+                              
+                                  dew = 250<br>
+                              
+                            
+                          
+                            
+                              
+                                  dns = 250<br>
+                              
+                            
+                          
+                            
+                              
+                                  sigma_builtin = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[time]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  tstart = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  tend = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt = 1.<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  dycore = 2              <br>
+                              
+                            
+                          
+                            
+                              
+                                  flow_law = 0            <br>
+                              
+                            
+                          
+                            
+                              
+                                  evolution = 3           <br>
+                              
+                            
+                          
+                            
+                              
+                                  temperature = 1         <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[ho_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  which_ho_babc = 4       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_efvs = 2       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_sparse = 3     <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_nonlinear = 0  <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[parameters]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  flow_factor = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  ice_limit = 1          <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF default]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  comment = created with dome.py<br>
+                              
+                            
+                          
+                            
+                              
+                                  title = parabolic dome test case using first-order dynamics<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF input]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  name = data/dome.240.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  time = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF output]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  variables = thk usurf uvel vvel velnorm temp<br>
+                              
+                            
+                          
+                            
+                              
+                                  frequency = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  name = data/dome.240.out.nc<br>
+                              
+                            
+                          
+                          </div>
+                    
+                  </div>
+                  <div class="status">
+                    
+                      <p style="float: left; color: green">Files match</p>
+                    
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            
+                <div class="Configuration">
+                  <!-- Hide and show buttons to allow the user view data more easily -->
+                  <a href="#hidedome2402" class="hide" id="hidedome2402">+</a>
+                  <a href="#showdome2402" class="show" id="showdome2402">-</a>
+                  <h4 class="top">dome.240.glissade.config</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    <!-- The changed variable keeps track of whether the files match -->
+                    
+                    
+                          <b>[DOME-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                          <b>[grid]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  upn = 10<br>
+                              
+                            
+                          
+                            
+                              
+                                  ewn = 240<br>
+                              
+                            
+                          
+                            
+                              
+                                  nsn = 240<br>
+                              
+                            
+                          
+                            
+                              
+                                  dew = 250<br>
+                              
+                            
+                          
+                            
+                              
+                                  dns = 250<br>
+                              
+                            
+                          
+                            
+                              
+                                  sigma_builtin = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[time]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  tstart = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  tend = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt = 1.<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  dycore = 2              <br>
+                              
+                            
+                          
+                            
+                              
+                                  flow_law = 0            <br>
+                              
+                            
+                          
+                            
+                              
+                                  evolution = 3           <br>
+                              
+                            
+                          
+                            
+                              
+                                  temperature = 1         <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[ho_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  which_ho_babc = 4       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_efvs = 2       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_sparse = 3     <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_nonlinear = 0  <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[parameters]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  flow_factor = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  ice_limit = 1          <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF default]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  comment = created with dome.py<br>
+                              
+                            
+                          
+                            
+                              
+                                  title = parabolic dome test case using first-order dynamics<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF input]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  name = data/dome.240.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  time = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF output]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  variables = thk usurf uvel vvel velnorm temp<br>
+                              
+                            
+                          
+                            
+                              
+                                  frequency = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  name = data/dome.240.glissade.out.nc<br>
+                              
+                            
+                          
+                          </div>
+                    
+                  </div>
+                  <div class="status">
+                    
+                      <p style="float: left; color: green">Files match</p>
+                    
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            
+                <div class="Configuration">
+                  <!-- Hide and show buttons to allow the user view data more easily -->
+                  <a href="#hidedome2403" class="hide" id="hidedome2403">+</a>
+                  <a href="#showdome2403" class="show" id="showdome2403">-</a>
+                  <h4 class="top">dome.240.glide.config</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    <!-- The changed variable keeps track of whether the files match -->
+                    
+                    
+                          <b>[DOME-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                          <b>[grid]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  upn = 10<br>
+                              
+                            
+                          
+                            
+                              
+                                  ewn = 240<br>
+                              
+                            
+                          
+                            
+                              
+                                  nsn = 240<br>
+                              
+                            
+                          
+                            
+                              
+                                  dew = 250<br>
+                              
+                            
+                          
+                            
+                              
+                                  dns = 250<br>
+                              
+                            
+                          
+                            
+                              
+                                  sigma_builtin = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[time]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  tstart = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  tend = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt = 1.<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  dycore = 1              <br>
+                              
+                            
+                          
+                            
+                              
+                                  flow_law = 0            <br>
+                              
+                            
+                          
+                            
+                              
+                                  evolution = 3           <br>
+                              
+                            
+                          
+                            
+                              
+                                  temperature = 1         <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[ho_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  which_ho_babc = 4       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_efvs = 2       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_sparse = 4     <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_nonlinear = 1  <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[parameters]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  flow_factor = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  ice_limit = 1          <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF default]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  comment = created with dome.py<br>
+                              
+                            
+                          
+                            
+                              
+                                  title = parabolic dome test case using first-order dynamics<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF input]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  name = data/dome.240.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  time = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF output]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  variables = thk usurf uvel vvel velnorm temp<br>
+                              
+                            
+                          
+                            
+                              
+                                  frequency = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  name = data/dome.240.glide.out.nc<br>
+                              
+                            
+                          
+                          </div>
+                    
+                  </div>
+                  <div class="status">
+                    
+                      <p style="float: left; color: green">Files match</p>
+                    
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            
+        
+        </div>
+        <hr style="opacity: 0; height: 5px;">
+        <br style="clear: both" />
+        <!-- END CONFIGURATION SECTION -->
+        
+                
+    </div>
+    
+    <div class="case">
+      
+
+      <!-- BEGIN PLOT SECTION -->
+      <b class="label-header">Plots</b> <br/>
+      <div class="separator">
+      <hr style="opacity: 0; height: 5px;">
+      
+        <a style="padding-left: 20px; color: #696969;">No plots for dome500</a>
+      
+      </div>
+      
+      <br style="clear: both" />
+      <br height="30px" />
+      <!-- END PLOT SECTION -->
+      
+      
+      
+
+      <!-- BEGIN TIMING SUMMARY SECTION -->
+      <b class="label-header"> Timing Summary</b>
+      <br style="clear:both; height: 10px;" />
+      <div class="separator">
+      
+      
+        <br style="clear:both; height: 10px;" />
+        <b style="display: block;">glissade</b>
+        <table style="width: 100%;  border-collapse: collapse;">
+          <tr>
+            <th>Variable</th>
+            <th>Average</th>
+            <th>Minimum</th>
+            <th>Maximum</th>
+          </tr>
+          
+            
+            <tr>
+              <td style="text-align: right">IO Writeback</td>
+              
+              
+              
+              <td style="text-align: left">
+                1.19091 
+                
+                  <p style="display: inline; color: green">(-0.006)</p>
+                
+              </td>
+              <td style="text-align: left">
+                1.12600 
+                
+                  <p style="display: inline; color: green">(-0.034)</p>
+                
+              </td>
+              <td style="text-align: left">
+                1.24300 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">Simple Glide</td>
+              
+              
+              
+              <td style="text-align: left">
+                29.53800 
+                
+                  <p style="display: inline; color: red">(+29.538)</p>
+                
+              </td>
+              <td style="text-align: left">
+                29.53800 
+                
+                  <p style="display: inline; color: red">(+29.538)</p>
+                
+              </td>
+              <td style="text-align: left">
+                29.53800 
+                
+                  <p style="display: inline; color: red">(+29.538)</p>
+                
+              </td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">Initial Diagonal Solve</td>
+              
+              
+              
+              <td style="text-align: left">
+                31.08191 
+                
+                  <p style="display: inline; color: green">(-0.285)</p>
+                
+              </td>
+              <td style="text-align: left">
+                28.23200 
+                
+                  <p style="display: inline; color: green">(-2.579)</p>
+                
+              </td>
+              <td style="text-align: left">
+                32.18800 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">Velocity Driver</td>
+              
+              
+              
+              <td style="text-align: left">
+                31.07845 
+                
+                  <p style="display: inline; color: green">(-0.285)</p>
+                
+              </td>
+              <td style="text-align: left">
+                28.23100 
+                
+                  <p style="display: inline; color: green">(-2.576)</p>
+                
+              </td>
+              <td style="text-align: left">
+                32.18400 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+            </tr>
+            
+          
+        </table>
+      
+        <br style="clear:both; height: 10px;" />
+        <b style="display: block;">glide</b>
+        <table style="width: 100%;  border-collapse: collapse;">
+          <tr>
+            <th>Variable</th>
+            <th>Average</th>
+            <th>Minimum</th>
+            <th>Maximum</th>
+          </tr>
+          
+            
+            <tr>
+              <td style="text-align: right">IO Writeback</td>
+              
+              
+              
+              <td style="text-align: left">
+                1.34540 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+              <td style="text-align: left">
+                1.32300 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+              <td style="text-align: left">
+                1.38700 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">Simple Glide</td>
+              
+              
+              
+              <td style="text-align: left">
+                0.00000 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+              <td style="text-align: left">
+                0.00000 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+              <td style="text-align: left">
+                0.00000 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">Initial Diagonal Solve</td>
+              
+              
+              
+              <td style="text-align: left">
+                178.44660 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+              <td style="text-align: left">
+                177.75000 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+              <td style="text-align: left">
+                179.28400 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">/home/bzq/livv-dev/LIVV/perf_test/dome500/data_titan/out.500.glide.timing/cism_timing_stats</td>
+              <td>N/A</td>
+              <td>N/A</td>
+              <td>N/A</td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">Velocity Driver</td>
+              
+              
+              
+              <td style="text-align: left">
+                178.44330 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+              <td style="text-align: left">
+                177.74700 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+              <td style="text-align: left">
+                179.28000 
+                
+                  <p style="display: inline; color: green">(0.000)</p>
+                
+              </td>
+            </tr>
+            
+          
+        </table>
+      
+      
+      </div>
+      <br style="clear: both" />
+      <br height="30px" />
+      <!-- END TIMING SUMMARY SECTION -->
+
+
+            
+
+      <!-- BEGIN CONFIGURATION SECTION -->
+      <b class="label-header"> Configuration Files </b>
+      <div class="separator">
+      <hr style="opacity: 0; height: 5px;">
+          
+            
+                <div class="Configuration">
+                  <!-- Hide and show buttons to allow the user view data more easily -->
+                  <a href="#hidedome5001" class="hide" id="hidedome5001">+</a>
+                  <a href="#showdome5001" class="show" id="showdome5001">-</a>
+                  <h4 class="top">dome.500.glide.config</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    <!-- The changed variable keeps track of whether the files match -->
+                    
+                    
+                          <b>[DOME-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                          <b>[grid]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  upn = 10<br>
+                              
+                            
+                          
+                            
+                              
+                                  ewn = 500<br>
+                              
+                            
+                          
+                            
+                              
+                                  nsn = 500<br>
+                              
+                            
+                          
+                            
+                              
+                                  dew = 120<br>
+                              
+                            
+                          
+                            
+                              
+                                  dns = 120<br>
+                              
+                            
+                          
+                            
+                              
+                                  sigma_builtin = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[time]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  tstart = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  tend = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt = 1.<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  dycore = 1              <br>
+                              
+                            
+                          
+                            
+                              
+                                  flow_law = 0            <br>
+                              
+                            
+                          
+                            
+                              
+                                  evolution = 3           <br>
+                              
+                            
+                          
+                            
+                              
+                                  temperature = 1         <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[ho_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  which_ho_babc = 4       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_efvs = 2       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_sparse = 4     <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_nonlinear = 1  <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[parameters]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  flow_factor = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  ice_limit = 1          <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF default]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  comment = created with dome.py<br>
+                              
+                            
+                          
+                            
+                              
+                                  title = parabolic dome test case using first-order dynamics<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF input]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  name = data/dome.500.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  time = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF output]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  variables = thk usurf uvel vvel velnorm temp<br>
+                              
+                            
+                          
+                            
+                              
+                                  frequency = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  name = data/dome.500.glide.out.nc<br>
+                              
+                            
+                          
+                          </div>
+                    
+                  </div>
+                  <div class="status">
+                    
+                      <p style="float: left; color: green">Files match</p>
+                    
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            
+                <div class="Configuration">
+                  <!-- Hide and show buttons to allow the user view data more easily -->
+                  <a href="#hidedome5002" class="hide" id="hidedome5002">+</a>
+                  <a href="#showdome5002" class="show" id="showdome5002">-</a>
+                  <h4 class="top">dome.500.glissade.config</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    <!-- The changed variable keeps track of whether the files match -->
+                    
+                    
+                          <b>[DOME-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                          <b>[grid]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  upn = 10<br>
+                              
+                            
+                          
+                            
+                              
+                                  ewn = 500<br>
+                              
+                            
+                          
+                            
+                              
+                                  nsn = 500<br>
+                              
+                            
+                          
+                            
+                              
+                                  dew = 120<br>
+                              
+                            
+                          
+                            
+                              
+                                  dns = 120<br>
+                              
+                            
+                          
+                            
+                              
+                                  sigma_builtin = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[time]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  tstart = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  tend = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt = 1.<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  dycore = 2              <br>
+                              
+                            
+                          
+                            
+                              
+                                  flow_law = 0            <br>
+                              
+                            
+                          
+                            
+                              
+                                  evolution = 3           <br>
+                              
+                            
+                          
+                            
+                              
+                                  temperature = 1         <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[ho_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  which_ho_babc = 4       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_efvs = 2       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_sparse = 3     <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_nonlinear = 0  <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[parameters]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  flow_factor = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  ice_limit = 1          <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF default]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  comment = created with dome.py<br>
+                              
+                            
+                          
+                            
+                              
+                                  title = parabolic dome test case using first-order dynamics<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF input]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  name = data/dome.500.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  time = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF output]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  variables = thk usurf uvel vvel velnorm temp<br>
+                              
+                            
+                          
+                            
+                              
+                                  frequency = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  name = data/dome.500.glissade.out.nc<br>
+                              
+                            
+                          
+                          </div>
+                    
+                  </div>
+                  <div class="status">
+                    
+                      <p style="float: left; color: green">Files match</p>
+                    
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            
+                <div class="Configuration">
+                  <!-- Hide and show buttons to allow the user view data more easily -->
+                  <a href="#hidedome5003" class="hide" id="hidedome5003">+</a>
+                  <a href="#showdome5003" class="show" id="showdome5003">-</a>
+                  <h4 class="top">dome.500.config</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    <!-- The changed variable keeps track of whether the files match -->
+                    
+                    
+                          <b>[DOME-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                          <b>[grid]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  upn = 10<br>
+                              
+                            
+                          
+                            
+                              
+                                  ewn = 500<br>
+                              
+                            
+                          
+                            
+                              
+                                  nsn = 500<br>
+                              
+                            
+                          
+                            
+                              
+                                  dew = 120<br>
+                              
+                            
+                          
+                            
+                              
+                                  dns = 120<br>
+                              
+                            
+                          
+                            
+                              
+                                  sigma_builtin = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[time]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  tstart = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  tend = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt = 1.<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  dycore = 2              <br>
+                              
+                            
+                          
+                            
+                              
+                                  flow_law = 0            <br>
+                              
+                            
+                          
+                            
+                              
+                                  evolution = 3           <br>
+                              
+                            
+                          
+                            
+                              
+                                  temperature = 1         <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[ho_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  which_ho_babc = 4       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_efvs = 2       <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_sparse = 3     <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_nonlinear = 0  <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[parameters]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  flow_factor = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  ice_limit = 1          <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF default]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  comment = created with dome.py<br>
+                              
+                            
+                          
+                            
+                              
+                                  title = parabolic dome test case using first-order dynamics<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF input]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  name = data/dome.500.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  time = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF output]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  variables = thk usurf uvel vvel velnorm temp<br>
+                              
+                            
+                          
+                            
+                              
+                                  frequency = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  name = data/dome.500.out.nc<br>
+                              
+                            
+                          
+                          </div>
+                    
+                  </div>
+                  <div class="status">
+                    
+                      <p style="float: left; color: green">Files match</p>
+                    
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            
+        
+        </div>
+        <hr style="opacity: 0; height: 5px;">
+        <br style="clear: both" />
+        <!-- END CONFIGURATION SECTION -->
+        
+                
+    </div>
+    
+    <div class="case">
+      
+
+      <!-- BEGIN PLOT SECTION -->
+      <b class="label-header">Plots</b> <br/>
+      <div class="separator">
+      <hr style="opacity: 0; height: 5px;">
+      
+        
+        
+        <div class="gallery">
+          <div style="float: left; display: inline;">
+             <!-- imgArr[0] is the name of the image -->
+             <a href="#img_form_scalingDome_1" id="img_pop">
+                <img src="../imgs/dome/dome_glide_Simple Glide__scaling.png" width="150px"></img>
+            </a>
+            <br style="clear: both" />
+            <!-- imgArr[1] is the description -->
+            <p>Scaling plot for glide Simple Glide</p>
+          </div>
+         </div>
+        <a href="dome.html" class="overlay" id="img_form_scalingDome_1"></a>
+
+        <div class="popup">
+          <img src="../imgs/dome/dome_glide_Simple Glide__scaling.png" class="imageOverlay"></img>
+          <a class="close" href="#close">x</a>
+        </div>
+        
+      
+        
+        <div class="gallery">
+          <div style="float: left; display: inline;">
+             <!-- imgArr[0] is the name of the image -->
+             <a href="#img_form_scalingDome_2" id="img_pop">
+                <img src="../imgs/dome/dome_glissade_Simple Glide__scaling.png" width="150px"></img>
+            </a>
+            <br style="clear: both" />
+            <!-- imgArr[1] is the description -->
+            <p>Scaling plot for glissade Simple Glide</p>
+          </div>
+         </div>
+        <a href="dome.html" class="overlay" id="img_form_scalingDome_2"></a>
+
+        <div class="popup">
+          <img src="../imgs/dome/dome_glissade_Simple Glide__scaling.png" class="imageOverlay"></img>
+          <a class="close" href="#close">x</a>
+        </div>
+        
+      
+        
+        <div class="gallery">
+          <div style="float: left; display: inline;">
+             <!-- imgArr[0] is the name of the image -->
+             <a href="#img_form_scalingDome_3" id="img_pop">
+                <img src="../imgs/dome/dome_glide_Velocity Driver__scaling.png" width="150px"></img>
+            </a>
+            <br style="clear: both" />
+            <!-- imgArr[1] is the description -->
+            <p>Scaling plot for glide Velocity Driver</p>
+          </div>
+         </div>
+        <a href="dome.html" class="overlay" id="img_form_scalingDome_3"></a>
+
+        <div class="popup">
+          <img src="../imgs/dome/dome_glide_Velocity Driver__scaling.png" class="imageOverlay"></img>
+          <a class="close" href="#close">x</a>
+        </div>
+        
+      
+        
+        <div class="gallery">
+          <div style="float: left; display: inline;">
+             <!-- imgArr[0] is the name of the image -->
+             <a href="#img_form_scalingDome_4" id="img_pop">
+                <img src="../imgs/dome/dome_glissade_Velocity Driver__scaling.png" width="150px"></img>
+            </a>
+            <br style="clear: both" />
+            <!-- imgArr[1] is the description -->
+            <p>Scaling plot for glissade Velocity Driver</p>
+          </div>
+         </div>
+        <a href="dome.html" class="overlay" id="img_form_scalingDome_4"></a>
+
+        <div class="popup">
+          <img src="../imgs/dome/dome_glissade_Velocity Driver__scaling.png" class="imageOverlay"></img>
+          <a class="close" href="#close">x</a>
+        </div>
+        
+      
+        
+        <div class="gallery">
+          <div style="float: left; display: inline;">
+             <!-- imgArr[0] is the name of the image -->
+             <a href="#img_form_scalingDome_5" id="img_pop">
+                <img src="../imgs/dome/dome_glide_Initial Diagonal Solve__scaling.png" width="150px"></img>
+            </a>
+            <br style="clear: both" />
+            <!-- imgArr[1] is the description -->
+            <p>Scaling plot for glide Initial Diagonal Solve</p>
+          </div>
+         </div>
+        <a href="dome.html" class="overlay" id="img_form_scalingDome_5"></a>
+
+        <div class="popup">
+          <img src="../imgs/dome/dome_glide_Initial Diagonal Solve__scaling.png" class="imageOverlay"></img>
+          <a class="close" href="#close">x</a>
+        </div>
+        
+      
+        
+        <div class="gallery">
+          <div style="float: left; display: inline;">
+             <!-- imgArr[0] is the name of the image -->
+             <a href="#img_form_scalingDome_6" id="img_pop">
+                <img src="../imgs/dome/dome_glissade_Initial Diagonal Solve__scaling.png" width="150px"></img>
+            </a>
+            <br style="clear: both" />
+            <!-- imgArr[1] is the description -->
+            <p>Scaling plot for glissade Initial Diagonal Solve</p>
+          </div>
+         </div>
+        <a href="dome.html" class="overlay" id="img_form_scalingDome_6"></a>
+
+        <div class="popup">
+          <img src="../imgs/dome/dome_glissade_Initial Diagonal Solve__scaling.png" class="imageOverlay"></img>
+          <a class="close" href="#close">x</a>
+        </div>
+        
+      
+        
+        <div class="gallery">
+          <div style="float: left; display: inline;">
+             <!-- imgArr[0] is the name of the image -->
+             <a href="#img_form_scalingDome_7" id="img_pop">
+                <img src="../imgs/dome/dome_glide_IO Writeback__scaling.png" width="150px"></img>
+            </a>
+            <br style="clear: both" />
+            <!-- imgArr[1] is the description -->
+            <p>Scaling plot for glide IO Writeback</p>
+          </div>
+         </div>
+        <a href="dome.html" class="overlay" id="img_form_scalingDome_7"></a>
+
+        <div class="popup">
+          <img src="../imgs/dome/dome_glide_IO Writeback__scaling.png" class="imageOverlay"></img>
+          <a class="close" href="#close">x</a>
+        </div>
+        
+      
+        
+        <div class="gallery">
+          <div style="float: left; display: inline;">
+             <!-- imgArr[0] is the name of the image -->
+             <a href="#img_form_scalingDome_8" id="img_pop">
+                <img src="../imgs/dome/dome_glissade_IO Writeback__scaling.png" width="150px"></img>
+            </a>
+            <br style="clear: both" />
+            <!-- imgArr[1] is the description -->
+            <p>Scaling plot for glissade IO Writeback</p>
+          </div>
+         </div>
+        <a href="dome.html" class="overlay" id="img_form_scalingDome_8"></a>
+
+        <div class="popup">
+          <img src="../imgs/dome/dome_glissade_IO Writeback__scaling.png" class="imageOverlay"></img>
+          <a class="close" href="#close">x</a>
+        </div>
+        
+      
+      <!-- No plots were passed to jinja2 -->
+      
+      </div>
+      
+      <br style="clear: both" />
+      <br height="30px" />
+      <!-- END PLOT SECTION -->
+      
+      
+      
+
+      <!-- BEGIN TIMING SUMMARY SECTION -->
+      <b class="label-header"> Timing Summary</b>
+      <br style="clear:both; height: 10px;" />
+      <div class="separator">
+      
+      
+      
+      </div>
+      <br style="clear: both" />
+      <br height="30px" />
+      <!-- END TIMING SUMMARY SECTION -->
+
+
+            
+
+      <!-- BEGIN CONFIGURATION SECTION -->
+      <b class="label-header"> Configuration Files </b>
+      <div class="separator">
+      <hr style="opacity: 0; height: 5px;">
+          
+          <a style="padding-left: 20px; color: #696969;">Could not find any configuration files to check</a>
+        
+        </div>
+        <hr style="opacity: 0; height: 5px;">
+        <br style="clear: both" />
+        <!-- END CONFIGURATION SECTION -->
+        
+                
+    </div>
+    
+    </div>
+    <br>
+
+    
+	</div>
+
+	<div id="footer">
+		<p id="info">
+			V&V Performed by bzq at 04-22-2015 10:15:08 <br> 
+			Test run of code <br>
+		</p>
+	</div>
+</div>
+</body>
+
+</html>

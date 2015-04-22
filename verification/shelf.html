@@ -17,15 +17,10 @@
 <div id="page">
 	<div id="header">
 		<img src="../imgs/gicon.svg" style="width: 30px; float: left; padding: 5px;"/>
-		<p id="header-content">
+		<a id="header-content" href="/home/bzq/livv-dev/LIVV/www/index.html">
 			LIVV: Land Ice Verification & Validation
-		</p>
+		</a>
 	</div>
-  <div id="nav">
-    <a href="../index.html" class="button">Home</a>
-    <a href="http://blizzard.ornl.gov" class="button">Blizzard</a>
-    <a href="http://oceans11.lanl.gov/cism/" class="button">CISM</a> 
-  </div>
   
   <!--   Start the pace specific content -->
   <div id="content">
@@ -56,12 +51,11 @@
     <label for="tab-circular-shelf">circular-shelf</label>  
       
       
-      
     <!-- Go through each of the test cases that fall under this specific subcategory -->
     
     <div class="case">
-    
-    
+      
+
       <!-- BEGIN PLOT SECTION -->
       <b class="label-header">Plots</b> <br/>
       <div class="separator">
@@ -70,19 +64,17 @@
         <a style="padding-left: 20px; color: #696969;">No plots for confined-shelf</a>
       
       </div>
-      <!-- END PLOT SECTION -->
-      
       
       <br style="clear: both" />
       <br height="30px" />
-
+      <!-- END PLOT SECTION -->
+      
+      
+      
 
       <!-- BEGIN BIT FOR BIT SECTION -->
       <b class="label-header">
         Bit for Bit 
-        <a style="font-size: small; font-style: italic">
-          Click on failures to see difference plots
-        </a> 
       </b>
       <div class="separator">
       <hr style="opacity: 0; height: 5px;">
@@ -126,12 +118,12 @@
         
       
       </div>
-      <!-- END BIT FOR BIT SECTION -->
-        
-        
       <br height="30px" />
+      <!-- END BIT FOR BIT SECTION -->
       
       
+            
+
       <!-- BEGIN CONFIGURATION SECTION -->
       <b class="label-header"> Configuration Files </b>
       <div class="separator">
@@ -1042,145 +1034,146 @@
             
         
         </div>
+        <hr style="opacity: 0; height: 5px;">
+        <br style="clear: both" />
         <!-- END CONFIGURATION SECTION -->
         
         
-        <hr style="opacity: 0; height: 5px;">
-        <br style="clear: both" />
-        
-        
+      
+
         <!-- BEGIN OUTPUT ANALYSIS SECTION -->
         <b class="label-header">Output Analysis</b>
         <div class="separator">
         
-      	<table style="width:100%">
-      		<tr style="background-color: #47A3FF;">
-      			<th>Output File</th>
-      			
-      				<th>Dycore Type</th>
-      			
-      				<th>Number of processors</th>
-      			
-      				<th>Number of timesteps</th>
-      			
-      				<th>Avg convergence rate</th>
-      			
-      		</tr>
-      		
-      		<tr>
-      			<td style="text-align: left">confined-shelf.outg.large</td>
-      			
-      			<td>Glissade</td>
-      			
-      			<td>2</td>
-      			
-      			<td>0</td>
-      			
-      			<td>N/A</td>
-      			
-      		</tr>
-      		
-      		<tr>
-      			<td style="text-align: left">confined-shelf.out</td>
-      			
-      			<td>Glissade</td>
-      			
-      			<td>2</td>
-      			
-      			<td>0</td>
-      			
-      			<td>N/A</td>
-      			
-      		</tr>
-      		
-      		<tr>
-      			<td style="text-align: left">confined-shelf.outp</td>
-      			
-      			<td>Glissade</td>
-      			
-      			<td>2</td>
-      			
-      			<td>0</td>
-      			
-      			<td>N/A</td>
-      			
-      		</tr>
-      		
-      		<tr>
-      			<td style="text-align: left">._confined-shelf.outg.large</td>
-      			
-      			<td>Glissade</td>
-      			
-      			<td>2</td>
-      			
-      			<td>0</td>
-      			
-      			<td>N/A</td>
-      			
-      		</tr>
-      		
-      		<tr>
-      			<td style="text-align: left">._confined-shelf.outg</td>
-      			
-      			<td>Glissade</td>
-      			
-      			<td>2</td>
-      			
-      			<td>0</td>
-      			
-      			<td>N/A</td>
-      			
-      		</tr>
-      		
-      		<tr>
-      			<td style="text-align: left">._confined-shelf.out</td>
-      			
-      			<td>Glissade</td>
-      			
-      			<td>2</td>
-      			
-      			<td>0</td>
-      			
-      			<td>N/A</td>
-      			
-      		</tr>
-      		
-      		<tr>
-      			<td style="text-align: left">._confined-shelf.outp</td>
-      			
-      			<td>Glissade</td>
-      			
-      			<td>2</td>
-      			
-      			<td>0</td>
-      			
-      			<td>N/A</td>
-      			
-      		</tr>
-      		
-      		<tr>
-      			<td style="text-align: left">confined-shelf.outg</td>
-      			
-      			<td>Glissade</td>
-      			
-      			<td>2</td>
-      			
-      			<td>0</td>
-      			
-      			<td>N/A</td>
-      			
-      		</tr>
-      		
-      	</table>
-      	
-      	</div>
-      	<!-- END OUTPUT ANALYSIS SECTION -->
-      	
+        <table style="width:100%">
+            <tr style="background-color: #47A3FF;">
+                <th>Output File</th>
+                
+                    <th>Dycore Type</th>
+                
+                    <th>Number of processors</th>
+                
+                    <th>Number of timesteps</th>
+                
+                    <th>Avg convergence rate</th>
+                
+            </tr>
+            
+            <tr>
+                <td style="text-align: left">confined-shelf.outg.large</td>
+                
+                <td>Glissade</td>
+                
+                <td>2</td>
+                
+                <td>0</td>
+                
+                <td>N/A</td>
+                
+            </tr>
+            
+            <tr>
+                <td style="text-align: left">confined-shelf.out</td>
+                
+                <td>Glissade</td>
+                
+                <td>2</td>
+                
+                <td>0</td>
+                
+                <td>N/A</td>
+                
+            </tr>
+            
+            <tr>
+                <td style="text-align: left">confined-shelf.outp</td>
+                
+                <td>Glissade</td>
+                
+                <td>2</td>
+                
+                <td>0</td>
+                
+                <td>N/A</td>
+                
+            </tr>
+            
+            <tr>
+                <td style="text-align: left">._confined-shelf.outg.large</td>
+                
+                <td>Glissade</td>
+                
+                <td>2</td>
+                
+                <td>0</td>
+                
+                <td>N/A</td>
+                
+            </tr>
+            
+            <tr>
+                <td style="text-align: left">._confined-shelf.outg</td>
+                
+                <td>Glissade</td>
+                
+                <td>2</td>
+                
+                <td>0</td>
+                
+                <td>N/A</td>
+                
+            </tr>
+            
+            <tr>
+                <td style="text-align: left">._confined-shelf.out</td>
+                
+                <td>Glissade</td>
+                
+                <td>2</td>
+                
+                <td>0</td>
+                
+                <td>N/A</td>
+                
+            </tr>
+            
+            <tr>
+                <td style="text-align: left">._confined-shelf.outp</td>
+                
+                <td>Glissade</td>
+                
+                <td>2</td>
+                
+                <td>0</td>
+                
+                <td>N/A</td>
+                
+            </tr>
+            
+            <tr>
+                <td style="text-align: left">confined-shelf.outg</td>
+                
+                <td>Glissade</td>
+                
+                <td>2</td>
+                
+                <td>0</td>
+                
+                <td>N/A</td>
+                
+            </tr>
+            
+        </table>
+        
+        </div>
+        <!-- END OUTPUT ANALYSIS SECTION -->
+        
+        
     </div>
     
     <div class="case">
-    
-    
+      
+
       <!-- BEGIN PLOT SECTION -->
       <b class="label-header">Plots</b> <br/>
       <div class="separator">
@@ -1189,19 +1182,17 @@
         <a style="padding-left: 20px; color: #696969;">No plots for circular-shelf</a>
       
       </div>
-      <!-- END PLOT SECTION -->
-      
       
       <br style="clear: both" />
       <br height="30px" />
-
+      <!-- END PLOT SECTION -->
+      
+      
+      
 
       <!-- BEGIN BIT FOR BIT SECTION -->
       <b class="label-header">
         Bit for Bit 
-        <a style="font-size: small; font-style: italic">
-          Click on failures to see difference plots
-        </a> 
       </b>
       <div class="separator">
       <hr style="opacity: 0; height: 5px;">
@@ -1230,17 +1221,25 @@
         
           <b>circular-shelf.gnu.JFNK.large.nc</b>
           
-            <table style="clear: both; width: 75%; margin-left: 40px; margin-bottom: 20px; margin-top: 20px;">
+            <table style="clear: both; width: 80%; margin-left: 40px; margin-bottom: 20px; margin-top: 20px;">
               <tr>
                 <th>Variable</th>
                 <th>Max |Error|</th>
                 <th>RMSE</th>
+                <th>Plot (Click to enlarge)</th>
               </tr>
               
                 <tr>
-                  <td><a target="_blank" href="../imgs/shelf/bit4bit/circular-shelf.gnu.JFNK.large.nc.velnorm.png">velnorm</a></td>
+                  <td><a target="_blank" href="../imgs/shelf/bit4bit/circular-shelf.gnu.JFNK.large.nc.velnorm.png"><b>velnorm</b></a></td>
                   <td>1936.76745892</td>
                   <td>1109.40138585</td>
+                  <td>
+                    <a target="_blank" href="../imgs/shelf/bit4bit/circular-shelf.gnu.JFNK.large.nc.velnorm.png">
+                      <div class="bitforbit">
+                        <img src="../imgs/shelf/bit4bit/circular-shelf.gnu.JFNK.large.nc.velnorm.png" class="bitforbit">
+                      </div>
+                    </a>
+                  </td>                  
                 </tr>
               
             </table>
@@ -1248,12 +1247,12 @@
         
       
       </div>
-      <!-- END BIT FOR BIT SECTION -->
-        
-        
       <br height="30px" />
+      <!-- END BIT FOR BIT SECTION -->
       
       
+            
+
       <!-- BEGIN CONFIGURATION SECTION -->
       <b class="label-header"> Configuration Files </b>
       <div class="separator">
@@ -2170,99 +2169,100 @@
             
         
         </div>
+        <hr style="opacity: 0; height: 5px;">
+        <br style="clear: both" />
         <!-- END CONFIGURATION SECTION -->
         
         
-        <hr style="opacity: 0; height: 5px;">
-        <br style="clear: both" />
-        
-        
+      
+
         <!-- BEGIN OUTPUT ANALYSIS SECTION -->
         <b class="label-header">Output Analysis</b>
         <div class="separator">
         
-      	<table style="width:100%">
-      		<tr style="background-color: #47A3FF;">
-      			<th>Output File</th>
-      			
-      				<th>Dycore Type</th>
-      			
-      				<th>Number of processors</th>
-      			
-      				<th>Number of timesteps</th>
-      			
-      				<th>Avg convergence rate</th>
-      			
-      		</tr>
-      		
-      		<tr>
-      			<td style="text-align: left">circular-shelf.out</td>
-      			
-      			<td>Glissade</td>
-      			
-      			<td>2</td>
-      			
-      			<td>0</td>
-      			
-      			<td>N/A</td>
-      			
-      		</tr>
-      		
-      		<tr>
-      			<td style="text-align: left">circular-shelf.outg.large</td>
-      			
-      			<td>Glissade</td>
-      			
-      			<td>2</td>
-      			
-      			<td>0</td>
-      			
-      			<td>N/A</td>
-      			
-      		</tr>
-      		
-      		<tr>
-      			<td style="text-align: left">circular-shelf.outp</td>
-      			
-      			<td>Glissade</td>
-      			
-      			<td>2</td>
-      			
-      			<td>0</td>
-      			
-      			<td>N/A</td>
-      			
-      		</tr>
-      		
-      		<tr>
-      			<td style="text-align: left">circular-shelf.outg</td>
-      			
-      			<td>Glissade</td>
-      			
-      			<td>2</td>
-      			
-      			<td>0</td>
-      			
-      			<td>N/A</td>
-      			
-      		</tr>
-      		
-      	</table>
-      	
-      	</div>
-      	<!-- END OUTPUT ANALYSIS SECTION -->
-      	
+        <table style="width:100%">
+            <tr style="background-color: #47A3FF;">
+                <th>Output File</th>
+                
+                    <th>Dycore Type</th>
+                
+                    <th>Number of processors</th>
+                
+                    <th>Number of timesteps</th>
+                
+                    <th>Avg convergence rate</th>
+                
+            </tr>
+            
+            <tr>
+                <td style="text-align: left">circular-shelf.out</td>
+                
+                <td>Glissade</td>
+                
+                <td>2</td>
+                
+                <td>0</td>
+                
+                <td>N/A</td>
+                
+            </tr>
+            
+            <tr>
+                <td style="text-align: left">circular-shelf.outg.large</td>
+                
+                <td>Glissade</td>
+                
+                <td>2</td>
+                
+                <td>0</td>
+                
+                <td>N/A</td>
+                
+            </tr>
+            
+            <tr>
+                <td style="text-align: left">circular-shelf.outp</td>
+                
+                <td>Glissade</td>
+                
+                <td>2</td>
+                
+                <td>0</td>
+                
+                <td>N/A</td>
+                
+            </tr>
+            
+            <tr>
+                <td style="text-align: left">circular-shelf.outg</td>
+                
+                <td>Glissade</td>
+                
+                <td>2</td>
+                
+                <td>0</td>
+                
+                <td>N/A</td>
+                
+            </tr>
+            
+        </table>
+        
+        </div>
+        <!-- END OUTPUT ANALYSIS SECTION -->
+        
+        
     </div>
     
-    </div>
-    <br>
+  </div>
+  <br>
 
 <!-- Include the footer -->
 	</div>
 
 	<div id="footer">
 		<p id="info">
-			V&V Performed by bzq at 04-01-2015 09:53:00 <br> 
+			V&V Performed by bzq at 04-22-2015 10:15:08 <br> 
 			Test run of code <br>
 		</p>
 	</div>
