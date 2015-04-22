@@ -205,8 +205,9 @@ class AbstractTest(object):
                         "user" : livv.user,
                         "comment" : livv.comment,
                         "testName" : self.getName(),
-                        "indexDir" : livv.indexDir,
+                        "indexDir" : indexDir,
                         "cssDir" : cssDir,
+                        "imgDir" : imgDir,
                         "testDescription" : self.description,
                         "testsRun" : self.testsRun,
                         "testHeader" : livv.parserVars,
@@ -215,7 +216,6 @@ class AbstractTest(object):
                         "plotDetails" : self.plotDetails,
                         "modelConfigs" : self.modelConfigs,
                         "benchConfigs" : self.benchConfigs,
-                        "imgDir" : imgDir,
                         "testImages" : testImages}
         outputText = template.render( templateVars )
         page = open(livv.indexDir + os.sep + "verification" + os.sep + self.getName() + '.html', "w")

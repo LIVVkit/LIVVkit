@@ -245,7 +245,7 @@ class Parser(object):
                 print("        Could not generate " + dycore + " timing summary.  Need to have at least 10 samples, but only found " + str(nTimingFiles) + "!")
                 # Build the output data-structure
                 for var in livv.timingVars:
-                    timingDetails[var] = None
+                    timingDetails[var] = {}
                 timingSummary[dycore] = timingDetails
             else: 
                 # Go through each subdirectory and parse the cism_timing_stats file

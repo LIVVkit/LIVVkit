@@ -178,7 +178,7 @@ timingVars = [
               'IO Writeback'
              ]
 
-dycores = ["glide", "glissade"] #, "glam", "albany", "bisicles"]
+dycores = ["glide", "glissade", "glam", "albany", "bisicles"]
 
 
 # Website related variables
@@ -206,7 +206,7 @@ if __name__ == '__main__':
     import util.websetup as websetup
     import verification.dome, verification.ismip, verification.gis, verification.shelf
     import performance.dome, performance.gis
-    
+
     # Check if we are saving/loading the configuration and set up the machine name
     if options.machineName == '' and options.save:
         # Save the configuration with the default host name
@@ -261,19 +261,26 @@ if __name__ == '__main__':
 
     # Describes the test module and the cases to run for said module
     #NOTE: Each of these modules can be found in bin
-    verificationMapping = {"dome" : ( verification.dome.Test, verification.dome.choose(options.dome) ),
+    verificationMapping = {
+                    "dome" : ( verification.dome.Test, verification.dome.choose(options.dome) ),
                    "ismip" : ( verification.ismip.Test, verification.ismip.choose(options.ismip) ),
                    "shelf" : ( verification.shelf.Test, verification.shelf.choose(options.shelf) )
                    }
 
-    perfMapping = {"dome" : ( performance.dome.Test, performance.dome.choose(options.perfDome) ),
-                   "gis" : ( performance.gis.Test, performance.gis.choose(options.perfGis))}
-    
-    validationMapping = {"validation" : (0,0)}
-    
-    testMapping = {"Verification" : verificationMapping,
+    perfMapping = {
+                   "dome" : ( performance.dome.Test, performance.dome.choose(options.perfDome) ),
+                   "gis" : ( performance.gis.Test, performance.gis.choose(options.perfGis))
+                   }
+
+    validationMapping = {
+                         "validation" : (0,0)
+                         }
+
+    testMapping = {
+                   "Verification" : verificationMapping,
                    "Performance" : perfMapping,
-                   "Validation" : validationMapping}
+                   "Validation" : validationMapping
+                   }
 
     # Get the keys for all non-empty test cases
     testsRun = list( itertools.compress( verificationMapping.keys(), [val[1] for val in verificationMapping.values()]) )

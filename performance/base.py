@@ -42,17 +42,17 @@ class AbstractTest(object):
     #
     def __init__(self):
         self.testsRun = []
-        
+
         # Structure is:
         #  
         self.plotDetails = dict()
-        
+
         # Layout:
         self.fileTestDetails = dict()
-        
+
         # Layout:  
         self.modelConfigs, self.benchConfigs = dict(), dict()
-        
+
         # Layout:  {*TimingData : {testName : {dycoreType : {solverVariable : [avg, min, max] } } } } 
         self.modelTimingData, self.benchTimingData = dict(), dict()
 
@@ -118,7 +118,7 @@ class AbstractTest(object):
                         mins.append(self.modelTimingData[test][dycore][var][1])
                         maxs.append(self.modelTimingData[test][dycore][var][2])
                         ress.append(res)
-                        
+
                 # If there is any data to plot, do it now
                 if len(ress) != 0:
                     fig, ax = pyplot.subplots(1)
@@ -131,7 +131,7 @@ class AbstractTest(object):
                     ax.fill_between(ress, mins, maxs, alpha=0.25)
                     pyplot.savefig(livv.imgDir + os.sep + self.getName() + os.sep + type + "_" + dycore + "_" + var + "_" + "_scaling" + ".png")
                     imagesGenerated.append( [type + "_" + dycore + "_" + var + "_" + "_scaling" + ".png", "Scaling plot for " + dycore + " " + var])
-        
+
         # Record the plots
         self.plotDetails[typeString] = imagesGenerated
 
@@ -171,8 +171,9 @@ class AbstractTest(object):
                         "user" : livv.user,
                         "comment" : livv.comment,
                         "testName" : self.getName(),
-                        "indexDir" : livv.indexDir,
+                        "indexDir" : indexDir,
                         "cssDir" : cssDir,
+                        "imgDir" : imgDir,
                         "testDescription" : self.description,
                         "testsRun" : self.testsRun,
                         "testHeader" : livv.parserVars,
@@ -182,7 +183,6 @@ class AbstractTest(object):
                         "benchConfigs" : self.benchConfigs,
                         "modelTimingData" : self.modelTimingData,
                         "benchTimingData" : self.benchTimingData,
-                        "imgDir" : imgDir,
                         "testImages" : testImages}
         outputText = template.render( templateVars )
         page = open(livv.indexDir + os.sep + "performance" + os.sep + self.getName() + '.html', "w")
