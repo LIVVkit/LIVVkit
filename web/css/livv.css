@@ -118,9 +118,9 @@ hr {
 #header-content {
 	color: white;
 	position: absolute;
-    margin-left: 4%;
     height: 0.85em;
    	line-height: 0.85em;
+   	padding-top: 15px;
 }
 
 #info {
