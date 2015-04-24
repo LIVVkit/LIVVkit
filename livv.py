@@ -144,6 +144,9 @@ imgDir         = outputDir + "/imgs"
 comment        = options.comment
 timestamp      = time.strftime("%m-%d-%Y %H:%M:%S")
 user           = getpass.getuser()
+websiteDir     = cwd + "/web"
+templateDir    = websiteDir + "/templates"
+indexDir       = outputDir
 
 # If the user specifies a benchmark dir honor it, otherwise default to inside of inputDir
 if options.benchmarkDir == "NOT A REAL FOLDER":
@@ -171,6 +174,7 @@ parserVars = [
               'Avg convergence rate'
              ]
 
+# Variables to measure when parsing through timing summaries
 timingVars = [
               'Simple Glide',
               'Velocity Driver',
@@ -178,16 +182,8 @@ timingVars = [
               'IO Writeback'
              ]
 
+# Dycores to try to parse output for
 dycores = ["glide", "glissade", "glam", "albany", "bisicles"]
-
-
-# Website related variables
-websiteDir  = cwd + "/web"
-templateDir = websiteDir + "/templates"
-indexDir    = outputDir
-cssDir      = indexDir + os.sep + "css"
-testDir     = indexDir + os.sep + "verification"
-imgDir      = indexDir + os.sep + "imgs"
 
 ###############################################################################
 #                               Main Execution                                #
@@ -202,8 +198,8 @@ if __name__ == '__main__':
     dependencies.check()
 
     # Pull in the LIVV specific modules
-    import util.machines as machines
-    import util.websetup as websetup
+    import util.configurationHandler
+    import util.websetup
     import verification.dome, verification.ismip, verification.gis, verification.shelf
     import performance.dome, performance.gis
 
@@ -211,24 +207,24 @@ if __name__ == '__main__':
     if options.machineName == '' and options.save:
         # Save the configuration with the default host name
         machineName = socket.gethostname()
-        machines.save(machineName)
+        util.configurationHandler.save(machineName)
     elif options.save:
         # Save the configuration with the specified host name
         machineName = options.machineName
-        machines.save(machineName)
+        util.configurationHandler.save(machineName)
     elif options.machineName == '':
         # Don't save the configuration and use the default host name
         machineName = socket.gethostname() 
     else:
         # Try to load the machine name specified
         machineName = options.machineName
-        vars = machines.load(machineName)
+        vars = util.configurationHandler.load(machineName)
         globals().update(vars)
 
     # Check if the user has a default config saved and use that if it does
     if os.path.exists(configDir + os.sep + machineName + "_" + user + "_default"):
         machineName = machineName + "_" + user + "_default"
-        vars = machines.load(machineName)
+        vars = util.configurationHandler.load(machineName)
         globals().update(vars)
 
     # Print out some information
@@ -303,11 +299,11 @@ if __name__ == '__main__':
         print("  " + case)
     print("")
 
-    # Run the verification
+    # Set up the directory structure and summary dictionaries for output
     verificationSummary, performanceSummary, validationSummary = dict(), dict(), dict()
-    websetup.setup(testsRun + perfTestsRun + validationTestsRun)
+    util.websetup.setup(testsRun + perfTestsRun + validationTestsRun)
 
-    # Run the V&V Tests
+    # Run the verification tests
     if len(testsRun) > 0:
         print("--------------------------------------------------------------------------")
         print("  Beginning verification test suite....")
@@ -357,7 +353,7 @@ if __name__ == '__main__':
 
     # Create the site index
     print("Generating web pages in " + outputDir) 
-    websetup.generate(verificationSummary, performanceSummary, validationSummary)
+    util.websetup.generate(verificationSummary, performanceSummary, validationSummary)
 
     ###############################################################################
     #                        Finished.  Tell user about it.                       #

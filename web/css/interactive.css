@@ -27,7 +27,8 @@ a.button:hover {
   Summary Table Styling
 ******************************************************************************/
 table.summary {
-	width: 100%;
+	margin-left: 10%;
+	width: 80%;
 }
 
 .tableLink {

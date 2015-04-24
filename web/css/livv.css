@@ -101,6 +101,11 @@ hr {
     padding: 15px;
 }
 
+.description {
+	margin-left: 30px;
+	width: 80%;
+}
+
 
 /******************************************************************************
   Header/Footer Styling
@@ -121,6 +126,19 @@ hr {
     height: 0.85em;
    	line-height: 0.85em;
    	padding-top: 15px;
+   	padding-bottom: 15px;
+   	padding-left: 35px;
+   	margin-left: -35px;
+}
+
+#wiki-content {
+	color: white;
+	position: absolute;
+	height: 0.85em;
+	line-height: 0.85em;
+	padding-top: 15px;
+	padding-bottom: 15px;
+	margin-left: 840px;
 }
 
 #info {
