@@ -18,7 +18,7 @@ def choose(key):
 
 
 import livv
-from bin.test import AbstractTest
+from verification.base import AbstractTest
 import jinja2
 
 ## Main class for handling Greenland Ice Sheet test cases.
@@ -42,7 +42,7 @@ class Test(AbstractTest):
         self.gisTestDetails = []
         self.gisFileTestDetails = []
 
-        # Some information about the GIS tests
+        # Some information about the GIS verification
         self.name = "gis"
         self.description = "Attributes: This test case represents the Greenland ice" + \
                   " sheet (GIS) at different spatial resolutions (10km and 5km)." + \

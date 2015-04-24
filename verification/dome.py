@@ -1,6 +1,6 @@
 '''
 Master module for dome test cases.  Inherits methods from the AbstractTest
-class from the Test module.  Dome specific tests are performed by calling
+class from the Test module.  Dome specific verification are performed by calling
 the run() method, which passes the necessary information to the runDome()
 method.
 
@@ -27,8 +27,8 @@ def choose(key):
 
 
 import livv
-from bin.test import AbstractTest
-from bin.parser import Parser
+from verification.base import AbstractTest
+from util.parser import Parser
 
 ## Main class for handling dome test cases.
 #
@@ -43,7 +43,7 @@ class Test(AbstractTest):
     def __init__(self):
         super(self.__class__, self).__init__()
 
-        # Describe what the dome tests are all about
+        # Describe what the dome verification are all about
         self.name = "dome"
         self.description = "3-D paraboloid dome of ice with a circular, 60 km" + \
                       " diameter base sitting on a flat bed. The horizontal" + \
@@ -82,7 +82,7 @@ class Test(AbstractTest):
         modelDir = livv.inputDir + os.sep + "dome" + resolution + os.sep + type + os.sep + livv.dataDir
         benchDir = livv.benchmarkDir + os.sep + "dome" + resolution + os.sep + type + os.sep + livv.dataDir
         if not (os.path.exists(modelDir) and os.path.exists(benchDir)):
-            print("    Could not find data for dome" + resolution + " " + type + " tests!  Tried to find data in:")
+            print("    Could not find data for dome" + resolution + " " + type + " verification!  Tried to find data in:")
             print("      " + modelDir)
             print("      " + benchDir)
             print("    Continuing with next test....")

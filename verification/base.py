@@ -64,7 +64,7 @@ class AbstractTest(object):
     def run(self, test):
         pass
 
-    ## Get a summary of the tests that have been run 
+    ## Get a summary of the verification that have been run 
     #
     #  Output:
     #    @return a dictionary of the testcases that holds various statistics
@@ -106,7 +106,7 @@ class AbstractTest(object):
             print("  Benchmark and model data not available for " + test)
             return {'No matching benchmark and data files found': ['SKIPPED','0.0']}
         else:
-            print("  Running bit for bit tests of " + test + "....")
+            print("  Running bit for bit verification of " + test + "....")
 
         # Go through and check if any differences occur
         for same in list(sameList):
@@ -205,8 +205,9 @@ class AbstractTest(object):
                         "user" : livv.user,
                         "comment" : livv.comment,
                         "testName" : self.getName(),
-                        "indexDir" : livv.indexDir,
+                        "indexDir" : indexDir,
                         "cssDir" : cssDir,
+                        "imgDir" : imgDir,
                         "testDescription" : self.description,
                         "testsRun" : self.testsRun,
                         "testHeader" : livv.parserVars,
@@ -215,98 +216,11 @@ class AbstractTest(object):
                         "plotDetails" : self.plotDetails,
                         "modelConfigs" : self.modelConfigs,
                         "benchConfigs" : self.benchConfigs,
-                        "imgDir" : imgDir,
                         "testImages" : testImages}
         outputText = template.render( templateVars )
-        page = open(livv.testDir + '/' + self.getName() + '.html', "w")
+        page = open(livv.indexDir + os.sep + "verification" + os.sep + self.getName() + '.html', "w")
         page.write(outputText)
         page.close()
 
 
-## TestSummary provides LIVV the ability to assemble the overview and main page.
-#
-#  The TestSummary class does not strictly fall under the category of a test
-#  but can take advantage of the infrastructure that the AbstractTest class
-#  provides.
-#
-class TestSummary(AbstractTest):
-
-    ## Constructor
-    #
-    def __init__(self):
-        return
-
-    ## Return the name of the test
-    # 
-    def getName(self):
-        return "test summary"
-
-    ## Prepare the index of the website.
-    #
-    #  input:
-    #    @param testsRun: the top level names of each of the tests run
-    #
-    def webSetup(self, testsRun):
-        # Check if we need to back up an old run
-        if os.path.exists(livv.indexDir):
-            response = raw_input("Found a duplicate of the output directory.  Would you like to create a backup before overwriting? (y/n)")
-            if response in ["yes", "Yes", "YES", "YEs", "y", "Y"]:
-                if os.path.exists(livv.indexDir + "_backup"):
-                    shutil.rmtree(livv.indexDir + "_backup")
-                shutil.copytree(livv.indexDir, livv.indexDir + "_backup")
-            else:
-                shutil.rmtree(livv.indexDir)
-
-        # Create directory structure
-        for siteDir in [livv.indexDir, livv.testDir]:
-            if not os.path.exists(siteDir):
-                os.mkdir(siteDir);
-
-        # Copy over css && imgs directories from source
-        if os.path.exists(livv.indexDir + "/css"): shutil.rmtree(livv.indexDir + "/css")
-        shutil.copytree(livv.websiteDir + "/css", livv.indexDir + "/css")
-        if os.path.exists(livv.indexDir + "/imgs"): shutil.rmtree(livv.indexDir + "/imgs")
-        shutil.copytree(livv.websiteDir + "/imgs", livv.indexDir + "/imgs")
-
-        # Set up imgs directory to have sub-directories for each test
-        for test in testsRun:
-            if not os.path.exists(livv.imgDir + os.sep + test + os.sep + "bit4bit"):
-                os.makedirs(livv.imgDir + os.sep + test + os.sep + "bit4bit")
-
-
-    ## Build the index
-    #
-    #  input:
-    #    @param testsRun: The list of which tests were run
-    #    @param testMapping: The grouping of test cases to the overall test
-    #    @param testSummary: A summary of the plots generated, bit for bit tests, etc
-    #
-    def generate(self, testsRun, testMapping, testSummary):
-        # Where to look for page templates
-        templateLoader = jinja2.FileSystemLoader(searchpath=livv.templateDir)
-        templateEnv = jinja2.Environment(loader=templateLoader)
-
-        # Create the index page
-        templateFile = "/index.html"
-        template = templateEnv.get_template(templateFile)
-
-        templateVars = {"indexDir" : livv.indexDir,
-                        "testsRun" : testsRun,
-                        "testMapping" : testMapping,
-                        "testSummary" : testSummary,
-                        "timestamp" : livv.timestamp,
-                        "user" : livv.user,
-                        "comment" : livv.comment,
-                        "cssDir" : "css", 
-                        "imgDir" : "imgs"}
-
-        # Write out the index page
-        outputText = template.render(templateVars)
-        page = open(livv.indexDir + "/index.html", "w")
-        page.write(outputText)
-        page.close()
-
-    # Override the abstract methods with empty calls    
-    def run(self, test):
-        pass
 
