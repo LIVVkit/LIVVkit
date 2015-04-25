@@ -1,5 +1,8 @@
 '''
-Master module for shelf test cases
+Master module for shelf test cases  Inherits methods from the AbstractTest
+class from the base module.  Shelf specific verification is performed by calling
+the run() method, which passes the necessary information to the runShelf()
+method.
 
 Created on Dec 8, 2014
 
@@ -10,15 +13,17 @@ import re
 import os
 import subprocess
 
-# the test cases that can be run
+# A mapping of the options to the test cases that can be run
 cases = {'none' : [],
          'confined' : ['confined-shelf'],
          'circular' : ['circular-shelf'],
          'all' : ['confined-shelf', 'circular-shelf']}
 
+# Return a list of options
 def choices():
     return list( cases.keys() )
 
+# Return the tests associated with an option
 def choose(key):
     return cases[key]
 
@@ -27,7 +32,7 @@ import livv
 from verification.base import AbstractTest
 from util.parser import Parser
 
-# # Main class for handling shelf test cases.
+## Main class for handling shelf test cases.
 #
 #  The shelf test cases inherit functionality from AbstractTest for checking 
 #  bit-for-bittedness as well as for parsing standard output from a model run.
@@ -42,15 +47,6 @@ class Test(AbstractTest):
 
         self.name = "shelf"
         self.description = "A blank description"
-
-
-    ## Return the name of the test
-    #
-    #  output:
-    #    @returns name : shelf
-    #
-    def getName(self):
-        return self.name
 
 
     ## Runs the shelf specific test case.  
@@ -76,7 +72,7 @@ class Test(AbstractTest):
         self.runShelf(test, testDir, benchDir)
 
 
-    ## Perform V&V on the a shelf case
+    ## Perform verification analysis on the a shelf case
     #
     #  input:
     #    @param type: The type of shelf test (circular, confined, etc)

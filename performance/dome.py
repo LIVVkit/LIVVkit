@@ -1,7 +1,7 @@
 '''
 Master module for dome test cases.  Inherits methods from the AbstractTest
 class from the Test module.  Dome specific verification are performed by calling
-the run() method, which passes the necessary information to the runDome()
+the run() method, which passes the necessary information to the runDomePerformance()
 method.
 
 Created on Dec 8, 2014
@@ -22,9 +22,11 @@ cases = {'none' : [],
          'scaling' : ['dome60', 'dome120', 'dome240', 'dome500', 'scalingDome'],
         }
 
+# Return a list of options
 def choices():
     return list( cases.keys() )
 
+# Return the tests associated with an option
 def choose(key):
     return cases[key]
 
@@ -33,11 +35,10 @@ import livv
 from base import AbstractTest
 from util.parser import Parser
 
-## Main class for handling dome test cases.
+## Main class for handling dome performance validation
 #
-#  The dome test cases inherit functionality from AbstractTest for checking 
-#  bit-for-bittedness as well as for parsing standard output from a model run.
-#  This class handles evolving and diagnostic variations of the dome case.
+#  The dome test cases inherit functionality from AbstractTest for
+#  generating scaling plots and generating the output webpage.
 #
 class Test(AbstractTest):
 
@@ -55,16 +56,6 @@ class Test(AbstractTest):
                       " set of experiments a quasi no-slip basal condition in" + \
                       " imposed by setting. A zero-flux boundary condition is" + \
                       " applied to the dome margins. "
-
-
-    ## Returns the name of the test
-    #
-    #  output:
-    #    @returns name : Dome
-    #
-    def getName(self):
-        return self.name
-
 
     ## Runs the performance specific test case.
     #
@@ -152,4 +143,3 @@ class Test(AbstractTest):
         self.summary['dome' + resolution] = [numberPlots, numberOutputFiles,
                                              numberConfigMatches, numberConfigTests,
                                              numberBitMatches, numberBitTests]
-        

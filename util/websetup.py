@@ -64,7 +64,7 @@ def generate(verificationSummary, performanceSummary, validationSummary):
     templateFile = os.sep + "index.html"
     template = templateEnv.get_template(templateFile)
 
-    templateVars = {"indexDir" : livv.indexDir,
+    templateVars = {"indexDir" : ".",
                     "verificationSummary" : verificationSummary,
                     "performanceSummary" : performanceSummary,
                     "validationSummary" : validationSummary,

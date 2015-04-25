@@ -1,7 +1,7 @@
 '''
-The AbstractTest class defines several methods that each test class must implement
+The AbstractTest class defines several methods that each test class must implement.
 
-Created on Apr 21, 2015
+Created on Apr 24, 2015
 
 @author: arbennett
 '''
@@ -21,11 +21,10 @@ import livv
 
 from plots import nclfunc
 
-## Provide base functionality for a Performance test
+## Provide base functionality for a Validation test
 #
 #  Each test within LIVV needs to be able to run specific test code, and
-#  generate its output.  Tests inherit a common method of generating 
-#  scaling plots
+#  generate its output.
 #
 class AbstractTest(object):
     __metaclass__ = ABCMeta
@@ -33,7 +32,7 @@ class AbstractTest(object):
     ## Constructor
     #
     def __init__(self):
-        self.name = "default"
+        self.name = 'default'
         self.testsRun = []
 
         # Structure is:
@@ -43,14 +42,9 @@ class AbstractTest(object):
         # Layout:
         self.fileTestDetails = dict()
 
-        # Layout:  
-        self.modelConfigs, self.benchConfigs = dict(), dict()
-
-        # Layout:  {*TimingData : {testName : {dycoreType : {solverVariable : [avg, min, max] } } } } 
-        self.modelTimingData, self.benchTimingData = dict(), dict()
-
         # Layout:
         self.summary = dict()
+
 
     ## Definition for the general test run
     #
@@ -60,59 +54,6 @@ class AbstractTest(object):
     @abstractmethod
     def run(self, test):
         pass
-
-    ## Generate scaling plots
-    #
-    #  Generates scaling plots for each variable and dycore combination of a given
-    #  type.
-    #
-    #  input:
-    #    @param type : the overarching test category to generate scaling plots for (ie dome/gis)
-    #
-    def runScaling(self, type):
-        typeString = 'scaling' + type
-        self.modelTimingData[typeString] = dict()
-        self.benchTimingData[typeString] = dict()
-        imagesGenerated = []
-        print("")
-        print("  Generating scaling plots for " + type + "....")
-        type = type.lower() + '_' if typeString == "scalingGIS" else type.lower()
-        tests = filter(re.compile(type + ".*").search, self.modelTimingData.keys())
-        resolutions = sorted([int(re.findall(r'\d+', s)[0]) for s in tests])
-
-        # Generate all of the plots
-        for var in livv.timingVars:
-            for dycore in livv.dycores:
-                mins, avgs, maxs, ress = [], [], [], []
-                for res in sorted(resolutions):
-                    # Fix string for Greenland runs
-                    test = type + str(res) + 'km' if typeString == 'scalingGIS' else type + str(res)
-                    # Add the data if it's available
-                    if self.modelTimingData[test] != {} and \
-                            self.modelTimingData[test][dycore] != {} and \
-                            self.modelTimingData[test][dycore][var] != {} and \
-                            len(self.modelTimingData[test][dycore][var]) == 3:
-                        avgs.append(self.modelTimingData[test][dycore][var][0])
-                        mins.append(self.modelTimingData[test][dycore][var][1])
-                        maxs.append(self.modelTimingData[test][dycore][var][2])
-                        ress.append(res)
-
-                # If there is any data to plot, do it now
-                if len(ress) != 0:
-                    fig, ax = pyplot.subplots(1)
-                    pyplot.title((type + " " + " scaling plot for " + var + "(" + dycore + ")").title())
-                    pyplot.xlabel("Problem Size")
-                    pyplot.ylabel("Time (s)")
-                    pyplot.xticks()
-                    pyplot.yticks()
-                    ax.plot(ress, avgs, color='black', ls='--')
-                    ax.fill_between(ress, mins, maxs, alpha=0.25)
-                    pyplot.savefig(livv.imgDir + os.sep + self.name + os.sep + type + "_" + dycore + "_" + var + "_" + "_scaling" + ".png")
-                    imagesGenerated.append( [type + "_" + dycore + "_" + var + "_" + "_scaling" + ".png", "Scaling plot for " + dycore + " " + var])
-
-        # Record the plots
-        self.plotDetails[typeString] = imagesGenerated
-
 
     ## Creates the output test page
     #
@@ -130,7 +71,7 @@ class AbstractTest(object):
         # Set up jinja related variables
         templateLoader = jinja2.FileSystemLoader(searchpath=livv.templateDir)
         templateEnv = jinja2.Environment(loader=templateLoader, extensions=["jinja2.ext.do",])
-        templateFile = "/performance_test.html"
+        templateFile = "/validation_test.html"
         template = templateEnv.get_template(templateFile)
 
         # Set up relative paths
@@ -166,3 +107,4 @@ class AbstractTest(object):
         page = open(livv.indexDir + os.sep + "performance" + os.sep + self.name + '.html', "w")
         page.write(outputText)
         page.close()
+

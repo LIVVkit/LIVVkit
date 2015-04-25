@@ -1,14 +1,7 @@
 '''
-Contains two classes for generalized testing in LIVV.
-
 The AbstractTest class defines several methods that each test class must implement, 
 as well as provides bit for bit and stdout parsing capabilities which are inherited
-by all derived test classes.  
-
-The TestSummary is a dummy class that is used to generate the index of the output.
-It implements a method called webSetup that creates the index with a short summary
-of the execution stats.  All other methods are dummies.  Further implementations
-similar to TestSummary are discouraged to avoid breaking the AbstractTest template.
+by all derived test classes.
 
 Created on Dec 8, 2014
 
@@ -34,7 +27,7 @@ from plots import nclfunc
 #
 #  Each test within LIVV needs to be able to run specific test code, and
 #  generate its output.  Tests inherit a common method of checking for 
-#  bit-for-bittedness as well for parsing the standard output of model output
+#  bit-for-bittedness
 #
 class AbstractTest(object):
     __metaclass__ = ABCMeta
@@ -42,6 +35,7 @@ class AbstractTest(object):
     ## Constructor
     #
     def __init__(self):
+        self.name = "default"
         self.testsRun = []
         self.bitForBitDetails = dict()
         self.plotDetails = dict()
@@ -49,11 +43,6 @@ class AbstractTest(object):
         self.modelConfigs, self.benchConfigs = dict(), dict()
         self.summary = dict()
 
-    ## Should return the name of the test
-    #
-    @abstractmethod
-    def getName(self):
-        pass
 
     ## Definition for the general test run
     #
@@ -64,24 +53,17 @@ class AbstractTest(object):
     def run(self, test):
         pass
 
-    ## Get a summary of the verification that have been run 
-    #
-    #  Output:
-    #    @return a dictionary of the testcases that holds various statistics
-    #
-    def getSummary(self):
-        return self.summary
 
     ## Tests all models and benchmarks against each other in a bit for bit fashion.
     #  If any differences are found the method will return 1, otherwise 0.
     #
     #  Input:
-    #    @param test: the test case to check bitness
+    #    @param test: the test case to check bittedness
     #    @param testDir: the path to the model data
     #    @param benchDir: the path to the benchmark data
     #
     #  Output:
-    #    @returns [change, err] where change in {0,1}
+    #    @returns [change, err] where change in {0,1} and result in {'N/A', 'SUCCESS', 'FAILURE'}
     #
     def bit4bit(self, test, testDir, benchDir):
         # Mapping of result codes to results
@@ -164,7 +146,7 @@ class AbstractTest(object):
 
             # Generate the plots for each of the failed variables
             for var in plotVars.keys():
-                outFile = livv.imgDir + os.sep + self.getName() + os.sep + "bit4bit" + os.sep + testFile.split(os.sep)[-1] + "." + var + ".png"
+                outFile = livv.imgDir + os.sep + self.name + os.sep + "bit4bit" + os.sep + testFile.split(os.sep)[-1] + "." + var + ".png"
                 nclfunc.plot_diff(var, testFile, benchFile, outFile)
 
         return bitDict
@@ -176,7 +158,7 @@ class AbstractTest(object):
     #  This page will contain a detailed list of the results from LIVV.  Details
     #  from the run are pulled from two locations.  Global definitions that are 
     #  displayed on every page, or used for navigation purposes are imported
-    #  from the main livv.py module.  All dome specific information is supplied
+    #  from the main livv.py module.  All test specific information is supplied
     #  via class variables.
     #
     #  \note Paths that are contained in templateVars should not be using os.sep
@@ -186,7 +168,7 @@ class AbstractTest(object):
         # Set up jinja related variables
         templateLoader = jinja2.FileSystemLoader(searchpath=livv.templateDir)
         templateEnv = jinja2.Environment(loader=templateLoader, extensions=["jinja2.ext.do",])
-        templateFile = "/test.html"
+        templateFile = "/verification_test.html"
         template = templateEnv.get_template(templateFile)
 
         # Set up relative paths
@@ -195,7 +177,7 @@ class AbstractTest(object):
         imgDir = indexDir + "/imgs"
 
         # Grab all of our images
-        testImgDir = livv.imgDir + os.sep + self.getName()
+        testImgDir = livv.imgDir + os.sep + self.name
         testImages = [os.path.basename(img) for img in glob.glob(testImgDir + os.sep + "*.png")]
         testImages.append([os.path.basename(img) for img in glob.glob(testImgDir + "*.jpg")])
         testImages.append([os.path.basename(img) for img in glob.glob(testImgDir + "*.svg")])
@@ -204,7 +186,7 @@ class AbstractTest(object):
         templateVars = {"timestamp" : livv.timestamp,
                         "user" : livv.user,
                         "comment" : livv.comment,
-                        "testName" : self.getName(),
+                        "testName" : self.name,
                         "indexDir" : indexDir,
                         "cssDir" : cssDir,
                         "imgDir" : imgDir,
@@ -218,9 +200,6 @@ class AbstractTest(object):
                         "benchConfigs" : self.benchConfigs,
                         "testImages" : testImages}
         outputText = template.render( templateVars )
-        page = open(livv.indexDir + os.sep + "verification" + os.sep + self.getName() + '.html', "w")
+        page = open(livv.indexDir + os.sep + "verification" + os.sep + self.name + '.html', "w")
         page.write(outputText)
         page.close()
-
-
-

@@ -1,7 +1,7 @@
 '''
-Master module for dome test cases.  Inherits methods from the AbstractTest
-class from the Test module.  Dome specific verification are performed by calling
-the run() method, which passes the necessary information to the runDome()
+Master module for GIS test cases.  Inherits methods from the AbstractTest
+class from the Test module.  GIS specific verification are performed by calling
+the run() method, which passes the necessary information to the runGisPerformance()
 method.
 
 Created on Dec 8, 2014
@@ -34,11 +34,10 @@ import livv
 from base import AbstractTest
 from util.parser import Parser
 
-## Main class for handling dome test cases.
+## Main class for handling gis performance validation.
 #
-#  The dome test cases inherit functionality from AbstractTest for checking 
-#  bit-for-bittedness as well as for parsing standard output from a model run.
-#  This class handles evolving and diagnostic variations of the dome case.
+#  The dome test cases inherit functionality from AbstractTest for
+#  generating scaling plots and generating the output webpage.
 #
 class Test(AbstractTest):
 
@@ -50,15 +49,6 @@ class Test(AbstractTest):
         # Describe what the dome verification are all about
         self.name = "gis"
         self.description = "A placeholder description"
-
-
-    ## Returns the name of the test
-    #
-    #  output:
-    #    @returns name : Dome
-    #
-    def getName(self):
-        return self.name
 
 
     ## Runs the performance specific test case.

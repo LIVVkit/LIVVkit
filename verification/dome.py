@@ -1,6 +1,6 @@
 '''
 Master module for dome test cases.  Inherits methods from the AbstractTest
-class from the Test module.  Dome specific verification are performed by calling
+class from the base module.  Dome specific verification is performed by calling
 the run() method, which passes the necessary information to the runDome()
 method.
 
@@ -19,9 +19,11 @@ cases = {'none'   : [],
          'evolving'  : ['dome30/evolving'],
          'all'    : ['dome30/diagnostic', 'dome30/evolving'],}
 
+# Return a list of options
 def choices():
     return list( cases.keys() )
 
+# Return the tests associated with an option
 def choose(key):
     return cases[key]
 
@@ -33,8 +35,8 @@ from util.parser import Parser
 ## Main class for handling dome test cases.
 #
 #  The dome test cases inherit functionality from AbstractTest for checking 
-#  bit-for-bittedness as well as for parsing standard output from a model run.
-#  This class handles evolving and diagnostic variations of the dome case.
+#  bit-for-bittedness from a model run. This class handles evolving and \
+#  diagnostic variations of the dome case.
 #
 class Test(AbstractTest):
 
@@ -52,15 +54,6 @@ class Test(AbstractTest):
                       " set of experiments a quasi no-slip basal condition in" + \
                       " imposed by setting. A zero-flux boundary condition is" + \
                       " applied to the dome margins. "
-
-
-    ## Returns the name of the test
-    #
-    #  output:
-    #    @returns name : Dome
-    #
-    def getName(self):
-        return self.name
 
 
     ## Runs the dome specific test case.  
@@ -94,9 +87,8 @@ class Test(AbstractTest):
     ## Perform V&V on the evolving dome case
     #
     #  Runs the dome evolving V&V for a given resolution.  First parses through all 
-    #  of the standard output files for the given test case, then generates plots via
-    #  the plotEvolving function.  Finishes up by doing bit for bit comparisons with
-    #  the benchmark files.
+    #  of the standard output files for the given test case, then finishes up by 
+    #  doing bit for bit comparisons with the benchmark files.
     #
     #  input:
     #    @param resolution: The resolution of the test cases to look in.
@@ -135,7 +127,7 @@ class Test(AbstractTest):
 
         # Run bit for bit test
         numberBitMatches, numberBitTests = 0, 0
-        self.bitForBitDetails['dome' + resolution + os.sep + type] = self.bit4bit(self.getName(), modelDir, benchDir)
+        self.bitForBitDetails['dome' + resolution + os.sep + type] = self.bit4bit(self.name, modelDir, benchDir)
         for key, value in self.bitForBitDetails['dome' + resolution + os.sep + type].iteritems():
             print ("    {:<40} {:<10}".format(key,value[0]))
             if value[0] == "SUCCESS": numberBitMatches+=1

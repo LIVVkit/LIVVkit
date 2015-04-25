@@ -314,7 +314,7 @@ if __name__ == '__main__':
         # Run the specific and bit for bit verification for each case of the test
         for case in verificationMapping[test][1]:
             newTest.run(case)
-        verificationSummary[test] = newTest.getSummary()
+        verificationSummary[test] = newTest.summary
         print("")
         # Generate the test-specific webpage 
         newTest.generate()
@@ -330,7 +330,7 @@ if __name__ == '__main__':
         # Run the specific and bit for bit verification for each case of the test
         for case in perfMapping[test][1]:
             newTest.run(case)
-        performanceSummary[test] = newTest.getSummary()
+        performanceSummary[test] = newTest.summary
         print("")
         # Generate the test-specific webpage 
         newTest.generate()
@@ -346,7 +346,7 @@ if __name__ == '__main__':
         # Run the specific and bit for bit verification for each case of the test
         for case in validationMapping[test][1]:
             newTest.run(case)
-        validationSummary[test] = newTest.getSummary()
+        validationSummary[test] = newTest.summary
         print("")
         # Generate the test-specific webpage 
         newTest.generate()

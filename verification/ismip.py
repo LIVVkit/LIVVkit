@@ -1,5 +1,8 @@
 '''
-Master module for Ismip verification.  
+Master module for Ismip verification.  Inherits methods from the AbstractTest
+class from the base module.  ISMIP specific verification is performed by calling
+the run() method, which passes the necessary information to the runIsmip()
+method.
 
 Created on Dec 8, 2014
 
@@ -10,15 +13,17 @@ import re
 import os
 import subprocess
 
-
+# Mapping from options to test cases
 cases = {'none'  : [],
          'small' : ['ismip-hom-a/80km', 'ismip-hom-c/80km'],
          'large' : ['ismip-hom-a/20km', 'ismip-hom-c/20km'],
          'all'   : ['ismip-hom-a/20km', 'ismip-hom-c/20km', 'ismip-hom-a/80km', 'ismip-hom-c/80km']}
 
+# Return a list of options
 def choices():
     return list( cases.keys() )
 
+# Return the tests associated with an option
 def choose(key):
     return cases[key]
 
@@ -30,7 +35,7 @@ from util.parser import Parser
 ## Main class for handling Ismip test cases.
 #
 #  The Ismip test cases inherit functionality from AbstractTest for checking 
-#  bit-for-bittedness as well as for parsing standard output from a model run.
+#  bit-for-bittedness and generating webpages with results.
 #  This class handles the Ismip-hom a and c verification for resolutions of 20km and 80km.
 #
 class Test(AbstractTest):
@@ -46,14 +51,6 @@ class Test(AbstractTest):
                            " physics.  For more information, see <a href=http://homepages.ulb.ac.be/~fpattyn/ismip/>" +\
                            "http://homepages.ulb.ac.be/~fpattyn/ismip/</a> \n" + \
                            " Simulates steady ice flow over a surface with periodic boundary conditions"
-
-    ## Return the name of the test
-    #
-    #  output:
-    #    @returns name : ismip
-    #
-    def getName(self):
-        return self.name
 
 
     ## Runs the ismip specific test case.
@@ -92,16 +89,14 @@ class Test(AbstractTest):
     ## Perform V&V on an ismip-hom test case
     #
     #  Runs the ismip V&V for a given case and resolution.  First parses through all
-    #  of the standard output files for the given test case, then generates plots via
-    #  the plot function.  Finishes up by doing bit for bit comparisons with
-    #  the benchmark files.
+    #  of the standard output files for the given test case and finishes up by 
+    #  doing bit for bit comparisons with the benchmark files.
     #
     #  input:
     #    @param testDir: The path to the test data
     #    @param benchDir: The path to the benchmark data
     #    @param aOrC: Whether we are running ismip-hom-a or ismip-hom-c
     #    @param resolution: The resolution of the test cases to look in.
-    #                       (eg resolution == 30 -> reg_test/dome30/diagnostic)
     # 
     def runIsmip(self, testDir, benchDir, aOrC, resolution):
         print("  Ismip-hom-" + aOrC + os.sep + resolution + " test in progress....")
