@@ -183,7 +183,7 @@ timingVars = [
              ]
 
 # Dycores to try to parse output for
-dycores = ["glide", "glissade", "glam", "albany", "bisicles"]
+dycores = ['glissade'] #["glide", "glissade", "glam", "albany", "bisicles"]
 
 ###############################################################################
 #                               Main Execution                                #
@@ -200,7 +200,7 @@ if __name__ == '__main__':
     # Pull in the LIVV specific modules
     import util.configurationHandler
     import util.websetup
-    import verification.dome, verification.ismip, verification.gis, verification.shelf
+    import verification.dome, verification.ismip, verification.shelf
     import performance.dome, performance.gis
 
     # Check if we are saving/loading the configuration and set up the machine name

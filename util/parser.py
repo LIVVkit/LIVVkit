@@ -227,9 +227,10 @@ class Parser(object):
         for dycore in livv.dycores:
             timingDetails = dict()
             veloDriverList, diagSolveList, simpleGlideList, ioWriteList = [], [], [], []
+            numberProcessors = 0
 
             # Find all of the timing files
-            regex = re.compile("out.*." + dycore + ".timing.*")
+            regex = re.compile("out.*." + dycore + ".timing..*")
             if os.path.exists(basePath):
                 subDirs = filter(regex.search, os.listdir(basePath))
             else:
@@ -260,8 +261,9 @@ class Parser(object):
                         for line in timingFile:
                             if line.startswith("name"):
                                 timingHeaders = line.replace('(','').replace(')','').split()
-                            elif "cism" in line:
+                            elif "cism" in line or "simple glide" in line:
                                 splitLine = line.split()
+                                numberProcessors = int(splitLine[2])
                                 simpleGlideList.append(float(splitLine[5]))
                             elif "initial_diag_var_solve" in line:
                                 splitLine = line.split()
@@ -273,12 +275,18 @@ class Parser(object):
                                 splitLine = line.split()
                                 ioWriteList.append(float(splitLine[5]))
 
+                
+                # Scale the times to be per processor
+                #for list in [veloDriverList, diagSolveList, simpleGlideList, ioWriteList]:
+                #    list[:] = [x/numberProcessors for x in list]
+                
                 # Make sure that something is in the lists so that data can be calculated
                 lists = [veloDriverList, diagSolveList, simpleGlideList, ioWriteList]
                 for list in lists:
                     if len(list) == 0: list.append(0)
 
                 # Build the output data-structure
+                timingDetails['Processor Count'] = numberProcessors
                 timingDetails['Simple Glide'] = [mean(simpleGlideList), min(simpleGlideList), max(simpleGlideList)]
                 timingDetails['Velocity Driver'] = [mean(veloDriverList), min(veloDriverList), max(veloDriverList)]
                 timingDetails['Initial Diagonal Solve'] = [mean(diagSolveList), min(diagSolveList), max(diagSolveList)]
@@ -286,7 +294,8 @@ class Parser(object):
                 timingSummary[dycore] = timingDetails
 
                 # Print out a table with average, min, and max of the variables
-                print ""
+                print "          Dycore: " + dycore
+                print "          Number of processors: " + str(numberProcessors)
                 print "                    \tAvg \t\t Min \t\t Max"
                 print("                    --------------------------------------------------")
                 print "          SimGlide  | {:15} | {:15} | {:15}".format(str(mean(simpleGlideList)), str(min(simpleGlideList)), str(max(simpleGlideList)))
