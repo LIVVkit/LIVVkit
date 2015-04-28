@@ -53,7 +53,6 @@ hr {
 ******************************************************************************/
 #page {
     background-color: rgba(255,255,255,1);
-    border-radius: 5px;
     padding: 5px;
     margin-left: 15%;
     margin-right: 5%;
@@ -111,13 +110,16 @@ hr {
   Header/Footer Styling
 ******************************************************************************/
 #header {
-    width: calc(100% + 10px);
     height: 2.5em;
-    border-top-right-radius: 5px;
-    border-top-left-radius: 5px;
-    transform: translate(-5px,-5px);   
 	background-color: #111111;
 	color: white;
+    margin-left: 15%;
+    width: 1010px;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+    -moz-box-shadow: 5px 5px 4px rgba(30,30,30,0.3);
+    -webkit-box-shadow: 5px 5px 4px rgba(30,30,30,0.3);
+     box-shadow: 5px 5px 4px rgba(30,30,30,0.3);
 }
 
 #header-content {
@@ -138,7 +140,7 @@ hr {
 	line-height: 0.85em;
 	padding-top: 15px;
 	padding-bottom: 15px;
-	margin-left: 840px;
+	margin-left: 830px;
 }
 
 #info {
@@ -148,7 +150,7 @@ hr {
 #content {}
 
 #footer {
-    width: calc(100% + 10px);
+    width: 1010px;
     height: 5em;
     border-bottom-right-radius: 5px;
     border-bottom-left-radius: 5px;
@@ -156,11 +158,14 @@ hr {
     border-left: 0;
     border-right: 0;
     border-bottom: 0;
+    margin-left: 15%;
     border-style: solid;
     border-color: #47A3FF;
     color: #FFFFFF;
     background-color: #111111;
-    transform: translate(-5px,5px);   
+    -moz-box-shadow: 5px 5px 4px rgba(30,30,30,0.3);
+    -webkit-box-shadow: 5px 5px 4px rgba(30,30,30,0.3);
+     box-shadow: 5px 5px 4px rgba(30,30,30,0.3);
 }
 
 #nav {
