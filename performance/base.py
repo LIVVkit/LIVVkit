@@ -102,7 +102,7 @@ class AbstractTest(object):
                     fig, ax = pyplot.subplots(1)
                     pyplot.title((type + " " + " scaling plot for " + var + "(" + dycore + ")").title())
                     pyplot.xlabel("Problem Size")
-                    pyplot.ylabel("Time (s)")
+                    pyplot.ylabel("Time per processor (s)")
                     pyplot.xticks()
                     pyplot.yticks()
                     ax.plot(ress, avgs, color='black', ls='--')

@@ -261,24 +261,27 @@ class Parser(object):
                         for line in timingFile:
                             if line.startswith("name"):
                                 timingHeaders = line.replace('(','').replace(')','').split()
-                            elif "cism" in line or "simple glide" in line:
+                            elif "cism" in line:
+                                splitLine = line.split()
+                                simpleGlideList.append(float(splitLine[4]))                                
+                            elif "simple glide" in line:
                                 splitLine = line.split()
                                 numberProcessors = int(splitLine[2])
                                 simpleGlideList.append(float(splitLine[5]))
                             elif "initial_diag_var_solve" in line:
                                 splitLine = line.split()
-                                diagSolveList.append(float(splitLine[5]))
+                                diagSolveList.append(float(splitLine[4]))
                             elif "_velo_driver" in line:
                                 splitLine = line.split()
-                                veloDriverList.append(float(splitLine[5]))
+                                veloDriverList.append(float(splitLine[4]))
                             elif "io_writeall" in line:
                                 splitLine = line.split()
-                                ioWriteList.append(float(splitLine[5]))
+                                ioWriteList.append(float(splitLine[4]))
 
                 
                 # Scale the times to be per processor
-                #for list in [veloDriverList, diagSolveList, simpleGlideList, ioWriteList]:
-                #    list[:] = [x/numberProcessors for x in list]
+                for list in [veloDriverList, diagSolveList, simpleGlideList, ioWriteList]:
+                    list[:] = [x/numberProcessors for x in list]
                 
                 # Make sure that something is in the lists so that data can be calculated
                 lists = [veloDriverList, diagSolveList, simpleGlideList, ioWriteList]
