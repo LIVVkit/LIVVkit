@@ -36,20 +36,19 @@ class AbstractTest(object):
         self.name = "default"
         self.testsRun = []
 
-        # Structure is:
-        #  
+        # Summary of plots generated
         self.plotDetails = dict()
 
-        # Layout:
+        # Mapping of tests to files
         self.fileTestDetails = dict()
 
-        # Layout:  
+        # Summary of the configuration files parsed
         self.modelConfigs, self.benchConfigs = dict(), dict()
 
-        # Layout:  {*TimingData : {testName : {dycoreType : {solverVariable : [avg, min, max] } } } } 
+        # Summary of the timing data parsed
         self.modelTimingData, self.benchTimingData = dict(), dict()
 
-        # Layout:
+        # A list of some key indicators 
         self.summary = dict()
 
     ## Definition for the general test run
