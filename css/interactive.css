@@ -183,6 +183,8 @@ div.gallery p:hover {
 
 .tabs div.case {
     display: none;
+    visibility: none;
+    -webkit-appearance:none;
     border-top:solid 2px #47A3FF; 
     padding: 15px;
 }

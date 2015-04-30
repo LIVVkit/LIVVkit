@@ -39,20 +39,20 @@
   <!--   Some CSS for determining which tab is selected -->
   <STYLE type="text/css">
   #select :checked +  * +  * +  * +  label { background-color:#47A3FF;border-color:#47A3FF;color:#fff;}
-  #select :checked +  * +  * +  * +  * +  * +  * +  * +  div {display: block; }
+  #select :checked +  * ~  * ~  * ~  * ~  * ~  * ~  * ~  div {display: block; visibility: visible;}
   </STYLE>
   
   <!-- Generate the tab section -->
   <div id="select" class="tabs">
     <!-- The part that is hidden from the user -->
     
-    <input id="tab-ismip-hom-a/20km" name="tabs" type="radio" checked />
+    <input id="tab-ismip-hom-a/20km" name="tabs" style="-webkit-appearance:none;" type="radio" checked />
     
-    <input id="tab-ismip-hom-c/20km" name="tabs" type="radio" checked />
+    <input id="tab-ismip-hom-c/20km" name="tabs" style="-webkit-appearance:none;" type="radio" checked />
     
-    <input id="tab-ismip-hom-a/80km" name="tabs" type="radio" checked />
+    <input id="tab-ismip-hom-a/80km" name="tabs" style="-webkit-appearance:none;" type="radio" checked />
     
-    <input id="tab-ismip-hom-c/80km" name="tabs" type="radio" checked />
+    <input id="tab-ismip-hom-c/80km" name="tabs" style="-webkit-appearance:none;" type="radio" checked />
       
     <!-- The part you can click on -->
     
@@ -5807,7 +5807,7 @@
 
 <div id="footer">
 	<p id="info">
-		V&V Performed by bzq at 04-28-2015 17:12:27 <br> 
+		V&V Performed by bzq at 04-29-2015 17:07:32 <br> 
 		Test run of code <br>
 	</p>
 </div>
