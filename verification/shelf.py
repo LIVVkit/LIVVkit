@@ -88,18 +88,7 @@ class Test(AbstractTest):
             shelfParser.parseConfigurations(testDir + configPath, benchDir + configPath)
 
         # Scrape the details from each of the files and store some data for later
-        try:
-            files = os.listdir(testDir)
-        except:
-            print("    Could not find model and benchmark directories for " + type)
-            files = []
-        test = re.compile(type + ".*out.*")
-        files = filter(test.search, files)
-        shelfFiles, shelfDetails = [], []
-        for file in files:
-            shelfDetails.append(shelfParser.parseOutput(testDir + "/" + file))
-            shelfFiles.append(file)
-        self.fileTestDetails[type] = zip(shelfFiles, shelfDetails)
+        self.fileTestDetails[type] = shelfParser.parseStdOutput(testDir, ".*out.*")
 
         # Record the data from the parser
         numberOutputFiles, numberConfigMatches, numberConfigTests = shelfParser.getParserSummary()

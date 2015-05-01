@@ -100,11 +100,6 @@ class Test(AbstractTest):
             print("    Continuing with next test....")
             return 1
 
-        # Search for the std output files
-        files = os.listdir(perfDir)
-        test = re.compile("^out.gis." + resolution + ".((albany)|(glissade))$")
-        files = filter(test.search, files)
-
         # Process the configure files
         configPath = os.sep + ".." + os.sep + "configure_files"
         gisParser = Parser()
@@ -112,11 +107,7 @@ class Test(AbstractTest):
                 gisParser.parseConfigurations(perfDir + configPath, perfBenchDir + configPath)
 
         # Scrape the details from each of the files and store some data for later
-        perfDetails, perfFiles = [], []
-        for file in files:
-            perfDetails.append(gisParser.parseOutput(perfDir + os.sep +  file))
-            perfFiles.append(file)
-        self.fileTestDetails['gis_' + resolution] = zip(perfFiles, perfDetails)
+        self.fileTestDetails['gis_' + resolution] = gisParser.parseStdOutput(perfDir, "^out.gis." + resolution + ".((albany)|(glissade))$")
 
         # Go through and pull in the timing data
         print("")

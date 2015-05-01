@@ -109,18 +109,7 @@ class Test(AbstractTest):
             ismipParser.parseConfigurations(testDir + configPath, benchDir + configPath)
 
         # Scrape the details from each of the files and store some data for later
-        test = re.compile(".*out.*[0-9]")
-        try:
-            files = os.listdir(testDir)
-        except:
-            print("    Could not find model and benchmark directories for " + testName)
-            files = []
-        files = filter(test.search, files)
-        ismipDetails, ismipFiles = [], []
-        for file in files:
-            ismipDetails.append(ismipParser.parseOutput(testDir + '/' + file))
-            ismipFiles.append(file)
-        self.fileTestDetails[testName] = zip(ismipFiles, ismipDetails)
+        self.fileTestDetails[testName] = ismipParser.parseStdOutput(testDir, ".*out.*[0-9]")
 
         # Record the data from the parser
         numberOutputFiles, numberConfigMatches, numberConfigTests = ismipParser.getParserSummary()

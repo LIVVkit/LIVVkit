@@ -105,10 +105,6 @@ class Test(AbstractTest):
             print("    Continuing with next test....")
             return 1
 
-        files = os.listdir(perfDir)
-        test = re.compile("^out." + resolution + ".((glide)|(glissade))$")
-        files = filter(test.search, files)
-
         # Process the configure files
         configPath = os.sep + ".." + os.sep + "configure_files"
         domeParser = Parser()
@@ -116,11 +112,7 @@ class Test(AbstractTest):
                 domeParser.parseConfigurations(perfDir + configPath, perfBenchDir + configPath)
 
         # Scrape the details from each of the files and store some data for later
-        perfDetails, perfFiles = [], []
-        for file in files:
-            perfDetails.append(domeParser.parseOutput(perfDir + os.sep +  file))
-            perfFiles.append(file)
-        self.fileTestDetails["dome" + resolution] = zip(perfFiles, perfDetails)
+        self.fileTestDetails["dome" + resolution] = domeParser.parseStdOutput(perfDir, "^out." + resolution + ".((glide)|(glissade))$")
 
         # Go through and pull in the timing data
         print("")

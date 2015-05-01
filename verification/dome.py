@@ -17,11 +17,11 @@ import subprocess
 cases = {'none'   : [],
          'diagnostic' : ['dome30/diagnostic'],
          'evolving'  : ['dome30/evolving'],
-         'all'    : ['dome30/diagnostic', 'dome30/evolving'],}
+         'all'    : ['dome30/diagnostic', 'dome30/evolving'], }
 
 # Return a list of options
 def choices():
-    return list( cases.keys() )
+    return list(cases.keys())
 
 # Return the tests associated with an option
 def choose(key):
@@ -32,7 +32,7 @@ import livv
 from verification.base import AbstractTest
 from util.parser import Parser
 
-## Main class for handling dome test cases.
+# # Main class for handling dome test cases.
 #
 #  The dome test cases inherit functionality from AbstractTest for checking 
 #  bit-for-bittedness from a model run. This class handles evolving and \
@@ -40,7 +40,7 @@ from util.parser import Parser
 #
 class Test(AbstractTest):
 
-    ## Constructor
+    # # Constructor
     #
     def __init__(self):
         super(self.__class__, self).__init__()
@@ -56,7 +56,7 @@ class Test(AbstractTest):
                       " applied to the dome margins. "
 
 
-    ## Runs the dome specific test case.  
+    # # Runs the dome specific test case.  
     #
     #  When running a test this call will record the specific test case 
     #  being run.  Each specific test case string is mapped to the 
@@ -80,11 +80,11 @@ class Test(AbstractTest):
             print("      " + benchDir)
             print("    Continuing with next test....")
             self.bitForBitDetails['dome' + resolution + os.sep + type] = {'Data not found': ['SKIPPED', '0.0']}
-            return 1 # zero returns a problem        
+            return 1  # zero returns a problem        
         self.runDome(resolution, type, modelDir, benchDir)
 
 
-    ## Perform V&V on the evolving dome case
+    # # Perform V&V on the evolving dome case
     #
     #  Runs the dome evolving V&V for a given resolution.  First parses through all 
     #  of the standard output files for the given test case, then finishes up by 
@@ -105,33 +105,22 @@ class Test(AbstractTest):
         self.modelConfigs['dome' + resolution + os.sep + type], self.benchConfigs['dome' + resolution + os.sep + type] = \
                 domeParser.parseConfigurations(modelDir + configPath, benchDir + configPath)
 
-        # Scrape the details from each of the files and store some data for later
-        try:
-            files = os.listdir(modelDir)
-        except:
-            print("    Could not find model and benchmark directories for dome" + resolution + "/" + type)
-            files = []
-        test = re.compile(".*((small)|(large))_proc")
-        files = filter(test.search, files)
-        domeDetails, domeFiles = [], []
-        for file in files:
-            domeDetails.append(domeParser.parseOutput(modelDir + os.sep +  file))
-            domeFiles.append(file)
-        self.fileTestDetails["dome" + resolution + os.sep + type] = zip(domeFiles, domeDetails)
-
+        # Parse standard out
+        self.fileTestDetails["dome" + resolution + os.sep + type] = domeParser.parseStdOutput(modelDir,".*((small)|(large))_proc")
+        
         # Record the data from the parser
         numberOutputFiles, numberConfigMatches, numberConfigTests = domeParser.getParserSummary()
 
         # Create the plots
-        numberPlots = 0 #self.plotEvolving(resolution)
+        numberPlots = 0  # self.plotEvolving(resolution)
 
         # Run bit for bit test
         numberBitMatches, numberBitTests = 0, 0
         self.bitForBitDetails['dome' + resolution + os.sep + type] = self.bit4bit(self.name, modelDir, benchDir)
         for key, value in self.bitForBitDetails['dome' + resolution + os.sep + type].iteritems():
-            print ("    {:<40} {:<10}".format(key,value[0]))
-            if value[0] == "SUCCESS": numberBitMatches+=1
-            numberBitTests+=1
+            print ("    {:<40} {:<10}".format(key, value[0]))
+            if value[0] == "SUCCESS": numberBitMatches += 1
+            numberBitTests += 1
 
         self.summary['dome' + resolution + os.sep + type] = [numberPlots, numberOutputFiles,
                                                              numberConfigMatches, numberConfigTests,

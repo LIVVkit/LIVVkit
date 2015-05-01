@@ -79,7 +79,6 @@ class Parser(object):
         # Pull the files, while filtering out "hidden" ones
         modelFiles = [f for f in os.listdir(modelDir) if not f.startswith('.')]
         benchFiles = [f for f in os.listdir(benchDir) if not f.startswith('.')]
-        sameList = set(modelFiles).intersection(benchFiles)
         self.nConfigParsed += len(modelFiles)
 
         # Pull in the information from the model run
@@ -151,73 +150,87 @@ class Parser(object):
     #    @param stdOutData: a mapping of the various parameters to
     #      their values from the file
     #
-    def parseOutput(self, file):
+    def parseStdOutput(self, modelDir, regex):
         # Set up variables that we can use to map data and information
         dycoreTypes = {"0" : "Glide", "1" : "Glam", "2" : "Glissade", "3" : "AlbanyFelix", "4" : "BISICLES"}
-        numberProcs = 0
-        currentStep = 0
-        avgItersToConverge = 0
-        convergedIters = []
-        itersToConverge = []
 
-        # Make sure that we can actually read the file
+
+        # Scrape the details from each of the files and store some data for later
         try:
-            logfile = open(file, 'r')
-            self.nOutputParsed += 1
+            files = os.listdir(modelDir)
         except:
-            print "ERROR: Could not read " + file
-            return
+            files = []
+            print("    Could not find model data in" + modelDir)
 
-        # Go through and build up information about the simulation
-        for line in logfile:
-            #Determine the dycore type
-            if ('CISM dycore type' in line):
-                if line.split()[-1] == '=':
-                    self.stdOutData['Dycore Type'] = dycoreTypes[next(logfile).strip()]
-                else:
-                    self.stdOutData['Dycore Type'] = dycoreTypes[line.split()[-1]]
+        files = filter(re.compile(regex).search, files)
+        outdata = []
 
-            # Calculate the total number of processors used
-            if ('total procs' in line):
-                numberProcs += int(line.split()[-1])
+        for fileName in files:
 
-            # Grab the current timestep
-            if ('Nonlinear Solver Step' in line):
-                currentStep = int(line.split()[4])
-
-            # Get the number of iterations per timestep
-            if ('"SOLVE_STATUS_CONVERGED"' in line):
-                splitLine = line.split()
-                itersToConverge.append(int(splitLine[splitLine.index('"SOLVE_STATUS_CONVERGED"') + 2]))
-
-            # If the timestep converged mark it with a positive
-            if ('Converged!' in line):
-                convergedIters.append(currentStep)
-
-            # If the timestep didn't converge mark it with a negative
-            if ('Failed!' in line):
-                convergedIters.append(-1*currentStep)
-
-        # Calculate the average number of iterations it took to converge
-        if (len(itersToConverge) > 0):
-            avgItersToConverge = sum(itersToConverge) / len(itersToConverge)
-
-        # Record some of the data in the self.stdOutData
-        self.stdOutData['Number of processors'] = numberProcs
-        self.stdOutData['Number of timesteps'] = currentStep
-        if avgItersToConverge > 0:
-            self.stdOutData['Average iterations to converge'] = avgItersToConverge 
-
-        if self.stdOutData['Dycore Type'] == None: self.stdOutData['Dycore Type'] = 'Unavailable'
-        for key in self.stdOutData.keys():
-            if self.stdOutData[key] == None:
-                self.stdOutData[key] = 'N/A'
-
-        return self.stdOutData
+            # Initialize a new set of data
+            numberProcs = 0
+            currentStep = 0
+            avgItersToConverge = 0
+            convergedIters = []
+            itersToConverge = []
+            self.stdOutData = OrderedDict()
+            
+            # Open up the file
+            logfile = open(modelDir + os.sep + fileName, 'r')
+            self.nOutputParsed += 1
+    
+            # Go through and build up information about the simulation
+            for line in logfile:
+                #Determine the dycore type
+                if ('CISM dycore type' in line):
+                    if line.split()[-1] == '=':
+                        self.stdOutData['Dycore Type'] = dycoreTypes[next(logfile).strip()]
+                    else:
+                        self.stdOutData['Dycore Type'] = dycoreTypes[line.split()[-1]]
+    
+                # Calculate the total number of processors used
+                if ('total procs' in line):
+                    numberProcs += int(line.split()[-1])
+    
+                # Grab the current timestep
+                if ('Nonlinear Solver Step' in line):
+                    currentStep = int(line.split()[4])
+    
+                # Get the number of iterations per timestep
+                if ('"SOLVE_STATUS_CONVERGED"' in line):
+                    splitLine = line.split()
+                    itersToConverge.append(int(splitLine[splitLine.index('"SOLVE_STATUS_CONVERGED"') + 2]))
+    
+                # If the timestep converged mark it with a positive
+                if ('Converged!' in line):
+                    convergedIters.append(currentStep)
+    
+                # If the timestep didn't converge mark it with a negative
+                if ('Failed!' in line):
+                    convergedIters.append(-1*currentStep)
+    
+            # Calculate the average number of iterations it took to converge
+            if (len(itersToConverge) > 0):
+                avgItersToConverge = sum(itersToConverge) / len(itersToConverge)
+    
+            # Record some of the data in the self.stdOutData
+            self.stdOutData['Number of processors'] = numberProcs
+            self.stdOutData['Number of timesteps'] = currentStep
+            if avgItersToConverge > 0:
+                self.stdOutData['Average iterations to converge'] = avgItersToConverge 
+    
+            if not self.stdOutData.has_key('Dycore Type') or self.stdOutData['Dycore Type'] == None: 
+                self.stdOutData['Dycore Type'] = 'Unavailable'
+            for key in self.stdOutData.keys():
+                if self.stdOutData[key] == None:
+                    self.stdOutData[key] = 'N/A'
+            
+            outdata.append(self.stdOutData)
+    
+        return zip(files, outdata)
 
 
     ## Search through gptl timing files
-    #
     #
     def parseTimingSummaries(self, basePath):
         timingSummary = dict()
