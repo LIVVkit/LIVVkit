@@ -21,6 +21,21 @@ import livv
 
 from plots import nclfunc
 
+# Map of the options to the test cases
+cases = {'none' : [],
+         'dome' : ['dome'],
+         'gis'  : ['gis'],
+         'all'  : ['dome', 'gis']
+        }
+
+# Return a list of options
+def choices():
+    return list( cases.keys() )
+
+# Return the tests associated with an option
+def choose(key):
+    return cases[key]
+
 ## Provide base functionality for a Performance test
 #
 #  Each test within LIVV needs to be able to run specific test code, and
@@ -69,14 +84,14 @@ class AbstractTest(object):
     #    @param type : the overarching test category to generate scaling plots for (ie dome/gis)
     #
     def runScaling(self, type):
-        typeString = 'scaling' + type
+        typeString = 'scaling'
         self.modelTimingData[typeString] = dict()
         self.benchTimingData[typeString] = dict()
         imagesGenerated = []
         print("")
         print("  Generating scaling plots for " + type + "....")
-        type = type.lower() + '_' if typeString == "scalingGIS" else type.lower()
-        tests = filter(re.compile(type + ".*").search, self.modelTimingData.keys())
+        type = type.lower() + '_' if type == "gis" else type.lower()
+        tests = filter(re.compile(type + "..*").search, self.modelTimingData.keys())
         resolutions = sorted([int(re.findall(r'\d+', s)[0]) for s in tests])
 
         # Generate all of the plots
@@ -85,7 +100,7 @@ class AbstractTest(object):
                 mins, avgs, maxs, ress = [], [], [], []
                 for res in sorted(resolutions):
                     # Fix string for Greenland runs
-                    test = type + str(res) + 'km' if typeString == 'scalingGIS' else type + str(res)
+                    test = type + str(res) + 'km' if type == 'gis_' else type + str(res)
                     # Add the data if it's available
                     if self.modelTimingData[test] != {} and \
                             self.modelTimingData[test][dycore] != {} and \
