@@ -72,7 +72,7 @@ parser.add_option('--dome', action='store',
 
 parser.add_option('--ismip', action='store', 
                   type='choice', dest='ismip', 
-                  choices=ismipVerificationChoices(), default='all', 
+                  choices=ismipVerificationChoices(), default='none', 
                   help='specifies the ismip verification to run')
 
 parser.add_option('--shelf', action='store', 
@@ -97,22 +97,22 @@ parser.add_option('--comment', action='store',
 
 parser.add_option('-o', '--outputDir', action='store',
                   type='string', dest='outputDir',
-                  default=os.path.dirname(os.path.abspath(__file__)) + "/www",
+                  default=os.path.dirname(os.path.abspath(__file__)) + os.sep + "www",
                   help='Location to output the LIVV webpages.')
 
 parser.add_option('-i', '--inputDir', action='store',
                   type='string', dest='inputDir',
-                  default=os.path.dirname(os.path.abspath(__file__)) + "/reg_test",
+                  default=os.path.dirname(os.path.abspath(__file__)) + os.sep + "reg_test",
                   help='Location of the input for running verification.')
 
 parser.add_option('-p', '--performanceDir', action='store',
                   type='string', dest='performanceDir',
-                  default=os.path.dirname(os.path.abspath(__file__)) + "/perf_test",
+                  default=os.path.dirname(os.path.abspath(__file__)) + os.sep + "reg_test",
                   help='Location of the input for running performance verification.')
 
 parser.add_option('-b', '--benchmarkDir', action='store',
                   type='string', dest='benchmarkDir',
-                  default="NOT A REAL FOLDER",
+                  default=os.path.dirname(os.path.abspath(__file__)) + os.sep + "reg_bench",
                   help='Location of the input for running verification.')
 
 parser.add_option('-d', '--dataDir', action='store',
@@ -137,6 +137,7 @@ parser.add_option('-s', '--save', action="store_true", dest='save',
 cwd            = os.path.dirname(os.path.abspath(__file__))
 configDir      = cwd + os.sep + "configurations"
 inputDir       = options.inputDir
+benchmarkDir   = options.benchmarkDir
 performanceDir = options.performanceDir
 dataDir        = options.dataDir
 outputDir      = options.outputDir
@@ -146,13 +147,7 @@ timestamp      = time.strftime("%m-%d-%Y %H:%M:%S")
 user           = getpass.getuser()
 websiteDir     = cwd + "/web"
 templateDir    = websiteDir + "/templates"
-indexDir       = outputDir
-
-# If the user specifies a benchmark dir honor it, otherwise default to inside of inputDir
-if options.benchmarkDir == "NOT A REAL FOLDER":
-    benchmarkDir = inputDir + os.sep + "bench"
-else:
-    benchmarkDir = options.benchmarkDir
+indexDir       = outputDir  
 
 # Modules that need to be loaded on big machines
 modules = [
