@@ -13,24 +13,9 @@ import re
 import os
 import subprocess
 
-# A mapping of the options to the test cases that can be run
-cases = {'none' : [],
-         'confined' : ['confined-shelf'],
-         'circular' : ['circular-shelf'],
-         'all' : ['confined-shelf', 'circular-shelf']}
-
-# Return a list of options
-def choices():
-    return list( cases.keys() )
-
-# Return the tests associated with an option
-def choose(key):
-    return cases[key] if cases.has_key(key) else None
-
-
-import livv
 from verification.base import AbstractTest
 from util.parser import Parser
+import util.variables
 
 ## Main class for handling shelf test cases.
 #
@@ -57,11 +42,12 @@ class Test(AbstractTest):
     #  input:
     #    @param test : the string indicator of the test to run
     #
-    def run(self, test):
+    def run(self):
+        return
         # Make sure LIVV can find the data
         self.testsRun.append(test)
-        testDir = livv.inputDir + os.sep + test + os.sep + livv.dataDir 
-        benchDir = livv.benchmarkDir + os.sep + test + os.sep + livv.dataDir 
+        testDir = util.variables.inputDir + os.sep + 'shelf'
+        benchDir = util.variables.benchmarkDir + os.sep + 'shelf'
         if not (os.path.exists(testDir) and os.path.exists(benchDir)):
             print("    Could not find data for " + test + " verification!  Tried to find data in:")
             print("      " + testDir)

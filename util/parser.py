@@ -20,7 +20,7 @@ import re
 import fnmatch
 import ConfigParser
 
-import livv
+import util.variables
 from collections import OrderedDict
 from numpy import Infinity, mean
 
@@ -44,7 +44,7 @@ class Parser(object):
 
         # Build an empty ordered dictionary so that the output prints in a nice order
         self.stdOutData = OrderedDict()
-        for var in livv.parserVars: self.stdOutData[var] = None
+        for var in util.variables.parserVars: self.stdOutData[var] = None
 
     ## Get some details about what was parsed
     #
@@ -237,7 +237,7 @@ class Parser(object):
         if not os.path.exists(basePath):
             return timingSummary
 
-        for dycore in livv.dycores:
+        for dycore in util.variables.dycores:
             timingDetails = dict()
             veloDriverList, diagSolveList, simpleGlideList, ioWriteList = [], [], [], []
             numberProcessors = 0
@@ -258,7 +258,7 @@ class Parser(object):
             if nTimingFiles < 9:
                 print("        Could not generate " + dycore + " timing summary.  Need to have at least 10 samples, but only found " + str(nTimingFiles) + "!")
                 # Build the output data-structure
-                for var in livv.timingVars:
+                for var in util.variables.timingVars:
                     timingDetails[var] = {}
                 timingSummary[dycore] = timingDetails
             else: 

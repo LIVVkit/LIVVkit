@@ -46,38 +46,34 @@ import getpass
 import platform
 import socket
 import itertools
+import util.variables
 
 from optparse import OptionParser
 from collections import OrderedDict
+
+# Pull in the LIVV specific modules
+import util.configurationHandler
+import util.websetup
+import verification.dome, verification.ismip, verification.shelf
+import performance.dome, performance.gis
+import validation.gis
+import util.dependencies as dependencies
+
+from verification.base import choices as verificationChoices
+from performance.base import choices as performanceChoices
+from validation.base import choices as validationChoices
 
 ###############################################################################
 #                                  Options                                    #
 ###############################################################################
 
-#NOTE: be careful here! We just want to get our optional argument choices. 
-# Everything else should be imported in __main__!
-from verification.dome import choices as domeVerificationChoices
-from verification.ismip import choices as ismipVerificationChoices
-from verification.shelf import choices as shelfVerificationChoices
-from performance.base import choices as performanceChoices
 
 usage_string = "%prog [options]"
 parser = OptionParser(usage=usage_string)
-parser.add_option('--dome', action='store', 
-                  type='choice', dest='dome', 
-                  choices=domeVerificationChoices(), default='all', 
+parser.add_option('--verification', action='store', 
+                  type='choice', dest='verification', 
+                  choices=verificationChoices(), default='all', 
                   help='specifies the dome verification to run')
-
-
-parser.add_option('--ismip', action='store', 
-                  type='choice', dest='ismip', 
-                  choices=ismipVerificationChoices(), default='none', 
-                  help='specifies the ismip verification to run')
-
-parser.add_option('--shelf', action='store', 
-                  type='choice', dest='shelf', 
-                  choices=shelfVerificationChoices(), default='all', 
-                  help='specifies the shelf verification to run')
 
 parser.add_option('--performance', action='store', 
                   type='choice', dest='performance', 
@@ -96,22 +92,18 @@ parser.add_option('-o', '--outputDir', action='store',
 
 parser.add_option('-i', '--inputDir', action='store',
                   type='string', dest='inputDir',
-                  default=os.path.dirname(os.path.abspath(__file__)) + os.sep + "reg_test",
+                  default=os.path.dirname(os.path.abspath(__file__)) + os.sep + "reg_test" + os.sep + "linux-gnu" + os.sep + "higher-order",
                   help='Location of the input for running verification.')
 
 parser.add_option('-p', '--performanceDir', action='store',
                   type='string', dest='performanceDir',
-                  default=os.path.dirname(os.path.abspath(__file__)) + os.sep + "reg_test",
+                  default=os.path.dirname(os.path.abspath(__file__)) + os.sep + "reg_test" + os.sep + "linux-gnu" + os.sep + "higher-order",
                   help='Location of the input for running performance verification.')
 
 parser.add_option('-b', '--benchmarkDir', action='store',
                   type='string', dest='benchmarkDir',
-                  default=os.path.dirname(os.path.abspath(__file__)) + os.sep + "reg_bench",
+                  default=os.path.dirname(os.path.abspath(__file__)) + os.sep + "reg_bench" + os.sep + "linux-gnu" + os.sep + "higher-order",
                   help='Location of the input for running verification.')
-
-parser.add_option('-d', '--dataDir', action='store',
-                  type='string', dest='dataDir', default='data_titan',
-                  help='Subdirectory where data is stored')
 
 parser.add_option('-m', '--machine', action='store',
                   type='string', dest='machineName', default='',
@@ -128,23 +120,22 @@ parser.add_option('-s', '--save', action="store_true", dest='save',
 ###############################################################################
 
 # I/O Related variables
-cwd            = os.path.dirname(os.path.abspath(__file__))
-configDir      = cwd + os.sep + "configurations"
-inputDir       = options.inputDir
-benchmarkDir   = options.benchmarkDir
-performanceDir = options.performanceDir
-dataDir        = options.dataDir
-outputDir      = options.outputDir
-imgDir         = outputDir + "/imgs"
-comment        = options.comment
-timestamp      = time.strftime("%m-%d-%Y %H:%M:%S")
-user           = getpass.getuser()
-websiteDir     = cwd + "/web"
-templateDir    = websiteDir + "/templates"
-indexDir       = outputDir  
+util.variables.cwd            = os.path.dirname(os.path.abspath(__file__))
+util.variables.configDir      = util.variables.cwd + os.sep + "configurations"
+util.variables.inputDir       = options.inputDir
+util.variables.benchmarkDir   = options.benchmarkDir
+util.variables.performanceDir = options.performanceDir
+util.variables.outputDir      = options.outputDir
+util.variables.imgDir         = util.variables.outputDir + "/imgs"
+util.variables.comment        = options.comment
+util.variables.timestamp      = time.strftime("%m-%d-%Y %H:%M:%S")
+util.variables.user           = getpass.getuser()
+util.variables.websiteDir     = util.variables.cwd + "/web"
+util.variables.templateDir    = util.variables.websiteDir + "/templates"
+util.variables.indexDir       = util.variables.outputDir
 
 # Modules that need to be loaded on big machines
-modules = [
+util.variables.modules = [
            "python/2.7.5", 
            "ncl/6.1.0", 
            "nco/4.3.9", 
@@ -156,7 +147,7 @@ modules = [
           ]
 
 # A list of the information that should be looked for in the stdout of model output
-parserVars = [
+util.variables.parserVars = [
               'Dycore Type', 
               'Number of processors',
               'Number of timesteps',
@@ -164,7 +155,7 @@ parserVars = [
              ]
 
 # Variables to measure when parsing through timing summaries
-timingVars = [
+util.variables.timingVars = [
               'Simple Glide',
               'Velocity Driver',
               'Initial Diagonal Solve',
@@ -172,7 +163,7 @@ timingVars = [
              ]
 
 # Dycores to try to parse output for
-dycores = ['glissade'] #["glide", "glissade", "glam", "albany", "bisicles"]
+util.variables.dycores = ['glissade'] #["glide", "glissade", "glam", "albany", "bisicles"]
 
 ###############################################################################
 #                               Main Execution                                #
@@ -183,14 +174,7 @@ if __name__ == '__main__':
     print("------------------------------------------------------------------------------")
 
     # Run the dependency checker
-    import util.dependencies as dependencies
     dependencies.check()
-
-    # Pull in the LIVV specific modules
-    import util.configurationHandler
-    import util.websetup
-    import verification.dome, verification.ismip, verification.shelf
-    import performance.dome, performance.gis
 
     # Check if we are saving/loading the configuration and set up the machine name
     if options.machineName == '' and options.save:
@@ -208,33 +192,33 @@ if __name__ == '__main__':
         # Try to load the machine name specified
         machineName = options.machineName
         vars = util.configurationHandler.load(machineName)
-        globals().update(vars)
+        util.variables.globals().update(vars)
 
     # Check if the user has a default config saved and use that if it does
-    if os.path.exists(configDir + os.sep + machineName + "_" + user + "_default"):
-        machineName = machineName + "_" + user + "_default"
+    if os.path.exists(util.variables.configDir + os.sep + machineName + "_" + util.variables.user + "_default"):
+        machineName = machineName + "_" + util.variables.user + "_default"
         vars = util.configurationHandler.load(machineName)
-        globals().update(vars)
+        util.variables.globals().update(vars)
 
     # Print out some information
     print("\n  Current run: " + time.strftime("%m-%d-%Y %H:%M:%S"))
-    print("  User: " + user)
+    print("  User: " + util.variables.user)
     print("  Config: " + machineName)
     print("  OS Type: " + platform.system() + " " + platform.release())
-    print("  " + comment)
+    print("  " + util.variables.comment)
     print("")
 
     # Check to make sure the directory structure is okay
-    if not os.path.exists(inputDir):
+    if not os.path.exists(util.variables.inputDir):
         print("------------------------------------------------------------------------------")
-        print("ERROR: Could not find " + inputDir + " for input")
+        print("ERROR: Could not find " + util.variables.inputDir + " for input")
         print("       Use the -i, -b, and -d flags to specify the locations of the model and comparison data.")
         print("       See README.md for more details.")
         print("------------------------------------------------------------------------------")
         exit(1)
-    if not os.path.exists(benchmarkDir):
+    if not os.path.exists(util.variables.benchmarkDir):
         print("------------------------------------------------------------------------------")    
-        print("ERROR: Could not find " + benchmarkDir + " for input")
+        print("ERROR: Could not find " + util.variables.benchmarkDir + " for input")
         print("       Use the -i, -b, and -d flags to specify the locations of the model and comparison data.")
         print("       See README.md for more details.")
         print("------------------------------------------------------------------------------")
@@ -244,78 +228,82 @@ if __name__ == '__main__':
     #                              Record Test Cases                              #
     ###############################################################################
 
-    # Describes the test module and the cases to run for said module
     verificationMapping = {
-                    "dome" : ( verification.dome.Test, verification.dome.choose(options.dome) ),
-                   "ismip" : ( verification.ismip.Test, verification.ismip.choose(options.ismip) ),
-                   "shelf" : ( verification.shelf.Test, verification.shelf.choose(options.shelf) )
-                   }
+                           'dome' : verification.dome.Test,
+                           'ismip' : verification.ismip.Test,
+                           'shelf' : verification.shelf.Test
+                           }
 
-    perfMapping = {
-                   "dome" : ( performance.dome.Test, performance.dome.choose(options.performance) ),
-                   "gis" : ( performance.gis.Test, performance.gis.choose(options.performance))
-                   }
+    performanceMapping = {
+                          'dome' : performance.dome.Test,
+                          'gis' : performance.gis.Test
+                          }
 
     validationMapping = {
-                         "validation" : (0,0)
+                         'gis' : validation.gis.Test
                          }
 
+    # Describes the test module and the cases to run for said module
     testMapping = {
                    "Verification" : verificationMapping,
-                   "Performance" : perfMapping,
+                   "Performance" : performanceMapping,
                    "Validation" : validationMapping
                    }
-
-    # Get the keys for all non-empty test cases
-    testsRun = list( itertools.compress( verificationMapping.keys(), [val[1] for val in verificationMapping.values()]) )
-    perfTestsRun = list( itertools.compress( perfMapping.keys(), [val[1] for val in perfMapping.values()]) )
-    validationTestsRun = list( itertools.compress( validationMapping.keys(), [val[1] for val in validationMapping.values()]))
+    verificationTests = verification.base.choose(options.verification)
+    performanceTests = performance.base.choose(options.performance)
+    validationTests = validation.base.choose('none')
+    testMapping = {
+                   "Verification" : verificationTests,
+                   "Performance" : performanceTests,
+                   "Validation" : validationTests
+                   }
 
     ###############################################################################
     #                               Run Test Cases                                #
     ###############################################################################
     # Give a list of the tests that will be run
-    print("Running verification:")
-    for case in itertools.chain.from_iterable( [verificationMapping[test][1] for test in testsRun] ): 
-        print("  " + case)
-    print("")
-    print("Running performance:")
-    for case in itertools.chain.from_iterable( [perfMapping[test][1] for test in perfTestsRun] ): 
-        print("  " + case)
-    print("")
-    print("Running validation:")
-    for case in itertools.chain.from_iterable( [validationMapping[test][1] for test in validationTestsRun] ): 
-        print("  " + case)
-    print("")
+    if len(verificationTests) > 0:  
+        print("Running verification tests:")
+        for case in verificationTests: 
+            print("  " + case)
+        print("")
+    if len(performanceTests) > 0:
+        print("Running performance tests:")
+        for case in performanceTests:
+            print("  " + case)
+        print("")
+    if len(validationTests) > 0:
+        print("Running validation tests:")
+        for case in validationTests:
+            print("  " + case)
+        print("")
 
     # Set up the directory structure and summary dictionaries for output
     verificationSummary, performanceSummary, validationSummary = dict(), dict(), dict()
-    util.websetup.setup(testsRun + perfTestsRun + validationTestsRun)
+    util.websetup.setup(verificationTests + performanceTests + validationTests)
 
     # Run the verification tests
-    if len(testsRun) > 0:
+    if len(verificationTests) > 0:
         print("--------------------------------------------------------------------------")
         print("  Beginning verification test suite....")
         print("--------------------------------------------------------------------------")
-    for test in testsRun:
+    for test in verificationTests:
         # Create a new instance of the specific test class (see verificationMapping for the mapping)
-        newTest = verificationMapping[test][0]()
-        # Run the specific and bit for bit verification for each case of the test
-        for case in verificationMapping[test][1]:
-            newTest.run(case)
+        newTest = verificationMapping[test]()
+        newTest.run()
         verificationSummary[test] = newTest.summary
         print("")
         # Generate the test-specific webpage 
         newTest.generate()
 
     # Run the performance verification
-    if len(perfTestsRun) > 0:
+    if len(performanceTests) > 0:
         print("--------------------------------------------------------------------------")
         print("  Beginning performance analysis....")
         print("--------------------------------------------------------------------------")
-    for test in perfTestsRun:
+    for test in performanceTests:
         # Create a new instance of the specific test class (see verificationMapping for the mapping)
-        newTest = perfMapping[test][0]()
+        newTest = performanceMapping[test]()
         newTest.run()
         performanceSummary[test] = newTest.summary
         print("")
@@ -323,23 +311,22 @@ if __name__ == '__main__':
         newTest.generate()
 
     # Run the validation verification
-    if len(validationTestsRun) > 0:
+    if len(validationTests) > 0:
         print("--------------------------------------------------------------------------")
         print("  Beginning validation test suite....")
         print("--------------------------------------------------------------------------")
-    for test in validationTestsRun:
+    for test in validationTests:
         # Create a new instance of the specific test class (see verificationMapping for the mapping)
-        newTest = validationMapping[test][0]()
+        newTest = validationMapping[test]()
         # Run the specific and bit for bit verification for each case of the test
-        for case in validationMapping[test][1]:
-            newTest.run(case)
+        newTest.run()
         validationSummary[test] = newTest.summary
         print("")
         # Generate the test-specific webpage 
         newTest.generate()
 
     # Create the site index
-    print("Generating web pages in " + outputDir) 
+    print("Generating web pages in " + util.variables.outputDir) 
     util.websetup.generate(verificationSummary, performanceSummary, validationSummary)
 
     ###############################################################################
@@ -347,5 +334,5 @@ if __name__ == '__main__':
     ###############################################################################
     print("------------------------------------------------------------------------------")
     print("Finished running LIVV.  Results:  ")
-    print("  Open " + outputDir + "/index.html to see test results")
+    print("  Open " + util.variables.outputDir + "/index.html to see test results")
     print("------------------------------------------------------------------------------")

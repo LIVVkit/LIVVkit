@@ -18,13 +18,22 @@ import glob
 import numpy
 import jinja2
 from abc import ABCMeta, abstractmethod
-import livv
 
 from plots import nclfunc
 
+# A mapping of the options to the test cases that can be run
+cases = {'none' : [],
+         'dome' : ['dome'],
+         'gis' : ['gis'],
+         'all' : ['dome', 'gis']}
+
 # Return a list of options
 def choices():
-    return ('none', 'dome', 'gis', 'all')
+    return list( cases.keys() )
+
+# Return the tests associated with an option
+def choose(key):
+    return cases[key] if cases.has_key(key) else None
 
 
 ## Provide base functionality for a Performance test

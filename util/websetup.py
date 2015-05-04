@@ -8,7 +8,7 @@ Created Apr 21, 2015
 import os
 import shutil
 
-import livv
+import util.variables
 import jinja2
 
 ## Prepare the index of the website.
@@ -18,34 +18,34 @@ import jinja2
 #
 def setup(testsRun):
     # Check if we need to back up an old run
-    if os.path.exists(livv.indexDir):
+    if os.path.exists(util.variables.indexDir):
         response = raw_input("Found a duplicate of the output directory.  Would you like to create a backup before overwriting? (y/n)")
         if response in ["yes", "Yes", "YES", "YEs", "y", "Y"]:
-            if os.path.exists(livv.indexDir + "_backup"):
-                shutil.rmtree(livv.indexDir + "_backup")
-            shutil.copytree(livv.indexDir, livv.indexDir + "_backup")
+            if os.path.exists(util.variables.indexDir + "_backup"):
+                shutil.rmtree(util.variables.indexDir + "_backup")
+            shutil.copytree(util.variables.indexDir, util.variables.indexDir + "_backup")
         else:
-            shutil.rmtree(livv.indexDir)
+            shutil.rmtree(util.variables.indexDir)
 
     # Create directory structure
-    testDirs = [livv.indexDir, 
-                livv.indexDir + os.sep + "validation", 
-                livv.indexDir + os.sep + "verification", 
-                livv.indexDir + os.sep + "performance"]
+    testDirs = [util.variables.indexDir, 
+                util.variables.indexDir + os.sep + "validation", 
+                util.variables.indexDir + os.sep + "verification", 
+                util.variables.indexDir + os.sep + "performance"]
     for siteDir in testDirs:
         if not os.path.exists(siteDir):
             os.mkdir(siteDir);
 
     # Copy over css && imgs directories from source
-    if os.path.exists(livv.indexDir + os.sep + "css"): shutil.rmtree(livv.indexDir + os.sep + "css")
-    shutil.copytree(livv.websiteDir + os.sep + "css", livv.indexDir + os.sep + "css")
-    if os.path.exists(livv.indexDir + os.sep + "imgs"): shutil.rmtree(livv.indexDir + os.sep + "imgs")
-    shutil.copytree(livv.websiteDir + os.sep + "imgs", livv.indexDir + os.sep + "imgs")
+    if os.path.exists(util.variables.indexDir + os.sep + "css"): shutil.rmtree(util.variables.indexDir + os.sep + "css")
+    shutil.copytree(util.variables.websiteDir + os.sep + "css", util.variables.indexDir + os.sep + "css")
+    if os.path.exists(util.variables.indexDir + os.sep + "imgs"): shutil.rmtree(util.variables.indexDir + os.sep + "imgs")
+    shutil.copytree(util.variables.websiteDir + os.sep + "imgs", util.variables.indexDir + os.sep + "imgs")
 
     # Set up imgs directory to have sub-directories for each test
     for test in testsRun:
-        if not os.path.exists(livv.indexDir + os.sep + "imgs" + os.sep + test + os.sep + "bit4bit"):
-            os.makedirs(livv.imgDir + os.sep + test + os.sep + "bit4bit")
+        if not os.path.exists(util.variables.indexDir + os.sep + "imgs" + os.sep + test + os.sep + "bit4bit"):
+            os.makedirs(util.variables.imgDir + os.sep + test + os.sep + "bit4bit")
 
 
 ## Build the index
@@ -57,7 +57,7 @@ def setup(testsRun):
 #
 def generate(verificationSummary, performanceSummary, validationSummary):
     # Where to look for page templates
-    templateLoader = jinja2.FileSystemLoader(searchpath=livv.templateDir)
+    templateLoader = jinja2.FileSystemLoader(searchpath=util.variables.templateDir)
     templateEnv = jinja2.Environment(loader=templateLoader)
 
     # Create the index page
@@ -68,14 +68,14 @@ def generate(verificationSummary, performanceSummary, validationSummary):
                     "verificationSummary" : verificationSummary,
                     "performanceSummary" : performanceSummary,
                     "validationSummary" : validationSummary,
-                    "timestamp" : livv.timestamp,
-                    "user" : livv.user,
-                    "comment" : livv.comment,
+                    "timestamp" : util.variables.timestamp,
+                    "user" : util.variables.user,
+                    "comment" : util.variables.comment,
                     "cssDir" : "css", 
                     "imgDir" : "imgs"}
 
     # Write out the index page
     outputText = template.render(templateVars)
-    page = open(livv.indexDir + os.sep + "index.html", "w")
+    page = open(util.variables.indexDir + os.sep + "index.html", "w")
     page.write(outputText)
     page.close()

@@ -16,7 +16,7 @@
   <!--   Some CSS for determining which tab is selected -->
   <STYLE type="text/css">
   #select :checked + {% for i in range(testsRun|length -1) %} * + {% endfor %} label { background-color:#47A3FF;border-color:#47A3FF;color:#fff;}
-  #select :checked + {% for i in range(2*testsRun|length -1) %} * ~ {% endfor %} div {display: block;}
+  #select :checked + {% for i in range(2*testsRun|length -1) %} * + {% endfor %} div {display: block;}
   </STYLE>
   
   <!-- Generate the tab section -->

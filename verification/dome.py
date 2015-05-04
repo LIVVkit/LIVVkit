@@ -13,24 +13,9 @@ import re
 import os
 import subprocess
 
-# Map of the options to the test cases
-cases = {'none'   : [],
-         'diagnostic' : ['dome30/diagnostic'],
-         'evolving'  : ['dome30/evolving'],
-         'all'    : ['dome30/diagnostic', 'dome30/evolving'], }
-
-# Return a list of options
-def choices():
-    return list(cases.keys())
-
-# Return the tests associated with an option
-def choose(key):
-    return cases[key] if cases.has_key(key) else None
-
-
-import livv
 from verification.base import AbstractTest
 from util.parser import Parser
+import util.variables
 
 # # Main class for handling dome test cases.
 #
@@ -65,15 +50,12 @@ class Test(AbstractTest):
     #  input:
     #    @param testCase : the string indicator of the test to run
     #
-    def run(self, testCase):
-        # Map the case names to the case functions
-        self.testsRun.append(testCase)
-        splitCase = testCase.split('/')
-        type, resolution = splitCase[-1], splitCase[0][4:]
+    def run(self):
+        return
 
         # Make sure LIVV can find the data
-        modelDir = livv.inputDir + os.sep + "dome" + resolution + os.sep + type + os.sep + livv.dataDir
-        benchDir = livv.benchmarkDir + os.sep + "dome" + resolution + os.sep + type + os.sep + livv.dataDir
+        modelDir = util.variables.inputDir + os.sep + "dome"
+        benchDir = util.variables.benchmarkDir + os.sep + "dome"
         if not (os.path.exists(modelDir) and os.path.exists(benchDir)):
             print("    Could not find data for dome" + resolution + " " + type + " verification!  Tried to find data in:")
             print("      " + modelDir)

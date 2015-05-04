@@ -17,7 +17,7 @@ import sys
 import urllib2
 import subprocess
 
-import livv
+import util.variables
 
 ## Run all of the checks for dependencies required by LIVV
 #
@@ -49,9 +49,9 @@ def check():
     try:
         from setuptools.command import easy_install
     except ImportError:
-        if not os.path.exists(livv.cwd + os.sep + "deps"):
-            os.mkdir(livv.cwd + os.sep + "deps")
-            sys.path.append(livv.cwd + os.sep + "deps")
+        if not os.path.exists(util.variables.cwd + os.sep + "deps"):
+            os.mkdir(util.variables.cwd + os.sep + "deps")
+            sys.path.append(util.variables.cwd + os.sep + "deps")
         installSetupTools()
         from setuptools.command import easy_install
 
@@ -66,9 +66,9 @@ def check():
             print("      Found " + lib + "!")
         except ImportError:
             print("      Could not find " + lib + ".  Building a copy for you...."),
-            if not os.path.exists(livv.cwd + os.sep + "deps"):
-                os.mkdir(livv.cwd + os.sep + "deps")
-                sys.path.append(livv.cwd + os.sep + "deps")
+            if not os.path.exists(util.variables.cwd + os.sep + "deps"):
+                os.mkdir(util.variables.cwd + os.sep + "deps")
+                sys.path.append(util.variables.cwd + os.sep + "deps")
             easy_install.main(["--user",lib])
             libsInstalled.append(lib)
 
@@ -115,18 +115,18 @@ def checkModules():
         return
     else:
         # We need to check if all of the correct modules are loaded
-        if not os.path.exists(livv.cwd + os.sep + "deps"):
-            os.mkdir(livv.cwd + os.sep + "deps")
-            sys.path.append(livv.cwd + os.sep + "deps")
-        f = open(livv.cwd + os.sep + "deps" + os.sep + "modules", 'w')
+        if not os.path.exists(util.variables.cwd + os.sep + "deps"):
+            os.mkdir(util.variables.cwd + os.sep + "deps")
+            sys.path.append(util.variables.cwd + os.sep + "deps")
+        f = open(util.variables.cwd + os.sep + "deps" + os.sep + "modules", 'w')
 
         # Record the modules needed, the modules that have been loaded, and start a list for what's missing
-        modules = livv.modules
+        modules = util.variables.modules
         moduleListOutput = out.split() + err.split()
         modulesNeeded = []
 
         # Go through and find out if anything is missing
-        for module in livv.modules:
+        for module in util.variables.modules:
             f.write("module load " + module + "\n")
             if module not in moduleListOutput:
                 modulesNeeded.append(module)
@@ -163,7 +163,7 @@ def installSetupTools():
     url = "https://bootstrap.pypa.io/ez_setup.py"
     fileName = "ez_setup.py"
     u = urllib2.urlopen(url)
-    f = open(livv.cwd + os.sep + "deps" + os.sep + fileName, 'wb')
+    f = open(util.variables.cwd + os.sep + "deps" + os.sep + fileName, 'wb')
     urlInfo = u.info()
     fileSize = int(urlInfo.getheaders("Content-Length")[0])
 
@@ -175,5 +175,5 @@ def installSetupTools():
         buffer = u.read(block)
         if not buffer: break
         f.write(buffer)
-    os.system("python " + livv.cwd + os.sep + "deps" + os.sep + fileName + " --user")
+    os.system("python " + util.variables.cwd + os.sep + "deps" + os.sep + fileName + " --user")
 

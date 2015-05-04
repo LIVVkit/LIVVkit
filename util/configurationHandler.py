@@ -7,7 +7,7 @@ Created on Dec 23, 2014
 '''
 
 import os
-import livv
+import util.variables
 
 ## Load a configuration file from the configurations directory at the root of LIVV.
 #
@@ -19,7 +19,7 @@ import livv
 #
 def load(machineName):
     # Tell the user where we are going to load from
-    configFile = livv.cwd + os.sep + "configurations" + os.sep + machineName
+    configFile = util.variables.cwd + os.sep + "configurations" + os.sep + machineName
     print("Loading configuration file from " + configFile )
 
     # Load up the file
@@ -41,8 +41,8 @@ def load(machineName):
 def save(machineName):
 
     # Pull in the variables needed and tell user where they'll go 
-    from livv import *
-    configFile = livv.cwd + os.sep + "configurations" + os.sep + machineName
+    from util.variables import *
+    configFile = util.variables.cwd + os.sep + "configurations" + os.sep + machineName
     print("Saving configuration to " + configFile )
 
     # Open the file for writing

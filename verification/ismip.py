@@ -13,24 +13,9 @@ import re
 import os
 import subprocess
 
-# Mapping from options to test cases
-cases = {'none'  : [],
-         'small' : ['ismip-hom-a/80km', 'ismip-hom-c/80km'],
-         'large' : ['ismip-hom-a/20km', 'ismip-hom-c/20km'],
-         'all'   : ['ismip-hom-a/20km', 'ismip-hom-c/20km', 'ismip-hom-a/80km', 'ismip-hom-c/80km']}
-
-# Return a list of options
-def choices():
-    return list( cases.keys() )
-
-# Return the tests associated with an option
-def choose(key):
-    return cases[key] if cases.has_key(key) else None
-
-
-import livv
 from verification.base import AbstractTest
 from util.parser import Parser
+import util.variables
 
 ## Main class for handling Ismip test cases.
 #
@@ -62,13 +47,14 @@ class Test(AbstractTest):
     #  input:
     #    @param test : the string indicator of the test to run
     #
-    def run(self, test):
+    def run(self):
+        return
         # Common run
         self.testsRun.append(test)
 
         # Make sure LIVV can find the data
-        testDir = livv.inputDir + os.sep + test + os.sep + livv.dataDir 
-        benchDir = livv.benchmarkDir + os.sep + test + os.sep + livv.dataDir
+        testDir = util.variables.inputDir + os.sep + test
+        benchDir = util.variables.benchmarkDir + os.sep + test
         if not (os.path.exists(testDir) and os.path.exists(benchDir)):
             print("    Could not find data for " + testDir + " verification!  Tried to find data in:")
             print("      " + testDir)
