@@ -26,7 +26,7 @@ def choices():
     return list( cases.keys() )
 
 def choose(key):
-    return cases[key]
+    return cases[key] if cases.has_key(key) else None
 
 
 import livv

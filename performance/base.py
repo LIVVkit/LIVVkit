@@ -1,4 +1,5 @@
 '''
+Performance Testing Base Module
 The AbstractTest class defines several methods that each test class must implement
 
 Created on Apr 21, 2015
@@ -21,20 +22,10 @@ import livv
 
 from plots import nclfunc
 
-# Map of the options to the test cases
-cases = {'none' : [],
-         'dome' : ['dome'],
-         'gis'  : ['gis'],
-         'all'  : ['dome', 'gis']
-        }
-
 # Return a list of options
 def choices():
-    return list( cases.keys() )
+    return ('none', 'dome', 'gis', 'all')
 
-# Return the tests associated with an option
-def choose(key):
-    return cases[key]
 
 ## Provide base functionality for a Performance test
 #
@@ -84,7 +75,7 @@ class AbstractTest(object):
     #    @param type : the overarching test category to generate scaling plots for (ie dome/gis)
     #
     def runScaling(self, type):
-        typeString = 'scaling'
+        typeString = 'Performance                            '
         self.modelTimingData[typeString] = dict()
         self.benchTimingData[typeString] = dict()
         imagesGenerated = []

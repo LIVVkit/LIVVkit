@@ -279,6 +279,7 @@ if __name__ == '__main__':
     ###############################################################################
     #                               Run Test Cases                                #
     ###############################################################################
+    # Give a list of the tests that will be run
     print("Running verification:")
     for case in itertools.chain.from_iterable( [verificationMapping[test][1] for test in testsRun] ): 
         print("  " + case)

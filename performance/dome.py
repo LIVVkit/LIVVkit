@@ -28,7 +28,7 @@ def choices():
 
 # Return the tests associated with an option
 def choose(key):
-    return cases[key]
+    return cases[key] if cases.has_key(key) else None
 
 
 import livv
@@ -69,10 +69,9 @@ class Test(AbstractTest):
         
         for case in cases:
             res = re.findall(r'\d+', case)[0]
-            self.testsRun.append('dome' + res)
             self.runDomePerformance(res)
         
-        self.testsRun.append('scaling')
+        self.testsRun.append('Performance')
         self.runScaling('dome')
         return
 

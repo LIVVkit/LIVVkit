@@ -25,7 +25,7 @@ def choices():
 
 # Return the tests associated with an option
 def choose(key):
-    return cases[key]
+    return cases[key] if cases.has_key(key) else None
 
 
 import livv
