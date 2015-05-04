@@ -10,7 +10,7 @@
   
   <STYLE type="text/css">
   #select :checked + {% for i in range(testsRun|length -1) %} * + {% endfor %} label { background-color:#47A3FF;border-color:#47A3FF;color:#fff;}
-  #select :checked + {% for i in range(2*testsRun|length -1) %} * + {% endfor %} div {display: block; }
+  #select :checked + {% for i in range(2*testsRun|length -1) %} * ~ {% endfor %} div {display: block; }
   </STYLE>
   
   <div id="select" class="tabs">
@@ -20,7 +20,7 @@
     <input id="tab-{{case}}" name="tabs" type="radio" checked />
     {% endfor %}  
     {% for case in testsRun %}
-    <label for="tab-{{case}}">{{case}}</label>  
+    <label for="tab-{{case}}">{{case}}</label>
     {% endfor %}  
     
     

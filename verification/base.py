@@ -1,4 +1,5 @@
 '''
+Verification Test Base Module
 The AbstractTest class defines several methods that each test class must implement, 
 as well as provides bit for bit and stdout parsing capabilities which are inherited
 by all derived test classes.

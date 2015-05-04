@@ -11,15 +11,15 @@ Created on Dec 8, 2014
 
 import re
 import os
+import glob
 import subprocess
 import itertools
 
 # Map of the options to the test cases
 cases = {'none' : [],
-         'small' : ['dome60'],
-         'medium' : ['dome120'],
-         'large' : ['dome240'],
-         'scaling' : ['dome60', 'dome120', 'dome240', 'dome500', 'scalingDome'],
+         'gis' : [],
+         'dome' : ['dome'],
+         'all'  : ['dome']
         }
 
 # Return a list of options
@@ -28,7 +28,7 @@ def choices():
 
 # Return the tests associated with an option
 def choose(key):
-    return cases[key]
+    return cases[key] if cases.has_key(key) else None
 
 
 import livv
@@ -57,32 +57,23 @@ class Test(AbstractTest):
                       " imposed by setting. A zero-flux boundary condition is" + \
                       " applied to the dome margins. "
 
-    ## Runs the performance specific test case.
+    ## Runs the performance specific test cases.
     #
     #  When running a test this call will record the specific test case
-    #  being run.  Each specific test case string is mapped to the
-    #  method that will be used to run the actual test case.
+    #  being run.  Each specific test case string is run via the 
+    #  runDomePerformance function.  All of the data pulled is then
+    #  assimilated via the runScaling method defined in the base class
     #
-    #  input:
-    #    @param testCase : the string indicator of the test to run
-    #
-    def run(self, testCase):
-        # Map the case names to the case functions
-        self.testsRun.append(testCase)
-        splitCase = ["".join(x) for _, x in itertools.groupby(testCase, key=str.isdigit)]
-        if len(splitCase) == 1: 
-            splitCase = filter(None, re.split("([A-Z][^A-Z]*)", testCase))
-        perfType = splitCase[0]
-        resolution = "".join(splitCase[1:])
-        callDict = {'dome' : self.runDomePerformance,
-                    'scaling' : self.runScaling}
-
-        # Call the correct function
-        if callDict.has_key(perfType):
-            callDict[perfType](resolution)
-        else: 
-            print("  Could not find test code for performance test: " + testCase)
-
+    def run(self):
+        cases = glob.glob(livv.performanceDir + os.sep + "dome*")
+        
+        for case in cases:
+            res = re.findall(r'\d+', case)[0]
+            self.runDomePerformance(res)
+        
+        self.testsRun.append('Performance')
+        self.runScaling('dome')
+        return
 
 
     ## Dome Performance Testing

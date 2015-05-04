@@ -59,8 +59,7 @@ from collections import OrderedDict
 from verification.dome import choices as domeVerificationChoices
 from verification.ismip import choices as ismipVerificationChoices
 from verification.shelf import choices as shelfVerificationChoices
-from performance.dome import choices as domePerformanceChoices
-from performance.gis import choices as gisPerformanceChoices
+from performance.base import choices as performanceChoices
 
 usage_string = "%prog [options]"
 parser = OptionParser(usage=usage_string)
@@ -80,15 +79,10 @@ parser.add_option('--shelf', action='store',
                   choices=shelfVerificationChoices(), default='all', 
                   help='specifies the shelf verification to run')
 
-parser.add_option('--performanceDome', action='store', 
-                  type='choice', dest='perfDome', 
-                  choices=domePerformanceChoices(), default='none', 
+parser.add_option('--performance', action='store', 
+                  type='choice', dest='performance', 
+                  choices=performanceChoices(), default='none', 
                   help='specifies the dome performance verification to run')
-
-parser.add_option('--performanceGreenland', action='store', 
-                  type='choice', dest='perfGis', 
-                  choices=gisPerformanceChoices(), default='none', 
-                  help='specifies the greenland performance verification to run')
 
 parser.add_option('--comment', action='store', 
                   type='string', dest='comment',
@@ -251,7 +245,6 @@ if __name__ == '__main__':
     ###############################################################################
 
     # Describes the test module and the cases to run for said module
-    #NOTE: Each of these modules can be found in bin
     verificationMapping = {
                     "dome" : ( verification.dome.Test, verification.dome.choose(options.dome) ),
                    "ismip" : ( verification.ismip.Test, verification.ismip.choose(options.ismip) ),
@@ -259,8 +252,8 @@ if __name__ == '__main__':
                    }
 
     perfMapping = {
-                   "dome" : ( performance.dome.Test, performance.dome.choose(options.perfDome) ),
-                   "gis" : ( performance.gis.Test, performance.gis.choose(options.perfGis))
+                   "dome" : ( performance.dome.Test, performance.dome.choose(options.performance) ),
+                   "gis" : ( performance.gis.Test, performance.gis.choose(options.performance))
                    }
 
     validationMapping = {
@@ -281,15 +274,16 @@ if __name__ == '__main__':
     ###############################################################################
     #                               Run Test Cases                                #
     ###############################################################################
-    print("Running V&V verification:")
+    # Give a list of the tests that will be run
+    print("Running verification:")
     for case in itertools.chain.from_iterable( [verificationMapping[test][1] for test in testsRun] ): 
         print("  " + case)
     print("")
-    print("Running performance verification:")
+    print("Running performance:")
     for case in itertools.chain.from_iterable( [perfMapping[test][1] for test in perfTestsRun] ): 
         print("  " + case)
     print("")
-    print("Running validation verification:")
+    print("Running validation:")
     for case in itertools.chain.from_iterable( [validationMapping[test][1] for test in validationTestsRun] ): 
         print("  " + case)
     print("")
@@ -322,9 +316,7 @@ if __name__ == '__main__':
     for test in perfTestsRun:
         # Create a new instance of the specific test class (see verificationMapping for the mapping)
         newTest = perfMapping[test][0]()
-        # Run the specific and bit for bit verification for each case of the test
-        for case in perfMapping[test][1]:
-            newTest.run(case)
+        newTest.run()
         performanceSummary[test] = newTest.summary
         print("")
         # Generate the test-specific webpage 

@@ -1,4 +1,5 @@
 '''
+Performance Testing Base Module
 The AbstractTest class defines several methods that each test class must implement
 
 Created on Apr 21, 2015
@@ -20,6 +21,11 @@ from abc import ABCMeta, abstractmethod
 import livv
 
 from plots import nclfunc
+
+# Return a list of options
+def choices():
+    return ('none', 'dome', 'gis', 'all')
+
 
 ## Provide base functionality for a Performance test
 #
@@ -69,14 +75,14 @@ class AbstractTest(object):
     #    @param type : the overarching test category to generate scaling plots for (ie dome/gis)
     #
     def runScaling(self, type):
-        typeString = 'scaling' + type
+        typeString = 'Performance                            '
         self.modelTimingData[typeString] = dict()
         self.benchTimingData[typeString] = dict()
         imagesGenerated = []
         print("")
         print("  Generating scaling plots for " + type + "....")
-        type = type.lower() + '_' if typeString == "scalingGIS" else type.lower()
-        tests = filter(re.compile(type + ".*").search, self.modelTimingData.keys())
+        type = type.lower() + '_' if type == "gis" else type.lower()
+        tests = filter(re.compile(type + "..*").search, self.modelTimingData.keys())
         resolutions = sorted([int(re.findall(r'\d+', s)[0]) for s in tests])
 
         # Generate all of the plots
@@ -85,7 +91,7 @@ class AbstractTest(object):
                 mins, avgs, maxs, ress = [], [], [], []
                 for res in sorted(resolutions):
                     # Fix string for Greenland runs
-                    test = type + str(res) + 'km' if typeString == 'scalingGIS' else type + str(res)
+                    test = type + str(res) + 'km' if type == 'gis_' else type + str(res)
                     # Add the data if it's available
                     if self.modelTimingData[test] != {} and \
                             self.modelTimingData[test][dycore] != {} and \
