@@ -205,7 +205,6 @@ class Parser(object):
                     itersToConverge.append(int(splitLine[splitLine.index('"SOLVE_STATUS_CONVERGED"') + 2]))
 
                 if ("Compute dH/dt" in line):
-                    print(iterNumber)
                     itersToConverge.append(int(iterNumber))
 
                 # If the timestep converged mark it with a positive
@@ -229,6 +228,9 @@ class Parser(object):
             self.stdOutData['Number of timesteps'] = int(currentStep)
             if avgItersToConverge > 0:
                 self.stdOutData['Average iterations to converge'] = avgItersToConverge 
+            elif int(currentStep) == 0:
+                self.stdOutData['Number of timesteps'] = 1
+                self.stdOutData['Average iterations to converge'] = iterNumber
 
             if not self.stdOutData.has_key('Dycore Type') or self.stdOutData['Dycore Type'] == None: 
                 self.stdOutData['Dycore Type'] = 'Unavailable'

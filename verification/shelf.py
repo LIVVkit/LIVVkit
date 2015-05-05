@@ -11,6 +11,7 @@ Created on Dec 8, 2014
 
 import re
 import os
+import glob
 import subprocess
 
 from verification.base import AbstractTest
@@ -26,11 +27,9 @@ import util.variables
 class Test(AbstractTest):
 
     ## Constructor
-    #
     def __init__(self):
         super(self.__class__, self).__init__()
-
-        self.name = "shelf"
+        self.name = "Shelf"
         self.description = "A blank description"
 
 
@@ -43,54 +42,52 @@ class Test(AbstractTest):
     #    @param test : the string indicator of the test to run
     #
     def run(self):
-        return
-        # Make sure LIVV can find the data
-        self.testsRun.append(test)
-        testDir = util.variables.inputDir + os.sep + 'shelf'
+        modelDir = util.variables.inputDir + os.sep + 'shelf'
         benchDir = util.variables.benchmarkDir + os.sep + 'shelf'
-        if not (os.path.exists(testDir) and os.path.exists(benchDir)):
-            print("    Could not find data for " + test + " verification!  Tried to find data in:")
-            print("      " + testDir)
+        if not (os.path.exists(modelDir) and os.path.exists(benchDir)):
+            print("    Could not find data for shelf verification!  Tried to find data in:")
+            print("      " + modelDir)
             print("      " + benchDir)
             print("    Continuing with next test....")
-            self.bitForBitDetails[test] = {'Data not found': ['SKIPPED', '0.0']}
-            return 1 # zero returns a problem
-        self.runShelf(test, testDir, benchDir)
+            return
+        testTypes = sorted(set(fn.split('.')[0].split('-')[-1] for fn in os.listdir(modelDir)))
+        for test in testTypes:
+            resolutions = sorted(set(fn.split(os.sep)[-1].split('.')[1]  \
+                            for fn in glob.glob(modelDir + os.sep + 'shelf-' + test + "*")))
+            for resolution in resolutions:
+                self.runShelf(test, resolution, modelDir, benchDir)
+                self.testsRun.append(test.capitalize() + " " + resolution)
 
 
     ## Perform verification analysis on the a shelf case
     #
     #  input:
     #    @param type: The type of shelf test (circular, confined, etc)
+    #    @param resolution: The size of the shelf test (0041, 0043, etc)
     #    @param testDir: The path to the test data
     #    @param benchDir: The path to the benchmark data
     #
-    def runShelf(self, type, testDir, benchDir):
-        # Parse the configure files
-        print("  " + type + " test in progress....")
-        configPath = os.sep + ".." + os.sep + "configure_files"
+    def runShelf(self, type, resolution, testDir, benchDir):
+        print("  " + type.capitalize() + " shelf " + resolution + " test in progress....")
+        testName = type.capitalize() + " " + resolution
         shelfParser = Parser()
-        self.modelConfigs[type], self.benchConfigs[type] = \
-            shelfParser.parseConfigurations(testDir + configPath, benchDir + configPath)
+
+        # Parse the configure files
+        self.modelConfigs[testName], self.benchConfigs[testName] = \
+            shelfParser.parseConfigurations(testDir, benchDir, "shelf-" + type + "." + resolution + ".config")
 
         # Scrape the details from each of the files and store some data for later
-        self.fileTestDetails[type] = shelfParser.parseStdOutput(testDir, ".*out.*")
-
-        # Record the data from the parser
+        self.fileTestDetails[testName] = shelfParser.parseStdOutput(testDir, "shelf-" + type + "." + resolution + ".config.oe")
         numberOutputFiles, numberConfigMatches, numberConfigTests = shelfParser.getParserSummary()
-
-        # Create the plots
-        numberPlots = 0 # self.plotConfined(testDir, benchDir, shelfFiles)
 
         # Run bit for bit test
         numberBitTests, numberBitMatches = 0, 0
-        self.bitForBitDetails[type] = self.bit4bit('/' + type, testDir, benchDir)
-        for key, value in self.bitForBitDetails[type].iteritems():
+        self.bitForBitDetails[testName] = self.bit4bit('shelf-' + type, testDir, benchDir, resolution)
+        for key, value in self.bitForBitDetails[testName].iteritems():
             print ("    {:<40} {:<10}".format(key, value[0]))
             if value[0] == "SUCCESS": numberBitMatches+=1
             numberBitTests+=1
 
-        # Record the summary
-        self.summary[type] = [numberPlots, numberOutputFiles,
+        self.summary[testName] = [numberOutputFiles,
                               numberConfigMatches, numberConfigTests,
                               numberBitMatches, numberBitTests]

@@ -18,7 +18,7 @@ from verification.base import AbstractTest
 from util.parser import Parser
 import util.variables
 
-# # Main class for handling dome test cases.
+## Main class for handling dome test cases.
 #
 #  The dome test cases inherit functionality from AbstractTest for checking 
 #  bit-for-bittedness from a model run. This class handles evolving and \
@@ -26,13 +26,10 @@ import util.variables
 #
 class Test(AbstractTest):
 
-    # # Constructor
-    #
+    ## Constructor
     def __init__(self):
         super(self.__class__, self).__init__()
-
-        # Describe what the dome verification are all about
-        self.name = "dome"
+        self.name = "Dome"
         self.description = "3-D paraboloid dome of ice with a circular, 60 km" + \
                       " diameter base sitting on a flat bed. The horizontal" + \
                       " spatial resolution studies are 2 km, 1 km, 0.5 km" + \
@@ -59,10 +56,10 @@ class Test(AbstractTest):
 
         resolutions = sorted(set(fn.split('.')[1] for fn in os.listdir(modelDir)))
         self.runDome(resolutions[0], modelDir, benchDir)
-        self.testsRun.append("dome" + resolutions[0])
+        self.testsRun.append("Dome " + resolutions[0])
 
 
-    # # Perform V&V on the evolving dome case
+    ## Perform V&V on the evolving dome case
     #
     #  Runs the dome evolving V&V for a given resolution.  First parses through all 
     #  of the standard output files for the given test case, then finishes up by 
@@ -78,23 +75,23 @@ class Test(AbstractTest):
         # Process the configure files
         print("  Dome " + resolution + " test in progress....")
         domeParser = Parser()
-        self.modelConfigs['dome' + resolution], self.benchConfigs['dome' + resolution] = \
+        self.modelConfigs['Dome ' + resolution], self.benchConfigs['Dome ' + resolution] = \
                 domeParser.parseConfigurations(modelDir, benchDir, "*" + resolution + ".config")
 
         # Parse standard out
-        self.fileTestDetails["dome" + resolution] = domeParser.parseStdOutput(modelDir,"dome." + resolution + ".config.oe")
+        self.fileTestDetails["Dome " + resolution] = domeParser.parseStdOutput(modelDir,"dome." + resolution + ".config.oe")
 
         # Record the data from the parser
         numberOutputFiles, numberConfigMatches, numberConfigTests = domeParser.getParserSummary()
 
         # Run bit for bit test
         numberBitMatches, numberBitTests = 0, 0
-        self.bitForBitDetails['dome' + resolution] = self.bit4bit(self.name, modelDir, benchDir, resolution)
-        for key, value in self.bitForBitDetails['dome' + resolution].iteritems():
+        self.bitForBitDetails['Dome ' + resolution] = self.bit4bit('dome', modelDir, benchDir, resolution)
+        for key, value in self.bitForBitDetails['Dome ' + resolution].iteritems():
             print ("    {:<40} {:<10}".format(key, value[0]))
             if value[0] == "SUCCESS": numberBitMatches += 1
             numberBitTests += 1
 
-        self.summary['dome' + resolution] = [numberOutputFiles,
+        self.summary['Dome ' + resolution] = [numberOutputFiles,
                                              numberConfigMatches, numberConfigTests,
                                              numberBitMatches, numberBitTests]

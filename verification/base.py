@@ -216,6 +216,6 @@ class AbstractTest(object):
                         "benchConfigs" : self.benchConfigs,
                         "testImages" : testImages}
         outputText = template.render( templateVars )
-        page = open(util.variables.indexDir + os.sep + "verification" + os.sep + self.name + '.html', "w")
+        page = open(util.variables.indexDir + os.sep + "verification" + os.sep + self.name.lower() + '.html', "w")
         page.write(outputText)
         page.close()
