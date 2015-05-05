@@ -66,8 +66,6 @@ from validation.base import choices as validationChoices
 ###############################################################################
 #                                  Options                                    #
 ###############################################################################
-
-
 usage_string = "%prog [options]"
 parser = OptionParser(usage=usage_string)
 parser.add_option('--verification', action='store', 
@@ -114,6 +112,7 @@ parser.add_option('-s', '--save', action="store_true", dest='save',
 
 # Get the options and the arguments
 (options, args) = parser.parse_args()
+
 
 ###############################################################################
 #                              Global Variables                               #
@@ -164,6 +163,7 @@ util.variables.timingVars = [
 
 # Dycores to try to parse output for
 util.variables.dycores = ['glissade'] #["glide", "glissade", "glam", "albany", "bisicles"]
+
 
 ###############################################################################
 #                               Main Execution                                #

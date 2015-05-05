@@ -77,11 +77,12 @@ class AbstractTest(object):
     #    @param test: the test case to check bittedness
     #    @param testDir: the path to the model data
     #    @param benchDir: the path to the benchmark data
+    #    @param resolution: the size of the test being run
     #
     #  Output:
     #    @returns [change, err] where change in {0,1} and result in {'N/A', 'SUCCESS', 'FAILURE'}
     #
-    def bit4bit(self, test, testDir, benchDir):
+    def bit4bit(self, test, testDir, benchDir, resolution):
         # Mapping of result codes to results
         numpy.set_printoptions(threshold='nan')
         result = {-1 : 'N/A', 0 : 'SUCCESS', 1 : 'FAILURE'}
@@ -92,9 +93,8 @@ class AbstractTest(object):
             return {'No matching benchmark and data files found': ['SKIPPED','0.0']}
 
         # Get all of the .nc files in the model & benchmark directories
-        regex = re.compile('^[^\.].*?.nc')
-        testFiles = filter(regex.search, os.listdir(testDir))
-        benchFiles = filter(regex.search, os.listdir(benchDir))
+        testFiles = [fn.split(os.sep)[-1] for fn in glob.glob(testDir + os.sep + test + '.' + resolution + '.out.nc')]
+        benchFiles = [fn.split(os.sep)[-1] for fn in glob.glob(benchDir + os.sep + test + '.' + resolution + '.out.nc')]
 
         # Get the intersection of the two file lists
         sameList = set(testFiles).intersection(benchFiles)

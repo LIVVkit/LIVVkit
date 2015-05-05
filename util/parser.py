@@ -17,6 +17,7 @@ Created on Feb 19, 2015
 '''
 import os
 import re
+import glob
 import fnmatch
 import ConfigParser
 
@@ -71,14 +72,14 @@ class Parser(object):
     #    @returns modelData, benchData: the nested dictionaries corresponding
     #      to the files found in the input directories
     #
-    def parseConfigurations(self, modelDir, benchDir):
+    def parseConfigurations(self, modelDir, benchDir, regex):
         # Make sure the locations exist, and if not return blank sets
         if not (os.path.exists(modelDir) and os.path.exists(benchDir)):
             return dict(), dict()
 
         # Pull the files, while filtering out "hidden" ones
-        modelFiles = [f for f in os.listdir(modelDir) if not f.startswith('.')]
-        benchFiles = [f for f in os.listdir(benchDir) if not f.startswith('.')]
+        modelFiles = [fn.split(os.sep)[-1] for fn in glob.glob(modelDir + os.sep + "*" + regex)]
+        benchFiles = [fn.split(os.sep)[-1] for fn in glob.glob(benchDir + os.sep + "*" + regex)]
         self.nConfigParsed += len(modelFiles)
 
         # Pull in the information from the model run
@@ -174,11 +175,11 @@ class Parser(object):
             convergedIters = []
             itersToConverge = []
             self.stdOutData = OrderedDict()
-            
+
             # Open up the file
             logfile = open(modelDir + os.sep + fileName, 'r')
             self.nOutputParsed += 1
-    
+
             # Go through and build up information about the simulation
             for line in logfile:
                 #Determine the dycore type
@@ -187,46 +188,56 @@ class Parser(object):
                         self.stdOutData['Dycore Type'] = dycoreTypes[next(logfile).strip()]
                     else:
                         self.stdOutData['Dycore Type'] = dycoreTypes[line.split()[-1]]
-    
+
                 # Calculate the total number of processors used
                 if ('total procs' in line):
                     numberProcs += int(line.split()[-1])
-    
+
                 # Grab the current timestep
                 if ('Nonlinear Solver Step' in line):
                     currentStep = int(line.split()[4])
-    
+                if ('Compute ice velocities, time = ' in line):
+                    currentStep = float(line.split()[-1])
+
                 # Get the number of iterations per timestep
                 if ('"SOLVE_STATUS_CONVERGED"' in line):
                     splitLine = line.split()
                     itersToConverge.append(int(splitLine[splitLine.index('"SOLVE_STATUS_CONVERGED"') + 2]))
-    
+
+                if ("Compute dH/dt" in line):
+                    print(iterNumber)
+                    itersToConverge.append(int(iterNumber))
+
                 # If the timestep converged mark it with a positive
                 if ('Converged!' in line):
                     convergedIters.append(currentStep)
-    
+
                 # If the timestep didn't converge mark it with a negative
                 if ('Failed!' in line):
                     convergedIters.append(-1*currentStep)
-    
+
+                splitLine = line.split()
+                if len(splitLine) > 0:
+                    iterNumber = splitLine[0]
+
             # Calculate the average number of iterations it took to converge
             if (len(itersToConverge) > 0):
-                avgItersToConverge = sum(itersToConverge) / len(itersToConverge)
-    
+                avgItersToConverge = float(sum(itersToConverge)) / len(itersToConverge)
+
             # Record some of the data in the self.stdOutData
             self.stdOutData['Number of processors'] = numberProcs
-            self.stdOutData['Number of timesteps'] = currentStep
+            self.stdOutData['Number of timesteps'] = int(currentStep)
             if avgItersToConverge > 0:
                 self.stdOutData['Average iterations to converge'] = avgItersToConverge 
-    
+
             if not self.stdOutData.has_key('Dycore Type') or self.stdOutData['Dycore Type'] == None: 
                 self.stdOutData['Dycore Type'] = 'Unavailable'
             for key in self.stdOutData.keys():
                 if self.stdOutData[key] == None:
                     self.stdOutData[key] = 'N/A'
-            
+
             outdata.append(self.stdOutData)
-    
+
         return zip(files, outdata)
 
 

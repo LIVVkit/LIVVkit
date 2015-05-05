@@ -11,6 +11,7 @@ Created on Dec 8, 2014
 
 import re
 import os
+import glob
 import subprocess
 
 from verification.base import AbstractTest
@@ -41,18 +42,11 @@ class Test(AbstractTest):
                       " applied to the dome margins. "
 
 
-    # # Runs the dome specific test case.  
+    ## Runs the dome specific test case.  
     #
-    #  When running a test this call will record the specific test case 
-    #  being run.  Each specific test case string is mapped to the 
-    #  method that will be used to run the actual test case.
-    #
-    #  input:
-    #    @param testCase : the string indicator of the test to run
+    #  TODO: Write new documentation
     #
     def run(self):
-        return
-
         # Make sure LIVV can find the data
         modelDir = util.variables.inputDir + os.sep + "dome"
         benchDir = util.variables.benchmarkDir + os.sep + "dome"
@@ -61,9 +55,11 @@ class Test(AbstractTest):
             print("      " + modelDir)
             print("      " + benchDir)
             print("    Continuing with next test....")
-            self.bitForBitDetails['dome' + resolution + os.sep + type] = {'Data not found': ['SKIPPED', '0.0']}
-            return 1  # zero returns a problem        
-        self.runDome(resolution, type, modelDir, benchDir)
+            return
+
+        resolutions = sorted(set(fn.split('.')[1] for fn in os.listdir(modelDir)))
+        self.runDome(resolutions[0], modelDir, benchDir)
+        self.testsRun.append("dome" + resolutions[0])
 
 
     # # Perform V&V on the evolving dome case
@@ -75,35 +71,30 @@ class Test(AbstractTest):
     #  input:
     #    @param resolution: The resolution of the test cases to look in.
     #                       (eg resolution == 30 -> reg_test/dome30/evolving)
-    #    @param type: The type of test case (evolving, diagnostic, etc)
     #    @param modelDir: the location of the model run data
     #    @param benchDir: the location of the benchmark data
     #
-    def runDome(self, resolution, type, modelDir, benchDir):
+    def runDome(self, resolution, modelDir, benchDir):
         # Process the configure files
-        print("  Dome " + type + " test in progress....")
-        configPath = os.sep + ".." + os.sep + "configure_files"
+        print("  Dome " + resolution + " test in progress....")
         domeParser = Parser()
-        self.modelConfigs['dome' + resolution + os.sep + type], self.benchConfigs['dome' + resolution + os.sep + type] = \
-                domeParser.parseConfigurations(modelDir + configPath, benchDir + configPath)
+        self.modelConfigs['dome' + resolution], self.benchConfigs['dome' + resolution] = \
+                domeParser.parseConfigurations(modelDir, benchDir, "*" + resolution + ".config")
 
         # Parse standard out
-        self.fileTestDetails["dome" + resolution + os.sep + type] = domeParser.parseStdOutput(modelDir,".*((small)|(large))_proc")
-        
+        self.fileTestDetails["dome" + resolution] = domeParser.parseStdOutput(modelDir,"dome." + resolution + ".config.oe")
+
         # Record the data from the parser
         numberOutputFiles, numberConfigMatches, numberConfigTests = domeParser.getParserSummary()
 
-        # Create the plots
-        numberPlots = 0  # self.plotEvolving(resolution)
-
         # Run bit for bit test
         numberBitMatches, numberBitTests = 0, 0
-        self.bitForBitDetails['dome' + resolution + os.sep + type] = self.bit4bit(self.name, modelDir, benchDir)
-        for key, value in self.bitForBitDetails['dome' + resolution + os.sep + type].iteritems():
+        self.bitForBitDetails['dome' + resolution] = self.bit4bit(self.name, modelDir, benchDir, resolution)
+        for key, value in self.bitForBitDetails['dome' + resolution].iteritems():
             print ("    {:<40} {:<10}".format(key, value[0]))
             if value[0] == "SUCCESS": numberBitMatches += 1
             numberBitTests += 1
 
-        self.summary['dome' + resolution + os.sep + type] = [numberPlots, numberOutputFiles,
-                                                             numberConfigMatches, numberConfigTests,
-                                                             numberBitMatches, numberBitTests]
+        self.summary['dome' + resolution] = [numberOutputFiles,
+                                             numberConfigMatches, numberConfigTests,
+                                             numberBitMatches, numberBitTests]
