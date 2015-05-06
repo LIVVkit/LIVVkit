@@ -29,7 +29,8 @@ cases = {'none' : [],
          'ismip' : ['ismip'],
          'dome' : ['dome'],
          'shelf' : ['shelf'],
-         'all' : ['dome', 'ismip', 'shelf']}
+         'stream' : ['stream'],
+         'all' : ['dome', 'ismip', 'shelf', 'stream']}
 
 # Return a list of options
 def choices():

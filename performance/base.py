@@ -20,6 +20,7 @@ import jinja2
 from abc import ABCMeta, abstractmethod
 
 from plots import nclfunc
+import util.variables
 
 # A mapping of the options to the test cases that can be run
 cases = {'none' : [],
@@ -46,7 +47,6 @@ class AbstractTest(object):
     __metaclass__ = ABCMeta
 
     ## Constructor
-    #
     def __init__(self):
         self.name = "default"
         self.testsRun = []
@@ -67,10 +67,6 @@ class AbstractTest(object):
         self.summary = dict()
 
     ## Definition for the general test run
-    #
-    #  input:
-    #    @param test : the string indicator of the test to run
-    #
     @abstractmethod
     def run(self, test):
         pass
@@ -142,7 +138,7 @@ class AbstractTest(object):
     #
     def generate(self):
         # Set up jinja related variables
-        templateLoader = jinja2.FileSystemLoader(searchpath=livv.templateDir)
+        templateLoader = jinja2.FileSystemLoader(searchpath=util.variables.templateDir)
         templateEnv = jinja2.Environment(loader=templateLoader, extensions=["jinja2.ext.do",])
         templateFile = "/performance_test.html"
         template = templateEnv.get_template(templateFile)
@@ -153,22 +149,22 @@ class AbstractTest(object):
         imgDir = indexDir + "/imgs"
 
         # Grab all of our images
-        testImgDir = livv.imgDir + os.sep + self.name
+        testImgDir = util.variables.imgDir + os.sep + self.name
         testImages = [os.path.basename(img) for img in glob.glob(testImgDir + os.sep + "*.png")]
         testImages.append([os.path.basename(img) for img in glob.glob(testImgDir + os.sep +"*.jpg")])
         testImages.append([os.path.basename(img) for img in glob.glob(testImgDir + os.sep +"*.svg")])
 
         # Set up the template variables  
-        templateVars = {"timestamp" : livv.timestamp,
-                        "user" : livv.user,
-                        "comment" : livv.comment,
+        templateVars = {"timestamp" : util.variables.timestamp,
+                        "user" : util.variables.user,
+                        "comment" : util.variables.comment,
                         "testName" : self.name,
                         "indexDir" : indexDir,
                         "cssDir" : cssDir,
                         "imgDir" : imgDir,
                         "testDescription" : self.description,
                         "testsRun" : self.testsRun,
-                        "testHeader" : livv.parserVars,
+                        "testHeader" : util.variables.parserVars,
                         "testDetails" : self.fileTestDetails,
                         "plotDetails" : self.plotDetails,
                         "modelConfigs" : self.modelConfigs,
@@ -177,6 +173,6 @@ class AbstractTest(object):
                         "benchTimingData" : self.benchTimingData,
                         "testImages" : testImages}
         outputText = template.render( templateVars )
-        page = open(livv.indexDir + os.sep + "performance" + os.sep + self.name + '.html', "w")
+        page = open(util.variables.indexDir + os.sep + "performance" + os.sep + self.name.lower() + '.html', "w")
         page.write(outputText)
         page.close()

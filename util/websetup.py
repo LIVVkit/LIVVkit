@@ -19,7 +19,7 @@ import jinja2
 def setup(testsRun):
     # Check if we need to back up an old run
     if os.path.exists(util.variables.indexDir):
-        response = raw_input("Found a duplicate of the output directory.  Would you like to create a backup before overwriting? (y/n)")
+        response = raw_input(os.linesep + "Found a duplicate of the output directory.  Would you like to create a backup before overwriting? (y/n)" + os.linesep)
         if response in ["yes", "Yes", "YES", "YEs", "y", "Y"]:
             if os.path.exists(util.variables.indexDir + "_backup"):
                 shutil.rmtree(util.variables.indexDir + "_backup")
@@ -46,7 +46,6 @@ def setup(testsRun):
     for test in testsRun:
         if not os.path.exists(util.variables.indexDir + os.sep + "imgs" + os.sep + test + os.sep + "bit4bit"):
             os.makedirs(util.variables.imgDir + os.sep + test + os.sep + "bit4bit")
-
 
 ## Build the index
 #

@@ -1,6 +1,6 @@
 '''
-Master module for dome test cases.  Inherits methods from the AbstractTest
-class from the Test module.  Dome specific verification are performed by calling
+Master module for dome performance test cases.  Inherits methods from the AbstractTest
+class from the Test module.  Dome specific performance tests are performed by calling
 the run() method, which passes the necessary information to the runDomePerformance()
 method.
 
@@ -14,6 +14,10 @@ import os
 import glob
 import subprocess
 import itertools
+
+from performance.base import AbstractTest
+from util.parser import Parser
+import util.variables
 
 # Map of the options to the test cases
 cases = {'none' : [],
@@ -30,11 +34,6 @@ def choices():
 def choose(key):
     return cases[key] if cases.has_key(key) else None
 
-
-import livv
-from base import AbstractTest
-from util.parser import Parser
-
 ## Main class for handling dome performance validation
 #
 #  The dome test cases inherit functionality from AbstractTest for
@@ -43,11 +42,8 @@ from util.parser import Parser
 class Test(AbstractTest):
 
     ## Constructor
-    #
     def __init__(self):
         super(self.__class__, self).__init__()
-
-        # Describe what the dome verification are all about
         self.name = "dome"
         self.description = "3-D paraboloid dome of ice with a circular, 60 km" + \
                       " diameter base sitting on a flat bed. The horizontal" + \
@@ -65,15 +61,18 @@ class Test(AbstractTest):
     #  assimilated via the runScaling method defined in the base class
     #
     def run(self):
-        cases = glob.glob(livv.performanceDir + os.sep + "dome*")
-        
-        for case in cases:
-            res = re.findall(r'\d+', case)[0]
-            self.runDomePerformance(res)
-        
-        self.testsRun.append('Performance')
-        self.runScaling('dome')
-        return
+        modelDir = util.variables.inputDir + os.sep + "dome"
+        benchDir = util.variables.benchmarkDir + os.sep + "dome"
+        if not (os.path.exists(modelDir) and os.path.exists(benchDir)):
+            print("    Could not find data for dome" + resolution + " " + type + " verification!  Tried to find data in:")
+            print("      " + modelDir)
+            print("      " + benchDir)
+            print("    Continuing with next test....")
+            return
+        resolutions = sorted(set(fn.split('.')[1] for fn in os.listdir(modelDir)))
+        for resolution in resolutions:
+            self.runDome(resolution, modelDir, benchDir)
+            self.testsRun.append("Dome " + resolution)
 
 
     ## Dome Performance Testing
@@ -81,38 +80,21 @@ class Test(AbstractTest):
     #  input:
     #    @param resolution: the size of the test being analyzed
     #
-    def runDomePerformance(self, resolution):
-        print("")
-        print("  Dome " + resolution + " performance verification in progress....")  
-
-        # Search for the std output files
-        perfDir = livv.performanceDir + os.sep + "dome" + resolution + os.sep + livv.dataDir 
-        perfBenchDir = livv.performanceDir + os.sep + "bench" + os.sep + "dome" + resolution + os.sep + livv.dataDir
-
-        if not (os.path.exists(perfDir) and os.path.exists(perfBenchDir)):
-            print("    Could not find data for Dome " + resolution + " verification!  Tried to find data in:")
-            print("      " + perfDir)
-            print("      " + perfBenchDir)
-            print("    Continuing with next test....")
-            return 1
+    def runDome(self, resolution, perfDir, perfBenchDir):
+        print("  Dome " + resolution + " performance verification in progress....")
 
         # Process the configure files
-        configPath = os.sep + ".." + os.sep + "configure_files"
         domeParser = Parser()
-        self.modelConfigs['dome' + resolution], self.benchConfigs['dome' + resolution] = \
-                domeParser.parseConfigurations(perfDir + configPath, perfBenchDir + configPath)
+        self.modelConfigs['Dome ' + resolution], self.benchConfigs['Dome ' + resolution] = \
+                domeParser.parseConfigurations(perfDir, perfBenchDir, "*" + resolution + ".config")
 
         # Scrape the details from each of the files and store some data for later
         self.fileTestDetails["dome" + resolution] = domeParser.parseStdOutput(perfDir, "^out." + resolution + ".((glide)|(glissade))$")
 
         # Go through and pull in the timing data
-        print("")
-        print("        Model Timing Summary:")
-        print("      --------------------------------------------------------------------")
+        print("    Model Timing Summary:")
         self.modelTimingData['dome' + resolution] = domeParser.parseTimingSummaries(perfDir)
-        print("")
-        print("        Benchmark Timing Summary:")
-        print("      --------------------------------------------------------------------")
+        print("    Benchmark Timing Summary:")
         self.benchTimingData['dome' + resolution] = domeParser.parseTimingSummaries(perfBenchDir)
 
         # Record the data from the parser

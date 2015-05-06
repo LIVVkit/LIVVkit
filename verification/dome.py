@@ -44,7 +44,6 @@ class Test(AbstractTest):
     #  TODO: Write new documentation
     #
     def run(self):
-        # Make sure LIVV can find the data
         modelDir = util.variables.inputDir + os.sep + "dome"
         benchDir = util.variables.benchmarkDir + os.sep + "dome"
         if not (os.path.exists(modelDir) and os.path.exists(benchDir)):
@@ -53,7 +52,6 @@ class Test(AbstractTest):
             print("      " + benchDir)
             print("    Continuing with next test....")
             return
-
         resolutions = sorted(set(fn.split('.')[1] for fn in os.listdir(modelDir)))
         self.runDome(resolutions[0], modelDir, benchDir)
         self.testsRun.append("Dome " + resolutions[0])

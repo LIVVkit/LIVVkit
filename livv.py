@@ -54,10 +54,11 @@ from collections import OrderedDict
 # Pull in the LIVV specific modules
 import util.configurationHandler
 import util.websetup
-import verification.dome, verification.ismip, verification.shelf
+import verification.dome, verification.ismip, verification.shelf, verification.stream
 import performance.dome, performance.gis
 import validation.gis
 import util.dependencies as dependencies
+import util.cleanup
 
 from verification.base import choices as verificationChoices
 from performance.base import choices as performanceChoices
@@ -71,12 +72,12 @@ parser = OptionParser(usage=usage_string)
 parser.add_option('--verification', action='store', 
                   type='choice', dest='verification', 
                   choices=verificationChoices(), default='all', 
-                  help='specifies the dome verification to run')
+                  help='specifies the verification tests to run')
 
 parser.add_option('--performance', action='store', 
                   type='choice', dest='performance', 
                   choices=performanceChoices(), default='none', 
-                  help='specifies the dome performance verification to run')
+                  help='specifies the performance tests to run')
 
 parser.add_option('--comment', action='store', 
                   type='string', dest='comment',
@@ -172,8 +173,6 @@ if __name__ == '__main__':
     print("------------------------------------------------------------------------------")
     print("  Land Ice Verification & Validation (LIVV)")
     print("------------------------------------------------------------------------------")
-
-    # Run the dependency checker
     dependencies.check()
 
     # Check if we are saving/loading the configuration and set up the machine name
@@ -201,12 +200,11 @@ if __name__ == '__main__':
         util.variables.globals().update(vars)
 
     # Print out some information
-    print("\n  Current run: " + time.strftime("%m-%d-%Y %H:%M:%S"))
+    print(os.linesep + "  Current run: " + time.strftime("%m-%d-%Y %H:%M:%S"))
     print("  User: " + util.variables.user)
     print("  Config: " + machineName)
     print("  OS Type: " + platform.system() + " " + platform.release())
-    print("  " + util.variables.comment)
-    print("")
+    print("  " + util.variables.comment + os.linesep)
 
     # Check to make sure the directory structure is okay
     if not os.path.exists(util.variables.inputDir):
@@ -231,7 +229,8 @@ if __name__ == '__main__':
     verificationMapping = {
                            'dome' : verification.dome.Test,
                            'ismip' : verification.ismip.Test,
-                           'shelf' : verification.shelf.Test
+                           'shelf' : verification.shelf.Test,
+                           'stream' : verification.stream.Test
                            }
 
     performanceMapping = {
@@ -266,17 +265,14 @@ if __name__ == '__main__':
         print("Running verification tests:")
         for case in verificationTests: 
             print("  " + case)
-        print("")
     if len(performanceTests) > 0:
-        print("Running performance tests:")
+        print(os.linesep + "Running performance tests:")
         for case in performanceTests:
             print("  " + case)
-        print("")
     if len(validationTests) > 0:
-        print("Running validation tests:")
+        print(os.linesep + "Running validation tests:")
         for case in validationTests:
             print("  " + case)
-        print("")
 
     # Set up the directory structure and summary dictionaries for output
     verificationSummary, performanceSummary, validationSummary = dict(), dict(), dict()
@@ -292,9 +288,8 @@ if __name__ == '__main__':
         newTest = verificationMapping[test]()
         newTest.run()
         verificationSummary[test] = newTest.summary
-        print("")
-        # Generate the test-specific webpage 
         newTest.generate()
+        print("")
 
     # Run the performance verification
     if len(performanceTests) > 0:
@@ -306,9 +301,8 @@ if __name__ == '__main__':
         newTest = performanceMapping[test]()
         newTest.run()
         performanceSummary[test] = newTest.summary
-        print("")
-        # Generate the test-specific webpage 
         newTest.generate()
+        print("")
 
     # Run the validation verification
     if len(validationTests) > 0:
@@ -321,13 +315,16 @@ if __name__ == '__main__':
         # Run the specific and bit for bit verification for each case of the test
         newTest.run()
         validationSummary[test] = newTest.summary
-        print("")
         # Generate the test-specific webpage 
         newTest.generate()
+        print("")
 
     # Create the site index
-    print("Generating web pages in " + util.variables.outputDir) 
+    print("Generating web pages in " + util.variables.outputDir + "....")
     util.websetup.generate(verificationSummary, performanceSummary, validationSummary)
+
+    print("Cleaning up....")
+    util.cleanup.clean()
 
     ###############################################################################
     #                        Finished.  Tell user about it.                       #

@@ -11,6 +11,7 @@ Created on Dec 8, 2014
 
 import re
 import os
+import glob
 import subprocess
 
 from verification.base import AbstractTest
@@ -48,28 +49,21 @@ class Test(AbstractTest):
     #    @param test : the string indicator of the test to run
     #
     def run(self):
-        return
-        # Common run
-        self.testsRun.append(test)
-
-        # Make sure LIVV can find the data
-        testDir = util.variables.inputDir + os.sep + test
-        benchDir = util.variables.benchmarkDir + os.sep + test
-        if not (os.path.exists(testDir) and os.path.exists(benchDir)):
-            print("    Could not find data for " + testDir + " verification!  Tried to find data in:")
-            print("      " + testDir)
+        modelDir = util.variables.inputDir + os.sep + 'ismip-hom'
+        benchDir = util.variables.benchmarkDir + os.sep + 'ismip-hom'
+        if not (os.path.exists(modelDir) and os.path.exists(benchDir)):
+            print("    Could not find data for ismip-hom verification!  Tried to find data in:")
+            print("      " + modelDir)
             print("      " + benchDir)
             print("    Continuing with next test....")
-            self.bitForBitDetails[test] = {'Data not found': ['SKIPPED', '0.0']}
-            return 1 # zero returns a problem
-
-        # Pull some data about the test case
-        splitCase = test.split('/')
-        aOrC = splitCase[0][-1]
-        resolution = splitCase[-1]
-
-        # Pass it onto the specific run
-        self.runIsmip(testDir, benchDir, aOrC, resolution)
+            return
+        testTypes = sorted(set(fn.split('.')[0].split('-')[-1] for fn in os.listdir(modelDir)))
+        for test in testTypes:
+            resolutions = sorted(set(fn.split(os.sep)[-1].split('.')[1]  \
+                            for fn in glob.glob(modelDir + os.sep + 'ismip-hom-' + test + "*")))
+            for resolution in resolutions:
+                self.runIsmip(modelDir, benchDir, test, resolution)
+                self.testsRun.append(test.capitalize() + " " + resolution)
 
 
     ## Perform V&V on an ismip-hom test case
@@ -81,37 +75,33 @@ class Test(AbstractTest):
     #  input:
     #    @param testDir: The path to the test data
     #    @param benchDir: The path to the benchmark data
-    #    @param aOrC: Whether we are running ismip-hom-a or ismip-hom-c
+    #    @param type: Which version of the ismip-hom test should be run
     #    @param resolution: The resolution of the test cases to look in.
     # 
-    def runIsmip(self, testDir, benchDir, aOrC, resolution):
-        print("  Ismip-hom-" + aOrC + os.sep + resolution + " test in progress....")
-        testName = 'ismip-hom-' + aOrC + os.sep + resolution
+    def runIsmip(self, testDir, benchDir, type, resolution):
+        print("  ISMIP-HOM-" + type.capitalize() + " " + resolution + " test in progress....")
+        testName = type.capitalize() + " " + resolution
 
         # Process the configure files
-        configPath = os.sep + ".." + os.sep + "configure_files"
         ismipParser = Parser()
         self.modelConfigs[testName], self.benchConfigs[testName] = \
-            ismipParser.parseConfigurations(testDir + configPath, benchDir + configPath)
+            ismipParser.parseConfigurations(testDir, benchDir, "ismip-hom-" + type + "." + resolution + ".config")
 
         # Scrape the details from each of the files and store some data for later
-        self.fileTestDetails[testName] = ismipParser.parseStdOutput(testDir, ".*out.*[0-9]")
+        self.fileTestDetails[testName] = ismipParser.parseStdOutput(testDir, "ismip-hom-" + type + "." + resolution + ".config.oe")
 
         # Record the data from the parser
         numberOutputFiles, numberConfigMatches, numberConfigTests = ismipParser.getParserSummary()
 
-        # Create the plots & record the number generated
-        numberPlots = 0 # self.plot(aOrC,resolution[:2])
-
         # Run bit for bit test
         numberBitTests, numberBitMatches = 0, 0
-        self.bitForBitDetails[testName] = self.bit4bit(os.sep + testName, testDir, benchDir)
+        self.bitForBitDetails[testName] = self.bit4bit('ismip-hom-' + type, testDir, benchDir, resolution)
         for key, value in self.bitForBitDetails[testName].iteritems():
             print ("    {:<40} {:<10}".format(key,value[0]))
             if value[0] == "SUCCESS": numberBitMatches+=1
             numberBitTests+=1
 
         # Record the summary
-        self.summary[testName] = [numberPlots, numberOutputFiles,
+        self.summary[testName] = [numberOutputFiles,
                                   numberConfigMatches, numberConfigTests,
                                   numberBitMatches, numberBitTests]
