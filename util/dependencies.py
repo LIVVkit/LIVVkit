@@ -19,14 +19,15 @@ import subprocess
 
 import util.variables
 
-## Run all of the checks for dependencies required by LIVV
-#
-#  Checks if modules are used, and if they are checks to see
-#  if they are loaded.  Then, checks for the necessary Python
-#  libraries.  If any are missing they are installed via 
-#  easy_install.  If easy_install isn't installed, that is 
-#  also built.
-#
+'''
+Run all of the checks for dependencies required by LIVV
+
+Checks if modules are used, and if they are checks to see
+if they are loaded.  Then, checks for the necessary Python
+libraries.  If any are missing they are installed via 
+easy_install.  If easy_install isn't installed, that is 
+also built.
+'''
 def check():
     # The list of nonstandard python libraries that are used 
     libraryList = ["jinja2", "netCDF4", "numpy", "matplotlib"]
@@ -34,8 +35,7 @@ def check():
     # Create a list to store all of the errors that were found
     depErrors = []
 
-    print("")
-    print("Beginning Dependency Checks........")
+    print(os.linesep + "Beginning Dependency Checks........")
 
     # If we need to load modules for LCF machines do so now
     checkModules()
@@ -58,7 +58,6 @@ def check():
     # Make sure all imports are going to work
     # And if they don't build a copy of the ones that are needed
     print("    Checking for external libraries....")
-
     libsInstalled=[]
     for lib in libraryList:
         try:
@@ -89,17 +88,16 @@ def check():
         for err in depErrors: print(err)
         exit(len(depErrors))
     else:
-        print("Okay!")
-        print("Setting up environment....")
+        print("Okay!" + os.linesep + "Setting up environment....")
 
+'''
+Checks if the system running LIVV uses modules to load dependencies.
 
-## Checks if the system running LIVV uses modules to load dependencies.
-#
-#  If the system does use modules, this method goes through and makes
-#  sure that the correct modules are loaded.  Any modules that are needed
-#  but haven't been loaded are added to a module loader script that the
-#  user is prompted to source before running LIVV again.
-#
+If the system does use modules, this method goes through and makes
+sure that the correct modules are loaded.  Any modules that are needed
+but haven't been loaded are added to a module loader script that the
+user is prompted to source before running LIVV again.
+'''
 def checkModules():
     # Check to see if calling 'module list' is a real command
     print("    Checking if modules need to be loaded"),
@@ -110,7 +108,6 @@ def checkModules():
     # Find out if we need to check if modules are loaded
     if "bash: module: command not found" in err or \
             "bash: module: command not found" in out:
-        # This system doesn't use modules for dependencies
         print(" nope.  Continuing....")
         return
     else:
@@ -121,7 +118,6 @@ def checkModules():
         f = open(util.variables.cwd + os.sep + "deps" + os.sep + "modules", 'w')
 
         # Record the modules needed, the modules that have been loaded, and start a list for what's missing
-        modules = util.variables.modules
         moduleListOutput = out.split() + err.split()
         modulesNeeded = []
 
@@ -150,25 +146,21 @@ def checkModules():
         else:
             print(" found all required modules!")
 
+'''
+Installs setuptools under the user python libraries
 
-## Installs setuptools under the user python libraries
-#
-#  If setuptools isn't found on a system it is probably the case that other
-#  packages are also not available.   Once setuptools is installed we can
-#  access the easy_install command from inside of LIVV if  any python
-#  dependencies aren't satisfied
-#
+If setuptools isn't found on a system it is probably the case that other
+packages are also not available.   Once setuptools is installed we can
+access the easy_install command from inside of LIVV if  any python
+dependencies aren't satisfied
+'''
 def installSetupTools():
-    # Specify where to download from and figure out how big it's going to be
+    # Specify where to download from
     url = "https://bootstrap.pypa.io/ez_setup.py"
     fileName = "ez_setup.py"
-    u = urllib2.urlopen(url)
+    u = urllib2.urlopen(url)    
     f = open(util.variables.cwd + os.sep + "deps" + os.sep + fileName, 'wb')
-    urlInfo = u.info()
-    fileSize = int(urlInfo.getheaders("Content-Length")[0])
 
-    # Download it
-    sizeOnDisk = 0
     block=8192
     while True:
         # We are downloading block by block - if we can't get anymore we must be done
@@ -176,4 +168,3 @@ def installSetupTools():
         if not buffer: break
         f.write(buffer)
     os.system("python " + util.variables.cwd + os.sep + "deps" + os.sep + fileName + " --user")
-

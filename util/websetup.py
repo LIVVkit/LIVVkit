@@ -11,11 +11,11 @@ import shutil
 import util.variables
 import jinja2
 
-## Prepare the index of the website.
-#
-#  input:
-#    @param testsRun: the top level names of each of the verification run
-#
+'''
+Prepare the index of the website.
+
+@param testsRun: the top level names of each of the verification run
+'''
 def setup(testsRun):
     # Check if we need to back up an old run
     if os.path.exists(util.variables.indexDir):
@@ -36,7 +36,7 @@ def setup(testsRun):
         if not os.path.exists(siteDir):
             os.mkdir(siteDir);
 
-    # Copy over css && imgs directories from source
+    # Copy over css & imgs directories from source
     if os.path.exists(util.variables.indexDir + os.sep + "css"): shutil.rmtree(util.variables.indexDir + os.sep + "css")
     shutil.copytree(util.variables.websiteDir + os.sep + "css", util.variables.indexDir + os.sep + "css")
     if os.path.exists(util.variables.indexDir + os.sep + "imgs"): shutil.rmtree(util.variables.indexDir + os.sep + "imgs")
@@ -47,13 +47,13 @@ def setup(testsRun):
         if not os.path.exists(util.variables.indexDir + os.sep + "imgs" + os.sep + test + os.sep + "bit4bit"):
             os.makedirs(util.variables.imgDir + os.sep + test + os.sep + "bit4bit")
 
-## Build the index
-#
-#  input:
-#    @param verificationSummary: A summary of the verification verification run
-#    @param performanceSummary: A summary of the performance verification run
-#    @param validationSummary: A summary of the validation verification run
-#
+'''
+Build the index
+
+@param verificationSummary: A summary of the verification verification run
+@param performanceSummary: A summary of the performance verification run
+@param validationSummary: A summary of the validation verification run
+'''
 def generate(verificationSummary, performanceSummary, validationSummary):
     # Where to look for page templates
     templateLoader = jinja2.FileSystemLoader(searchpath=util.variables.templateDir)

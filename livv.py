@@ -4,24 +4,14 @@ suite, runs the verification, and generates a website based on the results of th
 
 This script is broken into several main sections.  The first section defines the imports.
 For each new module added to LIVV they must be added to this section for the script to 
-access them.  Modules that are added internally to LIVV should be added within the __main__
-section of the imports to prevent data from being incorrectly shared & from breaking LIVV 
-as a whole.  System imports can go outside of __main__, though the libraryList in 
-dependencies should be updated if any functionality from outside the standard library is 
-added. 
+access them.  The libraryList in util.dependencies should be updated if any functionality 
+from outside the standard library is added. 
 
 To add or modify the test groupings there are several places that will need to be modified.
-First, if adding verification new options will need to be put in place to handle them.  If overall 
-test cases are modified the existing options for that test will need to be updated.  The 
-last place that will need to be modified is in the RECORD TEST CASES section where the 
-verification being run in a particular execution are resolved, and those test cases mapped to the 
-delegate test classes (found in livv_bin).
-
-Some information stored in the GLOBAL VARIABLES section may be of interest.  If modifications to
-LIVV require that new modules be loaded on LCF machines they can be defined in the modules variable.
-These modules are automatically checked by the dependency checker before running the test cases.
-The definitions for the variables pulled from standard output files is also recorded here.  If the
-parser needs to look for new information the variables of interest should be added to this list.
+First, the base module (found in verification, validation, or performance) will need to have 
+the new test added to the cases dictionary.  A new entry may need to be put into the test specific
+module as well; performance tests require this, verfication tests do not.  Finally, a new entry for
+the test will need to be added to the appropriate test mapping in the RECORD TEST CASES section.
 
 Execution of LIVV proceeds in the RUN TEST CASES section where the totality of the test 
 cases are recorded and run grouped by their respective delegate classes.  Each test case
@@ -45,11 +35,9 @@ import time
 import getpass
 import platform
 import socket
-import itertools
 import util.variables
 
 from optparse import OptionParser
-from collections import OrderedDict
 
 # Pull in the LIVV specific modules
 import util.configurationHandler
@@ -118,8 +106,6 @@ parser.add_option('-s', '--save', action="store_true", dest='save',
 ###############################################################################
 #                              Global Variables                               #
 ###############################################################################
-
-# I/O Related variables
 util.variables.cwd            = os.path.dirname(os.path.abspath(__file__))
 util.variables.configDir      = util.variables.cwd + os.sep + "configurations"
 util.variables.inputDir       = options.inputDir
@@ -207,25 +193,18 @@ if __name__ == '__main__':
     print("  " + util.variables.comment + os.linesep)
 
     # Check to make sure the directory structure is okay
-    if not os.path.exists(util.variables.inputDir):
-        print("------------------------------------------------------------------------------")
-        print("ERROR: Could not find " + util.variables.inputDir + " for input")
-        print("       Use the -i, -b, and -d flags to specify the locations of the model and comparison data.")
-        print("       See README.md for more details.")
-        print("------------------------------------------------------------------------------")
-        exit(1)
-    if not os.path.exists(util.variables.benchmarkDir):
-        print("------------------------------------------------------------------------------")    
-        print("ERROR: Could not find " + util.variables.benchmarkDir + " for input")
-        print("       Use the -i, -b, and -d flags to specify the locations of the model and comparison data.")
-        print("       See README.md for more details.")
-        print("------------------------------------------------------------------------------")
-        exit(1)
+    for dir in [util.variables.inputDir, util.variables.benchmarkDir]:
+        if not os.path.exists(dir):
+            print("------------------------------------------------------------------------------")
+            print("ERROR: Could not find " + dir + " for input")
+            print("       Use the -i, -b, and -d flags to specify the locations of the model and comparison data.")
+            print("       See README.md for more details.")
+            print("------------------------------------------------------------------------------")
+            exit(1)
 
     ###############################################################################
     #                              Record Test Cases                              #
     ###############################################################################
-
     verificationMapping = {
                            'dome' : verification.dome.Test,
                            'ismip' : verification.ismip.Test,
@@ -241,16 +220,10 @@ if __name__ == '__main__':
     validationMapping = {
                          'gis' : validation.gis.Test
                          }
-
-    # Describes the test module and the cases to run for said module
-    testMapping = {
-                   "Verification" : verificationMapping,
-                   "Performance" : performanceMapping,
-                   "Validation" : validationMapping
-                   }
+    
     verificationTests = verification.base.choose(options.verification)
     performanceTests = performance.base.choose(options.performance)
-    validationTests = validation.base.choose('none')
+    validationTests = validation.base.choose(options.validation)
     testMapping = {
                    "Verification" : verificationTests,
                    "Performance" : performanceTests,

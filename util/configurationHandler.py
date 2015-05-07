@@ -8,15 +8,14 @@ Created on Dec 23, 2014
 
 import os
 import util.variables
+from util.variables import *
 
-## Load a configuration file from the configurations directory at the root of LIVV.
-#
-#  Input:
-#    @param machineName: the name of the file to load from
-#
-#  Output:
-#    @returns locals: The list of variables loaded from the file
-#
+'''
+Load a configuration file from the configurations directory at the root of LIVV.
+
+@param machineName: the name of the file to load from
+@returns locals: The list of variables loaded from the file
+'''
 def load(machineName):
     # Tell the user where we are going to load from
     configFile = util.variables.cwd + os.sep + "configurations" + os.sep + machineName
@@ -33,19 +32,16 @@ def load(machineName):
     return locals()
 
 
-## Write a configuration file to the configurations directory at the root of LIVV.
-#
-#  Input:
-#    @param machineName: the name of the file to write to
-#
-def save(machineName):
+'''
+Write a configuration file to the configurations directory at the root of LIVV.
 
+@param machineName: the name of the file to write to
+'''
+def save(machineName):
     # Pull in the variables needed and tell user where they'll go 
-    from util.variables import *
     configFile = util.variables.cwd + os.sep + "configurations" + os.sep + machineName
     print("Saving configuration to " + configFile )
 
-    # Open the file for writing
     f = open(configFile, 'w')
     f.write("# Import variables for running livv on " + machineName +"\n")
 
@@ -54,7 +50,4 @@ def save(machineName):
     for k, v in locals().iteritems():
         if type(v) == type(''):
             f.write(str(k) + " = \'" + str(v) + "\'\n")
-
-    # Close the output file
     f.close()
-    return

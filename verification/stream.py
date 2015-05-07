@@ -1,47 +1,45 @@
 '''
 Master module for stream test cases.  Inherits methods from the AbstractTest
 class from the base module.  Stream specific verification is performed by calling
-the run() method, which passes the necessary information to the runStream()
+the run() method, which gathers & passes the necessary information to the runStream()
 method.
 
-Created on Dec 8, 2014
+Created on May 6, 2015
 
 @author: arbennett
 '''
-
-import re
 import os
-import glob
-import subprocess
 
 from verification.base import AbstractTest
 from util.parser import Parser
 import util.variables
 
-## Main class for handling stream test cases.
-#
-#  The stream test cases inherit functionality from AbstractTest for checking 
-#  bit-for-bittedness from a model run. This class handles evolving and \
-#  diagnostic variations of the stream case.
-#
+'''
+Main class for handling stream test cases.
+
+The stream test cases inherit functionality from AbstractTest for checking 
+bit-for-bittedness from a model run. This class handles evolving and \
+diagnostic variations of the stream case.
+'''
 class Test(AbstractTest):
 
-    ## Constructor
+    ''' Constructor '''
     def __init__(self):
         super(self.__class__, self).__init__()
         self.name = "Stream"
         self.description = "Description of stream"
 
 
-    ## Runs the stream specific test case.  
-    #
-    #  TODO: Write new documentation
-    #
+    '''
+    Runs all of the available stream tests.  Looks in the model and
+    benchmark directories for different variations, and then runs
+    the runStream() method with the correct information
+    '''
     def run(self):
         modelDir = util.variables.inputDir + os.sep + "stream"
         benchDir = util.variables.benchmarkDir + os.sep + "stream"
         if not (os.path.exists(modelDir) and os.path.exists(benchDir)):
-            print("    Could not find data for stream" + resolution + " " + type + " verification!  Tried to find data in:")
+            print("    Could not find data for stream  verification!  Tried to find data in:")
             print("      " + modelDir)
             print("      " + benchDir)
             print("    Continuing with next test....")
@@ -51,18 +49,15 @@ class Test(AbstractTest):
         self.testsRun.append("Stream " + resolutions[0])
 
 
-    ## Perform V&V on the stream case
-    #
-    #  Runs the stream evolving V&V for a given resolution.  First parses through all 
-    #  of the standard output files for the given test case, then finishes up by 
-    #  doing bit for bit comparisons with the benchmark files.
-    #
-    #  input:
-    #    @param resolution: The resolution of the test cases to look in.
-    #                       (eg resolution == 30 -> reg_test/stream30/evolving)
-    #    @param modelDir: the location of the model run data
-    #    @param benchDir: the location of the benchmark data
-    #
+    '''
+    Runs the stream V&V for a given resolution.  First parses through all 
+    of the standard output & config files for the given test case, then finishes up by 
+    doing bit for bit comparisons with the benchmark files.
+    
+    @param resolution: The resolution of the test cases to look in.
+    @param modelDir: the location of the model run data
+    @param benchDir: the location of the benchmark data
+    '''
     def runStream(self, resolution, modelDir, benchDir):
         # Process the configure files
         print("  Stream " + resolution + " test in progress....")

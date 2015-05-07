@@ -1,7 +1,7 @@
 '''
 Verification Test Base Module
 The AbstractTest class defines several methods that each test class must implement, 
-as well as provides bit for bit and stdout parsing capabilities which are inherited
+as well as provides bit for bit and html generating capabilities which are inherited
 by all derived test classes.
 
 Created on Dec 8, 2014
@@ -10,12 +10,9 @@ Created on Dec 8, 2014
 '''
 
 import sys
-import re
 import os
 import subprocess
-import shutil
 from netCDF4 import Dataset
-import matplotlib.pyplot as pyplot
 import glob
 import numpy
 import jinja2
@@ -32,25 +29,23 @@ cases = {'none' : [],
          'stream' : ['stream'],
          'all' : ['dome', 'ismip', 'shelf', 'stream']}
 
-# Return a list of options
-def choices():
-    return list( cases.keys() )
+''' Return a list of options '''
+def choices(): return list( cases.keys() )
 
-# Return the tests associated with an option
-def choose(key):
-    return cases[key] if cases.has_key(key) else None
+''' Return the tests associated with an option '''
+def choose(key): return cases[key] if cases.has_key(key) else None
 
-## AbstractTest provides a description of how a test should work in LIVV.
-#
-#  Each test within LIVV needs to be able to run specific test code, and
-#  generate its output.  Tests inherit a common method of checking for 
-#  bit-for-bittedness
-#
+'''
+AbstractTest provides a description of how a test should work in LIVV.
+
+Each test within LIVV needs to be able to run specific test code, and
+generate its output.  Tests inherit a common method of checking for 
+bit-for-bittedness
+'''
 class AbstractTest(object):
     __metaclass__ = ABCMeta
 
-    ## Constructor
-    #
+    ''' Constructor '''
     def __init__(self):
         self.name = "default"
         self.testsRun = []
@@ -61,28 +56,21 @@ class AbstractTest(object):
         self.summary = dict()
 
 
-    ## Definition for the general test run
-    #
-    #  input:
-    #    @param test : the string indicator of the test to run
-    #
+    ''' Definition for the general test run '''
     @abstractmethod
     def run(self, test):
         pass
 
-
-    ## Tests all models and benchmarks against each other in a bit for bit fashion.
-    #  If any differences are found the method will return 1, otherwise 0.
-    #
-    #  Input:
-    #    @param test: the test case to check bittedness
-    #    @param testDir: the path to the model data
-    #    @param benchDir: the path to the benchmark data
-    #    @param resolution: the size of the test being run
-    #
-    #  Output:
-    #    @returns [change, err] where change in {0,1} and result in {'N/A', 'SUCCESS', 'FAILURE'}
-    #
+    '''
+    Tests all models and benchmarks against each other in a bit for bit fashion.
+    If any differences are found the method will return 1, otherwise 0.
+    
+    @param test: the test case to check bittedness
+    @param testDir: the path to the model data
+    @param benchDir: the path to the benchmark data
+    @param resolution: the size of the test being run
+    @returns [change, err] where change in {0,1} and result in {'N/A', 'SUCCESS', 'FAILURE'}
+    '''
     def bit4bit(self, test, testDir, benchDir, resolution):
         # Mapping of result codes to results
         numpy.set_printoptions(threshold='nan')
@@ -92,12 +80,10 @@ class AbstractTest(object):
         # First, make sure that there is test data, otherwise not it.
         if not (os.path.exists(testDir) or os.path.exists(benchDir)):
             return {'No matching benchmark and data files found': ['SKIPPED','0.0']}
-
-        # Get all of the .nc files in the model & benchmark directories
+        
+        # Get the intersection of the two file lists
         testFiles = [fn.split(os.sep)[-1] for fn in glob.glob(testDir + os.sep + test + '.' + resolution + '.out.nc')]
         benchFiles = [fn.split(os.sep)[-1] for fn in glob.glob(benchDir + os.sep + test + '.' + resolution + '.out.nc')]
-
-        # Get the intersection of the two file lists
         sameList = set(testFiles).intersection(benchFiles)
 
         # If the intersection is empty just return a blank entry
@@ -114,7 +100,7 @@ class AbstractTest(object):
             testFile = testDir + os.sep + same
             benchFile = benchDir + os.sep + same
 
-            # check if they match
+            # Create a difference file with ncdiff
             comline = ['ncdiff', testFile, benchFile, testDir + os.sep + 'temp.nc', '-O']
             try:
                 subprocess.check_call(comline)
@@ -125,8 +111,6 @@ class AbstractTest(object):
                     exit(e.returncode)
                 except AttributeError:
                     exit(e.errno)
-
-            # Grab the output of ncdiff
             diffData = Dataset(testDir + os.sep + 'temp.nc', 'r')
             diffVars = diffData.variables.keys()
 
@@ -157,30 +141,25 @@ class AbstractTest(object):
                 print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
                       + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                 exit(e.errno)
-
-            # Record the status and details of the test
             bitDict[same] = [result[change],  plotVars]
 
             # Generate the plots for each of the failed variables
             for var in plotVars.keys():
                 outFile = util.variables.imgDir + os.sep + self.name + os.sep + "bit4bit" + os.sep + testFile.split(os.sep)[-1] + "." + var + ".png"
                 nclfunc.plot_diff(var, testFile, benchFile, outFile)
-
         return bitDict
 
-
-    ## Creates the output test page
-    #
-    #  The generate method will create a {{test}}.html page in the output directory.
-    #  This page will contain a detailed list of the results from LIVV.  Details
-    #  from the run are pulled from two locations.  Global definitions that are 
-    #  displayed on every page, or used for navigation purposes are imported
-    #  from the main livv.py module.  All test specific information is supplied
-    #  via class variables.
-    #
-    #  \note Paths that are contained in templateVars should not be using os.sep
-    #        since they are for html.
-    #
+    ''' 
+    The generate method will create a {{test}}.html page in the output directory.
+    This page will contain a detailed list of the results from LIVV.  Details
+    from the run are pulled from two locations.  Global definitions that are 
+    displayed on every page, or used for navigation purposes are imported
+    from the main livv.py module.  All test specific information is supplied
+    via class variables.
+    
+    @note Paths that are contained in templateVars should not be using os.sep
+          since they are for html.
+    '''
     def generate(self):
         # Set up jinja related variables
         templateLoader = jinja2.FileSystemLoader(searchpath=util.variables.templateDir)

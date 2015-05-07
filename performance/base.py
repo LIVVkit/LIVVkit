@@ -1,25 +1,17 @@
 '''
-Performance Testing Base Module
-The AbstractTest class defines several methods that each test class must implement
+Performance Testing Base Module.  Defines the AbstractTest that will be inherited by all performance test classes.
 
 Created on Apr 21, 2015
 
 @author: arbennett
 '''
-
-import sys
 import re
 import os
-import subprocess
-import shutil
-from netCDF4 import Dataset
 import matplotlib.pyplot as pyplot
 import glob
-import numpy
 import jinja2
 from abc import ABCMeta, abstractmethod
 
-from plots import nclfunc
 import util.variables
 
 # A mapping of the options to the test cases that can be run
@@ -36,63 +28,54 @@ def choices():
 def choose(key):
     return cases[key] if cases.has_key(key) else None
 
+'''
+AbstractTest provides base functionality for a Performance test
 
-## Provide base functionality for a Performance test
-#
-#  Each test within LIVV needs to be able to run specific test code, and
-#  generate its output.  Tests inherit a common method of generating 
-#  scaling plots
-#
+Each test within LIVV needs to be able to run specific test code, and
+generate its output.  Tests inherit a common method of generating 
+scaling plots
+'''
 class AbstractTest(object):
     __metaclass__ = ABCMeta
 
-    ## Constructor
+    ''' Constructor '''
     def __init__(self):
-        self.name = "default"
-        self.testsRun = []
-
-        # Summary of plots generated
-        self.plotDetails = dict()
-
-        # Mapping of tests to files
-        self.fileTestDetails = dict()
-
-        # Summary of the configuration files parsed
-        self.modelConfigs, self.benchConfigs = dict(), dict()
-
-        # Summary of the timing data parsed
-        self.modelTimingData, self.benchTimingData = dict(), dict()
+        self.name = "n/a"    # A name for the test
+        self.testsRun = []    # A list of the test cases run
+        self.plotDetails = dict()    # Summary of plots generated
+        self.fileTestDetails = dict()    # Mapping of tests to files
+        self.modelConfigs, self.benchConfigs = dict(), dict()    # Summaries of the config files parsed
+        self.modelTimingData, self.benchTimingData = dict(), dict()    # Summaries of the timing data parsed
 
         # A list of some key indicators 
         self.summary = dict()
 
-    ## Definition for the general test run
+    ''' Definition for the general test run '''
     @abstractmethod
     def run(self, test):
         pass
 
-    ## Generate scaling plots
-    #
-    #  Generates scaling plots for each variable and dycore combination of a given
-    #  type.
-    #
-    #  input:
-    #    @param type : the overarching test category to generate scaling plots for (ie dome/gis)
-    #
+
+    '''
+    Generates scaling plots for each variable and dycore combination of a given
+    type.
+    
+    @param type : the overarching test category to generate scaling plots for (ie dome/gis)
+    '''
     def runScaling(self, type):
+        # TODO: This method needs updating for new reg_test structure
         typeString = 'Performance                            '
         self.modelTimingData[typeString] = dict()
         self.benchTimingData[typeString] = dict()
         imagesGenerated = []
-        print("")
-        print("  Generating scaling plots for " + type + "....")
+        print(os.linesep + "  Generating scaling plots for " + type + "....")
         type = type.lower() + '_' if type == "gis" else type.lower()
         tests = filter(re.compile(type + "..*").search, self.modelTimingData.keys())
         resolutions = sorted([int(re.findall(r'\d+', s)[0]) for s in tests])
 
         # Generate all of the plots
-        for var in livv.timingVars:
-            for dycore in livv.dycores:
+        for var in util.variables.timingVars:
+            for dycore in util.variables.dycores:
                 mins, avgs, maxs, ress = [], [], [], []
                 for res in sorted(resolutions):
                     # Fix string for Greenland runs
@@ -117,25 +100,24 @@ class AbstractTest(object):
                     pyplot.yticks()
                     ax.plot(ress, avgs, color='black', ls='--')
                     ax.fill_between(ress, mins, maxs, alpha=0.25)
-                    pyplot.savefig(livv.imgDir + os.sep + self.name + os.sep + type + "_" + dycore + "_" + var + "_" + "_scaling" + ".png")
+                    pyplot.savefig(util.variables.imgDir + os.sep + self.name + os.sep + type + "_" + dycore + "_" + var + "_" + "_scaling" + ".png")
                     imagesGenerated.append( [type + "_" + dycore + "_" + var + "_" + "_scaling" + ".png", "Scaling plot for " + dycore + " " + var])
 
         # Record the plots
         self.plotDetails[typeString] = imagesGenerated
 
 
-    ## Creates the output test page
-    #
-    #  The generate method will create a {{test}}.html page in the output directory.
-    #  This page will contain a detailed list of the results from LIVV.  Details
-    #  from the run are pulled from two locations.  Global definitions that are 
-    #  displayed on every page, or used for navigation purposes are imported
-    #  from the main livv.py module.  All test specific information is supplied
-    #  via class variables.
-    #
-    #  \note Paths that are contained in templateVars should not be using os.sep
-    #        since they are for html.
-    #
+    '''
+    Create a {{test}}.html page in the output directory.
+    This page will contain a detailed list of the results from LIVV.  Details
+    from the run are pulled from two locations.  Global definitions that are 
+    displayed on every page, or used for navigation purposes are imported
+    from the main livv.py module.  All test specific information is supplied
+    via class variables.
+    
+    @note Paths that are contained in templateVars should not be using os.sep
+          since they are for html.
+    '''
     def generate(self):
         # Set up jinja related variables
         templateLoader = jinja2.FileSystemLoader(searchpath=util.variables.templateDir)

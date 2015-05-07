@@ -8,12 +8,7 @@ Created on Dec 8, 2014
 
 @author: arbennett
 '''
-
-import re
 import os
-import glob
-import subprocess
-import itertools
 
 from performance.base import AbstractTest
 from util.parser import Parser
@@ -26,22 +21,21 @@ cases = {'none' : [],
          'all'  : ['dome']
         }
 
-# Return a list of options
-def choices():
-    return list( cases.keys() )
+''' Return a list of options '''
+def choices(): return list(cases.keys())
 
-# Return the tests associated with an option
-def choose(key):
-    return cases[key] if cases.has_key(key) else None
+''' Return the tests associated with an option '''
+def choose(key): return cases[key] if cases.has_key(key) else None
 
-## Main class for handling dome performance validation
-#
-#  The dome test cases inherit functionality from AbstractTest for
-#  generating scaling plots and generating the output webpage.
-#
+'''
+Main class for handling dome performance validation
+
+The dome test cases inherit functionality from AbstractTest for
+generating scaling plots and generating the output webpage.
+'''
 class Test(AbstractTest):
 
-    ## Constructor
+    ''' Constructor '''
     def __init__(self):
         super(self.__class__, self).__init__()
         self.name = "dome"
@@ -53,18 +47,19 @@ class Test(AbstractTest):
                       " imposed by setting. A zero-flux boundary condition is" + \
                       " applied to the dome margins. "
 
-    ## Runs the performance specific test cases.
-    #
-    #  When running a test this call will record the specific test case
-    #  being run.  Each specific test case string is run via the 
-    #  runDomePerformance function.  All of the data pulled is then
-    #  assimilated via the runScaling method defined in the base class
-    #
+    '''
+    Runs the performance specific test cases.
+    
+    When running a test this call will record the specific test case
+    being run.  Each specific test case string is run via the 
+    runDomePerformance function.  All of the data pulled is then
+    assimilated via the runScaling method defined in the base class
+    '''
     def run(self):
         modelDir = util.variables.inputDir + os.sep + "dome"
         benchDir = util.variables.benchmarkDir + os.sep + "dome"
         if not (os.path.exists(modelDir) and os.path.exists(benchDir)):
-            print("    Could not find data for dome" + resolution + " " + type + " verification!  Tried to find data in:")
+            print("    Could not find data for dome verification!  Tried to find data in:")
             print("      " + modelDir)
             print("      " + benchDir)
             print("    Continuing with next test....")
@@ -75,13 +70,15 @@ class Test(AbstractTest):
             self.testsRun.append("Dome " + resolution)
 
 
-    ## Dome Performance Testing
-    #
-    #  input:
-    #    @param resolution: the size of the test being analyzed
-    #
+    '''
+    Run an instance of dome performance testing
+    
+    @param resolution: the size of the test being analyzed
+    @param perfDir: the location of the performance data
+    @param perfBenchDir: the location of the benchmark performance data
+    '''
     def runDome(self, resolution, perfDir, perfBenchDir):
-        print("  Dome " + resolution + " performance verification in progress....")
+        print("  Dome " + resolution + " performance testing in progress....")
 
         # Process the configure files
         domeParser = Parser()
@@ -100,11 +97,4 @@ class Test(AbstractTest):
         # Record the data from the parser
         numberOutputFiles, numberConfigMatches, numberConfigTests = domeParser.getParserSummary()
 
-        # Create the plots
-        numberPlots = 0 #self.plotPerformance(resolution)
-
-        numberBitMatches, numberBitTests = 0, 0
-
-        self.summary['dome' + resolution] = [numberPlots, numberOutputFiles,
-                                             numberConfigMatches, numberConfigTests,
-                                             numberBitMatches, numberBitTests]
+        self.summary['dome' + resolution] = [numberOutputFiles, numberConfigMatches, numberConfigTests]

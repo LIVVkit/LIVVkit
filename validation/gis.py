@@ -8,12 +8,7 @@ Created on Dec 8, 2014
 
 @author: arbennett
 '''
-
-import re
-import os
-import glob
-import subprocess
-import itertools
+from base import AbstractTest
 
 # Map of the options to the test cases
 cases = {'none' : [],
@@ -22,27 +17,22 @@ cases = {'none' : [],
          'all'  : ['gis']
         }
 
-def choices():
-    return list( cases.keys() )
+''' Return the options for validation testing '''
+def choices(): return list( cases.keys() )
 
-def choose(key):
-    return cases[key] if cases.has_key(key) else None
+''' Map the option to the test names '''
+def choose(key): return cases[key] if cases.has_key(key) else None
 
-from base import AbstractTest
-from util.parser import Parser
+'''
+Main class for handling gis performance validation.
 
-## Main class for handling gis performance validation.
-#
-#  The dome test cases inherit functionality from AbstractTest for
-#  generating scaling plots and generating the output webpage.
-#
+The dome test cases inherit functionality from AbstractTest for
+generating scaling plots and generating the output webpage.
+'''
 class Test(AbstractTest):
 
-    ## Constructor
-    #
+    ''' Constructor '''
     def __init__(self):
         super(self.__class__, self).__init__()
-
-        # Describe what the dome verification are all about
         self.name = "gis"
         self.description = "A placeholder description"

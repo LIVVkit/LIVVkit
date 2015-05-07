@@ -7,13 +7,13 @@ Created on May 6, 2015
 '''
 import os
 import glob
-
 import util.variables
 
+''' Removes files that are generated during the LIVV run '''
 def clean():
-    for dir in os.listdir(util.variables.inputDir):
-        [os.remove(file) for file in glob.glob(util.variables.inputDir + os.sep + dir + os.sep + "temp.*")]
-        [os.remove(file) for file in glob.glob(util.variables.inputDir + os.sep + dir + os.sep + "*.tmp")]
-    for dir in os.listdir(util.variables.benchmarkDir):
-        [os.remove(file) for file in glob.glob(util.variables.inputDir + os.sep + dir + os.sep + "temp.*")]
-        [os.remove(file) for file in glob.glob(util.variables.inputDir + os.sep + dir + os.sep + "*.tmp")]
+    for subDir in os.listdir(util.variables.inputDir):
+        [os.remove(tempFile) for tempFile in glob.glob(util.variables.inputDir + os.sep + subDir + os.sep + "temp.*")]
+        [os.remove(tempFile) for tempFile in glob.glob(util.variables.inputDir + os.sep + subDir + os.sep + "*.tmp")]
+    for subDir in os.listdir(util.variables.benchmarkDir):
+        [os.remove(tempFile) for tempFile in glob.glob(util.variables.inputDir + os.sep + subDir + os.sep + "temp.*")]
+        [os.remove(tempFile) for tempFile in glob.glob(util.variables.inputDir + os.sep + subDir + os.sep + "*.tmp")]

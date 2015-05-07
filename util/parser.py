@@ -18,66 +18,59 @@ Created on Feb 19, 2015
 import os
 import re
 import glob
-import fnmatch
 import ConfigParser
 
 import util.variables
 from collections import OrderedDict
-from numpy import Infinity, mean
+from numpy import mean
 
-## The generalized parser for processing text files associated with a test case
-#
-#  The parser class is to be used within test classes to easily get information
-#  from text files.  The two main pieces of functionality of a parser are for
-#  reading configuration files and standard output from simulations.
-#
+'''
+The generalized parser for processing text files associated with a test case
+
+The parser class is to be used within test classes to easily get information
+from text files.  The two main pieces of functionality of a parser are for
+reading configuration files and standard output from simulations.
+'''
 class Parser(object):
-
-    ## Constructor
-    #
+    
+    ''' Constructor '''
     def __init__(self):
         self.configParser = ConfigParser.ConfigParser()
-        self.benchData = dict()
-        self.modelData = dict()
+        self.benchData, self.modelData = dict(), dict()
         self.nOutputParsed = 0
-        self.nConfigParsed = 0
-        self.nConfigMatched = 0
+        self.nConfigParsed, self.nConfigMatched = 0, 0
 
         # Build an empty ordered dictionary so that the output prints in a nice order
         self.stdOutData = OrderedDict()
         for var in util.variables.parserVars: self.stdOutData[var] = None
 
-    ## Get some details about what was parsed
-    #
-    #  @return the number of output and configuration files parsed and 
-    #          how many configurations matched the benchmarks
-    #
+    '''
+    Get some key details about what was parsed
+    
+    @return the number of output and configuration files parsed and 
+            how many configurations matched the benchmarks
+    '''
     def getParserSummary(self):
         return self.nOutputParsed, self.nConfigMatched, self.nConfigParsed
 
-
-    ## Parse through all of the configuration files from a model and benchmark
-    #
-    #  Parses all of the files in the given directories and stores them as
-    #  nested dictionaries.  The general structure of the dictionaries are
-    #  {filename : {sectionHeaders : {variables : values}}}.  These can be
-    #  looped through for processing using the algorithm listed at the top 
-    #  of this file.
-    #
-    #  input:
-    #    @param modelDir: the directory for the model configuration files
-    #    @param benchDir: the directory for the benchmark configuration files
-    #
-    #  output:
-    #    @returns modelData, benchData: the nested dictionaries corresponding
-    #      to the files found in the input directories
-    #
+    '''
+    Parse through all of the configuration files from a model and benchmark
+    
+    Parses all of the files in the given directories and stores them as
+    nested dictionaries.  The general structure of the dictionaries are
+    {filename : {sectionHeaders : {variables : values}}}.  These can be
+    looped through for processing using the algorithm listed at the top 
+    of this file.
+    
+    @param modelDir: the directory for the model configuration files
+    @param benchDir: the directory for the benchmark configuration files
+    @returns modelData, benchData: the nested dictionaries corresponding
+             to the files found in the input directories
+    '''
     def parseConfigurations(self, modelDir, benchDir, regex):
         # Make sure the locations exist, and if not return blank sets
         if not (os.path.exists(modelDir) and os.path.exists(benchDir)):
             return dict(), dict()
-
-        # Pull the files, while filtering out "hidden" ones
         modelFiles = [fn.split(os.sep)[-1] for fn in glob.glob(modelDir + os.sep + "*" + regex)]
         benchFiles = [fn.split(os.sep)[-1] for fn in glob.glob(benchDir + os.sep + "*" + regex)]
         self.nConfigParsed += len(modelFiles)
@@ -135,43 +128,35 @@ class Parser(object):
                         configMatched = False
             if configMatched: self.nConfigMatched += 1
 
-        # Return both of the datasets
         return self.modelData, self.benchData
 
-
-    ## Scrapes a standard output file for some standard information
-    #
-    #  Searches through a standard output file looking for various
-    #  bits of information about the run.  
-    #
-    #  input:
-    #    @param file: the file to parse through
-    #
-    #  output:
-    #    @param stdOutData: a mapping of the various parameters to
-    #      their values from the file
-    #
+    '''    
+    Searches through a standard output file looking key pieces of
+    data about the run.  Records the dycore type, the number of 
+    processors used, the average convergence rate, and number of 
+    timesteps
+    
+    @param modelDir: the directory with files to parse through
+    @param regex: A pattern to match the std output files with
+    @returns a mapping of the various parameters to their values from the file
+    '''
     def parseStdOutput(self, modelDir, regex):
         # Set up variables that we can use to map data and information
         dycoreTypes = {"0" : "Glide", "1" : "Glam", "2" : "Glissade", "3" : "AlbanyFelix", "4" : "BISICLES"}
-
-
-        # Scrape the details from each of the files and store some data for later
         try:
             files = os.listdir(modelDir)
         except:
             files = []
             print("    Could not find model data in" + modelDir)
-
         files = filter(re.compile(regex).search, files)
         outdata = []
 
         for fileName in files:
-
             # Initialize a new set of data
             numberProcs = 0
             currentStep = 0
             avgItersToConverge = 0
+            iterNumber = 0
             convergedIters = []
             itersToConverge = []
             self.stdOutData = OrderedDict()
@@ -243,8 +228,12 @@ class Parser(object):
         return zip(files, outdata)
 
 
-    ## Search through gptl timing files
-    #
+    ''' 
+    Search through gptl timing files 
+    
+    @param basePath: the directory to look for timing files in
+    @returns a summary of the timing data that was parsed
+    '''
     def parseTimingSummaries(self, basePath):
         timingSummary = dict()
         if not os.path.exists(basePath):
@@ -254,18 +243,15 @@ class Parser(object):
             timingDetails = dict()
             veloDriverList, diagSolveList, simpleGlideList, ioWriteList = [], [], [], []
             numberProcessors = 0
-
-            # Find all of the timing files
             regex = re.compile("out.*." + dycore + ".timing..*")
             if os.path.exists(basePath):
                 subDirs = filter(regex.search, os.listdir(basePath))
             else:
                 subDirs = []
             nTimingFiles = 0
-            for dir in subDirs:
-                if "cism_timing_stats" in os.listdir(basePath + os.sep + dir):
+            for subDir in subDirs:
+                if "cism_timing_stats" in os.listdir(basePath + os.sep + subDir):
                     nTimingFiles += 1
-
 
             # Make sure that there are enough files to parse 
             if nTimingFiles < 9:
@@ -276,13 +262,13 @@ class Parser(object):
                 timingSummary[dycore] = timingDetails
             else: 
                 # Go through each subdirectory and parse the cism_timing_stats file
-                for dir in subDirs:
+                for subDir in subDirs:
                     # Tell the user if the file doesn't exist
-                    if not os.path.exists(basePath + os.sep + dir + os.sep + "cism_timing_stats"):
-                        timingDetails[basePath + os.sep + dir + os.sep + "cism_timing_stats"] = None
-                        print("    Could not find timing summary for " + dir)
+                    if not os.path.exists(basePath + os.sep + subDir + os.sep + "cism_timing_stats"):
+                        timingDetails[basePath + os.sep + subDir + os.sep + "cism_timing_stats"] = None
+                        print("    Could not find timing summary for " + subDir)
                     else:
-                        timingFile = open(basePath + os.sep + dir + os.sep + "cism_timing_stats", 'r')
+                        timingFile = open(basePath + os.sep + subDir + os.sep + "cism_timing_stats", 'r')
                         timingHeaders = []
                         for line in timingFile:
                             if line.startswith("name"):
@@ -304,16 +290,13 @@ class Parser(object):
                                 splitLine = line.split()
                                 ioWriteList.append(float(splitLine[4]))
 
-                
-                # Scale the times to be per processor
-                for list in [veloDriverList, diagSolveList, simpleGlideList, ioWriteList]:
-                    list[:] = [x/numberProcessors for x in list]
-                
+                # Scale the times to be per processor and
                 # Make sure that something is in the lists so that data can be calculated
                 lists = [veloDriverList, diagSolveList, simpleGlideList, ioWriteList]
-                for list in lists:
-                    if len(list) == 0: list.append(0)
-
+                for varList in lists:
+                    varList[:] = [x/numberProcessors for x in varList]
+                    if len(varList) == 0: varList.append(0)
+                
                 # Build the output data-structure
                 timingDetails['Processor Count'] = numberProcessors
                 timingDetails['Simple Glide'] = [mean(simpleGlideList), min(simpleGlideList), max(simpleGlideList)]

@@ -8,12 +8,11 @@ Created on Dec 8, 2014
 
 @author: arbennett
 '''
-
-import re
 import os
-import glob
-import subprocess
-import itertools
+
+import util.variables
+from base import AbstractTest
+from util.parser import Parser
 
 # Map of the options to the test cases
 cases = {'none' : [],
@@ -22,66 +21,50 @@ cases = {'none' : [],
          'all'  : ['gis']
         }
 
+# Return a list of options
 def choices():
-    return list( cases.keys() )
+    return list(cases.keys())
 
+# Return the tests associated with an option
 def choose(key):
     return cases[key] if cases.has_key(key) else None
 
+'''
+Main class for handling Greenland Ice Sheet performance validation.
 
-import livv
-from base import AbstractTest
-from util.parser import Parser
-
-## Main class for handling gis performance validation.
-#
-#  The dome test cases inherit functionality from AbstractTest for
-#  generating scaling plots and generating the output webpage.
-#
+The Greenland Ice Sheet test cases inherit functionality from AbstractTest for
+generating scaling plots and generating the output webpage.
+'''
 class Test(AbstractTest):
 
-    ## Constructor
-    #
+    ''' Constructor '''
     def __init__(self):
         super(self.__class__, self).__init__()
-
-        # Describe what the dome verification are all about
         self.name = "gis"
         self.description = "A placeholder description"
 
-
-    ## Runs the performance specific test cases
-    #
-    #  When running a test this call will record the specific test case
-    #  being run.  Each specific test case string is run via the 
-    #  runGisPerformance function.  All of the data pulled is then
-    #  assimilated via the runScaling method defined in the base class
-    #
+    '''
+    This method will record the specific test cases
+    being run.  Each specific test case string is run via the 
+    runGisPerformance function.  All of the data pulled is then
+    assimilated via the runScaling method defined in the base class
+    '''
     def run(self):
-        cases = glob.glob(livv.performanceDir + os.sep + "gis_*")
-
-        for case in cases:
-            res = re.findall(r'\d+', case)[0]
-            self.testsRun.append('gis' + res + 'km')
-            self.runGisPerformance(res + 'km')
-        
-        self.testsRun.append('scaling')
-        self.runScaling('gis')
+        print("This is a placeholder")
         return
 
 
-    ## Greenland Ice Sheet Performance Testing
-    #
-    #  input:
-    #    @param resolution : the resolution of the test data
-    #
+    '''
+    Greenland Ice Sheet Performance Testing
+    
+    @param resolution : the resolution of the test data
+    '''
     def runGisPerformance(self, resolution):
-        print("")
-        print("  Greenland Ice Sheet " + resolution + " performance  verification in progress....")
+        print(os.linesep + "  Greenland Ice Sheet " + resolution + " performance testing in progress....")
 
         # The locations for the data
-        perfDir = livv.performanceDir + os.sep + "gis_" + resolution + os.sep + livv.dataDir
-        perfBenchDir = livv.performanceDir + os.sep + "bench" + os.sep + 'gis_' + resolution + os.sep + livv.dataDir
+        perfDir = util.variables.performanceDir + os.sep + "gis_" + resolution
+        perfBenchDir = util.variables.performanceDir + os.sep + "bench" + os.sep + 'gis_' + resolution
 
         # Make sure that there is some data
         if not (os.path.exists(perfDir) and os.path.exists(perfBenchDir)):
@@ -89,36 +72,23 @@ class Test(AbstractTest):
             print("      " + perfDir)
             print("      " + perfBenchDir)
             print("    Continuing with next test....")
-            return 1
+            return
 
         # Process the configure files
-        configPath = os.sep + ".." + os.sep + "configure_files"
         gisParser = Parser()
         self.modelConfigs['gis_' + resolution], self.benchConfigs['gis_' + resolution] = \
-                gisParser.parseConfigurations(perfDir + configPath, perfBenchDir + configPath)
+                gisParser.parseConfigurations(perfDir, perfBenchDir)
 
         # Scrape the details from each of the files and store some data for later
         self.fileTestDetails['gis_' + resolution] = gisParser.parseStdOutput(perfDir, "^out.gis." + resolution + ".((albany)|(glissade))$")
 
         # Go through and pull in the timing data
-        print("")
-        print("        Model Timing Summary:")
-        print("      --------------------------------------------------------------------")
-        self.modelTimingData['gis_' + resolution] = gisParser.parseTimingSummaries(perfDir)
-        print("")
-        print("        Benchmark Timing Summary:")
-        print("      --------------------------------------------------------------------")
-        self.benchTimingData['gis_' + resolution] = gisParser.parseTimingSummaries(perfBenchDir)
+        print("    Model Timing Summary:")
+        self.modelTimingData['gis' + resolution] = gisParser.parseTimingSummaries(perfDir)
+        print("    Benchmark Timing Summary:")
+        self.benchTimingData['gis' + resolution] = gisParser.parseTimingSummaries(perfBenchDir)
 
         # Record the data from the parser
         numberOutputFiles, numberConfigMatches, numberConfigTests = gisParser.getParserSummary()
 
-        # Create the plots
-        numberPlots = 0 #self.plotPerformance(resolution)
-
-        numberBitMatches, numberBitTests = 0, 0
-
-        self.summary['gis_' + resolution] = [numberPlots, numberOutputFiles,
-                                             numberConfigMatches, numberConfigTests,
-                                             numberBitMatches, numberBitTests]
-        
+        self.summary['gis_' + resolution] = [numberOutputFiles, numberConfigMatches, numberConfigTests]

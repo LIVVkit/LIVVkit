@@ -1,4 +1,5 @@
 """
+Delegates plotting functionality to ncl
 """
 import os
 import subprocess
