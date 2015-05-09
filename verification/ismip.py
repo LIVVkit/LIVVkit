@@ -53,7 +53,7 @@ class Test(AbstractTest):
             resolutions = sorted(set(fn.split(os.sep)[-1].split('.')[1]  \
                             for fn in glob.glob(modelDir + os.sep + 'ismip-hom-' + test + "*")))
             for resolution in resolutions:
-                self.runIsmip(modelDir, benchDir, test, resolution)
+                self.runIsmip(test, resolution, modelDir, benchDir)
                 self.testsRun.append(test.capitalize() + " " + resolution)
 
     '''

@@ -67,6 +67,11 @@ parser.add_option('--performance', action='store',
                   choices=performanceChoices(), default='none', 
                   help='specifies the performance tests to run')
 
+parser.add_option('--validation', action='store', 
+                  type='choice', dest='validation', 
+                  choices=validationChoices(), default='none', 
+                  help='specifies the validation tests to run')
+
 parser.add_option('--comment', action='store', 
                   type='string', dest='comment',
                   default='Test run of code', 

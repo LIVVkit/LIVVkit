@@ -67,7 +67,9 @@ class Test(AbstractTest):
         resolutions = sorted(set(fn.split('.')[1] for fn in os.listdir(modelDir)))
         for resolution in resolutions:
             self.runDome(resolution, modelDir, benchDir)
-            self.testsRun.append("Dome " + resolution)
+            #self.testsRun.append("Dome " + resolution)
+        self.runScaling('dome')
+        self.testsRun.append('Scaling')
 
 
     '''

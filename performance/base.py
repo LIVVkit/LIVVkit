@@ -64,22 +64,21 @@ class AbstractTest(object):
     '''
     def runScaling(self, type):
         # TODO: This method needs updating for new reg_test structure
-        typeString = 'Performance                            '
+        typeString = 'Scaling'
         self.modelTimingData[typeString] = dict()
         self.benchTimingData[typeString] = dict()
         imagesGenerated = []
         print(os.linesep + "  Generating scaling plots for " + type + "....")
-        type = type.lower() + '_' if type == "gis" else type.lower()
-        tests = filter(re.compile(type + "..*").search, self.modelTimingData.keys())
-        resolutions = sorted([int(re.findall(r'\d+', s)[0]) for s in tests])
-
+        tests = filter(re.compile(type + "*").search, self.modelTimingData.keys())
+        resolutions = sorted([(re.findall(r'\d+', s)[0]) for s in tests])
+        
         # Generate all of the plots
         for var in util.variables.timingVars:
             for dycore in util.variables.dycores:
                 mins, avgs, maxs, ress = [], [], [], []
                 for res in sorted(resolutions):
                     # Fix string for Greenland runs
-                    test = type + str(res) + 'km' if type == 'gis_' else type + str(res)
+                    test = type + res
                     # Add the data if it's available
                     if self.modelTimingData[test] != {} and \
                             self.modelTimingData[test][dycore] != {} and \
@@ -88,7 +87,7 @@ class AbstractTest(object):
                         avgs.append(self.modelTimingData[test][dycore][var][0])
                         mins.append(self.modelTimingData[test][dycore][var][1])
                         maxs.append(self.modelTimingData[test][dycore][var][2])
-                        ress.append(res)
+                        ress.append(int(res))
 
                 # If there is any data to plot, do it now
                 if len(ress) != 0:
