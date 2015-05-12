@@ -146,11 +146,11 @@ util.variables.parserVars = [
              ]
 
 # Variables to measure when parsing through timing summaries
-util.variables.timingVars = [
-              'Simple Glide',
-              'Velocity Driver',
-              'Initial Diagonal Solve',
-              'IO Writeback'
+util.variables.timingVars = ['Time'
+             # 'Simple Glide',
+             # 'Velocity Driver',
+             # 'Initial Diagonal Solve',
+             # 'IO Writeback'
              ]
 
 # Dycores to try to parse output for

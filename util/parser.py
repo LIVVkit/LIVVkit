@@ -227,93 +227,26 @@ class Parser(object):
 
         return zip(files, outdata)
 
-
     ''' 
     Search through gptl timing files 
     
     @param basePath: the directory to look for timing files in
     @returns a summary of the timing data that was parsed
     '''
-    def parseTimingSummaries(self, basePath):
-        timingSummary = dict()
+    def parseTimingSummaries(self, basePath, testName, resolution):
         if not os.path.exists(basePath):
-            return timingSummary
+            return []
+        times = []
+        runs = sorted(set(fn.split(os.sep)[-1].split('.')[2][1:] for fn in \
+                          glob.glob(basePath + os.sep + testName + '.' + resolution + '.p[0-9][0-9][0-9].*'))) 
+        for run in runs:
+            filePath = basePath + os.sep + testName + '.' + resolution + '.p' + run + '.results'
+            if not os.path.exists(filePath): times.append('0'); continue
+            
+            # Open the file and grab the data outs
+            file = open(filePath, 'r')
+            for line in file:
+                time = line.split()[1]
+            times.append(time)
 
-        for dycore in util.variables.dycores:
-            timingDetails = dict()
-            veloDriverList, diagSolveList, simpleGlideList, ioWriteList = [], [], [], []
-            numberProcessors = 0
-            regex = re.compile("out.*." + dycore + ".timing..*")
-            if os.path.exists(basePath):
-                subDirs = filter(regex.search, os.listdir(basePath))
-            else:
-                subDirs = []
-            nTimingFiles = 0
-            for subDir in subDirs:
-                if "cism_timing_stats" in os.listdir(basePath + os.sep + subDir):
-                    nTimingFiles += 1
-
-            # Make sure that there are enough files to parse 
-            if nTimingFiles < 9:
-                print("        Could not generate " + dycore + " timing summary.  Need to have at least 10 samples, but only found " + str(nTimingFiles) + "!")
-                # Build the output data-structure
-                for var in util.variables.timingVars:
-                    timingDetails[var] = {}
-                timingSummary[dycore] = timingDetails
-            else: 
-                # Go through each subdirectory and parse the cism_timing_stats file
-                for subDir in subDirs:
-                    # Tell the user if the file doesn't exist
-                    if not os.path.exists(basePath + os.sep + subDir + os.sep + "cism_timing_stats"):
-                        timingDetails[basePath + os.sep + subDir + os.sep + "cism_timing_stats"] = None
-                        print("    Could not find timing summary for " + subDir)
-                    else:
-                        timingFile = open(basePath + os.sep + subDir + os.sep + "cism_timing_stats", 'r')
-                        timingHeaders = []
-                        for line in timingFile:
-                            if line.startswith("name"):
-                                timingHeaders = line.replace('(','').replace(')','').split()
-                            elif "cism" in line:
-                                splitLine = line.split()
-                                simpleGlideList.append(float(splitLine[4]))                                
-                            elif "simple glide" in line:
-                                splitLine = line.split()
-                                numberProcessors = int(splitLine[2])
-                                simpleGlideList.append(float(splitLine[5]))
-                            elif "initial_diag_var_solve" in line:
-                                splitLine = line.split()
-                                diagSolveList.append(float(splitLine[4]))
-                            elif "_velo_driver" in line:
-                                splitLine = line.split()
-                                veloDriverList.append(float(splitLine[4]))
-                            elif "io_writeall" in line:
-                                splitLine = line.split()
-                                ioWriteList.append(float(splitLine[4]))
-
-                # Scale the times to be per processor and
-                # Make sure that something is in the lists so that data can be calculated
-                lists = [veloDriverList, diagSolveList, simpleGlideList, ioWriteList]
-                for varList in lists:
-                    varList[:] = [x/numberProcessors for x in varList]
-                    if len(varList) == 0: varList.append(0)
-                
-                # Build the output data-structure
-                timingDetails['Processor Count'] = numberProcessors
-                timingDetails['Simple Glide'] = [mean(simpleGlideList), min(simpleGlideList), max(simpleGlideList)]
-                timingDetails['Velocity Driver'] = [mean(veloDriverList), min(veloDriverList), max(veloDriverList)]
-                timingDetails['Initial Diagonal Solve'] = [mean(diagSolveList), min(diagSolveList), max(diagSolveList)]
-                timingDetails['IO Writeback'] = [mean(ioWriteList), min(ioWriteList), max(ioWriteList)]
-                timingSummary[dycore] = timingDetails
-
-                # Print out a table with average, min, and max of the variables
-                print "          Dycore: " + dycore
-                print "          Number of processors: " + str(numberProcessors)
-                print "                    \tAvg \t\t Min \t\t Max"
-                print("                    --------------------------------------------------")
-                print "          SimGlide  | {:15} | {:15} | {:15}".format(str(mean(simpleGlideList)), str(min(simpleGlideList)), str(max(simpleGlideList)))
-                print "          VelDrive  | {:15} | {:15} | {:15}".format(str(mean(veloDriverList)), str(min(veloDriverList)), str(max(veloDriverList)))
-                print "          DiagSolv  | {:15} | {:15} | {:15}".format(str(mean(diagSolveList)), str(min(diagSolveList)), str(max(diagSolveList)))
-                print "          ioWrite   | {:15} | {:15} | {:15}".format(str(mean(ioWriteList)), str(min(ioWriteList)), str(max(ioWriteList)))
-                print ""
-
-        return timingSummary
+        return [runs, times]

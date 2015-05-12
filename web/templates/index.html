@@ -9,8 +9,8 @@
 		<table class="summary">
 			<tr>
 				<th></th>
-				<th>StdOut</th>
-				<th>Config Matches</th>
+				<th>Std Out Files Parsed</th>
+				<th>Config File Matches</th>
 				<th>Bit for Bit</th>
 			</tr>
 			{% for test, summary in verificationSummary.iteritems() %}
@@ -39,10 +39,8 @@
 		<table class="summary">
 			<tr>
 				<th></th>
-				<th>Plots</th>
-				<th>StdOut</th>
-				<th>Config Matches</th>
-				<th>Bit for Bit</th>
+				<th>Std Out Files Parsed</th>
+				<th>Config File Matches</th>
 			</tr>
 			{% for test, summary in performanceSummary.iteritems() %}
 			  <tr">
@@ -52,9 +50,7 @@
 			<tr>
 				<td><b>{{case}}</b></td>
 				<td>{{details[0]}}</td>
-				<td>{{details[1]}}</td>
-				<td>{{details[2]}}/{{details[3]}}</td>
-				<td>{{details[4]}}/{{details[5]}}</td>
+				<td>{{details[1]}}/{{details[2]}}</td>
 			</tr>
 			{% endfor %} 
 			{% endfor %}

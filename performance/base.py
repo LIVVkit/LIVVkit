@@ -7,6 +7,7 @@ Created on Apr 21, 2015
 '''
 import re
 import os
+import operator
 import matplotlib.pyplot as pyplot
 import glob
 import jinja2
@@ -55,7 +56,6 @@ class AbstractTest(object):
     def run(self, test):
         pass
 
-
     '''
     Generates scaling plots for each variable and dycore combination of a given
     type.
@@ -80,31 +80,35 @@ class AbstractTest(object):
                     # Fix string for Greenland runs
                     test = type + res
                     # Add the data if it's available
-                    if self.modelTimingData[test] != {} and \
-                            self.modelTimingData[test][dycore] != {} and \
-                            self.modelTimingData[test][dycore][var] != {} and \
-                            len(self.modelTimingData[test][dycore][var]) == 3:
-                        avgs.append(self.modelTimingData[test][dycore][var][0])
-                        mins.append(self.modelTimingData[test][dycore][var][1])
-                        maxs.append(self.modelTimingData[test][dycore][var][2])
-                        ress.append(int(res))
-
-                # If there is any data to plot, do it now
-                if len(ress) != 0:
-                    fig, ax = pyplot.subplots(1)
-                    pyplot.title((type + " " + " scaling plot for " + var + "(" + dycore + ")").title())
-                    pyplot.xlabel("Problem Size")
-                    pyplot.ylabel("Time per processor (s)")
-                    pyplot.xticks()
-                    pyplot.yticks()
-                    ax.plot(ress, avgs, color='black', ls='--')
-                    ax.fill_between(ress, mins, maxs, alpha=0.25)
-                    pyplot.savefig(util.variables.imgDir + os.sep + self.name + os.sep + type + "_" + dycore + "_" + var + "_" + "_scaling" + ".png")
-                    imagesGenerated.append( [type + "_" + dycore + "_" + var + "_" + "_scaling" + ".png", "Scaling plot for " + dycore + " " + var])
+                    if self.modelTimingData[test]!= []:
+                        data = self.modelTimingData[test]
+                        if data != [[],[]]:
+                            # If there is any data to plot, do it now
+                            fig, ax = pyplot.subplots(1)
+                            pyplot.title("Strong scaling for " + type  + res)
+                            pyplot.xlabel("Number of processors")
+                            pyplot.ylabel("Time (s)")
+                            pyplot.xticks()
+                            pyplot.yticks()
+                            ax.plot(data[0], data[1], 'bo-')
+                            print("Saving plot to " + util.variables.imgDir + os.sep + self.name + os.sep + type + "_" + dycore + "_" + res + "_scaling" + ".png")
+                            pyplot.savefig(util.variables.imgDir + os.sep + self.name + os.sep + type + "_" + dycore + "_" + res +  "_scaling" + ".png")
+                            imagesGenerated.append( [type + "_" + dycore + "_" + res + "_scaling" + ".png", "Scaling plot for " + type + res])
 
         # Record the plots
         self.plotDetails[typeString] = imagesGenerated
 
+    '''
+    Run weak scaling analysis
+    '''
+    def weakScaling(self):
+        return
+    
+    '''
+    Run strong scaling analysis
+    '''
+    def strongScaling(self):
+        return
 
     '''
     Create a {{test}}.html page in the output directory.

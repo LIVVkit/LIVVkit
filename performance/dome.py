@@ -85,16 +85,16 @@ class Test(AbstractTest):
         # Process the configure files
         domeParser = Parser()
         self.modelConfigs['Dome ' + resolution], self.benchConfigs['Dome ' + resolution] = \
-                domeParser.parseConfigurations(perfDir, perfBenchDir, "*" + resolution + ".config")
+                domeParser.parseConfigurations(perfDir, perfBenchDir, "*" + resolution + "*.config")
 
         # Scrape the details from each of the files and store some data for later
-        self.fileTestDetails["dome" + resolution] = domeParser.parseStdOutput(perfDir, "^out." + resolution + ".((glide)|(glissade))$")
+        self.fileTestDetails["Dome " + resolution] = domeParser.parseStdOutput(perfDir, "dome." + resolution + ".*.config.oe")
 
         # Go through and pull in the timing data
         print("    Model Timing Summary:")
-        self.modelTimingData['dome' + resolution] = domeParser.parseTimingSummaries(perfDir)
+        self.modelTimingData['dome' + resolution] = domeParser.parseTimingSummaries(perfDir, 'dome', resolution)
         print("    Benchmark Timing Summary:")
-        self.benchTimingData['dome' + resolution] = domeParser.parseTimingSummaries(perfBenchDir)
+        self.benchTimingData['dome' + resolution] = domeParser.parseTimingSummaries(perfBenchDir, 'dome', resolution)
 
         # Record the data from the parser
         numberOutputFiles, numberConfigMatches, numberConfigTests = domeParser.getParserSummary()
