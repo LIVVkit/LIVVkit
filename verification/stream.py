@@ -9,6 +9,7 @@ Created on May 6, 2015
 @author: arbennett
 '''
 import os
+import fnmatch
 
 from verification.base import AbstractTest
 from util.parser import Parser
@@ -44,7 +45,13 @@ class Test(AbstractTest):
             print("      " + benchDir)
             print("    Continuing with next test....")
             return
-        resolutions = sorted(set(fn.split('.')[1] for fn in os.listdir(modelDir)))
+
+        resolutions = set()
+        modelConfigFiles = fnmatch.filter(os.listdir(modelDir), 'stream*.config')
+        for mcf in modelConfigFiles:
+            resolutions.add( mcf.split('.')[1] )
+        resolutions = sorted( resolutions )
+                
         self.runStream(resolutions[0], modelDir, benchDir)
         self.testsRun.append("Stream " + resolutions[0])
 

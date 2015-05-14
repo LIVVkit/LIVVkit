@@ -9,10 +9,12 @@ Created on Dec 8, 2014
 @author: arbennett
 '''
 import os
+import fnmatch
 
 from verification.base import AbstractTest
 from util.parser import Parser
 import util.variables
+
 
 '''
 Main class for handling dome verification tests
@@ -49,7 +51,12 @@ class Test(AbstractTest):
             print("      " + benchDir)
             print("    Continuing with next test....")
             return
-        resolutions = sorted(set(fn.split('.')[1] for fn in os.listdir(modelDir)))
+        resolutions = set()
+        modelConfigFiles = fnmatch.filter(os.listdir(modelDir), 'dome*.config')
+        for mcf in modelConfigFiles:
+            resolutions.add( mcf.split('.')[1] )
+        resolutions = sorted( resolutions )
+        
         self.runDome(resolutions[0], modelDir, benchDir)
         self.testsRun.append("Dome " + resolutions[0])
 

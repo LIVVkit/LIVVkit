@@ -47,7 +47,7 @@ class Test(AbstractTest):
         testTypes = sorted(set(fn.split('.')[0].split('-')[-1] for fn in os.listdir(modelDir)))
         for test in testTypes:
             resolutions = sorted(set(fn.split(os.sep)[-1].split('.')[1]  \
-                            for fn in glob.glob(modelDir + os.sep + 'shelf-' + test + "*")))
+                            for fn in glob.glob(modelDir + os.sep + 'shelf-' + test + "*.config")))
             for resolution in resolutions:
                 self.runShelf(test, resolution, modelDir, benchDir)
                 self.testsRun.append(test.capitalize() + " " + resolution)

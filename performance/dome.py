@@ -9,10 +9,12 @@ Created on Dec 8, 2014
 @author: arbennett
 '''
 import os
+import fnmatch
 
 from performance.base import AbstractTest
 from util.parser import Parser
 import util.variables
+
 
 # Map of the options to the test cases
 cases = {'none' : [],
@@ -64,7 +66,12 @@ class Test(AbstractTest):
             print("      " + benchDir)
             print("    Continuing with next test....")
             return
-        resolutions = sorted(set(fn.split('.')[1] for fn in os.listdir(modelDir)))
+        resolutions = set()
+        modelConfigFiles = fnmatch.filter(os.listdir(modelDir), 'dome*.config')
+        for mcf in modelConfigFiles:
+            resolutions.add( mcf.split('.')[1] )
+        resolutions = sorted( resolutions )
+        
         for resolution in resolutions:
             self.runDome(resolution, modelDir, benchDir)
             #self.testsRun.append("Dome " + resolution)
