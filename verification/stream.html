@@ -1,0 +1,385 @@
+<!-- 
+  Template for generating test specific pages.
+-->
+
+<!-- Include the header and some links -->
+<!DOCTYPE html>
+<html>
+
+<head>
+<link rel="stylesheet" type="text/css" href="../css/livv.css">
+<link rel="stylesheet" type="text/css" href="../css/interactive.css">
+<link rel="stylesheet" type="text/css" href="../css/popups.css">
+</head>
+
+<body>	
+
+
+<div id="header">
+	<img src="../imgs/gicon.svg" style="width: 30px; float: left; padding: 5px;"/>
+	<a id="header-content" href="../index.html">
+		LIVV: Land Ice Verification & Validation
+	</a>
+	<a id="wiki-content" target="_blank" href="https://github.com/ACME-Climate/LIVV/wiki">
+	    Documentation
+	</a>
+</div>
+
+<div id="page">
+  
+  <!--   Start the pace specific content -->
+  <div id="content">
+  <h2 style="padding-left: 15px;">Stream</h2>
+  <div class="description">
+    <p>Description of stream</p>
+  </div>
+  <br style="clear: both" />
+  
+  <!--   Some CSS for determining which tab is selected -->
+  <STYLE type="text/css">
+  #select :checked +  label { background-color:#47A3FF;border-color:#47A3FF;color:#fff;}
+  #select :checked +  * +  div {display: block;}
+  </STYLE>
+  
+  <!-- Generate the tab section -->
+  <div id="select" class="tabs">
+    <!-- The part that is hidden from the user -->
+    
+    <input id="tab-Stream 0025" name="tabs" style="-webkit-appearance:none;" type="radio" checked />
+      
+    <!-- The part you can click on -->
+    
+    <label for="tab-Stream 0025">Stream 0025</label>  
+      
+      
+    <!-- Go through each of the test cases that fall under this specific subcategory -->
+    
+    <div class="case">
+      
+
+      <!-- BEGIN BIT FOR BIT SECTION -->
+      <b class="label-header">
+        Bit for Bit 
+      </b>
+      <div class="separator">
+      <hr style="opacity: 0; height: 5px;">
+
+      
+        
+          <b>stream.0025.p001.out.nc</b>
+          
+            <p class='SUCCESS' style="margin-left: 40px;"">SUCCESS</p>
+          
+        
+      
+      </div>
+      <br height="30px" />
+      <!-- END BIT FOR BIT SECTION -->
+      
+      
+            
+
+      <!-- BEGIN CONFIGURATION SECTION -->
+      <b class="label-header"> Configuration Files </b>
+      <div class="separator">
+      <hr style="opacity: 0; height: 5px;">
+          
+            
+                <div class="Configuration">
+                  <!-- Hide and show buttons to allow the user view data more easily -->
+                  <a href="#hideStream 00251" class="hide" id="hideStream 00251">+</a>
+                  <a href="#showStream 00251" class="show" id="showStream 00251">-</a>
+                  <h4 class="top">stream.0025.p001.config</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    <!-- The changed variable keeps track of whether the files match -->
+                    
+                    
+                          <b>[STREAM-TEST ]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                          <b>[grid]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  upn = 2<br>
+                              
+                            
+                          
+                            
+                              
+                                  ewn = 15<br>
+                              
+                            
+                          
+                            
+                              
+                                  nsn = 31<br>
+                              
+                            
+                          
+                            
+                              
+                                  dew = 2000.0<br>
+                              
+                            
+                          
+                            
+                              
+                                  dns = 2000.0<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[time]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  tstart = 0.0<br>
+                              
+                            
+                          
+                            
+                              
+                                  tend = 0.0<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt = 1.0<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  dycore = 2                  <br>
+                              
+                            
+                          
+                            
+                              
+                                  flow_law = 0                <br>
+                              
+                            
+                          
+                            
+                              
+                                  evolution = 3               <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[ho_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  which_ho_babc = 2           <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_efvs = 2           <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_sparse = 3         <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_nonlinear = 0      <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_approx = 2         <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_precond = 1        <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_assemble_beta = 1  <br>
+                              
+                            
+                          
+                            
+                              
+                                  glissade_maxiter = 300      <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[parameters]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  periodic_offset_ew = 30.0<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF default]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  comment = none<br>
+                              
+                            
+                          
+                            
+                              
+                                  title = simple ice stream - yield stress set for analytical solution<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF input]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  name = stream.0025.p001.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  time = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF output]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  variables = usrf topg thk flwa uvel vvel velnorm tauf<br>
+                              
+                            
+                          
+                            
+                              
+                                  frequency = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  name = stream.0025.p001.out.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  xtype = double<br>
+                              
+                            
+                          
+                          </div>
+                    
+                  </div>
+                  <div class="status">
+                    
+                      <p style="float: left; color: green">Files match</p>
+                    
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            
+        
+        </div>
+        <hr style="opacity: 0; height: 5px;">
+        <br style="clear: both" />
+        <!-- END CONFIGURATION SECTION -->
+        
+        
+      
+
+        <!-- BEGIN OUTPUT ANALYSIS SECTION -->
+        <b class="label-header">Output Analysis</b>
+        <div class="separator">
+        
+        <table style="width:100%">
+            <tr style="background-color: #47A3FF;">
+                <th>Output File</th>
+                
+                    <th>Dycore Type</th>
+                
+                    <th>Number of processors</th>
+                
+                    <th>Number of timesteps</th>
+                
+                    <th>Avg convergence rate</th>
+                
+            </tr>
+            
+            <tr>
+                <td style="text-align: left">stream.0025.p001.config.oe</td>
+                
+                <td>Glissade</td>
+                
+                <td>1</td>
+                
+                <td>1</td>
+                
+                <td>49</td>
+                
+            </tr>
+            
+        </table>
+        
+        </div>
+        <!-- END OUTPUT ANALYSIS SECTION -->
+        
+        
+    </div>
+    
+  </div>
+  <br>
+
+<!-- Include the footer -->
+	</div>
+</div>
+
+<div id="footer">
+	<p id="info">
+		V&V Performed by bzq at 05-14-2015 15:00:23 <br> 
+		Test run of code <br>
+	</p>
+</div>
+
+</body>
+
+</html>
