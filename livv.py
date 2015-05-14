@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 '''
 Main script to run LIVV.  This script records some user data, sets up the test 
 suite, runs the verification, and generates a website based on the results of the verification.
