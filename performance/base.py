@@ -21,11 +21,11 @@ cases = {'none' : [],
          'gis' : ['gis'],
          'all' : ['dome', 'gis']}
 
-# Return a list of options
+''' Return a list of options '''
 def choices():
     return list( cases.keys() )
 
-# Return the tests associated with an option
+''' Return the tests associated with an option '''
 def choose(key):
     return cases[key] if cases.has_key(key) else None
 
@@ -59,56 +59,55 @@ class AbstractTest(object):
     '''
     Generates scaling plots for each variable and dycore combination of a given
     type.
-    
+
     @param type : the overarching test category to generate scaling plots for (ie dome/gis)
     '''
-    def runScaling(self, type):
-        # TODO: This method needs updating for new reg_test structure
-        typeString = 'Scaling'
-        self.modelTimingData[typeString] = dict()
-        self.benchTimingData[typeString] = dict()
-        imagesGenerated = []
+    def runScaling(self, type, resolutions):
+        self.imagesGenerated = []
         print(os.linesep + "  Generating scaling plots for " + type + "....")
         tests = filter(re.compile(type + "*").search, self.modelTimingData.keys())
-        resolutions = sorted([(re.findall(r'\d+', s)[0]) for s in tests])
-        
-        # Generate all of the plots
-        for var in util.variables.timingVars:
-            for dycore in util.variables.dycores:
-                mins, avgs, maxs, ress = [], [], [], []
-                for res in sorted(resolutions):
-                    # Fix string for Greenland runs
-                    test = type + res
-                    # Add the data if it's available
-                    if self.modelTimingData[test]!= []:
-                        data = self.modelTimingData[test]
-                        if data != [[],[]]:
-                            # If there is any data to plot, do it now
-                            fig, ax = pyplot.subplots(1)
-                            pyplot.title("Strong scaling for " + type  + res)
-                            pyplot.xlabel("Number of processors")
-                            pyplot.ylabel("Time (s)")
-                            pyplot.xticks()
-                            pyplot.yticks()
-                            ax.plot(data[0], data[1], 'bo-')
-                            print("Saving plot to " + util.variables.imgDir + os.sep + self.name + os.sep + type + "_" + dycore + "_" + res + "_scaling" + ".png")
-                            pyplot.savefig(util.variables.imgDir + os.sep + self.name + os.sep + type + "_" + dycore + "_" + res +  "_scaling" + ".png")
-                            imagesGenerated.append( [type + "_" + dycore + "_" + res + "_scaling" + ".png", "Scaling plot for " + type + res])
+
+        self.weakScaling(type, resolutions)
+        self.strongScaling(type, resolutions)
 
         # Record the plots
-        self.plotDetails[typeString] = imagesGenerated
+        self.plotDetails['Scaling'] = self.imagesGenerated
 
     '''
     Run weak scaling analysis
     '''
-    def weakScaling(self):
+    def weakScaling(self, type, resolutions):
         return
-    
+
     '''
     Run strong scaling analysis
     '''
-    def strongScaling(self):
-        return
+    def strongScaling(self, type, resolutions):
+        # Generate all of the plots
+        for res in sorted(resolutions):
+            # Fix string for Greenland runs
+            test = type + res
+            # Add the data if it's available
+            if self.modelTimingData[test] != [] and self.modelTimingData[test] != [[],[]]:
+                modelData = self.modelTimingData[test]
+                fig, ax = pyplot.subplots(1)
+                pyplot.title("Strong scaling for " + type  + res)
+                pyplot.xlabel("Number of processors")
+                pyplot.ylabel("Time (s)")
+                pyplot.xticks()
+                pyplot.yticks()
+                ax.plot(modelData[0], modelData[1], 'bo-', label='Model')
+
+                # Add benchmark data if it's there
+                if self.benchTimingData[test] != [] and self.benchTimingData[test] != [[],[]]:
+                    benchData = self.benchTimingData[test]
+                    ax.plot(benchData[0], benchData[1], 'r^--', label='Benchmark')
+                    pyplot.legend()
+
+                print("Saving plot to " + util.variables.imgDir + os.sep + self.name + os.sep + type + "_" + res + "_scaling" + ".png")
+                pyplot.savefig(util.variables.imgDir + os.sep + self.name + os.sep + type + "_" + res +  "_scaling" + ".png")
+                self.imagesGenerated.append( [type + "_" + res + "_scaling" + ".png", "Strong scaling for " + type + res])
+
 
     '''
     Create a {{test}}.html page in the output directory.

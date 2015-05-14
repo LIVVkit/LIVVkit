@@ -82,8 +82,8 @@ class AbstractTest(object):
             return {'No matching benchmark and data files found': ['SKIPPED','0.0']}
         
         # Get the intersection of the two file lists
-        testFiles = [fn.split(os.sep)[-1] for fn in glob.glob(testDir + os.sep + test + '.' + resolution + '.out.nc')]
-        benchFiles = [fn.split(os.sep)[-1] for fn in glob.glob(benchDir + os.sep + test + '.' + resolution + '.out.nc')]
+        testFiles = [fn.split(os.sep)[-1] for fn in glob.glob(testDir + os.sep + test + '.' + resolution + '.*.out.nc')]
+        benchFiles = [fn.split(os.sep)[-1] for fn in glob.glob(benchDir + os.sep + test + '.' + resolution + '.*.out.nc')]
         sameList = set(testFiles).intersection(benchFiles)
 
         # If the intersection is empty just return a blank entry

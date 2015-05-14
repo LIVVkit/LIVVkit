@@ -68,7 +68,7 @@ class Test(AbstractTest):
         for resolution in resolutions:
             self.runDome(resolution, modelDir, benchDir)
             #self.testsRun.append("Dome " + resolution)
-        self.runScaling('dome')
+        self.runScaling('dome', resolutions)
         self.testsRun.append('Scaling')
 
 

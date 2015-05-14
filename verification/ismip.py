@@ -73,10 +73,10 @@ class Test(AbstractTest):
         # Process the configure files
         ismipParser = Parser()
         self.modelConfigs[testName], self.benchConfigs[testName] = \
-            ismipParser.parseConfigurations(testDir, benchDir, "ismip-hom-" + testCase + "." + resolution + ".config")
+            ismipParser.parseConfigurations(testDir, benchDir, "ismip-hom-" + testCase + "." + resolution + ".*.config")
 
         # Scrape the details from each of the files and store some data for later
-        self.fileTestDetails[testName] = ismipParser.parseStdOutput(testDir, "ismip-hom-" + testCase + "." + resolution + ".config.oe")
+        self.fileTestDetails[testName] = ismipParser.parseStdOutput(testDir, "ismip-hom-" + testCase + "." + resolution + ".*.config.oe")
 
         # Record the data from the parser
         numberOutputFiles, numberConfigMatches, numberConfigTests = ismipParser.getParserSummary()

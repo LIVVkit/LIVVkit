@@ -122,13 +122,13 @@ div.gallery p:hover {
 	left: 25%;
 	
     background-color: #fff;
-    border: 1px solid #000000;
+    border: 1px solid #47A3FF;
     display: inline-block;
     opacity: 0;
     padding: 15px;
     visibility: hidden;
     width: 50%;
-    height: 70%;
+    height: auto;
     z-index: 10;
 }
 
@@ -156,8 +156,9 @@ div.gallery p:hover {
     position: absolute;
     text-decoration: none;
     top: -15px;
+    left: -15px;
     width: 30px;
-    border-radius: 15px;
+    border-radius: 5px;
     font-size: 24px;
 }
 

@@ -63,10 +63,10 @@ class Test(AbstractTest):
         print("  Stream " + resolution + " test in progress....")
         streamParser = Parser()
         self.modelConfigs['Stream ' + resolution], self.benchConfigs['Stream ' + resolution] = \
-                streamParser.parseConfigurations(modelDir, benchDir, "*" + resolution + ".config")
+                streamParser.parseConfigurations(modelDir, benchDir, "*" + resolution + ".*.config")
 
         # Parse standard out
-        self.fileTestDetails["Stream " + resolution] = streamParser.parseStdOutput(modelDir,"stream." + resolution + ".config.oe")
+        self.fileTestDetails["Stream " + resolution] = streamParser.parseStdOutput(modelDir,"stream." + resolution + ".*.config.oe")
 
         # Record the data from the parser
         numberOutputFiles, numberConfigMatches, numberConfigTests = streamParser.getParserSummary()

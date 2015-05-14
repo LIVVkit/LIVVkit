@@ -67,10 +67,10 @@ class Test(AbstractTest):
 
         # Parse the configure files
         self.modelConfigs[testName], self.benchConfigs[testName] = \
-            shelfParser.parseConfigurations(testDir, benchDir, "shelf-" + testCase + "." + resolution + ".config")
+            shelfParser.parseConfigurations(testDir, benchDir, "shelf-" + testCase + "." + resolution + ".*.config")
 
         # Scrape the details from each of the files and store some data for later
-        self.fileTestDetails[testName] = shelfParser.parseStdOutput(testDir, "shelf-" + testCase + "." + resolution + ".config.oe")
+        self.fileTestDetails[testName] = shelfParser.parseStdOutput(testDir, "shelf-" + testCase + "." + resolution + ".*.config.oe")
         numberOutputFiles, numberConfigMatches, numberConfigTests = shelfParser.getParserSummary()
 
         # Run bit for bit test
