@@ -26,6 +26,10 @@ Created on Dec 3, 2014
 
 @authors: arbennett, jhkennedy
 '''
+print("------------------------------------------------------------------------------")
+print("  Land Ice Verification & Validation (LIVV)")
+print("------------------------------------------------------------------------------")
+
 
 ###############################################################################
 #                                  Imports                                    #
@@ -37,17 +41,19 @@ import time
 import getpass
 import platform
 import socket
-import util.variables
+
 
 from optparse import OptionParser
 
 # Pull in the LIVV specific modules
+import util.dependencies
+util.dependencies.check()
+import util.variables
 import util.configurationHandler
 import util.websetup
 import verification.dome, verification.ismip, verification.shelf, verification.stream
 import performance.dome, performance.gis
 import validation.gis
-import util.dependencies as dependencies
 import util.cleanup
 
 from verification.base import choices as verificationChoices
@@ -113,7 +119,7 @@ parser.add_option('-s', '--save', action="store_true", dest='save',
 ###############################################################################
 #                              Global Variables                               #
 ###############################################################################
-util.variables.cwd            = os.path.dirname(os.path.abspath(__file__))
+util.variables.cwd            = os.getcwd()
 util.variables.configDir      = util.variables.cwd + os.sep + "configurations"
 util.variables.inputDir       = options.inputDir
 util.variables.benchmarkDir   = options.benchmarkDir
@@ -126,18 +132,6 @@ util.variables.user           = getpass.getuser()
 util.variables.websiteDir     = util.variables.cwd + "/web"
 util.variables.templateDir    = util.variables.websiteDir + "/templates"
 util.variables.indexDir       = util.variables.outputDir
-
-# Modules that need to be loaded on big machines
-util.variables.modules = [
-           "python/2.7.5", 
-           "ncl/6.1.0", 
-           "nco/4.3.9", 
-           "python_matplotlib/1.3.1", 
-           "hdf5/1.8.11", 
-           "netcdf/4.1.3", 
-           "python_numpy/1.8.0", 
-           "python_netcdf4/1.0.6"
-          ]
 
 # A list of the information that should be looked for in the stdout of model output
 util.variables.parserVars = [
@@ -162,154 +156,150 @@ util.variables.dycores = ['glissade'] #["glide", "glissade", "glam", "albany", "
 ###############################################################################
 #                               Main Execution                                #
 ###############################################################################
-if __name__ == '__main__':
-    print("------------------------------------------------------------------------------")
-    print("  Land Ice Verification & Validation (LIVV)")
-    print("------------------------------------------------------------------------------")
-    dependencies.check()
 
-    # Check if we are saving/loading the configuration and set up the machine name
-    if options.machineName == '' and options.save:
-        # Save the configuration with the default host name
-        machineName = socket.gethostname()
-        util.configurationHandler.save(machineName)
-    elif options.save:
-        # Save the configuration with the specified host name
-        machineName = options.machineName
-        util.configurationHandler.save(machineName)
-    elif options.machineName == '':
-        # Don't save the configuration and use the default host name
-        machineName = socket.gethostname() 
-    else:
-        # Try to load the machine name specified
-        machineName = options.machineName
-        vars = util.configurationHandler.load(machineName)
-        util.variables.globals().update(vars)
 
-    # Check if the user has a default config saved and use that if it does
-    if os.path.exists(util.variables.configDir + os.sep + machineName + "_" + util.variables.user + "_default"):
-        machineName = machineName + "_" + util.variables.user + "_default"
-        vars = util.configurationHandler.load(machineName)
-        util.variables.globals().update(vars)
+# Check if we are saving/loading the configuration and set up the machine name
+if options.machineName == '' and options.save:
+    # Save the configuration with the default host name
+    machineName = socket.gethostname()
+    util.configurationHandler.save(machineName)
+elif options.save:
+    # Save the configuration with the specified host name
+    machineName = options.machineName
+    util.configurationHandler.save(machineName)
+elif options.machineName == '':
+    # Don't save the configuration and use the default host name
+    machineName = socket.gethostname() 
+else:
+    # Try to load the machine name specified
+    machineName = options.machineName
+    vars = util.configurationHandler.load(machineName)
+    #util.variables.globals().update(vars)
 
-    # Print out some information
-    print(os.linesep + "  Current run: " + time.strftime("%m-%d-%Y %H:%M:%S"))
-    print("  User: " + util.variables.user)
-    print("  Config: " + machineName)
-    print("  OS Type: " + platform.system() + " " + platform.release())
-    print("  " + util.variables.comment + os.linesep)
+# Check if the user has a default config saved and use that if it does
+if os.path.exists(util.variables.configDir + os.sep + machineName + "_" + util.variables.user + "_default"):
+    machineName = machineName + "_" + util.variables.user + "_default"
+    vars = util.configurationHandler.load(machineName)
+    #util.variables.globals().update(vars)
 
-    # Check to make sure the directory structure is okay
-    for dir in [util.variables.inputDir, util.variables.benchmarkDir]:
-        if not os.path.exists(dir):
-            print("------------------------------------------------------------------------------")
-            print("ERROR: Could not find " + dir + " for input")
-            print("       Use the -i, -b, and -d flags to specify the locations of the model and comparison data.")
-            print("       See README.md for more details.")
-            print("------------------------------------------------------------------------------")
-            exit(1)
+# Print out some information
+print(os.linesep + "  Current run: " + time.strftime("%m-%d-%Y %H:%M:%S"))
+print("  User: " + util.variables.user)
+print("  Config: " + machineName)
+print("  OS Type: " + platform.system() + " " + platform.release())
+print("  " + util.variables.comment + os.linesep)
 
-    ###############################################################################
-    #                              Record Test Cases                              #
-    ###############################################################################
-    verificationMapping = {
-                           'dome' : verification.dome.Test,
-                           'ismip' : verification.ismip.Test,
-                           'shelf' : verification.shelf.Test,
-                           'stream' : verification.stream.Test
-                           }
+# Check to make sure the directory structure is okay
+for dir in [util.variables.inputDir, util.variables.benchmarkDir]:
+    if not os.path.exists(dir):
+        print("------------------------------------------------------------------------------")
+        print("ERROR: Could not find " + dir + " for input")
+        print("       Use the -i, -b, and -d flags to specify the locations of the model and comparison data.")
+        print("       See README.md for more details.")
+        print("------------------------------------------------------------------------------")
+        exit(1)
 
-    performanceMapping = {
-                          'dome' : performance.dome.Test,
-                          'gis' : performance.gis.Test
-                          }
+###############################################################################
+#                              Record Test Cases                              #
+###############################################################################
+verificationMapping = {
+                       'dome' : verification.dome.Test,
+                       'ismip' : verification.ismip.Test,
+                       'shelf' : verification.shelf.Test,
+                       'stream' : verification.stream.Test
+                       }
 
-    validationMapping = {
-                         'gis' : validation.gis.Test
-                         }
-    
-    verificationTests = verification.base.choose(options.verification)
-    performanceTests = performance.base.choose(options.performance)
-    validationTests = validation.base.choose(options.validation)
-    testMapping = {
-                   "Verification" : verificationTests,
-                   "Performance" : performanceTests,
-                   "Validation" : validationTests
-                   }
+performanceMapping = {
+                      'dome' : performance.dome.Test,
+                      'gis' : performance.gis.Test
+                      }
 
-    ###############################################################################
-    #                               Run Test Cases                                #
-    ###############################################################################
-    # Give a list of the tests that will be run
-    if len(verificationTests) > 0:  
-        print("Running verification tests:")
-        for case in verificationTests: 
-            print("  " + case)
-    if len(performanceTests) > 0:
-        print(os.linesep + "Running performance tests:")
-        for case in performanceTests:
-            print("  " + case)
-    if len(validationTests) > 0:
-        print(os.linesep + "Running validation tests:")
-        for case in validationTests:
-            print("  " + case)
+validationMapping = {
+                     'gis' : validation.gis.Test
+                     }
 
-    # Set up the directory structure and summary dictionaries for output
-    verificationSummary, performanceSummary, validationSummary = dict(), dict(), dict()
-    util.websetup.setup(verificationTests + performanceTests + validationTests)
+verificationTests = verification.base.choose(options.verification)
+performanceTests = performance.base.choose(options.performance)
+validationTests = validation.base.choose(options.validation)
+testMapping = {
+               "Verification" : verificationTests,
+               "Performance" : performanceTests,
+               "Validation" : validationTests
+               }
 
-    # Run the verification tests
-    if len(verificationTests) > 0:
-        print("--------------------------------------------------------------------------")
-        print("  Beginning verification test suite....")
-        print("--------------------------------------------------------------------------")
-    for test in verificationTests:
-        # Create a new instance of the specific test class (see verificationMapping for the mapping)
-        newTest = verificationMapping[test]()
-        newTest.run()
-        verificationSummary[test] = newTest.summary
-        newTest.generate()
-        print("")
+###############################################################################
+#                               Run Test Cases                                #
+###############################################################################
+# Give a list of the tests that will be run
+if len(verificationTests) > 0:  
+    print("Running verification tests:")
+    for case in verificationTests: 
+        print("  " + case)
+if len(performanceTests) > 0:
+    print(os.linesep + "Running performance tests:")
+    for case in performanceTests:
+        print("  " + case)
+if len(validationTests) > 0:
+    print(os.linesep + "Running validation tests:")
+    for case in validationTests:
+        print("  " + case)
 
-    # Run the performance verification
-    if len(performanceTests) > 0:
-        print("--------------------------------------------------------------------------")
-        print("  Beginning performance analysis....")
-        print("--------------------------------------------------------------------------")
-    for test in performanceTests:
-        # Create a new instance of the specific test class (see verificationMapping for the mapping)
-        newTest = performanceMapping[test]()
-        newTest.run()
-        performanceSummary[test] = newTest.summary
-        newTest.generate()
-        print("")
+# Set up the directory structure and summary dictionaries for output
+verificationSummary, performanceSummary, validationSummary = dict(), dict(), dict()
+util.websetup.setup(verificationTests + performanceTests + validationTests)
 
-    # Run the validation verification
-    if len(validationTests) > 0:
-        print("--------------------------------------------------------------------------")
-        print("  Beginning validation test suite....")
-        print("--------------------------------------------------------------------------")
-    for test in validationTests:
-        # Create a new instance of the specific test class (see verificationMapping for the mapping)
-        newTest = validationMapping[test]()
-        # Run the specific and bit for bit verification for each case of the test
-        newTest.run()
-        validationSummary[test] = newTest.summary
-        # Generate the test-specific webpage 
-        newTest.generate()
-        print("")
+# Run the verification tests
+if len(verificationTests) > 0:
+    print("--------------------------------------------------------------------------")
+    print("  Beginning verification test suite....")
+    print("--------------------------------------------------------------------------")
+for test in verificationTests:
+    # Create a new instance of the specific test class (see verificationMapping for the mapping)
+    newTest = verificationMapping[test]()
+    newTest.run()
+    verificationSummary[test] = newTest.summary
+    newTest.generate()
+    print("")
 
-    # Create the site index
-    print("Generating web pages in " + util.variables.outputDir + "....")
-    util.websetup.generate(verificationSummary, performanceSummary, validationSummary)
+# Run the performance verification
+if len(performanceTests) > 0:
+    print("--------------------------------------------------------------------------")
+    print("  Beginning performance analysis....")
+    print("--------------------------------------------------------------------------")
+for test in performanceTests:
+    # Create a new instance of the specific test class (see verificationMapping for the mapping)
+    newTest = performanceMapping[test]()
+    newTest.run()
+    performanceSummary[test] = newTest.summary
+    newTest.generate()
+    print("")
 
-    print("Cleaning up....")
-    util.cleanup.clean()
+# Run the validation verification
+if len(validationTests) > 0:
+    print("--------------------------------------------------------------------------")
+    print("  Beginning validation test suite....")
+    print("--------------------------------------------------------------------------")
+for test in validationTests:
+    # Create a new instance of the specific test class (see verificationMapping for the mapping)
+    newTest = validationMapping[test]()
+    # Run the specific and bit for bit verification for each case of the test
+    newTest.run()
+    validationSummary[test] = newTest.summary
+    # Generate the test-specific webpage 
+    newTest.generate()
+    print("")
 
-    ###############################################################################
-    #                        Finished.  Tell user about it.                       #
-    ###############################################################################
-    print("------------------------------------------------------------------------------")
-    print("Finished running LIVV.  Results:  ")
-    print("  Open " + util.variables.outputDir + "/index.html to see test results")
-    print("------------------------------------------------------------------------------")
+# Create the site index
+print("Generating web pages in " + util.variables.outputDir + "....")
+util.websetup.generate(verificationSummary, performanceSummary, validationSummary)
+
+print("Cleaning up....")
+util.cleanup.clean()
+
+###############################################################################
+#                        Finished.  Tell user about it.                       #
+###############################################################################
+print("------------------------------------------------------------------------------")
+print("Finished running LIVV.  Results:  ")
+print("  Open " + util.variables.outputDir + "/index.html to see test results")
+print("------------------------------------------------------------------------------")

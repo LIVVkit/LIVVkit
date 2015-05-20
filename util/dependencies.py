@@ -17,8 +17,6 @@ import sys
 import urllib2
 import subprocess
 
-import util.variables
-
 '''
 Run all of the checks for dependencies required by LIVV
 
@@ -29,8 +27,11 @@ easy_install.  If easy_install isn't installed, that is
 also built.
 '''
 def check():
+    cwd = os.getcwd()
+    
     # The list of nonstandard python libraries that are used 
     libraryList = ["jinja2", "netCDF4", "numpy", "matplotlib"]
+    binaryList = ["ncdiff"]
 
     # Create a list to store all of the errors that were found
     depErrors = []
@@ -41,17 +42,32 @@ def check():
     checkModules()
 
     # Make sure all environment variables are set
-    if os.environ.get('NCARG_ROOT') == None:
+    if not os.environ.has_key("NCARG_ROOT"):
         depErrors.append("  NCARG_ROOT not found in environment")
+
+    # Check to make sure that binary files are found
+    print("    Checking for external programs....")
+    for program in binaryList:
+        found = False
+        for path in os.environ["PATH"].split(os.pathsep):
+            path = path.strip('"')
+            filePath = os.path.join(path, program)
+            print filePath
+            if os.path.isfile(filePath) and os.access(filePath, os.X_OK):
+                found = True
+        if not found:
+            depErrors.append("  " + program + " could not be found in system path.  Please install or update your path!")            
+                
+
 
     # For the python dependencies we may need easy_install
     # Make sure we have it, and if not, build it       
     try:
         from setuptools.command import easy_install
     except ImportError:
-        if not os.path.exists(util.variables.cwd + os.sep + "deps"):
-            os.mkdir(util.variables.cwd + os.sep + "deps")
-            sys.path.append(util.variables.cwd + os.sep + "deps")
+        if not os.path.exists(cwd + os.sep + "deps"):
+            os.mkdir(cwd + os.sep + "deps")
+            sys.path.append(cwd + os.sep + "deps")
         installSetupTools()
         from setuptools.command import easy_install
 
@@ -65,9 +81,9 @@ def check():
             print("      Found " + lib + "!")
         except ImportError:
             print("      Could not find " + lib + ".  Building a copy for you...."),
-            if not os.path.exists(util.variables.cwd + os.sep + "deps"):
-                os.mkdir(util.variables.cwd + os.sep + "deps")
-                sys.path.append(util.variables.cwd + os.sep + "deps")
+            if not os.path.exists(cwd + os.sep + "deps"):
+                os.mkdir(cwd + os.sep + "deps")
+                sys.path.append(cwd + os.sep + "deps")
             easy_install.main(["--user",lib])
             libsInstalled.append(lib)
 
@@ -100,7 +116,18 @@ user is prompted to source before running LIVV again.
 '''
 def checkModules():
     # Check to see if calling 'module list' is a real command
+    cwd = os.getcwd()
     print("    Checking if modules need to be loaded"),
+    modules = [
+           "python/2.7.5", 
+           "ncl/6.1.0", 
+           "nco/4.3.9", 
+           "python_matplotlib/1.3.1", 
+           "hdf5/1.8.11", 
+           "netcdf/4.1.3", 
+           "python_numpy/1.8.0", 
+           "python_netcdf4/1.0.6"
+          ]
     checkCmd = ["bash", "-c", "module list"]
     checkCall = subprocess.Popen(checkCmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out, err = checkCall.communicate()
@@ -112,17 +139,17 @@ def checkModules():
         return
     else:
         # We need to check if all of the correct modules are loaded
-        if not os.path.exists(util.variables.cwd + os.sep + "deps"):
-            os.mkdir(util.variables.cwd + os.sep + "deps")
-            sys.path.append(util.variables.cwd + os.sep + "deps")
-        f = open(util.variables.cwd + os.sep + "deps" + os.sep + "modules", 'w')
+        if not os.path.exists(cwd + os.sep + "deps"):
+            os.mkdir(cwd + os.sep + "deps")
+            sys.path.append(cwd + os.sep + "deps")
+        f = open(cwd + os.sep + "deps" + os.sep + "modules", 'w')
 
         # Record the modules needed, the modules that have been loaded, and start a list for what's missing
         moduleListOutput = out.split() + err.split()
         modulesNeeded = []
 
         # Go through and find out if anything is missing
-        for module in util.variables.modules:
+        for module in modules:
             f.write("module load " + module + "\n")
             if module not in moduleListOutput:
                 modulesNeeded.append(module)
@@ -156,10 +183,11 @@ dependencies aren't satisfied
 '''
 def installSetupTools():
     # Specify where to download from
+    cwd = os.getcwd()
     url = "https://bootstrap.pypa.io/ez_setup.py"
     fileName = "ez_setup.py"
     u = urllib2.urlopen(url)    
-    f = open(util.variables.cwd + os.sep + "deps" + os.sep + fileName, 'wb')
+    f = open(cwd + os.sep + "deps" + os.sep + fileName, 'wb')
 
     block=8192
     while True:
@@ -167,4 +195,4 @@ def installSetupTools():
         buffer = u.read(block)
         if not buffer: break
         f.write(buffer)
-    os.system("python " + util.variables.cwd + os.sep + "deps" + os.sep + fileName + " --user")
+    os.system("python " + cwd + os.sep + "deps" + os.sep + fileName + " --user")
