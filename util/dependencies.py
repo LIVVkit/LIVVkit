@@ -52,7 +52,6 @@ def check():
         for path in os.environ["PATH"].split(os.pathsep):
             path = path.strip('"')
             filePath = os.path.join(path, program)
-            print filePath
             if os.path.isfile(filePath) and os.access(filePath, os.X_OK):
                 found = True
         if not found:
