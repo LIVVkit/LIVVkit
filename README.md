@@ -11,6 +11,7 @@ If this document is out of date send us an email!  See the contact section below
 ================
 LIVV is a python-based toolkit for verification and validation of Ice Sheet Models.  LIVV provides a way for testing model output against a set of benchmark data.  Verification testing checks bitwise accuracy of solutions, and reports inconsistencies, as well as providing differences in configurations between model and benchmark data.  Standard output files are parsed for key information.  Validation and performance testing are under development.
 
+For further documentation view the [wiki](https://github.com/ACME-Climate/LIVV/wiki)
 
   Before Using
 ================
