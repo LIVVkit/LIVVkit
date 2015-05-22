@@ -31,7 +31,7 @@ def check():
     
     # The list of nonstandard python libraries that are used 
     libraryList = ["jinja2", "netCDF4", "numpy", "matplotlib"]
-    binaryList = ["ncdiff"]
+    binaryList = ["ncdiff", "ncl"]
 
     # Create a list to store all of the errors that were found
     depErrors = []

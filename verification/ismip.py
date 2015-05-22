@@ -28,6 +28,8 @@ class Test(AbstractTest):
     def __init__(self):
         super(self.__class__, self).__init__()
         self.name = "ismip"
+        self.modelDir = util.variables.inputDir + os.sep + 'ismip-hom'
+        self.benchDir = util.variables.benchmarkDir + os.sep + 'ismip-hom'
         self.description = "The Ice Sheet Model Intercomparison Project for Higher-Order Models (ISMIP-HOM) " + \
                            "prescribes a set of experiments meant to test the implementation of higher-order" + \
                            " physics.  For more information, see <a href=http://homepages.ulb.ac.be/~fpattyn/ismip/>" +\
@@ -40,20 +42,18 @@ class Test(AbstractTest):
     the runIsmip() method with the correct information
     '''
     def run(self):
-        modelDir = util.variables.inputDir + os.sep + 'ismip-hom'
-        benchDir = util.variables.benchmarkDir + os.sep + 'ismip-hom'
-        if not (os.path.exists(modelDir) and os.path.exists(benchDir)):
+        if not (os.path.exists(self.modelDir) and os.path.exists(self.benchDir)):
             print("    Could not find data for ismip-hom verification!  Tried to find data in:")
-            print("      " + modelDir)
-            print("      " + benchDir)
+            print("      " + self.modelDir)
+            print("      " + self.benchDir)
             print("    Continuing with next test....")
             return
-        testTypes = sorted(set(fn.split('.')[0].split('-')[-1] for fn in os.listdir(modelDir)))
+        testTypes = sorted(set(fn.split('.')[0].split('-')[-1] for fn in os.listdir(self.modelDir)))
         for test in testTypes:
             resolutions = sorted(set(fn.split(os.sep)[-1].split('.')[1]  \
-                            for fn in glob.glob(modelDir + os.sep + 'ismip-hom-' + test + "*.config")))
+                            for fn in glob.glob(self.modelDir + os.sep + 'ismip-hom-' + test + "*.config")))
             for resolution in resolutions:
-                self.runIsmip(test, resolution, modelDir, benchDir)
+                self.runIsmip(test, resolution, self.modelDir, self.benchDir)
                 self.testsRun.append(test.capitalize() + " " + resolution)
 
     '''

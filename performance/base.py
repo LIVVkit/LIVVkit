@@ -45,6 +45,7 @@ class AbstractTest(object):
         self.testsRun = []    # A list of the test cases run
         self.plotDetails = dict()    # Summary of plots generated
         self.fileTestDetails = dict()    # Mapping of tests to files
+        self.modelDir, self.benchDir = "", "" # Paths to the model and benchmark data
         self.modelConfigs, self.benchConfigs = dict(), dict()    # Summaries of the config files parsed
         self.modelTimingData, self.benchTimingData = dict(), dict()    # Summaries of the timing data parsed
 

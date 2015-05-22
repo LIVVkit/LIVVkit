@@ -41,6 +41,8 @@ class Test(AbstractTest):
     def __init__(self):
         super(self.__class__, self).__init__()
         self.name = "dome"
+        self.modelDir = util.variables.inputDir + os.sep + "dome"
+        self.benchDir = util.variables.benchmarkDir + os.sep + "dome"
         self.description = "3-D paraboloid dome of ice with a circular, 60 km" + \
                       " diameter base sitting on a flat bed. The horizontal" + \
                       " spatial resolution studies are 2 km, 1 km, 0.5 km" + \
@@ -58,22 +60,20 @@ class Test(AbstractTest):
     assimilated via the runScaling method defined in the base class
     '''
     def run(self):
-        modelDir = util.variables.inputDir + os.sep + "dome"
-        benchDir = util.variables.benchmarkDir + os.sep + "dome"
-        if not (os.path.exists(modelDir) and os.path.exists(benchDir)):
+        if not (os.path.exists(self.modelDir) and os.path.exists(self.benchDir)):
             print("    Could not find data for dome verification!  Tried to find data in:")
-            print("      " + modelDir)
-            print("      " + benchDir)
+            print("      " + self.modelDir)
+            print("      " + self.benchDir)
             print("    Continuing with next test....")
             return
         resolutions = set()
-        modelConfigFiles = fnmatch.filter(os.listdir(modelDir), 'dome*.config')
+        modelConfigFiles = fnmatch.filter(os.listdir(self.modelDir), 'dome*.config')
         for mcf in modelConfigFiles:
             resolutions.add( mcf.split('.')[1] )
         resolutions = sorted( resolutions )
         
         for resolution in resolutions:
-            self.runDome(resolution, modelDir, benchDir)
+            self.runDome(resolution, self.modelDir, self.benchDir)
             #self.testsRun.append("Dome " + resolution)
         self.runScaling('dome', resolutions)
         self.testsRun.append('Scaling')

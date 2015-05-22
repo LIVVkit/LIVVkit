@@ -41,6 +41,8 @@ class Test(AbstractTest):
     def __init__(self):
         super(self.__class__, self).__init__()
         self.name = "gis"
+        self.modelDir = util.variables.performanceDir + os.sep + "gis"
+        self.benchDir = util.variables.performanceDir + os.sep + "bench" + os.sep + 'gis'
         self.description = "A placeholder description"
 
     '''
@@ -62,31 +64,27 @@ class Test(AbstractTest):
     def runGisPerformance(self, resolution):
         print(os.linesep + "  Greenland Ice Sheet " + resolution + " performance testing in progress....")
 
-        # The locations for the data
-        perfDir = util.variables.performanceDir + os.sep + "gis_" + resolution
-        perfBenchDir = util.variables.performanceDir + os.sep + "bench" + os.sep + 'gis_' + resolution
-
         # Make sure that there is some data
-        if not (os.path.exists(perfDir) and os.path.exists(perfBenchDir)):
+        if not (os.path.exists(self.modelDir) and os.path.exists(self.benchDir)):
             print("    Could not find data for GIS " + resolution + " verification!  Tried to find data in:")
-            print("      " + perfDir)
-            print("      " + perfBenchDir)
+            print("      " + self.modelDir)
+            print("      " + self.benchDir)
             print("    Continuing with next test....")
             return
 
         # Process the configure files
         gisParser = Parser()
         self.modelConfigs['gis_' + resolution], self.benchConfigs['gis_' + resolution] = \
-                gisParser.parseConfigurations(perfDir, perfBenchDir)
+                gisParser.parseConfigurations(self.modelDir, self.benchDir)
 
         # Scrape the details from each of the files and store some data for later
-        self.fileTestDetails['gis_' + resolution] = gisParser.parseStdOutput(perfDir, "^out.gis." + resolution + ".((albany)|(glissade))$")
+        self.fileTestDetails['gis_' + resolution] = gisParser.parseStdOutput(self.modelDir, "^out.gis." + resolution + ".((albany)|(glissade))$")
 
         # Go through and pull in the timing data
         print("    Model Timing Summary:")
-        self.modelTimingData['gis' + resolution] = gisParser.parseTimingSummaries(perfDir)
+        self.modelTimingData['gis' + resolution] = gisParser.parseTimingSummaries(self.modelDir)
         print("    Benchmark Timing Summary:")
-        self.benchTimingData['gis' + resolution] = gisParser.parseTimingSummaries(perfBenchDir)
+        self.benchTimingData['gis' + resolution] = gisParser.parseTimingSummaries(self.benchDir)
 
         # Record the data from the parser
         numberOutputFiles, numberConfigMatches, numberConfigTests = gisParser.getParserSummary()

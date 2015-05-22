@@ -48,6 +48,7 @@ class AbstractTest(object):
     ''' Constructor '''
     def __init__(self):
         self.name = "default"
+        self.modelDir, self.benchDir = "", ""
         self.testsRun = []
         self.bitForBitDetails = dict()
         self.plotDetails = dict()

@@ -28,6 +28,8 @@ class Test(AbstractTest):
     def __init__(self):
         super(self.__class__, self).__init__()
         self.name = "Shelf"
+        self.modelDir = util.variables.inputDir + os.sep + 'shelf'
+        self.benchDir = util.variables.benchmarkDir + os.sep + 'shelf'
         self.description = "A blank description"
   
     '''
@@ -36,20 +38,18 @@ class Test(AbstractTest):
     the runShelf() method with the correct information
     '''
     def run(self):
-        modelDir = util.variables.inputDir + os.sep + 'shelf'
-        benchDir = util.variables.benchmarkDir + os.sep + 'shelf'
-        if not (os.path.exists(modelDir) and os.path.exists(benchDir)):
+        if not (os.path.exists(self.modelDir) and os.path.exists(self.benchDir)):
             print("    Could not find data for shelf verification!  Tried to find data in:")
-            print("      " + modelDir)
-            print("      " + benchDir)
+            print("      " + self.modelDir)
+            print("      " + self.benchDir)
             print("    Continuing with next test....")
             return
-        testTypes = sorted(set(fn.split('.')[0].split('-')[-1] for fn in os.listdir(modelDir)))
+        testTypes = sorted(set(fn.split('.')[0].split('-')[-1] for fn in os.listdir(self.modelDir)))
         for test in testTypes:
             resolutions = sorted(set(fn.split(os.sep)[-1].split('.')[1]  \
-                            for fn in glob.glob(modelDir + os.sep + 'shelf-' + test + "*.config")))
+                            for fn in glob.glob(self.modelDir + os.sep + 'shelf-' + test + "*.config")))
             for resolution in resolutions:
-                self.runShelf(test, resolution, modelDir, benchDir)
+                self.runShelf(test, resolution, self.modelDir, self.benchDir)
                 self.testsRun.append(test.capitalize() + " " + resolution)
 
     '''
