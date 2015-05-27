@@ -51,6 +51,7 @@ util.dependencies.check()
 import util.variables
 import util.configurationHandler
 import util.websetup
+import util.selfVerification
 import verification.dome, verification.ismip, verification.shelf, verification.stream
 import performance.dome, performance.gis
 import validation.gis
@@ -230,6 +231,9 @@ testMapping = {
 ###############################################################################
 #                               Run Test Cases                                #
 ###############################################################################
+# Do a quick check to make sure that analysis works the way we want it to
+# util.selfVerification.check()
+
 # Give a list of the tests that will be run
 if len(verificationTests) > 0:  
     print("Running verification tests:")
