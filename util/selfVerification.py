@@ -11,7 +11,7 @@ Created on Dec 8, 2014
 import os
 import sys
 
-import verification.dome.Test as Test
+import verification.dome
 import util.variables
 
 '''
@@ -25,7 +25,7 @@ def check():
     # Redirect standard output so that we don't have to see the output of these tests
     sys.stdout = open(os.devnull, "w")
     errorList = []
-    dome = Test()
+    dome = verification.dome.Test()
     dome.benchDir = util.variables.cwd + "util" + os.sep + "data" + os.sep + "bench"
     
     # Compare against data that should all match

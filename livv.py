@@ -45,22 +45,9 @@ import socket
 
 from optparse import OptionParser
 
-# Pull in the LIVV specific modules
-import util.dependencies
-util.dependencies.check()
-import util.variables
-import util.configurationHandler
-import util.websetup
-import util.selfVerification
-import verification.dome, verification.ismip, verification.shelf, verification.stream
-import performance.dome, performance.gis
-import validation.gis
-import util.cleanup
-
 from verification.base import choices as verificationChoices
 from performance.base import choices as performanceChoices
 from validation.base import choices as validationChoices
-
 ###############################################################################
 #                                  Options                                    #
 ###############################################################################
@@ -116,6 +103,17 @@ parser.add_option('-s', '--save', action="store_true", dest='save',
 # Get the options and the arguments
 (options, args) = parser.parse_args()
 
+# Pull in the LIVV specific modules
+import util.dependencies
+util.dependencies.check()
+import util.variables
+import util.configurationHandler
+import util.websetup
+import util.selfVerification
+import verification.dome, verification.ismip, verification.shelf, verification.stream
+import performance.dome, performance.gis
+import validation.gis
+import util.cleanup
 
 ###############################################################################
 #                              Global Variables                               #
