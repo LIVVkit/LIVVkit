@@ -106,7 +106,7 @@ class AbstractTest(object):
                     pyplot.legend()
 
                 print("Saving plot to " + util.variables.imgDir + os.sep + self.name + os.sep + type + "_" + res + "_scaling" + ".png")
-                pyplot.savefig(util.variables.imgDir + os.sep + self.name + os.sep + type + "_" + res +  "_scaling" + ".png")
+                pyplot.savefig(util.variables.imgDir + os.sep + self.name.capitalize() + os.sep + type + "_" + res +  "_scaling" + ".png")
                 self.imagesGenerated.append( [type + "_" + res + "_scaling" + ".png", "Strong scaling for " + type + res])
 
 

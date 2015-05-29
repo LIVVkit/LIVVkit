@@ -40,7 +40,7 @@ class Test(AbstractTest):
     ''' Constructor '''
     def __init__(self):
         super(self.__class__, self).__init__()
-        self.name = "dome"
+        self.name = "Dome"
         self.modelDir = util.variables.inputDir + os.sep + "dome"
         self.benchDir = util.variables.benchmarkDir + os.sep + "dome"
         self.description = "3-D paraboloid dome of ice with a circular, 60 km" + \

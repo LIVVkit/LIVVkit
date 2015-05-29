@@ -44,8 +44,8 @@ def setup(testsRun):
 
     # Set up imgs directory to have sub-directories for each test
     for test in testsRun:
-        if not os.path.exists(util.variables.indexDir + os.sep + "imgs" + os.sep + test + os.sep + "bit4bit"):
-            os.makedirs(util.variables.imgDir + os.sep + test + os.sep + "bit4bit")
+        if not os.path.exists(util.variables.imgDir + os.sep + test.capitalize() + os.sep + "bit4bit"):
+            os.makedirs(util.variables.imgDir + os.sep + test.capitalize() + os.sep + "bit4bit")
 
 '''
 Build the index

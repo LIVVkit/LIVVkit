@@ -9,6 +9,8 @@ Created on Dec 8, 2014
 '''
 
 import os
+import shutil
+import subprocess
 import sys
 
 import verification.dome
@@ -20,32 +22,55 @@ LIVV works as planned.
 '''
 def check():   
     print("Beginning internal consistency checks....")
-    print("  Verifying integrity of verification tests....")
+    print("  Verifying integrity of verification tests...."),
     
     # Redirect standard output so that we don't have to see the output of these tests
     sys.stdout = open(os.devnull, "w")
     errorList = []
     dome = verification.dome.Test()
-    dome.benchDir = util.variables.cwd + "util" + os.sep + "data" + os.sep + "bench"
+    dome.benchDir = util.variables.cwd + os.sep + "util" + os.sep + "data_base"
     
     # Compare against data that should all match
-    dome.modelDir = util.variables.cwd + "util" + os.sep + "data" + os.sep + "same"
+    dome.modelDir = util.variables.cwd + os.sep + "util" + os.sep + "data_same"
     dome.run()
-    if not dome.bitForbitDetails["filename.nc"][0] == 'SUCCESS':
+    if not dome.bitForBitDetails["Dome 0010"]["dome.0010.p001.out.nc"][0] == 'SUCCESS':
         errorList.append("NCDiff recorded differences on results of same test.")
 
     # Compare against data that has a small difference
-    dome.modelDir = util.variables.cwd + "util" + os.sep + "data" + os.sep + "small"
+    dome.modelDir = util.variables.cwd + os.sep + "util" + os.sep + "data_diffsmall"
     dome.run()
-    if not dome.bitForbitDetails["filename.nc"][0] == 'FAILURE':
+    if not dome.bitForBitDetails["Dome 0010"]["dome.0010.p001.out.nc"][0] == 'FAILURE':
         errorList.append("NCDiff failed to record differences on small difference test") 
 
     # Compare against data that has a large difference
-    dome.modelDir = util.variables.cwd + "util" + os.sep + "data" + os.sep + "large"
+    dome.modelDir = util.variables.cwd + os.sep + "util" + os.sep + "data_difflarge"
     dome.run() 
-    if not dome.bitForbitDetails["filename.nc"][0] == 'FAILURE':
+    if not dome.bitForBitDetails["Dome 0010"]["dome.0010.p001.out.nc"][0] == 'FAILURE':
         errorList.append("NCDiff failed to record differences on small difference test") 
 
+    # If the bit for bit difference plots are to be removed uncomment these lines
+    #shutil.rmtree(util.variables.imgDir + os.sep + "Dome" + os.sep + "bit4bit")
+    #os.mkdir(util.variables.imgDir + os.sep + "Dome" + os.sep + "bit4bit")
+    
     # Restore standard output so that we can report and continue if possible 
     sys.stdout = sys.__stdout__
+    if not errorList == []:
+        # Get the current revision
+        rev = subprocess.check_output(['git', 'rev-parse', '--short', 'HEAD']).strip()
+        print("")
+        print("")
+        print("---------------------- ERROR --------------------------")
+        print("  Found errors while checking internal consistency: ")
+        for err in errorList:
+            print("    " + err)
+        print("")
+        print("  Report these errors with the code " + rev + " at: ")
+        print("    https://github.com/ACME-Climate/LIVV/issues")
+        print("")
+        print("---------------------- ERROR --------------------------")
+        exit()
+    else:
+        print(" Okay!")
+        print("")
+    
     
