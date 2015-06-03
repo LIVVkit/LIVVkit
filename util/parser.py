@@ -236,17 +236,17 @@ class Parser(object):
     def parseTimingSummaries(self, basePath, testName, resolution):
         if not os.path.exists(basePath):
             return []
-        times = []
+        times = dict()
         runs = sorted(set(fn.split(os.sep)[-1].split('.')[2][1:] for fn in \
                           glob.glob(basePath + os.sep + testName + '.' + resolution + '.p[0-9][0-9][0-9].*'))) 
         for run in runs:
             filePath = basePath + os.sep + testName + '.' + resolution + '.p' + run + '.results'
-            if not os.path.exists(filePath): times.append('0'); continue
+            if not os.path.exists(filePath): times[run] = '0'; continue
             
             # Open the file and grab the data outs
             file = open(filePath, 'r')
             for line in file:
                 time = line.split()[1]
-            times.append(time)
+            times[run] = time
 
-        return [runs, times]
+        return times

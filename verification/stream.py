@@ -30,7 +30,9 @@ class Test(AbstractTest):
         self.name = "Stream"
         self.modelDir = util.variables.inputDir + os.sep + "stream"
         self.benchDir = util.variables.benchmarkDir + os.sep + "stream"
-        self.description = "Description of stream"
+        self.description = "The stream test case simulates flow over an" + \
+                            " idealized ice stream underlain by a subglacial" + \
+                            " till with a known and specified yield stress distribution. "
 
 
     '''

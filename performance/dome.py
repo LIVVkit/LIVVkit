@@ -98,9 +98,7 @@ class Test(AbstractTest):
         self.fileTestDetails["Dome " + resolution] = domeParser.parseStdOutput(perfDir, "dome." + resolution + ".*.config.oe")
 
         # Go through and pull in the timing data
-        print("    Model Timing Summary:")
         self.modelTimingData['dome' + resolution] = domeParser.parseTimingSummaries(perfDir, 'dome', resolution)
-        print("    Benchmark Timing Summary:")
         self.benchTimingData['dome' + resolution] = domeParser.parseTimingSummaries(perfBenchDir, 'dome', resolution)
 
         # Record the data from the parser

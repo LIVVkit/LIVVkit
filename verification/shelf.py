@@ -30,7 +30,11 @@ class Test(AbstractTest):
         self.name = "Shelf"
         self.modelDir = util.variables.inputDir + os.sep + 'shelf'
         self.benchDir = util.variables.benchmarkDir + os.sep + 'shelf'
-        self.description = "A blank description"
+        self.description = "Simulates two shelf conditions, confined and " + \
+                            "circular.  The confined shelf is an idealized 500m " + \
+                            "ice shelf in a confined, rectangular embayment.  The " + \
+                            "circular shelf is a 1000 m thick circular shelf grounded " + \
+                            "at the center."
   
     '''
     Runs all of the available shelf tests.  Looks in the model and

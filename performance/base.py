@@ -12,6 +12,7 @@ import matplotlib.pyplot as pyplot
 import glob
 import jinja2
 from abc import ABCMeta, abstractmethod
+from collections import Counter
 
 import util.variables
 
@@ -66,7 +67,6 @@ class AbstractTest(object):
     def runScaling(self, type, resolutions):
         self.imagesGenerated = []
         print(os.linesep + "  Generating scaling plots for " + type + "....")
-        tests = filter(re.compile(type + "*").search, self.modelTimingData.keys())
 
         self.weakScaling(type, resolutions)
         self.strongScaling(type, resolutions)
@@ -78,8 +78,43 @@ class AbstractTest(object):
     Run weak scaling analysis
     '''
     def weakScaling(self, type, resolutions):
-        return
+        workPerProc, plotVars = [], []
+        resolutions = sorted(resolutions)
+        # Find out how much work per processor for each run
+        for res in resolutions:
+            test= type + res
+            procList = self.modelTimingData[test].keys()
+            workPerProc.append([(int(res)**2)/int(nProc)for nProc in procList])
 
+        # To generate the best plot, figure out which work/processor number 
+        # was most common, then pull out the resolution, number of processor,
+        # and the time taken 
+        workPerProc = [i for sublist in workPerProc for i in sublist]
+        scalingConstant = Counter(workPerProc).most_common()[0][0]
+        for res in resolutions: 
+            test= type + res
+            procList = self.modelTimingData[test].keys()
+            for nProc in procList:
+                if (int(res)**2)/int(nProc) == scalingConstant:
+                    plotVars.append([res, nProc, self.modelTimingData[type + res][nProc]])  
+        
+        # These are the plotting variables
+        resolutions = [int(var[0]) for var in plotVars]
+        processors = [int(var[1]) for var in plotVars]
+        times = [float(var[2]) for var in plotVars]
+        
+        # Plot it and then save the file + record it so we can link to it
+        fig, ax = pyplot.subplots(1)
+        pyplot.title("Weak scaling for " + type)
+        pyplot.xlabel("Problem size")
+        pyplot.ylabel("Time (s)")
+        pyplot.xticks()
+        pyplot.yticks()
+        ax.plot(resolutions, times, 'bo-', label='Model')
+        print("Saving plot to " + util.variables.imgDir + os.sep + self.name.capitalize() + os.sep + type +  "_scaling_weak.png")
+        pyplot.savefig(util.variables.imgDir + os.sep + self.name.capitalize() + os.sep + type +  "_scaling_weak.png")
+        self.imagesGenerated.append( [type + "_scaling_weak.png", "Weak scaling for " + type])
+        
     '''
     Run strong scaling analysis
     '''
@@ -97,15 +132,17 @@ class AbstractTest(object):
                 pyplot.ylabel("Time (s)")
                 pyplot.xticks()
                 pyplot.yticks()
-                ax.plot(modelData[0], modelData[1], 'bo-', label='Model')
+                x, y = zip(*sorted(zip(modelData.keys(), modelData.values())))
+                ax.plot(x, y, 'bo-', label='Model')
 
                 # Add benchmark data if it's there
                 if self.benchTimingData[test] != [] and self.benchTimingData[test] != [[],[]]:
                     benchData = self.benchTimingData[test]
-                    ax.plot(benchData[0], benchData[1], 'r^--', label='Benchmark')
+                    x, y = zip(*sorted(zip(benchData.keys(), benchData.values())))
+                    ax.plot(x, y, 'r^--', label='Benchmark')
                     pyplot.legend()
 
-                print("Saving plot to " + util.variables.imgDir + os.sep + self.name + os.sep + type + "_" + res + "_scaling" + ".png")
+                print("Saving plot to " + util.variables.imgDir + os.sep + self.name.capitalize() + os.sep + type + "_" + res +  "_scaling" + ".png")
                 pyplot.savefig(util.variables.imgDir + os.sep + self.name.capitalize() + os.sep + type + "_" + res +  "_scaling" + ".png")
                 self.imagesGenerated.append( [type + "_" + res + "_scaling" + ".png", "Strong scaling for " + type + res])
 
