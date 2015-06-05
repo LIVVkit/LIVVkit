@@ -9,12 +9,14 @@ import re
 import os
 import operator
 import matplotlib.pyplot as pyplot
+import numpy as np
 import glob
 import jinja2
 from abc import ABCMeta, abstractmethod
 from collections import Counter
 
 import util.variables
+from test.test_index import minsize
 
 # A mapping of the options to the test cases that can be run
 cases = {'none' : [],
@@ -101,8 +103,10 @@ class AbstractTest(object):
         # These are the plotting variables
         resolutions = [int(var[0]) for var in plotVars]
         processors = [int(var[1]) for var in plotVars]
-        times = [float(var[2]) for var in plotVars]
-        
+        times = [var[2] for var in plotVars]
+        mins = [var[-1] for var in times]
+        maxs = [var[1] for var in times]
+        times = [var[0] for var in times]
         # Plot it and then save the file + record it so we can link to it
         fig, ax = pyplot.subplots(1)
         pyplot.title("Weak scaling for " + type)
@@ -111,6 +115,8 @@ class AbstractTest(object):
         pyplot.xticks()
         pyplot.yticks()
         ax.plot(resolutions, times, 'bo-', label='Model')
+        ax.plot(resolutions, mins, 'b--')
+        ax.plot(resolutions, maxs, 'b--')
         print("Saving plot to " + util.variables.imgDir + os.sep + self.name.capitalize() + os.sep + type +  "_scaling_weak.png")
         pyplot.savefig(util.variables.imgDir + os.sep + self.name.capitalize() + os.sep + type +  "_scaling_weak.png")
         self.imagesGenerated.append( [type + "_scaling_weak.png", "Weak scaling for " + type])
@@ -133,13 +139,23 @@ class AbstractTest(object):
                 pyplot.xticks()
                 pyplot.yticks()
                 x, y = zip(*sorted(zip(modelData.keys(), modelData.values())))
+                mins = [yy[-1] for yy in y]
+                maxs = [yy[1] for yy in y]
+                y = [yy[0] for yy in y] 
                 ax.plot(x, y, 'bo-', label='Model')
-
+                ax.plot(x,mins, 'b--')
+                ax.plot(x,maxs, 'b--')
+                
                 # Add benchmark data if it's there
                 if self.benchTimingData[test] != [] and self.benchTimingData[test] != [[],[]]:
                     benchData = self.benchTimingData[test]
                     x, y = zip(*sorted(zip(benchData.keys(), benchData.values())))
-                    ax.plot(x, y, 'r^--', label='Benchmark')
+                    mins = [yy[-1] for yy in y]
+                    maxs = [yy[1] for yy in y]
+                    y = [yy[0] for yy in y]
+                    ax.plot(x, y, 'r^-', label='Benchmark')
+                    ax.plot(x,mins, 'r--')
+                    ax.plot(x,maxs, 'r--')
                     pyplot.legend()
 
                 print("Saving plot to " + util.variables.imgDir + os.sep + self.name.capitalize() + os.sep + type + "_" + res +  "_scaling" + ".png")

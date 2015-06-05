@@ -19,10 +19,10 @@ import os
 import re
 import glob
 import ConfigParser
+import numpy as np
 
 import util.variables
 from collections import OrderedDict
-from numpy import mean
 
 '''
 The generalized parser for processing text files associated with a test case
@@ -237,16 +237,30 @@ class Parser(object):
         if not os.path.exists(basePath):
             return []
         times = dict()
-        runs = sorted(set(fn.split(os.sep)[-1].split('.')[2][1:] for fn in \
-                          glob.glob(basePath + os.sep + testName + '.' + resolution + '.p[0-9][0-9][0-9].*'))) 
-        for run in runs:
-            filePath = basePath + os.sep + testName + '.' + resolution + '.p' + run + '.results'
-            if not os.path.exists(filePath): times[run] = '0'; continue
+        timingFiles = glob.glob(basePath + os.sep + "timing"+ os.sep + testName.lower() + '-t[0-9].' + resolution + ".p[0-9][0-9][0-9].results") 
+        timingFiles += (glob.glob(basePath + os.sep + "timing"+ os.sep + testName.lower() + '-t[0-9].' + resolution + ".p[0-9][0-9][0-9].cism_timing_stats") )
+
+        for filePath in timingFiles:
+            run = filePath.split(os.sep)[-1].split('.')[2][1:]
+            if not times.has_key(run): times[run] = []
+            if not os.path.exists(filePath): continue
             
             # Open the file and grab the data outs
             file = open(filePath, 'r')
             for line in file:
-                time = line.split()[1]
-            times[run] = time
-
+                # If the line is empty just go to the next
+                if line.split() == []:
+                    continue
+                
+                # If this is a big machine this is how we find the time
+                if line.split()[0] == 'cism':
+                    times[run].append(float(line.split()[5]))
+                    break
+                
+                # Otherwise it's found here
+                if line.split()[0] == filePath.split(os.sep)[-1].replace('results', 'config'):
+                    times[run].append(float(line.split()[1]))
+            
+            # Record the mean, max, and min times found
+            times[run] = [np.mean(times[run]), np.max(times[run]), np.min(times[run])]
         return times
