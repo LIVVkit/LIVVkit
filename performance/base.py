@@ -16,7 +16,6 @@ from abc import ABCMeta, abstractmethod
 from collections import Counter
 
 import util.variables
-from test.test_index import minsize
 
 # A mapping of the options to the test cases that can be run
 cases = {'none' : [],
