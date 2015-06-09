@@ -50,6 +50,5 @@ def save(machineName):
     # this avoids writing out objects, and also writes a complete set of info
     for k, v in locals().iteritems():
         if type(v) == type(''):
-            print(k, v)
             f.write(str(k) + " = \'" + str(v) + "\'\n")
     f.close()
