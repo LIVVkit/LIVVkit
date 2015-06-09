@@ -18,6 +18,9 @@ user           = ''
 websiteDir     = ''
 templateDir    = ''
 indexDir       = ''
+verification   = ''
+performance    = ''
+validation     = ''
 
 # Modules that need to be loaded on big machines
 modules = []
@@ -30,3 +33,8 @@ timingVars = []
 
 # Dycores to try to parse output for
 dycores = []
+
+
+# Provide a way to update this when loading a configuration
+def update(vars):
+    globals().update(vars)

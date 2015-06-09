@@ -42,7 +42,6 @@ import getpass
 import platform
 import socket
 
-
 from optparse import OptionParser
 
 from verification.base import choices as verificationChoices
@@ -88,11 +87,11 @@ parser.add_option('-b', '--benchmarkDir', action='store',
                   default=os.path.dirname(os.path.abspath(__file__)) + os.sep + "reg_bench" + os.sep + "linux-gnu" + os.sep + "higher-order",
                   help='Location of the input for running verification.')
 
-parser.add_option('-m', '--machine', action='store',
-                  type='string', dest='machineName', default='',
-                  help='Load a preconfigured set of options for a specific machine.')
+parser.add_option('--load', action='store',
+                  type='string', dest='loadName', default='',
+                  help='Load a preconfigured set of options for the given machine name.')
 
-parser.add_option('-s', '--save', action="store_true", dest='save',
+parser.add_option('--save', action="store", dest='saveName', default='',
                   help='Store the configuration being run with the given machine name.')
 
 # Get the options and the arguments
@@ -125,6 +124,9 @@ util.variables.user           = getpass.getuser()
 util.variables.websiteDir     = util.variables.cwd + "/web"
 util.variables.templateDir    = util.variables.websiteDir + "/templates"
 util.variables.indexDir       = util.variables.outputDir
+util.variables.verification   = options.verification
+util.variables.performance    = options.performance
+util.variables.validation     = options.validation
 
 # A list of the information that should be looked for in the stdout of model output
 util.variables.parserVars = [
@@ -152,22 +154,16 @@ util.variables.dycores = ['glissade'] #["glide", "glissade", "glam", "albany", "
 
 
 # Check if we are saving/loading the configuration and set up the machine name
-if options.machineName == '' and options.save:
+machineName = socket.gethostname()
+if options.saveName != '':
     # Save the configuration with the default host name
-    machineName = socket.gethostname()
+    machineName = options.saveName
     util.configurationHandler.save(machineName)
-elif options.save:
-    # Save the configuration with the specified host name
-    machineName = options.machineName
-    util.configurationHandler.save(machineName)
-elif options.machineName == '':
-    # Don't save the configuration and use the default host name
-    machineName = socket.gethostname() 
-else:
+elif options.loadName != '':
     # Try to load the machine name specified
-    machineName = options.machineName
+    machineName = options.loadName
     vars = util.configurationHandler.load(machineName)
-    #util.variables.globals().update(vars)
+    util.variables.update(vars)
 
 # Check if the user has a default config saved and use that if it does
 if os.path.exists(util.variables.configDir + os.sep + machineName + "_" + util.variables.user + "_default"):
@@ -211,9 +207,9 @@ validationMapping = {
                      'gis' : validation.gis.Test
                      }
 
-verificationTests = verification.base.choose(options.verification)
-performanceTests = performance.base.choose(options.performance)
-validationTests = validation.base.choose(options.validation)
+verificationTests = verification.base.choose(util.variables.verification)
+performanceTests = performance.base.choose(util.variables.performance)
+validationTests = validation.base.choose(util.variables.validation)
 testMapping = {
                "Verification" : verificationTests,
                "Performance" : performanceTests,

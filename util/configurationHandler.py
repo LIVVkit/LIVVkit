@@ -40,6 +40,7 @@ Write a configuration file to the configurations directory at the root of LIVV.
 def save(machineName):
     # Pull in the variables needed and tell user where they'll go 
     configFile = util.variables.cwd + os.sep + "configurations" + os.sep + machineName
+    from util.variables import *
     print("Saving configuration to " + configFile )
 
     f = open(configFile, 'w')
@@ -49,5 +50,6 @@ def save(machineName):
     # this avoids writing out objects, and also writes a complete set of info
     for k, v in locals().iteritems():
         if type(v) == type(''):
+            print(k, v)
             f.write(str(k) + " = \'" + str(v) + "\'\n")
     f.close()
