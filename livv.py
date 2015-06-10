@@ -72,9 +72,6 @@ import socket
 
 from optparse import OptionParser
 
-import util.dependencies
-util.dependencies.check()
-
 ###############################################################################
 #                                  Options                                    #
 ###############################################################################
@@ -114,6 +111,8 @@ parser.add_option('--save', action="store", dest='saveName', default='',
 (options, args) = parser.parse_args()
 
 # Pull in the LIVV specific modules
+import util.dependencies
+util.dependencies.check()
 import util.variables
 import util.configurationHandler
 import util.websetup
