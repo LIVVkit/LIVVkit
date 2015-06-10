@@ -68,7 +68,7 @@ def check():
     print(os.linesep + "Beginning Dependency Checks........")
 
     # If we need to load modules for LCF machines do so now
-    checkModules()
+    # checkModules()
 
     # Make sure all environment variables are set
     if not os.environ.has_key("NCARG_ROOT"):
@@ -179,7 +179,7 @@ def checkModules():
         # Go through and find out if anything is missing
         for module in modules:
             f.write("module load " + module + "\n")
-            if module not in moduleListOutput:
+            if module+'*' not in moduleListOutput:
                 modulesNeeded.append(module)
         f.close()
 
