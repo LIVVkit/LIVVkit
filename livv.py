@@ -44,6 +44,9 @@ import socket
 
 from optparse import OptionParser
 
+import util.dependencies
+util.dependencies.check()
+
 from verification.base import choices as verificationChoices
 from performance.base import choices as performanceChoices
 from validation.base import choices as validationChoices
@@ -98,8 +101,7 @@ parser.add_option('--save', action="store", dest='saveName', default='',
 (options, args) = parser.parse_args()
 
 # Pull in the LIVV specific modules
-import util.dependencies
-util.dependencies.check()
+
 import util.variables
 import util.configurationHandler
 import util.websetup
@@ -251,7 +253,7 @@ for test in verificationTests:
     newTest.run()
     verificationSummary[test] = newTest.summary
     newTest.generate()
-    print("")
+    print("")    
 
 # Run the performance verification
 if len(performanceTests) > 0:

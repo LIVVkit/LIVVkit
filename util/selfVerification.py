@@ -51,7 +51,7 @@ def check():
     # If the bit for bit difference plots are to be removed uncomment these lines
     #shutil.rmtree(util.variables.imgDir + os.sep + "Dome" + os.sep + "bit4bit")
     #os.mkdir(util.variables.imgDir + os.sep + "Dome" + os.sep + "bit4bit")
-    
+   
     # Restore standard output so that we can report and continue if possible 
     sys.stdout = sys.__stdout__
     if not errorList == []:
