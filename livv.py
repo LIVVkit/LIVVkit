@@ -136,7 +136,7 @@ util.variables.user           = getpass.getuser()
 util.variables.websiteDir     = util.variables.cwd + "/web"
 util.variables.templateDir    = util.variables.websiteDir + "/templates"
 util.variables.indexDir       = util.variables.outputDir
-util.variables.performance    = options.performance
+util.variables.performance    = str(options.performance)
 
 # A list of the information that should be looked for in the stdout of model output
 util.variables.parserVars = [
@@ -246,7 +246,7 @@ for test in verificationTests:
     print("")    
 
 # Run the performance verification
-if util.variables.performance:
+if util.variables.performance == "True":
     print("--------------------------------------------------------------------------")
     print("  Beginning performance analysis....")
     print("--------------------------------------------------------------------------")
