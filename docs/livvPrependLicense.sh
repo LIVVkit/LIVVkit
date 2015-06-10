@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ###########################################
-# Prepend liscense header to python files. 
+# Prepend license header to python files. 
 ###########################################
 for SRC in $(find ./ -name '*.py')
 do
@@ -13,7 +13,7 @@ do
 done
 
 #########################################
-# Prepend liscense header to html files. 
+# Prepend license header to html files. 
 #########################################
 for SRC in $(find ./ -name '*.html')
 do
@@ -25,7 +25,7 @@ do
 done
 
 ########################################
-# Prepend liscense header to css files. 
+# Prepend license header to css files. 
 ########################################
 for SRC in $(find ./ -name '*.css')
 do
