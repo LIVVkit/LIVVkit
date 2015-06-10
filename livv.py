@@ -92,12 +92,12 @@ parser.add_option('-o', '--out-dir', action='store',
 
 parser.add_option('-t', '--test-dir', action='store',
                   type='string', dest='inputDir',
-                  default=os.path.dirname(os.path.abspath(__file__)) + os.sep + "reg_test" + os.sep + "linux-gnu" + os.sep + "higher-order",
+                  default=os.path.dirname(os.path.abspath(__file__)) + os.sep + "reg_test" + os.sep + "linux-gnu",
                   help='Location of the input for running verification.')
 
 parser.add_option('-b', '--bench-dir', action='store',
                   type='string', dest='benchmarkDir',
-                  default=os.path.dirname(os.path.abspath(__file__)) + os.sep + "reg_bench" + os.sep + "linux-gnu" + os.sep + "higher-order",
+                  default=os.path.dirname(os.path.abspath(__file__)) + os.sep + "reg_bench" + os.sep + "linux-gnu",
                   help='Location of the input for running verification.')
 
 parser.add_option('--load', action='store',
@@ -126,8 +126,8 @@ import util.cleanup
 ###############################################################################
 util.variables.cwd            = os.getcwd()
 util.variables.configDir      = util.variables.cwd + os.sep + "configurations"
-util.variables.inputDir       = options.inputDir
-util.variables.benchmarkDir   = options.benchmarkDir
+util.variables.inputDir       = options.inputDir + os.sep + 'higher-order'
+util.variables.benchmarkDir   = options.benchmarkDir + os.sep + 'higher-order'
 util.variables.outputDir      = options.outputDir
 util.variables.imgDir         = util.variables.outputDir + "/imgs"
 util.variables.comment        = options.comment
