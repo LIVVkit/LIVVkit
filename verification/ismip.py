@@ -45,6 +45,8 @@ from verification.base import AbstractTest
 from util.parser import Parser
 import util.variables
 
+def getName(): return "Ismip"
+
 '''
 Main class for handling Ismip test cases.
 

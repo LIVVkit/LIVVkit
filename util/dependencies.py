@@ -147,14 +147,14 @@ def checkModules():
     cwd = os.getcwd()
     print("    Checking if modules need to be loaded"),
     modules = [
-           "python/2.7.5", 
-           "ncl/6.1.0", 
-           "nco/4.3.9", 
-           "python_matplotlib/1.3.1", 
-           "hdf5/1.8.11", 
-           "netcdf/4.1.3", 
-           "python_numpy/1.8.0", 
-           "python_netcdf4/1.0.6"
+           "python", 
+           "ncl", 
+           "nco", 
+           "python_matplotlib", 
+           "hdf5", 
+           "netcdf", 
+           "python_numpy", 
+           "python_netcdf4"
           ]
     checkCmd = ["bash", "-c", "module list"]
     checkCall = subprocess.Popen(checkCmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)

@@ -28,7 +28,6 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-
 '''
 Main script to run LIVV.  This script records some user data, sets up the test 
 suite, runs the verification, and generates a website based on the results of the verification.
@@ -76,45 +75,30 @@ from optparse import OptionParser
 import util.dependencies
 util.dependencies.check()
 
-from verification.base import choices as verificationChoices
-from performance.base import choices as performanceChoices
-from validation.base import choices as validationChoices
 ###############################################################################
 #                                  Options                                    #
 ###############################################################################
 usage_string = "%prog [options]"
 parser = OptionParser(usage=usage_string)
-parser.add_option('--verification', action='store', 
-                  type='choice', dest='verification', 
-                  choices=verificationChoices(), default='all', 
-                  help='specifies the verification tests to run')
-
-parser.add_option('--performance', action='store', 
-                  type='choice', dest='performance', 
-                  choices=performanceChoices(), default='none', 
-                  help='specifies the performance tests to run')
-
-parser.add_option('--validation', action='store', 
-                  type='choice', dest='validation', 
-                  choices=validationChoices(), default='none', 
-                  help='specifies the validation tests to run')
+parser.add_option('--performance', action='store_true', 
+                  dest='performance', help='specifies whether to run the performance tests')
 
 parser.add_option('--comment', action='store', 
                   type='string', dest='comment',
                   default='Test run of code', 
                   help='Log a comment about this run')
 
-parser.add_option('-o', '--outputDir', action='store',
+parser.add_option('-o', '--out-dir', action='store',
                   type='string', dest='outputDir',
                   default=os.path.dirname(os.path.abspath(__file__)) + os.sep + "www",
                   help='Location to output the LIVV webpages.')
 
-parser.add_option('-i', '--inputDir', action='store',
+parser.add_option('-t', '--test-dir', action='store',
                   type='string', dest='inputDir',
                   default=os.path.dirname(os.path.abspath(__file__)) + os.sep + "reg_test" + os.sep + "linux-gnu" + os.sep + "higher-order",
                   help='Location of the input for running verification.')
 
-parser.add_option('-b', '--benchmarkDir', action='store',
+parser.add_option('-b', '--bench-dir', action='store',
                   type='string', dest='benchmarkDir',
                   default=os.path.dirname(os.path.abspath(__file__)) + os.sep + "reg_bench" + os.sep + "linux-gnu" + os.sep + "higher-order",
                   help='Location of the input for running verification.')
@@ -130,14 +114,12 @@ parser.add_option('--save', action="store", dest='saveName', default='',
 (options, args) = parser.parse_args()
 
 # Pull in the LIVV specific modules
-
 import util.variables
 import util.configurationHandler
 import util.websetup
 import util.selfVerification
 import verification.dome, verification.ismip, verification.shelf, verification.stream
-import performance.dome, performance.gis
-import validation.gis
+import performance.dome
 import util.cleanup
 
 ###############################################################################
@@ -155,9 +137,7 @@ util.variables.user           = getpass.getuser()
 util.variables.websiteDir     = util.variables.cwd + "/web"
 util.variables.templateDir    = util.variables.websiteDir + "/templates"
 util.variables.indexDir       = util.variables.outputDir
-util.variables.verification   = options.verification
 util.variables.performance    = options.performance
-util.variables.validation     = options.validation
 
 # A list of the information that should be looked for in the stdout of model output
 util.variables.parserVars = [
@@ -222,30 +202,13 @@ for dir in [util.variables.inputDir, util.variables.benchmarkDir]:
 ###############################################################################
 #                              Record Test Cases                              #
 ###############################################################################
-verificationMapping = {
-                       'dome' : verification.dome.Test,
-                       'ismip' : verification.ismip.Test,
-                       'shelf' : verification.shelf.Test,
-                       'stream' : verification.stream.Test
-                       }
-
-performanceMapping = {
-                      'dome' : performance.dome.Test,
-                      'gis' : performance.gis.Test
-                      }
-
-validationMapping = {
-                     'gis' : validation.gis.Test
-                     }
-
-verificationTests = verification.base.choose(util.variables.verification)
-performanceTests = performance.base.choose(util.variables.performance)
-validationTests = validation.base.choose(util.variables.validation)
+verificationTests = [verification.dome, verification.ismip, verification.shelf, verification.stream] 
+performanceTests = [performance.dome]
+validationTests = []
 testMapping = {
                "Verification" : verificationTests,
                "Performance" : performanceTests,
-               "Validation" : validationTests
-               }
+               "Validation" : validationTests}
 
 ###############################################################################
 #                               Run Test Cases                                #
@@ -254,18 +217,17 @@ testMapping = {
 util.selfVerification.check()
 
 # Give a list of the tests that will be run
-if len(verificationTests) > 0:  
-    print("Running verification tests:")
-    for case in verificationTests: 
-        print("  " + case)
-if len(performanceTests) > 0:
+print("Running verification tests:")
+for case in verificationTests: 
+    print("  " + case.getName())
+if util.variables.performance:
     print(os.linesep + "Running performance tests:")
     for case in performanceTests:
-        print("  " + case)
+        print("  " + case.getName())
 if len(validationTests) > 0:
     print(os.linesep + "Running validation tests:")
     for case in validationTests:
-        print("  " + case)
+        print("  " + case.getName())
 
 # Set up the directory structure and summary dictionaries for output
 verificationSummary, performanceSummary, validationSummary = dict(), dict(), dict()
@@ -278,39 +240,39 @@ if len(verificationTests) > 0:
     print("--------------------------------------------------------------------------")
 for test in verificationTests:
     # Create a new instance of the specific test class (see verificationMapping for the mapping)
-    newTest = verificationMapping[test]()
+    newTest = test.Test()
     newTest.run()
-    verificationSummary[test] = newTest.summary
+    verificationSummary[test.getName().lower()] = newTest.summary
     newTest.generate()
     print("")    
 
 # Run the performance verification
-if len(performanceTests) > 0:
+if util.variables.performance:
     print("--------------------------------------------------------------------------")
     print("  Beginning performance analysis....")
     print("--------------------------------------------------------------------------")
-for test in performanceTests:
-    # Create a new instance of the specific test class (see verificationMapping for the mapping)
-    newTest = performanceMapping[test]()
-    newTest.run()
-    performanceSummary[test] = newTest.summary
-    newTest.generate()
-    print("")
+    for test in performanceTests:
+        # Create a new instance of the specific test class (see verificationMapping for the mapping)
+        newTest = test.Test()
+        newTest.run()
+        performanceSummary[test.getName().lower()] = newTest.summary
+        newTest.generate()
+        print("")
 
 # Run the validation verification
-if len(validationTests) > 0:
+if util.variables.validation:
     print("--------------------------------------------------------------------------")
     print("  Beginning validation test suite....")
     print("--------------------------------------------------------------------------")
-for test in validationTests:
-    # Create a new instance of the specific test class (see verificationMapping for the mapping)
-    newTest = validationMapping[test]()
-    # Run the specific and bit for bit verification for each case of the test
-    newTest.run()
-    validationSummary[test] = newTest.summary
-    # Generate the test-specific webpage 
-    newTest.generate()
-    print("")
+    for test in validationTests:
+        # Create a new instance of the specific test class (see verificationMapping for the mapping)
+        newTest = validationMapping[test]()
+        # Run the specific and bit for bit verification for each case of the test
+        newTest.run()
+        validationSummary[test.getName().lower()] = newTest.summary
+        # Generate the test-specific webpage 
+        newTest.generate()
+        print("")
 
 # Create the site index
 print("Generating web pages in " + util.variables.outputDir + "....")

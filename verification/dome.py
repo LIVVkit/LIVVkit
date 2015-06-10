@@ -44,6 +44,7 @@ from verification.base import AbstractTest
 from util.parser import Parser
 import util.variables
 
+def getName(): return "Dome"
 
 '''
 Main class for handling dome verification tests

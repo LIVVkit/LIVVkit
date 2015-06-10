@@ -50,20 +50,6 @@ from abc import ABCMeta, abstractmethod
 from plots import nclfunc
 import util.variables
 
-# A mapping of the options to the test cases that can be run
-cases = {'none' : [],
-         'ismip' : ['ismip'],
-         'dome' : ['dome'],
-         'shelf' : ['shelf'],
-         'stream' : ['stream'],
-         'all' : ['dome', 'ismip', 'shelf', 'stream']}
-
-''' Return a list of options '''
-def choices(): return list( cases.keys() )
-
-''' Return the tests associated with an option '''
-def choose(key): return cases[key] if cases.has_key(key) else None
-
 '''
 AbstractTest provides a description of how a test should work in LIVV.
 

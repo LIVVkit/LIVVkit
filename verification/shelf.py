@@ -44,6 +44,8 @@ from verification.base import AbstractTest
 from util.parser import Parser
 import util.variables
 
+def getName(): return "Shelf"
+
 '''
 Main class for handling shelf test cases.
 

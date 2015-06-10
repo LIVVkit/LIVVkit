@@ -44,19 +44,7 @@ from performance.base import AbstractTest
 from util.parser import Parser
 import util.variables
 
-
-# Map of the options to the test cases
-cases = {'none' : [],
-         'gis' : [],
-         'dome' : ['dome'],
-         'all'  : ['dome']
-        }
-
-''' Return a list of options '''
-def choices(): return list(cases.keys())
-
-''' Return the tests associated with an option '''
-def choose(key): return cases[key] if cases.has_key(key) else None
+def getName(): return "Dome"
 
 '''
 Main class for handling dome performance validation
