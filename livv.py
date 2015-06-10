@@ -193,7 +193,7 @@ for dir in [util.variables.inputDir, util.variables.benchmarkDir]:
     if not os.path.exists(dir):
         print("------------------------------------------------------------------------------")
         print("ERROR: Could not find " + dir + " for input")
-        print("       Use the -i, -b, and -d flags to specify the locations of the model and comparison data.")
+        print("       Use the -t and -b flags to specify the locations of the test and benchmark data.")
         print("       See README.md for more details.")
         print("------------------------------------------------------------------------------")
         exit(1)
