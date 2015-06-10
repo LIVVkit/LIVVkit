@@ -9,15 +9,15 @@ If this document is out of date send us an email!  See the contact section below
 
   Introduction
 ================
-LIVV is a python-based toolkit for verification and validation of Ice Sheet Models.  LIVV provides a way for testing model output against a set of benchmark data.  Verification testing checks bitwise accuracy of solutions, and reports inconsistencies, as well as providing differences in configurations between model and benchmark data.  Standard output files are parsed for key information.  Validation and performance testing are under development.
+LIVVkit is a python-based toolkit for verification and validation of Ice Sheet Models.  LIVVkit provides a way for testing model output against a set of benchmark data.  Verification testing checks bitwise accuracy of solutions, and reports inconsistencies, as well as providing differences in configurations between model and benchmark data.  Standard output files are parsed for key information.  Validation and performance testing are under development.
 
-For further documentation view the [wiki](https://github.com/ACME-Climate/LIVV/wiki)
+For further documentation view the [wiki](https://github.com/LIVVkit/LIVVkit/wiki)
 
   Before Using
 ================
-Some requirements must be met before using LIVV.  LIVV was designed to be used with Python 2.7.  If you are using any other version of Python by default, use the command for Python 2.7 in place of any calls to `python` in this document (or any other LIVV Documentation).  If you are not sure what version of Python you are running try running `python --version` from a terminal.
+Some requirements must be met before using LIVVkit.  LIVVkit was designed to be used with Python 2.7.  If you are using any other version of Python by default, use the command for Python 2.7 in place of any calls to `python` in this document (or any other LIVVkit Documentation).  If you are not sure what version of Python you are running try running `python --version` from a terminal.
 
-LIVV depends on several software packages and libraries. We are working towards a completely automatic dependency management system, but some use cases may have been overlooked.  The complete list of dependencies for LIVV is as follows: 
+LIVVkit depends on several software packages and libraries. We are working towards a completely automatic dependency management system, but some use cases may have been overlooked.  The complete list of dependencies for LIVVkit is as follows: 
 
  * Python 2.7
  * NetCDF 4.3.0+
@@ -39,7 +39,7 @@ Send us an email to get a set of benchmark data.
 
   How to Use
 ==============
-Using LIVV should be a painless experience.  You can give it a go with default settings simply by running:
+Using LIVVkit should be a painless experience.  You can give it a go with default settings simply by running:
 
 > python livv.py
 
@@ -56,7 +56,7 @@ For a detailed list of options see the Options section, below.
 
   Options
 ===========
-A variety of options can be used with LIVV.  A detailed list follows:
+A variety of options can be used with LIVVkit.  A detailed list follows:
 
 |	Option	| Description |
 | ------------: | :-------------------------------------------------------------------------------------------------------------------------------- |
@@ -64,7 +64,7 @@ A variety of options can be used with LIVV.  A detailed list follows:
 |  --verification=VER | Specifies the verification tests to run                      |
 |  --performance=PERF | Specifies the performance tests to run                      |
 |  --comment=COMMENT |	Log a comment about this run									|
-|  -o OUTPUTDIR, --outputDir=OUTPUTDIR | Location to output the LIVV webpages.							|
+|  -o OUTPUTDIR, --outputDir=OUTPUTDIR | Location to output the LIVVkit webpages.							|
 |  -i INPUTDIR, --inputDir=INPUTDIR | Location of the input for running tests.						|
 |  -b BENCHDIR, --benchmarkDir=BENCHDIR | Location of the input for running tests.						|
 |  --load CONFIG | Load a preconfigured set of options for the given name.		|
@@ -74,7 +74,7 @@ A variety of options can be used with LIVV.  A detailed list follows:
   Contact
 ===========
 Bug reports/Feature Requests:
-  https://github.com/ACME-Climate/LIVV/issues
+  https://github.com/LIVVkit/LIVVkit/issues
 
 Andrew Bennett : 
   Github: arbennett
