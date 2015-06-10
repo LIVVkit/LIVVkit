@@ -8,13 +8,13 @@ if [ $? != 0 ]; then
 else 
 	# Go ahead and load them
 	echo -n "Loading modules...."
-	module load python/2.7.5
-	module load ncl/6.1.0
-	module load nco/4.3.9
-	module load python_matplotlib/1.3.1
-	module load hdf5/1.8.11
-	module load netcdf/4.1.3
-	module load python_numpy/1.8.0
-	module load python_netcdf4/1.0.6
+	module load python
+	module load ncl
+	module load nco
+	module load python_matplotlib
+	module load hdf5
+	module load netcdf
+	module load python_numpy
+	module load python_netcdf4
 	echo "done!"
 fi
