@@ -135,6 +135,7 @@ util.variables.user           = getpass.getuser()
 util.variables.websiteDir     = util.variables.cwd + "/web"
 util.variables.templateDir    = util.variables.websiteDir + "/templates"
 util.variables.indexDir       = util.variables.outputDir
+util.variables.verification   = "True"
 util.variables.performance    = str(options.performance)
 util.variables.validation     = "False"
 
@@ -233,7 +234,7 @@ verificationSummary, performanceSummary, validationSummary = dict(), dict(), dic
 util.websetup.setup(verificationTests + performanceTests + validationTests)
 
 # Run the verification tests
-if len(verificationTests) > 0:
+if util.variables.verification == "True":
     print("--------------------------------------------------------------------------")
     print("  Beginning verification test suite....")
     print("--------------------------------------------------------------------------")
