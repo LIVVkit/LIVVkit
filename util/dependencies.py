@@ -117,7 +117,7 @@ def check():
 
     if len(libsInstalled) > 0:
         print("")
-        print("")
+        print("")        
         print("------------------------------------------------------------------------------")
         print "  External Python Libraries have been installed!  Libraries installed:"
         for lib in libsInstalled:
@@ -131,8 +131,11 @@ def check():
     if len(depErrors) > 0:
         print("Uh oh!")
         print("")
+        print("------------------------------------------------------------------------------")
         print("Errors checking dependencies.  Errors found: ")
         for err in depErrors: print(err)
+        print("------------------------------------------------------------------------------")
+        print("")
         exit(len(depErrors))
     else:
         print("Okay!" + os.linesep + "Setting up environment....")
