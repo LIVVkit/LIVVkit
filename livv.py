@@ -57,8 +57,7 @@ Created on Dec 3, 2014
 print("------------------------------------------------------------------------------")
 print("  Land Ice Verification & Validation (LIVV)")
 print("------------------------------------------------------------------------------")
-
-
+print("  Load modules: python, ncl, nco, python_matplotlib, hdf5, netcdf, python_numpy, and python_netcdf4 for best results.")
 ###############################################################################
 #                                  Imports                                    #
 ###############################################################################
@@ -137,6 +136,7 @@ util.variables.websiteDir     = util.variables.cwd + "/web"
 util.variables.templateDir    = util.variables.websiteDir + "/templates"
 util.variables.indexDir       = util.variables.outputDir
 util.variables.performance    = str(options.performance)
+util.variables.validation     = "False"
 
 # A list of the information that should be looked for in the stdout of model output
 util.variables.parserVars = [
@@ -219,11 +219,11 @@ util.selfVerification.check()
 print("Running verification tests:")
 for case in verificationTests: 
     print("  " + case.getName())
-if util.variables.performance:
+if util.variables.performance == "True":
     print(os.linesep + "Running performance tests:")
     for case in performanceTests:
         print("  " + case.getName())
-if len(validationTests) > 0:
+if util.variables.validation == "True":
     print(os.linesep + "Running validation tests:")
     for case in validationTests:
         print("  " + case.getName())
@@ -259,7 +259,7 @@ if util.variables.performance == "True":
         print("")
 
 # Run the validation verification
-if util.variables.validation:
+if util.variables.validation == "True":
     print("--------------------------------------------------------------------------")
     print("  Beginning validation test suite....")
     print("--------------------------------------------------------------------------")

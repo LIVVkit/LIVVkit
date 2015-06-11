@@ -116,12 +116,15 @@ def check():
             libsInstalled.append(lib)
 
     if len(libsInstalled) > 0:
+        print("")
+        print("")
         print("------------------------------------------------------------------------------")
         print "  External Python Libraries have been installed!  Libraries installed:"
         for lib in libsInstalled:
             print("    " + lib)
         print("  Run LIVV again to continue.  ")
         print("------------------------------------------------------------------------------")
+        print("")
         exit(0)
 
     # Show all of the dependency errors that were found

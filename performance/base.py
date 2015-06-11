@@ -145,7 +145,7 @@ class AbstractTest(object):
         ax.plot(resolutions, times, 'bo-', label='Model')
         ax.plot(resolutions, mins, 'b--')
         ax.plot(resolutions, maxs, 'b--')
-        print("Saving plot to " + util.variables.imgDir + os.sep + self.name.capitalize() + os.sep + type +  "_scaling_weak.png")
+        #print("Saving plot to " + util.variables.imgDir + os.sep + self.name.capitalize() + os.sep + type +  "_scaling_weak.png")
         pyplot.savefig(util.variables.imgDir + os.sep + self.name.capitalize() + os.sep + type +  "_scaling_weak.png")
         self.imagesGenerated.append( [type + "_scaling_weak.png", "Weak scaling for " + type])
         
@@ -186,7 +186,7 @@ class AbstractTest(object):
                     ax.plot(x,maxs, 'r--')
                     pyplot.legend()
 
-                print("Saving plot to " + util.variables.imgDir + os.sep + self.name.capitalize() + os.sep + type + "_" + res +  "_scaling" + ".png")
+                #print("Saving plot to " + util.variables.imgDir + os.sep + self.name.capitalize() + os.sep + type + "_" + res +  "_scaling" + ".png")
                 pyplot.savefig(util.variables.imgDir + os.sep + self.name.capitalize() + os.sep + type + "_" + res +  "_scaling" + ".png")
                 self.imagesGenerated.append( [type + "_" + res + "_scaling" + ".png", "Strong scaling for " + type + res])
 
