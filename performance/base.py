@@ -120,6 +120,12 @@ class AbstractTest(object):
         # was most common, then pull out the resolution, number of processor,
         # and the time taken 
         workPerProc = [i for sublist in workPerProc for i in sublist]
+        
+        # If there's no data quit early
+        if workPerProc == []:
+            return
+       
+        # This gets the most applicable data points to plot
         scalingConstant = Counter(workPerProc).most_common()[0][0]
         for res in resolutions: 
             test= type + res
@@ -158,7 +164,9 @@ class AbstractTest(object):
             # Fix string for Greenland runs
             test = type + res
             # Add the data if it's available
-            if self.modelTimingData[test] != [] and self.modelTimingData[test] != [[],[]]:
+            if self.modelTimingData[test] != {} and self.modelTimingData[test] != {[],[]}:
+                
+                print self.modelTimingData[test]
                 modelData = self.modelTimingData[test]
                 fig, ax = pyplot.subplots(1)
                 pyplot.title("Strong scaling for " + type  + res)

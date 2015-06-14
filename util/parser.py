@@ -230,7 +230,7 @@ class Parser(object):
                     convergedIters.append(-1*currentStep)
 
                 splitLine = line.split()
-                if len(splitLine) > 0:
+                if len(splitLine) > 0 and splitLine[0].isdigit():
                     iterNumber = splitLine[0]
 
             # Calculate the average number of iterations it took to converge
