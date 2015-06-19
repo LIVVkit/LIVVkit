@@ -66,3 +66,9 @@ dycores = []
 # Provide a way to update this when loading a configuration
 def update(vars):
     globals().update(vars)
+
+# Print out the variables that are contained in this module
+def print_vars():
+    for k,v in globals().iteritems():
+        if not str(k).startswith('__'):
+            print str(k) + " = " + str(v)

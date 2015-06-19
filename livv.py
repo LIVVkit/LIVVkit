@@ -158,12 +158,9 @@ util.variables.timingVars = ['Time'
 # Dycores to try to parse output for
 util.variables.dycores = ['glissade'] #["glide", "glissade", "glam", "albany", "bisicles"]
 
-
 ###############################################################################
 #                               Main Execution                                #
 ###############################################################################
-
-
 # Check if we are saving/loading the configuration and set up the machine name
 machineName = socket.gethostname()
 if options.saveName != '':
