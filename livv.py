@@ -68,6 +68,8 @@ import time
 import getpass
 import platform
 import socket
+import time
+import multiprocessing
 
 from optparse import OptionParser
 
@@ -230,18 +232,26 @@ if util.variables.validation == "True":
 verificationSummary, performanceSummary, validationSummary = dict(), dict(), dict()
 util.websetup.setup(verificationTests + performanceTests + validationTests)
 
+# Steps to run verification
+def verify(verType):
+    newTest = verType.Test()
+    newTest.run()
+    verificationSummary[verType.getName().lower()] = newTest.summary
+    newTest.generate()
+    print("")
+
 # Run the verification tests
+verificationProcesses = [multiprocessing.Process(target=verify, args=(verType,)) for verType in verificationTests]
 if util.variables.verification == "True":
     print("--------------------------------------------------------------------------")
     print("  Beginning verification test suite....")
     print("--------------------------------------------------------------------------")
-for test in verificationTests:
-    # Create a new instance of the specific test class (see verificationMapping for the mapping)
-    newTest = test.Test()
-    newTest.run()
-    verificationSummary[test.getName().lower()] = newTest.summary
-    newTest.generate()
-    print("")    
+for p in verificationProcesses:
+    p.start()
+
+while len(multiprocessing.active_children()) != 0:
+    time.sleep(0.25)
+    
 
 # Run the performance verification
 if util.variables.performance == "True":
