@@ -104,10 +104,7 @@ class AbstractTest(object):
 
         # If the intersection is empty just return a blank entry
         if len(sameList) == 0:
-            print("  Benchmark and model data not available for " + test)
             return {'No matching benchmark and data files found': ['SKIPPED','0.0']}
-        else:
-            print("  Running bit for bit verification of " + test + "....")
 
         # Go through and check if any differences occur
         for same in list(sameList):

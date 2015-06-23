@@ -232,26 +232,25 @@ if util.variables.validation == "True":
 verificationSummary, performanceSummary, validationSummary = dict(), dict(), dict()
 util.websetup.setup(verificationTests + performanceTests + validationTests)
 
-# Steps to run verification
-def verify(verType):
-    newTest = verType.Test()
-    newTest.run()
-    verificationSummary[verType.getName().lower()] = newTest.summary
-    newTest.generate()
-    print("")
-
 # Run the verification tests
-verificationProcesses = [multiprocessing.Process(target=verify, args=(verType,)) for verType in verificationTests]
+output = multiprocessing.Queue()
+verificationProcesses = [multiprocessing.Process(target=verType.Test().run, args=(verificationSummary, output)) for verType in verificationTests]
 if util.variables.verification == "True":
     print("--------------------------------------------------------------------------")
     print("  Beginning verification test suite....")
     print("--------------------------------------------------------------------------")
-for p in verificationProcesses:
-    p.start()
-
-while len(multiprocessing.active_children()) != 0:
-    time.sleep(0.25)
+    # Spawn a new process for each test
+    for p in verificationProcesses:
+        p.start()
+        p.join()
     
+    # Wait for all of the tests to finish
+    while len(multiprocessing.active_children()) != 0:
+        time.sleep(0.25)
+    
+    # Show the results
+    while output.qsize() > 0:
+        print output.get()
 
 # Run the performance verification
 if util.variables.performance == "True":

@@ -71,12 +71,12 @@ class Test(AbstractTest):
     benchmark directories for different variations, and then runs
     the runStream() method with the correct information
     '''
-    def run(self):
+    def run(self, verSummary, output):
         if not (os.path.exists(self.modelDir) and os.path.exists(self.benchDir)):
-            print("    Could not find data for stream  verification!  Tried to find data in:")
-            print("      " + self.modelDir)
-            print("      " + self.benchDir)
-            print("    Continuing with next test....")
+            output.put("    Could not find data for stream  verification!  Tried to find data in:")
+            output.put("      " + self.modelDir)
+            output.put("      " + self.benchDir)
+            output.put("    Continuing with next test....")
             return
 
         resolutions = set()
@@ -85,9 +85,11 @@ class Test(AbstractTest):
             resolutions.add( mcf.split('.')[1] )
         resolutions = sorted( resolutions )
                 
-        self.runStream(resolutions[0], self.modelDir, self.benchDir)
+        self.runStream(resolutions[0], self.modelDir, self.benchDir, output)
         self.testsRun.append("Stream " + resolutions[0])
-
+        verSummary[self.name.lower()] = self.summary
+        output.put("")
+        
 
     '''
     Runs the stream V&V for a given resolution.  First parses through all 
@@ -98,9 +100,9 @@ class Test(AbstractTest):
     @param modelDir: the location of the model run data
     @param benchDir: the location of the benchmark data
     '''
-    def runStream(self, resolution, modelDir, benchDir):
+    def runStream(self, resolution, modelDir, benchDir, output):
         # Process the configure files
-        print("  Stream " + resolution + " test in progress....")
+        output.put("  Stream " + resolution + " test in progress....")
         streamParser = Parser()
         self.modelConfigs['Stream ' + resolution], self.benchConfigs['Stream ' + resolution] = \
                 streamParser.parseConfigurations(modelDir, benchDir, "*" + resolution + ".*.config")
@@ -115,7 +117,7 @@ class Test(AbstractTest):
         numberBitMatches, numberBitTests = 0, 0
         self.bitForBitDetails['Stream ' + resolution] = self.bit4bit('stream', modelDir, benchDir, resolution)
         for key, value in self.bitForBitDetails['Stream ' + resolution].iteritems():
-            print ("    {:<40} {:<10}".format(key, value[0]))
+            output.put("    {:<40} {:<10}".format(key, value[0]))
             if value[0] == "SUCCESS": numberBitMatches += 1
             numberBitTests += 1
 

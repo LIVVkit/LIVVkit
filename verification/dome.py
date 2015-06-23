@@ -72,13 +72,13 @@ class Test(AbstractTest):
     benchmark directories for different variations, and then runs
     the runDome() method with the correct information
     '''
-    def run(self):
+    def run(self, verSummary, output):
 
         if not (os.path.exists(self.modelDir) and os.path.exists(self.benchDir)):
-            print("    Could not find data for dome verification!  Tried to find data in:")
-            print("      " + self.modelDir)
-            print("      " + self.benchDir)
-            print("    Continuing with next test....")
+            output.put("    Could not find data for dome verification!  Tried to find data in:")
+            output.put("      " + self.modelDir)
+            output.put("      " + self.benchDir)
+            output.put("    Continuing with next test....")
             return
         resolutions = set()
         modelConfigFiles = fnmatch.filter(os.listdir(self.modelDir), 'dome*.config')
@@ -86,8 +86,10 @@ class Test(AbstractTest):
             resolutions.add( mcf.split('.')[1] )
         resolutions = sorted( resolutions )
         
-        self.runDome(resolutions[0], self.modelDir, self.benchDir)
+        self.runDome(resolutions[0], self.modelDir, self.benchDir, output)
         self.testsRun.append("Dome " + resolutions[0])
+        verSummary[self.name.lower()] = self.summary
+        output.put("")
 
     '''
     Runs the dome V&V for a given resolution.  First parses through all 
@@ -98,8 +100,8 @@ class Test(AbstractTest):
     @param modelDir: the location of the model run data
     @param benchDir: the location of the benchmark data
     '''
-    def runDome(self, resolution, modelDir, benchDir):
-        print("  Dome " + resolution + " test in progress....")
+    def runDome(self, resolution, modelDir, benchDir, output):
+        output.put("  Dome " + resolution + " test in progress....")
         domeParser = Parser()
         
         # Process the configure files
@@ -116,7 +118,7 @@ class Test(AbstractTest):
         numberBitMatches, numberBitTests = 0, 0
         self.bitForBitDetails['Dome ' + resolution] = self.bit4bit('dome', modelDir, benchDir, resolution)
         for key, value in self.bitForBitDetails['Dome ' + resolution].iteritems():
-            print ("    {:<40} {:<10}".format(key, value[0]))
+            output.put("    {:<40} {:<10}".format(key, value[0]))
             if value[0] == "SUCCESS": numberBitMatches += 1
             numberBitTests += 1
 

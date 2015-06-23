@@ -41,7 +41,7 @@ import os
 import shutil
 import subprocess
 import sys
-
+import Queue
 import verification.dome
 import util.variables
 
@@ -54,26 +54,27 @@ def check():
     print("  Verifying integrity of verification tests...."),
     
     # Redirect standard output so that we don't have to see the output of these tests
-    sys.stdout = open(os.devnull, "w")
+    #sys.stdout = open(os.devnull, "w")
     errorList = []
+    fakeSummary = dict()
     dome = verification.dome.Test()
     dome.benchDir = util.variables.cwd + os.sep + "util" + os.sep + "data_base"
     
     # Compare against data that should all match
     dome.modelDir = util.variables.cwd + os.sep + "util" + os.sep + "data_same"
-    dome.run()
+    dome.run(fakeSummary, Queue.Queue())
     if not dome.bitForBitDetails["Dome 0010"]["dome.0010.p001.out.nc"][0] == 'SUCCESS':
         errorList.append("NCDiff recorded differences on results of same test.")
 
     # Compare against data that has a small difference
     dome.modelDir = util.variables.cwd + os.sep + "util" + os.sep + "data_diffsmall"
-    dome.run()
+    dome.run(fakeSummary, Queue.Queue())
     if not dome.bitForBitDetails["Dome 0010"]["dome.0010.p001.out.nc"][0] == 'FAILURE':
         errorList.append("NCDiff failed to record differences on small difference test") 
 
     # Compare against data that has a large difference
     dome.modelDir = util.variables.cwd + os.sep + "util" + os.sep + "data_difflarge"
-    dome.run() 
+    dome.run(fakeSummary, Queue.Queue()) 
     if not dome.bitForBitDetails["Dome 0010"]["dome.0010.p001.out.nc"][0] == 'FAILURE':
         errorList.append("NCDiff failed to record differences on small difference test") 
 
@@ -82,7 +83,7 @@ def check():
     #os.mkdir(util.variables.imgDir + os.sep + "Dome" + os.sep + "bit4bit")
    
     # Restore standard output so that we can report and continue if possible 
-    sys.stdout = sys.__stdout__
+    #sys.stdout = sys.__stdout__
     if not errorList == []:
         # Get the current revision
         rev = subprocess.check_output(['git', 'rev-parse', '--short', 'HEAD']).strip()

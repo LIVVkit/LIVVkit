@@ -72,20 +72,22 @@ class Test(AbstractTest):
     benchmark directories for different variations, and then runs
     the runShelf() method with the correct information
     '''
-    def run(self):
+    def run(self, verSummary, output):
         if not (os.path.exists(self.modelDir) and os.path.exists(self.benchDir)):
-            print("    Could not find data for shelf verification!  Tried to find data in:")
-            print("      " + self.modelDir)
-            print("      " + self.benchDir)
-            print("    Continuing with next test....")
+            output.put("    Could not find data for shelf verification!  Tried to find data in:")
+            output.put("      " + self.modelDir)
+            output.put("      " + self.benchDir)
+            output.put("    Continuing with next test....")
             return
         testTypes = sorted(set(fn.split('.')[0].split('-')[-1] for fn in os.listdir(self.modelDir)))
         for test in testTypes:
             resolutions = sorted(set(fn.split(os.sep)[-1].split('.')[1]  \
                             for fn in glob.glob(self.modelDir + os.sep + 'shelf-' + test + "*.config")))
             for resolution in resolutions:
-                self.runShelf(test, resolution, self.modelDir, self.benchDir)
+                self.runShelf(test, resolution, self.modelDir, self.benchDir, output)
                 self.testsRun.append(test.capitalize() + " " + resolution)
+        verSummary[self.name.lower()] = self.summary
+        output.put("")
 
     '''
     Perform verification analysis on the a shelf case
@@ -95,8 +97,8 @@ class Test(AbstractTest):
      @param testDir: The path to the test data
      @param benchDir: The path to the benchmark data
     '''
-    def runShelf(self, testCase, resolution, testDir, benchDir):
-        print("  " + testCase.capitalize() + " shelf " + resolution + " test in progress....")
+    def runShelf(self, testCase, resolution, testDir, benchDir, output):
+        output.put("  " + testCase.capitalize() + " shelf " + resolution + " test in progress....")
         testName = testCase.capitalize() + " " + resolution
         shelfParser = Parser()
 
@@ -112,7 +114,7 @@ class Test(AbstractTest):
         numberBitTests, numberBitMatches = 0, 0
         self.bitForBitDetails[testName] = self.bit4bit('shelf-' + testCase, testDir, benchDir, resolution)
         for key, value in self.bitForBitDetails[testName].iteritems():
-            print ("    {:<40} {:<10}".format(key, value[0]))
+            output.put("    {:<40} {:<10}".format(key, value[0]))
             if value[0] == "SUCCESS": numberBitMatches+=1
             numberBitTests+=1
 
