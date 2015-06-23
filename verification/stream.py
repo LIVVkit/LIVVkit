@@ -87,6 +87,7 @@ class Test(AbstractTest):
                 
         self.runStream(resolutions[0], self.modelDir, self.benchDir, output)
         self.testsRun.append("Stream " + resolutions[0])
+        self.generate()
         verSummary[self.name.lower()] = self.summary
         output.put("")
         

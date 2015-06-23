@@ -229,11 +229,14 @@ if util.variables.validation == "True":
         print("  " + case.getName())
 
 # Set up the directory structure and summary dictionaries for output
-verificationSummary, performanceSummary, validationSummary = dict(), dict(), dict()
 util.websetup.setup(verificationTests + performanceTests + validationTests)
 
 # Run the verification tests
+manager = multiprocessing.Manager()
 output = multiprocessing.Queue()
+verificationSummary = manager.dict()
+performanceSummary = manager.dict()
+validationSummary = manager.dict()
 verificationProcesses = [multiprocessing.Process(target=verType.Test().run, args=(verificationSummary, output)) for verType in verificationTests]
 if util.variables.verification == "True":
     print("--------------------------------------------------------------------------")
@@ -245,9 +248,10 @@ if util.variables.verification == "True":
         p.join()
     
     # Wait for all of the tests to finish
-    while len(multiprocessing.active_children()) != 0:
+    while len(multiprocessing.active_children()) > 3:
+        print multiprocessing.active_children()
         time.sleep(0.25)
-    
+
     # Show the results
     while output.qsize() > 0:
         print output.get()
@@ -281,6 +285,9 @@ if util.variables.validation == "True":
         print("")
 
 # Create the site index
+verificationSummary = dict(verificationSummary)
+performanceSummary = dict(performanceSummary)
+validationSummary = dict(validationSummary)
 print("Generating web pages in " + util.variables.outputDir + "....")
 util.websetup.generate(verificationSummary, performanceSummary, validationSummary)
 

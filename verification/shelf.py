@@ -86,6 +86,7 @@ class Test(AbstractTest):
             for resolution in resolutions:
                 self.runShelf(test, resolution, self.modelDir, self.benchDir, output)
                 self.testsRun.append(test.capitalize() + " " + resolution)
+        self.generate()
         verSummary[self.name.lower()] = self.summary
         output.put("")
 

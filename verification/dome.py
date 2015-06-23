@@ -88,6 +88,7 @@ class Test(AbstractTest):
         
         self.runDome(resolutions[0], self.modelDir, self.benchDir, output)
         self.testsRun.append("Dome " + resolutions[0])
+        self.generate()
         verSummary[self.name.lower()] = self.summary
         output.put("")
 

@@ -164,9 +164,7 @@ class AbstractTest(object):
             # Fix string for Greenland runs
             test = type + res
             # Add the data if it's available
-            if self.modelTimingData[test] != {} and self.modelTimingData[test] != {[],[]}:
-                
-                print self.modelTimingData[test]
+            if self.modelTimingData[test] != {}:                
                 modelData = self.modelTimingData[test]
                 fig, ax = pyplot.subplots(1)
                 pyplot.title("Strong scaling for " + type  + res)
