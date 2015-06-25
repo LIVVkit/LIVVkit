@@ -50,6 +50,25 @@ from abc import ABCMeta, abstractmethod
 from plots import nclfunc
 import util.variables
 
+
+def good_time_dim(file_name):
+    """
+    Check netCDF files time dimension for emptyness. This likely
+    indicates the run did not complete.
+    """
+    
+    nc_file = Dataset(file_name, 'r')
+
+    times = False
+    if len(nc_file.dimensions['time']) > 0:
+        # empty, unlimited dims will be lenght 0
+        times = True
+
+    nc_file.close()
+
+    return times
+
+
 '''
 AbstractTest provides a description of how a test should work in LIVV.
 
@@ -113,53 +132,64 @@ class AbstractTest(object):
             testFile = testDir + os.sep + same
             benchFile = benchDir + os.sep + same
 
-            # Create a difference file with ncdiff
-            comline = ['ncdiff', testFile, benchFile, testDir + os.sep + 'temp.nc', '-O']
-            try:
-                subprocess.check_call(comline)
-            except Exception as e:
-                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
-                      + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+            # check for empty time dimensions
+            goodBench = good_time_dim(benchFile)
+            goodTest = good_time_dim(testFile)
+            
+            if (not goodBench) and (not goodTest):
+                bitDict[same] =  ['EMPTY TIME','benchmark and test']
+            elif not goodBench:
+                bitDict[same] =  ['EMPTY TIME','benchmark']
+            elif not goodTest:
+                bitDict[same] =  ['EMPTY TIME','test']
+            else:
+                # Create a difference file with ncdiff
+                comline = ['ncdiff', testFile, benchFile, testDir + os.sep + 'temp.nc', '-O']
                 try:
-                    exit(e.returncode)
-                except AttributeError:
+                    subprocess.check_call(comline)
+                except Exception as e:
+                    print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
+                          + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
+                    try:
+                        exit(e.returncode)
+                    except AttributeError:
+                        exit(e.errno)
+                diffData = Dataset(testDir + os.sep + 'temp.nc', 'r')
+                diffVars = diffData.variables.keys()
+
+                # Check if any data in thk has changed, if it exists
+                if 'thk' in diffVars and diffData.variables['thk'].size != 0:
+                    data = diffData.variables['thk'][:]
+                    if data.any():
+                        # Record the maximum difference and root mean square of the error 
+                        max = numpy.amax( numpy.absolute(data) )
+                        rmse = numpy.sqrt(numpy.sum( numpy.square(data).flatten() ) / data.size )
+                        plotVars['thk'] = [max, rmse]
+                        change = 1
+
+                # Check if any data in velnorm has changed, if it exists
+                if 'velnorm' in diffVars and diffData.variables['velnorm'].size != 0:
+                    data = diffData.variables['velnorm'][:]
+                    if data.any():
+                        # Record the maximum difference and root mean square of the error 
+                        max = numpy.amax( numpy.absolute(data) )
+                        rmse = numpy.sqrt(numpy.sum( numpy.square(data).flatten() ) / data.size )
+                        plotVars['velnorm'] = [max, rmse]
+                        change = 1
+
+                # Remove the temp file
+                try:
+                    os.remove(testDir + os.sep + 'temp.nc')
+                except OSError as e:
+                    print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
+                          + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                     exit(e.errno)
-            diffData = Dataset(testDir + os.sep + 'temp.nc', 'r')
-            diffVars = diffData.variables.keys()
+                bitDict[same] = [result[change],  plotVars]
 
-            # Check if any data in thk has changed, if it exists
-            if 'thk' in diffVars and diffData.variables['thk'].size != 0:
-                data = diffData.variables['thk'][:]
-                if data.any():
-                    # Record the maximum difference and root mean square of the error 
-                    max = numpy.amax( numpy.absolute(data) )
-                    rmse = numpy.sqrt(numpy.sum( numpy.square(data).flatten() ) / data.size )
-                    plotVars['thk'] = [max, rmse]
-                    change = 1
-
-            # Check if any data in velnorm has changed, if it exists
-            if 'velnorm' in diffVars and diffData.variables['velnorm'].size != 0:
-                data = diffData.variables['velnorm'][:]
-                if data.any():
-                    # Record the maximum difference and root mean square of the error 
-                    max = numpy.amax( numpy.absolute(data) )
-                    rmse = numpy.sqrt(numpy.sum( numpy.square(data).flatten() ) / data.size )
-                    plotVars['velnorm'] = [max, rmse]
-                    change = 1
-
-            # Remove the temp file
-            try:
-                os.remove(testDir + os.sep + 'temp.nc')
-            except OSError as e:
-                print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
-                      + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
-                exit(e.errno)
-            bitDict[same] = [result[change],  plotVars]
-
-            # Generate the plots for each of the failed variables
-            for var in plotVars.keys():
-                outFile = util.variables.imgDir + os.sep + self.name + os.sep + "bit4bit" + os.sep + testFile.split(os.sep)[-1] + "." + var + ".png"
-                nclfunc.plot_diff(var, testFile, benchFile, outFile)
+                # Generate the plots for each of the failed variables
+                for var in plotVars.keys():
+                    outFile = util.variables.imgDir + os.sep + self.name + os.sep + "bit4bit" + os.sep + testFile.split(os.sep)[-1] + "." + var + ".png"
+                    nclfunc.plot_diff(var, testFile, benchFile, outFile)
         return bitDict
 
     ''' 

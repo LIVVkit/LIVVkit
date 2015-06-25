@@ -42,7 +42,10 @@
         {% for fileName, details in bitForBitDetails[case].iteritems() %}
           <b>{{fileName}}</b>
           {% if details[0] == "SUCCESS" %}
-            <p class='SUCCESS' style="margin-left: 40px;"">SUCCESS</p>
+            <p class='SUCCESS' style="margin-left: 40px;">SUCCESS</p>
+          {% elif details[0] == "EMPTY TIME" %}
+          <p class='FAILURE' style="margin-left: 40px;">Empty time dimension in {{details[1]}} data. 
+                                                        This likely indicates the run was quit before it finished. Rerun this.</p>
           {% elif details[0] == "SKIPPED" %}
             <p class='SKIPPED' style="margin-left: 40px;">SKIPPED</p>
           {% elif details[0] == "FAILURE" %}
