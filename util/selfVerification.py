@@ -95,7 +95,7 @@ def check():
             print("    " + err)
         print("")
         print("  Report these errors with the code " + rev + " at: ")
-        print("    https://github.com/ACME-Climate/LIVV/issues")
+        print("    https://github.com/LIVVkit/LIVVkit/issues")
         print("")
         print("---------------------- ERROR --------------------------")
         exit()
