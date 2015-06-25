@@ -212,6 +212,9 @@ testMapping = {
 ###############################################################################
 #                               Run Test Cases                                #
 ###############################################################################
+# Set up the directory structure for output
+util.websetup.setup(verificationTests + performanceTests + validationTests)
+
 # Do a quick check to make sure that analysis works the way we want it to
 util.selfVerification.check()
 
@@ -227,9 +230,6 @@ if util.variables.validation == "True":
     print(os.linesep + "Running validation tests:")
     for case in validationTests:
         print("  " + case.getName())
-
-# Set up the directory structure and summary dictionaries for output
-util.websetup.setup(verificationTests + performanceTests + validationTests)
 
 # Run the verification tests
 manager = multiprocessing.Manager()
