@@ -37,6 +37,7 @@ Created Apr 21, 2015
 import os
 import errno
 import shutil
+from datetime import datetime
 
 import util.variables
 import jinja2
@@ -67,9 +68,8 @@ def setup(testsRun):
     if os.listdir(util.variables.indexDir):
         response = raw_input(os.linesep + "Found a duplicate of the output directory.  Would you like to create a backup before overwriting? (y/n)" + os.linesep)
         if response in ["yes", "Yes", "YES", "YEs", "y", "Y"]:
-            if os.path.exists(util.variables.indexDir + "_backup"):
-                shutil.rmtree(util.variables.indexDir + "_backup")
-            shutil.move(util.variables.indexDir, util.variables.indexDir + "_backup")
+            stamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            shutil.move(util.variables.indexDir, util.variables.indexDir + "_bkd_" + stamp)
         else:
             shutil.rmtree(util.variables.indexDir)
 
