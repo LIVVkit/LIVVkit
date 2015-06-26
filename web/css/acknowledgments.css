@@ -1,0 +1,65 @@
+#acknowledgments {
+    width: 1010px;
+    padding: 1em 0px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-top: 3px;
+    border-left: 0;
+    border-right: 0;
+    border-bottom: 0;
+    margin-left: 15%;
+    border-style: solid;
+    border-color: #47A3FF;
+    background-color: #FFFFFF;
+    color: #111111;
+    -moz-box-shadow: 5px 5px 4px rgba(30,30,30,0.3);
+    -webkit-box-shadow: 5px 5px 4px rgba(30,30,30,0.3);
+    box-shadow: 5px 5px 4px rgba(30,30,30,0.3);
+}
+
+#acknowledgments h2 {
+    margin: 0;
+    text-align: center;
+}
+
+#acknowledgments a {
+	color: #3385FF;
+    text-decoration: none;
+}
+
+.tableLink:hover {
+	color: #47A3FF;
+}
+
+
+#acklogo {
+    width: 1010px;
+    padding-top: 15px;
+    text-align: justify;
+}
+
+#acklogo {
+    display: inline-block;
+}
+
+#acklogo:after {
+    content: "";
+    width: 100%;
+    display: inline-block;
+}
+
+    
+#logoORNL {
+    padding-left: 15px;
+    height: 90px;
+}
+
+#logoLANL {
+    padding-right:15px;
+    height: 90px;
+}
+
+#logoDOESC {
+    height: 90px;
+}
+

@@ -183,7 +183,8 @@ hr {
 
 #footer {
     width: 1010px;
-    height: 5em;
+    margin-bottom: -5px;
+    padding-bottom: 10px;
     border-bottom-right-radius: 5px;
     border-bottom-left-radius: 5px;
     border-top: 3px;
