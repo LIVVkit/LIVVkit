@@ -27,13 +27,13 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-'''
+"""
 Performance Testing Base Module.  Defines the AbstractTest that will be inherited by all performance test classes.
 
 Created on Apr 21, 2015
 
 @author: arbennett
-'''
+"""
 import re
 import os
 import operator
@@ -52,25 +52,25 @@ cases = {'none' : [],
          'gis' : ['gis'],
          'all' : ['dome', 'gis']}
 
-''' Return a list of options '''
+""" Return a list of options """
 def choices():
     return list( cases.keys() )
 
-''' Return the tests associated with an option '''
+""" Return the tests associated with an option """
 def choose(key):
     return cases[key] if cases.has_key(key) else None
 
-'''
+"""
 AbstractTest provides base functionality for a Performance test
 
 Each test within LIVV needs to be able to run specific test code, and
 generate its output.  Tests inherit a common method of generating 
 scaling plots
-'''
+"""
 class AbstractTest(object):
     __metaclass__ = ABCMeta
 
-    ''' Constructor '''
+    """ Constructor """
     def __init__(self):
         self.name = "n/a"    # A name for the test
         self.testsRun = []    # A list of the test cases run
@@ -83,17 +83,17 @@ class AbstractTest(object):
         # A list of some key indicators 
         self.summary = dict()
 
-    ''' Definition for the general test run '''
+    """ Definition for the general test run """
     @abstractmethod
     def run(self, test):
         pass
 
-    '''
+    """
     Generates scaling plots for each variable and dycore combination of a given
     type.
 
     @param type : the overarching test category to generate scaling plots for (ie dome/gis)
-    '''
+    """
     def runScaling(self, type, resolutions):
         self.imagesGenerated = []
         print(os.linesep + "  Generating scaling plots for " + type + "....")
@@ -104,9 +104,9 @@ class AbstractTest(object):
         # Record the plots
         self.plotDetails['Scaling'] = self.imagesGenerated
 
-    '''
+    """
     Run weak scaling analysis
-    '''
+    """
     def weakScaling(self, type, resolutions):
         workPerProc, plotVars = [], []
         resolutions = sorted(resolutions)
@@ -155,9 +155,9 @@ class AbstractTest(object):
         pyplot.savefig(util.variables.imgDir + os.sep + self.name.capitalize() + os.sep + type +  "_scaling_weak.png")
         self.imagesGenerated.append( [type + "_scaling_weak.png", "Weak scaling for " + type])
         
-    '''
+    """
     Run strong scaling analysis
-    '''
+    """
     def strongScaling(self, type, resolutions):
         # Generate all of the plots
         for res in sorted(resolutions):
@@ -197,7 +197,7 @@ class AbstractTest(object):
                 self.imagesGenerated.append( [type + "_" + res + "_scaling" + ".png", "Strong scaling for " + type + res])
 
 
-    '''
+    """
     Create a {{test}}.html page in the output directory.
     This page will contain a detailed list of the results from LIVV.  Details
     from the run are pulled from two locations.  Global definitions that are 
@@ -207,7 +207,7 @@ class AbstractTest(object):
     
     @note Paths that are contained in templateVars should not be using os.sep
           since they are for html.
-    '''
+    """
     def generate(self):
         # Set up jinja related variables
         templateLoader = jinja2.FileSystemLoader(searchpath=util.variables.templateDir)

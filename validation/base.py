@@ -27,14 +27,14 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-'''
+"""
 Validation Test Base Module
 The AbstractTest class defines several methods that each test class must implement.
 
 Created on Apr 24, 2015
 
 @author: arbennett
-'''
+"""
 import os
 import glob
 import jinja2
@@ -47,22 +47,22 @@ cases = {'none' : [],
          'gis' : ['gis'],
          'all' : ['gis']}
 
-''' Return a list of options '''
+""" Return a list of options """
 def choices(): return list( cases.keys() )
 
-''' Return the tests associated with an option '''
+""" Return the tests associated with an option """
 def choose(key): return cases[key] if cases.has_key(key) else None
 
-'''
+"""
 Provide base functionality for a Validation test
 
 Each test within LIVV needs to be able to run specific test code, and
 generate its output.
-'''
+"""
 class AbstractTest(object):
     __metaclass__ = ABCMeta
 
-    ''' Constructor '''
+    """ Constructor """
     def __init__(self):
         self.name = 'na'
         self.testsRun = []
@@ -70,12 +70,12 @@ class AbstractTest(object):
         self.plotDetails = dict()
         self.fileTestDetails = dict()
         
-    ''' Definition for the general test run '''
+    """ Definition for the general test run """
     @abstractmethod
     def run(self, test):
         pass
 
-    '''
+    """
     Creates the output test page
     
     The generate method will create a {{test}}.html page in the output directory.
@@ -87,7 +87,7 @@ class AbstractTest(object):
     
     @note Paths that are contained in templateVars should not be using os.sep
           since they are for html.
-    '''
+    """
     def generate(self):
         # Set up jinja related variables
         templateLoader = jinja2.FileSystemLoader(searchpath=util.variables.templateDir)

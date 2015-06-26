@@ -27,7 +27,7 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-'''
+"""
 Master module for stream test cases.  Inherits methods from the AbstractTest
 class from the base module.  Stream specific verification is performed by calling
 the run() method, which gathers & passes the necessary information to the runStream()
@@ -36,7 +36,7 @@ method.
 Created on May 6, 2015
 
 @author: arbennett
-'''
+"""
 import os
 import fnmatch
 
@@ -46,16 +46,16 @@ import util.variables
 
 def getName(): return "Stream"
 
-'''
+"""
 Main class for handling stream test cases.
 
 The stream test cases inherit functionality from AbstractTest for checking 
 bit-for-bittedness from a model run. This class handles evolving and \
 diagnostic variations of the stream case.
-'''
+"""
 class Test(AbstractTest):
 
-    ''' Constructor '''
+    """ Constructor """
     def __init__(self):
         super(self.__class__, self).__init__()
         self.name = "Stream"
@@ -66,11 +66,11 @@ class Test(AbstractTest):
                             " till with a known and specified yield stress distribution. "
 
 
-    '''
+    """
     Runs all of the available stream tests.  Looks in the model and
     benchmark directories for different variations, and then runs
     the runStream() method with the correct information
-    '''
+    """
     def run(self, verSummary, output):
         if not (os.path.exists(self.modelDir) and os.path.exists(self.benchDir)):
             output.put("    Could not find data for stream  verification!  Tried to find data in:")
@@ -92,7 +92,7 @@ class Test(AbstractTest):
         output.put("")
         
 
-    '''
+    """
     Runs the stream V&V for a given resolution.  First parses through all 
     of the standard output & config files for the given test case, then finishes up by 
     doing bit for bit comparisons with the benchmark files.
@@ -100,7 +100,7 @@ class Test(AbstractTest):
     @param resolution: The resolution of the test cases to look in.
     @param modelDir: the location of the model run data
     @param benchDir: the location of the benchmark data
-    '''
+    """
     def runStream(self, resolution, modelDir, benchDir, output):
         # Process the configure files
         output.put("  Stream " + resolution + " test in progress....")

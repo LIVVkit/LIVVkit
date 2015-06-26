@@ -27,7 +27,7 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-'''
+"""
 A general parser for extracting data from text files.  When using parseConfigurations the
 resulting dictionaries can be iterated over via the following code:
 
@@ -43,7 +43,7 @@ resulting dictionaries can be iterated over via the following code:
 Created on Feb 19, 2015
 
 @author: arbennett
-'''
+"""
 import os
 import re
 import glob
@@ -53,16 +53,16 @@ import numpy as np
 import util.variables
 from collections import OrderedDict
 
-'''
+"""
 The generalized parser for processing text files associated with a test case
 
 The parser class is to be used within test classes to easily get information
 from text files.  The two main pieces of functionality of a parser are for
 reading configuration files and standard output from simulations.
-'''
+"""
 class Parser(object):
     
-    ''' Constructor '''
+    """ Constructor """
     def __init__(self):
         self.configParser = ConfigParser.ConfigParser()
         self.benchData, self.modelData = dict(), dict()
@@ -73,16 +73,16 @@ class Parser(object):
         self.stdOutData = OrderedDict()
         for var in util.variables.parserVars: self.stdOutData[var] = None
 
-    '''
+    """
     Get some key details about what was parsed
     
     @return the number of output and configuration files parsed and 
             how many configurations matched the benchmarks
-    '''
+    """
     def getParserSummary(self):
         return self.nOutputParsed, self.nConfigMatched, self.nConfigParsed
 
-    '''
+    """
     Parse through all of the configuration files from a model and benchmark
     
     Parses all of the files in the given directories and stores them as
@@ -95,7 +95,7 @@ class Parser(object):
     @param benchDir: the directory for the benchmark configuration files
     @returns modelData, benchData: the nested dictionaries corresponding
              to the files found in the input directories
-    '''
+    """
     def parseConfigurations(self, modelDir, benchDir, regex):
         # Make sure the locations exist, and if not return blank sets
         if not (os.path.exists(modelDir) and os.path.exists(benchDir)):
@@ -159,7 +159,7 @@ class Parser(object):
 
         return self.modelData, self.benchData
 
-    '''    
+    """    
     Searches through a standard output file looking key pieces of
     data about the run.  Records the dycore type, the number of 
     processors used, the average convergence rate, and number of 
@@ -168,7 +168,7 @@ class Parser(object):
     @param modelDir: the directory with files to parse through
     @param regex: A pattern to match the std output files with
     @returns a mapping of the various parameters to their values from the file
-    '''
+    """
     def parseStdOutput(self, modelDir, regex):
         # Set up variables that we can use to map data and information
         dycoreTypes = {"0" : "Glide", "1" : "Glam", "2" : "Glissade", "3" : "AlbanyFelix", "4" : "BISICLES"}
@@ -256,12 +256,12 @@ class Parser(object):
 
         return zip(files, outdata)
 
-    ''' 
+    """ 
     Search through gptl timing files 
     
     @param basePath: the directory to look for timing files in
     @returns a summary of the timing data that was parsed
-    '''
+    """
     def parseTimingSummaries(self, basePath, testName, resolution):
         if not os.path.exists(basePath):
             return []

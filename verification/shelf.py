@@ -27,7 +27,7 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-'''
+"""
 Master module for shelf test cases  Inherits methods from the AbstractTest
 class from the base module.  Shelf specific verification is performed by calling
 the run() method, which gathers & passes the necessary information to the runShelf()
@@ -36,7 +36,7 @@ method.
 Created on Dec 8, 2014
 
 @author: arbennett
-'''
+"""
 import os
 import glob
 
@@ -46,13 +46,13 @@ import util.variables
 
 def getName(): return "Shelf"
 
-'''
+"""
 Main class for handling shelf test cases.
 
 The shelf test cases inherit functionality from AbstractTest for checking 
 bit-for-bittedness as well as for parsing standard output from a model run.
 This class handles the confined and circular variations of the shelf cases.
-'''
+"""
 class Test(AbstractTest):
 
     ## Constructor
@@ -67,11 +67,11 @@ class Test(AbstractTest):
                             "circular shelf is a 1000 m thick circular shelf grounded " + \
                             "at the center."
   
-    '''
+    """
     Runs all of the available shelf tests.  Looks in the model and
     benchmark directories for different variations, and then runs
     the runShelf() method with the correct information
-    '''
+    """
     def run(self, verSummary, output):
         if not (os.path.exists(self.modelDir) and os.path.exists(self.benchDir)):
             output.put("    Could not find data for shelf verification!  Tried to find data in:")
@@ -90,14 +90,14 @@ class Test(AbstractTest):
         verSummary[self.name.lower()] = self.summary
         output.put("")
 
-    '''
+    """
     Perform verification analysis on the a shelf case
     
      @param type: The type of shelf test (circular, confined, etc)
      @param resolution: The size of the shelf test (0041, 0043, etc)
      @param testDir: The path to the test data
      @param benchDir: The path to the benchmark data
-    '''
+    """
     def runShelf(self, testCase, resolution, testDir, benchDir, output):
         output.put("  " + testCase.capitalize() + " shelf " + resolution + " test in progress....")
         testName = testCase.capitalize() + " " + resolution

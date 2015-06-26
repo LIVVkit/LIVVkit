@@ -27,7 +27,7 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-'''
+"""
 Master module for GIS test cases.  Inherits methods from the AbstractTest
 class from the Test module.  GIS specific verification are performed by calling
 the run() method, which passes the necessary information to the runGisPerformance()
@@ -36,7 +36,7 @@ method.
 Created on Dec 8, 2014
 
 @author: arbennett
-'''
+"""
 import os
 
 import util.variables
@@ -45,15 +45,15 @@ from util.parser import Parser
 
 def getName(): return "Greenland Ice Sheet"
 
-'''
+"""
 Main class for handling Greenland Ice Sheet performance validation.
 
 The Greenland Ice Sheet test cases inherit functionality from AbstractTest for
 generating scaling plots and generating the output webpage.
-'''
+"""
 class Test(AbstractTest):
 
-    ''' Constructor '''
+    """ Constructor """
     def __init__(self):
         super(self.__class__, self).__init__()
         self.name = "gis"
@@ -61,22 +61,22 @@ class Test(AbstractTest):
         self.benchDir = util.variables.performanceDir + os.sep + "bench" + os.sep + 'gis'
         self.description = "A placeholder description"
 
-    '''
+    """
     This method will record the specific test cases
     being run.  Each specific test case string is run via the 
     runGisPerformance function.  All of the data pulled is then
     assimilated via the runScaling method defined in the base class
-    '''
+    """
     def run(self):
         print("This is a placeholder")
         return
 
 
-    '''
+    """
     Greenland Ice Sheet Performance Testing
     
     @param resolution : the resolution of the test data
-    '''
+    """
     def runGisPerformance(self, resolution):
         print(os.linesep + "  Greenland Ice Sheet " + resolution + " performance testing in progress....")
 

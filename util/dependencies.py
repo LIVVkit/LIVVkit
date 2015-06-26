@@ -27,13 +27,13 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-'''
+"""
 Dependency management module for LIVV
 
 Created on January 6, 2015
 
 @author: arbennett
-'''
+"""
 
 #
 # TODO : Try to import urllib2 before checking for setuptools.  If it's not available try using something
@@ -46,7 +46,7 @@ import sys
 import urllib2
 import subprocess
 
-'''
+"""
 Run all of the checks for dependencies required by LIVV
 
 Checks if modules are used, and if they are checks to see
@@ -54,7 +54,7 @@ if they are loaded.  Then, checks for the necessary Python
 libraries.  If any are missing they are installed via 
 easy_install.  If easy_install isn't installed, that is 
 also built.
-'''
+"""
 def check():
     cwd = os.getcwd()
     
@@ -140,14 +140,14 @@ def check():
     else:
         print("Okay!" + os.linesep + "Setting up environment....")
 
-'''
+"""
 Checks if the system running LIVV uses modules to load dependencies.
 
 If the system does use modules, this method goes through and makes
 sure that the correct modules are loaded.  Any modules that are needed
 but haven't been loaded are added to a module loader script that the
 user is prompted to source before running LIVV again.
-'''
+"""
 def checkModules():
     # Check to see if calling 'module list' is a real command
     cwd = os.getcwd()
@@ -207,14 +207,14 @@ def checkModules():
         else:
             print(" found all required modules!")
 
-'''
+"""
 Installs setuptools under the user python libraries
 
 If setuptools isn't found on a system it is probably the case that other
 packages are also not available.   Once setuptools is installed we can
 access the easy_install command from inside of LIVV if  any python
 dependencies aren't satisfied
-'''
+"""
 def installSetupTools():
     # Specify where to download from
     cwd = os.getcwd()

@@ -27,13 +27,13 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-'''
+"""
 Storage for global variables.  These are set upon startup in the main 
 livv.py module
 
 Created on May 5th, 2015
 @author arbennett
-'''
+"""
 cwd            = ''
 configDir      = ''
 inputDir       = ''

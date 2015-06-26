@@ -27,24 +27,23 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-'''
+"""
 Contains the specifications for how to handle preconfigured machine options
 
 Created on Dec 23, 2014
 
 @author: arbennett
-'''
+"""
 
 import os
 import util.variables
-from util.variables import *
 
-'''
+"""
 Load a configuration file from the configurations directory at the root of LIVV.
 
 @param machineName: the name of the file to load from
 @returns locals: The list of variables loaded from the file
-'''
+"""
 def load(machineName):
     # Tell the user where we are going to load from
     configFile = util.variables.cwd + os.sep + "configurations" + os.sep + machineName
@@ -61,11 +60,11 @@ def load(machineName):
     return locals()
 
 
-'''
+"""
 Write a configuration file to the configurations directory at the root of LIVV.
 
 @param machineName: the name of the file to write to
-'''
+"""
 def save(machineName):
     # Pull in the variables needed and tell user where they'll go 
     configFile = util.variables.cwd + os.sep + "configurations" + os.sep + machineName

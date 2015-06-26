@@ -27,13 +27,13 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-'''
+"""
 Utility module to make setting up the index of the LIVV webpage easier.
 
 Created Apr 21, 2015
 
 @author arbennett
-'''
+"""
 import os
 import errno
 import shutil
@@ -42,11 +42,11 @@ from datetime import datetime
 import util.variables
 import jinja2
 
-'''
+"""
 Prepare the index of the website.
 
 @param testsRun: the top level names of each of the verification run
-'''
+"""
 
 def mkdir_p(path):
     """
@@ -76,7 +76,8 @@ def setup(testsRun):
     # Create directory structure
     testDirs = [util.variables.indexDir + os.sep + "validation", 
                 util.variables.indexDir + os.sep + "verification", 
-                util.variables.indexDir + os.sep + "performance"]
+                util.variables.indexDir + os.sep + "performance",
+                util.variables.indexDir + os.sep + "data"]
     for siteDir in testDirs:
         mkdir_p(siteDir);
 
@@ -88,13 +89,13 @@ def setup(testsRun):
     for test in testsRun:
         mkdir_p(util.variables.imgDir + os.sep + test.getName().capitalize() + os.sep + "bit4bit")
 
-'''
+"""
 Build the index
 
 @param verificationSummary: A summary of the verification verification run
 @param performanceSummary: A summary of the performance verification run
 @param validationSummary: A summary of the validation verification run
-'''
+"""
 def generate(verificationSummary, performanceSummary, validationSummary):
     # Where to look for page templates
     templateLoader = jinja2.FileSystemLoader(searchpath=util.variables.templateDir)

@@ -27,7 +27,7 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-'''
+"""
 Master module for dome test cases.  Inherits methods from the AbstractTest
 class from the base module.  Dome specific verification is performed by calling
 the run() method, which gathers & passes the necessary information to the runDome()
@@ -36,7 +36,7 @@ method.
 Created on Dec 8, 2014
 
 @author: arbennett
-'''
+"""
 import os
 import fnmatch
 
@@ -46,16 +46,16 @@ import util.variables
 
 def getName(): return "Dome"
 
-'''
+"""
 Main class for handling dome verification tests
 
 The dome test cases inherit functionality from AbstractTest for checking 
 bit-for-bittedness from a model run. This class handles evolving and \
 diagnostic variations of the dome case.
-'''
+"""
 class Test(AbstractTest):
 
-    ''' Constructor '''
+    """ Constructor """
     def __init__(self):
         super(self.__class__, self).__init__()
         self.name = "Dome"
@@ -67,11 +67,11 @@ class Test(AbstractTest):
                       " imposed by setting. A zero-flux boundary condition is" + \
                       " applied to the dome margins. "
 
-    '''
+    """
     Runs all of the available dome tests.  Looks in the model and
     benchmark directories for different variations, and then runs
     the runDome() method with the correct information
-    '''
+    """
     def run(self, verSummary, output):
 
         if not (os.path.exists(self.modelDir) and os.path.exists(self.benchDir)):
@@ -93,7 +93,7 @@ class Test(AbstractTest):
         verSummary[self.name.lower()] = self.summary
         output.put("")
 
-    '''
+    """
     Runs the dome V&V for a given resolution.  First parses through all 
     of the standard output & config files for the given test case, then finishes up by 
     doing bit for bit comparisons with the benchmark files.
@@ -101,7 +101,7 @@ class Test(AbstractTest):
     @param resolution: The resolution of the test cases to look in.
     @param modelDir: the location of the model run data
     @param benchDir: the location of the benchmark data
-    '''
+    """
     def runDome(self, resolution, modelDir, benchDir, output):
         output.put("  Dome " + resolution + " test in progress....")
         domeParser = Parser()

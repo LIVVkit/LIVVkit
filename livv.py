@@ -28,7 +28,7 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-'''
+"""
 Main script to run LIVV.  This script records some user data, sets up the test 
 suite, runs the verification, and generates a website based on the results of the verification.
 
@@ -53,7 +53,7 @@ verification.
 Created on Dec 3, 2014
 
 @authors: arbennett, jhkennedy
-'''
+"""
 print("------------------------------------------------------------------------------")
 print("  Land Ice Verification & Validation (LIVV)")
 print("------------------------------------------------------------------------------")

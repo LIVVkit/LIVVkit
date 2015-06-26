@@ -27,7 +27,7 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-'''
+"""
 Master module for dome performance test cases.  Inherits methods from the AbstractTest
 class from the Test module.  Dome specific performance tests are performed by calling
 the run() method, which passes the necessary information to the runDomePerformance()
@@ -36,7 +36,7 @@ method.
 Created on Dec 8, 2014
 
 @author: arbennett
-'''
+"""
 import os
 import fnmatch
 
@@ -46,15 +46,15 @@ import util.variables
 
 def getName(): return "Dome"
 
-'''
+"""
 Main class for handling dome performance validation
 
 The dome test cases inherit functionality from AbstractTest for
 generating scaling plots and generating the output webpage.
-'''
+"""
 class Test(AbstractTest):
 
-    ''' Constructor '''
+    """ Constructor """
     def __init__(self):
         super(self.__class__, self).__init__()
         self.name = "Dome"
@@ -68,14 +68,14 @@ class Test(AbstractTest):
                       " imposed by setting. A zero-flux boundary condition is" + \
                       " applied to the dome margins. "
 
-    '''
+    """
     Runs the performance specific test cases.
     
     When running a test this call will record the specific test case
     being run.  Each specific test case string is run via the 
     runDomePerformance function.  All of the data pulled is then
     assimilated via the runScaling method defined in the base class
-    '''
+    """
     def run(self):
         if not (os.path.exists(self.modelDir) and os.path.exists(self.benchDir)):
             print("    Could not find data for dome verification!  Tried to find data in:")
@@ -97,13 +97,13 @@ class Test(AbstractTest):
 
 
 
-    '''
+    """
     Run an instance of dome performance testing
     
     @param resolution: the size of the test being analyzed
     @param perfDir: the location of the performance data
     @param perfBenchDir: the location of the benchmark performance data
-    '''
+    """
     def runDome(self, resolution, perfDir, perfBenchDir):
         print("  Dome " + resolution + " performance testing in progress....")
 

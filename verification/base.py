@@ -27,7 +27,7 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-'''
+"""
 Verification Test Base Module
 The AbstractTest class defines several methods that each test class must implement, 
 as well as provides bit for bit and html generating capabilities which are inherited
@@ -36,7 +36,7 @@ by all derived test classes.
 Created on Dec 8, 2014
 
 @author: arbennett
-'''
+"""
 
 import sys
 import os
@@ -69,17 +69,17 @@ def good_time_dim(file_name):
     return times
 
 
-'''
+"""
 AbstractTest provides a description of how a test should work in LIVV.
 
 Each test within LIVV needs to be able to run specific test code, and
 generate its output.  Tests inherit a common method of checking for 
 bit-for-bittedness
-'''
+"""
 class AbstractTest(object):
     __metaclass__ = ABCMeta
 
-    ''' Constructor '''
+    """ Constructor """
     def __init__(self):
         self.name = "default"
         self.modelDir, self.benchDir = "", ""
@@ -91,12 +91,12 @@ class AbstractTest(object):
         self.summary = dict()
 
 
-    ''' Definition for the general test run '''
+    """ Definition for the general test run """
     @abstractmethod
     def run(self, test):
         pass
 
-    '''
+    """
     Tests all models and benchmarks against each other in a bit for bit fashion.
     If any differences are found the method will return 1, otherwise 0.
     
@@ -105,7 +105,7 @@ class AbstractTest(object):
     @param benchDir: the path to the benchmark data
     @param resolution: the size of the test being run
     @returns [change, err] where change in {0,1} and result in {'N/A', 'SUCCESS', 'FAILURE'}
-    '''
+    """
     def bit4bit(self, test, testDir, benchDir, resolution):
         # Mapping of result codes to results
         numpy.set_printoptions(threshold='nan')
@@ -192,7 +192,7 @@ class AbstractTest(object):
                     nclfunc.plot_diff(var, testFile, benchFile, outFile)
         return bitDict
 
-    ''' 
+    """ 
     The generate method will create a {{test}}.html page in the output directory.
     This page will contain a detailed list of the results from LIVV.  Details
     from the run are pulled from two locations.  Global definitions that are 
@@ -202,7 +202,7 @@ class AbstractTest(object):
     
     @note Paths that are contained in templateVars should not be using os.sep
           since they are for html.
-    '''
+    """
     def generate(self):
         # Set up jinja related variables
         templateLoader = jinja2.FileSystemLoader(searchpath=util.variables.templateDir)
