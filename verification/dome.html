@@ -1,8 +1,70 @@
+<!--
+ - Copyright (c) 2015, UT-BATTELLE, LLC
+ - All rights reserved.
+ - 
+ - Redistribution and use in source and binary forms, with or without
+ - modification, are permitted provided that the following conditions are met:
+ - 
+ - 1. Redistributions of source code must retain the above copyright notice, this
+ - list of conditions and the following disclaimer.
+ - 
+ - 2. Redistributions in binary form must reproduce the above copyright notice,
+ - this list of conditions and the following disclaimer in the documentation
+ - and/or other materials provided with the distribution.
+ - 
+ - 3. Neither the name of the copyright holder nor the names of its contributors
+ - may be used to endorse or promote products derived from this software without
+ - specific prior written permission.
+ - 
+ - THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ - ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ - WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ - DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ - FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ - DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ - SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ - CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ - OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ - OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+
+
 <!-- 
   Template for generating test specific pages.
 -->
 
 <!-- Include the header and some links -->
+<!--
+ - Copyright (c) 2015, UT-BATTELLE, LLC
+ - All rights reserved.
+ - 
+ - Redistribution and use in source and binary forms, with or without
+ - modification, are permitted provided that the following conditions are met:
+ - 
+ - 1. Redistributions of source code must retain the above copyright notice, this
+ - list of conditions and the following disclaimer.
+ - 
+ - 2. Redistributions in binary form must reproduce the above copyright notice,
+ - this list of conditions and the following disclaimer in the documentation
+ - and/or other materials provided with the distribution.
+ - 
+ - 3. Neither the name of the copyright holder nor the names of its contributors
+ - may be used to endorse or promote products derived from this software without
+ - specific prior written permission.
+ - 
+ - THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ - ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ - WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ - DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ - FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ - DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ - SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ - CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ - OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ - OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+
+
 <!DOCTYPE html>
 <html>
 
@@ -10,6 +72,7 @@
 <link rel="stylesheet" type="text/css" href="../css/livv.css">
 <link rel="stylesheet" type="text/css" href="../css/interactive.css">
 <link rel="stylesheet" type="text/css" href="../css/popups.css">
+<link rel="stylesheet" type="text/css" href="../css/acknowledgments.css">
 </head>
 
 <body>	
@@ -20,7 +83,7 @@
 	<a id="header-content" href="../index.html">
 		LIVV: Land Ice Verification & Validation
 	</a>
-	<a id="wiki-content" target="_blank" href="https://github.com/ACME-Climate/LIVV/wiki">
+	<a id="wiki-content" target="_blank" href="https://github.com/LIVVkit/LIVVkit/wiki">
 	    Documentation
 	</a>
 </div>
@@ -37,8 +100,8 @@
   
   <!--   Some CSS for determining which tab is selected -->
   <STYLE type="text/css">
-  #select :checked +  label { background-color:#47A3FF;border-color:#47A3FF;color:#fff;}
-  #select :checked +  * +  div {display: block;}
+  #select :checked +  * +  * +  * +  * +  label { background-color:#47A3FF;border-color:#47A3FF;color:#fff;}
+  #select :checked +  * +  * +  * +  * +  * +  * +  * +  * +  * +  div {display: block;}
   </STYLE>
   
   <!-- Generate the tab section -->
@@ -46,16 +109,63 @@
     <!-- The part that is hidden from the user -->
     
     <input id="tab-Dome 0031" name="tabs" style="-webkit-appearance:none;" type="radio" checked />
+    
+    <input id="tab-Dome 0062" name="tabs" style="-webkit-appearance:none;" type="radio" checked />
+    
+    <input id="tab-Dome 0124" name="tabs" style="-webkit-appearance:none;" type="radio" checked />
+    
+    <input id="tab-Dome 0248" name="tabs" style="-webkit-appearance:none;" type="radio" checked />
+    
+    <input id="tab-Dome 0496" name="tabs" style="-webkit-appearance:none;" type="radio" checked />
       
     <!-- The part you can click on -->
     
     <label for="tab-Dome 0031">Dome 0031</label>  
+    
+    <label for="tab-Dome 0062">Dome 0062</label>  
+    
+    <label for="tab-Dome 0124">Dome 0124</label>  
+    
+    <label for="tab-Dome 0248">Dome 0248</label>  
+    
+    <label for="tab-Dome 0496">Dome 0496</label>  
       
       
     <!-- Go through each of the test cases that fall under this specific subcategory -->
     
     <div class="case">
-      
+      <!--
+ - Copyright (c) 2015, UT-BATTELLE, LLC
+ - All rights reserved.
+ - 
+ - Redistribution and use in source and binary forms, with or without
+ - modification, are permitted provided that the following conditions are met:
+ - 
+ - 1. Redistributions of source code must retain the above copyright notice, this
+ - list of conditions and the following disclaimer.
+ - 
+ - 2. Redistributions in binary form must reproduce the above copyright notice,
+ - this list of conditions and the following disclaimer in the documentation
+ - and/or other materials provided with the distribution.
+ - 
+ - 3. Neither the name of the copyright holder nor the names of its contributors
+ - may be used to endorse or promote products derived from this software without
+ - specific prior written permission.
+ - 
+ - THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ - ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ - WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ - DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ - FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ - DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ - SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ - CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ - OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ - OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+
+
+
 
       <!-- BEGIN BIT FOR BIT SECTION -->
       <b class="label-header">
@@ -68,22 +178,22 @@
         
           <b>dome.0031.p002.out.nc</b>
           
-            <p class='SUCCESS' style="margin-left: 40px;"">SUCCESS</p>
+            <p class='SUCCESS' style="margin-left: 40px;">SUCCESS</p>
           
         
           <b>dome.0031.p004.out.nc</b>
           
-            <p class='SUCCESS' style="margin-left: 40px;"">SUCCESS</p>
+            <p class='SUCCESS' style="margin-left: 40px;">SUCCESS</p>
           
         
           <b>dome.0031.p001.out.nc</b>
           
-            <p class='SUCCESS' style="margin-left: 40px;"">SUCCESS</p>
+            <p class='SUCCESS' style="margin-left: 40px;">SUCCESS</p>
           
         
           <b>dome.0031.p008.out.nc</b>
           
-            <p class='SUCCESS' style="margin-left: 40px;"">SUCCESS</p>
+            <p class='SUCCESS' style="margin-left: 40px;">SUCCESS</p>
           
         
       
@@ -92,7 +202,38 @@
       <!-- END BIT FOR BIT SECTION -->
       
       
-            
+      <!--
+ - Copyright (c) 2015, UT-BATTELLE, LLC
+ - All rights reserved.
+ - 
+ - Redistribution and use in source and binary forms, with or without
+ - modification, are permitted provided that the following conditions are met:
+ - 
+ - 1. Redistributions of source code must retain the above copyright notice, this
+ - list of conditions and the following disclaimer.
+ - 
+ - 2. Redistributions in binary form must reproduce the above copyright notice,
+ - this list of conditions and the following disclaimer in the documentation
+ - and/or other materials provided with the distribution.
+ - 
+ - 3. Neither the name of the copyright holder nor the names of its contributors
+ - may be used to endorse or promote products derived from this software without
+ - specific prior written permission.
+ - 
+ - THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ - ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ - WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ - DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ - FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ - DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ - SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ - CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ - OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ - OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+
+
+      
 
       <!-- BEGIN CONFIGURATION SECTION -->
       <b class="label-header"> Configuration Files </b>
@@ -1015,7 +1156,38 @@
         <!-- END CONFIGURATION SECTION -->
         
         
-      
+      <!--
+ - Copyright (c) 2015, UT-BATTELLE, LLC
+ - All rights reserved.
+ - 
+ - Redistribution and use in source and binary forms, with or without
+ - modification, are permitted provided that the following conditions are met:
+ - 
+ - 1. Redistributions of source code must retain the above copyright notice, this
+ - list of conditions and the following disclaimer.
+ - 
+ - 2. Redistributions in binary form must reproduce the above copyright notice,
+ - this list of conditions and the following disclaimer in the documentation
+ - and/or other materials provided with the distribution.
+ - 
+ - 3. Neither the name of the copyright holder nor the names of its contributors
+ - may be used to endorse or promote products derived from this software without
+ - specific prior written permission.
+ - 
+ - THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ - ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ - WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ - DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ - FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ - DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ - SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ - CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ - OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ - OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+
+
+
 
         <!-- BEGIN OUTPUT ANALYSIS SECTION -->
         <b class="label-header">Output Analysis</b>
@@ -1036,11 +1208,11 @@
             </tr>
             
             <tr>
-                <td style="text-align: left">dome.0031.p008.config.oe</td>
+                <td style="text-align: left">dome.0031.p001.config.oe</td>
                 
                 <td>Glissade</td>
                 
-                <td>8</td>
+                <td>1</td>
                 
                 <td>10</td>
                 
@@ -1075,11 +1247,11 @@
             </tr>
             
             <tr>
-                <td style="text-align: left">dome.0031.p001.config.oe</td>
+                <td style="text-align: left">dome.0031.p008.config.oe</td>
                 
                 <td>Glissade</td>
                 
-                <td>1</td>
+                <td>8</td>
                 
                 <td>10</td>
                 
@@ -1095,18 +1267,2724 @@
         
     </div>
     
+    <div class="case">
+      <!--
+ - Copyright (c) 2015, UT-BATTELLE, LLC
+ - All rights reserved.
+ - 
+ - Redistribution and use in source and binary forms, with or without
+ - modification, are permitted provided that the following conditions are met:
+ - 
+ - 1. Redistributions of source code must retain the above copyright notice, this
+ - list of conditions and the following disclaimer.
+ - 
+ - 2. Redistributions in binary form must reproduce the above copyright notice,
+ - this list of conditions and the following disclaimer in the documentation
+ - and/or other materials provided with the distribution.
+ - 
+ - 3. Neither the name of the copyright holder nor the names of its contributors
+ - may be used to endorse or promote products derived from this software without
+ - specific prior written permission.
+ - 
+ - THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ - ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ - WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ - DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ - FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ - DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ - SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ - CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ - OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ - OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+
+
+
+
+      <!-- BEGIN BIT FOR BIT SECTION -->
+      <b class="label-header">
+        Bit for Bit 
+      </b>
+      <div class="separator">
+      <hr style="opacity: 0; height: 5px;">
+
+      
+        
+          <b>dome.0062.p001.out.nc</b>
+          
+            <p class='SUCCESS' style="margin-left: 40px;">SUCCESS</p>
+          
+        
+          <b>dome.0062.p004.out.nc</b>
+          
+            <p class='SUCCESS' style="margin-left: 40px;">SUCCESS</p>
+          
+        
+      
+      </div>
+      <br height="30px" />
+      <!-- END BIT FOR BIT SECTION -->
+      
+      
+      <!--
+ - Copyright (c) 2015, UT-BATTELLE, LLC
+ - All rights reserved.
+ - 
+ - Redistribution and use in source and binary forms, with or without
+ - modification, are permitted provided that the following conditions are met:
+ - 
+ - 1. Redistributions of source code must retain the above copyright notice, this
+ - list of conditions and the following disclaimer.
+ - 
+ - 2. Redistributions in binary form must reproduce the above copyright notice,
+ - this list of conditions and the following disclaimer in the documentation
+ - and/or other materials provided with the distribution.
+ - 
+ - 3. Neither the name of the copyright holder nor the names of its contributors
+ - may be used to endorse or promote products derived from this software without
+ - specific prior written permission.
+ - 
+ - THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ - ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ - WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ - DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ - FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ - DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ - SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ - CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ - OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ - OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+
+
+      
+
+      <!-- BEGIN CONFIGURATION SECTION -->
+      <b class="label-header"> Configuration Files </b>
+      <div class="separator">
+      <hr style="opacity: 0; height: 5px;">
+          
+            
+                <div class="Configuration">
+                  <!-- Hide and show buttons to allow the user view data more easily -->
+                  <a href="#hideDome 00621" class="hide" id="hideDome 00621">+</a>
+                  <a href="#showDome 00621" class="show" id="showDome 00621">-</a>
+                  <h4 class="top">dome.0062.p004.config</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    <!-- The changed variable keeps track of whether the files match -->
+                    
+                    
+                          <b>[DOME-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                          <b>[grid]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  upn = 10<br>
+                              
+                            
+                          
+                            
+                              
+                                  ewn = 62<br>
+                              
+                            
+                          
+                            
+                              
+                                  nsn = 62<br>
+                              
+                            
+                          
+                            
+                              
+                                  dew = 1000.0<br>
+                              
+                            
+                          
+                            
+                              
+                                  dns = 1000.0<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[time]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  tstart = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  tend = 10.<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt = 1.<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt_diag = 1.<br>
+                              
+                            
+                          
+                            
+                              
+                                  idiag = 10<br>
+                              
+                            
+                          
+                            
+                              
+                                  jdiag = 10<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  dycore = 2                  <br>
+                              
+                            
+                          
+                            
+                              
+                                  flow_law = 2                <br>
+                              
+                            
+                          
+                            
+                              
+                                  evolution = 3               <br>
+                              
+                            
+                          
+                            
+                              
+                                  temperature = 1             <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[ho_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  which_ho_babc = 4           <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_efvs = 2           <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_sparse = 3         <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_nonlinear = 0      <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[parameters]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  ice_limit = 1.          <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF default]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  comment = created with dome.py<br>
+                              
+                            
+                          
+                            
+                              
+                                  title = parabolic dome test case using first-order dynamics<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF input]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  name = dome.0062.p004.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  time = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF output]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  variables = thk usurf uvel vvel velnorm temp<br>
+                              
+                            
+                          
+                            
+                              
+                                  frequency = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  name = dome.0062.p004.out.nc<br>
+                              
+                            
+                          
+                          </div>
+                    
+                  </div>
+                  <div class="status">
+                    
+                      <p style="float: left; color: green">Files match</p>
+                    
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            
+                <div class="Configuration">
+                  <!-- Hide and show buttons to allow the user view data more easily -->
+                  <a href="#hideDome 00622" class="hide" id="hideDome 00622">+</a>
+                  <a href="#showDome 00622" class="show" id="showDome 00622">-</a>
+                  <h4 class="top">dome.0062.p001.config</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    <!-- The changed variable keeps track of whether the files match -->
+                    
+                    
+                          <b>[DOME-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                          <b>[grid]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  upn = 10<br>
+                              
+                            
+                          
+                            
+                              
+                                  ewn = 62<br>
+                              
+                            
+                          
+                            
+                              
+                                  nsn = 62<br>
+                              
+                            
+                          
+                            
+                              
+                                  dew = 1000.0<br>
+                              
+                            
+                          
+                            
+                              
+                                  dns = 1000.0<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[time]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  tstart = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  tend = 10.<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt = 1.<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt_diag = 1.<br>
+                              
+                            
+                          
+                            
+                              
+                                  idiag = 10<br>
+                              
+                            
+                          
+                            
+                              
+                                  jdiag = 10<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  dycore = 2                  <br>
+                              
+                            
+                          
+                            
+                              
+                                  flow_law = 2                <br>
+                              
+                            
+                          
+                            
+                              
+                                  evolution = 3               <br>
+                              
+                            
+                          
+                            
+                              
+                                  temperature = 1             <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[ho_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  which_ho_babc = 4           <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_efvs = 2           <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_sparse = 3         <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_nonlinear = 0      <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[parameters]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  ice_limit = 1.          <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF default]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  comment = created with dome.py<br>
+                              
+                            
+                          
+                            
+                              
+                                  title = parabolic dome test case using first-order dynamics<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF input]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  name = dome.0062.p001.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  time = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF output]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  variables = thk usurf uvel vvel velnorm temp<br>
+                              
+                            
+                          
+                            
+                              
+                                  frequency = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  name = dome.0062.p001.out.nc<br>
+                              
+                            
+                          
+                          </div>
+                    
+                  </div>
+                  <div class="status">
+                    
+                      <p style="float: left; color: green">Files match</p>
+                    
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            
+        
+        </div>
+        <hr style="opacity: 0; height: 5px;">
+        <br style="clear: both" />
+        <!-- END CONFIGURATION SECTION -->
+        
+        
+      <!--
+ - Copyright (c) 2015, UT-BATTELLE, LLC
+ - All rights reserved.
+ - 
+ - Redistribution and use in source and binary forms, with or without
+ - modification, are permitted provided that the following conditions are met:
+ - 
+ - 1. Redistributions of source code must retain the above copyright notice, this
+ - list of conditions and the following disclaimer.
+ - 
+ - 2. Redistributions in binary form must reproduce the above copyright notice,
+ - this list of conditions and the following disclaimer in the documentation
+ - and/or other materials provided with the distribution.
+ - 
+ - 3. Neither the name of the copyright holder nor the names of its contributors
+ - may be used to endorse or promote products derived from this software without
+ - specific prior written permission.
+ - 
+ - THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ - ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ - WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ - DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ - FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ - DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ - SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ - CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ - OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ - OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+
+
+
+
+        <!-- BEGIN OUTPUT ANALYSIS SECTION -->
+        <b class="label-header">Output Analysis</b>
+        <div class="separator">
+        
+        <table style="width:100%">
+            <tr style="background-color: #47A3FF;">
+                <th>Output File</th>
+                
+                    <th>Dycore Type</th>
+                
+                    <th>Number of processors</th>
+                
+                    <th>Number of timesteps</th>
+                
+                    <th>Avg convergence rate</th>
+                
+            </tr>
+            
+            <tr>
+                <td style="text-align: left">dome.0062.p004.config.oe</td>
+                
+                <td>Glissade</td>
+                
+                <td>4</td>
+                
+                <td>10</td>
+                
+                <td>34.3</td>
+                
+            </tr>
+            
+            <tr>
+                <td style="text-align: left">dome.0062.p001.config.oe</td>
+                
+                <td>Glissade</td>
+                
+                <td>1</td>
+                
+                <td>10</td>
+                
+                <td>34.3</td>
+                
+            </tr>
+            
+        </table>
+        
+        </div>
+        <!-- END OUTPUT ANALYSIS SECTION -->
+        
+        
+    </div>
+    
+    <div class="case">
+      <!--
+ - Copyright (c) 2015, UT-BATTELLE, LLC
+ - All rights reserved.
+ - 
+ - Redistribution and use in source and binary forms, with or without
+ - modification, are permitted provided that the following conditions are met:
+ - 
+ - 1. Redistributions of source code must retain the above copyright notice, this
+ - list of conditions and the following disclaimer.
+ - 
+ - 2. Redistributions in binary form must reproduce the above copyright notice,
+ - this list of conditions and the following disclaimer in the documentation
+ - and/or other materials provided with the distribution.
+ - 
+ - 3. Neither the name of the copyright holder nor the names of its contributors
+ - may be used to endorse or promote products derived from this software without
+ - specific prior written permission.
+ - 
+ - THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ - ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ - WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ - DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ - FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ - DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ - SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ - CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ - OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ - OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+
+
+
+
+      <!-- BEGIN BIT FOR BIT SECTION -->
+      <b class="label-header">
+        Bit for Bit 
+      </b>
+      <div class="separator">
+      <hr style="opacity: 0; height: 5px;">
+
+      
+        
+          <b>dome.0124.p256.out.nc</b>
+          
+            <p class='SUCCESS' style="margin-left: 40px;">SUCCESS</p>
+          
+        
+          <b>dome.0124.p001.out.nc</b>
+          
+            <p class='SUCCESS' style="margin-left: 40px;">SUCCESS</p>
+          
+        
+          <b>dome.0124.p016.out.nc</b>
+          
+            <p class='SUCCESS' style="margin-left: 40px;">SUCCESS</p>
+          
+        
+      
+      </div>
+      <br height="30px" />
+      <!-- END BIT FOR BIT SECTION -->
+      
+      
+      <!--
+ - Copyright (c) 2015, UT-BATTELLE, LLC
+ - All rights reserved.
+ - 
+ - Redistribution and use in source and binary forms, with or without
+ - modification, are permitted provided that the following conditions are met:
+ - 
+ - 1. Redistributions of source code must retain the above copyright notice, this
+ - list of conditions and the following disclaimer.
+ - 
+ - 2. Redistributions in binary form must reproduce the above copyright notice,
+ - this list of conditions and the following disclaimer in the documentation
+ - and/or other materials provided with the distribution.
+ - 
+ - 3. Neither the name of the copyright holder nor the names of its contributors
+ - may be used to endorse or promote products derived from this software without
+ - specific prior written permission.
+ - 
+ - THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ - ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ - WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ - DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ - FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ - DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ - SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ - CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ - OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ - OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+
+
+      
+
+      <!-- BEGIN CONFIGURATION SECTION -->
+      <b class="label-header"> Configuration Files </b>
+      <div class="separator">
+      <hr style="opacity: 0; height: 5px;">
+          
+            
+                <div class="Configuration">
+                  <!-- Hide and show buttons to allow the user view data more easily -->
+                  <a href="#hideDome 01241" class="hide" id="hideDome 01241">+</a>
+                  <a href="#showDome 01241" class="show" id="showDome 01241">-</a>
+                  <h4 class="top">dome.0124.p256.config</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    <!-- The changed variable keeps track of whether the files match -->
+                    
+                    
+                          <b>[DOME-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                          <b>[grid]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  upn = 10<br>
+                              
+                            
+                          
+                            
+                              
+                                  ewn = 124<br>
+                              
+                            
+                          
+                            
+                              
+                                  nsn = 124<br>
+                              
+                            
+                          
+                            
+                              
+                                  dew = 500.0<br>
+                              
+                            
+                          
+                            
+                              
+                                  dns = 500.0<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[time]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  tstart = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  tend = 10.<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt = 1.<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt_diag = 1.<br>
+                              
+                            
+                          
+                            
+                              
+                                  idiag = 10<br>
+                              
+                            
+                          
+                            
+                              
+                                  jdiag = 10<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  dycore = 2                  <br>
+                              
+                            
+                          
+                            
+                              
+                                  flow_law = 2                <br>
+                              
+                            
+                          
+                            
+                              
+                                  evolution = 3               <br>
+                              
+                            
+                          
+                            
+                              
+                                  temperature = 1             <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[ho_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  which_ho_babc = 4           <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_efvs = 2           <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_sparse = 3         <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_nonlinear = 0      <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[parameters]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  ice_limit = 1.          <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF default]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  comment = created with dome.py<br>
+                              
+                            
+                          
+                            
+                              
+                                  title = parabolic dome test case using first-order dynamics<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF input]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  name = dome.0124.p256.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  time = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF output]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  variables = thk usurf uvel vvel velnorm temp<br>
+                              
+                            
+                          
+                            
+                              
+                                  frequency = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  name = dome.0124.p256.out.nc<br>
+                              
+                            
+                          
+                          </div>
+                    
+                  </div>
+                  <div class="status">
+                    
+                      <p style="float: left; color: green">Files match</p>
+                    
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            
+                <div class="Configuration">
+                  <!-- Hide and show buttons to allow the user view data more easily -->
+                  <a href="#hideDome 01242" class="hide" id="hideDome 01242">+</a>
+                  <a href="#showDome 01242" class="show" id="showDome 01242">-</a>
+                  <h4 class="top">dome.0124.p016.config</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    <!-- The changed variable keeps track of whether the files match -->
+                    
+                    
+                          <b>[DOME-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                          <b>[grid]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  upn = 10<br>
+                              
+                            
+                          
+                            
+                              
+                                  ewn = 124<br>
+                              
+                            
+                          
+                            
+                              
+                                  nsn = 124<br>
+                              
+                            
+                          
+                            
+                              
+                                  dew = 500.0<br>
+                              
+                            
+                          
+                            
+                              
+                                  dns = 500.0<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[time]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  tstart = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  tend = 10.<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt = 1.<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt_diag = 1.<br>
+                              
+                            
+                          
+                            
+                              
+                                  idiag = 10<br>
+                              
+                            
+                          
+                            
+                              
+                                  jdiag = 10<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  dycore = 2                  <br>
+                              
+                            
+                          
+                            
+                              
+                                  flow_law = 2                <br>
+                              
+                            
+                          
+                            
+                              
+                                  evolution = 3               <br>
+                              
+                            
+                          
+                            
+                              
+                                  temperature = 1             <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[ho_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  which_ho_babc = 4           <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_efvs = 2           <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_sparse = 3         <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_nonlinear = 0      <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[parameters]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  ice_limit = 1.          <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF default]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  comment = created with dome.py<br>
+                              
+                            
+                          
+                            
+                              
+                                  title = parabolic dome test case using first-order dynamics<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF input]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  name = dome.0124.p016.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  time = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF output]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  variables = thk usurf uvel vvel velnorm temp<br>
+                              
+                            
+                          
+                            
+                              
+                                  frequency = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  name = dome.0124.p016.out.nc<br>
+                              
+                            
+                          
+                          </div>
+                    
+                  </div>
+                  <div class="status">
+                    
+                      <p style="float: left; color: green">Files match</p>
+                    
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            
+                <div class="Configuration">
+                  <!-- Hide and show buttons to allow the user view data more easily -->
+                  <a href="#hideDome 01243" class="hide" id="hideDome 01243">+</a>
+                  <a href="#showDome 01243" class="show" id="showDome 01243">-</a>
+                  <h4 class="top">dome.0124.p001.config</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    <!-- The changed variable keeps track of whether the files match -->
+                    
+                    
+                          <b>[DOME-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                          <b>[grid]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  upn = 10<br>
+                              
+                            
+                          
+                            
+                              
+                                  ewn = 124<br>
+                              
+                            
+                          
+                            
+                              
+                                  nsn = 124<br>
+                              
+                            
+                          
+                            
+                              
+                                  dew = 500.0<br>
+                              
+                            
+                          
+                            
+                              
+                                  dns = 500.0<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[time]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  tstart = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  tend = 10.<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt = 1.<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt_diag = 1.<br>
+                              
+                            
+                          
+                            
+                              
+                                  idiag = 10<br>
+                              
+                            
+                          
+                            
+                              
+                                  jdiag = 10<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  dycore = 2                  <br>
+                              
+                            
+                          
+                            
+                              
+                                  flow_law = 2                <br>
+                              
+                            
+                          
+                            
+                              
+                                  evolution = 3               <br>
+                              
+                            
+                          
+                            
+                              
+                                  temperature = 1             <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[ho_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  which_ho_babc = 4           <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_efvs = 2           <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_sparse = 3         <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_nonlinear = 0      <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[parameters]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  ice_limit = 1.          <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF default]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  comment = created with dome.py<br>
+                              
+                            
+                          
+                            
+                              
+                                  title = parabolic dome test case using first-order dynamics<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF input]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  name = dome.0124.p001.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  time = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF output]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  variables = thk usurf uvel vvel velnorm temp<br>
+                              
+                            
+                          
+                            
+                              
+                                  frequency = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  name = dome.0124.p001.out.nc<br>
+                              
+                            
+                          
+                          </div>
+                    
+                  </div>
+                  <div class="status">
+                    
+                      <p style="float: left; color: green">Files match</p>
+                    
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            
+        
+        </div>
+        <hr style="opacity: 0; height: 5px;">
+        <br style="clear: both" />
+        <!-- END CONFIGURATION SECTION -->
+        
+        
+      <!--
+ - Copyright (c) 2015, UT-BATTELLE, LLC
+ - All rights reserved.
+ - 
+ - Redistribution and use in source and binary forms, with or without
+ - modification, are permitted provided that the following conditions are met:
+ - 
+ - 1. Redistributions of source code must retain the above copyright notice, this
+ - list of conditions and the following disclaimer.
+ - 
+ - 2. Redistributions in binary form must reproduce the above copyright notice,
+ - this list of conditions and the following disclaimer in the documentation
+ - and/or other materials provided with the distribution.
+ - 
+ - 3. Neither the name of the copyright holder nor the names of its contributors
+ - may be used to endorse or promote products derived from this software without
+ - specific prior written permission.
+ - 
+ - THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ - ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ - WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ - DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ - FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ - DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ - SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ - CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ - OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ - OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+
+
+
+
+        <!-- BEGIN OUTPUT ANALYSIS SECTION -->
+        <b class="label-header">Output Analysis</b>
+        <div class="separator">
+        
+        <table style="width:100%">
+            <tr style="background-color: #47A3FF;">
+                <th>Output File</th>
+                
+                    <th>Dycore Type</th>
+                
+                    <th>Number of processors</th>
+                
+                    <th>Number of timesteps</th>
+                
+                    <th>Avg convergence rate</th>
+                
+            </tr>
+            
+            <tr>
+                <td style="text-align: left">dome.0124.p001.config.oe</td>
+                
+                <td>Glissade</td>
+                
+                <td>1</td>
+                
+                <td>10</td>
+                
+                <td>33.3</td>
+                
+            </tr>
+            
+            <tr>
+                <td style="text-align: left">dome.0124.p256.config.oe</td>
+                
+                <td>Glissade</td>
+                
+                <td>256</td>
+                
+                <td>10</td>
+                
+                <td>33.3</td>
+                
+            </tr>
+            
+            <tr>
+                <td style="text-align: left">dome.0124.p016.config.oe</td>
+                
+                <td>Glissade</td>
+                
+                <td>16</td>
+                
+                <td>10</td>
+                
+                <td>33.3</td>
+                
+            </tr>
+            
+        </table>
+        
+        </div>
+        <!-- END OUTPUT ANALYSIS SECTION -->
+        
+        
+    </div>
+    
+    <div class="case">
+      <!--
+ - Copyright (c) 2015, UT-BATTELLE, LLC
+ - All rights reserved.
+ - 
+ - Redistribution and use in source and binary forms, with or without
+ - modification, are permitted provided that the following conditions are met:
+ - 
+ - 1. Redistributions of source code must retain the above copyright notice, this
+ - list of conditions and the following disclaimer.
+ - 
+ - 2. Redistributions in binary form must reproduce the above copyright notice,
+ - this list of conditions and the following disclaimer in the documentation
+ - and/or other materials provided with the distribution.
+ - 
+ - 3. Neither the name of the copyright holder nor the names of its contributors
+ - may be used to endorse or promote products derived from this software without
+ - specific prior written permission.
+ - 
+ - THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ - ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ - WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ - DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ - FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ - DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ - SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ - CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ - OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ - OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+
+
+
+
+      <!-- BEGIN BIT FOR BIT SECTION -->
+      <b class="label-header">
+        Bit for Bit 
+      </b>
+      <div class="separator">
+      <hr style="opacity: 0; height: 5px;">
+
+      
+        
+          <b>dome.0248.p064.out.nc</b>
+          
+            <table style="clear: both; width: 80%; margin-left: 40px; margin-bottom: 20px; margin-top: 20px;">
+              <tr>
+                <th>Variable</th>
+                <th>Max |Error|</th>
+                <th>RMSE</th>
+                <th>Plot (Click to enlarge)</th>
+              </tr>
+              
+                <tr>
+                  <td><a target="_blank" href="../imgs/Dome/bit4bit/dome.0248.p064.out.nc.velnorm.png"><b>velnorm</b></a></td>
+                  <td>4.65661287308e-07</td>
+                  <td>5.6842980103e-10</td>
+                  <td>
+                    <a target="_blank" href="../imgs/Dome/bit4bit/dome.0248.p064.out.nc.velnorm.png">
+                      <div class="bitforbit">
+                        <img src="../imgs/Dome/bit4bit/dome.0248.p064.out.nc.velnorm.png" class="bitforbit">
+                      </div>
+                    </a>
+                  </td>                  
+                </tr>
+              
+            </table>
+          
+        
+          <b>dome.0248.p256.out.nc</b>
+          
+            <table style="clear: both; width: 80%; margin-left: 40px; margin-bottom: 20px; margin-top: 20px;">
+              <tr>
+                <th>Variable</th>
+                <th>Max |Error|</th>
+                <th>RMSE</th>
+                <th>Plot (Click to enlarge)</th>
+              </tr>
+              
+                <tr>
+                  <td><a target="_blank" href="../imgs/Dome/bit4bit/dome.0248.p256.out.nc.velnorm.png"><b>velnorm</b></a></td>
+                  <td>4.65661287308e-07</td>
+                  <td>1.84412350778e-09</td>
+                  <td>
+                    <a target="_blank" href="../imgs/Dome/bit4bit/dome.0248.p256.out.nc.velnorm.png">
+                      <div class="bitforbit">
+                        <img src="../imgs/Dome/bit4bit/dome.0248.p256.out.nc.velnorm.png" class="bitforbit">
+                      </div>
+                    </a>
+                  </td>                  
+                </tr>
+              
+                <tr>
+                  <td><a target="_blank" href="../imgs/Dome/bit4bit/dome.0248.p256.out.nc.thk.png"><b>thk</b></a></td>
+                  <td>1.16415321827e-07</td>
+                  <td>4.00325565423e-10</td>
+                  <td>
+                    <a target="_blank" href="../imgs/Dome/bit4bit/dome.0248.p256.out.nc.thk.png">
+                      <div class="bitforbit">
+                        <img src="../imgs/Dome/bit4bit/dome.0248.p256.out.nc.thk.png" class="bitforbit">
+                      </div>
+                    </a>
+                  </td>                  
+                </tr>
+              
+            </table>
+          
+        
+      
+      </div>
+      <br height="30px" />
+      <!-- END BIT FOR BIT SECTION -->
+      
+      
+      <!--
+ - Copyright (c) 2015, UT-BATTELLE, LLC
+ - All rights reserved.
+ - 
+ - Redistribution and use in source and binary forms, with or without
+ - modification, are permitted provided that the following conditions are met:
+ - 
+ - 1. Redistributions of source code must retain the above copyright notice, this
+ - list of conditions and the following disclaimer.
+ - 
+ - 2. Redistributions in binary form must reproduce the above copyright notice,
+ - this list of conditions and the following disclaimer in the documentation
+ - and/or other materials provided with the distribution.
+ - 
+ - 3. Neither the name of the copyright holder nor the names of its contributors
+ - may be used to endorse or promote products derived from this software without
+ - specific prior written permission.
+ - 
+ - THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ - ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ - WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ - DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ - FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ - DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ - SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ - CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ - OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ - OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+
+
+      
+
+      <!-- BEGIN CONFIGURATION SECTION -->
+      <b class="label-header"> Configuration Files </b>
+      <div class="separator">
+      <hr style="opacity: 0; height: 5px;">
+          
+            
+                <div class="Configuration">
+                  <!-- Hide and show buttons to allow the user view data more easily -->
+                  <a href="#hideDome 02481" class="hide" id="hideDome 02481">+</a>
+                  <a href="#showDome 02481" class="show" id="showDome 02481">-</a>
+                  <h4 class="top">dome.0248.p256.config</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    <!-- The changed variable keeps track of whether the files match -->
+                    
+                    
+                          <b>[DOME-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                          <b>[grid]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  upn = 10<br>
+                              
+                            
+                          
+                            
+                              
+                                  ewn = 248<br>
+                              
+                            
+                          
+                            
+                              
+                                  nsn = 248<br>
+                              
+                            
+                          
+                            
+                              
+                                  dew = 250.0<br>
+                              
+                            
+                          
+                            
+                              
+                                  dns = 250.0<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[time]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  tstart = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  tend = 10.<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt = 1.<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt_diag = 1.<br>
+                              
+                            
+                          
+                            
+                              
+                                  idiag = 10<br>
+                              
+                            
+                          
+                            
+                              
+                                  jdiag = 10<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  dycore = 2                  <br>
+                              
+                            
+                          
+                            
+                              
+                                  flow_law = 2                <br>
+                              
+                            
+                          
+                            
+                              
+                                  evolution = 3               <br>
+                              
+                            
+                          
+                            
+                              
+                                  temperature = 1             <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[ho_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  which_ho_babc = 4           <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_efvs = 2           <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_sparse = 3         <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_nonlinear = 0      <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[parameters]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  ice_limit = 1.          <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF default]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  comment = created with dome.py<br>
+                              
+                            
+                          
+                            
+                              
+                                  title = parabolic dome test case using first-order dynamics<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF input]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  name = dome.0248.p256.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  time = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF output]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  variables = thk usurf uvel vvel velnorm temp<br>
+                              
+                            
+                          
+                            
+                              
+                                  frequency = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  name = dome.0248.p256.out.nc<br>
+                              
+                            
+                          
+                          </div>
+                    
+                  </div>
+                  <div class="status">
+                    
+                      <p style="float: left; color: green">Files match</p>
+                    
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            
+                <div class="Configuration">
+                  <!-- Hide and show buttons to allow the user view data more easily -->
+                  <a href="#hideDome 02482" class="hide" id="hideDome 02482">+</a>
+                  <a href="#showDome 02482" class="show" id="showDome 02482">-</a>
+                  <h4 class="top">dome.0248.p064.config</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    <!-- The changed variable keeps track of whether the files match -->
+                    
+                    
+                          <b>[DOME-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                          <b>[grid]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  upn = 10<br>
+                              
+                            
+                          
+                            
+                              
+                                  ewn = 248<br>
+                              
+                            
+                          
+                            
+                              
+                                  nsn = 248<br>
+                              
+                            
+                          
+                            
+                              
+                                  dew = 250.0<br>
+                              
+                            
+                          
+                            
+                              
+                                  dns = 250.0<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[time]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  tstart = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  tend = 10.<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt = 1.<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt_diag = 1.<br>
+                              
+                            
+                          
+                            
+                              
+                                  idiag = 10<br>
+                              
+                            
+                          
+                            
+                              
+                                  jdiag = 10<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  dycore = 2                  <br>
+                              
+                            
+                          
+                            
+                              
+                                  flow_law = 2                <br>
+                              
+                            
+                          
+                            
+                              
+                                  evolution = 3               <br>
+                              
+                            
+                          
+                            
+                              
+                                  temperature = 1             <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[ho_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  which_ho_babc = 4           <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_efvs = 2           <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_sparse = 3         <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_nonlinear = 0      <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[parameters]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  ice_limit = 1.          <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF default]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  comment = created with dome.py<br>
+                              
+                            
+                          
+                            
+                              
+                                  title = parabolic dome test case using first-order dynamics<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF input]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  name = dome.0248.p064.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  time = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF output]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  variables = thk usurf uvel vvel velnorm temp<br>
+                              
+                            
+                          
+                            
+                              
+                                  frequency = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  name = dome.0248.p064.out.nc<br>
+                              
+                            
+                          
+                          </div>
+                    
+                  </div>
+                  <div class="status">
+                    
+                      <p style="float: left; color: green">Files match</p>
+                    
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            
+        
+        </div>
+        <hr style="opacity: 0; height: 5px;">
+        <br style="clear: both" />
+        <!-- END CONFIGURATION SECTION -->
+        
+        
+      <!--
+ - Copyright (c) 2015, UT-BATTELLE, LLC
+ - All rights reserved.
+ - 
+ - Redistribution and use in source and binary forms, with or without
+ - modification, are permitted provided that the following conditions are met:
+ - 
+ - 1. Redistributions of source code must retain the above copyright notice, this
+ - list of conditions and the following disclaimer.
+ - 
+ - 2. Redistributions in binary form must reproduce the above copyright notice,
+ - this list of conditions and the following disclaimer in the documentation
+ - and/or other materials provided with the distribution.
+ - 
+ - 3. Neither the name of the copyright holder nor the names of its contributors
+ - may be used to endorse or promote products derived from this software without
+ - specific prior written permission.
+ - 
+ - THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ - ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ - WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ - DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ - FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ - DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ - SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ - CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ - OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ - OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+
+
+
+
+        <!-- BEGIN OUTPUT ANALYSIS SECTION -->
+        <b class="label-header">Output Analysis</b>
+        <div class="separator">
+        
+        <table style="width:100%">
+            <tr style="background-color: #47A3FF;">
+                <th>Output File</th>
+                
+                    <th>Dycore Type</th>
+                
+                    <th>Number of processors</th>
+                
+                    <th>Number of timesteps</th>
+                
+                    <th>Avg convergence rate</th>
+                
+            </tr>
+            
+            <tr>
+                <td style="text-align: left">dome.0248.p064.config.oe</td>
+                
+                <td>Glissade</td>
+                
+                <td>64</td>
+                
+                <td>10</td>
+                
+                <td>31.3</td>
+                
+            </tr>
+            
+            <tr>
+                <td style="text-align: left">dome.0248.p256.config.oe</td>
+                
+                <td>Glissade</td>
+                
+                <td>256</td>
+                
+                <td>10</td>
+                
+                <td>31.3</td>
+                
+            </tr>
+            
+        </table>
+        
+        </div>
+        <!-- END OUTPUT ANALYSIS SECTION -->
+        
+        
+    </div>
+    
+    <div class="case">
+      <!--
+ - Copyright (c) 2015, UT-BATTELLE, LLC
+ - All rights reserved.
+ - 
+ - Redistribution and use in source and binary forms, with or without
+ - modification, are permitted provided that the following conditions are met:
+ - 
+ - 1. Redistributions of source code must retain the above copyright notice, this
+ - list of conditions and the following disclaimer.
+ - 
+ - 2. Redistributions in binary form must reproduce the above copyright notice,
+ - this list of conditions and the following disclaimer in the documentation
+ - and/or other materials provided with the distribution.
+ - 
+ - 3. Neither the name of the copyright holder nor the names of its contributors
+ - may be used to endorse or promote products derived from this software without
+ - specific prior written permission.
+ - 
+ - THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ - ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ - WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ - DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ - FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ - DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ - SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ - CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ - OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ - OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+
+
+
+
+      <!-- BEGIN BIT FOR BIT SECTION -->
+      <b class="label-header">
+        Bit for Bit 
+      </b>
+      <div class="separator">
+      <hr style="opacity: 0; height: 5px;">
+
+      
+        
+          <b>dome.0496.p256.out.nc</b>
+          
+            <table style="clear: both; width: 80%; margin-left: 40px; margin-bottom: 20px; margin-top: 20px;">
+              <tr>
+                <th>Variable</th>
+                <th>Max |Error|</th>
+                <th>RMSE</th>
+                <th>Plot (Click to enlarge)</th>
+              </tr>
+              
+                <tr>
+                  <td><a target="_blank" href="../imgs/Dome/bit4bit/dome.0496.p256.out.nc.velnorm.png"><b>velnorm</b></a></td>
+                  <td>4.65661287308e-07</td>
+                  <td>5.96320596889e-09</td>
+                  <td>
+                    <a target="_blank" href="../imgs/Dome/bit4bit/dome.0496.p256.out.nc.velnorm.png">
+                      <div class="bitforbit">
+                        <img src="../imgs/Dome/bit4bit/dome.0496.p256.out.nc.velnorm.png" class="bitforbit">
+                      </div>
+                    </a>
+                  </td>                  
+                </tr>
+              
+                <tr>
+                  <td><a target="_blank" href="../imgs/Dome/bit4bit/dome.0496.p256.out.nc.thk.png"><b>thk</b></a></td>
+                  <td>5.96046447754e-05</td>
+                  <td>1.49393880074e-07</td>
+                  <td>
+                    <a target="_blank" href="../imgs/Dome/bit4bit/dome.0496.p256.out.nc.thk.png">
+                      <div class="bitforbit">
+                        <img src="../imgs/Dome/bit4bit/dome.0496.p256.out.nc.thk.png" class="bitforbit">
+                      </div>
+                    </a>
+                  </td>                  
+                </tr>
+              
+            </table>
+          
+        
+      
+      </div>
+      <br height="30px" />
+      <!-- END BIT FOR BIT SECTION -->
+      
+      
+      <!--
+ - Copyright (c) 2015, UT-BATTELLE, LLC
+ - All rights reserved.
+ - 
+ - Redistribution and use in source and binary forms, with or without
+ - modification, are permitted provided that the following conditions are met:
+ - 
+ - 1. Redistributions of source code must retain the above copyright notice, this
+ - list of conditions and the following disclaimer.
+ - 
+ - 2. Redistributions in binary form must reproduce the above copyright notice,
+ - this list of conditions and the following disclaimer in the documentation
+ - and/or other materials provided with the distribution.
+ - 
+ - 3. Neither the name of the copyright holder nor the names of its contributors
+ - may be used to endorse or promote products derived from this software without
+ - specific prior written permission.
+ - 
+ - THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ - ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ - WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ - DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ - FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ - DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ - SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ - CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ - OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ - OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+
+
+      
+
+      <!-- BEGIN CONFIGURATION SECTION -->
+      <b class="label-header"> Configuration Files </b>
+      <div class="separator">
+      <hr style="opacity: 0; height: 5px;">
+          
+            
+                <div class="Configuration">
+                  <!-- Hide and show buttons to allow the user view data more easily -->
+                  <a href="#hideDome 04961" class="hide" id="hideDome 04961">+</a>
+                  <a href="#showDome 04961" class="show" id="showDome 04961">-</a>
+                  <h4 class="top">dome.0496.p256.config</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    <!-- The changed variable keeps track of whether the files match -->
+                    
+                    
+                          <b>[DOME-TEST]</b>
+                          <div class="variable">
+                          
+                          </div>
+                    
+                          <b>[grid]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  upn = 10<br>
+                              
+                            
+                          
+                            
+                              
+                                  ewn = 496<br>
+                              
+                            
+                          
+                            
+                              
+                                  nsn = 496<br>
+                              
+                            
+                          
+                            
+                              
+                                  dew = 125.0<br>
+                              
+                            
+                          
+                            
+                              
+                                  dns = 125.0<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[time]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  tstart = 0.<br>
+                              
+                            
+                          
+                            
+                              
+                                  tend = 10.<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt = 1.<br>
+                              
+                            
+                          
+                            
+                              
+                                  dt_diag = 1.<br>
+                              
+                            
+                          
+                            
+                              
+                                  idiag = 10<br>
+                              
+                            
+                          
+                            
+                              
+                                  jdiag = 10<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  dycore = 2                  <br>
+                              
+                            
+                          
+                            
+                              
+                                  flow_law = 2                <br>
+                              
+                            
+                          
+                            
+                              
+                                  evolution = 3               <br>
+                              
+                            
+                          
+                            
+                              
+                                  temperature = 1             <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[ho_options]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  which_ho_babc = 4           <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_efvs = 2           <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_sparse = 3         <br>
+                              
+                            
+                          
+                            
+                              
+                                  which_ho_nonlinear = 0      <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[parameters]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  ice_limit = 1.          <br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF default]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  comment = created with dome.py<br>
+                              
+                            
+                          
+                            
+                              
+                                  title = parabolic dome test case using first-order dynamics<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF input]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  name = dome.0496.p256.nc<br>
+                              
+                            
+                          
+                            
+                              
+                                  time = 1<br>
+                              
+                            
+                          
+                          </div>
+                    
+                          <b>[CF output]</b>
+                          <div class="variable">
+                          
+                            
+                              
+                                  variables = thk usurf uvel vvel velnorm temp<br>
+                              
+                            
+                          
+                            
+                              
+                                  frequency = 1<br>
+                              
+                            
+                          
+                            
+                              
+                                  name = dome.0496.p256.out.nc<br>
+                              
+                            
+                          
+                          </div>
+                    
+                  </div>
+                  <div class="status">
+                    
+                      <p style="float: left; color: green">Files match</p>
+                    
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            
+        
+        </div>
+        <hr style="opacity: 0; height: 5px;">
+        <br style="clear: both" />
+        <!-- END CONFIGURATION SECTION -->
+        
+        
+      <!--
+ - Copyright (c) 2015, UT-BATTELLE, LLC
+ - All rights reserved.
+ - 
+ - Redistribution and use in source and binary forms, with or without
+ - modification, are permitted provided that the following conditions are met:
+ - 
+ - 1. Redistributions of source code must retain the above copyright notice, this
+ - list of conditions and the following disclaimer.
+ - 
+ - 2. Redistributions in binary form must reproduce the above copyright notice,
+ - this list of conditions and the following disclaimer in the documentation
+ - and/or other materials provided with the distribution.
+ - 
+ - 3. Neither the name of the copyright holder nor the names of its contributors
+ - may be used to endorse or promote products derived from this software without
+ - specific prior written permission.
+ - 
+ - THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ - ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ - WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ - DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ - FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ - DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ - SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ - CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ - OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ - OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+
+
+
+
+        <!-- BEGIN OUTPUT ANALYSIS SECTION -->
+        <b class="label-header">Output Analysis</b>
+        <div class="separator">
+        
+        <table style="width:100%">
+            <tr style="background-color: #47A3FF;">
+                <th>Output File</th>
+                
+                    <th>Dycore Type</th>
+                
+                    <th>Number of processors</th>
+                
+                    <th>Number of timesteps</th>
+                
+                    <th>Avg convergence rate</th>
+                
+            </tr>
+            
+            <tr>
+                <td style="text-align: left">dome.0496.p256.config.oe</td>
+                
+                <td>Glissade</td>
+                
+                <td>256</td>
+                
+                <td>10</td>
+                
+                <td>29.5</td>
+                
+            </tr>
+            
+        </table>
+        
+        </div>
+        <!-- END OUTPUT ANALYSIS SECTION -->
+        
+        
+    </div>
+    
   </div>
   <br>
 
 <!-- Include the footer -->
+<!--
+ - Copyright (c) 2015, UT-BATTELLE, LLC
+ - All rights reserved.
+ - 
+ - Redistribution and use in source and binary forms, with or without
+ - modification, are permitted provided that the following conditions are met:
+ - 
+ - 1. Redistributions of source code must retain the above copyright notice, this
+ - list of conditions and the following disclaimer.
+ - 
+ - 2. Redistributions in binary form must reproduce the above copyright notice,
+ - this list of conditions and the following disclaimer in the documentation
+ - and/or other materials provided with the distribution.
+ - 
+ - 3. Neither the name of the copyright holder nor the names of its contributors
+ - may be used to endorse or promote products derived from this software without
+ - specific prior written permission.
+ - 
+ - THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ - ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ - WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ - DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ - FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ - DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ - SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ - CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ - OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ - OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+
+
 	</div>
 </div>
 
 <div id="footer">
 	<p id="info">
-		V&V Performed by bzq at 06-05-2015 14:47:47 <br> 
-		Test run of code <br>
+		V&V Performed by fjk at 06-26-2015 14:27:59 <br>
+        <br>
+		This is an example website. <br>
 	</p>
+</div>
+
+<div id="acknowledgments">
+    <div id=acklogo>
+        <img id="logoORNL" src="../imgs/ORNL_Stacked_color.png" alt="ORNL"></img>
+        <img id="logoDOESC" src="../imgs/RGB_Color-Seal_Green-Mark_SC_Horizontal.png" alt="DOE Office of Science"></img>
+        <img id="logoLANL" src="../imgs/los-alamos-lab-logo-color.png" alt="LANL"></img>
+    </div>
+    <h2> <a href="https://github.com/LIVVkit/LIVVkit/issues" target=_blank>Contact us on github</a> </h2>
 </div>
 
 </body>
