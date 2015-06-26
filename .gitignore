@@ -1,8 +1,8 @@
 ####=== LIVV ===####
+reg_bench
 reg_test
-perf_test
 www/
-www_backup/
+www_*/
 
 ####=== NCL ===####
 plot_details.out

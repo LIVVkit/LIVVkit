@@ -35,7 +35,9 @@ Created Apr 21, 2015
 @author arbennett
 '''
 import os
+import errno
 import shutil
+from datetime import datetime
 
 import util.variables
 import jinja2
@@ -45,36 +47,46 @@ Prepare the index of the website.
 
 @param testsRun: the top level names of each of the verification run
 '''
+
+def mkdir_p(path):
+    """
+    Make parent directories as needed and no error if existing. Works like `mkdir -p`.
+    """
+    try:
+        os.makedirs(path)
+    except OSError as exc: # Python >2.5
+        if exc.errno == errno.EEXIST and os.path.isdir(path):
+            pass
+        else: raise
+
+
 def setup(testsRun):
+    # blindly make the output directory
+    mkdir_p(util.variables.indexDir)
+
     # Check if we need to back up an old run
-    if os.path.exists(util.variables.indexDir):
+    if os.listdir(util.variables.indexDir):
         response = raw_input(os.linesep + "Found a duplicate of the output directory.  Would you like to create a backup before overwriting? (y/n)" + os.linesep)
         if response in ["yes", "Yes", "YES", "YEs", "y", "Y"]:
-            if os.path.exists(util.variables.indexDir + "_backup"):
-                shutil.rmtree(util.variables.indexDir + "_backup")
-            shutil.copytree(util.variables.indexDir, util.variables.indexDir + "_backup")
+            stamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            shutil.move(util.variables.indexDir, util.variables.indexDir + "_bkd_" + stamp)
         else:
             shutil.rmtree(util.variables.indexDir)
 
     # Create directory structure
-    testDirs = [util.variables.indexDir, 
-                util.variables.indexDir + os.sep + "validation", 
+    testDirs = [util.variables.indexDir + os.sep + "validation", 
                 util.variables.indexDir + os.sep + "verification", 
                 util.variables.indexDir + os.sep + "performance"]
     for siteDir in testDirs:
-        if not os.path.exists(siteDir):
-            os.mkdir(siteDir);
+        mkdir_p(siteDir);
 
     # Copy over css & imgs directories from source
-    if os.path.exists(util.variables.indexDir + os.sep + "css"): shutil.rmtree(util.variables.indexDir + os.sep + "css")
     shutil.copytree(util.variables.websiteDir + os.sep + "css", util.variables.indexDir + os.sep + "css")
-    if os.path.exists(util.variables.indexDir + os.sep + "imgs"): shutil.rmtree(util.variables.indexDir + os.sep + "imgs")
     shutil.copytree(util.variables.websiteDir + os.sep + "imgs", util.variables.indexDir + os.sep + "imgs")
 
     # Set up imgs directory to have sub-directories for each test
     for test in testsRun:
-        if not os.path.exists(util.variables.imgDir + os.sep + test.getName().capitalize() + os.sep + "bit4bit"):
-            os.makedirs(util.variables.imgDir + os.sep + test.getName().capitalize() + os.sep + "bit4bit")
+        mkdir_p(util.variables.imgDir + os.sep + test.getName().capitalize() + os.sep + "bit4bit")
 
 '''
 Build the index
