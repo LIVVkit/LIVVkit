@@ -66,18 +66,21 @@ def setup(testsRun):
 
     # Check if we need to back up an old run
     if os.listdir(util.variables.indexDir):
-        response = raw_input(os.linesep + "Found a duplicate of the output directory.  Would you like to create a backup before overwriting? (y/n)" + os.linesep)
-        if response in ["yes", "Yes", "YES", "YEs", "y", "Y"]:
-            stamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            shutil.move(util.variables.indexDir, util.variables.indexDir + "_bkd_" + stamp)
-        else:
-            shutil.rmtree(util.variables.indexDir)
+        f = open(util.variables.indexDir + os.sep + "data.txt", "r")
+        prev_time = f.readline().replace(":","").replace("-","").replace(" ","_").rstrip()
+        prev_comment = f.readline().rstrip()
+        f.close()
+        print prev_time
+        print prev_comment
+        shutil.move(util.variables.indexDir, util.variables.indexDir + "_" + prev_time)
+        mkdir_p(util.variables.indexDir)
+        shutil.move(util.variables.indexDir + "_" + prev_time, util.variables.indexDir + os.sep + "www_" + prev_time)
+
 
     # Create directory structure
     testDirs = [util.variables.indexDir + os.sep + "validation", 
                 util.variables.indexDir + os.sep + "verification", 
-                util.variables.indexDir + os.sep + "performance",
-                util.variables.indexDir + os.sep + "data"]
+                util.variables.indexDir + os.sep + "performance"]
     for siteDir in testDirs:
         mkdir_p(siteDir);
 
@@ -88,6 +91,11 @@ def setup(testsRun):
     # Set up imgs directory to have sub-directories for each test
     for test in testsRun:
         mkdir_p(util.variables.imgDir + os.sep + test.getName().capitalize() + os.sep + "bit4bit")
+
+    f = open(util.variables.indexDir + os.sep + "data.txt", "w")
+    f.write(util.variables.timestamp + "\n")
+    f.write(util.variables.comment)
+    f.close()
 
 """
 Build the index
