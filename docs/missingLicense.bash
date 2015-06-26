@@ -27,14 +27,17 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+LIVV="../"
+CURRENT="Copyright (c)"
 
-
-#### clean up file from a livv run. Will destroy everything. ####
-
-
-# remove compiled python files
-find ./* -iname "*.pyc" -exec rm {} \;
-
-# remove website
-rm -r ./www
-rm -r ./www_backup
+########################################################
+# Display all files that are missing the license header.
+########################################################
+find $LIVV -type f -not -path "*.git*" \
+    -not -path "*configurations/*" \
+    -not -path "*util/data_*" \
+    -not -iname "*.png" \
+    -not -iname "*.jpg" \
+    -not -iname "*.svg" \
+    -not -iname "*.md" \
+    | xargs grep -L "$CURRENT"
