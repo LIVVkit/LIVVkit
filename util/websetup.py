@@ -70,12 +70,8 @@ def setup(testsRun):
         prev_time = f.readline().replace(":","").replace("-","").replace(" ","_").rstrip()
         prev_comment = f.readline().rstrip()
         f.close()
-        print prev_time
-        print prev_comment
         shutil.move(util.variables.indexDir, util.variables.indexDir + "_" + prev_time)
         mkdir_p(util.variables.indexDir)
-        shutil.move(util.variables.indexDir + "_" + prev_time, util.variables.indexDir + os.sep + "www_" + prev_time)
-
 
     # Create directory structure
     testDirs = [util.variables.indexDir + os.sep + "validation", 
