@@ -233,8 +233,11 @@ class Parser(object):
                 if len(splitLine) > 0 and splitLine[0].isdigit():
                     iterNumber = splitLine[0]
 
+
             # Calculate the average number of iterations it took to converge
             if (len(itersToConverge) > 0):
+                itersToConverge.append(int(iterNumber))
+                currentStep += 1
                 avgItersToConverge = float(sum(itersToConverge)) / len(itersToConverge)
 
             # Record some of the data in the self.stdOutData
