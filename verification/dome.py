@@ -86,8 +86,9 @@ class Test(AbstractTest):
             resolutions.add( mcf.split('.')[1] )
         resolutions = sorted( resolutions )
         
-        self.runDome(resolutions[0], self.modelDir, self.benchDir, output)
-        self.testsRun.append("Dome " + resolutions[0])
+        for res in resolutions:
+            self.runDome(res, self.modelDir, self.benchDir, output)
+            self.testsRun.append("Dome " + res)
         self.generate()
         verSummary[self.name.lower()] = self.summary
         output.put("")
