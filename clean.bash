@@ -37,4 +37,4 @@ find ./* -iname "*.pyc" -exec rm {} \;
 
 # remove website
 rm -r ./www
-rm -r ./www_backup
+rm -r ./www_*
