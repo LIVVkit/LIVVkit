@@ -26,7 +26,6 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-
 """
 Clean up all temporary files that were created and may be left behind.
 
@@ -38,11 +37,11 @@ import os
 import glob
 import util.variables
 
-""" Removes files that are generated during the LIVV run """
 def clean():
-    for subDir in os.listdir(util.variables.inputDir):
-        [os.remove(tempFile) for tempFile in glob.glob(util.variables.inputDir + os.sep + subDir + os.sep + "temp.*")]
-        [os.remove(tempFile) for tempFile in glob.glob(util.variables.inputDir + os.sep + subDir + os.sep + "*.tmp")]
-    for subDir in os.listdir(util.variables.benchmarkDir):
-        [os.remove(tempFile) for tempFile in glob.glob(util.variables.inputDir + os.sep + subDir + os.sep + "temp.*")]
-        [os.remove(tempFile) for tempFile in glob.glob(util.variables.inputDir + os.sep + subDir + os.sep + "*.tmp")]
+    """ Removes files that are generated during the LIVV run """
+    for sub_dir in os.listdir(util.variables.input_dir):
+        [os.remove(temp_file) for temp_file in glob.glob(util.variables.input_dir + os.sep + sub_dir + os.sep + "temp.*")]
+        [os.remove(temp_file) for temp_file in glob.glob(util.variables.input_dir + os.sep + sub_dir + os.sep + "*.tmp")]
+    for sub_dir in os.listdir(util.variables.benchmark_dir):
+        [os.remove(temp_file) for temp_file in glob.glob(util.variables.input_dir + os.sep + sub_dir + os.sep + "temp.*")]
+        [os.remove(temp_file) for temp_file in glob.glob(util.variables.input_dir + os.sep + sub_dir + os.sep + "*.tmp")]

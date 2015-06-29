@@ -26,7 +26,6 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-
 """
 Delegates plotting functionality to ncl
 """
@@ -34,7 +33,15 @@ import os
 import subprocess
 
 def plot_diff(var, testFile, benchFile, outFile):
-
+    """
+    Launch an ncl subprocess to generate a difference plot between two files.
+    
+    Args:
+        var: The variable to be plotted
+        testFile: The test model output file
+        benchFile: The benchmark  model output file
+        outFile: The file to write the plot to
+    """
     ncl_command = 'ncl \'bench = addfile("'+benchFile+'", "r")\' \'test = addfile("'+testFile+'", "r")\' \'plotFile = "'+outFile+'"\'  plots/vars/'+var+'_diff.ncl'
 
     # Be cautious about running subprocesses

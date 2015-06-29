@@ -26,10 +26,9 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-
 """
 Verification Test Base Module
-The AbstractTest class defines several methods that each test class must implement, 
+The Abstract_test class defines several methods that each test class must implement, 
 as well as provides bit for bit and html generating capabilities which are inherited
 by all derived test classes.
 
@@ -55,96 +54,91 @@ def good_time_dim(file_name):
     """
     Check netCDF files time dimension for emptyness. This likely
     indicates the run did not complete.
-    """
-    
+    """    
     nc_file = Dataset(file_name, 'r')
-
     times = False
     if len(nc_file.dimensions['time']) > 0:
-        # empty, unlimited dims will be lenght 0
+        # empty, unlimited dims will be length 0
         times = True
-
     nc_file.close()
-
     return times
 
 
-"""
-AbstractTest provides a description of how a test should work in LIVV.
-
-Each test within LIVV needs to be able to run specific test code, and
-generate its output.  Tests inherit a common method of checking for 
-bit-for-bittedness
-"""
 class AbstractTest(object):
+    """
+    Abstract_test provides a description of how a test should work in LIVV.
+    
+    Each test within LIVV needs to be able to run specific test code, and
+    generate its output.  Tests inherit a common method of checking for 
+    bit-for-bittedness
+    """
     __metaclass__ = ABCMeta
 
-    """ Constructor """
     def __init__(self):
+        """ Constructor """   
         self.name = "default"
-        self.modelDir, self.benchDir = "", ""
-        self.testsRun = []
-        self.bitForBitDetails = dict()
-        self.plotDetails = dict()
-        self.fileTestDetails = dict()
-        self.modelConfigs, self.benchConfigs = dict(), dict()
+        self.model_dir, self.bench_dir = "", ""
+        self.tests_run = []
+        self.bit_forBit_details = dict()
+        self.plot_details = dict()
+        self.file_testDetails = dict()
+        self.model_configs, self.bench_configs = dict(), dict()
         self.summary = dict()
 
 
-    """ Definition for the general test run """
     @abstractmethod
     def run(self, test):
+        """ Definition for the general test run """
         pass
 
-    """
-    Tests all models and benchmarks against each other in a bit for bit fashion.
-    If any differences are found the method will return 1, otherwise 0.
-    
-    @param test: the test case to check bittedness
-    @param testDir: the path to the model data
-    @param benchDir: the path to the benchmark data
-    @param resolution: the size of the test being run
-    @returns [change, err] where change in {0,1} and result in {'N/A', 'SUCCESS', 'FAILURE'}
-    """
-    def bit4bit(self, test, testDir, benchDir, resolution):
+
+    def bit4bit(self, test, test_dir, bench_dir, resolution):
+        """
+        Tests all models and benchmarks against each other in a bit for bit fashion.
+        
+        Args:
+            test: the test case to check bittedness
+            test_dir: the path to the model data
+            bench_dir: the path to the benchmark data
+            resolution: the size of the test being run
+        Returns:
+            [change, err] where change in {0,1} and err is a list of the status and some metrics
+        """
         # Mapping of result codes to results
         numpy.set_printoptions(threshold='nan')
         result = {-1 : 'N/A', 0 : 'SUCCESS', 1 : 'FAILURE'}
-        bitDict = dict()
+        bit_dict = dict()
 
-        # First, make sure that there is test data, otherwise not it.
-        if not (os.path.exists(testDir) or os.path.exists(benchDir)):
+        if not (os.path.exists(test_dir) or os.path.exists(bench_dir)):
             return {'No matching benchmark and data files found': ['SKIPPED','0.0']}
         
         # Get the intersection of the two file lists
-        testFiles = [fn.split(os.sep)[-1] for fn in glob.glob(testDir + os.sep + test + '.' + resolution + '*.out.nc')]
-        benchFiles = [fn.split(os.sep)[-1] for fn in glob.glob(benchDir + os.sep + test + '.' + resolution + '*.out.nc')]
-        sameList = set(testFiles).intersection(benchFiles)
-
-        # If the intersection is empty just return a blank entry
-        if len(sameList) == 0:
+        test_files = [fn.split(os.sep)[-1] for fn in glob.glob(test_dir + os.sep + test + '.' + resolution + '*.out.nc')]
+        bench_files = [fn.split(os.sep)[-1] for fn in glob.glob(bench_dir + os.sep + test + '.' + resolution + '*.out.nc')]
+        same_list = set(test_files).intersection(bench_files)
+        if len(same_list) == 0:
             return {'No matching benchmark and data files found': ['SKIPPED','0.0']}
 
         # Go through and check if any differences occur
-        for same in list(sameList):
+        for same in list(same_list):
             change = 0
-            plotVars = dict()
-            testFile = testDir + os.sep + same
-            benchFile = benchDir + os.sep + same
+            plot_vars = dict()
+            test_file = test_dir + os.sep + same
+            bench_file = bench_dir + os.sep + same
 
             # check for empty time dimensions
-            goodBench = good_time_dim(benchFile)
-            goodTest = good_time_dim(testFile)
+            good_bench = good_time_dim(bench_file)
+            good_test = good_time_dim(test_file)
             
-            if (not goodBench) and (not goodTest):
-                bitDict[same] =  ['EMPTY TIME','benchmark and test']
-            elif not goodBench:
-                bitDict[same] =  ['EMPTY TIME','benchmark']
-            elif not goodTest:
-                bitDict[same] =  ['EMPTY TIME','test']
+            if (not good_bench) and (not good_test):
+                bit_dict[same] =  ['EMPTY TIME','benchmark and test']
+            elif not good_bench:
+                bit_dict[same] =  ['EMPTY TIME','benchmark']
+            elif not good_test:
+                bit_dict[same] =  ['EMPTY TIME','test']
             else:
                 # Create a difference file with ncdiff
-                comline = ['ncdiff', testFile, benchFile, testDir + os.sep + 'temp.nc', '-O']
+                comline = ['ncdiff', test_file, bench_file, test_dir + os.sep + 'temp.nc', '-O']
                 try:
                     subprocess.check_call(comline)
                 except Exception as e:
@@ -152,93 +146,87 @@ class AbstractTest(object):
                           + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                     try:
                         exit(e.returncode)
-                    except AttributeError:
+                    except Attribute_error:
                         exit(e.errno)
-                diffData = Dataset(testDir + os.sep + 'temp.nc', 'r')
-                diffVars = diffData.variables.keys()
+                diff_data = Dataset(test_dir + os.sep + 'temp.nc', 'r')
+                diff_vars = diff_data.variables.keys()
 
                 # Check if any data in thk has changed, if it exists
-                if 'thk' in diffVars and diffData.variables['thk'].size != 0:
-                    data = diffData.variables['thk'][:]
+                if 'thk' in diff_vars and diff_data.variables['thk'].size != 0:
+                    data = diff_data.variables['thk'][:]
                     if data.any():
                         # Record the maximum difference and root mean square of the error 
                         max = numpy.amax( numpy.absolute(data) )
                         rmse = numpy.sqrt(numpy.sum( numpy.square(data).flatten() ) / data.size )
-                        plotVars['thk'] = [max, rmse]
+                        plot_vars['thk'] = [max, rmse]
                         change = 1
 
                 # Check if any data in velnorm has changed, if it exists
-                if 'velnorm' in diffVars and diffData.variables['velnorm'].size != 0:
-                    data = diffData.variables['velnorm'][:]
+                if 'velnorm' in diff_vars and diff_data.variables['velnorm'].size != 0:
+                    data = diff_data.variables['velnorm'][:]
                     if data.any():
                         # Record the maximum difference and root mean square of the error 
                         max = numpy.amax( numpy.absolute(data) )
                         rmse = numpy.sqrt(numpy.sum( numpy.square(data).flatten() ) / data.size )
-                        plotVars['velnorm'] = [max, rmse]
+                        plot_vars['velnorm'] = [max, rmse]
                         change = 1
 
                 # Remove the temp file
                 try:
-                    os.remove(testDir + os.sep + 'temp.nc')
+                    os.remove(test_dir + os.sep + 'temp.nc')
                 except OSError as e:
                     print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
                           + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                     exit(e.errno)
-                bitDict[same] = [result[change],  plotVars]
+                bit_dict[same] = [result[change],  plot_vars]
 
                 # Generate the plots for each of the failed variables
-                for var in plotVars.keys():
-                    outFile = util.variables.imgDir + os.sep + self.name + os.sep + "bit4bit" + os.sep + testFile.split(os.sep)[-1] + "." + var + ".png"
-                    nclfunc.plot_diff(var, testFile, benchFile, outFile)
-        return bitDict
+                for var in plot_vars.keys():
+                    out_file = util.variables.img_dir + os.sep + self.name + os.sep + "bit4bit" + os.sep + test_file.split(os.sep)[-1] + "." + var + ".png"
+                    nclfunc.plot_diff(var, test_file, bench_file, out_file)
+        return bit_dict
 
-    """ 
-    The generate method will create a {{test}}.html page in the output directory.
-    This page will contain a detailed list of the results from LIVV.  Details
-    from the run are pulled from two locations.  Global definitions that are 
-    displayed on every page, or used for navigation purposes are imported
-    from the main livv.py module.  All test specific information is supplied
-    via class variables.
-    
-    @note Paths that are contained in templateVars should not be using os.sep
-          since they are for html.
-    """
+
     def generate(self):
-        # Set up jinja related variables
-        templateLoader = jinja2.FileSystemLoader(searchpath=util.variables.templateDir)
-        templateEnv = jinja2.Environment(loader=templateLoader, extensions=["jinja2.ext.do",])
-        templateFile = "/verification_test.html"
-        template = templateEnv.get_template(templateFile)
-
-        # Set up relative paths
-        indexDir = ".."
-        cssDir = indexDir + "/css"
-        imgDir = indexDir + "/imgs"
-
-        # Grab all of our images
-        testImgDir = util.variables.imgDir + os.sep + self.name
-        testImages = [os.path.basename(img) for img in glob.glob(testImgDir + os.sep + "*.png")]
-        testImages.append([os.path.basename(img) for img in glob.glob(testImgDir + "*.jpg")])
-        testImages.append([os.path.basename(img) for img in glob.glob(testImgDir + "*.svg")])
-
-        # Set up the template variables  
-        templateVars = {"timestamp" : util.variables.timestamp,
+        """ 
+        The generate method will create a {{test}}.html page in the output directory.
+        This page will contain a detailed list of the results from LIVV.  Details
+        from the run are pulled from two locations.  Global definitions that are 
+        displayed on every page, or used for navigation purposes are imported
+        from the main livv.py module.  All test specific information is supplied
+        via class variables.
+        
+        @note Paths that are contained in template_vars should not be using os.sep
+              since they are for html.
+        """
+        template_loader = jinja2.FileSystemLoader(searchpath=util.variables.template_dir)
+        template_env = jinja2.Environment(loader=template_loader, extensions=["jinja2.ext.do",])
+        template_file = "/verification_test.html"
+        template = template_env.get_template(template_file)
+        index_dir = ".."
+        css_dir = index_dir + "/css"
+        img_dir = index_dir + "/imgs"
+        test_imgDir = util.variables.img_dir + os.sep + self.name
+        test_images = [os.path.basename(img) for img in glob.glob(test_imgDir + os.sep + "*.png")]
+        test_images.append([os.path.basename(img) for img in glob.glob(test_imgDir + "*.jpg")])
+        test_images.append([os.path.basename(img) for img in glob.glob(test_imgDir + "*.svg")])
+        template_vars = {"timestamp" : util.variables.timestamp,
                         "user" : util.variables.user,
                         "comment" : util.variables.comment,
-                        "testName" : self.name,
-                        "indexDir" : indexDir,
-                        "cssDir" : cssDir,
-                        "imgDir" : imgDir,
-                        "testDescription" : self.description,
-                        "testsRun" : self.testsRun,
-                        "testHeader" : util.variables.parserVars,
-                        "bitForBitDetails" : self.bitForBitDetails,
-                        "testDetails" : self.fileTestDetails,
-                        "plotDetails" : self.plotDetails,
-                        "modelConfigs" : self.modelConfigs,
-                        "benchConfigs" : self.benchConfigs,
-                        "testImages" : testImages}
-        outputText = template.render( templateVars )
-        page = open(util.variables.indexDir + os.sep + "verification" + os.sep + self.name.lower() + '.html', "w")
-        page.write(outputText)
+                        "test_name" : self.name,
+                        "index_dir" : index_dir,
+                        "css_dir" : css_dir,
+                        "img_dir" : img_dir,
+                        "test_description" : self.description,
+                        "tests_run" : self.tests_run,
+                        "test_header" : util.variables.parser_vars,
+                        "bit_forBit_details" : self.bit_forBit_details,
+                        "test_details" : self.file_testDetails,
+                        "plot_details" : self.plot_details,
+                        "model_configs" : self.model_configs,
+                        "bench_configs" : self.bench_configs,
+                        "test_images" : test_images}
+        output_text = template.render( template_vars )
+        page = open(util.variables.index_dir + os.sep + "verification" + os.sep + self.name.lower() + '.html', "w")
+        page.write(output_text)
         page.close()

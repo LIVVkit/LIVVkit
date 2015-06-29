@@ -29,7 +29,7 @@
 
 """
 Validation Test Base Module
-The AbstractTest class defines several methods that each test class must implement.
+The Abstract_test class defines several methods that each test class must implement.
 
 Created on Apr 24, 2015
 
@@ -59,16 +59,16 @@ Provide base functionality for a Validation test
 Each test within LIVV needs to be able to run specific test code, and
 generate its output.
 """
-class AbstractTest(object):
+class Abstract_test(object):
     __metaclass__ = ABCMeta
 
     """ Constructor """
     def __init__(self):
         self.name = 'na'
-        self.testsRun = []
+        self.tests_run = []
         self.summary = dict()
-        self.plotDetails = dict()
-        self.fileTestDetails = dict()
+        self.plot_details = dict()
+        self.file_testDetails = dict()
         
     """ Definition for the general test run """
     @abstractmethod
@@ -85,47 +85,47 @@ class AbstractTest(object):
     from the main livv.py module.  All test specific information is supplied
     via class variables.
     
-    @note Paths that are contained in templateVars should not be using os.sep
+    @note Paths that are contained in template_vars should not be using os.sep
           since they are for html.
     """
     def generate(self):
         # Set up jinja related variables
-        templateLoader = jinja2.FileSystemLoader(searchpath=util.variables.templateDir)
-        templateEnv = jinja2.Environment(loader=templateLoader, extensions=["jinja2.ext.do",])
-        templateFile = "/validation_test.html"
-        template = templateEnv.get_template(templateFile)
+        template_loader = jinja2.File_systemLoader(searchpath=util.variables.template_dir)
+        template_env = jinja2.Environment(loader=template_loader, extensions=["jinja2.ext.do",])
+        template_file = "/validation_test.html"
+        template = template_env.get_template(template_file)
 
         # Set up relative paths
-        indexDir = ".."
-        cssDir = indexDir + "/css"
-        imgDir = indexDir + "/imgs"
+        index_dir = ".."
+        css_dir = index_dir + "/css"
+        img_dir = index_dir + "/imgs"
 
         # Grab all of our images
-        testImgDir = util.variables.imgDir + os.sep + self.name
-        testImages = [os.path.basename(img) for img in glob.glob(testImgDir + os.sep + "*.png")]
-        testImages.append([os.path.basename(img) for img in glob.glob(testImgDir + os.sep +"*.jpg")])
-        testImages.append([os.path.basename(img) for img in glob.glob(testImgDir + os.sep +"*.svg")])
+        test_imgDir = util.variables.img_dir + os.sep + self.name
+        test_images = [os.path.basename(img) for img in glob.glob(test_imgDir + os.sep + "*.png")]
+        test_images.append([os.path.basename(img) for img in glob.glob(test_imgDir + os.sep +"*.jpg")])
+        test_images.append([os.path.basename(img) for img in glob.glob(test_imgDir + os.sep +"*.svg")])
 
         # Set up the template variables  
-        templateVars = {"timestamp" : util.variables.timestamp,
+        template_vars = {"timestamp" : util.variables.timestamp,
                         "user" : util.variables.user,
                         "comment" : util.variables.comment,
-                        "testName" : self.name,
-                        "indexDir" : indexDir,
-                        "cssDir" : cssDir,
-                        "imgDir" : imgDir,
-                        "testDescription" : self.description,
-                        "testsRun" : self.testsRun,
-                        "testHeader" : util.variables.parserVars,
-                        "testDetails" : self.fileTestDetails,
-                        "plotDetails" : self.plotDetails,
-                        "modelConfigs" : self.modelConfigs,
-                        "benchConfigs" : self.benchConfigs,
-                        "modelTimingData" : self.modelTimingData,
-                        "benchTimingData" : self.benchTimingData,
-                        "testImages" : testImages}
-        outputText = template.render( templateVars )
-        page = open(util.variables.indexDir + os.sep + "performance" + os.sep + self.name.lower() + '.html', "w")
-        page.write(outputText)
+                        "test_name" : self.name,
+                        "index_dir" : index_dir,
+                        "css_dir" : css_dir,
+                        "img_dir" : img_dir,
+                        "test_description" : self.description,
+                        "tests_run" : self.tests_run,
+                        "test_header" : util.variables.parser_vars,
+                        "test_details" : self.file_testDetails,
+                        "plot_details" : self.plot_details,
+                        "model_configs" : self.model_configs,
+                        "bench_configs" : self.bench_configs,
+                        "model_timingData" : self.model_timingData,
+                        "bench_timingData" : self.bench_timingData,
+                        "test_images" : test_images}
+        output_text = template.render( template_vars )
+        page = open(util.variables.index_dir + os.sep + "performance" + os.sep + self.name.lower() + '.html', "w")
+        page.write(output_text)
         page.close()
 

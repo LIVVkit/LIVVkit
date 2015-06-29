@@ -34,7 +34,7 @@ suite, runs the verification, and generates a website based on the results of th
 
 This script is broken into several main sections.  The first section defines the imports.
 For each new module added to LIVV they must be added to this section for the script to 
-access them.  The libraryList in util.dependencies should be updated if any functionality 
+access them.  The library_list in util.dependencies should be updated if any functionality 
 from outside the standard library is added. 
 
 To add or modify the test groupings there are several places that will need to be modified.
@@ -87,25 +87,25 @@ parser.add_option('--comment', action='store',
                   help='Log a comment about this run')
 
 parser.add_option('-o', '--out-dir', action='store',
-                  type='string', dest='outputDir',
+                  type='string', dest='output_dir',
                   default=os.path.dirname(os.path.abspath(__file__)) + os.sep + "www",
                   help='Location to output the LIVV webpages.')
 
 parser.add_option('-t', '--test-dir', action='store',
-                  type='string', dest='inputDir',
+                  type='string', dest='input_dir',
                   default=os.path.dirname(os.path.abspath(__file__)) + os.sep + "reg_test" + os.sep + "linux-gnu",
                   help='Location of the input for running verification.')
 
 parser.add_option('-b', '--bench-dir', action='store',
-                  type='string', dest='benchmarkDir',
+                  type='string', dest='benchmark_dir',
                   default=os.path.dirname(os.path.abspath(__file__)) + os.sep + "reg_bench" + os.sep + "linux-gnu",
                   help='Location of the input for running verification.')
 
 parser.add_option('--load', action='store',
-                  type='string', dest='loadName', default='',
+                  type='string', dest='load_name', default='',
                   help='Load a preconfigured set of options for the given machine name.')
 
-parser.add_option('--save', action="store", dest='saveName', default='',
+parser.add_option('--save', action="store", dest='save_name', default='',
                   help='Store the configuration being run with the given machine name.')
 
 # Get the options and the arguments
@@ -115,9 +115,9 @@ parser.add_option('--save', action="store", dest='saveName', default='',
 import util.dependencies
 util.dependencies.check()
 import util.variables
-import util.configurationHandler
+import util.configuration_handler
 import util.websetup
-import util.selfVerification
+import util.self_verification
 import verification.dome, verification.ismip, verification.shelf, verification.stream
 import performance.dome
 import util.cleanup
@@ -125,24 +125,24 @@ import util.cleanup
 ###############################################################################
 #                              Global Variables                               #
 ###############################################################################
-util.variables.cwd            = os.getcwd()
-util.variables.configDir      = util.variables.cwd + os.sep + "configurations"
-util.variables.inputDir       = options.inputDir + os.sep + 'higher-order'
-util.variables.benchmarkDir   = options.benchmarkDir + os.sep + 'higher-order'
-util.variables.outputDir      = options.outputDir
-util.variables.imgDir         = util.variables.outputDir + "/imgs"
-util.variables.comment        = options.comment
-util.variables.timestamp      = time.strftime("%m-%d-%Y %H:%M:%S")
-util.variables.user           = getpass.getuser()
-util.variables.websiteDir     = util.variables.cwd + "/web"
-util.variables.templateDir    = util.variables.websiteDir + "/templates"
-util.variables.indexDir       = util.variables.outputDir
-util.variables.verification   = "True"
-util.variables.performance    = str(options.performance)
-util.variables.validation     = "False"
+util.variables.cwd             = os.getcwd()
+util.variables.config_dir      = util.variables.cwd + os.sep + "configurations"
+util.variables.input_dir       = options.input_dir + os.sep + 'higher-order'
+util.variables.benchmark_dir   = options.benchmark_dir + os.sep + 'higher-order'
+util.variables.output_dir      = options.output_dir
+util.variables.img_dir         = util.variables.output_dir + "/imgs"
+util.variables.comment         = options.comment
+util.variables.timestamp       = time.strftime("%m-%d-%Y %H:%M:%S")
+util.variables.user            = getpass.getuser()
+util.variables.website_dir     = util.variables.cwd + "/web"
+util.variables.template_dir    = util.variables.website_dir + "/templates"
+util.variables.index_dir       = util.variables.output_dir
+util.variables.verification    = "True"
+util.variables.performance     = str(options.performance)
+util.variables.validation      = "False"
 
 # A list of the information that should be looked for in the stdout of model output
-util.variables.parserVars = [
+util.variables.parser_vars = [
               'Dycore Type', 
               'Number of processors',
               'Number of timesteps',
@@ -150,7 +150,7 @@ util.variables.parserVars = [
              ]
 
 # Variables to measure when parsing through timing summaries
-util.variables.timingVars = ['Time'
+util.variables.timing_vars = ['Time'
              # 'Simple Glide',
              # 'Velocity Driver',
              # 'Initial Diagonal Solve',
@@ -164,32 +164,32 @@ util.variables.dycores = ['glissade'] #["glide", "glissade", "glam", "albany", "
 #                               Main Execution                                #
 ###############################################################################
 # Check if we are saving/loading the configuration and set up the machine name
-machineName = socket.gethostname()
-if options.saveName != '':
+machine_name = socket.gethostname()
+if options.save_name != '':
     # Save the configuration with the default host name
-    machineName = options.saveName
-    util.configurationHandler.save(machineName)
-elif options.loadName != '':
+    machine_name = options.save_name
+    util.configuration_handler.save(machine_name)
+elif options.load_name != '':
     # Try to load the machine name specified
-    machineName = options.loadName
-    vars = util.configurationHandler.load(machineName)
+    machine_name = options.load_name
+    vars = util.configuration_handler.load(machine_name)
     util.variables.update(vars)
 
 # Check if the user has a default config saved and use that if it does
-if os.path.exists(util.variables.configDir + os.sep + machineName + "_" + util.variables.user + "_default"):
-    machineName = machineName + "_" + util.variables.user + "_default"
-    vars = util.configurationHandler.load(machineName)
+if os.path.exists(util.variables.config_dir + os.sep + machine_name + "_" + util.variables.user + "_default"):
+    machine_name = machine_name + "_" + util.variables.user + "_default"
+    vars = util.configuration_handler.load(machine_name)
     #util.variables.globals().update(vars)
 
 # Print out some information
 print(os.linesep + "  Current run: " + time.strftime("%m-%d-%Y %H:%M:%S"))
 print("  User: " + util.variables.user)
-print("  Config: " + machineName)
+print("  Config: " + machine_name)
 print("  OS Type: " + platform.system() + " " + platform.release())
 print("  " + util.variables.comment + os.linesep)
 
 # Check to make sure the directory structure is okay
-for dir in [util.variables.inputDir, util.variables.benchmarkDir]:
+for dir in [util.variables.input_dir, util.variables.benchmark_dir]:
     if not os.path.exists(dir):
         print("------------------------------------------------------------------------------")
         print("ERROR: Could not find " + dir + " for input")
@@ -201,55 +201,54 @@ for dir in [util.variables.inputDir, util.variables.benchmarkDir]:
 ###############################################################################
 #                              Record Test Cases                              #
 ###############################################################################
-verificationTests = [verification.dome, verification.ismip, verification.shelf, verification.stream] 
-performanceTests = [performance.dome]
-validationTests = []
-testMapping = {
-               "Verification" : verificationTests,
-               "Performance" : performanceTests,
-               "Validation" : validationTests}
+verification_tests = [verification.dome, verification.ismip, verification.shelf, verification.stream] 
+performance_tests = [performance.dome]
+validation_tests = []
+test_mapping = {
+               "Verification" : verification_tests,
+               "Performance" : performance_tests,
+               "Validation" : validation_tests}
 
 ###############################################################################
 #                               Run Test Cases                                #
 ###############################################################################
 # Set up the directory structure for output
-util.websetup.setup(verificationTests + performanceTests + validationTests)
+util.websetup.setup(verification_tests + performance_tests + validation_tests)
 
 # Do a quick check to make sure that analysis works the way we want it to
-util.selfVerification.check()
+util.self_verification.check()
 
 # Give a list of the tests that will be run
 print("Running verification tests:")
-for case in verificationTests: 
-    print("  " + case.getName())
+for case in verification_tests: 
+    print("  " + case.get_name())
 if util.variables.performance == "True":
     print(os.linesep + "Running performance tests:")
-    for case in performanceTests:
-        print("  " + case.getName())
+    for case in performance_tests:
+        print("  " + case.get_name())
 if util.variables.validation == "True":
     print(os.linesep + "Running validation tests:")
-    for case in validationTests:
-        print("  " + case.getName())
+    for case in validation_tests:
+        print("  " + case.get_name())
 
 # Run the verification tests
 manager = multiprocessing.Manager()
 output = multiprocessing.Queue()
-verificationSummary = manager.dict()
-performanceSummary = manager.dict()
-validationSummary = manager.dict()
-verificationProcesses = [multiprocessing.Process(target=verType.Test().run, args=(verificationSummary, output)) for verType in verificationTests]
+verification_summary = manager.dict()
+performance_summary = manager.dict()
+validation_summary = manager.dict()
+verification_processes = [multiprocessing.Process(target=ver_type.Test().run, args=(verification_summary, output)) for ver_type in verification_tests]
 if util.variables.verification == "True":
     print("--------------------------------------------------------------------------")
     print("  Beginning verification test suite....")
     print("--------------------------------------------------------------------------")
     # Spawn a new process for each test
-    for p in verificationProcesses:
+    for p in verification_processes:
         p.start()
         p.join()
     
     # Wait for all of the tests to finish
     while len(multiprocessing.active_children()) > 3:
-        print multiprocessing.active_children()
         time.sleep(0.25)
 
     # Show the results
@@ -261,12 +260,12 @@ if util.variables.performance == "True":
     print("--------------------------------------------------------------------------")
     print("  Beginning performance analysis....")
     print("--------------------------------------------------------------------------")
-    for test in performanceTests:
-        # Create a new instance of the specific test class (see verificationMapping for the mapping)
-        newTest = test.Test()
-        newTest.run()
-        performanceSummary[test.getName().lower()] = newTest.summary
-        newTest.generate()
+    for test in performance_tests:
+        # Create a new instance of the specific test class (see verification_mapping for the mapping)
+        new_test = test.Test()
+        new_test.run()
+        performance_summary[test.get_name().lower()] = new_test.summary
+        new_test.generate()
         print("")
 
 # Run the validation verification
@@ -274,22 +273,22 @@ if util.variables.validation == "True":
     print("--------------------------------------------------------------------------")
     print("  Beginning validation test suite....")
     print("--------------------------------------------------------------------------")
-    for test in validationTests:
-        # Create a new instance of the specific test class (see verificationMapping for the mapping)
-        newTest = validationMapping[test]()
+    for test in validation_tests:
+        # Create a new instance of the specific test class (see verification_mapping for the mapping)
+        new_test = validation_mapping[test]()
         # Run the specific and bit for bit verification for each case of the test
-        newTest.run()
-        validationSummary[test.getName().lower()] = newTest.summary
+        new_test.run()
+        validation_summary[test.get_name().lower()] = new_test.summary
         # Generate the test-specific webpage 
-        newTest.generate()
+        new_test.generate()
         print("")
 
 # Create the site index
-verificationSummary = dict(verificationSummary)
-performanceSummary = dict(performanceSummary)
-validationSummary = dict(validationSummary)
-print("Generating web pages in " + util.variables.outputDir + "....")
-util.websetup.generate(verificationSummary, performanceSummary, validationSummary)
+verification_summary = dict(verification_summary)
+performance_summary = dict(performance_summary)
+validation_summary = dict(validation_summary)
+print("Generating web pages in " + util.variables.output_dir + "....")
+util.websetup.generate(verification_summary, performance_summary, validation_summary)
 
 print("Cleaning up....")
 util.cleanup.clean()
@@ -299,5 +298,6 @@ util.cleanup.clean()
 ###############################################################################
 print("------------------------------------------------------------------------------")
 print("Finished running LIVV.  Results:  ")
-print("  Open " + util.variables.outputDir + "/index.html to see test results")
+print("  Open " + util.variables.output_dir + "/index.html to see test results")
 print("------------------------------------------------------------------------------")
+

@@ -33,30 +33,30 @@
 
   <div id="content">
   
-  <h2 style="padding-left: 15px;">{{testName}}</h2>
+  <h2 style="padding-left: 15px;">{{test_name}}</h2>
   <div class="description">
-    <p>{{testDescription}}</p>
+    <p>{{test_description}}</p>
   </div>
   <br style="clear: both" />
   
   <STYLE type="text/css">
-  #select :checked + {% for i in range(testsRun|length -1) %} * + {% endfor %} label { background-color:#47A3FF;border-color:#47A3FF;color:#fff;}
-  #select :checked + {% for i in range(2*testsRun|length -1) %} * ~ {% endfor %} div {display: block; }
+  #select :checked + {% for i in range(tests_run|length -1) %} * + {% endfor %} label { background-color:#47A3FF;border-color:#47A3FF;color:#fff;}
+  #select :checked + {% for i in range(2*tests_run|length -1) %} * ~ {% endfor %} div {display: block; }
   </STYLE>
   
   <div id="select" class="tabs">
   
     <!-- CREATE THE TAB SELECTOR -->
-    {% for case in testsRun %}
+    {% for case in tests_run %}
     <input id="tab-{{case}}" name="tabs" type="radio" checked />
     {% endfor %}  
-    {% for case in testsRun %}
+    {% for case in tests_run %}
     <label for="tab-{{case}}">{{case}}</label>
     {% endfor %}  
     
     
     <!-- GO THROUGH EACH SPECIFIC TEST CASE & DISPLAY THE CONTENT-->  
-    {% for case in testsRun %}
+    {% for case in tests_run %}
     <div class="case">
       {% include 'components/plots_section.html' %}
       {% include 'components/timing_summary_section.html' %}

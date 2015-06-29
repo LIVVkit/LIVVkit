@@ -38,31 +38,31 @@
   
   <!--   Start the pace specific content -->
   <div id="content">
-  <h2 style="padding-left: 15px;">{{testName}}</h2>
+  <h2 style="padding-left: 15px;">{{test_name}}</h2>
   <div class="description">
-    <p>{{testDescription}}</p>
+    <p>{{test_description}}</p>
   </div>
   <br style="clear: both" />
   
   <!--   Some CSS for determining which tab is selected -->
   <STYLE type="text/css">
-  #select :checked + {% for i in range(testsRun|length -1) %} * + {% endfor %} label { background-color:#47A3FF;border-color:#47A3FF;color:#fff;}
-  #select :checked + {% for i in range(2*testsRun|length -1) %} * + {% endfor %} div {display: block;}
+  #select :checked + {% for i in range(tests_run|length -1) %} * + {% endfor %} label { background-color:#47A3FF;border-color:#47A3FF;color:#fff;}
+  #select :checked + {% for i in range(2*tests_run|length -1) %} * + {% endfor %} div {display: block;}
   </STYLE>
   
   <!-- Generate the tab section -->
   <div id="select" class="tabs">
     <!-- The part that is hidden from the user -->
-    {% for case in testsRun %}
+    {% for case in tests_run %}
     <input id="tab-{{case}}" name="tabs" style="-webkit-appearance:none;" type="radio" checked />
     {% endfor %}  
     <!-- The part you can click on -->
-    {% for case in testsRun %}
+    {% for case in tests_run %}
     <label for="tab-{{case}}">{{case}}</label>  
     {% endfor %}  
       
     <!-- Go through each of the test cases that fall under this specific subcategory -->
-    {% for case in testsRun %}
+    {% for case in tests_run %}
     <div class="case">
       {% include 'components/bit_for_bit_section.html' %}
       {% include 'components/configuration_comparison_section.html' %}

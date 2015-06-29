@@ -34,7 +34,7 @@
 <div id="content">
 	<div class="verification">
 	  <h2 style="padding-left: 15px;">Verification Summary</h2>
-	  {% if verificationSummary == {} %}
+	  {% if verification_summary == {} %}
 	  <p style="margin-left: 20px;">No verification tests run</p>
 	  {% else %}
 		<table class="summary">
@@ -44,9 +44,9 @@
 				<th>Config File Matches</th>
 				<th>Bit for Bit</th>
 			</tr>
-			{% for test, summary in verificationSummary.iteritems() %}
+			{% for test, summary in verification_summary.iteritems() %}
             <tr>
-			  <td><a class="tableLink" href="{{indexDir}}/verification/{{test}}.html">{{test}}</a></td>
+			  <td><a class="table_link" href="{{index_dir}}/verification/{{test}}.html">{{test}}</a></td>
 			  </tr>
 			{% for case, details in summary.iteritems() %}
 			<tr {% if ((details[1] != details[2]) or (details[3] != details[4])) %} class="FAILURE" {% endif %} >
@@ -64,7 +64,7 @@
 
 	<div class="performance">
 	  <h2 style="padding-left: 15px;">Performance Summary</h2>
-	  	{% if performanceSummary == {} %}
+	  	{% if performance_summary == {} %}
 	  	<p style="margin-left: 20px;">No performance tests run</p>
 	  	{% else %}
 		<table class="summary">
@@ -73,9 +73,9 @@
 				<th>Std Out Files Parsed</th>
 				<th>Config File Matches</th>
 			</tr>
-			{% for test, summary in performanceSummary.iteritems() %}
+			{% for test, summary in performance_summary.iteritems() %}
 			  <tr>
-			  <td><a class="tableLink" href="{{indexDir}}/performance/{{test}}.html">{{test}}</a></td>
+			  <td><a class="table_link" href="{{index_dir}}/performance/{{test}}.html">{{test}}</a></td>
 			  </tr>
 			{% for case, details in summary.iteritems() %}
 			<tr {% if (details[1] != details[2])  %} class="FAILURE" {% endif %} >
@@ -92,11 +92,11 @@
 
 	<div class="validation">
 	  <h2 style="padding-left: 15px;">Validation Summary</h2>
-	    {% if validationSummary == {} %}
+	    {% if validation_summary == {} %}
 	  	<p style="margin-left: 20px;">No validation tests run</p>	    
 	    {% else %}
-		{% for test, summary in validationSummary.iteritems() %} <a
-			href="{{indexDir}}/validtion/{{test}}.html">{{test}}</a> <br> {%
+		{% for test, summary in validation_summary.iteritems() %} <a
+			href="{{index_dir}}/validtion/{{test}}.html">{{test}}</a> <br> {%
 		for case, details in summary.iteritems() %} <b>{{case}}</b>
 		<p>{{details}}</p>
 		{% endfor %} 

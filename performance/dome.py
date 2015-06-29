@@ -28,9 +28,9 @@
 
 
 """
-Master module for dome performance test cases.  Inherits methods from the AbstractTest
+Master module for dome performance test cases.  Inherits methods from the Abstract_test
 class from the Test module.  Dome specific performance tests are performed by calling
-the run() method, which passes the necessary information to the runDomePerformance()
+the run() method, which passes the necessary information to the run_domePerformance()
 method.
 
 Created on Dec 8, 2014
@@ -44,22 +44,23 @@ from performance.base import AbstractTest
 from util.parser import Parser
 import util.variables
 
-def getName(): return "Dome"
+def get_name():  return "Dome"
 
-"""
-Main class for handling dome performance validation
 
-The dome test cases inherit functionality from AbstractTest for
-generating scaling plots and generating the output webpage.
-"""
 class Test(AbstractTest):
+    """
+    Main class for handling dome performance validation
+    
+    The dome test cases inherit functionality from Abstract_test for
+    generating scaling plots and generating the output webpage.
+    """
 
-    """ Constructor """
     def __init__(self):
+        """ Constructor """
         super(self.__class__, self).__init__()
         self.name = "Dome"
-        self.modelDir = util.variables.inputDir + os.sep + "dome"
-        self.benchDir = util.variables.benchmarkDir + os.sep + "dome"
+        self.model_dir = util.variables.input_dir + os.sep + "dome"
+        self.bench_dir = util.variables.benchmark_dir + os.sep + "dome"
         self.description = "3-D paraboloid dome of ice with a circular, 60 km" + \
                       " diameter base sitting on a flat bed. The horizontal" + \
                       " spatial resolution studies are 2 km, 1 km, 0.5 km" + \
@@ -68,58 +69,59 @@ class Test(AbstractTest):
                       " imposed by setting. A zero-flux boundary condition is" + \
                       " applied to the dome margins. "
 
-    """
-    Runs the performance specific test cases.
-    
-    When running a test this call will record the specific test case
-    being run.  Each specific test case string is run via the 
-    runDomePerformance function.  All of the data pulled is then
-    assimilated via the runScaling method defined in the base class
-    """
+
     def run(self):
-        if not (os.path.exists(self.modelDir) and os.path.exists(self.benchDir)):
+        """
+        Runs the performance specific test cases.
+        
+        When running a test this call will record the specific test case
+        being run.  Each specific test case string is run via the 
+        run_domePerformance function.  All of the data pulled is then
+        assimilated via the run_scaling method defined in the base class
+        """
+        if not (os.path.exists(self.model_dir) and os.path.exists(self.bench_dir)):
             print("    Could not find data for dome verification!  Tried to find data in:")
-            print("      " + self.modelDir)
-            print("      " + self.benchDir)
+            print("      " + self.model_dir)
+            print("      " + self.bench_dir)
             print("    Continuing with next test....")
             return
         resolutions = set()
-        modelConfigFiles = fnmatch.filter(os.listdir(self.modelDir), 'dome*.config')
-        for mcf in modelConfigFiles:
+        model_configFiles = fnmatch.filter(os.listdir(self.model_dir), 'dome*.config')
+        for mcf in model_configFiles:
             resolutions.add( mcf.split('.')[1] )
         resolutions = sorted( resolutions )
         
         for resolution in resolutions:
-            self.runDome(resolution, self.modelDir, self.benchDir)
-            #self.testsRun.append("Dome " + resolution)
-        self.runScaling('dome', resolutions)
-        self.testsRun.append('Scaling')
+            self.run_dome(resolution, self.model_dir, self.bench_dir)
+            #self.tests_run.append("Dome " + resolution)
+        self.run_scaling('dome', resolutions)
+        self.tests_run.append('Scaling')
 
 
-
-    """
-    Run an instance of dome performance testing
-    
-    @param resolution: the size of the test being analyzed
-    @param perfDir: the location of the performance data
-    @param perfBenchDir: the location of the benchmark performance data
-    """
-    def runDome(self, resolution, perfDir, perfBenchDir):
+    def run_dome(self, resolution, perf_dir, perf_benchDir):
+        """
+        Run an instance of dome performance testing
+        
+        Args:
+            resolution: the size of the test being analyzed
+            perf_dir: the location of the performance data
+            perf_benchDir: the location of the benchmark performance data
+        """
         print("  Dome " + resolution + " performance testing in progress....")
 
         # Process the configure files
-        domeParser = Parser()
-        self.modelConfigs['Dome ' + resolution], self.benchConfigs['Dome ' + resolution] = \
-                domeParser.parseConfigurations(perfDir, perfBenchDir, "*" + resolution + "*.config")
+        dome_parser = Parser()
+        self.model_configs['Dome ' + resolution], self.bench_configs['Dome ' + resolution] = \
+                dome_parser.parse_configurations(perf_dir, perf_benchDir, "*" + resolution + "*.config")
 
         # Scrape the details from each of the files and store some data for later
-        self.fileTestDetails["Dome " + resolution] = domeParser.parseStdOutput(perfDir, "dome." + resolution + ".*.config.oe")
+        self.file_testDetails["Dome " + resolution] = dome_parser.parse_stdOutput(perf_dir, "dome." + resolution + ".*.config.oe")
 
         # Go through and pull in the timing data
-        self.modelTimingData['dome' + resolution] = domeParser.parseTimingSummaries(perfDir, 'dome', resolution)
-        self.benchTimingData['dome' + resolution] = domeParser.parseTimingSummaries(perfBenchDir, 'dome', resolution)
+        self.model_timingData['dome' + resolution] = dome_parser.parse_timingSummaries(perf_dir, 'dome', resolution)
+        self.bench_timingData['dome' + resolution] = dome_parser.parse_timingSummaries(perf_benchDir, 'dome', resolution)
 
         # Record the data from the parser
-        numberOutputFiles, numberConfigMatches, numberConfigTests = domeParser.getParserSummary()
+        number_outputFiles, number_configMatches, number_configTests = dome_parser.get_parserSummary()
 
-        self.summary['dome' + resolution] = [numberOutputFiles, numberConfigMatches, numberConfigTests]
+        self.summary['dome' + resolution] = [number_outputFiles, number_configMatches, number_configTests]

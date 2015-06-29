@@ -38,9 +38,9 @@
       <div class="separator">
       <hr style="opacity: 0; height: 5px;">
 
-      {% if bitForBitDetails[case]|length != 0 %}
-        {% for fileName, details in bitForBitDetails[case].iteritems() %}
-          <b>{{fileName}}</b>
+      {% if bit_forBit_details[case]|length != 0 %}
+        {% for file_name, details in bit_forBit_details[case].iteritems() %}
+          <b>{{file_name}}</b>
           {% if details[0] == "SUCCESS" %}
             <p class='SUCCESS' style="margin-left: 40px;">SUCCESS</p>
           {% elif details[0] == "EMPTY TIME" %}
@@ -58,13 +58,13 @@
               </tr>
               {% for var, vals in details[1].iteritems() %}
                 <tr>
-                  <td><a target="_blank" href="{{imgDir}}/{{testName}}/bit4bit/{{fileName}}.{{var}}.png"><b>{{var}}</b></a></td>
+                  <td><a target="_blank" href="{{img_dir}}/{{test_name}}/bit4bit/{{file_name}}.{{var}}.png"><b>{{var}}</b></a></td>
                   <td>{{vals[0]}}</td>
                   <td>{{vals[1]}}</td>
                   <td>
-                    <a target="_blank" href="{{imgDir}}/{{testName}}/bit4bit/{{fileName}}.{{var}}.png">
+                    <a target="_blank" href="{{img_dir}}/{{test_name}}/bit4bit/{{file_name}}.{{var}}.png">
                       <div class="bitforbit">
-                        <img src="{{imgDir}}/{{testName}}/bit4bit/{{fileName}}.{{var}}.png" class="bitforbit">
+                        <img src="{{img_dir}}/{{test_name}}/bit4bit/{{file_name}}.{{var}}.png" class="bitforbit">
                       </div>
                     </a>
                   </td>                  

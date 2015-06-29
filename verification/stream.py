@@ -26,11 +26,10 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-
 """
-Master module for stream test cases.  Inherits methods from the AbstractTest
+Master module for stream test cases.  Inherits methods from the Abstract_test
 class from the base module.  Stream specific verification is performed by calling
-the run() method, which gathers & passes the necessary information to the runStream()
+the run() method, which gathers & passes the necessary information to the run_stream()
 method.
 
 Created on May 6, 2015
@@ -44,84 +43,90 @@ from verification.base import AbstractTest
 from util.parser import Parser
 import util.variables
 
-def getName(): return "Stream"
+def get_name(): return "Stream"
 
-"""
-Main class for handling stream test cases.
-
-The stream test cases inherit functionality from AbstractTest for checking 
-bit-for-bittedness from a model run. This class handles evolving and \
-diagnostic variations of the stream case.
-"""
 class Test(AbstractTest):
+    """
+    Main class for handling stream test cases.
+    
+    The stream test cases inherit functionality from Abstract_test for checking 
+    bit-for-bittedness from a model run. This class handles evolving and \
+    diagnostic variations of the stream case.
+    """
 
-    """ Constructor """
     def __init__(self):
+        """ Constructor """
         super(self.__class__, self).__init__()
         self.name = "Stream"
-        self.modelDir = util.variables.inputDir + os.sep + "stream"
-        self.benchDir = util.variables.benchmarkDir + os.sep + "stream"
+        self.model_dir = util.variables.input_dir + os.sep + "stream"
+        self.bench_dir = util.variables.benchmark_dir + os.sep + "stream"
         self.description = "The stream test case simulates flow over an" + \
                             " idealized ice stream underlain by a subglacial" + \
                             " till with a known and specified yield stress distribution. "
 
 
-    """
-    Runs all of the available stream tests.  Looks in the model and
-    benchmark directories for different variations, and then runs
-    the runStream() method with the correct information
-    """
-    def run(self, verSummary, output):
-        if not (os.path.exists(self.modelDir) and os.path.exists(self.benchDir)):
+    def run(self, ver_summary, output):
+        """
+        Runs all of the available stream tests.  Looks in the model and
+        benchmark directories for different variations, and then runs
+        the run_stream() method with the correct information
+        
+        Args:
+            ver_summary: multiprocessing dict to store summaries for each run
+            output: multiprocessing queue to store information to print to stdout
+        """
+        if not (os.path.exists(self.model_dir) and os.path.exists(self.bench_dir)):
             output.put("    Could not find data for stream  verification!  Tried to find data in:")
-            output.put("      " + self.modelDir)
-            output.put("      " + self.benchDir)
+            output.put("      " + self.model_dir)
+            output.put("      " + self.bench_dir)
             output.put("    Continuing with next test....")
             return
 
         resolutions = set()
-        modelConfigFiles = fnmatch.filter(os.listdir(self.modelDir), 'stream*.config')
-        for mcf in modelConfigFiles:
+        model_configFiles = fnmatch.filter(os.listdir(self.model_dir), 'stream*.config')
+        for mcf in model_configFiles:
             resolutions.add( mcf.split('.')[1] )
         resolutions = sorted( resolutions )
                 
-        self.runStream(resolutions[0], self.modelDir, self.benchDir, output)
-        self.testsRun.append("Stream " + resolutions[0])
+        self.run_stream(resolutions[0], self.model_dir, self.bench_dir, output)
+        self.tests_run.append("Stream " + resolutions[0])
         self.generate()
-        verSummary[self.name.lower()] = self.summary
+        ver_summary[self.name.lower()] = self.summary
         output.put("")
         
 
-    """
-    Runs the stream V&V for a given resolution.  First parses through all 
-    of the standard output & config files for the given test case, then finishes up by 
-    doing bit for bit comparisons with the benchmark files.
-    
-    @param resolution: The resolution of the test cases to look in.
-    @param modelDir: the location of the model run data
-    @param benchDir: the location of the benchmark data
-    """
-    def runStream(self, resolution, modelDir, benchDir, output):
+    def run_stream(self, resolution, model_dir, bench_dir, output):
+        """
+        Runs the stream V&V for a given resolution.  First parses through all 
+        of the standard output & config files for the given test case, then finishes up by 
+        doing bit for bit comparisons with the benchmark files.
+        
+        Args:
+            resolution: The resolution of the test cases to look in.
+            model_dir: the location of the model run data
+            bench_dir: the location of the benchmark data
+            output: multiprocessing queue to store information to print to stdout
+        """
         # Process the configure files
         output.put("  Stream " + resolution + " test in progress....")
-        streamParser = Parser()
-        self.modelConfigs['Stream ' + resolution], self.benchConfigs['Stream ' + resolution] = \
-                streamParser.parseConfigurations(modelDir, benchDir, "*" + resolution + ".*.config")
+        stream_parser = Parser()
+        self.model_configs['Stream ' + resolution], self.bench_configs['Stream ' + resolution] = \
+                stream_parser.parse_configurations(model_dir, bench_dir, "*" + resolution + ".*.config")
 
         # Parse standard out
-        self.fileTestDetails["Stream " + resolution] = streamParser.parseStdOutput(modelDir,"stream." + resolution + ".*.config.oe")
+        self.file_testDetails["Stream " + resolution] = stream_parser.parse_stdOutput(model_dir,"stream." + resolution + ".*.config.oe")
 
         # Record the data from the parser
-        numberOutputFiles, numberConfigMatches, numberConfigTests = streamParser.getParserSummary()
+        number_outputFiles, number_configMatches, number_configTests = stream_parser.get_parserSummary()
 
         # Run bit for bit test
-        numberBitMatches, numberBitTests = 0, 0
-        self.bitForBitDetails['Stream ' + resolution] = self.bit4bit('stream', modelDir, benchDir, resolution)
-        for key, value in self.bitForBitDetails['Stream ' + resolution].iteritems():
+        number_bitMatches, number_bitTests = 0, 0
+        self.bit_forBit_details['Stream ' + resolution] = self.bit4bit('stream', model_dir, bench_dir, resolution)
+        for key, value in self.bit_forBit_details['Stream ' + resolution].iteritems():
             output.put("    {:<40} {:<10}".format(key, value[0]))
-            if value[0] == "SUCCESS": numberBitMatches += 1
-            numberBitTests += 1
+            if value[0] == "SUCCESS": number_bitMatches += 1
+            number_bitTests += 1
 
-        self.summary['Stream ' + resolution] = [numberOutputFiles,
-                                             numberConfigMatches, numberConfigTests,
-                                             numberBitMatches, numberBitTests]
+        self.summary['Stream ' + resolution] = [number_outputFiles,
+                                             number_configMatches, number_configTests,
+                                             number_bitMatches, number_bitTests]

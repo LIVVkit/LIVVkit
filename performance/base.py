@@ -26,19 +26,15 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-
 """
-Performance Testing Base Module.  Defines the AbstractTest that will be inherited by all performance test classes.
+Performance Testing Base Module.  Defines the Abstract_test that will be inherited by all performance test classes.
 
 Created on Apr 21, 2015
 
 @author: arbennett
 """
-import re
 import os
-import operator
 import matplotlib.pyplot as pyplot
-import numpy as np
 import glob
 import jinja2
 from abc import ABCMeta, abstractmethod
@@ -46,104 +42,103 @@ from collections import Counter
 
 import util.variables
 
-# A mapping of the options to the test cases that can be run
-cases = {'none' : [],
-         'dome' : ['dome'],
-         'gis' : ['gis'],
-         'all' : ['dome', 'gis']}
-
-""" Return a list of options """
-def choices():
-    return list( cases.keys() )
-
-""" Return the tests associated with an option """
-def choose(key):
-    return cases[key] if cases.has_key(key) else None
-
-"""
-AbstractTest provides base functionality for a Performance test
-
-Each test within LIVV needs to be able to run specific test code, and
-generate its output.  Tests inherit a common method of generating 
-scaling plots
-"""
 class AbstractTest(object):
+    """
+    Abstract_test provides base functionality for a performance test
+    
+    Each test within LIVV needs to be able to run specific test code, and
+    generate its output.  Tests inherit a common method of generating 
+    scaling plots
+    """
     __metaclass__ = ABCMeta
 
-    """ Constructor """
     def __init__(self):
+        """ Constructor for the abstract base of performance tests. """
         self.name = "n/a"    # A name for the test
-        self.testsRun = []    # A list of the test cases run
-        self.plotDetails = dict()    # Summary of plots generated
-        self.fileTestDetails = dict()    # Mapping of tests to files
-        self.modelDir, self.benchDir = "", "" # Paths to the model and benchmark data
-        self.modelConfigs, self.benchConfigs = dict(), dict()    # Summaries of the config files parsed
-        self.modelTimingData, self.benchTimingData = dict(), dict()    # Summaries of the timing data parsed
+        self.tests_run = []    # A list of the test cases run
+        self.summary = dict() # Used to store some key indicators 
+        self.plot_details = dict()    # Summary of plots generated
+        self.file_testDetails = dict()    # Mapping of tests to files
+        self.model_dir, self.bench_dir = "", "" # Paths to the model and benchmark data
+        self.model_configs, self.bench_configs = dict(), dict()    # Summaries of the config files parsed
+        self.model_timingData, self.bench_timingData = dict(), dict()    # Summaries of the timing data parsed
 
-        # A list of some key indicators 
-        self.summary = dict()
 
-    """ Definition for the general test run """
     @abstractmethod
     def run(self, test):
+        """
+        Definition for the general test run
+        
+        Args:
+            test_type -- The name of the test sub-test_type being run
+        """
         pass
 
-    """
-    Generates scaling plots for each variable and dycore combination of a given
-    type.
 
-    @param type : the overarching test category to generate scaling plots for (ie dome/gis)
-    """
-    def runScaling(self, type, resolutions):
-        self.imagesGenerated = []
-        print(os.linesep + "  Generating scaling plots for " + type + "....")
+    def run_scaling(self, test_type, resolutions):
+        """
+        Generates scaling plots for each variable and dycore combination of a given
+        test_type.
+    
+        Args:
+            test_type: the overarching test category to generate scaling plots for (ie dome/gis)
+            resolutions: a list of the resolutions the model was run at
+        """
+        self.images_generated = []
+        print(os.linesep + "  Generating scaling plots for " + test_type + "....")
 
-        self.weakScaling(type, resolutions)
-        self.strongScaling(type, resolutions)
+        self.weak_scaling(test_type, resolutions)
+        self.strong_scaling(test_type, resolutions)
 
         # Record the plots
-        self.plotDetails['Scaling'] = self.imagesGenerated
+        self.plot_details['Scaling'] = self.images_generated
 
-    """
-    Run weak scaling analysis
-    """
-    def weakScaling(self, type, resolutions):
-        workPerProc, plotVars = [], []
+
+    def weak_scaling(self, test_type, resolutions):
+        """
+        Generates a weak scaling plot.  This function is greedy, it will
+        find the most data points to plot from the data it is given.
+        
+        Args:
+            test_type: the overarching test category to generate scaling plots for (ie dome/gis)
+            resolutions: a list of the resolutions the model was run at
+        """
+        work_perProc, plot_vars = [], []
         resolutions = sorted(resolutions)
         # Find out how much work per processor for each run
         for res in resolutions:
-            test= type + res
-            procList = self.modelTimingData[test].keys()
-            workPerProc.append([(int(res)**2)/int(nProc)for nProc in procList])
+            test = test_type + res
+            proc_list = self.model_timingData[test].keys()
+            work_perProc.append([(int(res)**2)/int(n_proc)for n_proc in proc_list])
 
         # To generate the best plot, figure out which work/processor number 
         # was most common, then pull out the resolution, number of processor,
         # and the time taken 
-        workPerProc = [i for sublist in workPerProc for i in sublist]
+        work_perProc = [i for sublist in work_perProc for i in sublist]
         
         # If there's no data quit early
-        if workPerProc == []:
+        if work_perProc == []:
             return
        
         # This gets the most applicable data points to plot
-        scalingConstant = Counter(workPerProc).most_common()[0][0]
+        scaling_constant = Counter(work_perProc).most_common()[0][0]
         for res in resolutions: 
-            test= type + res
-            procList = self.modelTimingData[test].keys()
-            for nProc in procList:
-                if (int(res)**2)/int(nProc) == scalingConstant:
-                    plotVars.append([res, nProc, self.modelTimingData[type + res][nProc]])  
+            test= test_type + res
+            proc_list = self.model_timingData[test].keys()
+            for n_proc in proc_list:
+                if (int(res)**2)/int(n_proc) == scaling_constant:
+                    plot_vars.append([res, n_proc, self.model_timingData[test_type + res][n_proc]])  
         
         # These are the plotting variables
-        resolutions = [int(var[0]) for var in plotVars]
-        processors = [int(var[1]) for var in plotVars]
-        times = [var[2] for var in plotVars]
+        resolutions = [int(var[0]) for var in plot_vars]
+        processors = [int(var[1]) for var in plot_vars]
+        times = [var[2] for var in plot_vars]
         mins = [var[-1] for var in times]
         maxs = [var[1] for var in times]
         times = [var[0] for var in times]
         # Plot it and then save the file + record it so we can link to it
         fig, ax = pyplot.subplots(1)
-        pyplot.title("Weak scaling for " + type)
+        pyplot.title("Weak scaling for " + test_type)
         pyplot.xlabel("Problem size")
         pyplot.ylabel("Time (s)")
         pyplot.xticks()
@@ -151,28 +146,33 @@ class AbstractTest(object):
         ax.plot(resolutions, times, 'bo-', label='Model')
         ax.plot(resolutions, mins, 'b--')
         ax.plot(resolutions, maxs, 'b--')
-        #print("Saving plot to " + util.variables.imgDir + os.sep + self.name.capitalize() + os.sep + type +  "_scaling_weak.png")
-        pyplot.savefig(util.variables.imgDir + os.sep + self.name.capitalize() + os.sep + type +  "_scaling_weak.png")
-        self.imagesGenerated.append( [type + "_scaling_weak.png", "Weak scaling for " + type])
+        #print("Saving plot to " + util.variables.img_dir + os.sep + self.name.capitalize() + os.sep + test_type +  "_scaling_weak.png")
+        pyplot.savefig(util.variables.img_dir + os.sep + self.name.capitalize() + os.sep + test_type +  "_scaling_weak.png")
+        self.images_generated.append( [test_type + "_scaling_weak.png", "Weak scaling for " + test_type])
+
+
+    def strong_scaling(self, test_type, resolutions):
+        """
+        Generates strong scaling plots for each of the resolutions
+        that the model was run at.  
         
-    """
-    Run strong scaling analysis
-    """
-    def strongScaling(self, type, resolutions):
+        Args:
+            test_type: the overarching test category to generate scaling plots for (ie dome/gis)
+            resolutions: a list of the resolutions the model was run at
+        """
         # Generate all of the plots
         for res in sorted(resolutions):
-            # Fix string for Greenland runs
-            test = type + res
-            # Add the data if it's available
-            if self.modelTimingData[test] != {}:                
-                modelData = self.modelTimingData[test]
+            test = test_type + res
+            # Add the data if it's available and has at least 3 data points
+            if self.model_timingData[test] != {} and len(self.model_timingData.keys()) > 2:                
+                model_data = self.model_timingData[test]
                 fig, ax = pyplot.subplots(1)
-                pyplot.title("Strong scaling for " + type  + res)
+                pyplot.title("Strong scaling for " + test_type  + res)
                 pyplot.xlabel("Number of processors")
                 pyplot.ylabel("Time (s)")
                 pyplot.xticks()
                 pyplot.yticks()
-                x, y = zip(*sorted(zip(modelData.keys(), modelData.values())))
+                x, y = zip(*sorted(zip(model_data.keys(), model_data.values())))
                 mins = [yy[-1] for yy in y]
                 maxs = [yy[1] for yy in y]
                 y = [yy[0] for yy in y] 
@@ -181,9 +181,9 @@ class AbstractTest(object):
                 ax.plot(x,maxs, 'b--')
                 
                 # Add benchmark data if it's there
-                if self.benchTimingData[test] != [] and self.benchTimingData[test] != [[],[]]:
-                    benchData = self.benchTimingData[test]
-                    x, y = zip(*sorted(zip(benchData.keys(), benchData.values())))
+                if self.bench_timingData[test] != [] and self.bench_timingData[test] != [[],[]]:
+                    bench_data = self.bench_timingData[test]
+                    x, y = zip(*sorted(zip(bench_data.keys(), bench_data.values())))
                     mins = [yy[-1] for yy in y]
                     maxs = [yy[1] for yy in y]
                     y = [yy[0] for yy in y]
@@ -192,59 +192,58 @@ class AbstractTest(object):
                     ax.plot(x,maxs, 'r--')
                     pyplot.legend()
 
-                #print("Saving plot to " + util.variables.imgDir + os.sep + self.name.capitalize() + os.sep + type + "_" + res +  "_scaling" + ".png")
-                pyplot.savefig(util.variables.imgDir + os.sep + self.name.capitalize() + os.sep + type + "_" + res +  "_scaling" + ".png")
-                self.imagesGenerated.append( [type + "_" + res + "_scaling" + ".png", "Strong scaling for " + type + res])
+                pyplot.savefig(util.variables.img_dir + os.sep + self.name.capitalize() + os.sep + test_type + "_" + res +  "_scaling" + ".png")
+                self.images_generated.append( [test_type + "_" + res + "_scaling" + ".png", "Strong scaling for " + test_type + res])
 
 
-    """
-    Create a {{test}}.html page in the output directory.
-    This page will contain a detailed list of the results from LIVV.  Details
-    from the run are pulled from two locations.  Global definitions that are 
-    displayed on every page, or used for navigation purposes are imported
-    from the main livv.py module.  All test specific information is supplied
-    via class variables.
-    
-    @note Paths that are contained in templateVars should not be using os.sep
-          since they are for html.
-    """
     def generate(self):
+        """
+        Create a {{test}}.html page in the output directory.
+        This page will contain a detailed list of the results from LIVV.  Details
+        from the run are pulled from two locations.  Global definitions that are 
+        displayed on every page, or used for navigation purposes are imported
+        from the main livv.py module.  All test specific information is supplied
+        via class variables.
+        
+        @note Paths that are contained in template_vars should not be using os.sep
+              since they are for html.
+        """
         # Set up jinja related variables
-        templateLoader = jinja2.FileSystemLoader(searchpath=util.variables.templateDir)
-        templateEnv = jinja2.Environment(loader=templateLoader, extensions=["jinja2.ext.do",])
-        templateFile = "/performance_test.html"
-        template = templateEnv.get_template(templateFile)
+        template_loader = jinja2.FileSystemLoader(searchpath=util.variables.template_dir)
+        template_env = jinja2.Environment(loader=template_loader, extensions=["jinja2.ext.do",])
+        template_file = "/performance_test.html"
+        template = template_env.get_template(template_file)
 
         # Set up relative paths
-        indexDir = ".."
-        cssDir = indexDir + "/css"
-        imgDir = indexDir + "/imgs"
+        index_dir = ".."
+        css_dir = index_dir + "/css"
+        img_dir = index_dir + "/imgs"
 
         # Grab all of our images
-        testImgDir = util.variables.imgDir + os.sep + self.name
-        testImages = [os.path.basename(img) for img in glob.glob(testImgDir + os.sep + "*.png")]
-        testImages.append([os.path.basename(img) for img in glob.glob(testImgDir + os.sep +"*.jpg")])
-        testImages.append([os.path.basename(img) for img in glob.glob(testImgDir + os.sep +"*.svg")])
+        test_imgDir = util.variables.img_dir + os.sep + self.name
+        test_images = [os.path.basename(img) for img in glob.glob(test_imgDir + os.sep + "*.png")]
+        test_images.append([os.path.basename(img) for img in glob.glob(test_imgDir + os.sep +"*.jpg")])
+        test_images.append([os.path.basename(img) for img in glob.glob(test_imgDir + os.sep +"*.svg")])
 
         # Set up the template variables  
-        templateVars = {"timestamp" : util.variables.timestamp,
+        template_vars = {"timestamp" : util.variables.timestamp,
                         "user" : util.variables.user,
                         "comment" : util.variables.comment,
-                        "testName" : self.name,
-                        "indexDir" : indexDir,
-                        "cssDir" : cssDir,
-                        "imgDir" : imgDir,
-                        "testDescription" : self.description,
-                        "testsRun" : self.testsRun,
-                        "testHeader" : util.variables.parserVars,
-                        "testDetails" : self.fileTestDetails,
-                        "plotDetails" : self.plotDetails,
-                        "modelConfigs" : self.modelConfigs,
-                        "benchConfigs" : self.benchConfigs,
-                        "modelTimingData" : self.modelTimingData,
-                        "benchTimingData" : self.benchTimingData,
-                        "testImages" : testImages}
-        outputText = template.render( templateVars )
-        page = open(util.variables.indexDir + os.sep + "performance" + os.sep + self.name.lower() + '.html', "w")
-        page.write(outputText)
+                        "test_name" : self.name,
+                        "index_dir" : index_dir,
+                        "css_dir" : css_dir,
+                        "img_dir" : img_dir,
+                        "test_description" : self.description,
+                        "tests_run" : self.tests_run,
+                        "test_header" : util.variables.parser_vars,
+                        "test_details" : self.file_testDetails,
+                        "plot_details" : self.plot_details,
+                        "model_configs" : self.model_configs,
+                        "bench_configs" : self.bench_configs,
+                        "model_timingData" : self.model_timingData,
+                        "bench_timingData" : self.bench_timingData,
+                        "test_images" : test_images}
+        output_text = template.render( template_vars )
+        page = open(util.variables.index_dir + os.sep + "performance" + os.sep + self.name.lower() + '.html', "w")
+        page.write(output_text)
         page.close()

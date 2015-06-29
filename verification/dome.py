@@ -28,9 +28,9 @@
 
 
 """
-Master module for dome test cases.  Inherits methods from the AbstractTest
+Master module for dome test cases.  Inherits methods from the Abstract_test
 class from the base module.  Dome specific verification is performed by calling
-the run() method, which gathers & passes the necessary information to the runDome()
+the run() method, which gathers & passes the necessary information to the run_dome()
 method.
 
 Created on Dec 8, 2014
@@ -44,85 +44,93 @@ from verification.base import AbstractTest
 from util.parser import Parser
 import util.variables
 
-def getName(): return "Dome"
+def get_name(): return "Dome"
 
-"""
-Main class for handling dome verification tests
 
-The dome test cases inherit functionality from AbstractTest for checking 
-bit-for-bittedness from a model run. This class handles evolving and \
-diagnostic variations of the dome case.
-"""
 class Test(AbstractTest):
-
-    """ Constructor """
+    """
+    Main class for handling dome verification tests
+    
+    The dome test cases inherit functionality from Abstract_test for checking 
+    bit-for-bittedness from a model run. This class handles evolving and \
+    diagnostic variations of the dome case.
+    """
+    
     def __init__(self):
+        """ Constructor """
         super(self.__class__, self).__init__()
         self.name = "Dome"
-        self.modelDir = util.variables.inputDir + os.sep + "dome"
-        self.benchDir = util.variables.benchmarkDir + os.sep + "dome"
+        self.model_dir = util.variables.input_dir + os.sep + "dome"
+        self.bench_dir = util.variables.benchmark_dir + os.sep + "dome"
         self.description = "3-D paraboloid dome of ice with a circular, 60 km" + \
                       " diameter base sitting on a flat bed.  For this" + \
                       " set of experiments a quasi no-slip basal condition in" + \
                       " imposed by setting. A zero-flux boundary condition is" + \
                       " applied to the dome margins. "
 
-    """
-    Runs all of the available dome tests.  Looks in the model and
-    benchmark directories for different variations, and then runs
-    the runDome() method with the correct information
-    """
-    def run(self, verSummary, output):
 
-        if not (os.path.exists(self.modelDir) and os.path.exists(self.benchDir)):
+    def run(self, ver_summary, output):
+        """
+        Runs all of the available dome tests.  Looks in the model and
+        benchmark directories for different variations, and then runs
+        the run_dome() method with the correct information
+        
+        Args:
+            ver_summary: multiprocessing dict to store summaries for each run
+            output: multiprocessing queue to store information to print to stdout
+        """
+        if not (os.path.exists(self.model_dir) and os.path.exists(self.bench_dir)):
             output.put("    Could not find data for dome verification!  Tried to find data in:")
-            output.put("      " + self.modelDir)
-            output.put("      " + self.benchDir)
+            output.put("      " + self.model_dir)
+            output.put("      " + self.bench_dir)
             output.put("    Continuing with next test....")
             return
         resolutions = set()
-        modelConfigFiles = fnmatch.filter(os.listdir(self.modelDir), 'dome*.config')
-        for mcf in modelConfigFiles:
+        model_configFiles = fnmatch.filter(os.listdir(self.model_dir), 'dome*.config')
+        for mcf in model_configFiles:
             resolutions.add( mcf.split('.')[1] )
         resolutions = sorted( resolutions )
         
         for res in resolutions:
-            self.runDome(res, self.modelDir, self.benchDir, output)
-            self.testsRun.append("Dome " + res)
+            self.run_dome(res, self.model_dir, self.bench_dir, output)
+            self.tests_run.append("Dome " + res)
         self.generate()
-        verSummary[self.name.lower()] = self.summary
+        ver_summary[self.name.lower()] = self.summary
         output.put("")
 
-    """
-    Runs the dome V&V for a given resolution.  First parses through all 
-    of the standard output & config files for the given test case, then finishes up by 
-    doing bit for bit comparisons with the benchmark files.
-    
-    @param resolution: The resolution of the test cases to look in.
-    @param modelDir: the location of the model run data
-    @param benchDir: the location of the benchmark data
-    """
-    def runDome(self, resolution, modelDir, benchDir, output):
+
+    def run_dome(self, resolution, model_dir, bench_dir, output):
+        """
+        Runs the dome V&V for a given resolution.  First parses through all 
+        of the standard output & config files for the given test case, then finishes up by 
+        doing bit for bit comparisons with the benchmark files.
+        
+        Args:
+            resolution: The resolution of the test cases to look in.
+            model_dir: the location of the model run data
+            bench_dir: the location of the benchmark data
+            output: multiprocessing queue to store information to print to stdout
+        """
         output.put("  Dome " + resolution + " test in progress....")
-        domeParser = Parser()
+        dome_parser = Parser()
         
         # Process the configure files
-        self.modelConfigs['Dome ' + resolution], self.benchConfigs['Dome ' + resolution] = \
-                domeParser.parseConfigurations(modelDir, benchDir, "*" + resolution + ".*.config")
+        self.model_configs['Dome ' + resolution], self.bench_configs['Dome ' + resolution] = \
+                dome_parser.parse_configurations(model_dir, bench_dir, "*" + resolution + ".*.config")
 
         # Parse standard out
-        self.fileTestDetails["Dome " + resolution] = domeParser.parseStdOutput(modelDir,"dome." + resolution + ".*.config.oe")
+        self.file_testDetails["Dome " + resolution] = dome_parser.parse_stdOutput(model_dir,"dome." + resolution + ".*.config.oe")
 
         # Record the data from the parser
-        numberOutputFiles, numberConfigMatches, numberConfigTests = domeParser.getParserSummary()
+        number_outputFiles, number_configMatches, number_configTests = dome_parser.get_parserSummary()
 
         # Run bit for bit test
-        numberBitMatches, numberBitTests = 0, 0
-        self.bitForBitDetails['Dome ' + resolution] = self.bit4bit('dome', modelDir, benchDir, resolution)
-        for key, value in self.bitForBitDetails['Dome ' + resolution].iteritems():
+        number_bitMatches, number_bitTests = 0, 0
+        self.bit_forBit_details['Dome ' + resolution] = self.bit4bit('dome', model_dir, bench_dir, resolution)
+        for key, value in self.bit_forBit_details['Dome ' + resolution].iteritems():
             output.put("    {:<40} {:<10}".format(key, value[0]))
-            if value[0] == "SUCCESS": numberBitMatches += 1
-            numberBitTests += 1
+            if value[0] == "SUCCESS": number_bitMatches += 1
+            number_bitTests += 1
 
-        self.summary['Dome ' + resolution] = [numberOutputFiles, numberConfigMatches, numberConfigTests,
-                                              numberBitMatches, numberBitTests]
+        self.summary['Dome ' + resolution] = [number_outputFiles, number_configMatches, number_configTests,
+                                              number_bitMatches, number_bitTests]

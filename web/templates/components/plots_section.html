@@ -35,24 +35,24 @@
       <b class="label-header">Plots</b> <br/>
       <div class="separator">
       <hr style="opacity: 0; height: 5px;">
-      {% if case in plotDetails %}
-        {% for imgArr in plotDetails[case] %}
-        {% if imgArr[0] != [] %}
+      {% if case in plot_details %}
+        {% for img_arr in plot_details[case] %}
+        {% if img_arr[0] != [] %}
         <div class="gallery">
           <div style="float: left; display: inline;">
-             <!-- imgArr[0] is the name of the image -->
+             <!-- img_arr[0] is the name of the image -->
              <a href="#img_form_{{case}}_{{loop.index}}" id="img_pop">
-                <img src="{{imgDir}}/{{testName}}/{{imgArr[0]}}" width="150px"></img>
+                <img src="{{img_dir}}/{{test_name}}/{{img_arr[0]}}" width="150px"></img>
             </a>
             <br style="clear: both" />
-            <!-- imgArr[1] is the description -->
-            <p>{{imgArr[1]}}</p>
+            <!-- img_arr[1] is the description -->
+            <p>{{img_arr[1]}}</p>
           </div>
          </div>
         <a href="#close" class="overlay" id="img_form_{{case}}_{{loop.index}}"></a>
 
         <div class="popup">
-          <img src="{{imgDir}}/{{testName}}/{{imgArr[0]}}" class="imageOverlay"></img>
+          <img src="{{img_dir}}/{{test_name}}/{{img_arr[0]}}" class="image_overlay"></img>
           <a class="close" href="#close">x</a>
         </div>
         {% endif %}

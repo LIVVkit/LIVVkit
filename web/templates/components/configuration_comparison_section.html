@@ -35,8 +35,8 @@
       <b class="label-header"> Configuration Files </b>
       <div class="separator">
       <hr style="opacity: 0; height: 5px;">
-          {% if case in modelConfigs and modelConfigs[case]|length != 0 %}
-            {% for file in modelConfigs[case] %}
+          {% if case in model_configs and model_configs[case]|length != 0 %}
+            {% for file in model_configs[case] %}
                 <div class="Configuration">
                   <!-- Hide and show buttons to allow the user view data more easily -->
                   <a href="#hide{{case}}{{loop.index}}" class="hide" id="hide{{case}}{{loop.index}}">+</a>
@@ -46,18 +46,18 @@
                     <div style="clear:both;"></div>
                     <!-- The changed variable keeps track of whether the files match -->
                     {% set changed = [] %}
-                    {% for section, vars in modelConfigs[case][file].iteritems() %}
+                    {% for section, vars in model_configs[case][file].iteritems() %}
                           <b>[{{section}}]</b>
                           <div class="variable">
-                          {% for var, val in modelConfigs[case][file][section].iteritems() %}
-                            {% if case in benchConfigs and
-                                file in benchConfigs[case] and
-                                section in benchConfigs[case][file] and
-                                var in benchConfigs[case][file][section]%}
-                              {% if val == benchConfigs[case][file][section][var] %}
+                          {% for var, val in model_configs[case][file][section].iteritems() %}
+                            {% if case in bench_configs and
+                                file in bench_configs[case] and
+                                section in bench_configs[case][file] and
+                                var in bench_configs[case][file][section]%}
+                              {% if val == bench_configs[case][file][section][var] %}
                                   {{var}} = {{val}}<br>
                               {% else %}
-                                  {{var}} = <p style="color: green; display:inline">{{val}}</p> <p style="color: red; display:inline">{{benchConfigs[case][file][section][var]}}</p> <br>
+                                  {{var}} = <p style="color: green; display:inline">{{val}}</p> <p style="color: red; display:inline">{{bench_configs[case][file][section][var]}}</p> <br>
                                   {% do changed.append(1) %}
                               {% endif %}
                             {% else %}

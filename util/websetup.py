@@ -26,7 +26,6 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-
 """
 Utility module to make setting up the index of the LIVV webpage easier.
 
@@ -42,12 +41,6 @@ from datetime import datetime
 import util.variables
 import jinja2
 
-"""
-Prepare the index of the website.
-
-@param testsRun: the top level names of each of the verification run
-"""
-
 def mkdir_p(path):
     """
     Make parent directories as needed and no error if existing. Works like `mkdir -p`.
@@ -60,67 +53,69 @@ def mkdir_p(path):
         else: raise
 
 
-def setup(testsRun):
+def setup(tests_run):
+    """
+    Creates the directory structure that will have the web pages
+    written to.
+    
+    Args:
+        tests_run: the top level names of each of the tests run
+    """
     # blindly make the output directory
-    mkdir_p(util.variables.indexDir)
+    mkdir_p(util.variables.index_dir)
 
     # Check if we need to back up an old run
-    if os.listdir(util.variables.indexDir):
-        f = open(util.variables.indexDir + os.sep + "data.txt", "r")
+    if os.listdir(util.variables.index_dir):
+        f = open(util.variables.index_dir + os.sep + "data.txt", "r")
         prev_time = f.readline().replace(":","").replace("-","").replace(" ","_").rstrip()
         prev_comment = f.readline().rstrip()
         f.close()
-        shutil.move(util.variables.indexDir, util.variables.indexDir + "_" + prev_time)
-        mkdir_p(util.variables.indexDir)
+        shutil.move(util.variables.index_dir, util.variables.index_dir + "_" + prev_time)
+        mkdir_p(util.variables.index_dir)
 
     # Create directory structure
-    testDirs = [util.variables.indexDir + os.sep + "validation", 
-                util.variables.indexDir + os.sep + "verification", 
-                util.variables.indexDir + os.sep + "performance"]
-    for siteDir in testDirs:
-        mkdir_p(siteDir);
+    test_dirs = [util.variables.index_dir + os.sep + "validation", 
+                util.variables.index_dir + os.sep + "verification", 
+                util.variables.index_dir + os.sep + "performance"]
+    for site_dir in test_dirs:
+        mkdir_p(site_dir);
 
     # Copy over css & imgs directories from source
-    shutil.copytree(util.variables.websiteDir + os.sep + "css", util.variables.indexDir + os.sep + "css")
-    shutil.copytree(util.variables.websiteDir + os.sep + "imgs", util.variables.indexDir + os.sep + "imgs")
+    shutil.copytree(util.variables.website_dir + os.sep + "css", util.variables.index_dir + os.sep + "css")
+    shutil.copytree(util.variables.website_dir + os.sep + "imgs", util.variables.index_dir + os.sep + "imgs")
 
     # Set up imgs directory to have sub-directories for each test
-    for test in testsRun:
-        mkdir_p(util.variables.imgDir + os.sep + test.getName().capitalize() + os.sep + "bit4bit")
-
-    f = open(util.variables.indexDir + os.sep + "data.txt", "w")
+    for test in tests_run:
+        mkdir_p(util.variables.img_dir + os.sep + test.get_name().capitalize() + os.sep + "bit4bit")
+    f = open(util.variables.index_dir + os.sep + "data.txt", "w")
     f.write(util.variables.timestamp + "\n")
     f.write(util.variables.comment)
     f.close()
 
-"""
-Build the index
 
-@param verificationSummary: A summary of the verification verification run
-@param performanceSummary: A summary of the performance verification run
-@param validationSummary: A summary of the validation verification run
-"""
-def generate(verificationSummary, performanceSummary, validationSummary):
-    # Where to look for page templates
-    templateLoader = jinja2.FileSystemLoader(searchpath=util.variables.templateDir)
-    templateEnv = jinja2.Environment(loader=templateLoader)
-
-    # Create the index page
-    templateFile = os.sep + "index.html"
-    template = templateEnv.get_template(templateFile)
-
-    templateVars = {"indexDir" : ".",
-                    "verificationSummary" : verificationSummary,
-                    "performanceSummary" : performanceSummary,
-                    "validationSummary" : validationSummary,
+def generate(verification_summary, performance_summary, validation_summary):
+    """
+    Build the index
+    
+    Args:
+        verification_summary: A summary of the verification verification run
+        performance_summary: A summary of the performance verification run
+        validation_summary: A summary of the validation verification run
+    """
+    template_loader = jinja2.FileSystemLoader(searchpath=util.variables.template_dir)
+    template_env = jinja2.Environment(loader=template_loader)
+    template_file = os.sep + "index.html"
+    template = template_env.get_template(template_file)
+    template_vars = {"index_dir" : ".",
+                    "verification_summary" : verification_summary,
+                    "performance_summary" : performance_summary,
+                    "validation_summary" : validation_summary,
                     "timestamp" : util.variables.timestamp,
                     "user" : util.variables.user,
                     "comment" : util.variables.comment,
-                    "cssDir" : "css", 
-                    "imgDir" : "imgs"}
-
-    # Write out the index page
-    outputText = template.render(templateVars)
-    page = open(util.variables.indexDir + os.sep + "index.html", "w")
-    page.write(outputText)
+                    "css_dir" : "css", 
+                    "img_dir" : "imgs"}
+    output_text = template.render(template_vars)
+    page = open(util.variables.index_dir + os.sep + "index.html", "w")
+    page.write(output_text)
     page.close()

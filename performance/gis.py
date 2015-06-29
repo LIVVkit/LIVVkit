@@ -28,9 +28,9 @@
 
 
 """
-Master module for GIS test cases.  Inherits methods from the AbstractTest
+Master module for GIS test cases.  Inherits methods from the Abstract_test
 class from the Test module.  GIS specific verification are performed by calling
-the run() method, which passes the necessary information to the runGisPerformance()
+the run() method, which passes the necessary information to the run_gisPerformance()
 method.
 
 Created on Dec 8, 2014
@@ -43,66 +43,67 @@ import util.variables
 from base import AbstractTest
 from util.parser import Parser
 
-def getName(): return "Greenland Ice Sheet"
+def get_name(): return "Greenland Ice Sheet"
 
-"""
-Main class for handling Greenland Ice Sheet performance validation.
 
-The Greenland Ice Sheet test cases inherit functionality from AbstractTest for
-generating scaling plots and generating the output webpage.
-"""
 class Test(AbstractTest):
+    """
+    Main class for handling Greenland Ice Sheet performance validation.
+    
+    The Greenland Ice Sheet test cases inherit functionality from Abstract_test for
+    generating scaling plots and generating the output webpage.
+    """
 
-    """ Constructor """
     def __init__(self):
+        """ Constructor """
         super(self.__class__, self).__init__()
         self.name = "gis"
-        self.modelDir = util.variables.performanceDir + os.sep + "gis"
-        self.benchDir = util.variables.performanceDir + os.sep + "bench" + os.sep + 'gis'
+        self.model_dir = util.variables.input_dir + os.sep + "gis"
+        self.bench_dir = util.variables.benchmark_dir + os.sep + 'gis'
         self.description = "A placeholder description"
 
-    """
-    This method will record the specific test cases
-    being run.  Each specific test case string is run via the 
-    runGisPerformance function.  All of the data pulled is then
-    assimilated via the runScaling method defined in the base class
-    """
     def run(self):
+        """
+        This method will record the specific test cases
+        being run.  Each specific test case string is run via the 
+        run_gisPerformance function.  All of the data pulled is then
+        assimilated via the run_scaling method defined in the base class
+        """
         print("This is a placeholder")
-        return
 
 
-    """
-    Greenland Ice Sheet Performance Testing
-    
-    @param resolution : the resolution of the test data
-    """
-    def runGisPerformance(self, resolution):
+    def run_gisPerformance(self, resolution):
+        """
+        Greenland Ice Sheet Performance Testing
+        
+        Args:
+            resolution : the resolution of the test data
+        """
         print(os.linesep + "  Greenland Ice Sheet " + resolution + " performance testing in progress....")
 
         # Make sure that there is some data
-        if not (os.path.exists(self.modelDir) and os.path.exists(self.benchDir)):
+        if not (os.path.exists(self.model_dir) and os.path.exists(self.bench_dir)):
             print("    Could not find data for GIS " + resolution + " verification!  Tried to find data in:")
-            print("      " + self.modelDir)
-            print("      " + self.benchDir)
+            print("      " + self.model_dir)
+            print("      " + self.bench_dir)
             print("    Continuing with next test....")
             return
 
         # Process the configure files
-        gisParser = Parser()
-        self.modelConfigs['gis_' + resolution], self.benchConfigs['gis_' + resolution] = \
-                gisParser.parseConfigurations(self.modelDir, self.benchDir)
+        gis_parser = Parser()
+        self.model_configs['gis_' + resolution], self.bench_configs['gis_' + resolution] = \
+                gis_parser.parse_configurations(self.model_dir, self.bench_dir)
 
         # Scrape the details from each of the files and store some data for later
-        self.fileTestDetails['gis_' + resolution] = gisParser.parseStdOutput(self.modelDir, "^out.gis." + resolution + ".((albany)|(glissade))$")
+        self.file_testDetails['gis_' + resolution] = gis_parser.parse_stdOutput(self.model_dir, "^out.gis." + resolution + ".((albany)|(glissade))$")
 
         # Go through and pull in the timing data
         print("    Model Timing Summary:")
-        self.modelTimingData['gis' + resolution] = gisParser.parseTimingSummaries(self.modelDir)
+        self.model_timingData['gis' + resolution] = gis_parser.parse_timingSummaries(self.model_dir)
         print("    Benchmark Timing Summary:")
-        self.benchTimingData['gis' + resolution] = gisParser.parseTimingSummaries(self.benchDir)
+        self.bench_timingData['gis' + resolution] = gis_parser.parse_timingSummaries(self.bench_dir)
 
         # Record the data from the parser
-        numberOutputFiles, numberConfigMatches, numberConfigTests = gisParser.getParserSummary()
+        number_outputFiles, number_configMatches, number_configTests = gis_parser.get_parserSummary()
 
-        self.summary['gis_' + resolution] = [numberOutputFiles, numberConfigMatches, numberConfigTests]
+        self.summary['gis_' + resolution] = [number_outputFiles, number_configMatches, number_configTests]

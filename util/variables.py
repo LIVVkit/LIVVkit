@@ -26,7 +26,6 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-
 """
 Storage for global variables.  These are set upon startup in the main 
 livv.py module
@@ -35,17 +34,17 @@ Created on May 5th, 2015
 @author arbennett
 """
 cwd            = ''
-configDir      = ''
-inputDir       = ''
-benchmarkDir   = ''
-outputDir      = ''
-imgDir         = ''
+config_dir      = ''
+input_dir       = ''
+benchmark_dir   = ''
+output_dir      = ''
+img_dir         = ''
 comment        = ''
 timestamp      = ''
 user           = ''
-websiteDir     = ''
-templateDir    = ''
-indexDir       = ''
+website_dir     = ''
+template_dir    = ''
+index_dir       = ''
 verification   = ''
 performance    = ''
 validation     = ''
@@ -54,21 +53,20 @@ validation     = ''
 modules = []
 
 # A list of the information that should be looked for in the stdout of model output
-parserVars = []
+parser_vars = []
 
 # Variables to measure when parsing through timing summaries
-timingVars = []
+timing_vars = []
 
 # Dycores to try to parse output for
 dycores = []
 
-
-# Provide a way to update this when loading a configuration
 def update(vars):
+    """ Provide a way to update variables when loading a configuration """
     globals().update(vars)
 
-# Print out the variables that are contained in this module
 def print_vars():
+    """ Print out the variables that are contained in this module """
     for k,v in globals().iteritems():
         if not str(k).startswith('__'):
             print str(k) + " = " + str(v)

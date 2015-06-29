@@ -62,7 +62,7 @@ table.summary {
 	width: 80%;
 }
 
-.tableLink {
+.table_link {
 	width: 100%;
 	font-family: helvetica, sans-serif;
 	color: #3385FF;
@@ -72,7 +72,7 @@ table.summary {
     font-weight: 600;	
 }
 
-.tableLink:hover {
+.table_link:hover {
 	color: #47A3FF;
 }
 
@@ -163,7 +163,7 @@ div.gallery p:hover {
     z-index: 10;
 }
 
-.imageOverlay{
+.image_overlay{
 	display: block;
 	margin-left: auto;
 	margin-right: auto;

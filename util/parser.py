@@ -28,13 +28,13 @@
 
 
 """
-A general parser for extracting data from text files.  When using parseConfigurations the
+A general parser for extracting data from text files.  When using parse_configurations the
 resulting dictionaries can be iterated over via the following code:
 
-            for key1,value1 in modelConfigs.iteritems():
-                fileName = key1
+            for key1,value1 in model_configs.iteritems():
+                file_name = key1
                 for key2,value2 in value1.iteritems():
-                    sectionHeader = key2
+                    section_header = key2
                     for key3, value3 in value2.iteritems():
                         variable = key3 
                         value = value3.split("#")[0]
@@ -53,232 +53,240 @@ import numpy as np
 import util.variables
 from collections import OrderedDict
 
-"""
-The generalized parser for processing text files associated with a test case
 
-The parser class is to be used within test classes to easily get information
-from text files.  The two main pieces of functionality of a parser are for
-reading configuration files and standard output from simulations.
-"""
 class Parser(object):
+    """
+    The generalized parser for processing text files associated with a test case
     
-    """ Constructor """
+    The parser class is to be used within test classes to easily get information
+    from text files.  The two main pieces of functionality of a parser are for
+    reading configuration files and standard output from simulations.
+    """
     def __init__(self):
-        self.configParser = ConfigParser.ConfigParser()
-        self.benchData, self.modelData = dict(), dict()
-        self.nOutputParsed = 0
-        self.nConfigParsed, self.nConfigMatched = 0, 0
+        """ Constructor """
+        self.config_parser = ConfigParser.ConfigParser()
+        self.bench_data, self.model_data = dict(), dict()
+        self.n_outputParsed = 0
+        self.n_configParsed, self.n_configMatched = 0, 0
 
         # Build an empty ordered dictionary so that the output prints in a nice order
-        self.stdOutData = OrderedDict()
-        for var in util.variables.parserVars: self.stdOutData[var] = None
+        self.std_outData = OrderedDict()
+        for var in util.variables.parser_vars: self.std_outData[var] = None
 
-    """
-    Get some key details about what was parsed
-    
-    @return the number of output and configuration files parsed and 
-            how many configurations matched the benchmarks
-    """
-    def getParserSummary(self):
-        return self.nOutputParsed, self.nConfigMatched, self.nConfigParsed
 
-    """
-    Parse through all of the configuration files from a model and benchmark
-    
-    Parses all of the files in the given directories and stores them as
-    nested dictionaries.  The general structure of the dictionaries are
-    {filename : {sectionHeaders : {variables : values}}}.  These can be
-    looped through for processing using the algorithm listed at the top 
-    of this file.
-    
-    @param modelDir: the directory for the model configuration files
-    @param benchDir: the directory for the benchmark configuration files
-    @returns modelData, benchData: the nested dictionaries corresponding
-             to the files found in the input directories
-    """
-    def parseConfigurations(self, modelDir, benchDir, regex):
+    def get_parserSummary(self):
+        """ Get some key details about what was parsed """
+        return self.n_outputParsed, self.n_configMatched, self.n_configParsed
+
+
+    def parse_configurations(self, model_dir, bench_dir, regex):
+        """
+        Parse through all of the configuration files from a model and benchmark
+        
+        Parses all of the files in the given directories and stores them as
+        nested dictionaries.  The general structure of the dictionaries are
+        {filename : {section_headers : {variables : values}}}.  These can be
+        looped through for processing using the algorithm listed at the top 
+        of this file.
+        
+        Args:
+            model_dir: the directory for the model configuration files
+            bench_dir: the directory for the benchmark configuration files
+            regex: the pattern to match the config files with
+        Returns:
+            the nested dictionaries corresponding
+                 to the files found in the input directories
+        """
         # Make sure the locations exist, and if not return blank sets
-        if not (os.path.exists(modelDir) and os.path.exists(benchDir)):
+        if not (os.path.exists(model_dir) and os.path.exists(bench_dir)):
             return dict(), dict()
-        modelFiles = [fn.split(os.sep)[-1] for fn in glob.glob(modelDir + os.sep + "*" + regex)]
-        benchFiles = [fn.split(os.sep)[-1] for fn in glob.glob(benchDir + os.sep + "*" + regex)]
-        self.nConfigParsed += len(modelFiles)
+        model_files = [fn.split(os.sep)[-1] for fn in glob.glob(model_dir + os.sep + "*" + regex)]
+        bench_files = [fn.split(os.sep)[-1] for fn in glob.glob(bench_dir + os.sep + "*" + regex)]
+        self.n_configParsed += len(model_files)
 
         # Pull in the information from the model run
-        for modelF in modelFiles:
-            modelFile = modelDir + os.sep + modelF
-            modelFileData = OrderedDict()
-            self.configParser.read(modelFile)
+        for modelF in model_files:
+            model_file = model_dir + os.sep + modelF
+            model_fileData = OrderedDict()
+            self.config_parser.read(model_file)
 
             # Go through each header section (ones that look like [section])
-            for section in self.configParser.sections():
-                subDict = OrderedDict()
+            for section in self.config_parser.sections():
+                sub_dict = OrderedDict()
 
-                # Go through each item in the section and put {var : val} into subDict
-                for entry in self.configParser.items(section):
-                    subDict[entry[0]] = entry[1].split('#')[0] 
+                # Go through each item in the section and put {var : val} into sub_dict
+                for entry in self.config_parser.items(section):
+                    sub_dict[entry[0]] = entry[1].split('#')[0] 
 
                 # Map the sub-dictionary to the section 
-                modelFileData[section] = subDict.copy()
+                model_fileData[section] = sub_dict.copy()
 
             # Associate the data to the file
-            self.modelData[modelF] = modelFileData
+            self.model_data[modelF] = model_fileData
 
         # Pull in the information from the benchmark 
-        for benchF in benchFiles:
-            benchFile = benchDir + os.sep + benchF
-            benchFileData = OrderedDict()
-            self.configParser.read(benchFile)
+        for benchF in bench_files:
+            bench_file = bench_dir + os.sep + benchF
+            bench_fileData = OrderedDict()
+            self.config_parser.read(bench_file)
 
             # Go through each header section (ones that look like [section])
-            for section in self.configParser.sections():
-                subDict = OrderedDict()
+            for section in self.config_parser.sections():
+                sub_dict = OrderedDict()
 
-                # Go through each item in the section and put {var : val} into subDict
-                for entry in self.configParser.items(section):
-                    subDict[entry[0]] = entry[1].split('#')[0] 
+                # Go through each item in the section and put {var : val} into sub_dict
+                for entry in self.config_parser.items(section):
+                    sub_dict[entry[0]] = entry[1].split('#')[0] 
 
                 # Map the sub-dictionary to the section 
-                benchFileData[section] = subDict.copy()
+                bench_fileData[section] = sub_dict.copy()
 
             # Associate the data with the file
-            self.benchData[benchF] = benchFileData
+            self.bench_data[benchF] = bench_fileData
 
         # Check to see if the files match
         # TODO: This is unwieldy - can do a better job when I'm thinking better -arbennett
-        for file in modelFiles:
-            configMatched = True
-            for section, vars in self.modelData[file].iteritems():
-                for var, val in self.modelData[file][section].iteritems():
-                    if file in benchFiles and section in self.benchData[file] and var in self.benchData[file][section]:
-                        if val != self.benchData[file][section][var]:
-                            configMatched = False
+        for file in model_files:
+            config_matched = True
+            for section, vars in self.model_data[file].iteritems():
+                for var, val in self.model_data[file][section].iteritems():
+                    if file in bench_files and section in self.bench_data[file] and var in self.bench_data[file][section]:
+                        if val != self.bench_data[file][section][var]:
+                            config_matched = False
                     else:
-                        configMatched = False
-            if configMatched: self.nConfigMatched += 1
+                        config_matched = False
+            if config_matched: self.n_configMatched += 1
 
-        return self.modelData, self.benchData
+        return self.model_data, self.bench_data
 
-    """    
-    Searches through a standard output file looking key pieces of
-    data about the run.  Records the dycore type, the number of 
-    processors used, the average convergence rate, and number of 
-    timesteps
-    
-    @param modelDir: the directory with files to parse through
-    @param regex: A pattern to match the std output files with
-    @returns a mapping of the various parameters to their values from the file
-    """
-    def parseStdOutput(self, modelDir, regex):
+
+    def parse_stdOutput(self, model_dir, regex):
+        """    
+        Searches through a standard output file looking key pieces of
+        data about the run.  Records the dycore type, the number of 
+        processors used, the average convergence rate, and number of 
+        timesteps
+        
+        Args:
+            model_dir: the directory with files to parse through
+            regex: A pattern to match the std output files with
+        Return:
+            a mapping of the various parameters to their values from the file
+        """
         # Set up variables that we can use to map data and information
-        dycoreTypes = {"0" : "Glide", "1" : "Glam", "2" : "Glissade", "3" : "AlbanyFelix", "4" : "BISICLES"}
+        dycore_types = {"0" : "Glide", "1" : "Glam", "2" : "Glissade", "3" : "Albany_felix", "4" : "BISICLES"}
         try:
-            files = os.listdir(modelDir)
+            files = os.listdir(model_dir)
         except:
             files = []
-            print("    Could not find model data in" + modelDir)
+            print("    Could not find model data in" + model_dir)
         files = filter(re.compile(regex).search, files)
         outdata = []
 
-        for fileName in files:
+        for file_name in files:
             # Initialize a new set of data
-            numberProcs = 0
-            currentStep = 0
-            avgItersToConverge = 0
-            iterNumber = 0
-            convergedIters = []
-            itersToConverge = []
-            self.stdOutData = OrderedDict()
+            number_procs = 0
+            current_step = 0
+            avg_itersTo_converge = 0
+            iter_number = 0
+            converged_iters = []
+            iters_toConverge = []
+            self.std_outData = OrderedDict()
 
             # Open up the file
-            logfile = open(modelDir + os.sep + fileName, 'r')
-            self.nOutputParsed += 1
+            logfile = open(model_dir + os.sep + file_name, 'r')
+            self.n_outputParsed += 1
 
             # Go through and build up information about the simulation
             for line in logfile:
                 #Determine the dycore type
                 if ('CISM dycore type' in line):
                     if line.split()[-1] == '=':
-                        self.stdOutData['Dycore Type'] = dycoreTypes[next(logfile).strip()]
+                        self.std_outData['Dycore Type'] = dycore_types[next(logfile).strip()]
                     else:
-                        self.stdOutData['Dycore Type'] = dycoreTypes[line.split()[-1]]
+                        self.std_outData['Dycore Type'] = dycore_types[line.split()[-1]]
 
                 # Calculate the total number of processors used
                 if ('total procs' in line):
-                    numberProcs += int(line.split()[-1])
+                    number_procs += int(line.split()[-1])
 
                 # Grab the current timestep
                 if ('Nonlinear Solver Step' in line):
-                    currentStep = int(line.split()[4])
+                    current_step = int(line.split()[4])
                 if ('Compute ice velocities, time = ' in line):
-                    currentStep = float(line.split()[-1])
+                    current_step = float(line.split()[-1])
 
                 # Get the number of iterations per timestep
                 if ('"SOLVE_STATUS_CONVERGED"' in line):
-                    splitLine = line.split()
-                    itersToConverge.append(int(splitLine[splitLine.index('"SOLVE_STATUS_CONVERGED"') + 2]))
+                    split_line = line.split()
+                    iters_toConverge.append(int(split_line[split_line.index('"SOLVE_STATUS_CONVERGED"') + 2]))
 
                 if ("Compute dH/dt" in line):
-                    itersToConverge.append(int(iterNumber))
+                    iters_toConverge.append(int(iter_number))
 
                 # If the timestep converged mark it with a positive
                 if ('Converged!' in line):
-                    convergedIters.append(currentStep)
+                    converged_iters.append(current_step)
 
                 # If the timestep didn't converge mark it with a negative
                 if ('Failed!' in line):
-                    convergedIters.append(-1*currentStep)
+                    converged_iters.append(-1*current_step)
 
-                splitLine = line.split()
-                if len(splitLine) > 0 and splitLine[0].isdigit():
-                    iterNumber = splitLine[0]
+                split_line = line.split()
+                if len(split_line) > 0 and split_line[0].isdigit():
+                    iter_number = split_line[0]
 
 
             # Calculate the average number of iterations it took to converge
-            if (len(itersToConverge) > 0):
-                itersToConverge.append(int(iterNumber))
-                currentStep += 1
-                avgItersToConverge = float(sum(itersToConverge)) / len(itersToConverge)
+            if (len(iters_toConverge) > 0):
+                iters_toConverge.append(int(iter_number))
+                current_step += 1
+                avg_itersTo_converge = float(sum(iters_toConverge)) / len(iters_toConverge)
 
-            # Record some of the data in the self.stdOutData
-            self.stdOutData['Number of processors'] = numberProcs
-            self.stdOutData['Number of timesteps'] = int(currentStep)
-            if avgItersToConverge > 0:
-                self.stdOutData['Average iterations to converge'] = avgItersToConverge 
-            elif int(currentStep) == 0:
-                self.stdOutData['Number of timesteps'] = 1
-                self.stdOutData['Average iterations to converge'] = iterNumber
+            # Record some of the data in the self.std_outData
+            self.std_outData['Number of processors'] = number_procs
+            self.std_outData['Number of timesteps'] = int(current_step)
+            if avg_itersTo_converge > 0:
+                self.std_outData['Average iterations to converge'] = avg_itersTo_converge 
+            elif int(current_step) == 0:
+                self.std_outData['Number of timesteps'] = 1
+                self.std_outData['Average iterations to converge'] = iter_number
 
-            if not self.stdOutData.has_key('Dycore Type') or self.stdOutData['Dycore Type'] == None: 
-                self.stdOutData['Dycore Type'] = 'Unavailable'
-            for key in self.stdOutData.keys():
-                if self.stdOutData[key] == None:
-                    self.stdOutData[key] = 'N/A'
+            if not self.std_outData.has_key('Dycore Type') or self.std_outData['Dycore Type'] == None: 
+                self.std_outData['Dycore Type'] = 'Unavailable'
+            for key in self.std_outData.keys():
+                if self.std_outData[key] == None:
+                    self.std_outData[key] = 'N/A'
 
-            outdata.append(self.stdOutData)
+            outdata.append(self.std_outData)
 
         return zip(files, outdata)
 
-    """ 
-    Search through gptl timing files 
-    
-    @param basePath: the directory to look for timing files in
-    @returns a summary of the timing data that was parsed
-    """
-    def parseTimingSummaries(self, basePath, testName, resolution):
-        if not os.path.exists(basePath):
+
+    def parse_timingSummaries(self, base_path, test_name, resolution):
+        """ 
+        Search through gptl timing files 
+        
+        Args:
+            base_path: the directory to look for timing files in
+            test_name: the name of the test run
+            resolution: a string representation of the resolution of the run
+        Returns:
+            a summary of the timing data that was parsed
+        """
+        if not os.path.exists(base_path):
             return []
         times = dict()
-        timingFiles = glob.glob(basePath + os.sep + "timing"+ os.sep + testName.lower() + '-t[0-9].' + resolution + ".p[0-9][0-9][0-9].results") 
-        timingFiles += (glob.glob(basePath + os.sep + "timing"+ os.sep + testName.lower() + '-t[0-9].' + resolution + ".p[0-9][0-9][0-9].cism_timing_stats") )
+        timing_files = glob.glob(base_path + os.sep + "timing"+ os.sep + test_name.lower() + '-t[0-9].' + resolution + ".p[0-9][0-9][0-9].results") 
+        timing_files += (glob.glob(base_path + os.sep + "timing"+ os.sep + test_name.lower() + '-t[0-9].' + resolution + ".p[0-9][0-9][0-9].cism_timing_stats") )
 
-        for filePath in timingFiles:
-            run = filePath.split(os.sep)[-1].split('.')[2][1:]
+        for file_path in timing_files:
+            run = file_path.split(os.sep)[-1].split('.')[2][1:]
             if not times.has_key(run): times[run] = []
-            if not os.path.exists(filePath): continue
+            if not os.path.exists(file_path): continue
             
             # Open the file and grab the data outs
-            file = open(filePath, 'r')
+            file = open(file_path, 'r')
             for line in file:
                 # If the line is empty just go to the next
                 if line.split() == []:
@@ -290,7 +298,7 @@ class Parser(object):
                     break
                 
                 # Otherwise it's found here
-                if line.split()[0] == filePath.split(os.sep)[-1].replace('results', 'config'):
+                if line.split()[0] == file_path.split(os.sep)[-1].replace('results', 'config'):
                     times[run].append(float(line.split()[1]))
             
             # Record the mean, max, and min times found

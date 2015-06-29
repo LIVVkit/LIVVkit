@@ -34,15 +34,15 @@
         <!-- BEGIN OUTPUT ANALYSIS SECTION -->
         <b class="label-header">Output Analysis</b>
         <div class="separator">
-        {% if testDetails[case] != [] %}
+        {% if test_details[case] != [] %}
         <table style="width:100%">
             <tr style="background-color: #47A3FF;">
                 <th>Output File</th>
-                {% for var in testHeader %}
+                {% for var in test_header %}
                     <th>{{var}}</th>
                 {% endfor %}
             </tr>
-            {% for file, details in testDetails[case] %}
+            {% for file, details in test_details[case] %}
             <tr>
                 <td style="text-align: left">{{file}}</td>
                 {% for key, value in details.iteritems() %}

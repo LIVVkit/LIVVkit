@@ -35,8 +35,8 @@
       <b class="label-header"> Timing Summary</b>
       <br style="clear:both; height: 10px;" />
       <div class="separator">
-      {% if case in modelTimingData %}
-      {% for dycore, data in modelTimingData[case].iteritems() %}
+      {% if case in model_timingData %}
+      {% for dycore, data in model_timingData[case].iteritems() %}
         <br style="clear:both; height: 10px;" />
         <b style="display: block;">{{dycore}}</b>
         <table style="width: 100%;  border-collapse: collapse;">
@@ -50,31 +50,31 @@
             {% if vals[0] is defined %}
             <tr>
               <td style="text-align: right">{{var}}</td>
-              {% set diffZero = vals[0] - benchTimingData[case][dycore][var][0] %}
-              {% set diffOne = vals[1] - benchTimingData[case][dycore][var][1] %}
-              {% set diffTwo = vals[2] - benchTimingData[case][dycore][var][2] %}
+              {% set diff_zero = vals[0] - bench_timingData[case][dycore][var][0] %}
+              {% set diff_one = vals[1] - bench_timingData[case][dycore][var][1] %}
+              {% set diff_two = vals[2] - bench_timingData[case][dycore][var][2] %}
               <td style="text-align: left">
                 {{'%0.5f' % vals[0]}} 
-                {% if diffZero > 0 %}
-                  <p style="display: inline; color: red">(+{{'%0.3f' % diffZero}})</p>
+                {% if diff_zero > 0 %}
+                  <p style="display: inline; color: red">(+{{'%0.3f' % diff_zero}})</p>
                 {% else %}
-                  <p style="display: inline; color: green">({{'%0.3f' % diffZero}})</p>
+                  <p style="display: inline; color: green">({{'%0.3f' % diff_zero}})</p>
                 {% endif %}
               </td>
               <td style="text-align: left">
                 {{'%0.5f' % vals[1]}} 
-                {% if diffOne > 0 %}
-                  <p style="display: inline; color: red">(+{{'%0.3f' % diffOne}})</p>
+                {% if diff_one > 0 %}
+                  <p style="display: inline; color: red">(+{{'%0.3f' % diff_one}})</p>
                 {% else %}
-                  <p style="display: inline; color: green">({{'%0.3f' % diffOne}})</p>
+                  <p style="display: inline; color: green">({{'%0.3f' % diff_one}})</p>
                 {% endif %}
               </td>
               <td style="text-align: left">
                 {{'%0.5f' % vals[2]}} 
-                {% if diffTwo > 0 %}
-                  <p style="display: inline; color: red">(+{{'%0.3f' % diffTwo}})</p>
+                {% if diff_two > 0 %}
+                  <p style="display: inline; color: red">(+{{'%0.3f' % diff_two}})</p>
                 {% else %}
-                  <p style="display: inline; color: green">({{'%0.3f' % diffTwo}})</p>
+                  <p style="display: inline; color: green">({{'%0.3f' % diff_two}})</p>
                 {% endif %}
               </td>
             </tr>
