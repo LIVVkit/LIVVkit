@@ -50,7 +50,7 @@ class Test(AbstractTest):
     """
     Main class for handling Greenland Ice Sheet performance validation.
     
-    The Greenland Ice Sheet test cases inherit functionality from Abstract_test for
+    The Greenland Ice Sheet test cases inherit functionality from AbstractTest for
     generating scaling plots and generating the output webpage.
     """
 

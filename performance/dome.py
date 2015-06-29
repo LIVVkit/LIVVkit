@@ -51,7 +51,7 @@ class Test(AbstractTest):
     """
     Main class for handling dome performance validation
     
-    The dome test cases inherit functionality from Abstract_test for
+    The dome test cases inherit functionality from AbstractTest for
     generating scaling plots and generating the output webpage.
     """
 

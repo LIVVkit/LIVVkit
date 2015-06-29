@@ -51,7 +51,7 @@ class Test(AbstractTest):
     """
     Main class for handling dome verification tests
     
-    The dome test cases inherit functionality from Abstract_test for checking 
+    The dome test cases inherit functionality from AbstractTest for checking 
     bit-for-bittedness from a model run. This class handles evolving and \
     diagnostic variations of the dome case.
     """

@@ -44,7 +44,7 @@ import util.variables
 
 class AbstractTest(object):
     """
-    Abstract_test provides base functionality for a performance test
+    AbstractTest provides base functionality for a performance test
     
     Each test within LIVV needs to be able to run specific test code, and
     generate its output.  Tests inherit a common method of generating 

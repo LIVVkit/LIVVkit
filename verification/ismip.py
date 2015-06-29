@@ -50,7 +50,7 @@ class Test(AbstractTest):
     """
     Main class for handling Ismip test cases.
     
-    The Ismip test cases inherit functionality from Abstract_test for checking 
+    The Ismip test cases inherit functionality from AbstractTest for checking 
     bit-for-bittedness and generating webpages with results.
     """
 

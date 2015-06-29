@@ -49,7 +49,7 @@ class Test(AbstractTest):
     """
     Main class for handling shelf test cases.
     
-    The shelf test cases inherit functionality from Abstract_test for checking 
+    The shelf test cases inherit functionality from AbstractTest for checking 
     bit-for-bittedness as well as for parsing standard output from a model run.
     This class handles the confined and circular variations of the shelf cases.
     """

@@ -66,7 +66,7 @@ def good_time_dim(file_name):
 
 class AbstractTest(object):
     """
-    Abstract_test provides a description of how a test should work in LIVV.
+    AbstractTest provides a description of how a test should work in LIVV.
     
     Each test within LIVV needs to be able to run specific test code, and
     generate its output.  Tests inherit a common method of checking for 
