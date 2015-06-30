@@ -200,13 +200,8 @@ for data_dir in [util.variables.input_dir, util.variables.benchmark_dir]:
 ###############################################################################
 #                              Record Test Cases                              #
 ###############################################################################
-verification_tests = [
-                      verification.dome.Test(), 
-                      verification.ismip.Test(), 
-                      verification.shelf.Test(), 
-                      verification.stream.Test()
-                     ] 
-performance_tests = [performance.dome.Test()]
+verification_tests = [verification.dome, verification.ismip, verification.shelf, verification.stream] 
+performance_tests = [performance.dome]
 validation_tests = []
 test_mapping = {
                "Verification" : verification_tests,
@@ -223,14 +218,13 @@ util.websetup.setup(verification_tests + performance_tests + validation_tests)
 util.self_verification.check()
 
 # Give a list of the tests that will be run
-if util.variables.verification == "True":
-    print("Running verification tests:")
-    for case in verification_tests: 
-        print("  " + case.name)
+print("Running verification tests:")
+for case in verification_tests: 
+    print("  " + case.get_name())
 if util.variables.performance == "True":
     print(os.linesep + "Running performance tests:")
     for case in performance_tests:
-        print("  " + case.name)
+        print("  " + case.get_name())
 if util.variables.validation == "True":
     print(os.linesep + "Running validation tests:")
     for case in validation_tests:
@@ -238,10 +232,12 @@ if util.variables.validation == "True":
 
 # Run the verification tests
 manager = multiprocessing.Manager()
-verification_summary = dict()
-performance_summary = dict()
-validation_summary = dict()
-verification_processes = [multiprocessing.Process(target=ver_type.run)
+output = multiprocessing.Queue()
+verification_summary = manager.dict()
+performance_summary = manager.dict()
+validation_summary = manager.dict()
+verification_processes = [multiprocessing.Process(target=ver_type.Test().run, 
+                                                  args=(verification_summary, output)) 
                           for ver_type in verification_tests]
 if util.variables.verification == "True":
     print("--------------------------------------------------------------------------")
@@ -252,15 +248,23 @@ if util.variables.verification == "True":
         p.start()
         p.join()
 
+    # Wait for all of the tests to finish
+    while len(multiprocessing.active_children()) > 3:
+        time.sleep(0.25)
+
+    # Show the results
+    while output.qsize() > 0:
+        print output.get()
+
 # Run the performance verification
 if util.variables.performance == "True":
     print("--------------------------------------------------------------------------")
     print("  Beginning performance analysis....")
     print("--------------------------------------------------------------------------")
     for test in performance_tests:
-        new_test = test
+        new_test = test.Test()
         new_test.run()
-        performance_summary[test.name.lower()] = new_test.summary
+        performance_summary[test.get_name().lower()] = new_test.summary
         new_test.generate()
         print("")
 
@@ -277,8 +281,9 @@ if util.variables.validation == "True":
         print("")
 
 # Create the site index
-verification_summary = dict()
-validation_summary = dict()
+verification_summary = dict(verification_summary)
+performance_summary = dict(performance_summary)
+validation_summary = dict(validation_summary)
 print("Generating web pages in " + util.variables.output_dir + "....")
 util.websetup.generate(verification_summary, performance_summary, validation_summary)
 

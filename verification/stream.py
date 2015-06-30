@@ -43,6 +43,8 @@ from verification.base import AbstractTest
 from util.parser import Parser
 import util.variables
 
+def get_name(): return "Stream"
+
 class Test(AbstractTest):
     """
     Main class for handling stream test cases.
@@ -63,14 +65,21 @@ class Test(AbstractTest):
                             " till with a known and specified yield stress distribution. "
 
 
-    def run(self):
+    def run(self, ver_summary, output):
         """
         Runs all of the available stream tests.  Looks in the model and
         benchmark directories for different variations, and then runs
         the run_stream() method with the correct information
+        
+        Args:
+            ver_summary: multiprocessing dict to store summaries for each run
+            output: multiprocessing queue to store information to print to stdout
         """
         if not (os.path.exists(self.model_dir) and os.path.exists(self.bench_dir)):
-            # Save this info in a class variable
+            output.put("    Could not find data for stream  verification!  Tried to find data in:")
+            output.put("      " + self.model_dir)
+            output.put("      " + self.bench_dir)
+            output.put("    Continuing with next test....")
             return
 
         resolutions = set()
@@ -79,12 +88,14 @@ class Test(AbstractTest):
             resolutions.add( mcf.split('.')[1] )
         resolutions = sorted( resolutions )
                 
-        self.run_stream(resolutions[0], self.model_dir, self.bench_dir)
+        self.run_stream(resolutions[0], self.model_dir, self.bench_dir, output)
         self.tests_run.append("Stream " + resolutions[0])
         self.generate()
+        ver_summary[self.name.lower()] = self.summary
+        output.put("")
         
 
-    def run_stream(self, resolution, model_dir, bench_dir):
+    def run_stream(self, resolution, model_dir, bench_dir, output):
         """
         Runs the stream V&V for a given resolution.  First parses through all 
         of the standard output & config files for the given test case, then finishes up by 
@@ -94,8 +105,10 @@ class Test(AbstractTest):
             resolution: The resolution of the test cases to look in.
             model_dir: the location of the model run data
             bench_dir: the location of the benchmark data
+            output: multiprocessing queue to store information to print to stdout
         """
         # Process the configure files
+        output.put("  Stream " + resolution + " test in progress....")
         stream_parser = Parser()
         self.model_configs['Stream ' + resolution], self.bench_configs['Stream ' + resolution] = \
                 stream_parser.parse_configurations(model_dir, bench_dir, "*" + resolution + ".*.config")
@@ -110,6 +123,7 @@ class Test(AbstractTest):
         number_bitMatches, number_bitTests = 0, 0
         self.bit_for_bit_details['Stream ' + resolution] = self.bit4bit('stream', model_dir, bench_dir, resolution)
         for key, value in self.bit_for_bit_details['Stream ' + resolution].iteritems():
+            output.put("    {:<40} {:<10}".format(key, value[0]))
             if value[0] == "SUCCESS": number_bitMatches += 1
             number_bitTests += 1
 
