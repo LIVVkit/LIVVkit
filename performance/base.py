@@ -58,10 +58,10 @@ class AbstractTest(object):
         self.tests_run = []    # A list of the test cases run
         self.summary = dict() # Used to store some key indicators 
         self.plot_details = dict()    # Summary of plots generated
-        self.file_testDetails = dict()    # Mapping of tests to files
+        self.file_test_details = dict()    # Mapping of tests to files
         self.model_dir, self.bench_dir = "", "" # Paths to the model and benchmark data
         self.model_configs, self.bench_configs = dict(), dict()    # Summaries of the config files parsed
-        self.model_timingData, self.bench_timingData = dict(), dict()    # Summaries of the timing data parsed
+        self.model_timing_data, self.bench_timing_data = dict(), dict()    # Summaries of the timing data parsed
 
 
     @abstractmethod
@@ -108,7 +108,7 @@ class AbstractTest(object):
         # Find out how much work per processor for each run
         for res in resolutions:
             test = test_type + res
-            proc_list = self.model_timingData[test].keys()
+            proc_list = self.model_timing_data[test].keys()
             work_perProc.append([(int(res)**2)/int(n_proc)for n_proc in proc_list])
 
         # To generate the best plot, figure out which work/processor number 
@@ -124,10 +124,10 @@ class AbstractTest(object):
         scaling_constant = Counter(work_perProc).most_common()[0][0]
         for res in resolutions: 
             test= test_type + res
-            proc_list = self.model_timingData[test].keys()
+            proc_list = self.model_timing_data[test].keys()
             for n_proc in proc_list:
                 if (int(res)**2)/int(n_proc) == scaling_constant:
-                    plot_vars.append([res, n_proc, self.model_timingData[test_type + res][n_proc]])  
+                    plot_vars.append([res, n_proc, self.model_timing_data[test_type + res][n_proc]])  
         
         # These are the plotting variables
         resolutions = [int(var[0]) for var in plot_vars]
@@ -164,8 +164,8 @@ class AbstractTest(object):
         for res in sorted(resolutions):
             test = test_type + res
             # Add the data if it's available and has at least 3 data points
-            if self.model_timingData[test] != {} and len(self.model_timingData.keys()) > 2:                
-                model_data = self.model_timingData[test]
+            if self.model_timing_data[test] != {} and len(self.model_timing_data.keys()) > 2:                
+                model_data = self.model_timing_data[test]
                 fig, ax = pyplot.subplots(1)
                 pyplot.title("Strong scaling for " + test_type  + res)
                 pyplot.xlabel("Number of processors")
@@ -181,8 +181,8 @@ class AbstractTest(object):
                 ax.plot(x,maxs, 'b--')
                 
                 # Add benchmark data if it's there
-                if self.bench_timingData[test] != [] and self.bench_timingData[test] != [[],[]]:
-                    bench_data = self.bench_timingData[test]
+                if self.bench_timing_data[test] != [] and self.bench_timing_data[test] != [[],[]]:
+                    bench_data = self.bench_timing_data[test]
                     x, y = zip(*sorted(zip(bench_data.keys(), bench_data.values())))
                     mins = [yy[-1] for yy in y]
                     maxs = [yy[1] for yy in y]
@@ -236,12 +236,12 @@ class AbstractTest(object):
                         "test_description" : self.description,
                         "tests_run" : self.tests_run,
                         "test_header" : util.variables.parser_vars,
-                        "test_details" : self.file_testDetails,
+                        "test_details" : self.file_test_details,
                         "plot_details" : self.plot_details,
                         "model_configs" : self.model_configs,
                         "bench_configs" : self.bench_configs,
-                        "model_timingData" : self.model_timingData,
-                        "bench_timingData" : self.bench_timingData,
+                        "model_timing_data" : self.model_timing_data,
+                        "bench_timing_data" : self.bench_timing_data,
                         "test_images" : test_images}
         output_text = template.render( template_vars )
         page = open(util.variables.index_dir + os.sep + "performance" + os.sep + self.name.lower() + '.html', "w")

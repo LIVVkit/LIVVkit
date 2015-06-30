@@ -68,7 +68,7 @@ class Abstract_test(object):
         self.tests_run = []
         self.summary = dict()
         self.plot_details = dict()
-        self.file_testDetails = dict()
+        self.file_test_details = dict()
         
     """ Definition for the general test run """
     @abstractmethod
@@ -117,12 +117,12 @@ class Abstract_test(object):
                         "test_description" : self.description,
                         "tests_run" : self.tests_run,
                         "test_header" : util.variables.parser_vars,
-                        "test_details" : self.file_testDetails,
+                        "test_details" : self.file_test_details,
                         "plot_details" : self.plot_details,
                         "model_configs" : self.model_configs,
                         "bench_configs" : self.bench_configs,
-                        "model_timingData" : self.model_timingData,
-                        "bench_timingData" : self.bench_timingData,
+                        "model_timing_data" : self.model_timing_data,
+                        "bench_timing_data" : self.bench_timing_data,
                         "test_images" : test_images}
         output_text = template.render( template_vars )
         page = open(util.variables.index_dir + os.sep + "performance" + os.sep + self.name.lower() + '.html', "w")

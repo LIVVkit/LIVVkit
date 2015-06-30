@@ -117,15 +117,15 @@ class Test(AbstractTest):
             ismip_parser.parse_configurations(test_dir, bench_dir, "ismip-hom-" + test_case + "." + resolution + ".*.config")
 
         # Scrape the details from each of the files and store some data for later
-        self.file_testDetails[test_name] = ismip_parser.parse_stdOutput(test_dir, "ismip-hom-" + test_case + "." + resolution + ".*.config.oe")
+        self.file_test_details[test_name] = ismip_parser.parse_stdOutput(test_dir, "ismip-hom-" + test_case + "." + resolution + ".*.config.oe")
 
         # Record the data from the parser
         number_outputFiles, number_configMatches, number_configTests = ismip_parser.get_parserSummary()
 
         # Run bit for bit test
         number_bitTests, number_bitMatches = 0, 0
-        self.bit_forBit_details[test_name] = self.bit4bit('ismip-hom-' + test_case, test_dir, bench_dir, resolution)
-        for key, value in self.bit_forBit_details[test_name].iteritems():
+        self.bit_for_bit_details[test_name] = self.bit4bit('ismip-hom-' + test_case, test_dir, bench_dir, resolution)
+        for key, value in self.bit_for_bit_details[test_name].iteritems():
             output.put("    {:<40} {:<10}".format(key,value[0]))
             if value[0] == "SUCCESS": number_bitMatches+=1
             number_bitTests+=1

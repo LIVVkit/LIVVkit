@@ -115,11 +115,11 @@ class Test(AbstractTest):
                 dome_parser.parse_configurations(perf_dir, perf_benchDir, "*" + resolution + "*.config")
 
         # Scrape the details from each of the files and store some data for later
-        self.file_testDetails["Dome " + resolution] = dome_parser.parse_stdOutput(perf_dir, "dome." + resolution + ".*.config.oe")
+        self.file_test_details["Dome " + resolution] = dome_parser.parse_stdOutput(perf_dir, "dome." + resolution + ".*.config.oe")
 
         # Go through and pull in the timing data
-        self.model_timingData['dome' + resolution] = dome_parser.parse_timingSummaries(perf_dir, 'dome', resolution)
-        self.bench_timingData['dome' + resolution] = dome_parser.parse_timingSummaries(perf_benchDir, 'dome', resolution)
+        self.model_timing_data['dome' + resolution] = dome_parser.parse_timingSummaries(perf_dir, 'dome', resolution)
+        self.bench_timing_data['dome' + resolution] = dome_parser.parse_timingSummaries(perf_benchDir, 'dome', resolution)
 
         # Record the data from the parser
         number_outputFiles, number_configMatches, number_configTests = dome_parser.get_parserSummary()

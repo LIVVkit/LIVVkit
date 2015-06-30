@@ -68,7 +68,6 @@ import time
 import getpass
 import platform
 import socket
-import time
 import multiprocessing
 
 from optparse import OptionParser
@@ -172,13 +171,13 @@ if options.save_name != '':
 elif options.load_name != '':
     # Try to load the machine name specified
     machine_name = options.load_name
-    vars = util.configuration_handler.load(machine_name)
-    util.variables.update(vars)
+    vv_vars = util.configuration_handler.load(machine_name)
+    util.variables.update(vv_vars)
 
 # Check if the user has a default config saved and use that if it does
 if os.path.exists(util.variables.config_dir + os.sep + machine_name + "_" + util.variables.user + "_default"):
     machine_name = machine_name + "_" + util.variables.user + "_default"
-    vars = util.configuration_handler.load(machine_name)
+    vv_vars = util.configuration_handler.load(machine_name)
     #util.variables.globals().update(vars)
 
 # Print out some information
@@ -189,10 +188,10 @@ print("  OS Type: " + platform.system() + " " + platform.release())
 print("  " + util.variables.comment + os.linesep)
 
 # Check to make sure the directory structure is okay
-for dir in [util.variables.input_dir, util.variables.benchmark_dir]:
-    if not os.path.exists(dir):
+for data_dir in [util.variables.input_dir, util.variables.benchmark_dir]:
+    if not os.path.exists(data_dir):
         print("------------------------------------------------------------------------------")
-        print("ERROR: Could not find " + dir + " for input")
+        print("ERROR: Could not find " + data_dir + " for input")
         print("       Use the -t and -b flags to specify the locations of the test and benchmark data.")
         print("       See README.md for more details.")
         print("------------------------------------------------------------------------------")
@@ -237,7 +236,9 @@ output = multiprocessing.Queue()
 verification_summary = manager.dict()
 performance_summary = manager.dict()
 validation_summary = manager.dict()
-verification_processes = [multiprocessing.Process(target=ver_type.Test().run, args=(verification_summary, output)) for ver_type in verification_tests]
+verification_processes = [multiprocessing.Process(target=ver_type.Test().run, 
+                                                  args=(verification_summary, output)) 
+                          for ver_type in verification_tests]
 if util.variables.verification == "True":
     print("--------------------------------------------------------------------------")
     print("  Beginning verification test suite....")
@@ -246,7 +247,7 @@ if util.variables.verification == "True":
     for p in verification_processes:
         p.start()
         p.join()
-    
+
     # Wait for all of the tests to finish
     while len(multiprocessing.active_children()) > 3:
         time.sleep(0.25)
@@ -261,7 +262,6 @@ if util.variables.performance == "True":
     print("  Beginning performance analysis....")
     print("--------------------------------------------------------------------------")
     for test in performance_tests:
-        # Create a new instance of the specific test class (see verification_mapping for the mapping)
         new_test = test.Test()
         new_test.run()
         performance_summary[test.get_name().lower()] = new_test.summary
@@ -274,12 +274,9 @@ if util.variables.validation == "True":
     print("  Beginning validation test suite....")
     print("--------------------------------------------------------------------------")
     for test in validation_tests:
-        # Create a new instance of the specific test class (see verification_mapping for the mapping)
-        new_test = validation_mapping[test]()
-        # Run the specific and bit for bit verification for each case of the test
+        new_test = test.Test()
         new_test.run()
         validation_summary[test.get_name().lower()] = new_test.summary
-        # Generate the test-specific webpage 
         new_test.generate()
         print("")
 

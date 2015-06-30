@@ -88,7 +88,7 @@ def check():
     # Make sure we have it, and if not, build it       
     try:
         from setuptools.command import easy_install
-    except Import_error:
+    except ImportError:
         if not os.path.exists(cwd + os.sep + "deps"):
             os.mkdir(cwd + os.sep + "deps")
             sys.path.append(cwd + os.sep + "deps")
@@ -103,7 +103,7 @@ def check():
         try:
             __import__(lib)
             print("      Found " + lib + "!")
-        except Import_error:
+        except ImportError:
             print("      Could not find " + lib + ".  Building a copy for you...."),
             if not os.path.exists(cwd + os.sep + "deps"):
                 os.mkdir(cwd + os.sep + "deps")

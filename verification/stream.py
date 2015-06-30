@@ -114,15 +114,15 @@ class Test(AbstractTest):
                 stream_parser.parse_configurations(model_dir, bench_dir, "*" + resolution + ".*.config")
 
         # Parse standard out
-        self.file_testDetails["Stream " + resolution] = stream_parser.parse_stdOutput(model_dir,"stream." + resolution + ".*.config.oe")
+        self.file_test_details["Stream " + resolution] = stream_parser.parse_stdOutput(model_dir,"stream." + resolution + ".*.config.oe")
 
         # Record the data from the parser
         number_outputFiles, number_configMatches, number_configTests = stream_parser.get_parserSummary()
 
         # Run bit for bit test
         number_bitMatches, number_bitTests = 0, 0
-        self.bit_forBit_details['Stream ' + resolution] = self.bit4bit('stream', model_dir, bench_dir, resolution)
-        for key, value in self.bit_forBit_details['Stream ' + resolution].iteritems():
+        self.bit_for_bit_details['Stream ' + resolution] = self.bit4bit('stream', model_dir, bench_dir, resolution)
+        for key, value in self.bit_for_bit_details['Stream ' + resolution].iteritems():
             output.put("    {:<40} {:<10}".format(key, value[0]))
             if value[0] == "SUCCESS": number_bitMatches += 1
             number_bitTests += 1

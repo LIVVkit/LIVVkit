@@ -95,13 +95,13 @@ class Test(AbstractTest):
                 gis_parser.parse_configurations(self.model_dir, self.bench_dir)
 
         # Scrape the details from each of the files and store some data for later
-        self.file_testDetails['gis_' + resolution] = gis_parser.parse_stdOutput(self.model_dir, "^out.gis." + resolution + ".((albany)|(glissade))$")
+        self.file_test_details['gis_' + resolution] = gis_parser.parse_stdOutput(self.model_dir, "^out.gis." + resolution + ".((albany)|(glissade))$")
 
         # Go through and pull in the timing data
         print("    Model Timing Summary:")
-        self.model_timingData['gis' + resolution] = gis_parser.parse_timingSummaries(self.model_dir)
+        self.model_timing_data['gis' + resolution] = gis_parser.parse_timingSummaries(self.model_dir)
         print("    Benchmark Timing Summary:")
-        self.bench_timingData['gis' + resolution] = gis_parser.parse_timingSummaries(self.bench_dir)
+        self.bench_timing_data['gis' + resolution] = gis_parser.parse_timingSummaries(self.bench_dir)
 
         # Record the data from the parser
         number_outputFiles, number_configMatches, number_configTests = gis_parser.get_parserSummary()

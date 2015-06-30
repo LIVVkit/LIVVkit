@@ -79,9 +79,9 @@ class AbstractTest(object):
         self.name = "default"
         self.model_dir, self.bench_dir = "", ""
         self.tests_run = []
-        self.bit_forBit_details = dict()
+        self.bit_for_bit_details = dict()
         self.plot_details = dict()
-        self.file_testDetails = dict()
+        self.file_test_details = dict()
         self.model_configs, self.bench_configs = dict(), dict()
         self.summary = dict()
 
@@ -146,7 +146,7 @@ class AbstractTest(object):
                           + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
                     try:
                         exit(e.returncode)
-                    except Attribute_error:
+                    except AttributeError:
                         exit(e.errno)
                 diff_data = Dataset(test_dir + os.sep + 'temp.nc', 'r')
                 diff_vars = diff_data.variables.keys()
@@ -220,8 +220,8 @@ class AbstractTest(object):
                         "test_description" : self.description,
                         "tests_run" : self.tests_run,
                         "test_header" : util.variables.parser_vars,
-                        "bit_forBit_details" : self.bit_forBit_details,
-                        "test_details" : self.file_testDetails,
+                        "bit_for_bit_details" : self.bit_for_bit_details,
+                        "test_details" : self.file_test_details,
                         "plot_details" : self.plot_details,
                         "model_configs" : self.model_configs,
                         "bench_configs" : self.bench_configs,

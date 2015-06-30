@@ -70,8 +70,8 @@ class Parser(object):
         self.n_configParsed, self.n_configMatched = 0, 0
 
         # Build an empty ordered dictionary so that the output prints in a nice order
-        self.std_outData = OrderedDict()
-        for var in util.variables.parser_vars: self.std_outData[var] = None
+        self.std_out_data = OrderedDict()
+        for var in util.variables.parser_vars: self.std_out_data[var] = None
 
 
     def get_parserSummary(self):
@@ -191,7 +191,7 @@ class Parser(object):
             iter_number = 0
             converged_iters = []
             iters_toConverge = []
-            self.std_outData = OrderedDict()
+            self.std_out_data = OrderedDict()
 
             # Open up the file
             logfile = open(model_dir + os.sep + file_name, 'r')
@@ -202,9 +202,9 @@ class Parser(object):
                 #Determine the dycore type
                 if ('CISM dycore type' in line):
                     if line.split()[-1] == '=':
-                        self.std_outData['Dycore Type'] = dycore_types[next(logfile).strip()]
+                        self.std_out_data['Dycore Type'] = dycore_types[next(logfile).strip()]
                     else:
-                        self.std_outData['Dycore Type'] = dycore_types[line.split()[-1]]
+                        self.std_out_data['Dycore Type'] = dycore_types[line.split()[-1]]
 
                 # Calculate the total number of processors used
                 if ('total procs' in line):
@@ -243,22 +243,22 @@ class Parser(object):
                 current_step += 1
                 avg_itersTo_converge = float(sum(iters_toConverge)) / len(iters_toConverge)
 
-            # Record some of the data in the self.std_outData
-            self.std_outData['Number of processors'] = number_procs
-            self.std_outData['Number of timesteps'] = int(current_step)
+            # Record some of the data in the self.std_out_data
+            self.std_out_data['Number of processors'] = number_procs
+            self.std_out_data['Number of timesteps'] = int(current_step)
             if avg_itersTo_converge > 0:
-                self.std_outData['Average iterations to converge'] = avg_itersTo_converge 
+                self.std_out_data['Average iterations to converge'] = avg_itersTo_converge 
             elif int(current_step) == 0:
-                self.std_outData['Number of timesteps'] = 1
-                self.std_outData['Average iterations to converge'] = iter_number
+                self.std_out_data['Number of timesteps'] = 1
+                self.std_out_data['Average iterations to converge'] = iter_number
 
-            if not self.std_outData.has_key('Dycore Type') or self.std_outData['Dycore Type'] == None: 
-                self.std_outData['Dycore Type'] = 'Unavailable'
-            for key in self.std_outData.keys():
-                if self.std_outData[key] == None:
-                    self.std_outData[key] = 'N/A'
+            if not self.std_out_data.has_key('Dycore Type') or self.std_out_data['Dycore Type'] == None: 
+                self.std_out_data['Dycore Type'] = 'Unavailable'
+            for key in self.std_out_data.keys():
+                if self.std_out_data[key] == None:
+                    self.std_out_data[key] = 'N/A'
 
-            outdata.append(self.std_outData)
+            outdata.append(self.std_out_data)
 
         return zip(files, outdata)
 
