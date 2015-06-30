@@ -294,7 +294,7 @@ class Parser(object):
                 
                 # If this is a big machine this is how we find the time
                 if line.split()[0] == 'cism':
-                    times[run].append(float(line.split()[5]))
+                    times[run].append(float(line.split()[4])/int(line.split()[2]))
                     break
                 
                 # Otherwise it's found here

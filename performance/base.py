@@ -164,7 +164,7 @@ class AbstractTest(object):
         for res in sorted(resolutions):
             test = test_type + res
             # Add the data if it's available and has at least 3 data points
-            if self.model_timing_data[test] != {} and len(self.model_timing_data.keys()) > 2:                
+            if self.model_timing_data[test] != {} and len(self.model_timing_data[test].keys()) > 2:                
                 model_data = self.model_timing_data[test]
                 fig, ax = pyplot.subplots(1)
                 pyplot.title("Strong scaling for " + test_type  + res)
@@ -181,7 +181,7 @@ class AbstractTest(object):
                 ax.plot(x,maxs, 'b--')
                 
                 # Add benchmark data if it's there
-                if self.bench_timing_data[test] != [] and self.bench_timing_data[test] != [[],[]]:
+                if self.bench_timing_data[test] != {}:
                     bench_data = self.bench_timing_data[test]
                     x, y = zip(*sorted(zip(bench_data.keys(), bench_data.values())))
                     mins = [yy[-1] for yy in y]
