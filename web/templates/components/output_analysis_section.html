@@ -28,13 +28,14 @@
  - OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  -->
 
-
-
-
         <!-- BEGIN OUTPUT ANALYSIS SECTION -->
         <b class="label-header">Output Analysis</b>
         <div class="separator">
         {% if test_details[case] != [] %}
+        <p>
+			Statistics pulled from the test output of {{test_name}} runs are shown below.  If any differences 
+			were found from the benchmarks, the benchmark values will be shown in parentheses.  
+        </p>
         <table style="width:100%">
             <tr style="background-color: #47A3FF;">
                 <th>Output File</th>
@@ -42,11 +43,16 @@
                     <th>{{var}}</th>
                 {% endfor %}
             </tr>
-            {% for file, details in test_details[case] %}
+            {% for file, details in test_details[case].iteritems() %}
             <tr>
                 <td style="text-align: left">{{file}}</td>
                 {% for key, value in details.iteritems() %}
-                <td>{{value}}</td>
+                <td>
+                  {{value}}
+                  {% if case in bench_details.keys() and file in bench_details[case].keys() and key in bench_details[case][file].keys() and bench_details[case][file][key] != value%}
+                	<p style="color: red">({{bench_details[case][file][key]}})</p>
+                  {% endif %}  
+                </td>
                 {% endfor %}
             </tr>
             {% endfor %}
@@ -56,5 +62,3 @@
         {% endif %}
         </div>
         <!-- END OUTPUT ANALYSIS SECTION -->
-        
-        

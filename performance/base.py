@@ -58,7 +58,8 @@ class AbstractTest(object):
         self.tests_run = []    # A list of the test cases run
         self.summary = dict() # Used to store some key indicators 
         self.plot_details = dict()    # Summary of plots generated
-        self.file_test_details = dict()    # Mapping of tests to files
+        self.model_details = dict()    # Stats parsed from std out files for the model run
+        self.bench_details = dict()    # Stats parsed from std out files for the benchmarks
         self.model_dir, self.bench_dir = "", "" # Paths to the model and benchmark data
         self.model_configs, self.bench_configs = dict(), dict()    # Summaries of the config files parsed
         self.model_timing_data, self.bench_timing_data = dict(), dict()    # Summaries of the timing data parsed
@@ -236,7 +237,8 @@ class AbstractTest(object):
                         "test_description" : self.description,
                         "tests_run" : self.tests_run,
                         "test_header" : util.variables.parser_vars,
-                        "test_details" : self.file_test_details,
+                        "test_details" : self.model_details,
+                        "bench_details" : self.bench_details,
                         "plot_details" : self.plot_details,
                         "model_configs" : self.model_configs,
                         "bench_configs" : self.bench_configs,

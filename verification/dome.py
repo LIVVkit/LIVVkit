@@ -115,11 +115,12 @@ class Test(AbstractTest):
         dome_parser = Parser()
         
         # Process the configure files
-        self.model_configs['Dome ' + resolution], self.bench_configs['Dome ' + resolution] = \
+        self.test_configs['Dome ' + resolution], self.bench_configs['Dome ' + resolution] = \
                 dome_parser.parse_configurations(model_dir, bench_dir, "*" + resolution + ".*.config")
 
         # Parse standard out
-        self.file_test_details["Dome " + resolution] = dome_parser.parse_stdOutput(model_dir,"dome." + resolution + ".*.config.oe")
+        self.test_details["Dome " + resolution] = dome_parser.parse_std_output(model_dir,"dome." + resolution + ".*.config.oe")
+        self.bench_details["Dome " + resolution] = dome_parser.parse_std_output(bench_dir,"dome." + resolution + ".*.config.oe")      
 
         # Record the data from the parser
         number_outputFiles, number_configMatches, number_configTests = dome_parser.get_parserSummary()

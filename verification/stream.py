@@ -95,7 +95,7 @@ class Test(AbstractTest):
         output.put("")
         
 
-    def run_stream(self, resolution, model_dir, bench_dir, output):
+    def run_stream(self, resolution, test_dir, bench_dir, output):
         """
         Runs the stream V&V for a given resolution.  First parses through all 
         of the standard output & config files for the given test case, then finishes up by 
@@ -103,25 +103,26 @@ class Test(AbstractTest):
         
         Args:
             resolution: The resolution of the test cases to look in.
-            model_dir: the location of the model run data
+            test_dir: the location of the model run data
             bench_dir: the location of the benchmark data
             output: multiprocessing queue to store information to print to stdout
         """
         # Process the configure files
         output.put("  Stream " + resolution + " test in progress....")
         stream_parser = Parser()
-        self.model_configs['Stream ' + resolution], self.bench_configs['Stream ' + resolution] = \
-                stream_parser.parse_configurations(model_dir, bench_dir, "*" + resolution + ".*.config")
+        self.test_configs['Stream ' + resolution], self.bench_configs['Stream ' + resolution] = \
+                stream_parser.parse_configurations(test_dir, bench_dir, "*" + resolution + ".*.config")
 
         # Parse standard out
-        self.file_test_details["Stream " + resolution] = stream_parser.parse_stdOutput(model_dir,"stream." + resolution + ".*.config.oe")
+        self.bench_details["Stream " + resolution] = stream_parser.parse_std_output(bench_dir,"stream." + resolution + ".*.config.oe")
+        self.test_details["Stream " + resolution] = stream_parser.parse_std_output(test_dir,"stream." + resolution + ".*.config.oe")
 
         # Record the data from the parser
         number_outputFiles, number_configMatches, number_configTests = stream_parser.get_parserSummary()
 
         # Run bit for bit test
         number_bitMatches, number_bitTests = 0, 0
-        self.bit_for_bit_details['Stream ' + resolution] = self.bit4bit('stream', model_dir, bench_dir, resolution)
+        self.bit_for_bit_details['Stream ' + resolution] = self.bit4bit('stream', test_dir, bench_dir, resolution)
         for key, value in self.bit_for_bit_details['Stream ' + resolution].iteritems():
             output.put("    {:<40} {:<10}".format(key, value[0]))
             if value[0] == "SUCCESS": number_bitMatches += 1

@@ -113,11 +113,12 @@ class Test(AbstractTest):
 
         # Process the configure files
         ismip_parser = Parser()
-        self.model_configs[test_name], self.bench_configs[test_name] = \
+        self.test_configs[test_name], self.bench_configs[test_name] = \
             ismip_parser.parse_configurations(test_dir, bench_dir, "ismip-hom-" + test_case + "." + resolution + ".*.config")
 
         # Scrape the details from each of the files and store some data for later
-        self.file_test_details[test_name] = ismip_parser.parse_stdOutput(test_dir, "ismip-hom-" + test_case + "." + resolution + ".*.config.oe")
+        self.test_details[test_name] = ismip_parser.parse_std_output(test_dir, "ismip-hom-" + test_case + "." + resolution + ".*.config.oe")
+        self.bench_details[test_name] = ismip_parser.parse_std_output(bench_dir, "ismip-hom-" + test_case + "." + resolution + ".*.config.oe")
 
         # Record the data from the parser
         number_outputFiles, number_configMatches, number_configTests = ismip_parser.get_parserSummary()

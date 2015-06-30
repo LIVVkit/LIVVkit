@@ -98,28 +98,29 @@ class Test(AbstractTest):
         self.tests_run.append('Scaling')
 
 
-    def run_dome(self, resolution, perf_dir, perf_benchDir):
+    def run_dome(self, resolution, model_dir, bench_dir):
         """
         Run an instance of dome performance testing
         
         Args:
             resolution: the size of the test being analyzed
-            perf_dir: the location of the performance data
-            perf_benchDir: the location of the benchmark performance data
+            model_dir: the location of the performance data
+            bench_dir: the location of the benchmark performance data
         """
         print("  Dome " + resolution + " performance testing in progress....")
 
         # Process the configure files
         dome_parser = Parser()
         self.model_configs['Dome ' + resolution], self.bench_configs['Dome ' + resolution] = \
-                dome_parser.parse_configurations(perf_dir, perf_benchDir, "*" + resolution + "*.config")
+                dome_parser.parse_configurations(bench_dir, bench_dir, "*" + resolution + "*.config")
 
         # Scrape the details from each of the files and store some data for later
-        self.file_test_details["Dome " + resolution] = dome_parser.parse_stdOutput(perf_dir, "dome." + resolution + ".*.config.oe")
+        self.model_details["Dome " + resolution] = dome_parser.parse_std_output(model_dir, "dome." + resolution + ".*.config.oe")
+        self.bench_details["Dome " + resolution] = dome_parser.parse_std_output(bench_dir, "dome." + resolution + ".*.config.oe")
 
         # Go through and pull in the timing data
-        self.model_timing_data['dome' + resolution] = dome_parser.parse_timingSummaries(perf_dir, 'dome', resolution)
-        self.bench_timing_data['dome' + resolution] = dome_parser.parse_timingSummaries(perf_benchDir, 'dome', resolution)
+        self.model_timing_data['dome' + resolution] = dome_parser.parse_timingSummaries(model_dir, 'dome', resolution)
+        self.bench_timing_data['dome' + resolution] = dome_parser.parse_timingSummaries(bench_dir, 'dome', resolution)
 
         # Record the data from the parser
         number_outputFiles, number_configMatches, number_configTests = dome_parser.get_parserSummary()

@@ -81,8 +81,9 @@ class AbstractTest(object):
         self.tests_run = []
         self.bit_for_bit_details = dict()
         self.plot_details = dict()
-        self.file_test_details = dict()
-        self.model_configs, self.bench_configs = dict(), dict()
+        self.test_details = dict()
+        self.bench_details = dict()
+        self.test_configs, self.bench_configs = dict(), dict()
         self.summary = dict()
 
 
@@ -221,9 +222,10 @@ class AbstractTest(object):
                         "tests_run" : self.tests_run,
                         "test_header" : util.variables.parser_vars,
                         "bit_for_bit_details" : self.bit_for_bit_details,
-                        "test_details" : self.file_test_details,
+                        "test_details" : self.test_details,
+                        "bench_details" : self.bench_details,
                         "plot_details" : self.plot_details,
-                        "model_configs" : self.model_configs,
+                        "test_configs" : self.test_configs,
                         "bench_configs" : self.bench_configs,
                         "test_images" : test_images}
         output_text = template.render( template_vars )

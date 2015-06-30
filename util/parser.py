@@ -160,7 +160,7 @@ class Parser(object):
         return self.model_data, self.bench_data
 
 
-    def parse_stdOutput(self, model_dir, regex):
+    def parse_std_output(self, model_dir, regex):
         """    
         Searches through a standard output file looking key pieces of
         data about the run.  Records the dycore type, the number of 
@@ -181,7 +181,7 @@ class Parser(object):
             files = []
             print("    Could not find model data in" + model_dir)
         files = filter(re.compile(regex).search, files)
-        outdata = []
+        outdata = dict()
 
         for file_name in files:
             # Initialize a new set of data
@@ -258,9 +258,8 @@ class Parser(object):
                 if self.std_out_data[key] == None:
                     self.std_out_data[key] = 'N/A'
 
-            outdata.append(self.std_out_data)
-
-        return zip(files, outdata)
+            outdata[file_name] = self.std_out_data
+        return outdata
 
 
     def parse_timingSummaries(self, base_path, test_name, resolution):
