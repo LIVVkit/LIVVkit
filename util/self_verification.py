@@ -57,25 +57,24 @@ def check():
     # Redirect standard output so that we don't have to see the output of these tests
     #sys.stdout = open(os.devnull, "w")
     error_list = []
-    fake_summary = dict()
     dome = verification.dome.Test()
     dome.bench_dir = util.variables.cwd + os.sep + "util" + os.sep + "data_base"
     
     # Compare against data that should all match
     dome.model_dir = util.variables.cwd + os.sep + "util" + os.sep + "data_same"
-    dome.run(fake_summary, Queue.Queue())
+    dome.run()
     if not dome.bit_for_bit_details["Dome 0010"]["dome.0010.p001.out.nc"][0] == 'SUCCESS':
         error_list.append("NCDiff recorded differences on results of same test.")
 
     # Compare against data that has a small difference
     dome.model_dir = util.variables.cwd + os.sep + "util" + os.sep + "data_diffsmall"
-    dome.run(fake_summary, Queue.Queue())
+    dome.run()
     if not dome.bit_for_bit_details["Dome 0010"]["dome.0010.p001.out.nc"][0] == 'FAILURE':
         error_list.append("NCDiff failed to record differences on small difference test") 
 
     # Compare against data that has a large difference
     dome.model_dir = util.variables.cwd + os.sep + "util" + os.sep + "data_difflarge"
-    dome.run(fake_summary, Queue.Queue()) 
+    dome.run() 
     if not dome.bit_for_bit_details["Dome 0010"]["dome.0010.p001.out.nc"][0] == 'FAILURE':
         error_list.append("NCDiff failed to record differences on small difference test") 
 

@@ -86,7 +86,7 @@ def setup(tests_run):
 
     # Set up imgs directory to have sub-directories for each test
     for test in tests_run:
-        mkdir_p(util.variables.img_dir + os.sep + test.get_name().capitalize() + os.sep + "bit4bit")
+        mkdir_p(util.variables.img_dir + os.sep + test.name.capitalize() + os.sep + "bit4bit")
     f = open(util.variables.index_dir + os.sep + "data.txt", "w")
     f.write(util.variables.timestamp + "\n")
     f.write(util.variables.comment)

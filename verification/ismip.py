@@ -67,35 +67,26 @@ class Test(AbstractTest):
                            " Simulates steady ice flow over a surface with periodic boundary conditions"
 
 
-    def run(self, ver_summary, output):
+    def run(self):
         """
         Runs all of the available ISMIP tests.  Looks in the model and
         benchmark directories for different variations, and then runs
         the run_ismip() method with the correct information
-                
-        Args:
-            ver_summary: multiprocessing dict to store summaries for each run
-            output: multiprocessing queue to store information to print to stdout
         """
         if not (os.path.exists(self.model_dir) and os.path.exists(self.bench_dir)):
-            output.put("    Could not find data for ismip-hom verification!  Tried to find data in:")
-            output.put("      " + self.model_dir)
-            output.put("      " + self.bench_dir)
-            output.put("    Continuing with next test....")
+            # Record this in a class variable
             return
         test_types = sorted(set(fn.split('.')[0].split('-')[-1] for fn in os.listdir(self.model_dir)))
         for test in test_types:
             resolutions = sorted(set(fn.split(os.sep)[-1].split('.')[1]  \
                             for fn in glob.glob(self.model_dir + os.sep + 'ismip-hom-' + test + "*.config")))
             for resolution in resolutions:
-                self.run_ismip(test, resolution, self.model_dir, self.bench_dir, output)
+                self.run_ismip(test, resolution, self.model_dir, self.bench_dir)
                 self.tests_run.append(test.capitalize() + " " + resolution)
         self.generate()
-        ver_summary[self.name.lower()] = self.summary
-        output.put("")
     
 
-    def run_ismip(self, test_case, resolution, test_dir, bench_dir, output):
+    def run_ismip(self, test_case, resolution, test_dir, bench_dir):
         """
         Runs the ismip V&V for a given case and resolution.  First parses through all
         of the standard output  & config files for the given test case and finishes up by 
@@ -106,9 +97,7 @@ class Test(AbstractTest):
             resolution: The resolution of the test cases to look in.    
             test_dir: The path to the test data
             bench_dir: The path to the benchmark data
-            output: multiprocessing queue to store information to print to stdout
         """
-        output.put("  ISMIP-HOM-" + test_case.capitalize() + " " + resolution + " test in progress....")
         test_name = test_case.capitalize() + " " + resolution
 
         # Process the configure files
@@ -126,7 +115,6 @@ class Test(AbstractTest):
         number_bitTests, number_bitMatches = 0, 0
         self.bit_for_bit_details[test_name] = self.bit4bit('ismip-hom-' + test_case, test_dir, bench_dir, resolution)
         for key, value in self.bit_for_bit_details[test_name].iteritems():
-            output.put("    {:<40} {:<10}".format(key,value[0]))
             if value[0] == "SUCCESS": number_bitMatches+=1
             number_bitTests+=1
 

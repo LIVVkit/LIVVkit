@@ -44,9 +44,6 @@ from verification.base import AbstractTest
 from util.parser import Parser
 import util.variables
 
-def get_name(): return "Dome"
-
-
 class Test(AbstractTest):
     """
     Main class for handling dome verification tests
@@ -69,21 +66,14 @@ class Test(AbstractTest):
                       " applied to the dome margins. "
 
 
-    def run(self, ver_summary, output):
+    def run(self):
         """
         Runs all of the available dome tests.  Looks in the model and
         benchmark directories for different variations, and then runs
         the run_dome() method with the correct information
-        
-        Args:
-            ver_summary: multiprocessing dict to store summaries for each run
-            output: multiprocessing queue to store information to print to stdout
         """
         if not (os.path.exists(self.model_dir) and os.path.exists(self.bench_dir)):
-            output.put("    Could not find data for dome verification!  Tried to find data in:")
-            output.put("      " + self.model_dir)
-            output.put("      " + self.bench_dir)
-            output.put("    Continuing with next test....")
+            # Record this fact in a variable
             return
         resolutions = set()
         model_configFiles = fnmatch.filter(os.listdir(self.model_dir), 'dome*.config')
@@ -92,14 +82,11 @@ class Test(AbstractTest):
         resolutions = sorted( resolutions )
         
         for res in resolutions:
-            self.run_dome(res, self.model_dir, self.bench_dir, output)
+            self.run_dome(res, self.model_dir, self.bench_dir)
             self.tests_run.append("Dome " + res)
         self.generate()
-        ver_summary[self.name.lower()] = self.summary
-        output.put("")
 
-
-    def run_dome(self, resolution, model_dir, bench_dir, output):
+    def run_dome(self, resolution, model_dir, bench_dir):
         """
         Runs the dome V&V for a given resolution.  First parses through all 
         of the standard output & config files for the given test case, then finishes up by 
@@ -109,9 +96,7 @@ class Test(AbstractTest):
             resolution: The resolution of the test cases to look in.
             model_dir: the location of the model run data
             bench_dir: the location of the benchmark data
-            output: multiprocessing queue to store information to print to stdout
         """
-        output.put("  Dome " + resolution + " test in progress....")
         dome_parser = Parser()
         
         # Process the configure files
@@ -128,7 +113,6 @@ class Test(AbstractTest):
         number_bitMatches, number_bitTests = 0, 0
         self.bit_for_bit_details['Dome ' + resolution] = self.bit4bit('dome', model_dir, bench_dir, resolution)
         for key, value in self.bit_for_bit_details['Dome ' + resolution].iteritems():
-            output.put("    {:<40} {:<10}".format(key, value[0]))
             if value[0] == "SUCCESS": number_bitMatches += 1
             number_bitTests += 1
 

@@ -43,8 +43,6 @@ from verification.base import AbstractTest
 from util.parser import Parser
 import util.variables
 
-def get_name(): return "Shelf"
-
 class Test(AbstractTest):
     """
     Main class for handling shelf test cases.
@@ -67,35 +65,25 @@ class Test(AbstractTest):
                             "at the center."
   
 
-    def run(self, ver_summary, output):
+    def run(self):
         """
         Runs all of the available shelf tests.  Looks in the model and
         benchmark directories for different variations, and then runs
         the run_shelf() method with the correct information.
-        
-        Args:
-            ver_summary: multiprocessing dict to store summaries for each run
-            output: multiprocessing queue to store information to print to stdout
         """
         if not (os.path.exists(self.model_dir) and os.path.exists(self.bench_dir)):
-            output.put("    Could not find data for shelf verification!  Tried to find data in:")
-            output.put("      " + self.model_dir)
-            output.put("      " + self.bench_dir)
-            output.put("    Continuing with next test....")
+            # Save this in a class variable
             return
         test_types = sorted(set(fn.split('.')[0].split('-')[-1] for fn in os.listdir(self.model_dir)))
         for test in test_types:
             resolutions = sorted(set(fn.split(os.sep)[-1].split('.')[1]  \
                             for fn in glob.glob(self.model_dir + os.sep + 'shelf-' + test + "*.config")))
             for resolution in resolutions:
-                self.run_shelf(test, resolution, self.model_dir, self.bench_dir, output)
+                self.run_shelf(test, resolution, self.model_dir, self.bench_dir)
                 self.tests_run.append(test.capitalize() + " " + resolution)
         self.generate()
-        ver_summary[self.name.lower()] = self.summary
-        output.put("")
-
-
-    def run_shelf(self, test_case, resolution, test_dir, bench_dir, output):
+    
+    def run_shelf(self, test_case, resolution, test_dir, bench_dir):
         """
         Perform verification analysis on the a shelf case
         
@@ -104,9 +92,7 @@ class Test(AbstractTest):
             resolution: The size of the shelf test (0041, 0043, etc)
             test_dir: The path to the test data
             bench_dir: The path to the benchmark data
-            output: multiprocessing queue to store information to print to stdout
         """
-        output.put("  " + test_case.capitalize() + " shelf " + resolution + " test in progress....")
         test_name = test_case.capitalize() + " " + resolution
         shelf_parser = Parser()
 
@@ -122,7 +108,6 @@ class Test(AbstractTest):
         number_bitTests, number_bitMatches = 0, 0
         self.bit_for_bit_details[test_name] = self.bit4bit('shelf-' + test_case, test_dir, bench_dir, resolution)
         for key, value in self.bit_for_bit_details[test_name].iteritems():
-            output.put("    {:<40} {:<10}".format(key, value[0]))
             if value[0] == "SUCCESS": number_bitMatches += 1
             number_bitTests += 1
 
