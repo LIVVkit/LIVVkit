@@ -31,7 +31,8 @@ Storage for global variables.  These are set upon startup in the main
 livv.py module
 
 Created on May 5th, 2015
-@author arbennett
+
+@authors: arbennett, jhkennedy
 """
 cwd            = ''
 config_dir      = ''
@@ -60,10 +61,6 @@ timing_vars = []
 
 # Dycores to try to parse output for
 dycores = []
-
-def update(vars):
-    """ Provide a way to update variables when loading a configuration """
-    globals().update(vars)
 
 def print_vars():
     """ Print out the variables that are contained in this module """

@@ -27,48 +27,45 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 """
-Contains the specifications for how to handle preconfigured machine options
+Contains the specifications for how to handle preconfigured options
 
 Created on Dec 23, 2014
 
-@author: arbennett
+@authors: arbennett, jhkennedy
 """
+
 import os
 import util.variables
 
-def load(machine_name):
+def save(options):
     """
-    Load a configuration file from the configurations directory at the root of LIVV.
+    Write a configuration file to user specified file.
     
     Args:
-        machine_name: the name of the file to load from
-    Returns:
-        locals: The list of variables loaded from the file
+        options: an argparse Namespace 
     """
-    config_file = util.variables.cwd + os.sep + "configurations" + os.sep + machine_name
-    print("Loading configuration file from " + config_file )
-    try:
-        execfile(config_file)
-    except Exception as e:
-        print(e)
-        exit()
-    return locals()
+         
+    # get options to save
+    save_options = []
+    for opt, value in vars(options).iteritems():
+        # ignore these options
+        if opt in ['load','save']:
+            pass
+        # boolean options
+        elif opt in ['performance']:
+            save_options.append("--"+opt.replace('_','-')+"\n")
+        # all other options
+        else:
+            save_options.append("--"+opt.replace('_','-')+"="+str(value)+"\n")
 
-def save(machine_name):
-    """
-    Write a configuration file to the configurations directory at the root of LIVV.
-    
-    Args:
-        machine_name: the name of the file to write to
-    """
-    config_file = util.variables.cwd + os.sep + "configurations" + os.sep + machine_name
-    from util.variables import *
-    print("Saving configuration to " + config_file )
-    f = open(config_file, 'w')
-    f.write("# Import variables for running livv on " + machine_name +"\n")
-    # Iterate over all of the variables and only write out string variables
-    # this avoids writing out objects, and also writes a complete set of info
-    for k, v in locals().iteritems():
-        if type(v) == type(''):
-            f.write(str(k) + " = \'" + str(v) + "\'\n")
-    f.close()
+
+    # get configuration file name
+    save_path, save_name = os.path.split(options.save)
+    if not save_path:
+        save_path = util.variables.cwd + os.sep + 'configurations'
+    save_file = os.path.join(save_path, save_name)
+
+    # write configuration file
+    with open(save_file, 'w') as sf:
+        for opt in save_options:
+            sf.write(opt)

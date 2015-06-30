@@ -57,58 +57,64 @@ Created on Dec 3, 2014
 print("------------------------------------------------------------------------------")
 print("  Land Ice Verification & Validation (LIVV)")
 print("------------------------------------------------------------------------------")
-print("  Load modules: python, ncl, nco, python_matplotlib, hdf5, netcdf, python_numpy, and python_netcdf4 for best results.")
+print("  Load modules: python, ncl, nco, python_matplotlib, hdf5, netcdf,")
+print("                python_numpy, and python_netcdf4 for best results.\n")
 ###############################################################################
 #                                  Imports                                    #
 ###############################################################################
 
 # Standard python imports can be loaded any time
 import os
+import sys
 import time
 import getpass
 import platform
 import socket
 import multiprocessing
 
-from optparse import OptionParser
+import argparse
 
 ###############################################################################
 #                                  Options                                    #
 ###############################################################################
-usage_string = "%prog [options]"
-parser = OptionParser(usage=usage_string)
-parser.add_option('--performance', action='store_true', 
-                  dest='performance', help='specifies whether to run the performance tests')
 
-parser.add_option('--comment', action='store', 
-                  type='string', dest='comment',
-                  default='Test run of code', 
-                  help='Log a comment about this run')
+parser = argparse.ArgumentParser(description="Main script to run LIVV.",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+        fromfile_prefix_chars='@')
 
-parser.add_option('-o', '--out-dir', action='store',
-                  type='string', dest='output_dir',
-                  default=os.path.dirname(os.path.abspath(__file__)) + os.sep + "www",
-                  help='Location to output the LIVV webpages.')
+# location of this file
+livv_loc = os.path.abspath(__file__)
 
-parser.add_option('-t', '--test-dir', action='store',
-                  type='string', dest='input_dir',
-                  default=os.path.dirname(os.path.abspath(__file__)) + os.sep + "reg_test" + os.sep + "linux-gnu",
-                  help='Location of the input for running verification.')
+parser.add_argument('-b', '--bench-dir', 
+        default="reg_bench" + os.sep + "linux-gnu",
+        help='Location of the input for running verification.')
+parser.add_argument('-t', '--test-dir', 
+        default="reg_test" + os.sep + "linux-gnu",
+        help='Location of the input for running verification.')
+parser.add_argument('-o', '--out-dir', 
+        default="www",
+        help='Location to output the LIVV webpages.')
 
-parser.add_option('-b', '--bench-dir', action='store',
-                  type='string', dest='benchmark_dir',
-                  default=os.path.dirname(os.path.abspath(__file__)) + os.sep + "reg_bench" + os.sep + "linux-gnu",
-                  help='Location of the input for running verification.')
+parser.add_argument('-c', '--comment', 
+        default='Test run of code.', 
+        help="Describe this run. Comment will appear in the output website's footer.")
 
-parser.add_option('--load', action='store',
-                  type='string', dest='load_name', default='',
-                  help='Load a preconfigured set of options for the given machine name.')
+parser.add_argument('--performance', 
+        action='store_true', 
+        help='Run the performance tests analysis.')
 
-parser.add_option('--save', action="store", dest='save_name', default='',
-                  help='Store the configuration being run with the given machine name.')
+parser.add_argument('--load', 
+        help='Load saved options.')
+parser.add_argument('--save', 
+        help='Save the current options. If no path specification is given, saved options will appear in the configurations directory.')
 
 # Get the options and the arguments
-(options, args) = parser.parse_args()
+options = parser.parse_args()
+# load as saved options file -- command line arguments will override options in file
+if options.load:
+    newOpts = ['@'+options.load]
+    newOpts.extend(sys.argv[1:])
+    options = parser.parse_args(newOpts)
 
 # Pull in the LIVV specific modules
 import util.dependencies
@@ -126,9 +132,9 @@ import util.cleanup
 ###############################################################################
 util.variables.cwd             = os.getcwd()
 util.variables.config_dir      = util.variables.cwd + os.sep + "configurations"
-util.variables.input_dir       = options.input_dir + os.sep + 'higher-order'
-util.variables.benchmark_dir   = options.benchmark_dir + os.sep + 'higher-order'
-util.variables.output_dir      = options.output_dir
+util.variables.input_dir       = os.path.abspath(options.test_dir + os.sep + 'higher-order')
+util.variables.benchmark_dir   = os.path.abspath(options.bench_dir + os.sep + 'higher-order')
+util.variables.output_dir      = os.path.abspath(options.out_dir)
 util.variables.img_dir         = util.variables.output_dir + "/imgs"
 util.variables.comment         = options.comment
 util.variables.timestamp       = time.strftime("%m-%d-%Y %H:%M:%S")
@@ -162,29 +168,17 @@ util.variables.dycores = ['glissade'] #["glide", "glissade", "glam", "albany", "
 ###############################################################################
 #                               Main Execution                                #
 ###############################################################################
-# Check if we are saving/loading the configuration and set up the machine name
-machine_name = socket.gethostname()
-if options.save_name != '':
-    # Save the configuration with the default host name
-    machine_name = options.save_name
-    util.configuration_handler.save(machine_name)
-elif options.load_name != '':
-    # Try to load the machine name specified
-    machine_name = options.load_name
-    vv_vars = util.configuration_handler.load(machine_name)
-    util.variables.update(vv_vars)
-
-# Check if the user has a default config saved and use that if it does
-if os.path.exists(util.variables.config_dir + os.sep + machine_name + "_" + util.variables.user + "_default"):
-    machine_name = machine_name + "_" + util.variables.user + "_default"
-    vv_vars = util.configuration_handler.load(machine_name)
-    #util.variables.globals().update(vars)
+# Check if we are saving the configuration
+if options.save:
+    print("  Saving options as: " + options.save)
+    util.configuration_handler.save(options)
 
 # Print out some information
+machine_name = socket.gethostname()
 print(os.linesep + "  Current run: " + time.strftime("%m-%d-%Y %H:%M:%S"))
 print("  User: " + util.variables.user)
-print("  Config: " + machine_name)
 print("  OS Type: " + platform.system() + " " + platform.release())
+print("  Machine: " + machine_name)
 print("  " + util.variables.comment + os.linesep)
 
 # Check to make sure the directory structure is okay
