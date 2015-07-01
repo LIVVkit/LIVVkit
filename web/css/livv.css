@@ -184,7 +184,7 @@ hr {
 }
 
 #info {
-	padding: 5px;
+	padding-left: 10px;
 }
 
 #content {
@@ -192,19 +192,9 @@ hr {
 }
 
 #footer {
-<<<<<<< HEAD
     width: 70%;
     margin-left: 15%;
-    margin-bottom: 25px;
-    padding-bottom: 5px;
     height: auto;
-=======
-    width: 1010px;
-    margin-bottom: -5px;
-    padding-bottom: 10px;
-    border-bottom-right-radius: 5px;
-    border-bottom-left-radius: 5px;
->>>>>>> origin/jhkennedy/funding
     border-top: 3px;
     border-left: 0;
     border-right: 0;
@@ -213,6 +203,18 @@ hr {
     border-color: #47A3FF;
     color: #FFFFFF;
     background-color: #111111;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+}
+
+#footer h2 {
+	color: white;
+    margin: 0;
+    text-align: center;
+}
+
+#footer a {
+	color: white;
 }
 
 #nav {
