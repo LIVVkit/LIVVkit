@@ -35,8 +35,8 @@
       <b class="label-header"> Configuration Files </b>
       <div class="separator">
       <hr style="opacity: 0; height: 5px;">
-          {% if case in model_configs and model_configs[case]|length != 0 %}
-            {% for file in model_configs[case] %}
+          {% if case in test_configs and test_configs[case]|length != 0 %}
+            {% for file in test_configs[case] %}
                 <div class="Configuration">
                   <!-- Hide and show buttons to allow the user view data more easily -->
                   <a href="#hide{{case}}{{loop.index}}" class="hide" id="hide{{case}}{{loop.index}}">+</a>
@@ -46,10 +46,10 @@
                     <div style="clear:both;"></div>
                     <!-- The changed variable keeps track of whether the files match -->
                     {% set changed = [] %}
-                    {% for section, vars in model_configs[case][file].iteritems() %}
+                    {% for section, vars in test_configs[case][file].iteritems() %}
                           <b>[{{section}}]</b>
                           <div class="variable">
-                          {% for var, val in model_configs[case][file][section].iteritems() %}
+                          {% for var, val in test_configs[case][file][section].iteritems() %}
                             {% if case in bench_configs and
                                 file in bench_configs[case] and
                                 section in bench_configs[case][file] and
@@ -70,9 +70,9 @@
                   </div>
                   <div class="status">
                     {% if changed %}
-                      <p style="float: left; color: red">Files differ</p>
+                      <p style="float: left; color: red;">Files differ</p>
                     {% else %}
-                      <p style="float: left; color: green">Files match</p>
+                      <p style="float: left; color: green;">Files match</p>
                     {% endif %}
                   </div>
                 </div>

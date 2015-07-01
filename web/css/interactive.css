@@ -58,8 +58,8 @@ a.button:hover {
   Summary Table Styling
 ******************************************************************************/
 table.summary {
-	margin-left: 10%;
-	width: 80%;
+	margin-left: 5%;
+	width: 90%;
 }
 
 .table_link {
@@ -252,6 +252,7 @@ div.gallery p:hover {
 	float: left;
 	border-radius:2em;
 	margin-left: 20px;
+	margin: 5px;
     width: 2em;
     height: 2em;
     line-height: 2em;

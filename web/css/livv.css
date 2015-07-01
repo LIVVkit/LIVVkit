@@ -33,6 +33,8 @@
   Basic Styling Overrides
 ******************************************************************************/
 html {
+	font-family: 'Lato', helvetica, sans-serif;
+	height: 100%;
     background: url(../imgs/temp.jpg) no-repeat center center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
@@ -41,8 +43,16 @@ html {
     background-color: #5983AC;
 }
 
+body {
+	height: 100%;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+	margin-left: 0px;
+}
+
 h1, h2, h3, h4 {
-	font-family: helvetica, sans-serif;
+	font-family: 'Noto Sans', helvetica, sans-serif;
 }
 
 table, ul {
@@ -85,13 +95,21 @@ hr {
 ******************************************************************************/
 #page {
     background-color: rgba(255,255,255,1);
-    padding: 5px;
     margin-left: 15%;
-    margin-right: 5%;
-    width: 1000px;
-    -moz-box-shadow: 5px 5px 4px rgba(30,30,30,0.3);
-    -webkit-box-shadow: 5px 5px 4px rgba(30,30,30,0.3);
-     box-shadow: 5px 5px 4px rgba(30,30,30,0.3);
+    width: 70%;
+	margin-top: 0;
+	padding-bottom: 15px;
+    border-top: 3px;
+    border-left: 0;
+    border-right: 0;
+    border-bottom: 0;
+    border-style: solid;
+    border-color: #47A3FF;
+}
+
+#page:after {
+	content: "";
+	display: block;
 }
 
 #fancy {
@@ -142,16 +160,10 @@ hr {
   Header/Footer Styling
 ******************************************************************************/
 #header {
-    height: 2.5em;
+    height: 40px;
 	background-color: #111111;
 	color: white;
-    margin-left: 15%;
-    width: 1010px;
-    border-top-right-radius: 5px;
-    border-top-left-radius: 5px;
-    -moz-box-shadow: 5px 5px 4px rgba(30,30,30,0.3);
-    -webkit-box-shadow: 5px 5px 4px rgba(30,30,30,0.3);
-     box-shadow: 5px 5px 4px rgba(30,30,30,0.3);
+    width: 100%;
 }
 
 #header-content {
@@ -159,45 +171,40 @@ hr {
 	position: absolute;
     height: 0.85em;
    	line-height: 0.85em;
-   	padding-top: 15px;
-   	padding-bottom: 15px;
-   	padding-left: 35px;
-   	margin-left: -35px;
+   	margin-top: 15px;
 }
 
 #wiki-content {
 	color: white;
-	position: absolute;
+	float: right;
 	height: 0.85em;
 	line-height: 0.85em;
-	padding-top: 15px;
-	padding-bottom: 15px;
-	margin-left: 830px;
+	margin-top: 15px;
+	padding-right: 16%;
 }
 
 #info {
 	padding: 5px;
 }
 
-#content {}
+#content {
+
+}
 
 #footer {
-    width: 1010px;
-    height: 5em;
-    border-bottom-right-radius: 5px;
-    border-bottom-left-radius: 5px;
+    width: 70%;
+    margin-left: 15%;
+    margin-bottom: 25px;
+    padding-bottom: 5px;
+    height: auto;
     border-top: 3px;
     border-left: 0;
     border-right: 0;
     border-bottom: 0;
-    margin-left: 15%;
     border-style: solid;
     border-color: #47A3FF;
     color: #FFFFFF;
     background-color: #111111;
-    -moz-box-shadow: 5px 5px 4px rgba(30,30,30,0.3);
-    -webkit-box-shadow: 5px 5px 4px rgba(30,30,30,0.3);
-     box-shadow: 5px 5px 4px rgba(30,30,30,0.3);
 }
 
 #nav {
