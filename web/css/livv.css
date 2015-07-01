@@ -59,6 +59,7 @@ table, ul {
 	margin-top: 10px;
 	border-bottom: 1px solid #47A3FF;
     border-collapse: collapse;
+    width: 100%;
 }
 
 img { 
@@ -78,6 +79,7 @@ th {
     font-family: helvetica, sans-serif;	
 	color: #FFFFFF;
 	background-color: #47A3FF;
+	padding-top: 5px;
 }
 
 hr {
@@ -95,8 +97,10 @@ hr {
 ******************************************************************************/
 #page {
     background-color: rgba(255,255,255,1);
-    margin-left: 15%;
+    margin-left: auto;
+    margin-right: auto;
     width: 70%;
+    min-width: 800px;
 	margin-top: 0;
 	padding-bottom: 15px;
     border-top: 3px;
@@ -166,6 +170,13 @@ hr {
     width: 100%;
 }
 
+#header-spacer {
+	width: 70%;
+	min-width: 800px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
 #header-content {
 	color: white;
 	position: absolute;
@@ -180,7 +191,6 @@ hr {
 	height: 0.85em;
 	line-height: 0.85em;
 	margin-top: 15px;
-	padding-right: 16%;
 }
 
 #info {
@@ -193,7 +203,9 @@ hr {
 
 #footer {
     width: 70%;
-    margin-left: 15%;
+    min-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
     height: auto;
     border-top: 3px;
     border-left: 0;

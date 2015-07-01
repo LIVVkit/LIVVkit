@@ -31,12 +31,14 @@
 
 #acknowledgments {
     width: 70%;
+    min-width: 800px;
     padding: 1em 0px;
     border-top: 3px;
     border-left: 0;
     border-right: 0;
     border-bottom: 0;
-    margin-left: 15%;
+    margin-left: auto;
+    margin-right: auto;
     text-align: justify;
     border-style: solid;
     border-color: #47A3FF;
@@ -55,7 +57,7 @@
 
 
 #acklogo {
-    width: 90%;
+    width: 98%;
     padding-top: 15px;
     text-align: justify;
 }
@@ -80,14 +82,14 @@
 }
     
 #logoORNL {
-    height: 80px;
+    height: 75px;
 }
 
 #logoLANL {
-    height: 80px;
+    height: 75px;
 }
 
 #logoDOESC {
-    height: 80px;
+    height: 75px;
 }
 
