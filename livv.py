@@ -151,7 +151,7 @@ util.variables.parser_vars = [
               'Dycore Type', 
               'Number of processors',
               'Number of timesteps',
-              'Avg convergence rate'
+              'Avg iterations to converge'
              ]
 
 # Variables to measure when parsing through timing summaries
