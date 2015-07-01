@@ -52,7 +52,7 @@ body {
 }
 
 h1, h2, h3, h4 {
-	font-family: 'Noto Sans', helvetica, sans-serif;
+	font-family: 'Lato', helvetica, sans-serif;
 }
 
 table, ul {
@@ -192,11 +192,19 @@ hr {
 }
 
 #footer {
+<<<<<<< HEAD
     width: 70%;
     margin-left: 15%;
     margin-bottom: 25px;
     padding-bottom: 5px;
     height: auto;
+=======
+    width: 1010px;
+    margin-bottom: -5px;
+    padding-bottom: 10px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+>>>>>>> origin/jhkennedy/funding
     border-top: 3px;
     border-left: 0;
     border-right: 0;
