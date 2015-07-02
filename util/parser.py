@@ -48,6 +48,7 @@ import os
 import re
 import glob
 import ConfigParser
+import math
 import numpy as np
 
 import util.variables
@@ -241,7 +242,7 @@ class Parser(object):
             if (len(iters_toConverge) > 0):
                 iters_toConverge.append(int(iter_number))
                 current_step += 1
-                avg_itersTo_converge = float(sum(iters_toConverge)) / len(iters_toConverge)
+                avg_itersTo_converge = int(math.ceil( sum(iters_toConverge) / float(len(iters_toConverge)) ))
 
             # Record some of the data in the self.std_out_data
             self.std_out_data['Number of processors'] = number_procs
