@@ -274,33 +274,88 @@ class Parser(object):
         Returns:
             a summary of the timing data that was parsed
         """
-        if not os.path.exists(base_path):
-            return []
-        times = dict()
-        timing_files = glob.glob(base_path + os.sep + "timing"+ os.sep + test_name.lower() + '-t[0-9].' + resolution + ".p[0-9][0-9][0-9].results") 
-        timing_files += (glob.glob(base_path + os.sep + "timing"+ os.sep + test_name.lower() + '-t[0-9].' + resolution + ".p[0-9][0-9][0-9].cism_timing_stats") )
+        summary = dict()
 
-        for file_path in timing_files:
-            run = file_path.split(os.sep)[-1].split('.')[2][1:]
-            if not times.has_key(run): times[run] = []
-            if not os.path.exists(file_path): continue
-            
-            # Open the file and grab the data outs
-            file = open(file_path, 'r')
-            for line in file:
-                # If the line is empty just go to the next
-                if line.split() == []:
-                    continue
+        if not os.path.exists(base_path):
+            return summary
+        
+        # Get the list of all of the processor counts this resolution was run on 
+        proc_list = sorted(set(f.split('.')[2][1:] for f in glob.glob(base_path + os.sep + 
+                    "timing" + os.sep + test_name.lower() + "-*." + resolution + ".*")))
+        for p_count in proc_list:
+            summary[p_count] = dict()
+            timing_files = glob.glob(base_path + os.sep + "timing" + os.sep + test_name.lower() + 
+                           "-t[0-9]." + resolution + ".p" + p_count + ".results")
+            gptl_files = glob.glob(base_path + os.sep + "timing" + os.sep + test_name.lower() + 
+                           "-t[0-9]." + resolution + ".p" + p_count + ".cism_timing_stats")
+    
+            if len(timing_files) > 0:
+                summary[p_count] = self.parse_simple_timing(timing_files)
+            if len(gptl_files) > 0:
+                summary[p_count] = self.parse_gptl(gptl_files)
+
+        return summary
+
+
+
+    def parse_simple_timing(self, timing_files):
+        """
+        Docstring
+        """
+        simple_summary = dict()
+        simple_summary['Run Time'] = []
+        for t_file in timing_files:
+            if not os.path.exists(t_file): continue
+
+            f = open(t_file, 'r')
+            for line in f:
+                if line.split() == []: continue
+
+                if line.split()[0] == t_file.split(os.sep)[-1].replace('results', 'config'):
+                    simple_summary['Run Time'].append(float(line.split()[1]))
+            f.close()
+        simple_summary['Run Time'] = [
+                sum(simple_summary['Run Time'])/float(len(simple_summary['Run Time'])),
+                min(simple_summary['Run Time']), max(simple_summary['Run Time'])
+                    ]
+        return simple_summary
+        
+
+
+    def parse_gptl(self, timing_files):
+        """
+        Docstring
+        """
+        gptl_summary = dict()
+        gptl_summary["Run Time"] = []
+        gptl_summary["Init. Diag. Solve"] = []
+        gptl_summary["Stiff. Matrix Assembly"] = []
+        for t_file in timing_files:
+            if not os.path.exists(t_file): continue
+
+            f = open(t_file, 'r')
+            for line in f:
+                if line.split() == []: continue
                 
-                # If this is a big machine this is how we find the time
                 if line.split()[0] == 'cism':
-                    times[run].append(float(line.split()[4])/int(line.split()[2]))
-                    break
-                
-                # Otherwise it's found here
-                if line.split()[0] == file_path.split(os.sep)[-1].replace('results', 'config'):
-                    times[run].append(float(line.split()[1]))
-            
-            # Record the mean, max, and min times found
-            times[run] = [np.mean(times[run]), np.max(times[run]), np.min(times[run])]
-        return times
+                    gptl_summary["Run Time"].append(float(line.split()[4])/int(line.split()[2]))
+                elif line.split()[0] == 'initial_diag_var_solve':
+                    gptl_summary['Init. Diag. Solve'].append(float(line.split()[4])/int(line.split()[2]))
+                elif line.split()[0] == 'glissade_assemble_stiffness_mat':
+                    gptl_summary['Stiff. Matrix Assembly'].append(float(line.split()[4])/int(line.split()[2]))
+            f.close
+        gptl_summary['Run Time'] = [
+            sum(gptl_summary['Run Time'])/float(len(gptl_summary['Run Time'])),
+            min(gptl_summary['Run Time']), max(gptl_summary['Run Time'])
+                ]
+        gptl_summary['Init. Diag. Solve'] = [
+            sum(gptl_summary['Init. Diag. Solve'])/float(len(gptl_summary['Init. Diag. Solve'])),
+            min(gptl_summary['Init. Diag. Solve']), max(gptl_summary['Init. Diag. Solve'])
+                ]
+        gptl_summary['Stiff. Matrix Assembly'] = [
+            sum(gptl_summary['Stiff. Matrix Assembly'])/float(len(gptl_summary['Stiff. Matrix Assembly'])),
+            min(gptl_summary['Stiff. Matrix Assembly']), max(gptl_summary['Stiff. Matrix Assembly'])
+                ]
+          
+        return gptl_summary
+

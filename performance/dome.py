@@ -93,8 +93,8 @@ class Test(AbstractTest):
         
         for resolution in resolutions:
             self.run_dome(resolution, self.model_dir, self.bench_dir)
-            #self.tests_run.append("Dome " + resolution)
-        self.run_scaling('dome', resolutions)
+            self.tests_run.append("Dome " + resolution)
+        self.run_scaling('Dome ', resolutions)
         self.tests_run.append('Scaling')
 
 
@@ -119,10 +119,10 @@ class Test(AbstractTest):
         self.bench_details["Dome " + resolution] = dome_parser.parse_std_output(bench_dir, "dome." + resolution + ".*.config.oe")
 
         # Go through and pull in the timing data
-        self.model_timing_data['dome' + resolution] = dome_parser.parse_timingSummaries(model_dir, 'dome', resolution)
-        self.bench_timing_data['dome' + resolution] = dome_parser.parse_timingSummaries(bench_dir, 'dome', resolution)
+        self.model_timing_data['Dome ' + resolution] = dome_parser.parse_timingSummaries(model_dir, 'dome', resolution)
+        self.bench_timing_data['Dome ' + resolution] = dome_parser.parse_timingSummaries(bench_dir, 'dome', resolution)
 
         # Record the data from the parser
         number_outputFiles, number_configMatches, number_configTests = dome_parser.get_parserSummary()
 
-        self.summary['dome' + resolution] = [number_outputFiles, number_configMatches, number_configTests]
+        self.summary['Dome ' + resolution] = [number_outputFiles, number_configMatches, number_configTests]

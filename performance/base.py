@@ -128,7 +128,7 @@ class AbstractTest(object):
             proc_list = self.model_timing_data[test].keys()
             for n_proc in proc_list:
                 if (int(res)**2)/int(n_proc) == scaling_constant:
-                    plot_vars.append([res, n_proc, self.model_timing_data[test_type + res][n_proc]])  
+                    plot_vars.append([res, n_proc, self.model_timing_data[test_type + res][n_proc]["Run Time"]])  
         
         # These are the plotting variables
         resolutions = [int(var[0]) for var in plot_vars]
@@ -173,10 +173,14 @@ class AbstractTest(object):
                 pyplot.ylabel("Time (s)")
                 pyplot.xticks()
                 pyplot.yticks()
-                x, y = zip(*sorted(zip(model_data.keys(), model_data.values())))
-                mins = [yy[-1] for yy in y]
-                maxs = [yy[1] for yy in y]
-                y = [yy[0] for yy in y] 
+                x = sorted(model_data.keys())
+                times = [model_data[p]["Run Time"] for p in x] 
+                y, mins, maxs = [], [], []
+                for time in times:
+                    y.append(time[0])
+                    mins.append(time[1])
+                    maxs.append(time[2])
+
                 ax.plot(x, y, 'bo-', label='Model')
                 ax.plot(x,mins, 'b--')
                 ax.plot(x,maxs, 'b--')
@@ -184,10 +188,13 @@ class AbstractTest(object):
                 # Add benchmark data if it's there
                 if self.bench_timing_data[test] != {}:
                     bench_data = self.bench_timing_data[test]
-                    x, y = zip(*sorted(zip(bench_data.keys(), bench_data.values())))
-                    mins = [yy[-1] for yy in y]
-                    maxs = [yy[1] for yy in y]
-                    y = [yy[0] for yy in y]
+                    x = sorted(bench_data.keys())
+                    times = [bench_data[p]["Run Time"] for p in x] 
+                    y, mins, maxs = [], [], []
+                    for time in times:
+                        y.append(time[0])
+                        mins.append(time[1])
+                        maxs.append(time[2])
                     ax.plot(x, y, 'r^-', label='Benchmark')
                     ax.plot(x,mins, 'r--')
                     ax.plot(x,maxs, 'r--')

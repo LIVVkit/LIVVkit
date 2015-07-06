@@ -35,10 +35,10 @@
       <b class="label-header"> Timing Summary</b>
       <br style="clear:both; height: 10px;" />
       <div class="separator">
-      {% if case in model_timingData %}
-      {% for dycore, data in model_timingData[case].iteritems() %}
+      {% if case in model_timing_data %}
+      {% for p_count, data in model_timing_data[case].iteritems() %}
         <br style="clear:both; height: 10px;" />
-        <b style="display: block;">{{dycore}}</b>
+        <b>{{p_count}}</b>
         <table style="width: 100%;  border-collapse: collapse;">
           <tr>
             <th>Variable</th>
@@ -50,30 +50,43 @@
             {% if vals[0] is defined %}
             <tr>
               <td style="text-align: right">{{var}}</td>
-              {% set diff_zero = vals[0] - bench_timingData[case][dycore][var][0] %}
-              {% set diff_one = vals[1] - bench_timingData[case][dycore][var][1] %}
-              {% set diff_two = vals[2] - bench_timingData[case][dycore][var][2] %}
+              {% if p_count in bench_timing_data[case].keys() and 
+                    var in bench_timing_data[case][p_count].keys() %}
+                {% set diff_zero = vals[0] - bench_timing_data[case][p_count][var][0] %}
+                {% set diff_one = vals[1] - bench_timing_data[case][p_count][var][1] %}
+                {% set diff_two = vals[2] - bench_timing_data[case][p_count][var][2] %}
+              {% else %}
+                {% set diff_zero = 'N/A' %}
+                {% set diff_one = 'N/A' %}
+                {% set diff_two = 'N/A' %}
+              {% endif %}
               <td style="text-align: left">
                 {{'%0.5f' % vals[0]}} 
-                {% if diff_zero > 0 %}
+                {% if diff_zero == 'N/A' %}
+                  <p style="display: inline; color: grey;"> (N/A)</p> 
+                {% elif diff_zero > 0 %}
                   <p style="display: inline; color: red">(+{{'%0.3f' % diff_zero}})</p>
-                {% else %}
+                {% elif diff_zero <= 0 %}
                   <p style="display: inline; color: green">({{'%0.3f' % diff_zero}})</p>
                 {% endif %}
               </td>
               <td style="text-align: left">
                 {{'%0.5f' % vals[1]}} 
-                {% if diff_one > 0 %}
+                {% if diff_one == 'N/A' %}
+                  <p style="display: inline; color: grey;"> (N/A)</p>
+                {% elif diff_one > 0 %}
                   <p style="display: inline; color: red">(+{{'%0.3f' % diff_one}})</p>
-                {% else %}
+                {% elif diff_one <= 0 %}
                   <p style="display: inline; color: green">({{'%0.3f' % diff_one}})</p>
                 {% endif %}
               </td>
               <td style="text-align: left">
-                {{'%0.5f' % vals[2]}} 
-                {% if diff_two > 0 %}
+                {{'%0.5f' % vals[2]}}
+                {% if diff_two == 'N/A' %}
+                  <p style="display: inline; color: grey;"> (N/A)</p>  
+                {% elif diff_two > 0 %}
                   <p style="display: inline; color: red">(+{{'%0.3f' % diff_two}})</p>
-                {% else %}
+                {% elif diff_two <= 0 %}
                   <p style="display: inline; color: green">({{'%0.3f' % diff_two}})</p>
                 {% endif %}
               </td>
