@@ -66,10 +66,20 @@ def setup(tests_run):
 
     # Check if we need to back up an old run
     if os.listdir(util.variables.index_dir):
-        f = open(util.variables.index_dir + os.sep + "data.txt", "r")
-        prev_time = f.readline().replace(":","").replace("-","").replace(" ","_").rstrip()
-        prev_comment = f.readline().rstrip()
-        f.close()
+        print("--------------------------------------------------------------------------")
+        print('Previous output data found in output directory!')
+        try:
+            f = open(util.variables.index_dir + os.sep + "data.txt", "r")
+            prev_time = f.readline().replace(":","").replace("-","").replace(" ","_").rstrip()
+            prev_comment = f.readline().rstrip()
+            f.close()
+        except IOError:
+            prev_time = "bkd_"+datetime.now().strftime("%Y%m%d_%H%M%S")
+            prev_comment = "Warning: could not find previous runtime and comment."
+
+        print('   Backing up data to:')
+        print('   ' + util.variables.index_dir + "_" + prev_time)
+        print("--------------------------------------------------------------------------")
         shutil.move(util.variables.index_dir, util.variables.index_dir + "_" + prev_time)
         mkdir_p(util.variables.index_dir)
 
