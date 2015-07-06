@@ -122,7 +122,15 @@ class Test(AbstractTest):
         self.model_timing_data['Dome ' + resolution] = dome_parser.parse_timingSummaries(model_dir, 'dome', resolution)
         self.bench_timing_data['Dome ' + resolution] = dome_parser.parse_timingSummaries(bench_dir, 'dome', resolution)
 
-        # Record the data from the parser
-        number_outputFiles, number_configMatches, number_configTests = dome_parser.get_parserSummary()
+        model_p_counts = sorted(self.model_timing_data['Dome ' + resolution])
+        model_times = [self.model_timing_data['Dome ' + resolution][p]["Run Time"] for p in model_p_counts]
+        
+        bench_p_counts = sorted(self.bench_timing_data['Dome ' + resolution])
+        both_p_counts = list(set(model_p_counts) & set(bench_p_counts))
+        model_times = [self.model_timing_data['Dome ' + resolution][p]["Run Time"][0] for p in both_p_counts]
+        bench_times = [self.bench_timing_data['Dome ' + resolution][p]["Run Time"][0] for p in both_p_counts]
+        percentages = [100.00*(b_time - m_time)/b_time for m_time, b_time in zip(model_times, bench_times)]
 
-        self.summary['Dome ' + resolution] = [number_outputFiles, number_configMatches, number_configTests]
+        self.summary['Dome ' + resolution] = [model_p_counts, sum(percentages)/len(percentages)]
+
+

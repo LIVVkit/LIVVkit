@@ -70,18 +70,18 @@
 		<table class="summary">
 			<tr>
 				<th></th>
-				<th>Std Out Files Parsed</th>
-				<th>Config File Matches</th>
+				<th>Processor Counts</th>
+                <th>Avg. Runtime Change (% diff. from benchmark)</th>
 			</tr>
 			{% for test, summary in performance_summary.iteritems() %}
 			  <tr>
 			  <td><a class="table_link" href="{{index_dir}}/performance/{{test}}.html">{{test}}</a></td>
 			  </tr>
 			{% for case, details in summary.iteritems() %}
-			<tr {% if (details[1] != details[2])  %} class="FAILURE" {% endif %} >
+			<tr>
 				<td><b>{{case}}</b></td>
-				<td>{{details[0]}}</td>
-				<td>{{details[1]}}/{{details[2]}}</td>
+                <td>{% for d in details[0] %}{{d}}, {% endfor %}</td>
+                <td {% if details[1] > 0 %} style="color: red;" {% else %} style="color: green;" {% endif %}>{{details[1]}}</td>
 			</tr>
 			{% endfor %} 
 			{% endfor %}
