@@ -34,11 +34,14 @@ Created on Apr 21, 2015
 @author: arbennett
 """
 import os
-import matplotlib.pyplot as pyplot
 import glob
 import jinja2
 from abc import ABCMeta, abstractmethod
 from collections import Counter
+
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as pyplot
 
 import util.variables
 
