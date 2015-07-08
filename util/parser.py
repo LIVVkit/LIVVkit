@@ -69,6 +69,7 @@ class Parser(object):
         self.bench_data, self.model_data = dict(), dict()
         self.n_outputParsed = 0
         self.n_configParsed, self.n_configMatched = 0, 0
+        self.summary = []
 
         # Build an empty ordered dictionary so that the output prints in a nice order
         self.std_out_data = OrderedDict()
@@ -265,7 +266,7 @@ class Parser(object):
 
     def parse_timingSummaries(self, base_path, test_name, resolution):
         """ 
-        Search through gptl timing files 
+        Search through timing files 
         
         Args:
             base_path: the directory to look for timing files in
@@ -300,7 +301,12 @@ class Parser(object):
 
     def parse_simple_timing(self, timing_files):
         """
-        Docstring
+        Parse through timing files that only list total run time
+
+        Args:
+            timing_files: The list of files to parse through
+        Returns:
+            A dictionary with the mean, min, and max runtimes
         """
         simple_summary = dict()
         simple_summary['Run Time'] = []
@@ -324,7 +330,12 @@ class Parser(object):
 
     def parse_gptl(self, timing_files):
         """
-        Docstring
+        Parse through gptl timing files
+
+        Args:
+            timing_files: The list of files to parse through
+        Returns:
+            A dictionary with the mean, min, and max runtimes
         """
         gptl_summary = dict()
         gptl_summary["Run Time"] = []
@@ -344,18 +355,25 @@ class Parser(object):
                 elif line.split()[0] == 'glissade_assemble_stiffness_mat':
                     gptl_summary['Stiff. Matrix Assembly'].append(float(line.split()[4])/int(line.split()[2]))
             f.close
+
+        if gptl_summary["Run Time"] == []: gptl_summary["Run Time"].append(0.0)
+        if gptl_summary["Init. Diag. Solve"] == []: gptl_summary["Init. Diag. Solve"].append(0.0)
+        if gptl_summary["Stiff. Matrix Assembly"] == []: gptl_summary["Stiff. Matrix Assembly"].append(0.0)
+
         gptl_summary['Run Time'] = [
             sum(gptl_summary['Run Time'])/float(len(gptl_summary['Run Time'])),
             min(gptl_summary['Run Time']), max(gptl_summary['Run Time'])
                 ]
+        
         gptl_summary['Init. Diag. Solve'] = [
             sum(gptl_summary['Init. Diag. Solve'])/float(len(gptl_summary['Init. Diag. Solve'])),
             min(gptl_summary['Init. Diag. Solve']), max(gptl_summary['Init. Diag. Solve'])
                 ]
+
         gptl_summary['Stiff. Matrix Assembly'] = [
             sum(gptl_summary['Stiff. Matrix Assembly'])/float(len(gptl_summary['Stiff. Matrix Assembly'])),
             min(gptl_summary['Stiff. Matrix Assembly']), max(gptl_summary['Stiff. Matrix Assembly'])
                 ]
-          
+
         return gptl_summary
 

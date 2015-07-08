@@ -129,8 +129,9 @@ class Test(AbstractTest):
         both_p_counts = list(set(model_p_counts) & set(bench_p_counts))
         model_times = [self.model_timing_data['Dome ' + resolution][p]["Run Time"][0] for p in both_p_counts]
         bench_times = [self.bench_timing_data['Dome ' + resolution][p]["Run Time"][0] for p in both_p_counts]
-        percentages = [100.00*(b_time - m_time)/b_time for m_time, b_time in zip(model_times, bench_times)]
+        percentages = [100.00*(b_time - m_time)/b_time for m_time, b_time in zip(model_times, bench_times) if b_time > 0]
+        speed_up = sum(percentages)/len(percentages) if len(percentages) > 0 else 'N/A'
 
-        self.summary['Dome ' + resolution] = [model_p_counts, sum(percentages)/len(percentages)]
+        self.summary['Dome ' + resolution] = [model_p_counts, speed_up]
 
 

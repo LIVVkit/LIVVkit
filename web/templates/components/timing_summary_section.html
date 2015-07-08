@@ -38,13 +38,13 @@
       {% if case in model_timing_data %}
       {% for p_count, data in model_timing_data[case].iteritems() %}
         <br style="clear:both; height: 10px;" />
-        <b>{{p_count}}</b>
+        <b>Number of processors: {{p_count}}</b>
         <table style="width: 100%;  border-collapse: collapse;">
           <tr>
             <th>Variable</th>
-            <th>Average</th>
-            <th>Minimum</th>
-            <th>Maximum</th>
+            <th>Average (s)</th>
+            <th>Minimum (s)</th>
+            <th>Maximum (s)</th>
           </tr>
           {% for var, vals in data.iteritems() %}
             {% if vals[0] is defined %}
