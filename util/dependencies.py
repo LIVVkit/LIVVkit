@@ -42,8 +42,21 @@ Created on January 6, 2015
 
 import os
 import sys
-import urllib2
+import urllib
+import fnmatch
 import subprocess
+
+def find_eggs(tree):
+    """
+    This will recusively look for python '*.egg' files and folders. 
+    """
+    matches = []
+    for base, dirs, files in os.walk(tree):
+        goodfiles = fnmatch.filter(files, '*.egg')
+        matches.extend(os.path.join(base, f) for f in goodfiles)
+        gooddirs = fnmatch.filter(dirs, '*.egg')
+        matches.extend(os.path.join(base, d) for d in gooddirs)
+    return matches
 
 
 def check():
@@ -92,8 +105,18 @@ def check():
         if not os.path.exists(cwd + os.sep + "deps"):
             os.mkdir(cwd + os.sep + "deps")
             sys.path.append(cwd + os.sep + "deps")
-        install_setup_tools()
-        from setuptools.command import easy_install
+        
+        ez_command = install_setup_tools()
+        try:
+            from setuptools.command import easy_install
+        except ImportError:
+            print("  !------------------------------------------------------")
+            print("  ! ERROR: Could not install the setuptools module!")
+            print("  !        Try installing it yourself, and rerunning LIVVkit:")
+            print("  !           " + ez_command)
+            print("  !           python livv.py...")
+            print("  !------------------------------------------------------")
+            exit(1)
 
     # Make sure all imports are going to work
     # And if they don't build a copy of the ones that are needed
@@ -111,7 +134,24 @@ def check():
             easy_install.main(["--user",lib])
             libs_installed.append(lib)
 
-    if len(libs_installed) > 0:
+    # ez_setup instals into $HOME/.local/lib/python2.7/site-packages/ ...
+    egg_files = find_eggs(os.environ['HOME'] + os.sep + '.local')
+    
+    # add the found site-packages to the python path
+    for ef in egg_files:
+        if not (ef in sys.path):
+            sys.path.append(ef)
+
+    # check libraries again
+    libs_we_did_not_install = []
+    for lib in library_list:
+        try:
+            __import__(lib)
+        except ImportError:
+            libs_we_did_not_install.append(lib)
+        
+    # for some reason sys path did not get updated so... try running livv again.
+    if len(libs_we_did_not_install) > 0:
         print("")
         print("")        
         print("------------------------------------------------------------------------------")
@@ -216,14 +256,24 @@ def install_setup_tools():
     """
     cwd = os.getcwd()
     url = "https://bootstrap.pypa.io/ez_setup.py"
+    file_path = cwd + os.sep + "deps"
     file_name = "ez_setup.py"
-    u = urllib2.urlopen(url)    
-    f = open(cwd + os.sep + "deps" + os.sep + file_name, 'wb')
+    
+    urllib.urlretrieve(url, file_path + os.sep + file_name)
 
-    block=8192
-    while True:
-        # We are downloading block by block - if we can't get anymore we must be done
-        buff = u.read(block)
-        if not buff: break
-        f.write(buff)
-    os.system("python " + cwd + os.sep + "deps" + os.sep + file_name + " --user")
+    print("Setting up ez_setup module...")
+    ez_command = "python " + file_name + " --user 2> ez.err > ez.out"
+    ez_commands = ["cd "+file_path, ez_command, 'exit 0']
+    subprocess.check_call(str.join(" ; ",ez_commands), executable='/bin/bash', shell=True)
+   
+    # ez_setup instals into $HOME/.local/lib/python2.7/site-packages/ ...
+    egg_files = find_eggs(os.environ['HOME'] + os.sep + '.local')
+    
+    # add the found site-packages to the python path
+    for ef in egg_files:
+        if not (ef in sys.path):
+            sys.path.append(ef)
+
+    return ez_command
+
+

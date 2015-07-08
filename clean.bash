@@ -38,3 +38,12 @@ find ./* -iname "*.pyc" -exec rm {} \;
 # remove website
 rm -rf ./www
 rm -rf ./www_*
+
+# remove easy installs -- BE CAREFUL, ARE YOU SHURE?
+if [ "$1" == "deps" ]
+then
+    rm -rf ./deps/
+    rm -rf $HOME/.local/bin/*
+    rm -rf $HOME/.local/lib/python*/site-packages/*
+fi
+
