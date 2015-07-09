@@ -1,96 +1,146 @@
-![](https://github.com/ACME-Climate/LIVV/blob/develop/docs/livv.png)
+![](https://raw.githubusercontent.com/wiki/LIVVkit/LIVVkit/imgs/livvkit.png)
 
-===================================================================================================
+===============================================================================
   Land Ice Verification and Validation Toolkit
-===================================================================================================
-Last updated 4/17/2015
-If this document is out of date send us an email!  See the contact section below for more details.
+===============================================================================
 
+LIVVkit is a python-based toolkit for verification and validation of Ice Sheet
+Models. It aims to provide the following capabilities:
 
-  Introduction
-================
-LIVVkit is a python-based toolkit for verification and validation of Ice Sheet Models.  LIVVkit provides a way for testing model output against a set of benchmark data.  Verification testing checks bitwise accuracy of solutions, and reports inconsistencies, as well as providing differences in configurations between model and benchmark data.  Standard output files are parsed for key information.  Validation and performance testing are under development.
+**[Model V&V](https://github.com/LIVVkit/LIVVkit/wiki/VV)**
+* Numerical verification -- "Are we solving the equations correctly?"
+* Physical validation -- "Are we using the right physics?"
 
-For further documentation view the [wiki](https://github.com/LIVVkit/LIVVkit/wiki)
+**[Software V&V](https://github.com/LIVVkit/LIVVkit/wiki/VV)**
+* Code verification -- "did we build what *we* wanted?"
+* Performance validation -- "did we build what the *users* wanted?"
+
+Within LIVVkit, these capabilities are broken into four components:
+
+Model V&V
+* [Numerics](https://github.com/LIVVkit/LIVVkit/wiki/LIVVkit-numerics)
+* [Validation](https://github.com/LIVVkit/LIVVkit/wiki/LIVVkit-validation)
+
+Software V&V
+[Verification](https://github.com/LIVVkit/LIVVkit/wiki/LIVVkit-verification)
+[Performance](https://github.com/LIVVkit/LIVVkit/wiki/LIVVkit-performance)
+
+Currently, LIVVkit is being developed and used in conjunction with the
+Community Ice Sheet Model
+([CISM](http://oceans11.lanl.gov/cism/documentation.html)), but is designed to
+be extensible to other models. 
+
+For further documentation view the 
+[wiki](https://github.com/LIVVkit/LIVVkit/wiki).
 
   Before Using
 ================
-Some requirements must be met before using LIVVkit.  LIVVkit was designed to be used with Python 2.7.  If you are using any other version of Python by default, use the command for Python 2.7 in place of any calls to `python` in this document (or any other LIVVkit Documentation).  If you are not sure what version of Python you are running try running `python --version` from a terminal.
+### Install ###
 
-LIVVkit depends on several software packages and libraries. We are working towards a completely automatic dependency management system, but some use cases may have been overlooked.  The complete list of dependencies for LIVVkit is as follows: 
+Get a copy of LIVVkit by cloning this repo:
 
- * Python 2.7
- * NetCDF 4.3.0+
- * NCO (NetCDF Operators) 4.4.0
- * HDF5 1.8.6
- * NCL (NCAR Command Language) 6.1.2
- * python-netCDF4
- * python-matplotlib
- * python-numpy
- * python-jinja2
+```sh
+git clone https://github.com/LIVVkit/LIVVkit.git
+```
 
-If you are having any troubles with dependencies email us!  See the contact section below for more details.
+LIVVkit was designed to be used with [Python 2.7](https://www.python.org/). If
+you are using any other version of Python by default, use the command for
+Python 2.7 in place of any calls to `python` in this document (or any other
+LIVVkit Documentation).  If you are not sure what version of Python you are
+running try running `python --version` from a terminal.
 
+LIVVkit has some python package dependencies and some external package
+dependencies. The required packages to use LIVVkit are:
+
+Python Packages 
+* [python-numpy](https://pypi.python.org/pypi/numpy/1.9.2) 
+* [python-netCDF4](https://pypi.python.org/pypi/netCDF4) 
+* [python-matplotlib](https://pypi.python.org/pypi/matplotlib/1.4.3)
+* [python-jinja2](https://pypi.python.org/pypi/Jinja2/2.7.3) 
+
+External Packages
+[NetCDF 4.3.0+](http://www.unidata.ucar.edu/software/netcdf/)
+[NCO (NetCDF Operators) 4.4.0](http://nco.sourceforge.net/)
+[HDF5 1.8.6](https://www.hdfgroup.org/HDF5/)
+[NCL (NCAR Command Language + graphics library) 6.1.2](http://www.ncl.ucar.edu/)
+
+If you have a working install of CISM, you'll likely already have everything
+you need besides [NCL](http://www.ncl.ucar.edu/), which you must install
+manually.  LIVVkit will automatically install any missing python packages in
+your `$HOME/.local` directory.
+
+For more information about installing any of these dependencies, check the
+links for each specific package. You may also be able to refer to the
+installation instructions found in the
+[CISM](http://oceans11.lanl.gov/cism/documentation.html) manual. 
+
+If you are having any troubles with dependencies, open an issue on the 
+[issue tracker](https://github.com/LIVVkit/LIVVkit/issues)!
+
+
+  Usage
+==========
+LIVVkit is primarily controlled via options specified at the command line.
+To see the full list of options, run:
+
+```sh
+./livv.py -h
+```
+
+or 
+
+```sh
+python livv.py -h
+```
+
+The are three main use cases for LIVVkit:
  
-  Obtaining Benchmark Data
-============================
-Send us an email to get a set of benchmark data.
+[User](https://github.com/LIVVkit/LIVVkit/Workflow-user) 
+* verification of an install against a set of benchmark data 
+
+[Developer](https://github.com/LIVVkit/LIVVkit/Workflow-developer) 
+* verification and validation of model changes over time 
+
+[Scientist](https://github.com/LIVVkit/LIVVkit/Workflow-scientist)
+* validation of model results against observational and model generated data
+
+Go to the above links to see their workflows. The 
+[usage](https://github.com/LIVVkit/LIVVkit/Usage) 
+page has a discussion of LIVVkit's options, advanced usage, and workflows. 
 
 
-  How to Use
-==============
-Using LIVVkit should be a painless experience.  You can give it a go with default settings simply by running:
+  Development 
+===============
 
-> python livv.py
+LIVVkit is currently under active development. See our 
+[development roadmap](https://github.com/LIVVkit/LIVVkit/Development-roadmap). 
 
-The default options will run all of the verification cases for the Dome, Ishom, and Shelf tests.  If you have a configuration with specific options that you have set up you can use:
+For feature request, questions, bug reporting, or other issues, use the 
+[Issue Tracker](https://github.com/LIVVkit/LIVVkit/issues).
 
-> python livv.py -m CONFIG_NAME
-
-To save your own configuration use:
-
-> python livv.py [options] -m CONFIG_NAME -s
-
-For a detailed list of options see the Options section, below.
-
-
-  Options
-===========
-A variety of options can be used with LIVVkit.  A detailed list follows:
-
-|	Option	| Description |
-| ------------: | :-------------------------------------------------------------------------------------------------------------------------------- |
-|  -h, --help |	Show the help message |
-|  --verification=VER | Specifies the verification tests to run                      |
-|  --performance=PERF | Specifies the performance tests to run                      |
-|  --comment=COMMENT |	Log a comment about this run									|
-|  -o OUTPUTDIR, --outputDir=OUTPUTDIR | Location to output the LIVVkit webpages.							|
-|  -i INPUTDIR, --inputDir=INPUTDIR | Location of the input for running tests.						|
-|  -b BENCHDIR, --benchmarkDir=BENCHDIR | Location of the input for running tests.						|
-|  --load CONFIG | Load a preconfigured set of options for the given name.		|
-|  --save CONFIG |	Store the configuration being run with the given name.	|
-
+To contribute to LIVVkit, see: 
+* <https://github.com/LIVVkit/LIVVkit/Contribute>
 
   Contact
 ===========
-Bug reports/Feature Requests:
-  https://github.com/LIVVkit/LIVVkit/issues
 
-Andrew Bennett : 
-  Github: arbennett
-  Email:  bennettar@ornl.gov
+If you would like to suggest features, request tests, discuss contributions,
+report bugs, ask questions, or contact us for any reason, use the
+[Issue Tracker](https://github.com/LIVVkit/LIVVkit/issues).
 
-Joseph Kennedy : 
-  Github: jhkennedy
-  Email:  kennedyjh@ornl.gov
+Want to send us a private message?
 
-Kate Evans : 
-  Github: kevans32
-  Email: evanskj@ornl.gov
+**Andrew R. Bennett**
+* github: @arbennett
+* email: <a href="mailto:bennettar@ornl.gov">bennettar [at] ornl.gov</a>
 
+**Joseph H. Kennedy** 
+* github: @jhkennedy
+* email: <a href="mailto:kennedyjh@ornl.gov">kennedyjh [at] ornl.gov</a>
 
-TODO: A list of things that need to be updated.
------------------------------------------------
- * Detail options more clearly
- * Give some use-cases (ie if the user wants to save a new configuration with a custom name)
- * Tell us what needs adding!
+**Katherine J. Evans** 
+* github: @kevans32
+* email: <a href="mailto:evanskj@ornl.gov">evanskj [at] ornl.gov</a>
+
+If you're emailing us, we recommend CC-ing all three of us. 
+
