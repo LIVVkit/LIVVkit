@@ -1,0 +1,111 @@
+<!--
+ - Copyright (c) 2015, UT-BATTELLE, LLC
+ - All rights reserved.
+ - 
+ - Redistribution and use in source and binary forms, with or without
+ - modification, are permitted provided that the following conditions are met:
+ - 
+ - 1. Redistributions of source code must retain the above copyright notice, this
+ - list of conditions and the following disclaimer.
+ - 
+ - 2. Redistributions in binary form must reproduce the above copyright notice,
+ - this list of conditions and the following disclaimer in the documentation
+ - and/or other materials provided with the distribution.
+ - 
+ - 3. Neither the name of the copyright holder nor the names of its contributors
+ - may be used to endorse or promote products derived from this software without
+ - specific prior written permission.
+ - 
+ - THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ - ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ - WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ - DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ - FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ - DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ - SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ - CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ - OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ - OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+
+
+
+
+      <!-- BEGIN TIMING SUMMARY SECTION -->
+      <b class="label-header"> Timing Summary</b>
+      <br style="clear:both; height: 10px;" />
+      <div class="separator">
+      {% if case in model_timing_data %}
+      {% for p_count, data in model_timing_data[case].iteritems() %}
+        <br style="clear:both; height: 10px;" />
+        <b>Number of processors: {{p_count}}</b>
+        <table style="width: 100%;  border-collapse: collapse;">
+          <tr>
+            <th>Variable</th>
+            <th>Average (s)</th>
+            <th>Minimum (s)</th>
+            <th>Maximum (s)</th>
+          </tr>
+          {% for var, vals in data.iteritems() %}
+            {% if vals[0] is defined %}
+            <tr>
+              <td style="text-align: right">{{var}}</td>
+              {% if p_count in bench_timing_data[case].keys() and 
+                    var in bench_timing_data[case][p_count].keys() %}
+                {% set diff_zero = vals[0] - bench_timing_data[case][p_count][var][0] %}
+                {% set diff_one = vals[1] - bench_timing_data[case][p_count][var][1] %}
+                {% set diff_two = vals[2] - bench_timing_data[case][p_count][var][2] %}
+              {% else %}
+                {% set diff_zero = 'N/A' %}
+                {% set diff_one = 'N/A' %}
+                {% set diff_two = 'N/A' %}
+              {% endif %}
+              <td style="text-align: left">
+                {{'%0.5f' % vals[0]}} 
+                {% if diff_zero == 'N/A' %}
+                  <p style="display: inline; color: grey;"> (N/A)</p> 
+                {% elif diff_zero > 0 %}
+                  <p style="display: inline; color: red">(+{{'%0.3f' % diff_zero}})</p>
+                {% elif diff_zero <= 0 %}
+                  <p style="display: inline; color: green">({{'%0.3f' % diff_zero}})</p>
+                {% endif %}
+              </td>
+              <td style="text-align: left">
+                {{'%0.5f' % vals[1]}} 
+                {% if diff_one == 'N/A' %}
+                  <p style="display: inline; color: grey;"> (N/A)</p>
+                {% elif diff_one > 0 %}
+                  <p style="display: inline; color: red">(+{{'%0.3f' % diff_one}})</p>
+                {% elif diff_one <= 0 %}
+                  <p style="display: inline; color: green">({{'%0.3f' % diff_one}})</p>
+                {% endif %}
+              </td>
+              <td style="text-align: left">
+                {{'%0.5f' % vals[2]}}
+                {% if diff_two == 'N/A' %}
+                  <p style="display: inline; color: grey;"> (N/A)</p>  
+                {% elif diff_two > 0 %}
+                  <p style="display: inline; color: red">(+{{'%0.3f' % diff_two}})</p>
+                {% elif diff_two <= 0 %}
+                  <p style="display: inline; color: green">({{'%0.3f' % diff_two}})</p>
+                {% endif %}
+              </td>
+            </tr>
+            {% else %}
+            <tr>
+              <td style="text-align: right">{{var}}</td>
+              <td>N/A</td>
+              <td>N/A</td>
+              <td>N/A</td>
+            </tr>
+            {% endif %}
+          {% endfor %}
+        </table>
+      {% endfor %}
+      {% endif %}
+      </div>
+      <br style="clear: both" />
+      <br height="30px" />
+      <!-- END TIMING SUMMARY SECTION -->
+
+

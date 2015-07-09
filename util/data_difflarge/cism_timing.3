@@ -1,0 +1,91 @@
+
+************ PROCESS      3 (     3) ************
+
+$Id: gptl.c,v 1.157 2011-03-28 20:55:18 rosinski Exp $
+Clock rate = 2200.000000 MHz
+  BIT64 was true
+GPTL was built with THREADED_OMP
+HAVE_MPI was true
+  HAVE_COMM_F2C was true
+  ENABLE_PMPI was false
+HAVE_PAPI was false
+Underlying timing routine was nanotime.
+Per-call utr overhead est: 3.71581e-08 sec.
+If overhead stats are printed, roughly half the estimated number is
+embedded in the wallclock stats for each timer.
+Print method was most_frequent.
+If a '%_of' field is present, it is w.r.t. the first timer for thread 0.
+If a 'e6_per_sec' field is present, it is in millions of PAPI counts per sec.
+
+A '*' in column 1 below means the timer had multiple parents, though the
+values printed are for all calls.
+Further down the listing may be more detailed information about multiple
+parents. Look for 'Multiple parent info'
+
+Stats for thread 0:
+                                                On  Called Recurse   Wallclock          max          min     UTR Overhead 
+  cism                                          -        1    -       6.983080     6.983080     6.983080         0.000000 
+    initialization                              -        1    -       0.070554     0.070554     0.070554         0.000000 
+    initial_diag_var_solve                      -        1    -       0.442227     0.442227     0.442227         0.000000 
+    initial_write_diagnostics                   -        1    -       0.000554     0.000554     0.000554         0.000000 
+    initial_io_writeall                         -        1    -       0.001300     0.001300     0.001300         0.000000 
+    tstep                                       -       10    -       6.448434     0.814643     0.566441         0.000001 
+      glissade_therm_driver                     -       10    -       0.000572     0.000060     0.000051         0.000001 
+      inc_remap_driver                          -       10    -       0.014384     0.001476     0.001323         0.000001 
+        new_remap_halo_upds                     -       10    -       0.000642     0.000067     0.000060         0.000001 
+        glissade_transport_driver               -       10    -       0.013723     0.001413     0.001255         0.000001 
+          after_remap_haloupds                  -       10    -       0.000239     0.000028     0.000022         0.000001 
+      glissade_velo_driver                      -       10    -       6.430713     0.812971     0.564707         0.000001 
+        glissade_velo_higher_solver             -       10    -       6.430301     0.812934     0.564662         0.000001 
+          glissade_vhs_init                     -       10    -       0.003728     0.000388     0.000336         0.000001 
+            glissade_halo_nodeID                -       10    -       0.000253     0.000027     0.000020         0.000001 
+            glissade_load_vector_gravity        -       10    -       0.002899     0.000308     0.000257         0.000001 
+            glissade_load_vector_lateral_bc     -       10    -       0.000005     0.000001     0.000000         0.000001 
+          glissade_vhs_nonlinear_loop           -       10    -       6.413170     0.811340     0.563057         0.000001 
+            glissade_assemble_stiffness_mat     -      393    -       0.566202     0.001659     0.001256         0.000029 
+            glissade_halo_Axxs                  -      393    -       1.011119     0.002913     0.002421         0.000029 
+            glissade_halo_bxxs                  -      393    -       0.012029     0.000071     0.000023         0.000029 
+            glissade_chk_symmetry               -      393    -       0.056448     0.000173     0.000125         0.000029 
+            glissade_resid_vec                  -      393    -       0.059162     0.000200     0.000141         0.000029 
+            glissade_pcg_slv_struct             -      393    -       4.532268     0.024511     0.001506         0.000029 
+              pcg_precond_init                  -      393    -       0.009423     0.000073     0.000022         0.000029 
+              pcg_dotprod                       -    20796    -       0.096327     0.000013     0.000002         0.001545 
+              pcg_glbsum_init                   -      393    -       0.008779     0.000079     0.000016         0.000029 
+              pcg_halo_init                     -      786    -       0.050679     0.000155     0.000022         0.000058 
+              pcg_matmult_init                  -      393    -       0.021621     0.000071     0.000048         0.000029 
+              pcg_vecupdate                     -    20403    -       0.206315     0.000021     0.000003         0.001516 
+              pcg_precond_iter                  -    16675    -       0.334391     0.000036     0.000018         0.001239 
+              pcg_matmult_iter                  -    16675    -       0.893788     0.000077     0.000046         0.001239 
+              pcg_glbsum_iter                   -    16675    -       1.911651     0.000152     0.000099         0.001239 
+              pcg_halo_iter                     -    16675    -       0.362601     0.000094     0.000019         0.001239 
+              pcg_matmult_resid                 -     3335    -       0.181205     0.000069     0.000047         0.000248 
+              pcg_glbsum_resid                  -     3335    -       0.310037     0.000122     0.000085         0.000248 
+              pcg_halo_resid                    -     2942    -       0.062928     0.000094     0.000020         0.000219 
+            glissade_halo_xvel                  -      393    -       0.008643     0.000076     0.000020         0.000029 
+            glissade_resid_vec2                 -      393    -       0.004893     0.000020     0.000009         0.000029 
+          glissade_vhs_cleanup                  -       10    -       0.000647     0.000067     0.000063         0.000001 
+    write_diagnostics                           -       10    -       0.005441     0.000639     0.000523         0.000001 
+    set_forcing                                 -       10    -       0.000005     0.000001     0.000000         0.000001 
+    read_forcing                                -       10    -       0.000001     0.000000     0.000000         0.000001 
+    io_writeall                                 -       10    -       0.014511     0.001528     0.001373         0.000001 
+  t_prf                                         y        0    -       0.000000     0.000000     0.000000         0.000000 
+
+Overhead sum =   0.00913 wallclock seconds
+Total calls  = 122805
+
+thread 0 had some hash collisions:
+hashtable[0][965] had 2 entries: glissade_vhs_init pcg_dotprod
+Total collisions thread 0 = 1
+Entry information:
+num_zero = 980 num_one = 43 num_two = 1 num_more = 0
+Most = 2
+
+Thread 0 total memory usage = 29.328 KB
+  Hashmem                   = 16.384 KB
+  Regionmem                 = 12.24 KB (papimem portion = 0 KB)
+  Parent/child arrays       = 0.704 KB
+
+Total memory usage all threads = 29.328 KB
+
+Thread mapping:
+threadid_omp[0] = 0

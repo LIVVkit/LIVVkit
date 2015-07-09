@@ -1,0 +1,4 @@
+# Import variables for running livv on titan
+outputDir = "/www_titan"
+inputDir = "/test_titan"
+strangeVar = "what the.."

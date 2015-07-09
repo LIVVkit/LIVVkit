@@ -1,0 +1,90 @@
+<!--
+ - Copyright (c) 2015, UT-BATTELLE, LLC
+ - All rights reserved.
+ - 
+ - Redistribution and use in source and binary forms, with or without
+ - modification, are permitted provided that the following conditions are met:
+ - 
+ - 1. Redistributions of source code must retain the above copyright notice, this
+ - list of conditions and the following disclaimer.
+ - 
+ - 2. Redistributions in binary form must reproduce the above copyright notice,
+ - this list of conditions and the following disclaimer in the documentation
+ - and/or other materials provided with the distribution.
+ - 
+ - 3. Neither the name of the copyright holder nor the names of its contributors
+ - may be used to endorse or promote products derived from this software without
+ - specific prior written permission.
+ - 
+ - THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ - ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ - WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ - DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ - FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ - DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ - SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ - CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ - OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ - OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+
+
+      
+
+      <!-- BEGIN CONFIGURATION SECTION -->
+      <b class="label-header"> Configuration Files </b>
+      <div class="separator">
+      <hr style="opacity: 0; height: 5px;">
+          {% if case in test_configs and test_configs[case]|length != 0 %}
+            {% for file in test_configs[case] %}
+                <div class="Configuration">
+                  <!-- Hide and show buttons to allow the user view data more easily -->
+                  <a href="#hide{{case}}{{loop.index}}" class="hide" id="hide{{case}}{{loop.index}}">+</a>
+                  <a href="#show{{case}}{{loop.index}}" class="show" id="show{{case}}{{loop.index}}">-</a>
+                  <h4 class="top">{{file}}</h4>
+                  <div class="sections">
+                    <div style="clear:both;"></div>
+                    <!-- The changed variable keeps track of whether the files match -->
+                    {% set changed = [] %}
+                    {% for section, vars in test_configs[case][file].iteritems() %}
+                          <b>[{{section}}]</b>
+                          <div class="variable">
+                          {% for var, val in test_configs[case][file][section].iteritems() %}
+                            {% if case in bench_configs and
+                                file in bench_configs[case] and
+                                section in bench_configs[case][file] and
+                                var in bench_configs[case][file][section]%}
+                              {% if val == bench_configs[case][file][section][var] %}
+                                  {{var}} = {{val}}<br>
+                              {% else %}
+                                  {{var}} = <p style="color: green; display:inline">{{val}}</p> <p style="color: red; display:inline">{{bench_configs[case][file][section][var]}}</p> <br>
+                                  {% do changed.append(1) %}
+                              {% endif %}
+                            {% else %}
+                                {{var}} = {{val}} (Benchmark data missing.)<br>
+                                  {% do changed.append(1) %}
+                            {% endif %}
+                          {% endfor %}
+                          </div>
+                    {% endfor %}
+                  </div>
+                  <div class="status">
+                    {% if changed %}
+                      <p style="float: left; color: red;">Files differ</p>
+                    {% else %}
+                      <p style="float: left; color: green;">Files match</p>
+                    {% endif %}
+                  </div>
+                </div>
+                <div style="clear:both;"></div>
+                <hr>
+            {% endfor %}
+        {% else %}
+          <a style="padding-left: 20px; color: #696969;">Could not find any configuration files to check</a>
+        {% endif %}
+        </div>
+        <hr style="opacity: 0; height: 5px;">
+        <br style="clear: both" />
+        <!-- END CONFIGURATION SECTION -->
+        
+        
