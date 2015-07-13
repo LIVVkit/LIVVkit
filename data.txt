@@ -1,2 +1,2 @@
-07-02-2015 12:14:35
-Test run of code.
+07-13-2015 09:18:09
+Example comparison of two CISM commits. Test data was generated wtih BATs on titan using the gnu compiler.

@@ -97,16 +97,36 @@
   <br style="clear: both" />
   
   <STYLE type="text/css">
-  #select :checked +  label { background-color:#47A3FF;border-color:#47A3FF;color:#fff;}
-  #select :checked +  * ~  div {display: block; }
+  #select :checked +  * +  * +  * +  * +  * +  label { background-color:#47A3FF;border-color:#47A3FF;color:#fff;}
+  #select :checked +  * +  * +  * +  * +  * +  * +  * +  * +  * +  * +  * +  div {display: block; }
   </STYLE>
   
   <div id="select" class="tabs">
   
     <!-- CREATE THE TAB SELECTOR -->
     
+    <input id="tab-Dome 0031" name="tabs" type="radio" checked />
+    
+    <input id="tab-Dome 0062" name="tabs" type="radio" checked />
+    
+    <input id="tab-Dome 0124" name="tabs" type="radio" checked />
+    
+    <input id="tab-Dome 0248" name="tabs" type="radio" checked />
+    
+    <input id="tab-Dome 0496" name="tabs" type="radio" checked />
+    
     <input id="tab-Scaling" name="tabs" type="radio" checked />
       
+    
+    <label for="tab-Dome 0031">Dome 0031</label>
+    
+    <label for="tab-Dome 0062">Dome 0062</label>
+    
+    <label for="tab-Dome 0124">Dome 0124</label>
+    
+    <label for="tab-Dome 0248">Dome 0248</label>
+    
+    <label for="tab-Dome 0496">Dome 0496</label>
     
     <label for="tab-Scaling">Scaling</label>
       
@@ -115,7 +135,1451 @@
     <!-- GO THROUGH EACH SPECIFIC TEST CASE & DISPLAY THE CONTENT-->  
     
     <div class="case">
-      <!--
+      
+        <!--
+ - Copyright (c) 2015, UT-BATTELLE, LLC
+ - All rights reserved.
+ - 
+ - Redistribution and use in source and binary forms, with or without
+ - modification, are permitted provided that the following conditions are met:
+ - 
+ - 1. Redistributions of source code must retain the above copyright notice, this
+ - list of conditions and the following disclaimer.
+ - 
+ - 2. Redistributions in binary form must reproduce the above copyright notice,
+ - this list of conditions and the following disclaimer in the documentation
+ - and/or other materials provided with the distribution.
+ - 
+ - 3. Neither the name of the copyright holder nor the names of its contributors
+ - may be used to endorse or promote products derived from this software without
+ - specific prior written permission.
+ - 
+ - THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ - ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ - WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ - DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ - FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ - DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ - SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ - CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ - OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ - OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+
+
+
+
+      <!-- BEGIN TIMING SUMMARY SECTION -->
+      <b class="label-header"> Timing Summary</b>
+      <br style="clear:both; height: 10px;" />
+      <div class="separator">
+      
+      
+        <br style="clear:both; height: 10px;" />
+        <b>Number of processors: 002</b>
+        <table style="width: 100%;  border-collapse: collapse;">
+          <tr>
+            <th>Variable</th>
+            <th>Average (s)</th>
+            <th>Minimum (s)</th>
+            <th>Maximum (s)</th>
+          </tr>
+          
+            
+            <tr>
+              <td style="text-align: right">Init. Diag. Solve</td>
+              
+                
+                
+                
+              
+              <td style="text-align: left">
+                3.55112 
+                
+                  <p style="display: inline; color: green">(-0.007)</p>
+                
+              </td>
+              <td style="text-align: left">
+                3.54671 
+                
+                  <p style="display: inline; color: green">(-0.002)</p>
+                
+              </td>
+              <td style="text-align: left">
+                3.55721
+                
+                  <p style="display: inline; color: green">(-0.007)</p>
+                
+              </td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">Run Time</td>
+              
+                
+                
+                
+              
+              <td style="text-align: left">
+                44.43043 
+                
+                  <p style="display: inline; color: green">(-0.035)</p>
+                
+              </td>
+              <td style="text-align: left">
+                44.37107 
+                
+                  <p style="display: inline; color: green">(-0.027)</p>
+                
+              </td>
+              <td style="text-align: left">
+                44.51306
+                
+                  <p style="display: inline; color: green">(-0.168)</p>
+                
+              </td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">Stiff. Matrix Assembly</td>
+              
+                
+                
+                
+              
+              <td style="text-align: left">
+                9.21020 
+                
+                  <p style="display: inline; color: green">(-0.078)</p>
+                
+              </td>
+              <td style="text-align: left">
+                9.19689 
+                
+                  <p style="display: inline; color: green">(-0.083)</p>
+                
+              </td>
+              <td style="text-align: left">
+                9.22982
+                
+                  <p style="display: inline; color: green">(-0.070)</p>
+                
+              </td>
+            </tr>
+            
+          
+        </table>
+      
+        <br style="clear:both; height: 10px;" />
+        <b>Number of processors: 001</b>
+        <table style="width: 100%;  border-collapse: collapse;">
+          <tr>
+            <th>Variable</th>
+            <th>Average (s)</th>
+            <th>Minimum (s)</th>
+            <th>Maximum (s)</th>
+          </tr>
+          
+            
+            <tr>
+              <td style="text-align: right">Init. Diag. Solve</td>
+              
+                
+                
+                
+              
+              <td style="text-align: left">
+                4.62676 
+                
+                  <p style="display: inline; color: green">(-0.010)</p>
+                
+              </td>
+              <td style="text-align: left">
+                4.62227 
+                
+                  <p style="display: inline; color: green">(-0.009)</p>
+                
+              </td>
+              <td style="text-align: left">
+                4.63363
+                
+                  <p style="display: inline; color: green">(-0.008)</p>
+                
+              </td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">Run Time</td>
+              
+                
+                
+                
+              
+              <td style="text-align: left">
+                57.90993 
+                
+                  <p style="display: inline; color: red">(+0.126)</p>
+                
+              </td>
+              <td style="text-align: left">
+                57.85071 
+                
+                  <p style="display: inline; color: red">(+0.119)</p>
+                
+              </td>
+              <td style="text-align: left">
+                57.95965
+                
+                  <p style="display: inline; color: red">(+0.001)</p>
+                
+              </td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">Stiff. Matrix Assembly</td>
+              
+                
+                
+                
+              
+              <td style="text-align: left">
+                12.44804 
+                
+                  <p style="display: inline; color: green">(-0.043)</p>
+                
+              </td>
+              <td style="text-align: left">
+                12.43680 
+                
+                  <p style="display: inline; color: green">(-0.045)</p>
+                
+              </td>
+              <td style="text-align: left">
+                12.46319
+                
+                  <p style="display: inline; color: green">(-0.048)</p>
+                
+              </td>
+            </tr>
+            
+          
+        </table>
+      
+        <br style="clear:both; height: 10px;" />
+        <b>Number of processors: 008</b>
+        <table style="width: 100%;  border-collapse: collapse;">
+          <tr>
+            <th>Variable</th>
+            <th>Average (s)</th>
+            <th>Minimum (s)</th>
+            <th>Maximum (s)</th>
+          </tr>
+          
+            
+            <tr>
+              <td style="text-align: right">Init. Diag. Solve</td>
+              
+                
+                
+                
+              
+              <td style="text-align: left">
+                1.77594 
+                
+                  <p style="display: inline; color: green">(-0.012)</p>
+                
+              </td>
+              <td style="text-align: left">
+                1.76036 
+                
+                  <p style="display: inline; color: green">(-0.013)</p>
+                
+              </td>
+              <td style="text-align: left">
+                1.79408
+                
+                  <p style="display: inline; color: green">(-0.013)</p>
+                
+              </td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">Run Time</td>
+              
+                
+                
+                
+              
+              <td style="text-align: left">
+                20.44887 
+                
+                  <p style="display: inline; color: green">(-0.103)</p>
+                
+              </td>
+              <td style="text-align: left">
+                20.39010 
+                
+                  <p style="display: inline; color: green">(-0.081)</p>
+                
+              </td>
+              <td style="text-align: left">
+                20.54362
+                
+                  <p style="display: inline; color: green">(-0.311)</p>
+                
+              </td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">Stiff. Matrix Assembly</td>
+              
+                
+                
+                
+              
+              <td style="text-align: left">
+                2.97721 
+                
+                  <p style="display: inline; color: green">(-0.015)</p>
+                
+              </td>
+              <td style="text-align: left">
+                2.96169 
+                
+                  <p style="display: inline; color: green">(-0.013)</p>
+                
+              </td>
+              <td style="text-align: left">
+                2.98553
+                
+                  <p style="display: inline; color: green">(-0.012)</p>
+                
+              </td>
+            </tr>
+            
+          
+        </table>
+      
+        <br style="clear:both; height: 10px;" />
+        <b>Number of processors: 004</b>
+        <table style="width: 100%;  border-collapse: collapse;">
+          <tr>
+            <th>Variable</th>
+            <th>Average (s)</th>
+            <th>Minimum (s)</th>
+            <th>Maximum (s)</th>
+          </tr>
+          
+            
+            <tr>
+              <td style="text-align: right">Init. Diag. Solve</td>
+              
+                
+                
+                
+              
+              <td style="text-align: left">
+                2.12744 
+                
+                  <p style="display: inline; color: green">(-0.012)</p>
+                
+              </td>
+              <td style="text-align: left">
+                2.12222 
+                
+                  <p style="display: inline; color: green">(-0.009)</p>
+                
+              </td>
+              <td style="text-align: left">
+                2.14100
+                
+                  <p style="display: inline; color: green">(-0.033)</p>
+                
+              </td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">Run Time</td>
+              
+                
+                
+                
+              
+              <td style="text-align: left">
+                25.73947 
+                
+                  <p style="display: inline; color: red">(+0.045)</p>
+                
+              </td>
+              <td style="text-align: left">
+                25.68580 
+                
+                  <p style="display: inline; color: red">(+0.029)</p>
+                
+              </td>
+              <td style="text-align: left">
+                25.81902
+                
+                  <p style="display: inline; color: red">(+0.037)</p>
+                
+              </td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">Stiff. Matrix Assembly</td>
+              
+                
+                
+                
+              
+              <td style="text-align: left">
+                4.95668 
+                
+                  <p style="display: inline; color: green">(-0.023)</p>
+                
+              </td>
+              <td style="text-align: left">
+                4.94556 
+                
+                  <p style="display: inline; color: green">(-0.021)</p>
+                
+              </td>
+              <td style="text-align: left">
+                4.97270
+                
+                  <p style="display: inline; color: green">(-0.019)</p>
+                
+              </td>
+            </tr>
+            
+          
+        </table>
+      
+      
+      </div>
+      <br style="clear: both" />
+      <br height="30px" />
+      <!-- END TIMING SUMMARY SECTION -->
+
+
+      
+    </div>
+    
+    <div class="case">
+      
+        <!--
+ - Copyright (c) 2015, UT-BATTELLE, LLC
+ - All rights reserved.
+ - 
+ - Redistribution and use in source and binary forms, with or without
+ - modification, are permitted provided that the following conditions are met:
+ - 
+ - 1. Redistributions of source code must retain the above copyright notice, this
+ - list of conditions and the following disclaimer.
+ - 
+ - 2. Redistributions in binary form must reproduce the above copyright notice,
+ - this list of conditions and the following disclaimer in the documentation
+ - and/or other materials provided with the distribution.
+ - 
+ - 3. Neither the name of the copyright holder nor the names of its contributors
+ - may be used to endorse or promote products derived from this software without
+ - specific prior written permission.
+ - 
+ - THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ - ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ - WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ - DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ - FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ - DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ - SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ - CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ - OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ - OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+
+
+
+
+      <!-- BEGIN TIMING SUMMARY SECTION -->
+      <b class="label-header"> Timing Summary</b>
+      <br style="clear:both; height: 10px;" />
+      <div class="separator">
+      
+      
+        <br style="clear:both; height: 10px;" />
+        <b>Number of processors: 001</b>
+        <table style="width: 100%;  border-collapse: collapse;">
+          <tr>
+            <th>Variable</th>
+            <th>Average (s)</th>
+            <th>Minimum (s)</th>
+            <th>Maximum (s)</th>
+          </tr>
+          
+            
+            <tr>
+              <td style="text-align: right">Init. Diag. Solve</td>
+              
+                
+                
+                
+              
+              <td style="text-align: left">
+                18.68614 
+                
+                  <p style="display: inline; color: green">(-0.027)</p>
+                
+              </td>
+              <td style="text-align: left">
+                18.67418 
+                
+                  <p style="display: inline; color: green">(-0.019)</p>
+                
+              </td>
+              <td style="text-align: left">
+                18.69835
+                
+                  <p style="display: inline; color: green">(-0.044)</p>
+                
+              </td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">Run Time</td>
+              
+                
+                
+                
+              
+              <td style="text-align: left">
+                201.94286 
+                
+                  <p style="display: inline; color: red">(+0.302)</p>
+                
+              </td>
+              <td style="text-align: left">
+                201.41440 
+                
+                  <p style="display: inline; color: red">(+0.096)</p>
+                
+              </td>
+              <td style="text-align: left">
+                202.18560
+                
+                  <p style="display: inline; color: red">(+0.175)</p>
+                
+              </td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">Stiff. Matrix Assembly</td>
+              
+                
+                
+                
+              
+              <td style="text-align: left">
+                44.58624 
+                
+                  <p style="display: inline; color: green">(-0.144)</p>
+                
+              </td>
+              <td style="text-align: left">
+                44.44776 
+                
+                  <p style="display: inline; color: green">(-0.223)</p>
+                
+              </td>
+              <td style="text-align: left">
+                44.61834
+                
+                  <p style="display: inline; color: green">(-0.183)</p>
+                
+              </td>
+            </tr>
+            
+          
+        </table>
+      
+        <br style="clear:both; height: 10px;" />
+        <b>Number of processors: 004</b>
+        <table style="width: 100%;  border-collapse: collapse;">
+          <tr>
+            <th>Variable</th>
+            <th>Average (s)</th>
+            <th>Minimum (s)</th>
+            <th>Maximum (s)</th>
+          </tr>
+          
+            
+            <tr>
+              <td style="text-align: right">Init. Diag. Solve</td>
+              
+                
+                
+                
+              
+              <td style="text-align: left">
+                6.96683 
+                
+                  <p style="display: inline; color: green">(-0.036)</p>
+                
+              </td>
+              <td style="text-align: left">
+                6.91979 
+                
+                  <p style="display: inline; color: green">(-0.058)</p>
+                
+              </td>
+              <td style="text-align: left">
+                7.00203
+                
+                  <p style="display: inline; color: green">(-0.060)</p>
+                
+              </td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">Run Time</td>
+              
+                
+                
+                
+              
+              <td style="text-align: left">
+                73.68195 
+                
+                  <p style="display: inline; color: red">(+0.046)</p>
+                
+              </td>
+              <td style="text-align: left">
+                73.54530 
+                
+                  <p style="display: inline; color: red">(+0.043)</p>
+                
+              </td>
+              <td style="text-align: left">
+                73.96613
+                
+                  <p style="display: inline; color: red">(+0.151)</p>
+                
+              </td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">Stiff. Matrix Assembly</td>
+              
+                
+                
+                
+              
+              <td style="text-align: left">
+                17.25333 
+                
+                  <p style="display: inline; color: green">(-0.119)</p>
+                
+              </td>
+              <td style="text-align: left">
+                17.22607 
+                
+                  <p style="display: inline; color: green">(-0.126)</p>
+                
+              </td>
+              <td style="text-align: left">
+                17.27879
+                
+                  <p style="display: inline; color: green">(-0.148)</p>
+                
+              </td>
+            </tr>
+            
+          
+        </table>
+      
+      
+      </div>
+      <br style="clear: both" />
+      <br height="30px" />
+      <!-- END TIMING SUMMARY SECTION -->
+
+
+      
+    </div>
+    
+    <div class="case">
+      
+        <!--
+ - Copyright (c) 2015, UT-BATTELLE, LLC
+ - All rights reserved.
+ - 
+ - Redistribution and use in source and binary forms, with or without
+ - modification, are permitted provided that the following conditions are met:
+ - 
+ - 1. Redistributions of source code must retain the above copyright notice, this
+ - list of conditions and the following disclaimer.
+ - 
+ - 2. Redistributions in binary form must reproduce the above copyright notice,
+ - this list of conditions and the following disclaimer in the documentation
+ - and/or other materials provided with the distribution.
+ - 
+ - 3. Neither the name of the copyright holder nor the names of its contributors
+ - may be used to endorse or promote products derived from this software without
+ - specific prior written permission.
+ - 
+ - THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ - ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ - WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ - DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ - FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ - DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ - SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ - CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ - OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ - OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+
+
+
+
+      <!-- BEGIN TIMING SUMMARY SECTION -->
+      <b class="label-header"> Timing Summary</b>
+      <br style="clear:both; height: 10px;" />
+      <div class="separator">
+      
+      
+        <br style="clear:both; height: 10px;" />
+        <b>Number of processors: 001</b>
+        <table style="width: 100%;  border-collapse: collapse;">
+          <tr>
+            <th>Variable</th>
+            <th>Average (s)</th>
+            <th>Minimum (s)</th>
+            <th>Maximum (s)</th>
+          </tr>
+          
+            
+            <tr>
+              <td style="text-align: right">Init. Diag. Solve</td>
+              
+                
+                
+                
+              
+              <td style="text-align: left">
+                95.39978 
+                
+                  <p style="display: inline; color: red">(+0.033)</p>
+                
+              </td>
+              <td style="text-align: left">
+                95.22687 
+                
+                  <p style="display: inline; color: green">(-0.047)</p>
+                
+              </td>
+              <td style="text-align: left">
+                95.49769
+                
+                  <p style="display: inline; color: red">(+0.012)</p>
+                
+              </td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">Run Time</td>
+              
+                
+                
+                
+              
+              <td style="text-align: left">
+                828.81506 
+                
+                  <p style="display: inline; color: red">(+1.508)</p>
+                
+              </td>
+              <td style="text-align: left">
+                825.80450 
+                
+                  <p style="display: inline; color: green">(-0.136)</p>
+                
+              </td>
+              <td style="text-align: left">
+                842.97410
+                
+                  <p style="display: inline; color: red">(+13.427)</p>
+                
+              </td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">Stiff. Matrix Assembly</td>
+              
+                
+                
+                
+              
+              <td style="text-align: left">
+                184.20101 
+                
+                  <p style="display: inline; color: green">(-1.387)</p>
+                
+              </td>
+              <td style="text-align: left">
+                183.98820 
+                
+                  <p style="display: inline; color: green">(-1.317)</p>
+                
+              </td>
+              <td style="text-align: left">
+                184.37850
+                
+                  <p style="display: inline; color: green">(-1.428)</p>
+                
+              </td>
+            </tr>
+            
+          
+        </table>
+      
+        <br style="clear:both; height: 10px;" />
+        <b>Number of processors: 256</b>
+        <table style="width: 100%;  border-collapse: collapse;">
+          <tr>
+            <th>Variable</th>
+            <th>Average (s)</th>
+            <th>Minimum (s)</th>
+            <th>Maximum (s)</th>
+          </tr>
+          
+            
+            <tr>
+              <td style="text-align: right">Init. Diag. Solve</td>
+              
+                
+                
+                
+              
+              <td style="text-align: left">
+                1.78052 
+                
+                  <p style="display: inline; color: green">(-0.024)</p>
+                
+              </td>
+              <td style="text-align: left">
+                1.75079 
+                
+                  <p style="display: inline; color: green">(-0.007)</p>
+                
+              </td>
+              <td style="text-align: left">
+                1.86053
+                
+                  <p style="display: inline; color: green">(-0.050)</p>
+                
+              </td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">Run Time</td>
+              
+                
+                
+                
+              
+              <td style="text-align: left">
+                15.44649 
+                
+                  <p style="display: inline; color: green">(-0.321)</p>
+                
+              </td>
+              <td style="text-align: left">
+                15.21401 
+                
+                  <p style="display: inline; color: green">(-0.037)</p>
+                
+              </td>
+              <td style="text-align: left">
+                15.77534
+                
+                  <p style="display: inline; color: green">(-0.395)</p>
+                
+              </td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">Stiff. Matrix Assembly</td>
+              
+                
+                
+                
+              
+              <td style="text-align: left">
+                1.28252 
+                
+                  <p style="display: inline; color: green">(-0.005)</p>
+                
+              </td>
+              <td style="text-align: left">
+                1.27866 
+                
+                  <p style="display: inline; color: green">(-0.008)</p>
+                
+              </td>
+              <td style="text-align: left">
+                1.28536
+                
+                  <p style="display: inline; color: green">(-0.003)</p>
+                
+              </td>
+            </tr>
+            
+          
+        </table>
+      
+        <br style="clear:both; height: 10px;" />
+        <b>Number of processors: 016</b>
+        <table style="width: 100%;  border-collapse: collapse;">
+          <tr>
+            <th>Variable</th>
+            <th>Average (s)</th>
+            <th>Minimum (s)</th>
+            <th>Maximum (s)</th>
+          </tr>
+          
+            
+            <tr>
+              <td style="text-align: right">Init. Diag. Solve</td>
+              
+                
+                
+                
+              
+              <td style="text-align: left">
+                20.81088 
+                
+                  <p style="display: inline; color: green">(-0.077)</p>
+                
+              </td>
+              <td style="text-align: left">
+                20.72419 
+                
+                  <p style="display: inline; color: green">(-0.081)</p>
+                
+              </td>
+              <td style="text-align: left">
+                20.88022
+                
+                  <p style="display: inline; color: green">(-0.091)</p>
+                
+              </td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">Run Time</td>
+              
+                
+                
+                
+              
+              <td style="text-align: left">
+                169.52066 
+                
+                  <p style="display: inline; color: red">(+0.193)</p>
+                
+              </td>
+              <td style="text-align: left">
+                168.72094 
+                
+                  <p style="display: inline; color: red">(+0.041)</p>
+                
+              </td>
+              <td style="text-align: left">
+                171.56531
+                
+                  <p style="display: inline; color: red">(+1.690)</p>
+                
+              </td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">Stiff. Matrix Assembly</td>
+              
+                
+                
+                
+              
+              <td style="text-align: left">
+                18.67336 
+                
+                  <p style="display: inline; color: green">(-0.165)</p>
+                
+              </td>
+              <td style="text-align: left">
+                18.55629 
+                
+                  <p style="display: inline; color: green">(-0.258)</p>
+                
+              </td>
+              <td style="text-align: left">
+                18.73349
+                
+                  <p style="display: inline; color: green">(-0.142)</p>
+                
+              </td>
+            </tr>
+            
+          
+        </table>
+      
+      
+      </div>
+      <br style="clear: both" />
+      <br height="30px" />
+      <!-- END TIMING SUMMARY SECTION -->
+
+
+      
+    </div>
+    
+    <div class="case">
+      
+        <!--
+ - Copyright (c) 2015, UT-BATTELLE, LLC
+ - All rights reserved.
+ - 
+ - Redistribution and use in source and binary forms, with or without
+ - modification, are permitted provided that the following conditions are met:
+ - 
+ - 1. Redistributions of source code must retain the above copyright notice, this
+ - list of conditions and the following disclaimer.
+ - 
+ - 2. Redistributions in binary form must reproduce the above copyright notice,
+ - this list of conditions and the following disclaimer in the documentation
+ - and/or other materials provided with the distribution.
+ - 
+ - 3. Neither the name of the copyright holder nor the names of its contributors
+ - may be used to endorse or promote products derived from this software without
+ - specific prior written permission.
+ - 
+ - THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ - ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ - WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ - DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ - FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ - DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ - SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ - CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ - OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ - OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+
+
+
+
+      <!-- BEGIN TIMING SUMMARY SECTION -->
+      <b class="label-header"> Timing Summary</b>
+      <br style="clear:both; height: 10px;" />
+      <div class="separator">
+      
+      
+        <br style="clear:both; height: 10px;" />
+        <b>Number of processors: 256</b>
+        <table style="width: 100%;  border-collapse: collapse;">
+          <tr>
+            <th>Variable</th>
+            <th>Average (s)</th>
+            <th>Minimum (s)</th>
+            <th>Maximum (s)</th>
+          </tr>
+          
+            
+            <tr>
+              <td style="text-align: right">Init. Diag. Solve</td>
+              
+                
+                
+                
+              
+              <td style="text-align: left">
+                10.11793 
+                
+                  <p style="display: inline; color: red">(+0.048)</p>
+                
+              </td>
+              <td style="text-align: left">
+                9.93184 
+                
+                  <p style="display: inline; color: red">(+0.307)</p>
+                
+              </td>
+              <td style="text-align: left">
+                10.38320
+                
+                  <p style="display: inline; color: red">(+0.133)</p>
+                
+              </td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">Run Time</td>
+              
+                
+                
+                
+              
+              <td style="text-align: left">
+                61.71708 
+                
+                  <p style="display: inline; color: green">(-1.107)</p>
+                
+              </td>
+              <td style="text-align: left">
+                61.19586 
+                
+                  <p style="display: inline; color: green">(-0.754)</p>
+                
+              </td>
+              <td style="text-align: left">
+                62.35297
+                
+                  <p style="display: inline; color: green">(-1.302)</p>
+                
+              </td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">Stiff. Matrix Assembly</td>
+              
+                
+                
+                
+              
+              <td style="text-align: left">
+                4.65467 
+                
+                  <p style="display: inline; color: green">(-0.029)</p>
+                
+              </td>
+              <td style="text-align: left">
+                4.64070 
+                
+                  <p style="display: inline; color: green">(-0.040)</p>
+                
+              </td>
+              <td style="text-align: left">
+                4.66536
+                
+                  <p style="display: inline; color: green">(-0.020)</p>
+                
+              </td>
+            </tr>
+            
+          
+        </table>
+      
+        <br style="clear:both; height: 10px;" />
+        <b>Number of processors: 064</b>
+        <table style="width: 100%;  border-collapse: collapse;">
+          <tr>
+            <th>Variable</th>
+            <th>Average (s)</th>
+            <th>Minimum (s)</th>
+            <th>Maximum (s)</th>
+          </tr>
+          
+            
+            <tr>
+              <td style="text-align: right">Init. Diag. Solve</td>
+              
+                
+                
+                
+              
+              <td style="text-align: left">
+                32.71143 
+                
+                  <p style="display: inline; color: red">(+0.044)</p>
+                
+              </td>
+              <td style="text-align: left">
+                32.52405 
+                
+                  <p style="display: inline; color: green">(-0.014)</p>
+                
+              </td>
+              <td style="text-align: left">
+                32.91884
+                
+                  <p style="display: inline; color: red">(+0.143)</p>
+                
+              </td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">Run Time</td>
+              
+                
+                
+                
+              
+              <td style="text-align: left">
+                211.88848 
+                
+                  <p style="display: inline; color: green">(-0.080)</p>
+                
+              </td>
+              <td style="text-align: left">
+                209.20594 
+                
+                  <p style="display: inline; color: green">(-0.875)</p>
+                
+              </td>
+              <td style="text-align: left">
+                229.58125
+                
+                  <p style="display: inline; color: red">(+15.703)</p>
+                
+              </td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">Stiff. Matrix Assembly</td>
+              
+                
+                
+                
+              
+              <td style="text-align: left">
+                17.80209 
+                
+                  <p style="display: inline; color: green">(-0.089)</p>
+                
+              </td>
+              <td style="text-align: left">
+                17.78973 
+                
+                  <p style="display: inline; color: green">(-0.066)</p>
+                
+              </td>
+              <td style="text-align: left">
+                17.82523
+                
+                  <p style="display: inline; color: green">(-0.083)</p>
+                
+              </td>
+            </tr>
+            
+          
+        </table>
+      
+      
+      </div>
+      <br style="clear: both" />
+      <br height="30px" />
+      <!-- END TIMING SUMMARY SECTION -->
+
+
+      
+    </div>
+    
+    <div class="case">
+      
+        <!--
+ - Copyright (c) 2015, UT-BATTELLE, LLC
+ - All rights reserved.
+ - 
+ - Redistribution and use in source and binary forms, with or without
+ - modification, are permitted provided that the following conditions are met:
+ - 
+ - 1. Redistributions of source code must retain the above copyright notice, this
+ - list of conditions and the following disclaimer.
+ - 
+ - 2. Redistributions in binary form must reproduce the above copyright notice,
+ - this list of conditions and the following disclaimer in the documentation
+ - and/or other materials provided with the distribution.
+ - 
+ - 3. Neither the name of the copyright holder nor the names of its contributors
+ - may be used to endorse or promote products derived from this software without
+ - specific prior written permission.
+ - 
+ - THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ - ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ - WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ - DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ - FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ - DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ - SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ - CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ - OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ - OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+
+
+
+
+      <!-- BEGIN TIMING SUMMARY SECTION -->
+      <b class="label-header"> Timing Summary</b>
+      <br style="clear:both; height: 10px;" />
+      <div class="separator">
+      
+      
+        <br style="clear:both; height: 10px;" />
+        <b>Number of processors: 256</b>
+        <table style="width: 100%;  border-collapse: collapse;">
+          <tr>
+            <th>Variable</th>
+            <th>Average (s)</th>
+            <th>Minimum (s)</th>
+            <th>Maximum (s)</th>
+          </tr>
+          
+            
+            <tr>
+              <td style="text-align: right">Init. Diag. Solve</td>
+              
+                
+                
+                
+              
+              <td style="text-align: left">
+                56.53226 
+                
+                  <p style="display: inline; color: red">(+0.346)</p>
+                
+              </td>
+              <td style="text-align: left">
+                55.80848 
+                
+                  <p style="display: inline; color: red">(+0.335)</p>
+                
+              </td>
+              <td style="text-align: left">
+                57.30895
+                
+                  <p style="display: inline; color: green">(-0.426)</p>
+                
+              </td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">Run Time</td>
+              
+                
+                
+                
+              
+              <td style="text-align: left">
+                333.69245 
+                
+                  <p style="display: inline; color: green">(-5.190)</p>
+                
+              </td>
+              <td style="text-align: left">
+                329.10410 
+                
+                  <p style="display: inline; color: green">(-7.636)</p>
+                
+              </td>
+              <td style="text-align: left">
+                353.31687
+                
+                  <p style="display: inline; color: red">(+12.372)</p>
+                
+              </td>
+            </tr>
+            
+          
+            
+            <tr>
+              <td style="text-align: right">Stiff. Matrix Assembly</td>
+              
+                
+                
+                
+              
+              <td style="text-align: left">
+                16.79930 
+                
+                  <p style="display: inline; color: green">(-0.118)</p>
+                
+              </td>
+              <td style="text-align: left">
+                16.73677 
+                
+                  <p style="display: inline; color: green">(-0.173)</p>
+                
+              </td>
+              <td style="text-align: left">
+                16.81063
+                
+                  <p style="display: inline; color: green">(-0.113)</p>
+                
+              </td>
+            </tr>
+            
+          
+        </table>
+      
+      
+      </div>
+      <br style="clear: both" />
+      <br height="30px" />
+      <!-- END TIMING SUMMARY SECTION -->
+
+
+      
+    </div>
+    
+    <div class="case">
+      
+        <!--
  - Copyright (c) 2015, UT-BATTELLE, LLC
  - All rights reserved.
  - 
@@ -159,17 +1623,17 @@
           <div style="float: left; display: inline;">
              <!-- img_arr[0] is the name of the image -->
              <a href="#img_form_Scaling_1" id="img_pop">
-                <img src="../imgs/Dome/dome_scaling_weak.png" width="150px"></img>
+                <img src="../imgs/Dome/Dome _scaling_weak.png" width="150px"></img>
             </a>
             <br style="clear: both" />
             <!-- img_arr[1] is the description -->
-            <p>Weak scaling for dome</p>
+            <p>Weak scaling for Dome </p>
           </div>
          </div>
         <a href="#close" class="overlay" id="img_form_Scaling_1"></a>
 
         <div class="popup">
-          <img src="../imgs/Dome/dome_scaling_weak.png" class="image_overlay"></img>
+          <img src="../imgs/Dome/Dome _scaling_weak.png" class="image_overlay"></img>
           <a class="close" href="#close">x</a>
         </div>
         
@@ -179,17 +1643,17 @@
           <div style="float: left; display: inline;">
              <!-- img_arr[0] is the name of the image -->
              <a href="#img_form_Scaling_2" id="img_pop">
-                <img src="../imgs/Dome/dome_0031_scaling.png" width="150px"></img>
+                <img src="../imgs/Dome/Dome _0031_scaling.png" width="150px"></img>
             </a>
             <br style="clear: both" />
             <!-- img_arr[1] is the description -->
-            <p>Strong scaling for dome0031</p>
+            <p>Strong scaling for Dome 0031</p>
           </div>
          </div>
         <a href="#close" class="overlay" id="img_form_Scaling_2"></a>
 
         <div class="popup">
-          <img src="../imgs/Dome/dome_0031_scaling.png" class="image_overlay"></img>
+          <img src="../imgs/Dome/Dome _0031_scaling.png" class="image_overlay"></img>
           <a class="close" href="#close">x</a>
         </div>
         
@@ -199,17 +1663,17 @@
           <div style="float: left; display: inline;">
              <!-- img_arr[0] is the name of the image -->
              <a href="#img_form_Scaling_3" id="img_pop">
-                <img src="../imgs/Dome/dome_0124_scaling.png" width="150px"></img>
+                <img src="../imgs/Dome/Dome _0124_scaling.png" width="150px"></img>
             </a>
             <br style="clear: both" />
             <!-- img_arr[1] is the description -->
-            <p>Strong scaling for dome0124</p>
+            <p>Strong scaling for Dome 0124</p>
           </div>
          </div>
         <a href="#close" class="overlay" id="img_form_Scaling_3"></a>
 
         <div class="popup">
-          <img src="../imgs/Dome/dome_0124_scaling.png" class="image_overlay"></img>
+          <img src="../imgs/Dome/Dome _0124_scaling.png" class="image_overlay"></img>
           <a class="close" href="#close">x</a>
         </div>
         
@@ -223,50 +1687,7 @@
       <!-- END PLOT SECTION -->
       
       
-      <!--
- - Copyright (c) 2015, UT-BATTELLE, LLC
- - All rights reserved.
- - 
- - Redistribution and use in source and binary forms, with or without
- - modification, are permitted provided that the following conditions are met:
- - 
- - 1. Redistributions of source code must retain the above copyright notice, this
- - list of conditions and the following disclaimer.
- - 
- - 2. Redistributions in binary form must reproduce the above copyright notice,
- - this list of conditions and the following disclaimer in the documentation
- - and/or other materials provided with the distribution.
- - 
- - 3. Neither the name of the copyright holder nor the names of its contributors
- - may be used to endorse or promote products derived from this software without
- - specific prior written permission.
- - 
- - THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- - ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- - WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- - DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
- - FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- - DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- - SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- - CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
- - OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- - OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- -->
-
-
-
-
-      <!-- BEGIN TIMING SUMMARY SECTION -->
-      <b class="label-header"> Timing Summary</b>
-      <br style="clear:both; height: 10px;" />
-      <div class="separator">
       
-      </div>
-      <br style="clear: both" />
-      <br height="30px" />
-      <!-- END TIMING SUMMARY SECTION -->
-
-
     </div>
     
     </div>
@@ -309,9 +1730,9 @@
 
 <div id="footer">
 	<p id="info">
-		V&V Performed by fjk at 07-02-2015 12:14:35 <br>
+		V&V Performed by kennedy at 07-13-2015 09:18:09 <br>
         <br>
-		Test run of code. <br>
+		Example comparison of two CISM commits. Test data was generated wtih BATs on titan using the gnu compiler. <br>
 	</p>
  
 </div>
@@ -324,7 +1745,13 @@
         <span style="width: 100%; display: inline-block; line-height: 0;"></span>
     </div>
 
-    <h2 style="text-align: center;"> <a href="https://github.com/LIVVkit/LIVVkit/issues" target=_blank>Contact us on github</a> </h2>
+    <p id="piscees">
+    LIVVkit was developed under <a href="http://www.scidac.gov/PISCEES/" target=_blank>PISCEES</a>, a BER/ASCR SciDAC Earth System Modeling project.
+    </p>
+
+    <hr>
+
+    <h3 style="text-align: center;"> <a href="https://github.com/LIVVkit/LIVVkit/issues" target=_blank>Contact us on github</a> </h3>
 </div>
 
 
