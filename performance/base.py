@@ -151,8 +151,8 @@ class AbstractTest(object):
         ax.plot(resolutions, mins, 'b--')
         ax.plot(resolutions, maxs, 'b--')
         #print("Saving plot to " + util.variables.img_dir + os.sep + self.name.capitalize() + os.sep + test_type +  "_scaling_weak.png")
-        pyplot.savefig(util.variables.img_dir + os.sep + self.name.capitalize() + os.sep + test_type +  "_scaling_weak.png")
-        self.images_generated.append( [test_type + "_scaling_weak.png", "Weak scaling for " + test_type])
+        pyplot.savefig(util.variables.img_dir + os.sep + self.name.capitalize() + os.sep + test_type.strip() +  "_scaling_weak.png")
+        self.images_generated.append( [test_type.strip() + "_scaling_weak.png", "Weak scaling for " + test_type])
 
 
     def strong_scaling(self, test_type, resolutions):
@@ -203,8 +203,8 @@ class AbstractTest(object):
                     ax.plot(x,maxs, 'r--')
                     pyplot.legend()
 
-                pyplot.savefig(util.variables.img_dir + os.sep + self.name.capitalize() + os.sep + test_type + "_" + res +  "_scaling" + ".png")
-                self.images_generated.append( [test_type + "_" + res + "_scaling" + ".png", "Strong scaling for " + test_type + res])
+                pyplot.savefig(util.variables.img_dir + os.sep + self.name.capitalize() + os.sep + test_type.strip() + "_" + res +  "_scaling" + ".png")
+                self.images_generated.append( [test_type.strip() + "_" + res + "_scaling" + ".png", "Strong scaling for " + test_type + res])
 
 
     def generate(self):

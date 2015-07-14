@@ -22,8 +22,8 @@ Model V&V
 * [Validation](https://github.com/LIVVkit/LIVVkit/wiki/LIVVkit-validation)
 
 Software V&V
-[Verification](https://github.com/LIVVkit/LIVVkit/wiki/LIVVkit-verification)
-[Performance](https://github.com/LIVVkit/LIVVkit/wiki/LIVVkit-performance)
+* [Verification](https://github.com/LIVVkit/LIVVkit/wiki/LIVVkit-verification)
+* [Performance](https://github.com/LIVVkit/LIVVkit/wiki/LIVVkit-performance)
 
 Currently, LIVVkit is being developed and used in conjunction with the
 Community Ice Sheet Model
@@ -59,10 +59,10 @@ Python Packages
 * [python-jinja2](https://pypi.python.org/pypi/Jinja2/2.7.3) 
 
 External Packages
-[NetCDF 4.3.0+](http://www.unidata.ucar.edu/software/netcdf/)
-[NCO (NetCDF Operators) 4.4.0](http://nco.sourceforge.net/)
-[HDF5 1.8.6](https://www.hdfgroup.org/HDF5/)
-[NCL (NCAR Command Language + graphics library) 6.1.2](http://www.ncl.ucar.edu/)
+* [NetCDF 4.3.0+](http://www.unidata.ucar.edu/software/netcdf/)
+* [NCO (NetCDF Operators) 4.4.0](http://nco.sourceforge.net/)
+* [HDF5 1.8.6](https://www.hdfgroup.org/HDF5/)
+* [NCL (NCAR Command Language + graphics library) 6.1.2](http://www.ncl.ucar.edu/)
 
 If you have a working install of CISM, you'll likely already have everything
 you need besides [NCL](http://www.ncl.ucar.edu/), which you must install
