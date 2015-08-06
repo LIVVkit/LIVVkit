@@ -103,6 +103,10 @@ parser.add_argument('--performance',
         action='store_true', 
         help='Run the performance tests analysis.')
 
+parser.add_argument('--validation',
+        action='store_true',
+        help='Run the validation tests.')
+
 parser.add_argument('--load', 
         help='Load saved options.')
 parser.add_argument('--save', 
@@ -125,26 +129,29 @@ import util.websetup
 import util.self_verification
 import verification.dome, verification.ismip, verification.shelf, verification.stream
 import performance.dome
+import validation.scheduler
+import validation.util.configurations
 import util.cleanup
 
 ###############################################################################
 #                              Global Variables                               #
 ###############################################################################
-util.variables.cwd             = os.getcwd()
-util.variables.config_dir      = util.variables.cwd + os.sep + "configurations"
-util.variables.input_dir       = os.path.abspath(options.test_dir + os.sep + 'higher-order')
-util.variables.benchmark_dir   = os.path.abspath(options.bench_dir + os.sep + 'higher-order')
-util.variables.output_dir      = os.path.abspath(options.out_dir)
-util.variables.img_dir         = util.variables.output_dir + "/imgs"
-util.variables.comment         = options.comment
-util.variables.timestamp       = time.strftime("%m-%d-%Y %H:%M:%S")
-util.variables.user            = getpass.getuser()
-util.variables.website_dir     = util.variables.cwd + "/web"
-util.variables.template_dir    = util.variables.website_dir + "/templates"
-util.variables.index_dir       = util.variables.output_dir
-util.variables.verification    = "True"
-util.variables.performance     = str(options.performance)
-util.variables.validation      = "False"
+util.variables.cwd                = os.getcwd()
+util.variables.config_dir         = util.variables.cwd + os.sep + "configurations"
+util.variables.input_dir          = os.path.abspath(options.test_dir + os.sep + 'higher-order')
+util.variables.benchmark_dir      = os.path.abspath(options.bench_dir + os.sep + 'higher-order')
+util.variables.output_dir         = os.path.abspath(options.out_dir)
+util.variables.img_dir            = util.variables.output_dir + "/imgs"
+util.variables.comment            = options.comment
+util.variables.timestamp          = time.strftime("%m-%d-%Y %H:%M:%S")
+util.variables.user               = getpass.getuser()
+util.variables.website_dir        = util.variables.cwd + "/web"
+util.variables.template_dir       = util.variables.website_dir + "/templates"
+util.variables.index_dir          = util.variables.output_dir
+util.variables.verification       = "True"
+util.variables.performance        = str(options.performance)
+util.variables.validation         = str(options.validation)
+util.variables.validation_options = validation.util.configurations.parse_configs()
 
 # A list of the information that should be looked for in the stdout of model output
 util.variables.parser_vars = [
@@ -196,7 +203,7 @@ for data_dir in [util.variables.input_dir, util.variables.benchmark_dir]:
 ###############################################################################
 verification_tests = [verification.dome, verification.ismip, verification.shelf, verification.stream] 
 performance_tests = [performance.dome]
-validation_tests = []
+validation_tests = util.variables.validation_options.keys()
 test_mapping = {
                "Verification" : verification_tests,
                "Performance" : performance_tests,
