@@ -130,7 +130,7 @@ import util.self_verification
 import verification.dome, verification.ismip, verification.shelf, verification.stream
 import performance.dome
 import validation.scheduler
-import validation.util.configurations
+import validation.validation_utils.configurations
 import util.cleanup
 
 ###############################################################################
@@ -151,7 +151,7 @@ util.variables.index_dir          = util.variables.output_dir
 util.variables.verification       = "True"
 util.variables.performance        = str(options.performance)
 util.variables.validation         = str(options.validation)
-util.variables.validation_options = validation.util.configurations.parse_configs()
+util.variables.validation_options = validation.validation_utils.configurations.parse_configs()
 
 # A list of the information that should be looked for in the stdout of model output
 util.variables.parser_vars = [
@@ -274,12 +274,7 @@ if util.variables.validation == "True":
     print("--------------------------------------------------------------------------")
     print("  Beginning validation test suite....")
     print("--------------------------------------------------------------------------")
-    for test in validation_tests:
-        new_test = test.Test()
-        new_test.run()
-        validation_summary[test.get_name().lower()] = new_test.summary
-        new_test.generate()
-        print("")
+    validation.scheduler.run()
 
 # Create the site index
 verification_summary = dict(verification_summary)

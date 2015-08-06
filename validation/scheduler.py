@@ -2,6 +2,8 @@
 
 import importlib
 
+import util.variables
+
 # A non-smart way to just go and run what's in the validations dict
 # First step to improvement will be to use the multiprocessing bits
 # for parallelism
@@ -12,7 +14,7 @@ def run():
                  "Example Validator" : 
                     {
                       "Module" : "validation.example.example_validator",
-                      "Location" : "/home/bzq/livv-dev/LIVV/reg_test/linux-gnu/higher-order/dome",
+                      "Location" : util.variables.input_dir + "/dome",
                       "DataFiles" : ["dome.0062.p001.nc"],
                       "RunArgs" : ""
                     }
