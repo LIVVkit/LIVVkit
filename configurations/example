@@ -1,0 +1,5 @@
+--comment=Test run of code.
+--out-dir=www
+--test-dir=reg_test/hopper-gnu/
+--bench-dir=reg_bench/hopper-gnu/
+--performance

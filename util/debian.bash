@@ -43,6 +43,6 @@ sudo apt-get install -y libudunits2-dev
 sudo apt-get install -y ncl-ncarg
 #sudo ln -s /usr/share/ncarg /usr/lib/ncarg
     # this fixes a bug in NCL which may be present in Ubuntu 14.04 LTS
-    # but as been fixed in package NCL-6.2.0.1ubuntu1
+    # but has been fixed in package NCL-6.2.0.1ubuntu1
     # test first with:
     # ng4ex gsun01n -clean
