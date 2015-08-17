@@ -139,7 +139,7 @@ class AbstractTest(object):
                 bit_dict[same] =  ['EMPTY TIME','test']
             else:
                 # Create a difference file with ncdiff
-                comline = ['ncdiff', test_file, bench_file, test_dir + os.sep + 'temp.nc', '-O']
+                comline = ['ncdiff', '-v', 'thk,velnorm', test_file, bench_file, test_dir + os.sep + 'temp.nc', '-O']
                 try:
                     subprocess.check_call(comline)
                 except Exception as e:
