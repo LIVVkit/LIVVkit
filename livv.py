@@ -104,8 +104,8 @@ parser.add_argument('--performance',
         help='Run the performance tests analysis.')
 
 parser.add_argument('--validation',
-        action='store_true',
-        help='Run the validation tests.')
+        action='store', nargs='*',
+        help='Specify the location of the configuration files for validation tests.')
 
 parser.add_argument('--load', 
         help='Load saved options.')
@@ -130,7 +130,6 @@ import util.self_verification
 import verification.dome, verification.ismip, verification.shelf, verification.stream
 import performance.dome
 import validation.scheduler
-import validation.validation_utils.configurations
 import util.cleanup
 
 ###############################################################################
@@ -148,10 +147,9 @@ util.variables.user               = getpass.getuser()
 util.variables.website_dir        = util.variables.cwd + "/web"
 util.variables.template_dir       = util.variables.website_dir + "/templates"
 util.variables.index_dir          = util.variables.output_dir
-util.variables.verification       = "True"
+util.variables.verification       = "True" if options.validation == None else "False"
 util.variables.performance        = str(options.performance)
-util.variables.validation         = str(options.validation)
-util.variables.validation_options = validation.validation_utils.configurations.parse_configs()
+util.variables.validation         = options.validation
 
 # A list of the information that should be looked for in the stdout of model output
 util.variables.parser_vars = [
@@ -159,14 +157,6 @@ util.variables.parser_vars = [
               'Number of processors',
               'Number of timesteps',
               'Avg iterations to converge'
-             ]
-
-# Variables to measure when parsing through timing summaries
-util.variables.timing_vars = ['Time'
-             # 'Simple Glide',
-             # 'Velocity Driver',
-             # 'Initial Diagonal Solve',
-             # 'IO Writeback'
              ]
 
 # Dycores to try to parse output for
@@ -189,21 +179,22 @@ print("  Machine: " + machine_name)
 print("  " + util.variables.comment + os.linesep)
 
 # Check to make sure the directory structure is okay
-for data_dir in [util.variables.input_dir, util.variables.benchmark_dir]:
-    if not os.path.exists(data_dir):
-        print("------------------------------------------------------------------------------")
-        print("ERROR: Could not find " + data_dir + " for input")
-        print("       Use the -t and -b flags to specify the locations of the test and benchmark data.")
-        print("       See README.md for more details.")
-        print("------------------------------------------------------------------------------")
-        exit(1)
+if util.variables.verification == "True":
+    for data_dir in [util.variables.input_dir, util.variables.benchmark_dir]:
+        if not os.path.exists(data_dir):
+            print("------------------------------------------------------------------------------")
+            print("ERROR: Could not find " + data_dir + " for input")
+            print("       Use the -t and -b flags to specify the locations of the test and benchmark data.")
+            print("       See README.md for more details.")
+            print("------------------------------------------------------------------------------")
+            exit(1)
 
 ###############################################################################
 #                              Record Test Cases                              #
 ###############################################################################
 verification_tests = [verification.dome, verification.ismip, verification.shelf, verification.stream] 
 performance_tests = [performance.dome]
-validation_tests = util.variables.validation_options.keys()
+validation_tests = []
 test_mapping = {
                "Verification" : verification_tests,
                "Performance" : performance_tests,
@@ -270,7 +261,7 @@ if util.variables.performance == "True":
         print("")
 
 # Run the validation verification
-if util.variables.validation == "True":
+if util.variables.validation != None:
     print("--------------------------------------------------------------------------")
     print("  Beginning validation test suite....")
     print("--------------------------------------------------------------------------")
