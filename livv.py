@@ -127,10 +127,9 @@ import util.variables
 import util.configuration_handler
 import util.websetup
 import util.self_verification
-import verification.dome, verification.ismip, verification.shelf, verification.stream
+import verification.scheduler
 import performance.dome
 import validation.scheduler
-import util.cleanup
 
 ###############################################################################
 #                              Global Variables                               #
@@ -162,6 +161,10 @@ util.variables.parser_vars = [
 # Dycores to try to parse output for
 util.variables.dycores = ['glissade'] #["glide", "glissade", "glam", "albany", "bisicles"]
 
+verification_summary = dict()
+performance_summary = dict()
+validation_summary = dict()
+
 ###############################################################################
 #                               Main Execution                                #
 ###############################################################################
@@ -178,77 +181,24 @@ print("  OS Type: " + platform.system() + " " + platform.release())
 print("  Machine: " + machine_name)
 print("  " + util.variables.comment + os.linesep)
 
-# Check to make sure the directory structure is okay
-if util.variables.verification == "True":
-    for data_dir in [util.variables.input_dir, util.variables.benchmark_dir]:
-        if not os.path.exists(data_dir):
-            print("------------------------------------------------------------------------------")
-            print("ERROR: Could not find " + data_dir + " for input")
-            print("       Use the -t and -b flags to specify the locations of the test and benchmark data.")
-            print("       See README.md for more details.")
-            print("------------------------------------------------------------------------------")
-            exit(1)
-
-###############################################################################
-#                              Record Test Cases                              #
-###############################################################################
-verification_tests = [verification.dome, verification.ismip, verification.shelf, verification.stream] 
-performance_tests = [performance.dome]
-validation_tests = []
-test_mapping = {
-               "Verification" : verification_tests,
-               "Performance" : performance_tests,
-               "Validation" : validation_tests}
-
 ###############################################################################
 #                               Run Test Cases                                #
 ###############################################################################
-# Set up the directory structure for output
-util.websetup.setup(verification_tests + performance_tests + validation_tests)
-
 # Do a quick check to make sure that analysis works the way we want it to
 util.self_verification.check()
 
-# Give a list of the tests that will be run
-print("Running verification tests:")
-for case in verification_tests: 
-    print("  " + case.get_name())
-if util.variables.performance == "True":
-    print(os.linesep + "Running performance tests:")
-    for case in performance_tests:
-        print("  " + case.get_name())
-if util.variables.validation == "True":
-    print(os.linesep + "Running validation tests:")
-    for case in validation_tests:
-        print("  " + case.get_name())
-
 # Run the verification tests
-manager = multiprocessing.Manager()
-output = multiprocessing.Queue()
-verification_summary = manager.dict()
-performance_summary = manager.dict()
-validation_summary = manager.dict()
-verification_processes = [multiprocessing.Process(target=ver_type.Test().run, 
-                                                  args=(verification_summary, output)) 
-                          for ver_type in verification_tests]
 if util.variables.verification == "True":
-    print("--------------------------------------------------------------------------")
-    print("  Beginning verification test suite....")
-    print("--------------------------------------------------------------------------")
-    # Spawn a new process for each test
-    for p in verification_processes:
-        p.start()
-        p.join()
-
-    # Wait for all of the tests to finish
-    while len(multiprocessing.active_children()) > 3:
-        time.sleep(0.25)
-
-    # Show the results
-    while output.qsize() > 0:
-        print output.get()
+    scheduler = verification.scheduler.VerificationScheduler()
+    scheduler.setup()
+    scheduler.schedule()
+    scheduler.run()
+    scheduler.cleanup()
+    verification_summary = scheduler.summary.copy()
+    del scheduler
 
 # Run the performance verification
+performance_summary = dict()
 if util.variables.performance == "True":
     print("--------------------------------------------------------------------------")
     print("  Beginning performance analysis....")
@@ -261,11 +211,15 @@ if util.variables.performance == "True":
         print("")
 
 # Run the validation verification
+validation_summary = dict()
 if util.variables.validation != None:
-    print("--------------------------------------------------------------------------")
-    print("  Beginning validation test suite....")
-    print("--------------------------------------------------------------------------")
-    validation.scheduler.run()
+    scheduler = validation.scheduler.ValidationScheduler()
+    scheduler.setup()
+    scheduler.schedule()
+    scheduler.run()
+    scheduler.cleanup()
+    validation_summary = scheduler.summary.copy()
+    del scheduler
 
 # Create the site index
 verification_summary = dict(verification_summary)
@@ -273,9 +227,6 @@ performance_summary = dict(performance_summary)
 validation_summary = dict(validation_summary)
 print("Generating web pages in " + util.variables.output_dir + "....")
 util.websetup.generate(verification_summary, performance_summary, validation_summary)
-
-print("Cleaning up....")
-util.cleanup.clean()
 
 ###############################################################################
 #                        Finished.  Tell user about it.                       #

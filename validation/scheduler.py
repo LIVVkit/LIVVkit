@@ -39,30 +39,42 @@ import pprint
 import util.variables
 import validation_utils.ValidationParser as ValidationParser
 
-def setup():
-    """
-    Prepare information for running validation tests.  This will
-    need to make sure the directory structure is correct, read
-    configuration files, and do some other checking to make sure
-    that we are safe to run.
-    """
-    validations = dict()
-    validation_parser = ValidationParser.ValidationParser()
-    for config in util.variables.validation:
-        validations[config] = validation_parser.read_dict(config)
+class ValidationScheduler(object):
 
-def schedule():
-    """ Make the validation run efficiently. """
-    return
+    def __init__(self):
+        """ Constructor """
+        self.validations = None
+        self.summary = dict()
 
-def run():
-    """ Make the magic happen. """
-    return
-
-
-def cleanup():
-    """ And finally, take care of the mess we've made. """
-    return
-
-
-
+    def setup(self):
+        """
+        Prepare information for running validation tests.  This will
+        need to make sure the directory structure is correct, read
+        configuration files, and do some other checking to make sure
+        that we are safe to run.
+        """
+        validations = dict()
+        validation_parser = ValidationParser.ValidationParser()
+        for config in util.variables.validation:
+            validations[config] = validation_parser.read_dict(config)
+    
+        util.variables.validations = validations.keys()
+    
+    def schedule(self):
+        """ Make the validation run efficiently. """
+        return
+    
+    def run(self):
+        """ Make the magic happen. """
+        print("--------------------------------------------------------------------------")
+        print("  Beginning validation test suite....")
+        print("--------------------------------------------------------------------------")
+        return
+    
+    
+    def cleanup(self):
+        """ And finally, take care of the mess we've made. """
+        return
+    
+    
+    
