@@ -254,10 +254,10 @@ class Parser(object):
                 self.std_out_data['Number of timesteps'] = 1
                 self.std_out_data['Average iterations to converge'] = iter_number
 
-            if not self.std_out_data.has_key('Dycore Type') or self.std_out_data['Dycore Type'] == None: 
+            if not self.std_out_data.has_key('Dycore Type') or self.std_out_data['Dycore Type'] is None: 
                 self.std_out_data['Dycore Type'] = 'Unavailable'
             for key in self.std_out_data.keys():
-                if self.std_out_data[key] == None:
+                if self.std_out_data[key] is None:
                     self.std_out_data[key] = 'N/A'
 
             outdata[file_name] = self.std_out_data

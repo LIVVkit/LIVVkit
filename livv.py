@@ -146,7 +146,7 @@ util.variables.user               = getpass.getuser()
 util.variables.website_dir        = util.variables.cwd + "/web"
 util.variables.template_dir       = util.variables.website_dir + "/templates"
 util.variables.index_dir          = util.variables.output_dir
-util.variables.verification       = "True" if options.validation == None else "False"
+util.variables.verification       = "True" if options.validation is None else "False"
 util.variables.performance        = str(options.performance)
 util.variables.validation         = options.validation
 
@@ -212,7 +212,7 @@ if util.variables.performance == "True":
 
 # Run the validation verification
 validation_summary = dict()
-if util.variables.validation != None:
+if util.variables.validation is not None:
     scheduler = validation.scheduler.ValidationScheduler()
     scheduler.setup()
     scheduler.schedule()
