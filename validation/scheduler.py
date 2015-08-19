@@ -43,8 +43,9 @@ class ValidationScheduler(object):
 
     def __init__(self):
         """ Constructor """
-        self.validations = None
+        self.validations = dict() 
         self.summary = dict()
+
 
     def setup(self):
         """
@@ -53,22 +54,26 @@ class ValidationScheduler(object):
         configuration files, and do some other checking to make sure
         that we are safe to run.
         """
-        validations = dict()
-        validation_parser = ValidationParser.ValidationParser()
-        for config in util.variables.validation:
-            validations[config] = validation_parser.read_dict(config)
-    
-        util.variables.validations = validations.keys()
-    
-    def schedule(self):
-        """ Make the validation run efficiently. """
-        return
-    
-    def run(self):
-        """ Make the magic happen. """
         print("--------------------------------------------------------------------------")
         print("  Beginning validation test suite....")
         print("--------------------------------------------------------------------------")
+        validation_parser = ValidationParser.ValidationParser()
+        for config in util.variables.validation:
+            self.validations[config] = validation_parser.read_dict(config)
+        util.variables.validations = self.validations.keys()
+        util.websetup.setup([]) 
+
+    def schedule(self):
+        """ Make the validation run efficiently. """
+        for conf, vals in self.validations.iteritems():
+            for test_name, test_params in vals.iteritems():
+                print("    " + test_name + " in progress...")
+                m = importlib.import_module(test_params['module'])
+                m.run(**test_params)
+   
+
+    def run(self):
+        """ Make the magic happen. """
         return
     
     

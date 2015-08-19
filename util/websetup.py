@@ -84,9 +84,12 @@ def setup(tests_run):
         mkdir_p(util.variables.index_dir)
 
     # Create directory structure
-    test_dirs = [util.variables.index_dir + os.sep + "validation", 
-                util.variables.index_dir + os.sep + "verification", 
-                util.variables.index_dir + os.sep + "performance"]
+    test_dirs = [util.variables.index_dir + os.sep + "validation",
+                util.variables.index_dir + os.sep + "validation" + os.sep + "imgs", 
+                util.variables.index_dir + os.sep + "verification",
+                util.variables.index_dir + os.sep + "verification" + os.sep + "imgs",
+                util.variables.index_dir + os.sep + "performance",
+                util.variables.index_dir + os.sep + "performance" + os.sep + "imgs"]
     for site_dir in test_dirs:
         mkdir_p(site_dir);
 

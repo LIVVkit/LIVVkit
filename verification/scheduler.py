@@ -62,6 +62,10 @@ class VerificationScheduler(object):
         configuration files, and do some other checking to make sure
         that we are safe to run.
         """
+        print("--------------------------------------------------------------------------")
+        print("  Beginning verification test suite....")
+        print("--------------------------------------------------------------------------")
+        
         # Verification tests we run
         util.variables.verifications = [
                          verification.dome, 
@@ -101,9 +105,6 @@ class VerificationScheduler(object):
         """ 
         Launches all of the processes and synchronizes their output. 
         """
-        print("--------------------------------------------------------------------------")
-        print("  Beginning verification test suite....")
-        print("--------------------------------------------------------------------------")
         # Spawn a new process for each test
         for p in self.process_handles:
             p.start()

@@ -27,7 +27,6 @@
 # CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
 """
 Main script to run LIVV.  This script records some user data, sets up the test 
 suite, runs the verification, and generates a website based on the results of the verification.
@@ -54,16 +53,16 @@ Created on Dec 3, 2014
 
 @authors: arbennett, jhkennedy
 """
-print("------------------------------------------------------------------------------")
-print("  Land Ice Verification & Validation (LIVV)")
+print("                          __   _____   ___   ____    _ __     ") 
+print("                         / /  /  _/ | / / | / / /__ (_) /_    ") 
+print("                        / /___/ / | |/ /| |/ /  '_// / __/    ") 
+print("                       /____/___/ |___/ |___/_/\_\/_/\__/     ")
+print("")
+print("                       Land Ice Verification & Validation     ")
 print("------------------------------------------------------------------------------")
 print("  Load modules: python, ncl, nco, python_matplotlib, hdf5, netcdf,")
 print("                python_numpy, and python_netcdf4 for best results.\n")
-###############################################################################
-#                                  Imports                                    #
-###############################################################################
 
-# Standard python imports can be loaded any time
 import os
 import sys
 import time
@@ -126,7 +125,7 @@ util.dependencies.check()
 import util.variables
 import util.configuration_handler
 import util.websetup
-import util.self_verification
+import verification.ver_utils.self_verification
 import verification.scheduler
 import performance.dome
 import validation.scheduler
@@ -165,9 +164,6 @@ verification_summary = dict()
 performance_summary = dict()
 validation_summary = dict()
 
-###############################################################################
-#                               Main Execution                                #
-###############################################################################
 # Check if we are saving the configuration
 if options.save:
     print("  Saving options as: " + options.save)
@@ -184,13 +180,11 @@ print("  " + util.variables.comment + os.linesep)
 ###############################################################################
 #                               Run Test Cases                                #
 ###############################################################################
-# Do a quick check to make sure that analysis works the way we want it to
-util.self_verification.check()
-
 # Run the verification tests
 if util.variables.verification == "True":
     scheduler = verification.scheduler.VerificationScheduler()
     scheduler.setup()
+    verification.ver_utils.self_verification.check()
     scheduler.schedule()
     scheduler.run()
     scheduler.cleanup()

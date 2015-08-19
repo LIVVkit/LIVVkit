@@ -36,68 +36,66 @@ Created on Aug 7, 2015
 """
 
 import os
-import numpy
-import jinja2
-import pyproj
-import scipy
 import numpy as np
-import matplotlib.pyplot as plt
-from mpl_toolkits.basemap import Basemap
+import subprocess
 from netCDF4 import Dataset
 
 import util.variables
-# import validation.validation_utils.coverage_plot
 
-def run(model_dir, bench_dir, model_data, bench_data, run_args=None):
+def run(*args, **kwargs):
     """
     Runs the analysis of the coverage of the ice sheet over the land mass.
     Produces both an overall coverage percentage metric and a coverage plot.
 
-    Args:
-        model_dir: location of model output
-        bench_dir: location of benchmark output
-        model_data: the output file from the model run to be analyzed
-        bench_data: the output file from the benchmark run to be analyzed
+    Required args:
+        plot_file:  full path to the ncl script used to plot the data
+        model_data: full path to the output from the model data
+        bench_data: full path to the output from the benchmark data
     """
-    if not (os.path.exists(model_dir) and os.path.exists(bench_dir)):
+    plot_file = kwargs.get('plot_file')
+    bench_data = kwargs.get('bench_data')
+    model_data = kwargs.get('model_data')
+
+    if not (os.path.exists(model_data) and os.path.exists(bench_data)):
         # Add more handling here -- what do we want to return for failed tests
+        print("ERROR: Could not find necessary data to run the coverage validation!")
+        print(model_data)
+        print(bench_data)
+        print("")
         return
-    proj_file = pyproj.Proj('+proj=stere +ellps=WGS84 +datum=WGS84 +lat_ts=71.0 +lat_0=90 +lon_0=321.0 +k_0=1.0')
-    proj_lat_lon = pyproj.Proj('+proj=latlong +ellps=WGS84 +datum=WGS84')
-    model_dataset = Dataset(model_dir + os.sep + model_data)
-    bench_dataset = Dataset(bench_dir + os.sep + bench_data)
 
-    for set in [model_dataset, bench_dataset]:
-        # THIS PART NEEDS HELP.  LOOK THROUGH GREENLAND INTERACTS COMMITS FOR HELP
-        fig, ax = plt.figure()
-        x = set.variables['x1'][:]
-        y = set.variables['y1'][:]
-        nx = x.shape[0]
-        ny = y.shape[0]
-        y_grid, x_grid = scipy.meshgrid(y[:], x[:], indexing='ij')
-        # This may need to be tweaked
-        thk = set.variables['thk'][0]
-        
-        # Transform coords to lat/lon
-        lon, lat = pyproj.transform(proj_file, proj_lat_lon, x_grid.flatten(), y_grid.flatten())
-        lat = lat.reshape(ny,nx)
-        lon = lon.reshape(ny,nx)
-
-        # Put the thickness in a basemap
-        map_thk = Basemap(projection='stere', lat_0=65, lon_0=-25, \
-                    llcrnrlat=55, urcrnrlat=85, \
-                    llcrnrlon=-50, urcrnrlon=0, \
-                    rsphere=6371200, resolution='l', \
-                    area_thresh=10000, ax=ax)
-        map_thk.drawcoastlines(linewidth=0.25)
-        map_thk.fillcontinents(color='grey')
-        map_thk.drawmeridians(np.arange(0,360,30))
-        map_thk.drawparallels(np.arange(-90,90,30))
-        x, y = map_thk(lon,lat)
-        cs = map_thk.contour(x, y, thk, 5)
-
-        plt.plot()
-        plt.save(util.variables.output_dir + os.sep + 'coverage.png')
+    # Generate the script
+    output_path = util.variables.index_dir + os.sep + 'validation' + os.sep + 'imgs' + os.sep + 'coverage.png'
+    plot_coverage(plot_file, model_data, bench_data, output_path)
 
 
- I
+def plot_coverage(plot_file, model_data, bench_data, output_file):
+    """ 
+    Calls the ncl script to generate the plots for percent ice sheet 
+    coverage.
+
+    Args:
+        plot_file: Location of the ncl script to generate the coverage plot
+        model_data: The dataset with the model output
+        bench_data: The dataset with the benchmark output
+        output_file: The full path of where to write the plot to
+
+    Returns:
+        TBD
+    """
+    ncl_command = 'ncl \'bench = addfile("'+ bench_data +'", "r")\' \'model = addfile("'+ model_data +'", "r")\' \'plotFile = "'+ output_file +'"\' ' + plot_file
+
+    # Be cautious about running subprocesses
+    call = subprocess.Popen(ncl_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    stdOut, stdErr = call.stdout.read(), call.stderr.read()
+
+    if not os.path.exists(output_file):
+        print("****************************************************************************")
+        print("*** Error saving "+output_file)
+        print("*** Details of the error follow: ")
+        print("")
+        print(stdOut)
+        print(stdErr)
+        print("****************************************************************************")    
+
+

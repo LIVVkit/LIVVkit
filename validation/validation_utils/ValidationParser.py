@@ -1,5 +1,4 @@
 import ConfigParser
-import pprint
 
 class ValidationParser(ConfigParser.ConfigParser):
 
@@ -30,7 +29,6 @@ class ValidationParser(ConfigParser.ConfigParser):
         if dt.has_key('Globals'):
             glbls = dt.pop('Globals',None)
             for sect in dt.keys():
-                pprint.pprint(sect)
                 for k,v in glbls.iteritems():
                     if not dt[sect].has_key(k): dt[sect][k] = v
         return dt
