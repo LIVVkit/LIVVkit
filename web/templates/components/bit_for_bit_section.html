@@ -58,13 +58,13 @@
               </tr>
               {% for var, vals in details[1].iteritems() %}
                 <tr>
-                  <td><a target="_blank" href="{{img_dir}}/{{test_name}}/bit4bit/{{file_name}}.{{var}}.png"><b>{{var}}</b></a></td>
+                  <td><a target="_blank" href="{{test_imgDir}}/bit4bit/{{file_name}}.{{var}}.png"><b>{{var}}</b></a></td>
                   <td>{{vals[0]}}</td>
                   <td>{{vals[1]}}</td>
                   <td>
-                    <a target="_blank" href="{{img_dir}}/{{test_name}}/bit4bit/{{file_name}}.{{var}}.png">
+                    <a target="_blank" href="{{test_imgDir}}/bit4bit/{{file_name}}.{{var}}.png">
                       <div class="bitforbit">
-                        <img src="{{img_dir}}/{{test_name}}/bit4bit/{{file_name}}.{{var}}.png" class="bitforbit">
+                        <img src="{{test_imgDir}}/bit4bit/{{file_name}}.{{var}}.png" class="bitforbit">
                       </div>
                     </a>
                   </td>                  

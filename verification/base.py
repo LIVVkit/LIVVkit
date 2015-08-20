@@ -183,7 +183,9 @@ class AbstractTest(object):
 
                 # Generate the plots for each of the failed variables
                 for var in plot_vars.keys():
-                    out_file = util.variables.img_dir + os.sep + self.name + os.sep + "bit4bit" + os.sep + test_file.split(os.sep)[-1] + "." + var + ".png"
+                    out_file = util.variables.index_dir + os.sep + "verification" + os.sep + \
+                               self.name.capitalize() + os.sep + "imgs" + os.sep + "bit4bit" + \
+                               os.sep + test_file.split(os.sep)[-1] + "." + var + ".png"
                     nclfunc.plot_diff(var, test_file, bench_file, out_file)
         return bit_dict
 
@@ -207,17 +209,19 @@ class AbstractTest(object):
         index_dir = ".."
         css_dir = index_dir + "/css"
         img_dir = index_dir + "/imgs"
-        test_imgDir = util.variables.img_dir + os.sep + self.name
+        test_imgDir = util.variables.index_dir + os.sep + "verification" + os.sep + \
+                      self.name.capitalize() + os.sep + "imgs"
         test_images = [os.path.basename(img) for img in glob.glob(test_imgDir + os.sep + "*.png")]
         test_images.append([os.path.basename(img) for img in glob.glob(test_imgDir + "*.jpg")])
         test_images.append([os.path.basename(img) for img in glob.glob(test_imgDir + "*.svg")])
         template_vars = {"timestamp" : util.variables.timestamp,
                         "user" : util.variables.user,
                         "comment" : util.variables.comment,
-                        "test_name" : self.name,
+                        "test_name" : self.name.capitalize(),
                         "index_dir" : index_dir,
                         "css_dir" : css_dir,
                         "img_dir" : img_dir,
+                        "test_imgDir" : test_imgDir,
                         "test_description" : self.description,
                         "tests_run" : self.tests_run,
                         "test_header" : util.variables.parser_vars,

@@ -65,7 +65,15 @@ class VerificationScheduler(object):
         print("--------------------------------------------------------------------------")
         print("  Beginning verification test suite....")
         print("--------------------------------------------------------------------------")
-        
+        # Make sure that the directory structure is okay
+        for data_dir in [util.variables.input_dir, util.variables.benchmark_dir]:
+            if not os.path.exists(data_dir):
+                print("ERROR: Could not find " + data_dir + " for input")
+                print("       Use the -t and -b flags to specify the locations of the test and benchmark data.")
+                print("       See README.md for more details.")
+                print("------------------------------------------------------------------------------")
+                exit(1)       
+
         # Verification tests we run
         util.variables.verifications = [
                          verification.dome, 
@@ -74,18 +82,13 @@ class VerificationScheduler(object):
                          verification.stream
                         ]
 
-        # Create necessary directories
-        util.websetup.setup(util.variables.verifications) 
-        
-        # Make sure that the directory structure is okay
-        for data_dir in [util.variables.input_dir, util.variables.benchmark_dir]:
-            if not os.path.exists(data_dir):
-                print("------------------------------------------------------------------------------")
-                print("ERROR: Could not find " + data_dir + " for input")
-                print("       Use the -t and -b flags to specify the locations of the test and benchmark data.")
-                print("       See README.md for more details.")
-                print("------------------------------------------------------------------------------")
-                exit(1)
+        # Set up directories for output\
+        for ver in util.variables.verifications:
+            test_dir = util.variables.index_dir + os.sep + "verification" + os.sep + ver.get_name().capitalize()
+            util.websetup.mkdir_p(test_dir)
+            util.websetup.mkdir_p(test_dir + os.sep + "imgs")
+            util.websetup.mkdir_p(test_dir + os.sep + "imgs" + os.sep + "bit4bit")
+
     
     
     def schedule(self):

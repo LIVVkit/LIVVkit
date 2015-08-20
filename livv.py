@@ -28,26 +28,10 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
-Main script to run LIVV.  This script records some user data, sets up the test 
-suite, runs the verification, and generates a website based on the results of the verification.
-
-This script is broken into several main sections.  The first section defines the imports.
-For each new module added to LIVV they must be added to this section for the script to 
-access them.  The library_list in util.dependencies should be updated if any functionality 
-from outside the standard library is added. 
-
-To add or modify the test groupings there are several places that will need to be modified.
-First, the base module (found in verification, validation, or performance) will need to have 
-the new test added to the cases dictionary.  A new entry may need to be put into the test specific
-module as well; performance tests require this, verfication tests do not.  Finally, a new entry for
-the test will need to be added to the appropriate test mapping in the RECORD TEST CASES section.
-
-Execution of LIVV proceeds in the RUN TEST CASES section where the totality of the test 
-cases are recorded and run grouped by their respective delegate classes.  Each test case
-is run using the run method in the class.  This method will run common functionality then
-pass off to specialized methods for each test case.  Finally all of the information is 
-filled into an html template that contains all of the run information for a grouping of 
-verification.
+Executable script to start a verification and validation test suite.  This script
+handles options and setting up data storage from the options.  Each of the 
+sub-categories (verification, performance, validation, and numerics) are launched
+using their respective schedulers found in their subdirectories.
 
 Created on Dec 3, 2014
 
@@ -76,7 +60,6 @@ import argparse
 ###############################################################################
 #                                  Options                                    #
 ###############################################################################
-
 parser = argparse.ArgumentParser(description="Main script to run LIVV.",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
         fromfile_prefix_chars='@')
@@ -160,10 +143,6 @@ util.variables.parser_vars = [
 # Dycores to try to parse output for
 util.variables.dycores = ['glissade'] #["glide", "glissade", "glam", "albany", "bisicles"]
 
-verification_summary = dict()
-performance_summary = dict()
-validation_summary = dict()
-
 # Check if we are saving the configuration
 if options.save:
     print("  Saving options as: " + options.save)
@@ -180,6 +159,8 @@ print("  " + util.variables.comment + os.linesep)
 ###############################################################################
 #                               Run Test Cases                                #
 ###############################################################################
+verification_summary, validation_summary, performance_summary = dict(), dict(), dict()
+
 # Run the verification tests
 if util.variables.verification == "True":
     scheduler = verification.scheduler.VerificationScheduler()
@@ -189,11 +170,10 @@ if util.variables.verification == "True":
     scheduler.run()
     scheduler.cleanup()
     verification_summary = scheduler.summary.copy()
-    del scheduler
 
 # Run the performance verification
-performance_summary = dict()
 if util.variables.performance == "True":
+    performance_tests = [performance.dome]
     print("--------------------------------------------------------------------------")
     print("  Beginning performance analysis....")
     print("--------------------------------------------------------------------------")
@@ -205,7 +185,6 @@ if util.variables.performance == "True":
         print("")
 
 # Run the validation verification
-validation_summary = dict()
 if util.variables.validation is not None:
     scheduler = validation.scheduler.ValidationScheduler()
     scheduler.setup()
@@ -213,7 +192,6 @@ if util.variables.validation is not None:
     scheduler.run()
     scheduler.cleanup()
     validation_summary = scheduler.summary.copy()
-    del scheduler
 
 # Create the site index
 verification_summary = dict(verification_summary)
