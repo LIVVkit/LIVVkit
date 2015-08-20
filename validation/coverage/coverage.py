@@ -40,62 +40,66 @@ import numpy as np
 import subprocess
 from netCDF4 import Dataset
 
+from validation.base import AbstractTest
 import util.variables
 
-def run(*args, **kwargs):
-    """
-    Runs the analysis of the coverage of the ice sheet over the land mass.
-    Produces both an overall coverage percentage metric and a coverage plot.
+class Test(AbstractTest):
 
-    Required args:
-        plot_file:  full path to the ncl script used to plot the data
-        model_data: full path to the output from the model data
-        bench_data: full path to the output from the benchmark data
-    """
-    plot_file = kwargs.get('plot_file')
-    bench_data = kwargs.get('bench_data')
-    model_data = kwargs.get('model_data')
-
-    if not (os.path.exists(model_data) and os.path.exists(bench_data)):
-        # Add more handling here -- what do we want to return for failed tests
-        print("ERROR: Could not find necessary data to run the coverage validation!")
-        print(model_data)
-        print(bench_data)
-        print("")
-        return
-
-    # Generate the script
-    output_path = util.variables.index_dir + os.sep + 'validation' + os.sep + 'imgs' + os.sep + 'coverage.png'
-    plot_coverage(plot_file, model_data, bench_data, output_path)
-
-
-def plot_coverage(plot_file, model_data, bench_data, output_file):
-    """ 
-    Calls the ncl script to generate the plots for percent ice sheet 
-    coverage.
-
-    Args:
-        plot_file: Location of the ncl script to generate the coverage plot
-        model_data: The dataset with the model output
-        bench_data: The dataset with the benchmark output
-        output_file: The full path of where to write the plot to
-
-    Returns:
-        TBD
-    """
-    ncl_command = 'ncl \'bench = addfile("'+ bench_data +'", "r")\' \'model = addfile("'+ model_data +'", "r")\' \'plotFile = "'+ output_file +'"\' ' + plot_file
-
-    # Be cautious about running subprocesses
-    call = subprocess.Popen(ncl_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    stdOut, stdErr = call.stdout.read(), call.stderr.read()
-
-    if not os.path.exists(output_file):
-        print("****************************************************************************")
-        print("*** Error saving "+output_file)
-        print("*** Details of the error follow: ")
-        print("")
-        print(stdOut)
-        print(stdErr)
-        print("****************************************************************************")    
-
-
+    def run(self, *args, **kwargs):
+        """
+        Runs the analysis of the coverage of the ice sheet over the land mass.
+        Produces both an overall coverage percentage metric and a coverage plot.
+    
+        Required args:
+            plot_file:  full path to the ncl script used to plot the data
+            model_data: full path to the output from the model data
+            bench_data: full path to the output from the benchmark data
+        """
+        self.description = kwargs.get('description')
+        plot_file = kwargs.get('plot_file')
+        bench_data = kwargs.get('bench_data')
+        model_data = kwargs.get('model_data')
+    
+        if not (os.path.exists(model_data) and os.path.exists(bench_data)):
+            # Add more handling here -- what do we want to return for failed tests
+            print("ERROR: Could not find necessary data to run the coverage validation!")
+            print(model_data)
+            print(bench_data)
+            print("")
+            return
+    
+        # Generate the script
+        output_path = util.variables.index_dir + os.sep + 'validation' + os.sep + self.name + os.sep + 'imgs' + os.sep + 'coverage.png'
+        self.plot_coverage(plot_file, model_data, bench_data, output_path)
+    
+    
+    def plot_coverage(self, plot_file, model_data, bench_data, output_file):
+        """ 
+        Calls the ncl script to generate the plots for percent ice sheet 
+        coverage.
+    
+        Args:
+            plot_file: Location of the ncl script to generate the coverage plot
+            model_data: The dataset with the model output
+            bench_data: The dataset with the benchmark output
+            output_file: The full path of where to write the plot to
+    
+        Returns:
+            TBD
+        """
+        ncl_command = 'ncl \'bench = addfile("'+ bench_data +'", "r")\' \'model = addfile("'+ model_data +'", "r")\' \'plotFile = "'+ output_file +'"\' ' + plot_file
+    
+        # Be cautious about running subprocesses
+        call = subprocess.Popen(ncl_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        stdOut, stdErr = call.stdout.read(), call.stderr.read()
+    
+        if not os.path.exists(output_file):
+            print("****************************************************************************")
+            print("*** Error saving "+output_file)
+            print("*** Details of the error follow: ")
+            print("")
+            print(stdOut)
+            print(stdErr)
+            print("****************************************************************************")    
+    
+    

@@ -33,6 +33,7 @@ Should be used in the following order:
 
 @author arbennett
 """
+import os
 import importlib
 import pprint
 
@@ -43,6 +44,7 @@ class ValidationScheduler(object):
 
     def __init__(self):
         """ Constructor """
+        self.output_dir = util.variables.index_dir + os.sep + "validation"
         self.validations = dict() 
         self.summary = dict()
 
@@ -61,16 +63,24 @@ class ValidationScheduler(object):
         for config in util.variables.validation:
             self.validations[config] = validation_parser.read_dict(config)
         util.variables.validations = self.validations.keys()
-        util.websetup.setup([]) 
+       
+        # Set up directories for output\
+        for val in util.variables.validations:
+            util.websetup.mkdir_p(self.output_dir)
 
     def schedule(self):
         """ Make the validation run efficiently. """
         for conf, vals in self.validations.iteritems():
             for test_name, test_params in vals.iteritems():
                 print("    " + test_name + " in progress...")
+                util.websetup.mkdir_p(self.output_dir + os.sep + test_name + os.sep + 'imgs')
                 m = importlib.import_module(test_params['module'])
-                m.run(**test_params)
-   
+                val = m.Test()
+                val.name = test_name
+                val.run(**test_params)
+                val.generate()
+                self.summary[val.name] = val.summary
+
 
     def run(self):
         """ Make the magic happen. """

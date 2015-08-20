@@ -57,7 +57,7 @@ class VerificationScheduler(object):
 
     def setup(self):
         """
-        Prepare information for running validation tests.  This will
+        Prepare information for running verification tests.  This will
         need to make sure the directory structure is correct, read
         configuration files, and do some other checking to make sure
         that we are safe to run.
@@ -81,7 +81,7 @@ class VerificationScheduler(object):
                          verification.shelf, 
                          verification.stream
                         ]
-
+        
         # Set up directories for output\
         for ver in util.variables.verifications:
             test_dir = util.variables.index_dir + os.sep + "verification" + os.sep + ver.get_name().capitalize()

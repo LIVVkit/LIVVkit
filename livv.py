@@ -159,6 +159,7 @@ print("  " + util.variables.comment + os.linesep)
 ###############################################################################
 #                               Run Test Cases                                #
 ###############################################################################
+util.websetup.setup()
 verification_summary, validation_summary, performance_summary = dict(), dict(), dict()
 
 # Run the verification tests

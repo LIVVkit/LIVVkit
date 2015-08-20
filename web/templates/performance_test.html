@@ -59,7 +59,7 @@
     {% for case in tests_run %}
     <div class="case">
       {% if case == "Scaling" %}
-        {% include 'components/plots_section.html' %}
+        {% include 'components/perf_plots_section.html' %}
       {% else %}
         {% include 'components/timing_summary_section.html' %}
       {% endif %}

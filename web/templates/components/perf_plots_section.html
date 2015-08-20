@@ -28,18 +28,43 @@
  - OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  -->
 
-{% include 'components/header.html' %}
 
-  <!--   Start the pace specific content -->
-  <div id="content">
-    <h2 style="padding-left: 15px;">{{test_name}}</h2>
-    <div class="description">
-      <p>{{test_description}}</p>
-    </div>
-    <br style="clear: both" />
-    {% include 'components/plots_section.html' %}
-  </div>
-  <br>
 
-<!-- Include the footer -->
-{% include 'components/footer.html' %}
+
+      <!-- BEGIN PLOT SECTION -->
+      <b class="label-header">Plots</b> <br/>
+      <div class="separator">
+      <hr style="opacity: 0; height: 5px;">
+      {% if case in plot_details %}
+        {% for img_arr in plot_details[case] %}
+        {% if img_arr[0] != [] %}
+        <div class="gallery">
+          <div style="float: left; display: inline;">
+             <!-- img_arr[0] is the name of the image -->
+             <a href="#img_form_{{case}}_{{loop.index}}" id="img_pop">
+                <img src="{{img_dir}}/{{test_name}}/{{img_arr[0]}}" width="150px"></img>
+            </a>
+            <br style="clear: both" />
+            <!-- img_arr[1] is the description -->
+            <p>{{img_arr[1]}}</p>
+          </div>
+         </div>
+        <a href="#close" class="overlay" id="img_form_{{case}}_{{loop.index}}"></a>
+
+        <div class="popup">
+          <img src="{{img_dir}}/{{test_name}}/{{img_arr[0]}}" class="image_overlay"></img>
+          <a class="close" href="#close">x</a>
+        </div>
+        {% endif %}
+      {% endfor %}
+      <!-- No plots were passed to jinja2 -->
+      {% else %}
+        <a style="padding-left: 20px; color: #696969;">No plots for {{case}}</a>
+      {% endif %}
+      </div>
+      
+      <br style="clear: both" />
+      <br height="30px" />
+      <!-- END PLOT SECTION -->
+      
+      
