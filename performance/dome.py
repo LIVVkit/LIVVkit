@@ -70,7 +70,7 @@ class Test(AbstractTest):
                       " applied to the dome margins. "
 
 
-    def run(self):
+    def run(self, summary, output):
         """
         Runs the performance specific test cases.
         
@@ -92,13 +92,14 @@ class Test(AbstractTest):
         resolutions = sorted( resolutions )
         
         for resolution in resolutions:
-            self.run_dome(resolution, self.model_dir, self.bench_dir)
+            self.run_dome(resolution, self.model_dir, self.bench_dir, output)
             self.tests_run.append("Dome " + resolution)
-        self.run_scaling('Dome ', resolutions)
+        self.run_scaling('Dome ', resolutions, output)
         self.tests_run.append('Scaling')
+        self.generate()
 
 
-    def run_dome(self, resolution, model_dir, bench_dir):
+    def run_dome(self, resolution, model_dir, bench_dir, output):
         """
         Run an instance of dome performance testing
         
@@ -107,7 +108,7 @@ class Test(AbstractTest):
             model_dir: the location of the performance data
             bench_dir: the location of the benchmark performance data
         """
-        print("  Dome " + resolution + " performance testing in progress....")
+        output.put("  Dome " + resolution + " performance testing in progress....")
 
         # Process the configure files
         dome_parser = Parser()

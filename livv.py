@@ -110,7 +110,7 @@ import util.configuration_handler
 import util.websetup
 import verification.ver_utils.self_verification
 import verification.scheduler
-import performance.dome
+import performance.scheduler
 import validation.scheduler
 
 ###############################################################################
@@ -174,16 +174,11 @@ if util.variables.verification == "True":
 
 # Run the performance verification
 if util.variables.performance == "True":
-    performance_tests = [performance.dome]
-    print("--------------------------------------------------------------------------")
-    print("  Beginning performance analysis....")
-    print("--------------------------------------------------------------------------")
-    for test in performance_tests:
-        new_test = test.Test()
-        new_test.run()
-        performance_summary[test.get_name().lower()] = new_test.summary
-        new_test.generate()
-        print("")
+    scheduler = performance.scheduler.PerformanceScheduler()
+    scheduler.setup()
+    scheduler.schedule()
+    scheduler.run()
+    performance_summary = scheduler.summary.copy()
 
 # Run the validation verification
 if util.variables.validation is not None:

@@ -79,7 +79,7 @@ class AbstractTest(object):
         pass
 
 
-    def run_scaling(self, test_type, resolutions):
+    def run_scaling(self, test_type, resolutions, output):
         """
         Generates scaling plots for each variable and dycore combination of a given
         test_type.
@@ -89,7 +89,7 @@ class AbstractTest(object):
             resolutions: a list of the resolutions the model was run at
         """
         self.images_generated = []
-        print(os.linesep + "  Generating scaling plots for " + test_type + "....")
+        output.put(os.linesep + "  Generating scaling plots for " + test_type + "....")
 
         self.weak_scaling(test_type, resolutions)
         self.strong_scaling(test_type, resolutions)
@@ -151,7 +151,7 @@ class AbstractTest(object):
         ax.plot(resolutions, mins, 'b--')
         ax.plot(resolutions, maxs, 'b--')
         #print("Saving plot to " + util.variables.img_dir + os.sep + self.name.capitalize() + os.sep + test_type +  "_scaling_weak.png")
-        pyplot.savefig(util.variables.img_dir + os.sep + self.name.capitalize() + os.sep + test_type.strip() +  "_scaling_weak.png")
+        pyplot.savefig(util.variables.index_dir + os.sep + "performance" + os.sep + self.name + os.sep + "imgs" + os.sep + test_type.strip() +  "_scaling_weak.png")
         self.images_generated.append( [test_type.strip() + "_scaling_weak.png", "Weak scaling for " + test_type])
 
 
@@ -203,7 +203,7 @@ class AbstractTest(object):
                     ax.plot(x,maxs, 'r--')
                     pyplot.legend()
 
-                pyplot.savefig(util.variables.img_dir + os.sep + self.name.capitalize() + os.sep + test_type.strip() + "_" + res +  "_scaling" + ".png")
+                pyplot.savefig(util.variables.index_dir + os.sep + "performance" + os.sep + self.name + os.sep + "imgs" + os.sep + test_type.strip() + "_" + res +  "_scaling" + ".png")
                 self.images_generated.append( [test_type.strip() + "_" + res + "_scaling" + ".png", "Strong scaling for " + test_type + res])
 
 
