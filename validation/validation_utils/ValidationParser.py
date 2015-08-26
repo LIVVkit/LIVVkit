@@ -16,12 +16,12 @@ class ValidationParser(ConfigParser.ConfigParser):
             A nested dictionary containing all of the sections
             and variables from the file given.
         """
+        dt = dict()
         self.read(filepath)
-        dt = dict(self._sections)
-        # Prune out some information we don't need
-        for k in dt:
-            dt[k] = dict(self._defaults, **dt[k])
-            dt[k].pop('__name__', None)
+        for sect in self.sections():
+            dt[sect] = dict()
+            for k, v in self.items(sect):
+                dt[sect][k] = v
 
         # Go through and distribute the global information if 
         # there is any, but don't overwrite information if it
