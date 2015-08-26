@@ -57,7 +57,7 @@ class AbstractTest(object):
         css_dir = index_dir + "/css"
         img_dir = index_dir + "/imgs"
         test_imgDir = util.variables.index_dir + os.sep + "validation" + os.sep + \
-                      self.name.capitalize() + os.sep + "imgs"
+                      self.name + os.sep + "imgs"
         test_images = [os.path.basename(img) for img in glob.glob(test_imgDir + os.sep + "*.png")]
         test_images.append([os.path.basename(img) for img in glob.glob(test_imgDir + "*.jpg")])
         test_images.append([os.path.basename(img) for img in glob.glob(test_imgDir + "*.svg")])
@@ -70,7 +70,7 @@ class AbstractTest(object):
                         "css_dir" : css_dir,
                         "img_dir" : img_dir,
                         "test_imgDir" : test_imgDir,
-                        "test_name" : self.name,
+                        "test_name" : self.name.capitalize(),
                         "test_description" : self.description,
                         "test_images" : test_images}
         output_text = template.render( template_vars )

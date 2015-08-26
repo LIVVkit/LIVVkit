@@ -98,7 +98,7 @@
         <table class="summary">
           {% for test, summary in validation_summary.iteritems() %}
           <tr>
-            <td><a class="table_link" href="{{index_dir}}/validation/{{test}}/{{test}}.html">{{test}}</a></td>
+            <td><a class="table_link" href="{{index_dir}}/validation/{{test}}/{{test}}.html">{{test.capitalize()}}</a></td>
           </tr>
           {% endfor %}
         </table>
