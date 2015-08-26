@@ -69,7 +69,7 @@ class AbstractTest(object):
 
 
     @abstractmethod
-    def run(self, test):
+    def run(self, summary, output):
         """
         Definition for the general test run
         
@@ -229,9 +229,9 @@ class AbstractTest(object):
         index_dir = ".."
         css_dir = index_dir + "/css"
         img_dir = index_dir + "/imgs"
+        test_imgDir = index_dir + "/performance/" + self.name.capitalize() + "/imgs" 
 
         # Grab all of our images
-        test_imgDir = util.variables.img_dir + os.sep + self.name
         test_images = [os.path.basename(img) for img in glob.glob(test_imgDir + os.sep + "*.png")]
         test_images.append([os.path.basename(img) for img in glob.glob(test_imgDir + os.sep +"*.jpg")])
         test_images.append([os.path.basename(img) for img in glob.glob(test_imgDir + os.sep +"*.svg")])
@@ -244,6 +244,7 @@ class AbstractTest(object):
                         "index_dir" : index_dir,
                         "css_dir" : css_dir,
                         "img_dir" : img_dir,
+                        "test_imgDir" : test_imgDir,
                         "test_description" : self.description,
                         "tests_run" : self.tests_run,
                         "test_header" : util.variables.parser_vars,

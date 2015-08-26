@@ -209,7 +209,7 @@ class AbstractTest(object):
         index_dir = ".."
         css_dir = index_dir + "/css"
         img_dir = index_dir + "/imgs"
-        test_imgDir = util.variables.index_dir + os.sep + "verification" + os.sep + \
+        test_imgDir = index_dir + os.sep + "verification" + os.sep + \
                       self.name.capitalize() + os.sep + "imgs"
         test_images = [os.path.basename(img) for img in glob.glob(test_imgDir + os.sep + "*.png")]
         test_images.append([os.path.basename(img) for img in glob.glob(test_imgDir + "*.jpg")])

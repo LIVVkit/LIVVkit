@@ -42,7 +42,7 @@
           <div style="float: left; display: inline;">
              <!-- img_arr[0] is the name of the image -->
              <a href="#img_form_{{case}}_{{loop.index}}" id="img_pop">
-                <img src="{{img_dir}}/{{test_name}}/{{img_arr[0]}}" width="150px"></img>
+                 <img src="{{test_imgDir}}/{{img_arr[0]}}" width="150px"></img>
             </a>
             <br style="clear: both" />
             <!-- img_arr[1] is the description -->
@@ -52,7 +52,7 @@
         <a href="#close" class="overlay" id="img_form_{{case}}_{{loop.index}}"></a>
 
         <div class="popup">
-          <img src="{{img_dir}}/{{test_name}}/{{img_arr[0]}}" class="image_overlay"></img>
+          <img src="{{test_imgDir}}/{{img_arr[0]}}" class="image_overlay"></img>
           <a class="close" href="#close">x</a>
         </div>
         {% endif %}

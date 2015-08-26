@@ -70,7 +70,7 @@ class Test(AbstractTest):
                       " applied to the dome margins. "
 
 
-    def run(self, summary, output):
+    def run(self, perf_summary, output):
         """
         Runs the performance specific test cases.
         
@@ -97,6 +97,8 @@ class Test(AbstractTest):
         self.run_scaling('Dome ', resolutions, output)
         self.tests_run.append('Scaling')
         self.generate()
+        perf_summary[self.name.lower()] = self.summary
+        output.put("")
 
 
     def run_dome(self, resolution, model_dir, bench_dir, output):
