@@ -1,123 +1,209 @@
-;*************************************************
-; NCL Graphics: lsm_1.ncl
-;************************************************
+; Created by Lauren Vargo 06/11/2015
+; Reworked by Joseph H Kennedy for LIVVkit on 08/24/15
+
 load "$NCARG_ROOT/lib/ncarg/nclscripts/csm/gsn_code.ncl"
 load "$NCARG_ROOT/lib/ncarg/nclscripts/csm/gsn_csm.ncl" 
 load "$NCARG_ROOT/lib/ncarg/nclscripts/csm/contributed.ncl" 
 load "$NCARG_ROOT/lib/ncarg/nclscripts/csm/shea_util.ncl" 
-;************************************************
+
 begin
-;************************************************
-; read in netCDF file
+    ;******************************************************
+    ; Variables to be defined in call
+    ;******************************************************
+    ; gl_data       -- Greenland base dataset 
+    ;
+    ; model_prefix  -- 
+    ; model_suffix  -- 
+    ; model_start   -- 
+    ; model_end     -- 
+    ;
+    ; plot_file     -- the output file for the plot
+    ;
+    ;******************************************************
+    ; Process the data
+    ;******************************************************
+
+    nt = 0
+    
+    lat2d = gl_data->lat(nt,:,:)   
+    lon2d = gl_data->lon(nt,:,:)
+    
+    dimgrd = dimsizes(lat2d)
+    nlat = dimgrd(0)        
+    mlon = dimgrd(1)  
+
+    smbacc   = new((/nlat,mlon/),double,"No_FillValue")
+    tempacc  = new((/nlat,mlon/),double,"No_FillValue")
+    thkacc   = new((/nlat,mlon/),double,"No_FillValue")
+    topgacc  = new((/nlat,mlon/),double,"No_FillValue")
+    usurfacc = new((/nlat,mlon/),double,"No_FillValue")
+    
+    uvelacc = new((/nlat-1,mlon-1/),double,"No_FillValue")
+    vvelacc = new((/nlat-1,mlon-1/),double,"No_FillValue")
+    
+    do k = model_start,model_end
+        model_name = model_prefix + sprinti("%0.4i",k) + model_suffix
+        model = addfile(model_name,"r")
+        
+        smbacc(:,:) = smbacc(:,:) + model->acab(0,:,:)
+        sfacab = model->acab
+        
+        tempacc(:,:) = tempacc(:,:) + model->temp(0,0,:,:)
+        sftemp = model->temp
+        
+        thkacc(:,:) = thkacc(:,:) + model->thk(0,:,:)
+        sfthk = model->thk
+        
+        topgacc(:,:) = topgacc(:,:) + model->topg(0,:,:)
+        sftopg = model->topg
+        
+        usurfacc(:,:) = usurfacc(:,:) + model->usurf(0,:,:)
+        sfusurf = model->usurf
+        
+        uvelacc(:,:) = uvelacc(:,:) + model->uvel(0,0,:,:)
+        sfuvel = model->uvel
+        
+        vvelacc(:,:) = vvelacc(:,:) + model->vvel(0,0,:,:)
+        sfvvel = model->vvel
+    end do  
+
+    ; Average the results over the model window
+    n_files = model_end - model_start + 1
+    smb   = smbacc   / n_files 
+    temp  = tempacc  / n_files 
+    thk   = thkacc   / n_files 
+    topg  = topgacc  / n_files 
+    usurf = usurfacc / n_files 
+    uvel  = uvelacc  / n_files 
+    vvel  = vvelacc  / n_files 
+
+    ; Apply the scale factors if needed
+    if(isatt(sfacab,"scale_factor")) then
+        smb := smb * sfacab@scale_factor
+    end if 
+    if(isatt(sftemp,"scale_factor")) then
+        temp := temp * sftemp@scale_factor
+    end if 
+    if(isatt(sfthk,"scale_factor")) then
+        thk := thk * sfthk@scale_factor
+    end if 
+    if(isatt(sftopg,"scale_factor")) then
+        topg := topg * sftopg@scale_factor
+    end if 
+    if(isatt(sfusurf,"scale_factor")) then
+        usurf := usurf * sfusurf@scale_factor
+    end if 
+    if(isatt(sfuvel,"scale_factor")) then
+        uvel := uvel * sfuvel@scale_factor
+    end if       
+    if(isatt(sfvvel,"scale_factor")) then
+        vvel := vvel * sfvvel@scale_factor
+    end if       
+
+    ; calculate the velocity
+    Vel = ((uvel^2) + (vvel^2))^0.5
+
+    
+    ;******************************************************
+    ; Make plots
+    ;******************************************************
+    
+
+    wks = gsn_open_wks("png",plot_file)
+    
+    res1                      = True                        ; plot mods desired 
+    res1@gsnDraw              = False                       ; wait to draw the plot until all panels are plotted
+    res1@gsnFrame             = False                       ; wait to draw the plot until all panels are plotted
+    res1@cnFillOn             = True                        ; turn on color
+    res1@cnFillMode           = "RasterFill"                 
+    res1@cnLinesOn            = False                       ; no black lines between contours
+    res1@gsnLeftString        = ""                          ; no subtitle
+    res1@gsnRightString       = ""                          ; no subtitle
+    res1@cnFillPalette        = "WhiteBlueGreenYellowRed"   ; select the colormap
+    res1@lbTitleOn            = True                        ; add a title to the label bar
+    res1@lbTitleFontHeightF   = 0.015                       ; change font for the label bar title 
+    res1@lbTitlePosition      = "bottom"                    ; move title to below label bar
+    res1@lbLabelFontHeightF   = 0.012                       ; font smaller than default
+    res1@pmLabelBarHeightF    = 0.1                         ; wider than default
+    res1@pmLabelBarWidthF     = 0.3                         ; smaller than default
+    res1@trGridType           = "TriangularMesh"
+    res1@mpProjection         = "Stereographic"
+    res1@mpDataBaseVersion    = "mediumres"
+    res1@mpFillOn             = False                       ; turn off default land map fill
+    res1@mpLimitMode          = "Corners"  
+    res1@mpLeftCornerLatF     = lat2d(0,0)
+    res1@mpLeftCornerLonF     = lon2d(0,0)
+    res1@mpRightCornerLatF    = lat2d(nlat-1,mlon-1)
+    res1@mpRightCornerLonF    = lon2d(nlat-1,mlon-1)
+    res1@mpCenterLonF         = model->mapping@straight_vertical_longitude_from_pole
+    res1@mpCenterLatF         = model->mapping@standard_parallel
+    res1@tiMainFontHeightF    = 0.012
+
+    resD = res1
+    ;FIXME: Get a """Unable to convert string "MPL_bwr" to ColorMap""" error
+    ;resD@cnFillPalette        = "MPL_bwr"
+
+    ; panel resources
+    resP = True                                            
+    resP@gsnMaximize          = True
 
 
-  e  = model->usrf(0,:,:)
-  e@lat2d = model->lat(0,:,:)
-  e@lon2d = model->lon(0,:,:)
+    ; Surface mass balance
+    plot1 = new(3,graphic)   ; create the graphic with 3 panels
+    
+    xGL := gl_data->smb(nt,:,:)    ; read in actual data
+    xn := smb
+    
+    maxmod = ceil(max(xn))
+    maxmeas = ceil(max(xGL))
+    if maxmod .ge. maxmeas
+    	maxrange  = maxmod
+    else
+    	maxrange  = maxmeas
+    end if
+    
+    minmod = floor(min(xn))
+    minmeas = floor(min(xGL))
+    if minmod .le. minmeas
+    	minrange  = minmod
+    else
+    	minrange  = minmeas
+    end if
+    
+    totalrange = (maxrange - minrange)*2
+    rng = (maxrange - minrange)/totalrange
+    res1@cnLevelSelectionMode = "ManualLevels"
+    res1@cnMinLevelValF  = minrange			                ; set the minimum contour level
+    res1@cnMaxLevelValF  = maxrange			                ; set the maximum contour level
+    res1@cnLevelSpacingF = rng			                    ; set the interval between contours 
+	
+    xn@lat2d = lat2d 
+    xn@lon2d = lon2d
+    res1@tiMainString   = "CISM mean: Year"+ sprintf("%3.0f",model_start) + " -" + sprintf("%3.0f",model_end)
+    res1@lbTitleString  = " ("+sfacab@units+")"             ; label bar laber for first panel
+    
+    plot1(0) = gsn_csm_contour_map(wks,xn,res1)             ; create the first panel plot
+         
+    xGL@lat2d = lat2d
+    xGL@lon2d = lon2d
+    res1@tiMainString   = "1958-2007 Climatology"
+    res1@lbTitleString  = " ("+xGL@units+")" 
 
-  caps  = bench->PCT_GLC_GIC(:,:)
-  caps@lat2d = bench->LATIXY(:,:)
-  caps@lon2d = bench->LONGXY(:,:)
-  is  = bench->PCT_GLC_ICESHEET(:,:)
-  is@lat2d = bench->LATIXY(:,:)
-  is@lon2d = bench->LONGXY(:,:)
+    plot1(1) = gsn_csm_contour_map(wks,xGL,res1)
+    
+    xdif := xn - xGL                                        ; subtract model from data
+    xdif@lat2d = lat2d
+    xdif@lon2d = lon2d
+    resD@tiMainString   = "Difference (CISM - Data)"
+    resD@lbTitleString  = " ("+xGL@units+")"
+    
+    symMinMaxPlt (xdif,21,False,resD)
+    plot1(2) = gsn_csm_contour_map(wks,xdif,resD)
+  
+    resP@txString   = xGL@long_name                         ; title for first set of plots
+    gsn_panel(wks,plot1,(/1,3/),resP)                       ; create first set of plots
 
-  both = caps + is ; sum of both (not including PCT_GLACIER)
-  both@lat2d = bench->LATIXY(:,:)
-  both@lon2d = bench->LONGXY(:,:)
-
-;  printVarSummary(e)
-;  printMinMax(e,True)
-;  printVarSummary(caps)
-;  printMinMax(caps,True)
-;  printVarSummary(is)
-;  printMinMax(is,True)
-
-;************************************************
-; create plot of elevation data, then an overlay of percent ice sheet/caps data
-;************************************************
-  wks = gsn_open_wks("png",plotFile)                 ; open a ncgm file
-; colors = (/"white","black","white","purple","blue","green","yellow","orange",\
-;             "red","white"/)
-;  gsn_define_colormap(wks,colors)         ; select color map
-  gsn_define_colormap(wks,"prcp_2")         ; select color map
-  plot = new(3,graphic)
-
-  res = True                                    ; plot mods desired
-  res@gsnDraw = False				; do not draw the plot
-  res@gsnFrame = False				; do not advance the frame
-  res@tiMainString  	     = "" 		 ; main title blank
-  res@gsnSpreadColors      = True               ; make cn span entire color map
-  res@mpFillOn             = False              ; turn off gray continents
-  res@cnLineLabelsOn        = False
-  res@mpProjection         =  "Aitoff"    ; map Projection
-  res@mpLimitMode         =  "LatLon"    ; how to zoom in
-  res@mpCenterLatF         =  70.
-  res@mpCenterLonF         =  -44.
-  res@mpMinLonF            = -55                ; set min lon
-  res@mpMaxLonF            = -30                ; set max lon
-  res@mpMinLatF            =  57.               ; set min lat
-  res@mpMaxLatF            =  85.               ; set min lat
-  res@mpOutlineOn          =  False             ; turn map outline off
-  res@cnLinesOn            = False 		; do not draw contour lines
-  res@cnFillOn             = True               ; color fill on
-  res@cnFillMode           = "RasterFill"       ; color fill on
-  res@cnLineLabelsOn       = False
-  res@lbOrientation       = "Vertical"		; make label bar vertical
-  res@pmLabelBarOrthogonalPosF = -0.01 		; move label bar closer
-
-; contour levels for the percent
-  res@cnLevelSelectionMode = "ExplicitLevels" ; use explicit levels
-  res@cnLevels = (/1,5,10,20,30,40,50,60,70,80,90,100 /)            ; set the contour levels
-;  res@cnLevels = ispan(10,100,15)             ; set the contour levels
-
-  sres = True                                    ; plot mods desired
-  sres@cnFillOn             = False               ; color fill on
-  sres@cnLinesOn            = True 		; do not draw contour lines
-  sres@cnLineLabelsOn      = False 		; do not draw line labels
-
-; only set if not doing overlay
-;  sres@gsnSpreadColors      = True               ; make cn span entire color map
-;  sres@mpFillOn             = False              ; turn off gray continents
-;  sres@cnFillMode           = "RasterFill"     ; raster plot
-;  sres@mpOutlineOn          =  False             ; turn map outline off
-;  sres@mpMinLonF            = -70               ; set min lon
-;  sres@mpMaxLonF            = -15               ; set max lon
-;  sres@mpMinLatF            =  55.               ; set min lat
-
-  sres@gsnDraw = False				; do not draw the plot
-  sres@gsnFrame = False				; do not advance the frame
-
-; contour levels for the elevation data
-  sres@cnLevelSelectionMode = "ExplicitLevels"    ; use explicit levels
-  sres@cnLevels = (/0,1000,2000,3000/)            ; set the contour levels
-
-;  cres = True                                    ; plot mods desired
-;  cres@cnFillOn             = False               ; color fill on
-;  cres@cnLinesOn            = False 		; do not draw contour lines
-;  cres@cnLineLabelsOn       = False
-;  cres@cnLineThicknessF  = 4.                      ; line thickness
-;  cres@cnLineDashPattern = 12                      ; dashed lines
-;  cres@cnLineColor       = "Blue"                  ; blue contour lines
-;  cres@cnLevelSelectionMode = "ExplicitLevels"    ; use explicit levels
-;  cres@cnLevels = (/50,100/)            ; set the contour levels
-
-  plotA = gsn_csm_contour_map_overlay(wks,is,e,res,sres)   ; create plot
-  plotB = gsn_csm_contour_map_overlay(wks,caps,e,res,sres)   ; create plot
-  plotC = gsn_csm_contour_map_overlay(wks,both,e,res,sres)   ; create plot
-;  plot2 = gsn_csm_contour(wks, both, cres)   ; create plot
-;  plot = gsn_csm_contour_map_ce(wks, e, res)   ; create plot
-;  overlay(plot,plot2)
-  plot(0) = plotA
-  plot(1) = plotB
-  plot(2) = plotC
-
-; for paneling
-  resP = True
-;  resP@gsnMaximize = True 
-  gsn_panel(wks,plot,(/1,3/),resP)
-
-  end
+end
 
    
   
