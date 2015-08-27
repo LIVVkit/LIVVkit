@@ -10,14 +10,15 @@ begin
     ;******************************************************
     ; Variables to be defined in call
     ;******************************************************
-    ; gl_data       -- Greenland base dataset 
+    ; gl_data        -- Greenland base dataset 
+    ; vel_data       -- INSAR velocity dataset 
     ;
-    ; model_prefix  -- 
-    ; model_suffix  -- 
-    ; model_start   -- 
-    ; model_end     -- 
+    ; model_prefix   -- 
+    ; model_suffix   -- 
+    ; model_start    -- 
+    ; model_end      -- 
     ;
-    ; plot_file     -- the output file for the plot
+    ; plot_file_base -- the output file for the plot
     ;
     ;******************************************************
     ; Process the data
@@ -25,185 +26,278 @@ begin
 
     nt = 0
     
-    lat2d = gl_data->lat(nt,:,:)   
-    lon2d = gl_data->lon(nt,:,:)
+    gl_lat2d = gl_data->lat(nt,:,:)   
+    gl_lon2d = gl_data->lon(nt,:,:)
     
-    dimgrd = dimsizes(lat2d)
+    dimgrd = dimsizes(gl_lat2d)
     nlat = dimgrd(0)        
     mlon = dimgrd(1)  
 
-    smbacc   = new((/nlat,mlon/),double,"No_FillValue")
-    tempacc  = new((/nlat,mlon/),double,"No_FillValue")
-    thkacc   = new((/nlat,mlon/),double,"No_FillValue")
-    topgacc  = new((/nlat,mlon/),double,"No_FillValue")
-    usurfacc = new((/nlat,mlon/),double,"No_FillValue")
+    smb   = new((/nlat,mlon/),double,"No_FillValue")
+    temp  = new((/nlat,mlon/),double,"No_FillValue")
+    thk   = new((/nlat,mlon/),double,"No_FillValue")
+    topg  = new((/nlat,mlon/),double,"No_FillValue")
+    usurf = new((/nlat,mlon/),double,"No_FillValue")
     
-    uvelacc = new((/nlat-1,mlon-1/),double,"No_FillValue")
-    vvelacc = new((/nlat-1,mlon-1/),double,"No_FillValue")
+    uvel = new((/nlat-1,mlon-1/),double,"No_FillValue")
+    vvel = new((/nlat-1,mlon-1/),double,"No_FillValue")
     
     do k = model_start,model_end
         model_name = model_prefix + sprinti("%0.4i",k) + model_suffix
         model = addfile(model_name,"r")
         
-        smbacc(:,:) = smbacc(:,:) + model->acab(0,:,:)
-        sfacab = model->acab
-        
-        tempacc(:,:) = tempacc(:,:) + model->temp(0,0,:,:)
-        sftemp = model->temp
-        
-        thkacc(:,:) = thkacc(:,:) + model->thk(0,:,:)
-        sfthk = model->thk
-        
-        topgacc(:,:) = topgacc(:,:) + model->topg(0,:,:)
-        sftopg = model->topg
-        
-        usurfacc(:,:) = usurfacc(:,:) + model->usurf(0,:,:)
-        sfusurf = model->usurf
-        
-        uvelacc(:,:) = uvelacc(:,:) + model->uvel(0,0,:,:)
-        sfuvel = model->uvel
-        
-        vvelacc(:,:) = vvelacc(:,:) + model->vvel(0,0,:,:)
-        sfvvel = model->vvel
+        smb(:,:)   = smb(:,:) + model->acab(0,:,:)
+        temp(:,:)  = temp(:,:) + model->temp(0,0,:,:)
+        thk(:,:)   = thk(:,:) + model->thk(0,:,:)
+        topg(:,:)  = topg(:,:) + model->topg(0,:,:)
+        usurf(:,:) = usurf(:,:) + model->usurf(0,:,:)
+        uvel(:,:)  = uvel(:,:) + model->uvel(0,0,:,:)
+        vvel(:,:)  = vvel(:,:) + model->vvel(0,0,:,:)
     end do  
 
     ; Average the results over the model window
     n_files = model_end - model_start + 1
-    smb   = smbacc   / n_files 
-    temp  = tempacc  / n_files 
-    thk   = thkacc   / n_files 
-    topg  = topgacc  / n_files 
-    usurf = usurfacc / n_files 
-    uvel  = uvelacc  / n_files 
-    vvel  = vvelacc  / n_files 
+    smb   = smb   / n_files 
+    temp  = temp  / n_files 
+    thk   = thk   / n_files 
+    topg  = topg  / n_files 
+    usurf = usurf / n_files 
+    uvel  = uvel  / n_files 
+    vvel  = vvel  / n_files 
 
     ; Apply the scale factors if needed
-    if(isatt(sfacab,"scale_factor")) then
-        smb := smb * sfacab@scale_factor
+    if(isatt(model->acab,"scale_factor")) then
+        smb := smb * model->acab@scale_factor
     end if 
-    if(isatt(sftemp,"scale_factor")) then
-        temp := temp * sftemp@scale_factor
+    if(isatt(model->temp,"scale_factor")) then
+        temp := temp * model->temp@scale_factor
     end if 
-    if(isatt(sfthk,"scale_factor")) then
-        thk := thk * sfthk@scale_factor
+    if(isatt(model->thk,"scale_factor")) then
+        thk := thk * model->thk@scale_factor
     end if 
-    if(isatt(sftopg,"scale_factor")) then
-        topg := topg * sftopg@scale_factor
+    if(isatt(model->topg,"scale_factor")) then
+        topg := topg * model->topg@scale_factor
     end if 
-    if(isatt(sfusurf,"scale_factor")) then
-        usurf := usurf * sfusurf@scale_factor
+    if(isatt(model->usurf,"scale_factor")) then
+        usurf := usurf * model->usurf@scale_factor
     end if 
-    if(isatt(sfuvel,"scale_factor")) then
-        uvel := uvel * sfuvel@scale_factor
+    if(isatt(model->uvel,"scale_factor")) then
+        uvel := uvel * model->uvel@scale_factor
     end if       
-    if(isatt(sfvvel,"scale_factor")) then
-        vvel := vvel * sfvvel@scale_factor
+    if(isatt(model->vvel,"scale_factor")) then
+        vvel := vvel * model->vvel@scale_factor
     end if       
 
     ; calculate the velocity
-    Vel = ((uvel^2) + (vvel^2))^0.5
+    vel = ((uvel^2) + (vvel^2))^0.5
 
     
     ;******************************************************
     ; Make plots
     ;******************************************************
     
+    res_data                      = True                        ; plot mods desired 
+    res_data@gsnDraw              = False                       ; wait to draw the plot until all panels are plotted
+    res_data@gsnFrame             = False                       ; wait to draw the plot until all panels are plotted
+    res_data@cnFillOn             = True                        ; turn on color
+    res_data@cnFillMode           = "RasterFill"                 
+    res_data@cnLinesOn            = False                       ; no black lines between contours
+    res_data@gsnLeftString        = ""                          ; no subtitle
+    res_data@gsnRightString       = ""                          ; no subtitle
+    res_data@cnFillPalette        = "WhiteBlueGreenYellowRed"   ; select the colormap
+    res_data@lbTitleOn            = True                        ; add a title to the label bar
+    res_data@lbTitleFontHeightF   = 0.015                       ; change font for the label bar title 
+    res_data@lbTitlePosition      = "bottom"                    ; move title to below label bar
+    res_data@lbLabelFontHeightF   = 0.012                       ; font smaller than default
+    res_data@pmLabelBarHeightF    = 0.1                         ; wider than default
+    res_data@pmLabelBarWidthF     = 0.3                         ; smaller than default
+    res_data@trGridType           = "TriangularMesh"
+    res_data@mpProjection         = "Stereographic"
+    res_data@mpDataBaseVersion    = "mediumres"
+    res_data@mpFillOn             = False                       ; turn off default land map fill
+    res_data@mpLimitMode          = "Corners"  
+    res_data@mpLeftCornerLatF     = gl_lat2d(0,0)
+    res_data@mpLeftCornerLonF     = gl_lon2d(0,0)
+    res_data@mpRightCornerLatF    = gl_lat2d(nlat-1,mlon-1)
+    res_data@mpRightCornerLonF    = gl_lon2d(nlat-1,mlon-1)
+    res_data@mpCenterLonF         = model->mapping@straight_vertical_longitude_from_pole
+    res_data@mpCenterLatF         = model->mapping@standard_parallel
+    res_data@tiMainFontHeightF    = 0.012
 
-    wks = gsn_open_wks("png",plot_file)
-    
-    res1                      = True                        ; plot mods desired 
-    res1@gsnDraw              = False                       ; wait to draw the plot until all panels are plotted
-    res1@gsnFrame             = False                       ; wait to draw the plot until all panels are plotted
-    res1@cnFillOn             = True                        ; turn on color
-    res1@cnFillMode           = "RasterFill"                 
-    res1@cnLinesOn            = False                       ; no black lines between contours
-    res1@gsnLeftString        = ""                          ; no subtitle
-    res1@gsnRightString       = ""                          ; no subtitle
-    res1@cnFillPalette        = "WhiteBlueGreenYellowRed"   ; select the colormap
-    res1@lbTitleOn            = True                        ; add a title to the label bar
-    res1@lbTitleFontHeightF   = 0.015                       ; change font for the label bar title 
-    res1@lbTitlePosition      = "bottom"                    ; move title to below label bar
-    res1@lbLabelFontHeightF   = 0.012                       ; font smaller than default
-    res1@pmLabelBarHeightF    = 0.1                         ; wider than default
-    res1@pmLabelBarWidthF     = 0.3                         ; smaller than default
-    res1@trGridType           = "TriangularMesh"
-    res1@mpProjection         = "Stereographic"
-    res1@mpDataBaseVersion    = "mediumres"
-    res1@mpFillOn             = False                       ; turn off default land map fill
-    res1@mpLimitMode          = "Corners"  
-    res1@mpLeftCornerLatF     = lat2d(0,0)
-    res1@mpLeftCornerLonF     = lon2d(0,0)
-    res1@mpRightCornerLatF    = lat2d(nlat-1,mlon-1)
-    res1@mpRightCornerLonF    = lon2d(nlat-1,mlon-1)
-    res1@mpCenterLonF         = model->mapping@straight_vertical_longitude_from_pole
-    res1@mpCenterLatF         = model->mapping@standard_parallel
-    res1@tiMainFontHeightF    = 0.012
-
-    resD = res1
-    ;FIXME: Get a """Unable to convert string "MPL_bwr" to ColorMap""" error
-    ;resD@cnFillPalette        = "MPL_bwr"
+    res_diff = res_data
+    ;NOTE: "MPL_bwr" is only available in version 6.2 and later
+    ;res_diff@cnFillPalette        = "MPL_bwr"
+    res_diff@cnFillPalette        = "BlWhRe"
 
     ; panel resources
-    resP = True                                            
-    resP@gsnMaximize          = True
+    res_panel = True                                            
+    res_panel@gsnMaximize          = True
+    
+    undef("make_a_plot")                                    ; Just to make sure this isn't alread a function
+    procedure make_a_plot(bench_data, test_data, range_mod, plot_name, bench_title)
+    local wks, max_test, max_bench, max_range, min_test, min_bench, min_range, total_range, rng, diff_data, plot
+    begin
+        wks = gsn_open_wks("png", plot_name)
+        
+        max_test = ceil(max(test_data))
+        max_bench = ceil(max(bench_data))
+        if max_test .ge. max_bench
+            max_range = max_test
+        else
+            max_range = max_bench
+        end if
+        
+        min_test = floor(min(test_data))
+        min_bench = floor(min(bench_data))
+        if min_test .le. min_bench
+            min_range  = min_test
+        else
+            min_range  = min_bench
+        end if
+        
+        total_range = (max_range - min_range)*range_mod
+        rng = (max_range - min_range)/total_range
+        
+        test_data@lat2d = gl_lat2d 
+        test_data@lon2d = gl_lon2d
+        
+        bench_data@lat2d = gl_lat2d
+        bench_data@lon2d = gl_lon2d
+        
+        diff_data := test_data - bench_data                                        ; subtract model from data
+        diff_data@lat2d = gl_lat2d
+        diff_data@lon2d = gl_lon2d
+        
+        plot = new(3,graphic)   ; create the graphic with 3 panels
+        
+        res_data@cnLevelSelectionMode = "ManualLevels"
+        res_data@cnMinLevelValF  := min_range			                ; set the minimum contour level
+        res_data@cnMaxLevelValF  := max_range			                ; set the maximum contour level
+        res_data@cnLevelSpacingF := rng			                    ; set the interval between contours 
+        res_data@tiMainString   := "CISM mean: Year"+ sprintf("%3.0f",model_start) + " -" + sprintf("%3.0f",model_end)
+        res_data@lbTitleString  := " ("+bench_data@units+")"             ; label bar laber for first panel
+        
+        plot(0) = gsn_csm_contour_map(wks,test_data,res_data)             ; create the first panel plot
+             
+        res_data@tiMainString   := bench_title 
+        res_data@lbTitleString  := " ("+bench_data@units+")" 
 
+        plot(1) = gsn_csm_contour_map(wks,bench_data,res_data)
+        
+        res_diff@tiMainString   := "Difference (CISM - Data)"
+        res_diff@lbTitleString  := " ("+bench_data@units+")"
+        
+        symMinMaxPlt (diff_data,21,False,res_diff)
+        plot(2) = gsn_csm_contour_map(wks,diff_data,res_diff)
+      
+        res_panel@txString   := bench_data@long_name                         ; title for first set of plots
+        gsn_panel(wks,plot,(/1,3/),res_panel)                       ; create first set of plots
+    
+    end
 
-    ; Surface mass balance
-    plot1 = new(3,graphic)   ; create the graphic with 3 panels
+    ; for the plot procedure
+    range_mod = 2
+
+    ; surface mass balance
+    make_a_plot(gl_data->smb(nt,:,:), smb, range_mod, plot_file_base+"_smb.png", "1958-2007 Climatology")
+
+    ; temperature
+    gl_temp = gl_data->surftemp(nt,:,:)
+	do r = 0,nlat-1
+     	do c = 0,mlon-1
+			if ( thk(r,c) .eq. 0 )
+				gl_temp(r,c) = 0
+			end if
+		end do 
+	end do 	
     
-    xGL := gl_data->smb(nt,:,:)    ; read in actual data
-    xn := smb
+    make_a_plot(gl_temp, temp, range_mod, plot_file_base+"_temp.png", "Present day "+gl_data->surftemp@long_name)
+
+    ; thickness
+    range_mod := 1.0/100
+    make_a_plot(gl_data->thk(nt,:,:), thk, range_mod, plot_file_base+"_thk.png", "Present day "+gl_data->thk@long_name)
+
+    ; topography
+    range_mod := 1.0/200
+    make_a_plot(gl_data->topg(nt,:,:), topg, range_mod, plot_file_base+"_topg.png", "Present day "+gl_data->topg@long_name)
+
+    ; surface elevation
+    range_mod := 1.0/100
+    make_a_plot(gl_data->usrf(nt,:,:), usurf, range_mod, plot_file_base+"_usurf.png", "Present day "+gl_data->usrf@long_name)
     
-    maxmod = ceil(max(xn))
-    maxmeas = ceil(max(xGL))
-    if maxmod .ge. maxmeas
-    	maxrange  = maxmod
+    ; absolute velocity (surface)
+    vx = vel_data->vx(nt,:,:)   
+    vy = vel_data->vy(nt,:,:)
+    
+    velnorm := ((vx^2) + (vy^2))^0.5
+    
+    xi = ispan(1,1501,1)
+    yi = ispan(1,2801,1)
+    klon = ispan(1,300,1)
+    klat = ispan(1,560,1)
+    velnorm_data = linint2 (xi,yi,velnorm,False,klon,klat,0)
+     
+    do r = 0,559
+        do c = 0,299
+			if ( velnorm_data(r,c) .gt. 20000 )
+				velnorm_data(r,c) = 20000
+			end if
+		end do 
+	end do 	
+    
+    ;NOTE: velocity data is sufficiently different such that we'll have to manually make the plot.
+    ;make_a_plot(velnorm_data, vel, range_mod, plot_file_base+"_velnorm.png", "Present day "+gl_data->usrf@long_name)
+    bench_data = velnorm_data
+    test_data = vel 
+
+    wks = gsn_open_wks("png", plot_file_base+"_velnorm.png")
+    
+    max_test = ceil(max(test_data))
+    max_bench = ceil(max(bench_data))
+    if max_test .ge. max_bench
+        max_range = max_test
     else
-    	maxrange  = maxmeas
+        max_range = max_bench
     end if
+    ln_max = log10(max(max_range))
+    ;logspace = (10)^(fspan(0,lnmax,21))       ; logrithmically spaced contours
+    logspace = ((/1,10,100,1000,10000/))
     
-    minmod = floor(min(xn))
-    minmeas = floor(min(xGL))
-    if minmod .le. minmeas
-    	minrange  = minmod
-    else
-    	minrange  = minmeas
-    end if
+    test_data@lat2d = gl_lat2d 
+    test_data@lon2d = gl_lon2d
     
-    totalrange = (maxrange - minrange)*2
-    rng = (maxrange - minrange)/totalrange
-    res1@cnLevelSelectionMode = "ManualLevels"
-    res1@cnMinLevelValF  = minrange			                ; set the minimum contour level
-    res1@cnMaxLevelValF  = maxrange			                ; set the maximum contour level
-    res1@cnLevelSpacingF = rng			                    ; set the interval between contours 
-	
-    xn@lat2d = lat2d 
-    xn@lon2d = lon2d
-    res1@tiMainString   = "CISM mean: Year"+ sprintf("%3.0f",model_start) + " -" + sprintf("%3.0f",model_end)
-    res1@lbTitleString  = " ("+sfacab@units+")"             ; label bar laber for first panel
+    bench_data@lat2d = gl_lat2d
+    bench_data@lon2d = gl_lon2d
     
-    plot1(0) = gsn_csm_contour_map(wks,xn,res1)             ; create the first panel plot
+    diff_data := test_data - bench_data                                        ; subtract model from data
+    diff_data@lat2d = gl_lat2d
+    diff_data@lon2d = gl_lon2d
+    
+    plot = new(3,graphic)   ; create the graphic with 3 panels
+    
+    res_data@cnLevelSelectionMode = "ExplicitLevels"                        ; set explicit contour levels 
+    res_data@cnLevels = (logspace)                             ; set levels 
+    res_data@tiMainString   := "CISM mean: Year"+ sprintf("%3.0f",model_start) + " -" + sprintf("%3.0f",model_end)
+    res_data@lbTitleString  := " ("+gl_data->surfvelmag@units+")"             ; label bar laber for first panel
+    
+    plot(0) = gsn_csm_contour_map(wks,test_data,res_data)             ; create the first panel plot
          
-    xGL@lat2d = lat2d
-    xGL@lon2d = lon2d
-    res1@tiMainString   = "1958-2007 Climatology"
-    res1@lbTitleString  = " ("+xGL@units+")" 
+    res_data@tiMainString   := "Present day "+gl_data->surfvelmag@long_name
+    res_data@lbTitleString  := " ("+gl_data->surfvelmag@units+")" 
 
-    plot1(1) = gsn_csm_contour_map(wks,xGL,res1)
+    plot(1) = gsn_csm_contour_map(wks,bench_data,res_data)
     
-    xdif := xn - xGL                                        ; subtract model from data
-    xdif@lat2d = lat2d
-    xdif@lon2d = lon2d
-    resD@tiMainString   = "Difference (CISM - Data)"
-    resD@lbTitleString  = " ("+xGL@units+")"
+    res_diff@cnLevelSelectionMode = "ExplicitLevels"                        ; set explicit contour levels 
+    logspace := ((/-10000,-1000,-100-10,-1,0,1,10,100,1000,10000/))
+    res_diff@cnLevels = (logspace)                             ; set levels 
+    res_diff@tiMainString   := "Difference (CISM - Data)"
+    res_diff@lbTitleString  := " ("+gl_data->surfvelmag@units+")"
     
-    symMinMaxPlt (xdif,21,False,resD)
-    plot1(2) = gsn_csm_contour_map(wks,xdif,resD)
+    symMinMaxPlt (diff_data,21,False,res_diff)
+    plot(2) = gsn_csm_contour_map(wks,diff_data,res_diff)
   
-    resP@txString   = xGL@long_name                         ; title for first set of plots
-    gsn_panel(wks,plot1,(/1,3/),resP)                       ; create first set of plots
+    res_panel@txString   := gl_data->surfvelmag@long_name                         ; title for first set of plots
+    gsn_panel(wks,plot,(/1,3/),res_panel)                       ; create first set of plots
 
 end
-
-   
-  
+ 

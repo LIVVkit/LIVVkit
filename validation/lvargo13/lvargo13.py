@@ -59,6 +59,7 @@ class Test(AbstractTest):
         plot_script = kwargs.get('plot_script')
         
         gl_data = kwargs.get('gl_data')
+        vel_data = kwargs.get('vel_data')
         model_dir = kwargs.get('model_dir')
         model_prefix = kwargs.get('model_prefix')
         model_suffix = kwargs.get('model_suffix')
@@ -75,11 +76,11 @@ class Test(AbstractTest):
             return
     
         # Generate the script
-        output_file = util.variables.index_dir + os.sep + 'validation' + os.sep + self.name + os.sep + 'imgs' + os.sep + 'lvargo13.png'
-        self.plot_lvargo13(plot_script, gl_data, model_dir, model_prefix, model_suffix, model_start, model_end, output_file)
+        output_file_base = util.variables.index_dir + os.sep + 'validation' + os.sep + self.name + os.sep + 'imgs' + os.sep + 'lvargo13'
+        self.plot_lvargo13(plot_script, gl_data, vel_data, model_dir, model_prefix, model_suffix, model_start, model_end, output_file_base)
     
     
-    def plot_lvargo13(self, plot_script, gl_data, model_dir, model_prefix, model_suffix, model_start, model_end, output_file):
+    def plot_lvargo13(self, plot_script, gl_data, vel_data, model_dir, model_prefix, model_suffix, model_start, model_end, output_file_base):
         """ 
         Calls the ncl script to generate the plots for percent ice sheet 
         coverage.
@@ -88,30 +89,32 @@ class Test(AbstractTest):
             plot_script: Location of the ncl script to generate the coverage plot
             model_data: The dataset with the model output
             bench_data: The dataset with the benchmark output
-            output_file: The full path of where to write the plot to
+            output_file_base: The full path of where to write the plot to
     
         Returns:
             TBD
         """
         ncl_command = 'ncl \'gl_data = addfile("'+ gl_data +'", "r")\' '  \
+                           + '\'vel_data = addfile("'+ vel_data +'", "r")\' '  \
                            + '\'model_prefix = "'+ os.path.join(model_dir, model_prefix) +'"\' '     \
                            + '\'model_suffix = "'+ model_suffix +'"\' '     \
                            + '\'model_start = '+ model_start +'\' '       \
                            + '\'model_end = '+ model_end +'\' '           \
-                           + '\'plot_file = "'+ output_file +'"\' '       \
+                           + '\'plot_file_base = "'+ output_file_base +'"\' '       \
                            + plot_script
     
         # Be cautious about running subprocesses
         call = subprocess.Popen(ncl_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdOut, stdErr = call.stdout.read(), call.stderr.read()
     
-        if not os.path.exists(output_file):
-            print("****************************************************************************")
-            print("*** Error saving "+output_file)
-            print("*** Details of the error follow: ")
-            print("")
-            print(stdOut)
-            print(stdErr)
-            print("****************************************************************************")    
+        #FIXME: Need better error check here!
+        #if not os.path.exists(output_file_base):
+        #    print("****************************************************************************")
+        #    print("*** Error saving "+output_file_base)
+        #    print("*** Details of the error follow: ")
+        #    print("")
+        #    print(stdOut)
+        #    print(stdErr)
+        #    print("****************************************************************************")    
     
     
