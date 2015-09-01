@@ -43,6 +43,14 @@ from netCDF4 import Dataset
 from validation.base import AbstractTest
 import util.variables
 
+
+class plotData():
+    """
+    A class to hold the data to be passed to the plot function.
+    """
+    pass
+
+
 class Test(AbstractTest):
 
     def run(self, *args, **kwargs):
@@ -56,52 +64,52 @@ class Test(AbstractTest):
             bench_data: full path to the output from the benchmark data
         """
         self.description = kwargs.get('description')
-        plot_script = kwargs.get('plot_script')
-        
-        gl_data = kwargs.get('gl_data')
-        vel_data = kwargs.get('vel_data')
-        model_dir = kwargs.get('model_dir')
-        model_prefix = kwargs.get('model_prefix')
-        model_suffix = kwargs.get('model_suffix')
-        model_start = kwargs.get('model_start')
-        model_end = kwargs.get('model_end')
+       
+        pd = plotData()
+
+        # Get the data out of the config file
+        pd.plot_script  = kwargs.get('plot_script')
+        pd.gl_data      = kwargs.get('gl_data')
+        pd.vel_data     = kwargs.get('vel_data')
+        pd.model_dir    = kwargs.get('model_dir')
+        pd.model_prefix = kwargs.get('model_prefix')
+        pd.model_suffix = kwargs.get('model_suffix')
+        pd.model_start  = kwargs.get('model_start')
+        pd.model_end    = kwargs.get('model_end')
         
 
-        if not (os.path.exists(gl_data) and os.path.exists(model_dir)):
+        if not (os.path.exists(pd.gl_data) and os.path.exists(pd.model_dir)):
             # Add more handling here -- what do we want to return for failed tests
             print("ERROR: Could not find necessary data to run the lvargo13 validation!")
-            print(gl_data)
-            print(model_dir)
+            print(pd.gl_data)
+            print(pd.model_dir)
             print("")
             return
     
         # Generate the script
-        output_file_base = util.variables.index_dir + os.sep + 'validation' + os.sep + self.name + os.sep + 'imgs' + os.sep + 'lvargo13'
-        self.plot_lvargo13(plot_script, gl_data, vel_data, model_dir, model_prefix, model_suffix, model_start, model_end, output_file_base)
+        pd.output_file_base = util.variables.index_dir + os.sep + 'validation' + os.sep + self.name + os.sep + 'imgs' + os.sep + 'lvargo13'
+        self.plot_lvargo13(pd)
     
     
-    def plot_lvargo13(self, plot_script, gl_data, vel_data, model_dir, model_prefix, model_suffix, model_start, model_end, output_file_base):
+    def plot_lvargo13(self, pd):
         """ 
         Calls the ncl script to generate the plots for percent ice sheet 
         coverage.
     
         Args:
-            plot_script: Location of the ncl script to generate the coverage plot
-            model_data: The dataset with the model output
-            bench_data: The dataset with the benchmark output
-            output_file_base: The full path of where to write the plot to
+             pd: A plotData class instance that holds all the needed plot data.
     
         Returns:
             TBD
         """
-        ncl_command = 'ncl \'gl_data = addfile("'+ gl_data +'", "r")\' '  \
-                           + '\'vel_data = addfile("'+ vel_data +'", "r")\' '  \
-                           + '\'model_prefix = "'+ os.path.join(model_dir, model_prefix) +'"\' '     \
-                           + '\'model_suffix = "'+ model_suffix +'"\' '     \
-                           + '\'model_start = '+ model_start +'\' '       \
-                           + '\'model_end = '+ model_end +'\' '           \
-                           + '\'plot_file_base = "'+ output_file_base +'"\' '       \
-                           + plot_script
+        ncl_command = 'ncl \'gl_data = addfile("'+ pd.gl_data +'", "r")\' '  \
+                           + '\'vel_data = addfile("'+ pd.vel_data +'", "r")\' '  \
+                           + '\'model_prefix = "'+ os.path.join(pd.model_dir, pd.model_prefix) +'"\' '  \
+                           + '\'model_suffix = "'+ pd.model_suffix +'"\' '  \
+                           + '\'model_start = '+ pd.model_start +'\' '  \
+                           + '\'model_end = '+ pd.model_end +'\' '  \
+                           + '\'plot_file_base = "'+ pd.output_file_base +'"\' '  \
+                           + pd.plot_script
     
         # Be cautious about running subprocesses
         call = subprocess.Popen(ncl_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
