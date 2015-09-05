@@ -38,6 +38,7 @@ Created on May 6, 2015
 """
 import os
 import fnmatch
+import multiprocessing
 
 from verification.base import AbstractTest
 from util.parser import Parser
@@ -88,12 +89,19 @@ class Test(AbstractTest):
             resolutions.add( mcf.split('.')[1] )
         resolutions = sorted( resolutions )
                 
-        self.run_stream(resolutions[0], self.model_dir, self.bench_dir, output)
-        self.tests_run.append("Stream " + resolutions[0])
+        self.tests_run = ["Stream " + res for res in resolutions]
+        process_handles = [multiprocessing.Process(target=self.run_stream, args=(res,self.model_dir,self.bench_dir,output)) for res in resolutions]
+        
+        for p in process_handles:
+            p.start()
+
+        for p in process_handles:
+            p.join()
+        
+        self.convert_dicts()
         self.generate()
         ver_summary[self.name.lower()] = self.summary
-        output.put("")
-        
+
 
     def run_stream(self, resolution, test_dir, bench_dir, output):
         """
@@ -108,7 +116,6 @@ class Test(AbstractTest):
             output: multiprocessing queue to store information to print to stdout
         """
         # Process the configure files
-        output.put("  Stream " + resolution + " test in progress....")
         stream_parser = Parser()
         self.test_configs['Stream ' + resolution], self.bench_configs['Stream ' + resolution] = \
                 stream_parser.parse_configurations(test_dir, bench_dir, "*" + resolution + ".*.config")
@@ -124,7 +131,6 @@ class Test(AbstractTest):
         number_bitMatches, number_bitTests = 0, 0
         self.bit_for_bit_details['Stream ' + resolution] = self.bit4bit('stream', test_dir, bench_dir, resolution)
         for key, value in self.bit_for_bit_details['Stream ' + resolution].iteritems():
-            output.put("    {:<40} {:<10}".format(key, value[0]))
             if value[0] == "SUCCESS": number_bitMatches += 1
             number_bitTests += 1
 

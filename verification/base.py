@@ -44,6 +44,7 @@ from netCDF4 import Dataset
 import glob
 import numpy
 import jinja2
+import multiprocessing
 from abc import ABCMeta, abstractmethod 
 
 from plots import nclfunc
@@ -79,12 +80,24 @@ class AbstractTest(object):
         self.name = "default"
         self.model_dir, self.bench_dir = "", ""
         self.tests_run = []
-        self.bit_for_bit_details = dict()
-        self.plot_details = dict()
-        self.test_details = dict()
-        self.bench_details = dict()
-        self.test_configs, self.bench_configs = dict(), dict()
-        self.summary = dict()
+        self.manager = multiprocessing.Manager()
+        self.bit_for_bit_details = self.manager.dict()
+        self.plot_details = self.manager.dict()
+        self.test_details = self.manager.dict()
+        self.bench_details = self.manager.dict()
+        self.test_configs = self.manager.dict() 
+        self.bench_configs = self.manager.dict()
+        self.summary = self.manager.dict()
+
+
+    def convert_dicts(self):
+        self.bit_for_bit_details = dict(self.bit_for_bit_details)
+        self.plot_details = dict(self.plot_details)
+        self.test_details = dict(self.test_details)
+        self.bench_details = dict(self.bench_details)
+        self.test_configs = dict(self.test_configs)
+        self.bench_configs = dict(self.bench_configs)
+        self.summary = dict(self.summary)
 
 
     @abstractmethod
@@ -139,22 +152,14 @@ class AbstractTest(object):
                 bit_dict[same] =  ['EMPTY TIME','test']
             else:
                 # Create a difference file with ncdiff
-                comline = ['ncdiff', '-v', 'thk,velnorm', test_file, bench_file, test_dir + os.sep + 'temp.nc', '-O']
-                try:
-                    subprocess.check_call(comline)
-                except Exception as e:
-                    print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
-                          + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
-                    try:
-                        exit(e.returncode)
-                    except AttributeError:
-                        exit(e.errno)
-                diff_data = Dataset(test_dir + os.sep + 'temp.nc', 'r')
-                diff_vars = diff_data.variables.keys()
+                test_data = Dataset(test_file, 'r').variables
+                bench_data = Dataset(bench_file,'r').variables
 
+                
                 # Check if any data in thk has changed, if it exists
-                if 'thk' in diff_vars and diff_data.variables['thk'].size != 0:
-                    data = diff_data.variables['thk'][:]
+                if 'thk' in test_data and 'thk' in bench_data and \
+                        test_data['thk'].size != 0 and bench_data['thk'].size != 0:
+                    data = test_data['thk'][:] - bench_data['thk'][:]
                     if data.any():
                         # Record the maximum difference and root mean square of the error 
                         max = numpy.amax( numpy.absolute(data) )
@@ -163,8 +168,9 @@ class AbstractTest(object):
                         change = 1
 
                 # Check if any data in velnorm has changed, if it exists
-                if 'velnorm' in diff_vars and diff_data.variables['velnorm'].size != 0:
-                    data = diff_data.variables['velnorm'][:]
+                if 'velnorm' in test_data and 'velnorm' in bench_data and \
+                        test_data['velnorm'].size != 0 and bench_data['velnorm'].size != 0:
+                    data = test_data['velnorm'][:] - bench_data['velnorm'][:]
                     if data.any():
                         # Record the maximum difference and root mean square of the error 
                         max = numpy.amax( numpy.absolute(data) )
@@ -172,15 +178,9 @@ class AbstractTest(object):
                         plot_vars['velnorm'] = [max, rmse]
                         change = 1
 
-                # Remove the temp file
-                try:
-                    os.remove(test_dir + os.sep + 'temp.nc')
-                except OSError as e:
-                    print(str(e)+ ", File: "+ str(os.path.split(sys.exc_info()[2].tb_frame.f_code.co_filename)[1]) \
-                          + ", Line number: "+ str(sys.exc_info()[2].tb_lineno))
-                    exit(e.errno)
+                #test_data.close()
+                #bench_data.close()
                 bit_dict[same] = [result[change],  plot_vars]
-
                 # Generate the plots for each of the failed variables
                 for var in plot_vars.keys():
                     out_file = util.variables.index_dir + os.sep + "verification" + os.sep + \

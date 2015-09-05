@@ -38,6 +38,8 @@ Created on Dec 8, 2014
 """
 import os
 import glob
+import fnmatch
+import multiprocessing
 
 from verification.base import AbstractTest
 from util.parser import Parser
@@ -83,19 +85,23 @@ class Test(AbstractTest):
             output.put("      " + self.bench_dir)
             output.put("    Continuing with next test....")
             return
-        test_types = sorted(set(fn.split('.')[0].split('-')[-1] for fn in os.listdir(self.model_dir)))
-        for test in test_types:
-            resolutions = sorted(set(fn.split(os.sep)[-1].split('.')[1]  \
-                            for fn in glob.glob(self.model_dir + os.sep + 'shelf-' + test + "*.config")))
-            for resolution in resolutions:
-                self.run_shelf(test, resolution, self.model_dir, self.bench_dir, output)
-                self.tests_run.append(test.capitalize() + " " + resolution)
+        test_types = sorted(set('.'.join(fn.split('-')[-1].split('.')[0:2]) for fn in fnmatch.filter(os.listdir(self.model_dir), 'shelf-*')))
+        self.tests_run = [tt.capitalize().replace("."," ") for tt in test_types]
+
+        process_handles = [multiprocessing.Process(target=self.run_shelf, args=(tt,self.model_dir,self.bench_dir,output)) for tt in test_types]
+        
+        for p in process_handles:
+            p.start()
+
+        for p in process_handles:
+            p.join()
+        
+        self.convert_dicts()
         self.generate()
         ver_summary[self.name.lower()] = self.summary
-        output.put("")
 
 
-    def run_shelf(self, test_case, resolution, test_dir, bench_dir, output):
+    def run_shelf(self, test_case, test_dir, bench_dir, output):
         """
         Perform verification analysis on the a shelf case
         
@@ -106,25 +112,23 @@ class Test(AbstractTest):
             bench_dir: The path to the benchmark data
             output: multiprocessing queue to store information to print to stdout
         """
-        output.put("  " + test_case.capitalize() + " shelf " + resolution + " test in progress....")
-        test_name = test_case.capitalize() + " " + resolution
+        test_name = " ".join(test_case.capitalize().split('.'))
         shelf_parser = Parser()
 
         # Parse the configure files
         self.test_configs[test_name], self.bench_configs[test_name] = \
-            shelf_parser.parse_configurations(test_dir, bench_dir, "shelf-" + test_case + "." + resolution + ".*.config")
+            shelf_parser.parse_configurations(test_dir, bench_dir, "shelf-" + test_case + ".*.config")
 
         # Scrape the details from each of the files and store some data for later
-        self.bench_details[test_name] = shelf_parser.parse_std_output(bench_dir, "shelf-" + test_case + "." + resolution + ".*.config.oe")
-        self.test_details[test_name] = shelf_parser.parse_std_output(test_dir, "shelf-" + test_case + "." + resolution + ".*.config.oe")
+        self.bench_details[test_name] = shelf_parser.parse_std_output(bench_dir, "shelf-" + test_case + ".*.config.oe")
+        self.test_details[test_name] = shelf_parser.parse_std_output(test_dir, "shelf-" + test_case + ".*.config.oe")
         
         number_outputFiles, number_configMatches, number_configTests = shelf_parser.get_parserSummary()
 
         # Run bit for bit test
         number_bitTests, number_bitMatches = 0, 0
-        self.bit_for_bit_details[test_name] = self.bit4bit('shelf-' + test_case, test_dir, bench_dir, resolution)
+        self.bit_for_bit_details[test_name] = self.bit4bit('shelf-' + test_case.split('.')[0], test_dir, bench_dir, test_case.split('.')[-1])
         for key, value in self.bit_for_bit_details[test_name].iteritems():
-            output.put("    {:<40} {:<10}".format(key, value[0]))
             if value[0] == "SUCCESS": number_bitMatches += 1
             number_bitTests += 1
 

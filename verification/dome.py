@@ -39,6 +39,7 @@ Created on Dec 8, 2014
 """
 import os
 import fnmatch
+import multiprocessing
 
 from verification.base import AbstractTest
 from util.parser import Parser
@@ -91,12 +92,18 @@ class Test(AbstractTest):
             resolutions.add( mcf.split('.')[1] )
         resolutions = sorted( resolutions )
         
-        for res in resolutions:
-            self.run_dome(res, self.model_dir, self.bench_dir, output)
-            self.tests_run.append("Dome " + res)
+        self.tests_run = ["Dome " + res for res in resolutions]
+        process_handles = [multiprocessing.Process(target=self.run_dome, args=(res,self.model_dir,self.bench_dir,output)) for res in resolutions]
+        
+        for p in process_handles:
+            p.start()
+
+        for p in process_handles:
+            p.join()
+        
+        self.convert_dicts()
         self.generate()
         ver_summary[self.name.lower()] = self.summary
-        output.put("")
 
 
     def run_dome(self, resolution, model_dir, bench_dir, output):
@@ -111,7 +118,6 @@ class Test(AbstractTest):
             bench_dir: the location of the benchmark data
             output: multiprocessing queue to store information to print to stdout
         """
-        output.put("  Dome " + resolution + " test in progress....")
         dome_parser = Parser()
         
         # Process the configure files
@@ -129,7 +135,6 @@ class Test(AbstractTest):
         number_bitMatches, number_bitTests = 0, 0
         self.bit_for_bit_details['Dome ' + resolution] = self.bit4bit('dome', model_dir, bench_dir, resolution)
         for key, value in self.bit_for_bit_details['Dome ' + resolution].iteritems():
-            output.put("    {:<40} {:<10}".format(key, value[0]))
             if value[0] == "SUCCESS": number_bitMatches += 1
             number_bitTests += 1
 

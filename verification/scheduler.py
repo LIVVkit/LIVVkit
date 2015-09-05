@@ -36,7 +36,10 @@ Should be used in the following order:
 import os
 import glob
 import importlib
+import Queue
+import time
 import multiprocessing
+from threading import Thread
 
 import util.variables
 import util.websetup
@@ -81,7 +84,7 @@ class VerificationScheduler(object):
                          verification.shelf, 
                          verification.stream
                         ]
-        
+
         # Set up directories for output\
         for ver in util.variables.verifications:
             test_dir = util.variables.index_dir + os.sep + "verification" + os.sep + ver.get_name().capitalize()
@@ -97,12 +100,11 @@ class VerificationScheduler(object):
         to be run.
         """
         self.manager = multiprocessing.Manager()
-        self.output = multiprocessing.Queue()
+        self.output = self.manager.Queue()
         self.summary = self.manager.dict()
         self.process_handles = [multiprocessing.Process(target=ver_type.Test().run, 
                                                           args=(self.summary, self.output)) 
                                   for ver_type in util.variables.verifications]
-    
     
     def run(self):
         """ 
@@ -111,16 +113,14 @@ class VerificationScheduler(object):
         # Spawn a new process for each test
         for p in self.process_handles:
             p.start()
-            p.join()
         
-        # Wait for all of the tests to finish
-        while len(multiprocessing.active_children()) > 3:
-            time.sleep(0.25)
-      
+        for p in self.process_handles:
+            p.join()
+
         # Show the results
         while self.output.qsize() > 0:
             print self.output.get()
-    
+        
     
     def cleanup(self):
         """ And finally, take care of the mess we've made. """
