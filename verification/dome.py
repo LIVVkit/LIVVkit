@@ -60,7 +60,7 @@ class Test(AbstractTest):
     def __init__(self):
         """ Constructor """
         super(self.__class__, self).__init__()
-        self.name = "Dome"
+        self.name = "dome"
         self.model_dir = util.variables.input_dir + os.sep + "dome"
         self.bench_dir = util.variables.benchmark_dir + os.sep + "dome"
         self.description = "3-D paraboloid dome of ice with a circular, 60 km" + \
@@ -69,74 +69,12 @@ class Test(AbstractTest):
                       " imposed by setting. A zero-flux boundary condition is" + \
                       " applied to the dome margins. "
 
-
-    def run(self, ver_summary, output):
-        """
-        Runs all of the available dome tests.  Looks in the model and
-        benchmark directories for different variations, and then runs
-        the run_dome() method with the correct information
-        
-        Args:
-            ver_summary: multiprocessing dict to store summaries for each run
-            output: multiprocessing queue to store information to print to stdout
-        """
-        if not (os.path.exists(self.model_dir) and os.path.exists(self.bench_dir)):
-            output.put("    Could not find data for dome verification!  Tried to find data in:")
-            output.put("      " + self.model_dir)
-            output.put("      " + self.bench_dir)
-            output.put("    Continuing with next test....")
-            return
-        resolutions = set()
+    def collect_cases(self):
+        """ Returns a list of the dome cases found in the data """
+        test_types = set()
         model_configFiles = fnmatch.filter(os.listdir(self.model_dir), 'dome*.config')
         for mcf in model_configFiles:
-            resolutions.add( mcf.split('.')[1] )
-        resolutions = sorted( resolutions )
-        
-        self.tests_run = ["Dome " + res for res in resolutions]
-        process_handles = [multiprocessing.Process(target=self.run_dome, args=(res,self.model_dir,self.bench_dir,output)) for res in resolutions]
-        
-        for p in process_handles:
-            p.start()
-
-        for p in process_handles:
-            p.join()
-        
-        self.convert_dicts()
-        self.generate()
-        ver_summary[self.name.lower()] = self.summary
+            test_types.add( mcf.split('.')[1] )
+        self.tests_run = sorted( set(test_types) )
 
 
-    def run_dome(self, resolution, model_dir, bench_dir, output):
-        """
-        Runs the dome V&V for a given resolution.  First parses through all 
-        of the standard output & config files for the given test case, then finishes up by 
-        doing bit for bit comparisons with the benchmark files.
-        
-        Args:
-            resolution: The resolution of the test cases to look in.
-            model_dir: the location of the model run data
-            bench_dir: the location of the benchmark data
-            output: multiprocessing queue to store information to print to stdout
-        """
-        dome_parser = Parser()
-        
-        # Process the configure files
-        self.test_configs['Dome ' + resolution], self.bench_configs['Dome ' + resolution] = \
-                dome_parser.parse_configurations(model_dir, bench_dir, "*" + resolution + ".*.config")
-
-        # Parse standard out
-        self.test_details["Dome " + resolution] = dome_parser.parse_std_output(model_dir,"dome." + resolution + ".*.config.oe")
-        self.bench_details["Dome " + resolution] = dome_parser.parse_std_output(bench_dir,"dome." + resolution + ".*.config.oe")      
-
-        # Record the data from the parser
-        number_outputFiles, number_configMatches, number_configTests = dome_parser.get_parserSummary()
-
-        # Run bit for bit test
-        number_bitMatches, number_bitTests = 0, 0
-        self.bit_for_bit_details['Dome ' + resolution] = self.bit4bit('dome', model_dir, bench_dir, resolution)
-        for key, value in self.bit_for_bit_details['Dome ' + resolution].iteritems():
-            if value[0] == "SUCCESS": number_bitMatches += 1
-            number_bitTests += 1
-
-        self.summary['Dome ' + resolution] = [number_outputFiles, number_configMatches, number_configTests,
-                                              number_bitMatches, number_bitTests]
