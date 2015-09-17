@@ -146,8 +146,6 @@ class AbstractTest(object):
             test_case: Which version of the  test should be run
             output: multiprocessing queue to store information to print to stdout
         """
-        test_name = "Dome " + test_case 
-
         # Process the configure files
         parser = Parser()
         self.test_configs[test_case], self.bench_configs[test_case] = \
