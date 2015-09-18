@@ -63,10 +63,13 @@ class Test(AbstractTest):
         self.name = "dome"
         self.model_dir = util.variables.input_dir + os.sep + "dome"
         self.bench_dir = util.variables.benchmark_dir + os.sep + "dome"
-        self.description = "3-D paraboloid dome of ice with a circular, 60 km" + \
-                      " diameter base sitting on a flat bed.  For this" + \
-                      " set of experiments a quasi no-slip basal condition in" + \
-                      " imposed by setting. A zero-flux boundary condition is" + \
+        self.description = "This test case describes a 3-D paraboloid dome of" + \
+                      " ice with a circular, 60 km diameter base sitting on a" + \
+                      " flat bed. The horizontal spatial resolution studies are" + \
+                      " 2 km, 1 km, 0.5 km and 0.25 km, and there are 10 vertical" + \
+                      " levels. For this set of experiments a quasi no-slip basal" + \
+                      " condition in imposed by setting a very large basal" + \
+                      " sliding coefficient. A zero-flux boundary condition is" + \
                       " applied to the dome margins. "
 
     def collect_cases(self):
