@@ -27,7 +27,8 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 """
-Performance Testing Base Module.  Defines the Abstract_test that will be inherited by all performance test classes.
+Performance Testing Base Module.  Defines the AbstractTest class is 
+inherited by all performance test classes.
 
 Created on Apr 21, 2015
 

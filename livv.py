@@ -128,8 +128,8 @@ util.variables.user               = getpass.getuser()
 util.variables.website_dir        = util.variables.cwd + "/web"
 util.variables.template_dir       = util.variables.website_dir + "/templates"
 util.variables.index_dir          = util.variables.output_dir
-util.variables.verification       = "True" if options.validation is None else "False"
-util.variables.performance        = str(options.performance)
+util.variables.verification       = True if options.validation is None else False
+util.variables.performance        = options.performance
 util.variables.validation         = options.validation
 
 # A list of the information that should be looked for in the stdout of model output
@@ -139,9 +139,6 @@ util.variables.parser_vars = [
               'Number of timesteps',
               'Avg iterations to converge'
              ]
-
-# Dycores to try to parse output for
-util.variables.dycores = ['glissade'] #["glide", "glissade", "glam", "albany", "bisicles"]
 
 # Check if we are saving the configuration
 if options.save:
@@ -163,7 +160,7 @@ util.websetup.setup()
 verification_summary, validation_summary, performance_summary = dict(), dict(), dict()
 
 # Run the verification tests
-if util.variables.verification == "True":
+if util.variables.verification:
     scheduler = verification.scheduler.VerificationScheduler()
     scheduler.setup()
     verification.ver_utils.self_verification.check()
@@ -173,7 +170,7 @@ if util.variables.verification == "True":
     verification_summary = scheduler.summary.copy()
 
 # Run the performance verification
-if util.variables.performance == "True":
+if util.variables.performance:
     scheduler = performance.scheduler.PerformanceScheduler()
     scheduler.setup()
     scheduler.schedule()
