@@ -199,8 +199,8 @@ class AbstractTest(object):
         for same in list(same_list):
             change = 0
             plot_vars = dict()
-            test_file = self.model_dir + os.sep + same
-            bench_file = self.bench_dir + os.sep + same
+            test_file = os.path.join(self.model_dir, same)
+            bench_file = os.path.join(self.bench_dir, same)
 
             # check for empty time dimensions
             good_bench = good_time_dim(bench_file)
@@ -246,9 +246,8 @@ class AbstractTest(object):
                 bit_dict[same] = [result[change],  plot_vars]
                 # Generate the plots for each of the failed variables
                 for var in plot_vars.keys():
-                    out_file = util.variables.index_dir + os.sep + "verification" + os.sep + \
-                               self.name.capitalize() + os.sep + "imgs" + os.sep + "bit4bit" + \
-                               os.sep + test_file.split(os.sep)[-1] + "." + var + ".png"
+                    out_file = os.path.join(util.variables.index_dir, "verification", self.name.capitalize(),\
+                            "imgs", "bit4bit", test_file.split(os.sep)[-1] + "." + var + ".png")
                     nclfunc.plot_diff(var, test_file, bench_file, out_file)
         return bit_dict
 
@@ -272,9 +271,8 @@ class AbstractTest(object):
         index_dir = ".."
         css_dir = index_dir + "/css"
         img_dir = index_dir + "/imgs"
-        test_imgDir = index_dir + os.sep + "verification" + os.sep + \
-                      self.name.capitalize() + os.sep + "imgs"
-        test_images = [os.path.basename(img) for img in glob.glob(test_imgDir + os.sep + "*.png")]
+        test_imgDir = os.path.join(index_dir, "verification", self.name.capitalize(), "imgs")
+        test_images = [os.path.basename(img) for img in glob.glob(os.path.join(test_imgDir, "*.png"))]
         test_images.append([os.path.basename(img) for img in glob.glob(test_imgDir + "*.jpg")])
         test_images.append([os.path.basename(img) for img in glob.glob(test_imgDir + "*.svg")])
         template_vars = {"timestamp" : util.variables.timestamp,
@@ -296,7 +294,7 @@ class AbstractTest(object):
                         "bench_configs" : self.bench_configs,
                         "test_images" : test_images}
         output_text = template.render( template_vars )
-        page = open(util.variables.index_dir + os.sep + "verification" + os.sep + self.name.lower() + '.html', "w")
+        page = open(os.path.join(util.variables.index_dir, "verification", self.name.lower() + '.html'), "w")
         page.write(output_text)
         page.close()
 

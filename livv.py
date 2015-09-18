@@ -117,7 +117,7 @@ import validation.scheduler
 #                              Global Variables                               #
 ###############################################################################
 util.variables.cwd                = os.getcwd()
-util.variables.config_dir         = util.variables.cwd + os.sep + "configurations"
+util.variables.config_dir         = os.path.join(util.variables.cwd, "configurations")
 util.variables.input_dir          = os.path.abspath(options.test_dir + os.sep + 'higher-order')
 util.variables.benchmark_dir      = os.path.abspath(options.bench_dir + os.sep + 'higher-order')
 util.variables.output_dir         = os.path.abspath(options.out_dir)
@@ -125,8 +125,8 @@ util.variables.img_dir            = util.variables.output_dir + "/imgs"
 util.variables.comment            = options.comment
 util.variables.timestamp          = time.strftime("%m-%d-%Y %H:%M:%S")
 util.variables.user               = getpass.getuser()
-util.variables.website_dir        = util.variables.cwd + "/web"
-util.variables.template_dir       = util.variables.website_dir + "/templates"
+util.variables.website_dir        = os.path.join(util.variables.cwd, "web")
+util.variables.template_dir       = os.path.join(util.variables.website_dir, "templates")
 util.variables.index_dir          = util.variables.output_dir
 util.variables.verification       = True if options.validation is None else False
 util.variables.performance        = options.performance
