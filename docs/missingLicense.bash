@@ -36,6 +36,7 @@ CURRENT="Copyright (c)"
 find $LIVV -type f -not -path "*.git*" \
     -not -path "*configurations/*" \
     -not -path "*util/data_*" \
+    -not -path "*verification/ver_utils/data_*" \
     -not -iname "*.png" \
     -not -iname "*.jpg" \
     -not -iname "*.svg" \
