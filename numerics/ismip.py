@@ -62,3 +62,27 @@ class Test(AbstractTest):
         Run a case
         """
         print test_case
+        data_files = sorted(set(fn for fn in fnmatch.filter(os.listdir(self.data_dir), 'ismip-hom-?.*.txt')))
+        print data_files
+
+
+
+    def run_experiment_a(self):
+        """
+        Details here
+        """
+        pass
+
+
+    def run_experiment_c(self):
+        """
+        Details here
+        """
+        pass
+
+
+    def run_experiment_f(self):
+        """
+        Details here
+        """
+        pass

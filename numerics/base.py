@@ -72,7 +72,7 @@ class AbstractTest(object):
     def __init__(self):
         """ Constructor """   
         self.name = "default"
-        self.data_dir = "data"
+        self.data_dir = os.path.join(util.variables.cwd, "numerics", "data")
         self.model_dir, self.bench_dir = "", ""
         self.tests_run = []
         self.manager = multiprocessing.Manager()
