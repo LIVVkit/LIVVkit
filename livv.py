@@ -133,14 +133,9 @@ util.variables.user               = getpass.getuser()
 util.variables.website_dir        = os.path.join(util.variables.cwd, "web")
 util.variables.template_dir       = os.path.join(util.variables.website_dir, "templates")
 util.variables.index_dir          = util.variables.output_dir
-<<<<<<< HEAD
 util.variables.numerics           = str(options.numerics)
 util.variables.verification       = "True" if options.validation is None else "False"
 util.variables.performance        = str(options.performance)
-=======
-util.variables.verification       = True if options.validation is None else False
-util.variables.performance        = options.performance
->>>>>>> 3e332a4c6b25a3438392ea4842c43e2d8221d10a
 util.variables.validation         = options.validation
 
 # A list of the information that should be looked for in the stdout of model output
