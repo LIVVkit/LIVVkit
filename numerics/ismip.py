@@ -32,6 +32,7 @@ Master module for ISMIP numerics.
 """
 import os
 import fnmatch
+import numpy as np
 
 from numerics.base import AbstractTest
 import util.variables
@@ -61,28 +62,34 @@ class Test(AbstractTest):
         """
         Run a case
         """
-        print test_case
-        data_files = sorted(set(fn for fn in fnmatch.filter(os.listdir(self.data_dir), 'ismip-hom-?.*.txt')))
-        print data_files
+        run_functs = {'a' : run_experiment_a,
+                      'c' : run_experiment_c,
+                      'f' : run_experiment_f}
+        case, res = test_case.split('.')
+        run_functs[case](res)
+        
+
+    def run_experiment_a(self, resolution):
+        """
+        Details here
+        """
+        fpath = ""
+        data_files = sorted(set(fn for fn in fnmatch.filter(os.listdir(self.data_dir), 'ismip-hom-a.*.txt')))
+        x,y,vx_mean,vx_stdev,vy_mean,vy_stdev = np.loadtxt(fpath, unpack=True, delimiter=',', skiprows=1, usecols(0,1,2,3,6,7) 
 
 
-
-    def run_experiment_a(self):
+    def run_experiment_c(self, resolution):
         """
         Details here
         """
         pass
+        data_files = sorted(set(fn for fn in fnmatch.filter(os.listdir(self.data_dir), 'ismip-hom-c.*.txt')))
 
 
-    def run_experiment_c(self):
+    def run_experiment_f(self, resolution):
         """
         Details here
         """
         pass
+        data_files = sorted(set(fn for fn in fnmatch.filter(os.listdir(self.data_dir), 'ismip-hom-f.*.txt')))
 
-
-    def run_experiment_f(self):
-        """
-        Details here
-        """
-        pass

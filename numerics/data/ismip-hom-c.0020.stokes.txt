@@ -1,4 +1,4 @@
-x,y,vs_x mean,vs_x stdev,vs_x min,vs_x max,vs_y mean,vs_y stdev,vs_y min,vs_y max,vs_z mean,vs_z stdev,vs_z min,vs_z max,vb_x mean,vb_x stdev,vb_x min,vb_x max,vb_y mean,vb_y stdev,vb_y min,vb_y max,tb_xy mean,tb_xy stdev,tb_xy min,tb_xy max,tb_yz mean,tb_yz stdev,tb_yz min,tb_yz max
+x,y,vs_x mean,vs_x stdev,vs_x min,vs_x max,vs_y mean,vs_y stdev,vs_y min,vs_y max,vs_z mean,vs_z stdev,vs_z min,vs_z max,vb_x mean,vb_x stdev,vb_x min,vb_x max,vb_y mean,vb_y stdev,vb_y min,vb_y max,tb_xy mean,tb_xy stdev,tb_xy min,tb_xy max,tb_yz mean,tb_yz stdev,tb_yz min,tb_yz max,dp mean,dp stdev,dp min,dp max
 0.000000,0.000000,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan
 0.000000,0.025000,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan
 0.000000,0.050000,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan
