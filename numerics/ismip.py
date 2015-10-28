@@ -62,9 +62,9 @@ class Test(AbstractTest):
         """
         Run a case
         """
-        run_functs = {'a' : run_experiment_a,
-                      'c' : run_experiment_c,
-                      'f' : run_experiment_f}
+        run_functs = {'a' : self.run_experiment_a,
+                      'c' : self.run_experiment_c,
+                      'f' : self.run_experiment_f}
         case, res = test_case.split('.')
         run_functs[case](res)
         
@@ -75,7 +75,7 @@ class Test(AbstractTest):
         """
         fpath = ""
         data_files = sorted(set(fn for fn in fnmatch.filter(os.listdir(self.data_dir), 'ismip-hom-a.*.txt')))
-        x,y,vx_mean,vx_stdev,vy_mean,vy_stdev = np.loadtxt(fpath, unpack=True, delimiter=',', skiprows=1, usecols(0,1,2,3,6,7) 
+        #x,y,vx_mean,vx_stdev,vy_mean,vy_stdev = np.loadtxt(fpath, unpack=True, delimiter=',', skiprows=1, usecols=(0,1,2,3,6,7)) 
 
 
     def run_experiment_c(self, resolution):

@@ -64,7 +64,7 @@ def good_time_dim(file_name):
 
 class AbstractTest(object):
     """
-    AbstractTest provides a description of how a verification test should 
+    AbstractTest provides a description of how a numerics test should 
     work in LIVV.
     """
     __metaclass__ = ABCMeta
@@ -108,7 +108,7 @@ class AbstractTest(object):
 
     def run(self, ver_summary, output):
         """
-        Runs all of the available verification tests of a specific type.  
+        Runs all of the available numerics tests of a specific type.  
         Looks in the model and benchmark directories for different variations,
         and then runs the run_case() method with the correct information
         
@@ -117,7 +117,7 @@ class AbstractTest(object):
             output: multiprocessing queue to store information to print to stdout
         """
         if not (os.path.exists(self.model_dir) and os.path.exists(self.bench_dir)):
-            output.put("    Could not find data for " + self.name + " verification!  Tried to find data in:")
+            output.put("    Could not find data for " + self.name + " numerics!  Tried to find data in:")
             output.put("      " + self.model_dir)
             output.put("      " + self.bench_dir)
             output.put("    Continuing with next test....")
@@ -163,7 +163,6 @@ class AbstractTest(object):
         @note Paths that are contained in template_vars should not be using os.sep
               since they are for html.
         """
-        return
         template_loader = jinja2.FileSystemLoader(searchpath=util.variables.template_dir)
         template_env = jinja2.Environment(loader=template_loader, extensions=["jinja2.ext.do",])
         template_file = "/numerics_test.html"
@@ -187,12 +186,6 @@ class AbstractTest(object):
                         "test_description" : self.description,
                         "tests_run" : self.tests_run,
                         "test_header" : util.variables.parser_vars,
-                        "bit_for_bit_details" : self.bit_for_bit_details,
-                        "test_details" : self.test_details,
-                        "bench_details" : self.bench_details,
-                        "plot_details" : self.plot_details,
-                        "test_configs" : self.test_configs,
-                        "bench_configs" : self.bench_configs,
                         "test_images" : test_images}
         output_text = template.render( template_vars )
         page = open(util.variables.index_dir + os.sep + "numerics" + os.sep + self.name.lower() + '.html', "w")

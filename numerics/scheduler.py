@@ -70,7 +70,7 @@ class NumericsScheduler(object):
             print("------------------------------------------------------------------------------")
             exit(1)       
 
-        # Verification tests we run
+        # Numerics tests we run
         util.variables.numerics = [
                         numerics.ismip
                         ]
@@ -84,7 +84,7 @@ class NumericsScheduler(object):
     
     def schedule(self):
         """ 
-        Creates a process handle for each of the verification tests
+        Creates a process handle for each of the numerics tests
         to be run.
         """
         self.manager = multiprocessing.Manager()
