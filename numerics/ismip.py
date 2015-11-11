@@ -34,6 +34,7 @@ import os
 import fnmatch
 import numpy as np
 from netCDF4 import Dataset
+import matplotlib.pyplot as plt
 
 from numerics.base import AbstractTest
 import util.variables
@@ -89,28 +90,43 @@ class Test(AbstractTest):
         #       do inside of LIVV.  Okay, this will be a WIP.
         fpath = os.path.join(util.variables.cwd,"numerics","data","ismip-hom-a."+resolution+".lmla.txt")
         x,y,vx_mean,vx_stdev,vy_mean,vy_stdev = np.loadtxt(fpath, unpack=True, delimiter=',', skiprows=1, usecols=(0,1,2,3,6,7)) 
-        vnorm_mean = np.sqrt(np.add(np.power(vx_mean,2), np.power(vy_mean,2)))
-        vnorm_stdev = np.sqrt(np.add(np.power(vx_stdev,2), np.power(vy_stdev,2)))
-        vnorm_plus = np.add(vnorm_mean, vnorm_stdev) 
-        vnorm_minus = np.subtract(vnorm_mean, vnorm_stdev)
+        grid_shape = int(np.sqrt(len(x)))
+        vnorm_mean =  np.reshape(np.sqrt(np.add(np.power(vx_mean,2), np.power(vy_mean,2))), (grid_shape,grid_shape))
+        vnorm_stdev = np.reshape(np.sqrt(np.add(np.power(vx_stdev,2), np.power(vy_stdev,2))), (grid_shape,grid_shape))
+        vnorm_plus =  np.reshape(np.add(vnorm_mean, vnorm_stdev), (grid_shape,grid_shape))
+        vnorm_minus = np.reshape(np.subtract(vnorm_mean, vnorm_stdev), (grid_shape,grid_shape))
 
         # Grab the model data
         data_files = sorted(set(fn for fn in fnmatch.filter(os.listdir(self.model_dir), 'ismip-hom-a.'+resolution+'.????.out.nc')))
         for fname in data_files:
-            print os.path.join(self.model_dir,fname)
             dataset = Dataset(os.path.join(self.model_dir,fname),'r')
-            uvel = dataset.variables['uvel']
-            vvel = dataset.variables['vvel']
+            uvel = dataset.variables['uvel'][0,-1,:,:]
+            vvel = dataset.variables['vvel'][0,-1,:,:]
+            shape = np.shape(uvel)
             vnorm = np.sqrt(np.add(np.power(uvel,2), np.power(vvel,2)))
-            under = np.subtract(vnorm,vnorm_minus)
-            over = np.subtract(vnorm_plus,vnorm)
-            bad_data = np.add(over<0, under<0)
-            mean_diff = np.subtract(velnorm, vnorm_mean)
+            under = np.subtract(vnorm,vnorm_minus[1:-1,1:-1])
+            over = np.subtract(vnorm_plus[1:-1,1:-1],vnorm)
+            bad_data = np.zeros(shape)
+            for i in range(shape[0]):
+                for j in range(shape[0]):
+                    if under[i,j]<0 or over[i,j]>0:
+                        bad_data[i,j]=1
+            mean_diff = np.subtract(vnorm, vnorm_mean[1:-1,1:-1])
+            plt.subplot(1,2,1)
+            plt.imshow(vnorm)
+            plt.title('CISM')
+            plt.colorbar()
+            plt.subplot(1,2,2)
+            plt.imshow(vnorm_mean)
+            plt.title('ISMIP')
+            plt.colorbar()
+            plt.savefig('~/ismip_'+fname+'.png')
 
     def run_experiment_c(self, resolution):
         """
         Details here
         """
+        return
         # Grab the ISMIP benchmark data & calculate velocity norm mean and standard deviation
         fpath = os.path.join(util.variables.cwd,"numerics","data","ismip-hom-c."+resolution+".lmla.txt")
         x,y,vx_mean,vx_stdev,vy_mean,vy_stdev = np.loadtxt(fpath, unpack=True, delimiter=',', skiprows=1, usecols=(0,1,2,3,6,7)) 
@@ -119,7 +135,6 @@ class Test(AbstractTest):
         
         # Grab the model data
         data_files = sorted(set(fn for fn in fnmatch.filter(os.listdir(self.model_dir), 'ismip-hom-c.'+resolution+'.????.out.nc')))
-        print data_files
 
 
 
@@ -127,6 +142,7 @@ class Test(AbstractTest):
         """
         Details here
         """
+        return
         # Grab the ISMIP benchmark data & calculate velocity norm mean and standard deviation
         fpath = os.path.join(util.variables.cwd,"numerics","data","ismip-hom-f."+resolution+".lmla.txt")
         x,y,vx_mean,vx_stdev,vy_mean,vy_stdev = np.loadtxt(fpath, unpack=True, delimiter=',', skiprows=1, usecols=(0,1,2,3,6,7)) 
@@ -135,6 +151,5 @@ class Test(AbstractTest):
         
         # Grab the model data
         data_files = sorted(set(fn for fn in fnmatch.filter(os.listdir(self.model_dir), 'ismip-hom-f.'+resolution+'.????.out.nc')))
-        print data_files
 
 
