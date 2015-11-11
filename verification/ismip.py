@@ -57,5 +57,5 @@ class Test(AbstractTest):
 
     def collect_cases(self):
         """ Searches through the data directory and gathers the test cases to run """
-        self.tests_run = sorted(set('.'.join(fn.split('-')[-1].split('.')[0:2]) for fn in fnmatch.filter(os.listdir(self.model_dir), 'ismip-hom-*')))
+        self.tests_run = sorted(set('.'.join(fn.split('-')[-1].split('.')[0:2]) for fn in fnmatch.filter(os.listdir(self.model_dir), 'ismip-hom-?.*.nc')))
 
