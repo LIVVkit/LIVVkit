@@ -100,8 +100,8 @@ class Test(AbstractTest):
         data_files = sorted(set(fn for fn in fnmatch.filter(os.listdir(self.model_dir), 'ismip-hom-a.'+resolution+'.????.out.nc')))
         for fname in data_files:
             dataset = Dataset(os.path.join(self.model_dir,fname),'r')
-            uvel = dataset.variables['uvel'][0,-1,:,:]
-            vvel = dataset.variables['vvel'][0,-1,:,:]
+            uvel = dataset.variables['uvel'][0,1,:,:]
+            vvel = dataset.variables['vvel'][0,1,:,:]
             shape = np.shape(uvel)
             vnorm = np.sqrt(np.add(np.power(uvel,2), np.power(vvel,2)))
             under = np.subtract(vnorm,vnorm_minus[1:-1,1:-1])
@@ -113,14 +113,14 @@ class Test(AbstractTest):
                         bad_data[i,j]=1
             mean_diff = np.subtract(vnorm, vnorm_mean[1:-1,1:-1])
             plt.subplot(1,2,1)
-            plt.imshow(vnorm)
-            plt.title('CISM')
+            plt.imshow(mean_diff)
+            plt.title('Mean diff')
             plt.colorbar()
             plt.subplot(1,2,2)
-            plt.imshow(vnorm_mean)
-            plt.title('ISMIP')
+            plt.imshow(bad_data)
             plt.colorbar()
-            plt.savefig('~/ismip_'+fname+'.png')
+            plt.title('Bad data')
+            plt.savefig('/home/bzq/ismip_'+fname+'.png')
 
     def run_experiment_c(self, resolution):
         """
