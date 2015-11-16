@@ -134,7 +134,7 @@ class AbstractTest(object):
         
         self.convert_dicts()
         self.generate()
-        ver_summary[self.name.lower()] = self.summary
+        ver_summary[self.name] = self.summary
 
     
     @abstractmethod
@@ -170,7 +170,7 @@ class AbstractTest(object):
         index_dir = ".."
         css_dir = index_dir + "/css"
         img_dir = index_dir + "/imgs"
-        test_imgDir = index_dir + os.sep + "numerics" + os.sep + \
+        test_imgDir = util.variables.index_dir + os.sep + "numerics" + os.sep + \
                       self.name.capitalize() + os.sep + "imgs"
         test_images = [os.path.basename(img) for img in glob.glob(test_imgDir + os.sep + "*.png")]
         test_images.append([os.path.basename(img) for img in glob.glob(test_imgDir + "*.jpg")])

@@ -208,7 +208,7 @@ verification_summary = dict(verification_summary)
 performance_summary = dict(performance_summary)
 validation_summary = dict(validation_summary)
 print("Generating web pages in " + util.variables.output_dir + "....")
-util.websetup.generate(verification_summary, performance_summary, validation_summary)
+util.websetup.generate(numerics_summary, verification_summary, performance_summary, validation_summary)
 
 ###############################################################################
 #                        Finished.  Tell user about it.                       #

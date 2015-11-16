@@ -76,46 +76,73 @@ class Test(AbstractTest):
         Details here
         """
         # Grab the ISMIP benchmark data & calculate velocity norm mean and standard deviation
-        fpath = os.path.join(util.variables.cwd,"numerics","data","ismip-hom-a."+resolution+".lmla.txt")
-        x,y,vx_mean,vx_stdev,vy_mean,vy_stdev = np.loadtxt(fpath, unpack=True, delimiter=',', skiprows=1, usecols=(0,1,2,3,6,7)) 
+        exp_type = 'a'
+        fpath = os.path.join(util.variables.cwd,"numerics","data","ismip-hom-a."+resolution+\
+                             ".lmla.txt")
+        x, y, vx_mean, vx_stdev, vx_min, vx_max, vy_mean, vy_stdev, vy_min, vy_max =\
+            np.loadtxt(fpath, unpack=True, delimiter=',',skiprows=1, usecols=(0,1,2,3,4,5,6,7,8,9)) 
         n_pts = int(np.sqrt(len(x)))
-        vnorm_mean =  np.reshape(np.sqrt(np.add(np.power(vx_mean,2), np.power(vy_mean,2))), (n_pts,n_pts))
-        vnorm_stdev = np.reshape(np.sqrt(np.add(np.power(vx_stdev,2), np.power(vy_stdev,2))), (n_pts,n_pts))
+        vnorm_mean =  np.reshape(np.sqrt(np.add(np.power(vx_mean,2), np.power(vy_mean,2))),\
+                                 (n_pts,n_pts))
+        vnorm_stdev = np.reshape(np.sqrt(np.add(np.power(vx_stdev,2), np.power(vy_stdev,2))),\
+                                 (n_pts,n_pts))
         vnorm_plus =  np.reshape(np.add(vnorm_mean, vnorm_stdev), (n_pts,n_pts))
         vnorm_minus = np.reshape(np.subtract(vnorm_mean, vnorm_stdev), (n_pts,n_pts))
+        vnorm_max = np.reshape(np.sqrt(np.add(np.power(vx_max,2), np.power(vy_max,2))),\
+                               (n_pts,n_pts))
+        vnorm_min = np.reshape(np.sqrt(np.add(np.power(vx_min,2), np.power(vy_min,2))),\
+                               (n_pts,n_pts))
 
         # Grab the model data
         data_files = sorted(set(fn for fn in fnmatch.filter(os.listdir(self.model_dir), 'ismip-hom-a.'+resolution+'.????.out.nc')))
         for fname in data_files:
             dataset = Dataset(os.path.join(self.model_dir,fname),'r')
-            uvel = dataset.variables['uvel'][0,0,:,:]
-            vvel = dataset.variables['vvel'][0,0,:,:]
+            uvel  = dataset.variables['uvel'][0,0,:,:]
+            vvel  = dataset.variables['vvel'][0,0,:,:]
             shape = np.shape(uvel)
             vnorm = np.sqrt(np.add(np.power(uvel,2), np.power(vvel,2)))
-            under = np.subtract(vnorm_minus[1:-1,1:-1],vnorm)
-            over = np.subtract(vnorm_plus[1:-1,1:-1],vnorm)
+            floor = np.subtract(vnorm_min[1:-1,1:-1],   vnorm)
+            ciel  = np.subtract(vnorm_max[1:-1,1:-1],   vnorm)
+            under = np.subtract(vnorm_minus[1:-1,1:-1], vnorm)
+            over  = np.subtract(vnorm_plus[1:-1,1:-1],  vnorm)
             bad_data = np.zeros(shape)
             for i in range(shape[0]):
                 for j in range(shape[0]):
-                    if under[i,j]>0:
-                        bad_data[i,j]=-1
+                    if floor[i,j]>0:
+                        bad_data[i,j] = -2 # CISM < MIN_ISMIP
+                        self.summary['Out of Range'] = 1
+                    elif ciel[i,j]<0:
+                        bad_data[i,j] = 2  # CISM > MAX_ISMIP
+                        self.summary['Out of Range'] = 1
+                    elif under[i,j]>0:
+                        bad_data[i,j] = -1 # CISM < MU - SIGMA 
+                        self.summary['Out of Range'] = 1
                     elif over[i,j]<0:
-                        bad_data[i,j]=1
-            mean_diff = 100.0*np.divide(np.subtract(vnorm_mean[1:-1,1:-1], vnorm), vnorm_mean[1:-1,1:-1])
-            plt.subplot(1,2,1)
+                        bad_data[i,j] = 1  # CISM > MU + SIGMA
+                        self.summary['Out of Range'] = 1
+            mean_diff = 100.0*np.divide(np.subtract(vnorm_mean[1:-1,1:-1], vnorm),\
+                                                    vnorm_mean[1:-1,1:-1])
+            
+            plt.figure()
             plt.imshow(mean_diff)
             plt.title('% Difference from mean')
             plt.colorbar()
-            plt.subplot(1,2,2)
+            plt.savefig(os.path.join(util.variables.index_dir, 'numerics', self.name.capitalize(),\
+                        'imgs', exp_type + resolution + '_percent_diff.png'))
+            
+            plt.figure()
             plt.imshow(bad_data)
             plt.colorbar()
             plt.title('Data outside of standard deviation')
-            plt.savefig('/home/bzq/ismip_'+fname+'.png')
+            plt.savefig(os.path.join(util.variables.index_dir, 'numerics', self.name.capitalize(),\
+                        'imgs', exp_type + resolution + '_outliers.png'))
+
 
     def run_experiment_c(self, resolution):
         """
         Details here
         """
+        return
         fpath = os.path.join(util.variables.cwd,"numerics","data","ismip-hom-c."+resolution+".lmla.txt")
         x,y,vx_mean,vx_stdev,vy_mean,vy_stdev = np.loadtxt(fpath, unpack=True, delimiter=',', skiprows=1, usecols=(0,1,2,3,6,7)) 
         n_pts = int(np.sqrt(len(x)))
@@ -157,6 +184,7 @@ class Test(AbstractTest):
         """
         Details here
         """
+        return
         fpath = os.path.join(util.variables.cwd,"numerics","data","ismip-hom-f."+resolution+".lmla.txt")
         x,y,vx_mean,vx_stdev,vy_mean,vy_stdev = np.loadtxt(fpath, unpack=True, delimiter=',', skiprows=1, usecols=(0,1,2,3,6,7)) 
         n_pts = int(np.sqrt(len(x)))
