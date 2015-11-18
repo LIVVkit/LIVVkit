@@ -186,7 +186,7 @@ class AbstractTest(object):
                         "test_description" : self.description,
                         "tests_run" : self.tests_run,
                         "test_header" : util.variables.parser_vars,
-                        "test_images" : test_images}
+                        "test_images" : self.summary}
         output_text = template.render( template_vars )
         page = open(util.variables.index_dir + os.sep + "numerics" + os.sep + self.name.lower() + '.html', "w")
         page.write(output_text)

@@ -35,8 +35,9 @@
       <b class="label-header">Plots</b> <br/>
       <div class="separator">
       <hr style="opacity: 0; height: 5px;">
-      {% if test_images != [] %}
-        {% for img in test_images %}
+      {% if test_images[case] != [] %}
+        {% for img in test_images[case] %}
+        {% if img != [] %}
         <div class="gallery">
           <div style="float: left; display: inline;">
              <!-- img_arr[0] is the name of the image -->
@@ -52,6 +53,7 @@
           <img src="{{test_imgDir}}/{{img}}" class="image_overlay"></img>
           <a class="close" href="#close">x</a>
         </div>
+        {% endif %}
         {% endfor %}
       <!-- No plots were passed to jinja2 -->
       {% else %}
