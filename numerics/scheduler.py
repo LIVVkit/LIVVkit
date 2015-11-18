@@ -26,10 +26,7 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
-The scheduler for the verification tests.  It will handle the entire 
-lifecycle of any verification tests and associated files/processes.
-Should be used in the following order:
-    setup -> schedule -> run -> cleanup
+Scheduler for the numerics package.
 
 @author arbennett
 """
@@ -43,12 +40,9 @@ from threading import Thread
 
 import util.variables
 import util.websetup
-import verification.dome
-import verification.ismip
-import verification.shelf
-import verification.stream
+import numerics.ismip
 
-class VerificationScheduler(object):
+class NumericsScheduler(object):
 
     def __init__(self):
         """ Constructor """
@@ -60,51 +54,45 @@ class VerificationScheduler(object):
 
     def setup(self):
         """
-        Prepare information for running verification tests.  This will
+        Prepare information for running numerics tests.  This will
         need to make sure the directory structure is correct, read
         configuration files, and do some other checking to make sure
         that we are safe to run.
         """
         print("--------------------------------------------------------------------------")
-        print("  Beginning verification test suite....")
+        print("  Beginning numerics test suite....")
         print("--------------------------------------------------------------------------")
         # Make sure that the directory structure is okay
-        for data_dir in [util.variables.input_dir, util.variables.benchmark_dir]:
-            if not os.path.exists(data_dir):
-                print("ERROR: Could not find " + data_dir + " for input")
-                print("       Use the -t and -b flags to specify the locations of the test and benchmark data.")
-                print("       See README.md for more details.")
-                print("------------------------------------------------------------------------------")
-                exit(1)       
+        if not os.path.exists(util.variables.input_dir):
+            print("ERROR: Could not find " + util.variables.input_dir + " for input")
+            print("       Use the -t and -b flags to specify the locations of the test and benchmark data.")
+            print("       See README.md for more details.")
+            print("------------------------------------------------------------------------------")
+            exit(1)       
 
-        # Verification tests we run
-        util.variables.verifications = [
-                         verification.dome, 
-                         verification.ismip, 
-                         verification.shelf, 
-                         verification.stream
+        # Numerics tests we run
+        util.variables.numerics = [
+                        numerics.ismip
                         ]
 
         # Set up directories for output\
-        for ver in util.variables.verifications:
-            test_dir = util.variables.index_dir + os.sep + "verification" + os.sep + ver.get_name().capitalize()
+        for ver in util.variables.numerics:
+            test_dir = util.variables.index_dir + os.sep + "numerics" + os.sep + ver.get_name().capitalize()
             util.websetup.mkdir_p(test_dir)
             util.websetup.mkdir_p(test_dir + os.sep + "imgs")
-            util.websetup.mkdir_p(test_dir + os.sep + "imgs" + os.sep + "bit4bit")
-
     
     
     def schedule(self):
         """ 
-        Creates a process handle for each of the verification tests
+        Creates a process handle for each of the numerics tests
         to be run.
         """
         self.manager = multiprocessing.Manager()
         self.output = self.manager.Queue()
         self.summary = self.manager.dict()
-        self.process_handles = [multiprocessing.Process(target=ver_type.Test().run, 
+        self.process_handles = [multiprocessing.Process(target=num_type.Test().run, 
                                                           args=(self.summary, self.output)) 
-                                  for ver_type in util.variables.verifications]
+                                  for num_type in util.variables.numerics]
     
     def run(self):
         """ 
@@ -131,6 +119,4 @@ class VerificationScheduler(object):
             [os.remove(temp_file) for temp_file in glob.glob(util.variables.input_dir + os.sep + sub_dir + os.sep + "temp.*")]
             [os.remove(temp_file) for temp_file in glob.glob(util.variables.input_dir + os.sep + sub_dir + os.sep + "*.tmp")]
         return
-    
-    
     

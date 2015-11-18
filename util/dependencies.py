@@ -70,7 +70,8 @@ def check():
     also built.
     """
     cwd = os.getcwd()
-    
+    dep_dir = os.path.join(cwd, 'deps')
+
     # The list of nonstandard python libraries that are used 
     library_list = ["jinja2", "netCDF4", "numpy", "matplotlib"]
     # The list of command line programs needed
@@ -102,9 +103,9 @@ def check():
     try:
         from setuptools.command import easy_install
     except ImportError:
-        if not os.path.exists(cwd + os.sep + "deps"):
-            os.mkdir(cwd + os.sep + "deps")
-            sys.path.append(cwd + os.sep + "deps")
+        if not os.path.exists(dep_dir):
+            os.mkdir(dep_dir)
+            sys.path.append(dep_dir)
         
         ez_command = install_setup_tools()
         try:
@@ -128,14 +129,14 @@ def check():
             print("      Found " + lib + "!")
         except ImportError:
             print("      Could not find " + lib + ".  Building a copy for you...."),
-            if not os.path.exists(cwd + os.sep + "deps"):
-                os.mkdir(cwd + os.sep + "deps")
-                sys.path.append(cwd + os.sep + "deps")
+            if not os.path.exists(dep_dir):
+                os.mkdir(dep_dir)
+                sys.path.append(dep_dir)
             easy_install.main(["--user",lib])
             libs_installed.append(lib)
 
     # ez_setup instals into $HOME/.local/lib/python2.7/site-packages/ ...
-    egg_files = find_eggs(os.environ['HOME'] + os.sep + '.local')
+    egg_files = find_eggs(os.path.join(os.environ['HOME'], '.local'))
     
     # add the found site-packages to the python path
     for ef in egg_files:
@@ -188,6 +189,7 @@ def check_modules():
     """
     # Check to see if calling 'module list' is a real command
     cwd = os.getcwd()
+    dep_dir = os.path.join(cwd, 'deps')
     print("    Checking if modules need to be loaded"),
     modules = [
            "python", 
@@ -204,16 +206,15 @@ def check_modules():
     out, err = check_call.communicate()
 
     # Find out if we need to check if modules are loaded
-    if "bash: module: command not found" in err or \
-            "bash: module: command not found" in out:
+    if "bash: module: command not found" in err + out: 
         print(" nope.  Continuing....")
         return
     else:
         # We need to check if all of the correct modules are loaded
-        if not os.path.exists(cwd + os.sep + "deps"):
-            os.mkdir(cwd + os.sep + "deps")
-            sys.path.append(cwd + os.sep + "deps")
-        f = open(cwd + os.sep + "deps" + os.sep + "modules", 'w')
+        if not os.path.exists(dep_dir):
+            os.mkdir(dep_dir)
+            sys.path.append(dep_dir)
+        f = open(os.path.join(dep_dir, "modules"), 'w')
 
         # Record the modules needed, the modules that have been loaded, and start a list for what's missing
         module_list_output = out.split() + err.split()
