@@ -46,6 +46,7 @@ user           = ''
 website_dir     = ''
 template_dir    = ''
 index_dir       = ''
+numerics       = ''
 verification   = ''
 verifications  = []
 performance    = ''

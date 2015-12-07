@@ -94,7 +94,7 @@ def setup():
     f.close()
 
 
-def generate(verification_summary, performance_summary, validation_summary):
+def generate(numerics_summary, verification_summary, performance_summary, validation_summary):
     """
     Build the index
     
@@ -108,6 +108,7 @@ def generate(verification_summary, performance_summary, validation_summary):
     template_file = os.sep + "index.html"
     template = template_env.get_template(template_file)
     template_vars = {"index_dir" : ".",
+                    "numerics_summary" : numerics_summary,
                     "verification_summary" : verification_summary,
                     "performance_summary" : performance_summary,
                     "validation_summary" : validation_summary,

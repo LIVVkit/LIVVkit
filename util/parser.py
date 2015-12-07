@@ -184,7 +184,6 @@ class Parser(object):
             print("    Could not find model data in" + model_dir)
         files = filter(re.compile(regex).search, files)
         outdata = dict()
-
         for file_name in files:
             # Initialize a new set of data
             number_procs = 0

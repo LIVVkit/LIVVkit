@@ -89,6 +89,10 @@ parser.add_argument('--validation',
         action='store', nargs='*',
         help='Specify the location of the configuration files for validation tests.')
 
+parser.add_argument('--numerics',
+        action='store_true',
+        help="Run numerics tests.")
+
 parser.add_argument('--load', 
         help='Load saved options.')
 parser.add_argument('--save', 
@@ -108,6 +112,7 @@ util.dependencies.check()
 import util.variables
 import util.configuration_handler
 import util.websetup
+import numerics.scheduler
 import verification.ver_utils.self_verification
 import verification.scheduler
 import performance.scheduler
@@ -117,7 +122,7 @@ import validation.scheduler
 #                              Global Variables                               #
 ###############################################################################
 util.variables.cwd                = os.getcwd()
-util.variables.config_dir         = util.variables.cwd + os.sep + "configurations"
+util.variables.config_dir         = os.path.join(util.variables.cwd, "configurations")
 util.variables.input_dir          = os.path.abspath(options.test_dir + os.sep + 'higher-order')
 util.variables.benchmark_dir      = os.path.abspath(options.bench_dir + os.sep + 'higher-order')
 util.variables.output_dir         = os.path.abspath(options.out_dir)
@@ -125,11 +130,12 @@ util.variables.img_dir            = util.variables.output_dir + "/imgs"
 util.variables.comment            = options.comment
 util.variables.timestamp          = time.strftime("%m-%d-%Y %H:%M:%S")
 util.variables.user               = getpass.getuser()
-util.variables.website_dir        = util.variables.cwd + "/web"
-util.variables.template_dir       = util.variables.website_dir + "/templates"
+util.variables.website_dir        = os.path.join(util.variables.cwd, "web")
+util.variables.template_dir       = os.path.join(util.variables.website_dir, "templates")
 util.variables.index_dir          = util.variables.output_dir
-util.variables.verification       = "True" if options.validation is None else "False"
-util.variables.performance        = str(options.performance)
+util.variables.numerics           = options.numerics
+util.variables.verification       = True if options.validation is None else False
+util.variables.performance        = options.performance
 util.variables.validation         = options.validation
 
 # A list of the information that should be looked for in the stdout of model output
@@ -139,9 +145,6 @@ util.variables.parser_vars = [
               'Number of timesteps',
               'Avg iterations to converge'
              ]
-
-# Dycores to try to parse output for
-util.variables.dycores = ['glissade'] #["glide", "glissade", "glam", "albany", "bisicles"]
 
 # Check if we are saving the configuration
 if options.save:
@@ -160,10 +163,20 @@ print("  " + util.variables.comment + os.linesep)
 #                               Run Test Cases                                #
 ###############################################################################
 util.websetup.setup()
-verification_summary, validation_summary, performance_summary = dict(), dict(), dict()
+numerics_summary, verification_summary = dict(), dict()
+validation_summary, performance_summary = dict(), dict()
+
+# Run the numerics tests
+if util.variables.numerics:
+    scheduler = numerics.scheduler.NumericsScheduler()
+    scheduler.setup()
+    scheduler.schedule()
+    scheduler.run()
+    scheduler.cleanup()
+    numerics_summary = scheduler.summary.copy()
 
 # Run the verification tests
-if util.variables.verification == "True":
+if util.variables.verification:
     scheduler = verification.scheduler.VerificationScheduler()
     scheduler.setup()
     verification.ver_utils.self_verification.check()
@@ -173,7 +186,7 @@ if util.variables.verification == "True":
     verification_summary = scheduler.summary.copy()
 
 # Run the performance verification
-if util.variables.performance == "True":
+if util.variables.performance:
     scheduler = performance.scheduler.PerformanceScheduler()
     scheduler.setup()
     scheduler.schedule()
@@ -190,11 +203,12 @@ if util.variables.validation is not None:
     validation_summary = scheduler.summary.copy()
 
 # Create the site index
+numerics_summary = dict(numerics_summary)
 verification_summary = dict(verification_summary)
 performance_summary = dict(performance_summary)
 validation_summary = dict(validation_summary)
 print("Generating web pages in " + util.variables.output_dir + "....")
-util.websetup.generate(verification_summary, performance_summary, validation_summary)
+util.websetup.generate(numerics_summary, verification_summary, performance_summary, validation_summary)
 
 ###############################################################################
 #                        Finished.  Tell user about it.                       #

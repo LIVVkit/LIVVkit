@@ -26,7 +26,7 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
-Verification Test Base Module
+Numerics Test Base Module
 The Abstract_test class defines several methods that each test class must implement, 
 as well as provides bit for bit and html generating capabilities which are inherited
 by all derived test classes.
@@ -64,7 +64,7 @@ def good_time_dim(file_name):
 
 class AbstractTest(object):
     """
-    AbstractTest provides a description of how a verification test should 
+    AbstractTest provides a description of how a numerics test should 
     work in LIVV.
     """
     __metaclass__ = ABCMeta
@@ -72,6 +72,7 @@ class AbstractTest(object):
     def __init__(self):
         """ Constructor """   
         self.name = "default"
+        self.data_dir = os.path.join(util.variables.cwd, "numerics", "data")
         self.model_dir, self.bench_dir = "", ""
         self.tests_run = []
         self.manager = multiprocessing.Manager()
@@ -82,7 +83,7 @@ class AbstractTest(object):
         self.test_configs = self.manager.dict() 
         self.bench_configs = self.manager.dict()
         self.summary = self.manager.dict()
-
+        self.datasets = glob.glob(os.path.join("data", "*.txt"))
 
     @abstractmethod
     def collect_cases(self):
@@ -107,7 +108,7 @@ class AbstractTest(object):
 
     def run(self, ver_summary, output):
         """
-        Runs all of the available verification tests of a specific type.  
+        Runs all of the available numerics tests of a specific type.  
         Looks in the model and benchmark directories for different variations,
         and then runs the run_case() method with the correct information
         
@@ -116,7 +117,7 @@ class AbstractTest(object):
             output: multiprocessing queue to store information to print to stdout
         """
         if not (os.path.exists(self.model_dir) and os.path.exists(self.bench_dir)):
-            output.put("    Could not find data for " + self.name + " verification!  Tried to find data in:")
+            output.put("    Could not find data for " + self.name + " numerics!  Tried to find data in:")
             output.put("      " + self.model_dir)
             output.put("      " + self.bench_dir)
             output.put("    Continuing with next test....")
@@ -133,9 +134,10 @@ class AbstractTest(object):
         
         self.convert_dicts()
         self.generate()
-        ver_summary[self.name.lower()] = self.summary
+        ver_summary[self.name] = self.summary
 
-
+    
+    @abstractmethod
     def run_case(self, test_case, output):
         """
         Runs the V&V for a given case.  First parses through all of the standard 
@@ -146,110 +148,7 @@ class AbstractTest(object):
             test_case: Which version of the  test should be run
             output: multiprocessing queue to store information to print to stdout
         """
-        # Process the configure files
-        parser = Parser()
-        self.test_configs[test_case], self.bench_configs[test_case] = \
-            parser.parse_configurations(self.model_dir, self.bench_dir, self.name + "*" + test_case + ".*.config")
-
-        # Scrape the details from each of the files and store some data for later
-        self.test_details[test_case] = parser.parse_std_output(self.model_dir, self.name + "*(.|-)" + test_case + ".*.config.oe")
-        self.bench_details[test_case] = parser.parse_std_output(self.bench_dir, self.name + "*(.|-)" + test_case + ".*.config.oe")
-
-        # Record the data from the parser
-        number_outputFiles, number_configMatches, number_configTests = parser.get_parserSummary()
-
-        # Run bit for bit test
-        number_bitTests, number_bitMatches = 0, 0
-        self.bit_for_bit_details[test_case] = self.bit4bit(self.name + "*" + test_case, test_case)
-        for key, value in self.bit_for_bit_details[test_case].iteritems():
-            if value[0] == "SUCCESS": number_bitMatches+=1
-            number_bitTests+=1
-
-        self.summary[test_case] = [number_outputFiles, number_configMatches, number_configTests,
-                                  number_bitMatches, number_bitTests]
-
-
-    def bit4bit(self, test, resolution):
-        """
-        Tests all models and benchmarks against each other in a bit for bit fashion.
-        
-        Args:
-            test: the test case to check bittedness
-            resolution: the size of the test being run
-        Returns:
-            [change, err] where change in {0,1} and err is a list of the status and some metrics
-        """
-        # Mapping of result codes to results
-        numpy.set_printoptions(threshold='nan')
-        result = {-1 : 'N/A', 0 : 'SUCCESS', 1 : 'FAILURE'}
-        bit_dict = dict()
-
-        if not (os.path.exists(self.model_dir) or os.path.exists(self.bench_dir)):
-            return {'No matching benchmark and data files found': ['SKIPPED','0.0']}
-        
-        # Get the intersection of the two file lists
-        regex = self.name + '*(.|-)' + resolution + '.*.out.nc'
-        test_files = [fn.split(os.sep)[-1] for fn in filter(re.compile(regex).search, os.listdir(self.model_dir))]
-        bench_files = [fn.split(os.sep)[-1] for fn in filter(re.compile(regex).search, os.listdir(self.bench_dir))]
-        same_list = set(test_files).intersection(bench_files)
-        if len(same_list) == 0:
-            return {'No matching benchmark and data files found': ['SKIPPED','0.0']}
-
-        # Go through and check if any differences occur
-        for same in list(same_list):
-            change = 0
-            plot_vars = dict()
-            test_file = os.path.join(self.model_dir, same)
-            bench_file = os.path.join(self.bench_dir, same)
-
-            # check for empty time dimensions
-            good_bench = good_time_dim(bench_file)
-            good_test = good_time_dim(test_file)
-            
-            if (not good_bench) and (not good_test):
-                bit_dict[same] =  ['EMPTY TIME','benchmark and test']
-            elif not good_bench:
-                bit_dict[same] =  ['EMPTY TIME','benchmark']
-            elif not good_test:
-                bit_dict[same] =  ['EMPTY TIME','test']
-            else:
-                # Create a difference file with ncdiff
-                test= Dataset(test_file, 'r')
-                test_data = test.variables
-                bench = Dataset(bench_file,'r')
-                bench_data = bench.variables
-
-                # Check if any data in thk has changed, if it exists
-                if 'thk' in test_data and 'thk' in bench_data and \
-                        test_data['thk'].size != 0 and bench_data['thk'].size != 0:
-                    data = test_data['thk'][:] - bench_data['thk'][:]
-                    if data.any():
-                        # Record the maximum difference and root mean square of the error 
-                        max = numpy.amax( numpy.absolute(data) )
-                        rmse = numpy.sqrt(numpy.sum( numpy.square(data).flatten() ) / data.size )
-                        plot_vars['thk'] = [max, rmse]
-                        change = 1
-
-                # Check if any data in velnorm has changed, if it exists
-                if 'velnorm' in test_data and 'velnorm' in bench_data and \
-                        test_data['velnorm'].size != 0 and bench_data['velnorm'].size != 0:
-                    data = test_data['velnorm'][:] - bench_data['velnorm'][:]
-                    if data.any():
-                        # Record the maximum difference and root mean square of the error 
-                        max = numpy.amax( numpy.absolute(data) )
-                        rmse = numpy.sqrt(numpy.sum( numpy.square(data).flatten() ) / data.size )
-                        plot_vars['velnorm'] = [max, rmse]
-                        change = 1
-
-                test.close()
-                bench.close()
-                bit_dict[same] = [result[change],  plot_vars]
-                # Generate the plots for each of the failed variables
-                for var in plot_vars.keys():
-                    out_file = os.path.join(util.variables.index_dir, "verification", self.name.capitalize(),\
-                            "imgs", "bit4bit", test_file.split(os.sep)[-1] + "." + var + ".png")
-                    nclfunc.plot_diff(var, test_file, bench_file, out_file)
-        return bit_dict
+        pass
 
 
     def generate(self):
@@ -266,13 +165,14 @@ class AbstractTest(object):
         """
         template_loader = jinja2.FileSystemLoader(searchpath=util.variables.template_dir)
         template_env = jinja2.Environment(loader=template_loader, extensions=["jinja2.ext.do",])
-        template_file = "/verification_test.html"
+        template_file = "/numerics_test.html"
         template = template_env.get_template(template_file)
         index_dir = ".."
         css_dir = index_dir + "/css"
         img_dir = index_dir + "/imgs"
-        test_imgDir = os.path.join(index_dir, "verification", self.name.capitalize(), "imgs")
-        test_images = [os.path.basename(img) for img in glob.glob(os.path.join(test_imgDir, "*.png"))]
+        test_imgDir = util.variables.index_dir + os.sep + "numerics" + os.sep + \
+                      self.name.capitalize() + os.sep + "imgs"
+        test_images = [os.path.basename(img) for img in glob.glob(test_imgDir + os.sep + "*.png")]
         test_images.append([os.path.basename(img) for img in glob.glob(test_imgDir + "*.jpg")])
         test_images.append([os.path.basename(img) for img in glob.glob(test_imgDir + "*.svg")])
         template_vars = {"timestamp" : util.variables.timestamp,
@@ -286,15 +186,9 @@ class AbstractTest(object):
                         "test_description" : self.description,
                         "tests_run" : self.tests_run,
                         "test_header" : util.variables.parser_vars,
-                        "bit_for_bit_details" : self.bit_for_bit_details,
-                        "test_details" : self.test_details,
-                        "bench_details" : self.bench_details,
-                        "plot_details" : self.plot_details,
-                        "test_configs" : self.test_configs,
-                        "bench_configs" : self.bench_configs,
-                        "test_images" : test_images}
+                        "test_images" : self.summary}
         output_text = template.render( template_vars )
-        page = open(os.path.join(util.variables.index_dir, "verification", self.name.lower() + '.html'), "w")
+        page = open(util.variables.index_dir + os.sep + "numerics" + os.sep + self.name.lower() + '.html', "w")
         page.write(output_text)
         page.close()
 

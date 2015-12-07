@@ -57,24 +57,26 @@ def check():
     error_list = []
     fake_summary = dict()
     dome = verification.dome.Test()
-    dome.bench_dir = util.variables.cwd + os.sep + "util" + os.sep + "data_base"
-    
+    dome.bench_dir = os.path.join(util.variables.cwd, "verification", "ver_utils", "data_base")
     # Compare against data that should all match
-    dome.model_dir = util.variables.cwd + os.sep + "util" + os.sep + "data_same"
-    dome.run(fake_summary, Queue.Queue())
-    if not dome.bit_for_bit_details["Dome 0010"]["dome.0010.p001.out.nc"][0] == 'SUCCESS':
+    dome.model_dir = os.path.join(util.variables.cwd, "verification", "ver_utils", "data_same")
+    dome.collect_cases()
+    dome.run_case('0010', Queue.Queue())
+    if not dome.bit_for_bit_details["0010"]["dome.0010.p001.out.nc"][0] == 'SUCCESS':
         error_list.append("NCDiff recorded differences on results of same test.")
 
     # Compare against data that has a small difference
-    dome.model_dir = util.variables.cwd + os.sep + "util" + os.sep + "data_diffsmall"
-    dome.run(fake_summary, Queue.Queue())
-    if not dome.bit_for_bit_details["Dome 0010"]["dome.0010.p001.out.nc"][0] == 'FAILURE':
+    dome.model_dir = os.path.join(util.variables.cwd, "verification", "ver_utils", "data_diffsmall")
+    dome.collect_cases()
+    dome.run_case('0010', Queue.Queue())
+    if not dome.bit_for_bit_details["0010"]["dome.0010.p001.out.nc"][0] == 'FAILURE':
         error_list.append("NCDiff failed to record differences on small difference test") 
 
     # Compare against data that has a large difference
-    dome.model_dir = util.variables.cwd + os.sep + "util" + os.sep + "data_difflarge"
-    dome.run(fake_summary, Queue.Queue()) 
-    if not dome.bit_for_bit_details["Dome 0010"]["dome.0010.p001.out.nc"][0] == 'FAILURE':
+    dome.model_dir = os.path.join(util.variables.cwd, "verification", "ver_utils", "data_difflarge")
+    dome.collect_cases()
+    dome.run_case('0010', Queue.Queue()) 
+    if not dome.bit_for_bit_details["0010"]["dome.0010.p001.out.nc"][0] == 'FAILURE':
         error_list.append("NCDiff failed to record differences on small difference test") 
 
     # If the bit for bit difference plots are to be removed uncomment these lines
