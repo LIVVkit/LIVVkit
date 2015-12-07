@@ -135,7 +135,7 @@ util.variables.template_dir       = os.path.join(util.variables.website_dir, "te
 util.variables.index_dir          = util.variables.output_dir
 util.variables.numerics           = str(options.numerics)
 util.variables.verification       = True if options.validation is None else False
-util.variables.performance        = str(options.performance)
+util.variables.performance        = options.performance
 util.variables.validation         = options.validation
 
 # A list of the information that should be looked for in the stdout of model output
