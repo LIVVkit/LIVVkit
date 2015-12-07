@@ -133,7 +133,7 @@ util.variables.user               = getpass.getuser()
 util.variables.website_dir        = os.path.join(util.variables.cwd, "web")
 util.variables.template_dir       = os.path.join(util.variables.website_dir, "templates")
 util.variables.index_dir          = util.variables.output_dir
-util.variables.numerics           = str(options.numerics)
+util.variables.numerics           = options.numerics
 util.variables.verification       = True if options.validation is None else False
 util.variables.performance        = options.performance
 util.variables.validation         = options.validation
@@ -167,7 +167,7 @@ numerics_summary, verification_summary = dict(), dict()
 validation_summary, performance_summary = dict(), dict()
 
 # Run the numerics tests
-if util.variables.numerics == "True":
+if util.variables.numerics:
     scheduler = numerics.scheduler.NumericsScheduler()
     scheduler.setup()
     scheduler.schedule()

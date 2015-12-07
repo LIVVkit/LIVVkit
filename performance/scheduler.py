@@ -72,12 +72,12 @@ class PerformanceScheduler(object):
                 exit(1)       
 
         # Verification tests we run
-        util.variables.performances = [
+        util.variables.performance = [
                          performance.dome, 
                         ]
         
         # Set up directories for output\
-        for ver in util.variables.performances:
+        for ver in util.variables.performance:
             test_dir = util.variables.index_dir + os.sep + "performance" + os.sep + ver.get_name().capitalize()
             util.websetup.mkdir_p(test_dir)
             util.websetup.mkdir_p(test_dir + os.sep + "imgs")
@@ -94,7 +94,7 @@ class PerformanceScheduler(object):
         self.summary = self.manager.dict()
         self.process_handles = [multiprocessing.Process(target=perf_type.Test().run, 
                                                           args=(self.summary, self.output)) 
-                                  for perf_type in util.variables.performances]
+                                  for perf_type in util.variables.performance]
     
     
     def run(self):
@@ -107,7 +107,7 @@ class PerformanceScheduler(object):
             p.join()
         
         # Wait for all of the tests to finish
-        while len(multiprocessing.active_children()) > len(util.variables.performances):
+        while len(multiprocessing.active_children()) > len(util.variables.performance):
             time.sleep(0.25)
       
         # Show the results
