@@ -134,7 +134,7 @@ util.variables.website_dir        = os.path.join(util.variables.cwd, "web")
 util.variables.template_dir       = os.path.join(util.variables.website_dir, "templates")
 util.variables.index_dir          = util.variables.output_dir
 util.variables.numerics           = str(options.numerics)
-util.variables.verification       = "True" if options.validation is None else "False"
+util.variables.verification       = True if options.validation is None else False
 util.variables.performance        = str(options.performance)
 util.variables.validation         = options.validation
 
