@@ -29,46 +29,36 @@
  -->
 
 
-<!-- 
-  Template for generating test specific pages.
--->
 
-<!-- Include the header and some links -->
-{% include 'components/header.html' %}
-  
-  <!--   Start the pace specific content -->
-  <div id="content">
-  <h2 style="padding-left: 15px;">{{test_name}}</h2>
-  <div class="description">
-    <p>{{test_description}}</p>
-  </div>
-  <br style="clear: both" />
-  
-  <!--   Some CSS for determining which tab is selected -->
-  <STYLE type="text/css">
-  #select :checked + {% for i in range(tests_run|length -1) %} * + {% endfor %} label { background-color:#47A3FF;border-color:#47A3FF;color:#fff;}
-  #select :checked + {% for i in range(2*tests_run|length -1) %} * + {% endfor %} div {display: block;}
-  </STYLE>
-  
-  <!-- Generate the tab section -->
-  <div id="select" class="tabs">
-    <!-- The part that is hidden from the user -->
-    {% for case in tests_run %}
-    <input id="tab-{{case}}" name="tabs" style="-webkit-appearance:none;" type="radio" checked />
-    {% endfor %}  
-    <!-- The part you can click on -->
-    {% for case in tests_run %}
-    <label for="tab-{{case}}">{{case}}</label>  
-    {% endfor %}  
+
+      <!-- BEGIN PLOT SECTION -->
+      <b class="label-header">Plots</b> <br/>
+      <div class="separator">
+      <hr style="opacity: 0; height: 5px;">
+      {% if test_images != [] %}
+        {% for img in test_images %}
+        <div class="gallery">
+          <div style="float: left; display: inline;">
+             <!-- img_arr[0] is the name of the image -->
+             <a href="#img_form_{{img}}_{{loop.index}}" id="img_pop">
+                 <img src="{{test_imgDir}}/{{img}}" width="150px"></img>
+            </a>
+            <br style="clear: both" />
+          </div>
+         </div>
+        <a href="#close" class="overlay" id="img_form_{{img}}_{{loop.index}}"></a>
+
+        <div class="popup">
+          <img src="{{test_imgDir}}/{{img}}" class="image_overlay"></img>
+          <a class="close" href="#close">x</a>
+        </div>
+        {% endfor %}
+      <!-- No plots were passed to jinja2 -->
+      {% else %}
+        <a style="padding-left: 20px; color: #696969;">No plots for {{case}}</a>
+      {% endif %}
+      </div>
       
-    <!-- Go through each of the test cases that fall under this specific subcategory -->
-    {% for case in tests_run %}
-    <div class="case">
-        {% include 'components/num_plots_section.html' %}
-    </div>
-    {% endfor %}
-  </div>
-  <br>
-
-<!-- Include the footer -->
-{% include 'components/footer.html' %}
+      <br style="clear: both" />
+      <br height="30px" />
+      <!-- END PLOT SECTION -->

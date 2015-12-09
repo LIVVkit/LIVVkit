@@ -69,7 +69,7 @@ class AbstractTest(object):
                         "index_dir" : index_dir,
                         "css_dir" : css_dir,
                         "img_dir" : img_dir,
-                        "test_imgDir" : test_imgDir,
+                        "test_imgDir" : os.path.relpath(test_imgDir, test_imgDir+os.sep+'../'),
                         "test_name" : self.name.capitalize(),
                         "test_description" : self.description,
                         "test_images" : test_images}
