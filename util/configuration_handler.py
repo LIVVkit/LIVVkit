@@ -47,7 +47,7 @@ def save(options):
          
     # get options to save
     save_options = []
-    for opt, value in vars(options).iteritems():
+    for opt, value in vars(options).items():
         # ignore these options
         if opt in ['load','save']:
             pass

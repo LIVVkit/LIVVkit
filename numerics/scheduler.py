@@ -33,7 +33,6 @@ Scheduler for the numerics package.
 import os
 import glob
 import importlib
-import Queue
 import time
 import multiprocessing
 from threading import Thread
@@ -107,7 +106,7 @@ class NumericsScheduler(object):
 
         # Show the results
         while self.output.qsize() > 0:
-            print self.output.get()
+            print(self.output.get())
         
     
     def cleanup(self):

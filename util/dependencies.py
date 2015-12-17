@@ -83,7 +83,7 @@ def check():
     # check_modules()
 
     # Make sure all environment variables are set
-    if not os.environ.has_key("NCARG_ROOT"):
+    if not os.environ.__contains__("NCARG_ROOT"):
         error_list.append("  NCARG_ROOT not found in environment")
 
     # Check to make sure that binary files are found
@@ -156,7 +156,7 @@ def check():
         print("")
         print("")        
         print("------------------------------------------------------------------------------")
-        print "  External Python Libraries have been installed!  Libraries installed:"
+        print("  External Python Libraries have been installed!  Libraries installed:")
         for lib in libs_installed:
             print("    " + lib)
         print("  Run LIVV again to continue.  ")

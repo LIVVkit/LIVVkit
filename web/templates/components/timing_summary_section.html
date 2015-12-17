@@ -36,7 +36,7 @@
       <br style="clear:both; height: 10px;" />
       <div class="separator">
       {% if case in model_timing_data %}
-      {% for p_count, data in model_timing_data[case].iteritems() %}
+      {% for p_count, data in model_timing_data[case].items() %}
         <br style="clear:both; height: 10px;" />
         <b>Number of processors: {{p_count}}</b>
         <table style="width: 100%;  border-collapse: collapse;">
@@ -46,7 +46,7 @@
             <th>Minimum (s)</th>
             <th>Maximum (s)</th>
           </tr>
-          {% for var, vals in data.iteritems() %}
+          {% for var, vals in data.items() %}
             {% if vals[0] is defined %}
             <tr>
               <td style="text-align: right">{{var}}</td>

@@ -38,7 +38,7 @@ import importlib
 import pprint
 
 import util.variables
-import validation_utils.ValidationParser as ValidationParser
+import validation.validation_utils.ValidationParser as ValidationParser
 
 class ValidationScheduler(object):
 
@@ -70,8 +70,8 @@ class ValidationScheduler(object):
 
     def schedule(self):
         """ Make the validation run efficiently. """
-        for conf, vals in self.validations.iteritems():
-            for test_name, test_params in vals.iteritems():
+        for conf, vals in self.validations.items():
+            for test_name, test_params in vals.items():
                 print("    " + test_name.capitalize() + " in progress...")
                 util.websetup.mkdir_p(self.output_dir + os.sep + test_name + os.sep + 'imgs')
                 m = importlib.import_module(test_params['module'])

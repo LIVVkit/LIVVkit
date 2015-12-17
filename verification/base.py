@@ -161,7 +161,7 @@ class AbstractTest(object):
         # Run bit for bit test
         number_bitTests, number_bitMatches = 0, 0
         self.bit_for_bit_details[test_case] = self.bit4bit(self.name + "*" + test_case, test_case)
-        for key, value in self.bit_for_bit_details[test_case].iteritems():
+        for key, value in self.bit_for_bit_details[test_case].items():
             if value[0] == "SUCCESS": number_bitMatches+=1
             number_bitTests+=1
 

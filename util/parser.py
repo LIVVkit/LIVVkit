@@ -31,11 +31,11 @@
 A general parser for extracting data from text files.  When using parse_configurations the
 resulting dictionaries can be iterated over via the following code:
 
-            for key1,value1 in model_configs.iteritems():
+            for key1,value1 in model_configs.items():
                 file_name = key1
-                for key2,value2 in value1.iteritems():
+                for key2,value2 in value1.items():
                     section_header = key2
-                    for key3, value3 in value2.iteritems():
+                    for key3, value3 in value2.items():
                         variable = key3 
                         value = value3.split("#")[0]
 
@@ -47,7 +47,7 @@ Created on Feb 19, 2015
 import os
 import re
 import glob
-import ConfigParser
+import configparser
 import math
 import numpy as np
 
@@ -65,7 +65,7 @@ class Parser(object):
     """
     def __init__(self):
         """ Constructor """
-        self.config_parser = ConfigParser.ConfigParser()
+        self.config_parser = configparser.ConfigParser()
         self.bench_data, self.model_data = dict(), dict()
         self.n_outputParsed = 0
         self.n_configParsed, self.n_configMatched = 0, 0
@@ -150,8 +150,8 @@ class Parser(object):
         # TODO: This is unwieldy - can do a better job when I'm thinking better -arbennett
         for file in model_files:
             config_matched = True
-            for section, vars in self.model_data[file].iteritems():
-                for var, val in self.model_data[file][section].iteritems():
+            for section, vars in self.model_data[file].items():
+                for var, val in self.model_data[file][section].items():
                     if file in bench_files and section in self.bench_data[file] and var in self.bench_data[file][section]:
                         if val != self.bench_data[file][section][var]:
                             config_matched = False
@@ -253,7 +253,7 @@ class Parser(object):
                 self.std_out_data['Number of timesteps'] = 1
                 self.std_out_data['Average iterations to converge'] = iter_number
 
-            if not self.std_out_data.has_key('Dycore Type') or self.std_out_data['Dycore Type'] is None: 
+            if not self.std_out_data.__contains__('Dycore Type') or self.std_out_data['Dycore Type'] is None: 
                 self.std_out_data['Dycore Type'] = 'Unavailable'
             for key in self.std_out_data.keys():
                 if self.std_out_data[key] is None:

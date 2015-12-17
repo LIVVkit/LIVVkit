@@ -1,6 +1,6 @@
-import ConfigParser
+import configparser
 
-class ValidationParser(ConfigParser.ConfigParser):
+class ValidationParser(configparser.ConfigParser):
 
     def read_dict(self, filepath):
         """ 
@@ -26,10 +26,10 @@ class ValidationParser(ConfigParser.ConfigParser):
         # Go through and distribute the global information if 
         # there is any, but don't overwrite information if it
         # existed in the section previously
-        if dt.has_key('Globals'):
+        if dt.__contains__('Globals'):
             glbls = dt.pop('Globals',None)
             for sect in dt.keys():
-                for k,v in glbls.iteritems():
-                    if not dt[sect].has_key(k): dt[sect][k] = v
+                for k,v in glbls.items():
+                    if not dt[sect].__contains__(k): dt[sect][k] = v
         return dt
 

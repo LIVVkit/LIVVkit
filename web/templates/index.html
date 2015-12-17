@@ -44,11 +44,11 @@
 				<th>Config File Matches</th>
 				<th>Bit for Bit</th>
 			</tr>
-			{% for test, summary in verification_summary.iteritems() %}
+			{% for test, summary in verification_summary.items() %}
             <tr>
 			  <td><a class="table_link" href="{{index_dir}}/verification/{{test}}.html">{{test}}</a></td>
 			  </tr>
-			{% for case, details in summary.iteritems() %}
+			{% for case, details in summary.items() %}
 			<tr {% if ((details[1] != details[2]) or (details[3] != details[4])) %} class="FAILURE" {% endif %} >
 				<td><b>{{case}}</b></td>
 				<td>{{details[0]}}</td>
@@ -73,11 +73,11 @@
 				<th>Processor Counts</th>
                 <th>Avg. Runtime Change (% diff. from benchmark)</th>
 			</tr>
-			{% for test, summary in performance_summary.iteritems() %}
+			{% for test, summary in performance_summary.items() %}
 			  <tr>
 			  <td><a class="table_link" href="{{index_dir}}/performance/{{test}}.html">{{test}}</a></td>
 			  </tr>
-			{% for case, details in summary.iteritems() %}
+			{% for case, details in summary.items() %}
 			<tr>
 				<td><b>{{case}}</b></td>
                 <td>{% for d in details[0] %}{{d}}, {% endfor %}</td>
@@ -96,7 +96,7 @@
 	  	<p style="margin-left: 20px;">No validation tests run</p>	    
 	    {% else %}
         <table class="summary">
-          {% for test, summary in validation_summary.iteritems() %}
+          {% for test, summary in validation_summary.items() %}
           <tr>
             <td><a class="table_link" href="{{index_dir}}/validation/{{test}}/{{test}}.html">{{test.capitalize()}}</a></td>
           </tr>
@@ -111,7 +111,7 @@
 	  	<p style="margin-left: 20px;">No numerics tests run</p>	    
 	    {% else %}
         <table class="summary">
-          {% for test, summary in numerics_summary.iteritems() %}
+          {% for test, summary in numerics_summary.items() %}
           <tr>
             <td><a class="table_link" href="{{index_dir}}/numerics/{{test}}.html">{{test.capitalize()}}</a></td>
           </tr>

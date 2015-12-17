@@ -68,6 +68,6 @@ dycores = []
 
 def print_vars():
     """ Print out the variables that are contained in this module """
-    for k,v in globals().iteritems():
+    for k,v in globals().items():
         if not str(k).startswith('__'):
-            print str(k) + " = " + str(v)
+            print(str(k) + " = " + str(v))

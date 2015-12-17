@@ -46,10 +46,10 @@
                     <div style="clear:both;"></div>
                     <!-- The changed variable keeps track of whether the files match -->
                     {% set changed = [] %}
-                    {% for section, vars in test_configs[case][file].iteritems() %}
+                    {% for section, vars in test_configs[case][file].items() %}
                           <b>[{{section}}]</b>
                           <div class="variable">
-                          {% for var, val in test_configs[case][file][section].iteritems() %}
+                          {% for var, val in test_configs[case][file][section].items() %}
                             {% if case in bench_configs and
                                 file in bench_configs[case] and
                                 section in bench_configs[case][file] and
