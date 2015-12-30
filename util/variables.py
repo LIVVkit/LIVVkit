@@ -30,41 +30,26 @@
 Storage for global variables.  These are set upon startup in the main 
 livv.py module
 
-Created on May 5th, 2015
-
 @authors: arbennett, jhkennedy
 """
-cwd            = ''
-config_dir      = ''
-input_dir       = ''
-benchmark_dir   = ''
-output_dir      = ''
-img_dir         = ''
-comment        = ''
-timestamp      = ''
-user           = ''
-website_dir     = ''
-template_dir    = ''
-index_dir       = ''
-numerics       = ''
-verification   = ''
-verifications  = []
-performance    = ''
-performances  = []
-validation     = ''
-validations   = []
-
-# Modules that need to be loaded on big machines
-modules = []
-
-# A list of the information that should be looked for in the stdout of model output
-parser_vars = []
-
-# Variables to measure when parsing through timing summaries
-timing_vars = []
-
-# Dycores to try to parse output for
-dycores = []
+cwd                = "" 
+config_dir         = "" 
+input_dir          = "" 
+benchmark_dir      = "" 
+output_dir         = "" 
+img_dir            = "" 
+comment            = "" 
+timestamp          = "" 
+user               = "" 
+machine            = "" 
+os_type            = "" 
+website_dir        = "" 
+template_dir       = "" 
+index_dir          = "" 
+numerics           = "" 
+verification       = "" 
+performance        = "" 
+validation         = "" 
 
 def print_vars():
     """ Print out the variables that are contained in this module """

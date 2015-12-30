@@ -39,16 +39,20 @@ Created on Dec 3, 2014
 """
 import os
 import sys
-import time
-import getpass
-import platform
-import socket
-import multiprocessing
+
+import util.options
+import util.variables
+import util.dependencies
+import util.scheduler
+import util.websetup
 
 """
 Direct execution.
 """
 def main():
+    options = util.options.parse(sys.argv[1:]) 
+    util.options.init(options)
+
     print("------------------------------------------------------------------------------")
     print("                          __   _____   ___   ____    _ __     ") 
     print("                         / /  /  _/ | / / | / / /__ (_) /_    ") 
@@ -58,122 +62,34 @@ def main():
     print("                       Land Ice Verification & Validation     ")
     print("------------------------------------------------------------------------------")
     print("  Load modules: python, ncl, nco, python_matplotlib, hdf5, netcdf,")
-    print("                python_numpy, and python_netcdf4 for best results.\n")
-
-   # Get the options and the arguments
-    options = util.options.parse(sys.argv[1:]) 
-    
-    # Pull in the LIVV specific modules
-    import util.dependencies
-    util.dependencies.check()
-    import util.variables
-    import util.websetup
-    import numerics.scheduler
-    import verification.ver_utils.self_verification
-    import verification.scheduler
-    import performance.scheduler
-    import validation.scheduler
-    
-    ###############################################################################
-    #                              Global Variables                               #
-    ###############################################################################
-    util.variables.cwd                = os.getcwd()
-    util.variables.config_dir         = os.path.join(util.variables.cwd, "configurations")
-    util.variables.input_dir          = os.path.abspath(options.test_dir + os.sep + 'higher-order')
-    util.variables.benchmark_dir      = os.path.abspath(options.bench_dir + os.sep + 'higher-order')
-    util.variables.output_dir         = os.path.abspath(options.out_dir)
-    util.variables.img_dir            = util.variables.output_dir + "/imgs"
-    util.variables.comment            = options.comment
-    util.variables.timestamp          = time.strftime("%m-%d-%Y %H:%M:%S")
-    util.variables.user               = getpass.getuser()
-    util.variables.website_dir        = os.path.join(util.variables.cwd, "web")
-    util.variables.template_dir       = os.path.join(util.variables.website_dir, "templates")
-    util.variables.index_dir          = util.variables.output_dir
-    util.variables.numerics           = options.numerics
-    util.variables.verification       = True if options.validation is None else False
-    util.variables.performance        = options.performance
-    util.variables.validation         = options.validation
-    
-    # A list of the information that should be looked for in the stdout of model output
-    util.variables.parser_vars = [
-                  'Dycore Type', 
-                  'Number of processors',
-                  'Number of timesteps',
-                  'Avg iterations to converge'
-                 ]
-    
-    # Check if we are saving the configuration
-    if options.save:
-        print("  Saving options as: " + options.save)
-        util.configuration_handler.save(options)
-    
-    # Print out some information
-    machine_name = socket.gethostname()
-    print(os.linesep + "  Current run: " + time.strftime("%m-%d-%Y %H:%M:%S"))
+    print("                python_numpy, and python_netcdf4 for best results.")
+    print("")
+    print("  Current run: " + util.variables.timestamp)
     print("  User: " + util.variables.user)
-    print("  OS Type: " + platform.system() + " " + platform.release())
-    print("  Machine: " + machine_name)
-    print("  " + util.variables.comment + os.linesep)
-    
-    ###############################################################################
-    #                               Run Test Cases                                #
-    ###############################################################################
+    print("  OS Type: " + util.variables.os_type)
+    print("  Machine: " + util.variables.machine)
+    print("  " + util.variables.comment)
+
+    util.dependencies.check()
     util.websetup.setup()
     numerics_summary, verification_summary = dict(), dict()
     validation_summary, performance_summary = dict(), dict()
-    
-    # Run the numerics tests
-    if util.variables.numerics:
-        scheduler = numerics.scheduler.NumericsScheduler()
-        scheduler.setup()
-        scheduler.schedule()
-        scheduler.run()
-        scheduler.cleanup()
-        numerics_summary = scheduler.summary.copy()
-    
-    # Run the verification tests
-    if util.variables.verification:
-        scheduler = verification.scheduler.VerificationScheduler()
-        scheduler.setup()
-        verification.ver_utils.self_verification.check()
-        scheduler.schedule()
-        scheduler.run()
-        scheduler.cleanup()
-        verification_summary = scheduler.summary.copy()
-    
-    # Run the performance verification
-    if util.variables.performance:
-        scheduler = performance.scheduler.PerformanceScheduler()
-        scheduler.setup()
-        scheduler.schedule()
-        scheduler.run()
-        performance_summary = scheduler.summary.copy()
-    
-    # Run the validation verification
-    if util.variables.validation is not None:
-        scheduler = validation.scheduler.ValidationScheduler()
-        scheduler.setup()
-        scheduler.schedule()
-        scheduler.run()
-        scheduler.cleanup()
-        validation_summary = scheduler.summary.copy()
-    
+   
+    ## DO WORK HERE
+
     # Create the site index
     numerics_summary = dict(numerics_summary)
     verification_summary = dict(verification_summary)
     performance_summary = dict(performance_summary)
     validation_summary = dict(validation_summary)
     print("Generating web pages in " + util.variables.output_dir + "....")
-    util.websetup.generate(numerics_summary, verification_summary, performance_summary, validation_summary)
+    util.websetup.generate(numerics_summary,verification_summary,performance_summary,validation_summary)
     
-    ###############################################################################
-    #                        Finished.  Tell user about it.                       #
-    ###############################################################################
     print("------------------------------------------------------------------------------")
     print("Finished running LIVV.  Results:  ")
     print("  Open " + util.variables.output_dir + "/index.html to see test results")
     print("------------------------------------------------------------------------------")
 
-
 if __name__ == "__main__":
     main()
+
