@@ -83,22 +83,22 @@ def parse(args):
 
 def init(options):
     """ Initialize some defaults """
-    util.variables.cwd                = os.getcwd()
-    util.variables.config_dir         = os.path.join(util.variables.cwd, "configurations")
-    util.variables.input_dir          = os.path.abspath(options.test_dir + os.sep + 'higher-order')
-    util.variables.benchmark_dir      = os.path.abspath(options.bench_dir + os.sep + 'higher-order')
-    util.variables.output_dir         = os.path.abspath(options.out_dir)
-    util.variables.img_dir            = util.variables.output_dir + "/imgs"
-    util.variables.comment            = options.comment
-    util.variables.timestamp          = time.strftime("%m-%d-%Y %H:%M:%S")
-    util.variables.user               = getpass.getuser()
-    util.variables.machine            = socket.gethostname()
-    util.variables.os_type            = platform.system() + " " + platform.release()
-    util.variables.website_dir        = os.path.join(util.variables.cwd, "web")
-    util.variables.template_dir       = os.path.join(util.variables.website_dir, "templates")
-    util.variables.index_dir          = util.variables.output_dir
-    util.variables.numerics           = options.numerics
-    util.variables.verification       = True if options.validation is None else False
-    util.variables.performance        = options.performance
-    util.variables.validation         = options.validation
+    util.variables.cwd            = os.getcwd()
+    util.variables.config_dir     = os.path.join(util.variables.cwd, "configurations")
+    util.variables.input_dir      = os.path.abspath(options.test_dir + os.sep + 'higher-order')
+    util.variables.benchmark_dir  = os.path.abspath(options.bench_dir + os.sep + 'higher-order')
+    util.variables.output_dir     = os.path.abspath(options.out_dir)
+    util.variables.img_dir        = util.variables.output_dir + "/imgs"
+    util.variables.comment        = options.comment
+    util.variables.timestamp      = time.strftime("%m-%d-%Y %H:%M:%S")
+    util.variables.user           = getpass.getuser()
+    util.variables.machine        = socket.gethostname()
+    util.variables.os_type        = platform.system() + " " + platform.release()
+    util.variables.website_dir    = os.path.join(util.variables.cwd, "web")
+    util.variables.template_dir   = os.path.join(util.variables.website_dir, "templates")
+    util.variables.index_dir      = util.variables.output_dir
+    util.variables.numerics       = options.numerics
+    util.variables.verification   = True if options.validation is None else False
+    util.variables.performance    = options.performance
+    util.variables.validation     = options.validation
 

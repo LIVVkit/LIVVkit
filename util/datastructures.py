@@ -26,22 +26,23 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
-Provides functions for scheduling the runs of tests.
+Module to hold LIVV specific data structures
 
 @author: arbennett
 """
 
-def collect_cases():
-    pass
-
-def setup():
-    pass
-
-def run():
-    pass
-
-def cleanup():
-    pass
-
+class LIVVDict(dict):
+    """
+    Extension of the dictionary datastructure to allow for auto nesting.
+    Credit to: http://tiny.cc/qerr7x 
+    """
+    def __getitem__(self, item):
+        """ Tries to get the item, and if it's not found creates it """
+        try: 
+            return dict.__getitem__(self, item)
+        except KeyError:
+            tmp = type(self)()
+            self[item] = tmp
+            return tmp
 
 

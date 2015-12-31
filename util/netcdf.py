@@ -26,22 +26,23 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
-Provides functions for scheduling the runs of tests.
+Helper functions for dealing with netcdf datasets
 
-@author: arbennett
+@author: arbennett, jhkennedy
 """
 
-def collect_cases():
-    pass
+def has_time(dataset):
+    """
+    Check netCDF files time dimension for emptyness. This likely
+    indicates the run did not complete.
 
-def setup():
-    pass
+    Args:
+        dataset: An open, readable netcdf file
 
-def run():
-    pass
-
-def cleanup():
-    pass
-
-
-
+    Returns:
+        a boolean indicating if the time dimension is set correctly
+    """
+    try:
+        return len(dataset.dimensions['time']) > 0
+    except:
+        return False

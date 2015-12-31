@@ -50,8 +50,7 @@ import util.websetup
 Direct execution.
 """
 def main():
-    options = util.options.parse(sys.argv[1:]) 
-    util.options.init(options)
+    util.options.init(util.options.parse(sys.argv[1:]))
 
     print("------------------------------------------------------------------------------")
     print("                          __   _____   ___   ____    _ __     ") 
