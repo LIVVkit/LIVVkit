@@ -40,6 +40,17 @@ import util.netcdf
 import util.variables
 from util.datastructures import LIVVDict
 
+
+def load_json(file_path):
+    """
+    Load a verification configuration file.
+
+    Args:
+        file_path: The absolute path to the file to be loaded
+    """
+    pass
+
+
 def bit_for_bit(model_path, bench_path, var_list):
     """
     Checks whether the given files have bit for bit solution matches
@@ -107,7 +118,7 @@ def diff_configurations(model_config, bench_config):
         all_vars = set(model_vars + bench_vars)
         for v in all_vars:
             model_val = model_data[s][v] if s in model_sections and v in model_vars else 'NA'
-            bench_val = bench_data[s][v] is s in bench_sections and v in bench_vars else 'NA'
+            bench_val = bench_data[s][v] if s in bench_sections and v in bench_vars else 'NA'
             same = True if model_val == bench_val and model_val != 'NA' else False
             diff_dict[s][v] = (same, model_val, bench_val)
     return diff_dict

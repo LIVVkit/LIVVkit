@@ -31,13 +31,39 @@ Provides functions for scheduling the runs of tests.
 @author: arbennett
 """
 
-def collect_cases():
+import util.variables
+import components.numerics as numerics
+import components.verification as verification
+import components.performance as performance
+import components.validation as validation
+
+def setup_numerics():
+    """ Prepare information for running tests """
+    if util.variables.numerics != 'off':
+        numerics.load_json(util.variables.numerics)
+    
+def setup_verification():
+    if util.variables.verification != 'off':
+        verification.load_json(util.variables.verification)
+
+def setup_performance():
+    if util.variables.performance != 'off':
+        performance.load_json(util.variables.performance)
+   
+def setup_validation():
+    if util.variables.validation != 'off':
+        validation.load_json(util.variables.validation)
+
+def run_numerics():
     pass
 
-def setup():
+def run_verification():
     pass
 
-def run():
+def run_performance():
+    pass
+
+def run_validation():
     pass
 
 def cleanup():

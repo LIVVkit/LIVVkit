@@ -38,6 +38,7 @@ find ./* -iname "*.pyc" -exec rm {} \;
 # remove website
 rm -rf ./www
 rm -rf ./www_*
+rm -rf ./vv_*
 
 # remove easy installs -- BE CAREFUL, ARE YOU SHURE?
 if [ "$1" == "deps" ]

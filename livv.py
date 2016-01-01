@@ -44,7 +44,9 @@ import util.options
 import util.variables
 import util.dependencies
 import util.scheduler
-import util.websetup
+import util.web
+
+util.variables.base_path = os.path.abspath(__file__)
 
 """
 Direct execution.
@@ -70,22 +72,24 @@ def main():
     print("  " + util.variables.comment)
 
     util.dependencies.check()
-    util.websetup.setup()
-    numerics_summary, verification_summary = dict(), dict()
-    validation_summary, performance_summary = dict(), dict()
-   
-    ## DO WORK HERE
+    util.web.setup()
+    
+    util.scheduler.setup_numerics()
+    util.scheduler.run_numerics()
+    
+    util.scheduler.setup_verification()
+    util.scheduler.run_verification()
 
-    # Create the site index
-    numerics_summary = dict(numerics_summary)
-    verification_summary = dict(verification_summary)
-    performance_summary = dict(performance_summary)
-    validation_summary = dict(validation_summary)
-    print("Generating web pages in " + util.variables.output_dir + "....")
-    util.websetup.generate(numerics_summary,verification_summary,performance_summary,validation_summary)
+    util.scheduler.setup_performance()
+    util.scheduler.run_performance()
+
+    util.scheduler.setup_validation()
+    util.scheduler.run_validation()
+
+    util.scheduler.cleanup()
     
     print("------------------------------------------------------------------------------")
-    print("Finished running LIVV.  Results:  ")
+    print("Finished running LIVV.")
     print("  Open " + util.variables.output_dir + "/index.html to see test results")
     print("------------------------------------------------------------------------------")
 

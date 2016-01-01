@@ -54,30 +54,30 @@ def parse(args):
             default="reg_test" + os.sep + "linux-gnu",
             help='Location of the input for running verification.')
     parser.add_argument('-o', '--out-dir', 
-            default="www",
+            default="vv_" + time.strftime("%m-%d-%Y"),
             help='Location to output the LIVV webpages.')
     
     parser.add_argument('-c', '--comment', 
-            default='Test run of code.', 
+            default='Standard V&V.', 
             help="Describe this run. Comment will appear in the output website's footer.")
-    
+ 
+    parser.add_argument('--numerics',
+            default='off',
+            help="Specify the numerics tests to run.")
+   
+    parser.add_argument('--verification',
+            default=os.path.join(util.variables.base_path, "bundles", "cism_glissade", "verification.json"),
+            help='Run the verification tests analysis.')
+
     parser.add_argument('--performance', 
-            action='store_true', 
+            default='off', 
             help='Run the performance tests analysis.')
     
     parser.add_argument('--validation',
             action='store', nargs='*',
+            default='off',
             help='Specify the location of the configuration files for validation tests.')
-    
-    parser.add_argument('--numerics',
-            action='store_true',
-            help="Run numerics tests.")
-    
-    parser.add_argument('--load', 
-            help='Load saved options.')
-    parser.add_argument('--save', 
-            help='Save the current options. If no path specification is given,' +\
-                 ' saved options will appear in the configurations directory.')
+   
     return parser.parse_args()
 
 
@@ -98,7 +98,7 @@ def init(options):
     util.variables.template_dir   = os.path.join(util.variables.website_dir, "templates")
     util.variables.index_dir      = util.variables.output_dir
     util.variables.numerics       = options.numerics
-    util.variables.verification   = True if options.validation is None else False
+    util.variables.verification   = options.verification 
     util.variables.performance    = options.performance
     util.variables.validation     = options.validation
 

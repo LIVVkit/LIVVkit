@@ -1,0 +1,29 @@
+{ "Dome" : 
+    { 
+        "data_dir" : "dome",
+        "output_regex" : "dome.[0-9]{4}.p[0-9]{3}.out.nc",
+        "logfile_regex" : "dome.[0-9]{4}.p[0-9]{3}.config.oe",
+        "config_regex"  : "dome.[0-9]{4}.p[0-9]{3}.config"
+    },
+  "ISMIP-HOM" : 
+     { 
+        "data_dir" : "ismip-hom",
+        "output_regex" : "ismip-hom-[acf].[0-9]{4}.p[0-9]{3}.out.nc",
+        "logfile_regex" : "ismip-hom-[acf].[0-9]{4}.p[0-9]{3}.config.oe",
+        "config_regex"  : "ismipo-hom-[acf].[0-9]{4}.p[0-9]{3}.config"
+    },
+  "Shelf" : 
+     { 
+        "data_dir" : "shelf",
+        "output_regex" : "shelf-(circular|confined).[0-9]{4}.p[0-9]{3}.out.nc",
+        "logfile_regex" : "shelf-(circular|confined).[0-9]{4}.p[0-9]{3}.config.oe",
+        "config_regex"  : "shelf-(circular|confined).[0-9]{4}.p[0-9]{3}.config"
+    },
+  "Stream" : 
+     { 
+        "data_dir" : "stream",
+        "output_regex" : "stream.[0-9]{4}.p[0-9]{3}.out.nc",
+        "logfile_regex" : "stream.[0-9]{4}.p[0-9]{3}.config.oe",
+        "config_regex"  : "stream.[0-9]{4}.p[0-9]{3}.config"
+    }
+}
