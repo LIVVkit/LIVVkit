@@ -10,7 +10,7 @@
         "data_dir" : "ismip-hom",
         "output_regex" : "ismip-hom-[acf].[0-9]{4}.p[0-9]{3}.out.nc",
         "logfile_regex" : "ismip-hom-[acf].[0-9]{4}.p[0-9]{3}.config.oe",
-        "config_regex"  : "ismipo-hom-[acf].[0-9]{4}.p[0-9]{3}.config"
+        "config_regex"  : "ismip-hom-[acf].[0-9]{4}.p[0-9]{3}.config"
     },
   "Shelf" : 
      { 
