@@ -46,7 +46,7 @@ import util.dependencies
 import util.scheduler
 import util.web
 
-util.variables.base_path = os.path.abspath(__file__)
+util.variables.base_path = os.path.dirname(os.path.abspath(__file__))
 
 """
 Direct execution.
@@ -74,16 +74,9 @@ def main():
     util.dependencies.check()
     util.web.setup()
     
-    util.scheduler.setup_numerics()
     util.scheduler.run_numerics()
-    
-    util.scheduler.setup_verification()
     util.scheduler.run_verification()
-
-    util.scheduler.setup_performance()
     util.scheduler.run_performance()
-
-    util.scheduler.setup_validation()
     util.scheduler.run_validation()
 
     util.scheduler.cleanup()

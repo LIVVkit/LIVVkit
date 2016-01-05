@@ -30,41 +30,75 @@ Provides functions for scheduling the runs of tests.
 
 @author: arbennett
 """
+import os
+import re
+import glob
+import json
+import fnmatch
+import multiprocessing
 
 import util.variables
-import components.numerics as numerics
-import components.verification as verification
-import components.performance as performance
-import components.validation as validation
-
-def setup_numerics():
-    """ Prepare information for running tests """
-    if util.variables.numerics != 'off':
-        numerics.load_json(util.variables.numerics)
-    
-def setup_verification():
-    if util.variables.verification != 'off':
-        verification.load_json(util.variables.verification)
-
-def setup_performance():
-    if util.variables.performance != 'off':
-        performance.load_json(util.variables.performance)
-   
-def setup_validation():
-    if util.variables.validation != 'off':
-        validation.load_json(util.variables.validation)
+import components.numerics 
+import components.verification 
+import components.performance 
+import components.validation 
+from util.datastructures import LIVVDict
 
 def run_numerics():
-    pass
+    if not os.path.isfile(util.variables.numerics):
+        return
+    with open(util.variables.numerics, 'r') as f:
+        config = json.load(f)
+    tests = config.keys()
+    for test in tests:
+        print(test)
+
 
 def run_verification():
-    pass
+    if not os.path.isfile(util.variables.verification):
+        return
+    with open(util.variables.verification, 'r') as f:
+        config = json.load(f)
+    tests = [t for t in config.keys() if isinstance(config[t], dict)]
+
+    for t in tests:
+        cases = set([f.split('.')[0] for f in #TODO Fix this split expliciteness 
+                 os.listdir(os.path.join(util.variables.model_dir, config[t]['data_dir']))
+                 if f.startswith(t.lower())])
+        print(cases) 
 
 def run_performance():
-    pass
+    if not os.path.isfile(util.variables.performance):
+        return
+    with open(util.variables.performance, 'r') as f:
+        config = json.load(f)
+    tests = config.keys()
+    for test in tests:
+        print(test)
+
 
 def run_validation():
-    pass
+    if not os.path.isfile(util.variables.validation):
+        return
+    with open(util.variables.validation, 'r') as f:
+        config = json.load(f)
+    tests = config.keys()
+    for test in tests:
+        print(test)
+
+
+def launch_processes(test_list):
+    """ Helper method to launch processes and synch output """
+    manager = multiprocessing.Manager()
+    output = manager.Queue()
+    summary = manager.dict()
+    process_handles
+    
+    for p in process_handles:
+        p.start()
+    for p in process_handles:
+        p.join()
+
 
 def cleanup():
     pass

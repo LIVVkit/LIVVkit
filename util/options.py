@@ -50,7 +50,7 @@ def parse(args):
     parser.add_argument('-b', '--bench-dir', 
             default="reg_bench" + os.sep + "linux-gnu",
             help='Location of the input for running verification.')
-    parser.add_argument('-t', '--test-dir', 
+    parser.add_argument('-m', '--model-dir', 
             default="reg_test" + os.sep + "linux-gnu",
             help='Location of the input for running verification.')
     parser.add_argument('-o', '--out-dir', 
@@ -85,8 +85,8 @@ def init(options):
     """ Initialize some defaults """
     util.variables.cwd            = os.getcwd()
     util.variables.config_dir     = os.path.join(util.variables.cwd, "configurations")
-    util.variables.input_dir      = os.path.abspath(options.test_dir + os.sep + 'higher-order')
-    util.variables.benchmark_dir  = os.path.abspath(options.bench_dir + os.sep + 'higher-order')
+    util.variables.model_dir      = os.path.abspath(options.model_dir + os.sep + 'higher-order')
+    util.variables.bench_dir      = os.path.abspath(options.bench_dir + os.sep + 'higher-order')
     util.variables.output_dir     = os.path.abspath(options.out_dir)
     util.variables.img_dir        = util.variables.output_dir + "/imgs"
     util.variables.comment        = options.comment

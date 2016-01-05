@@ -32,6 +32,7 @@ Verification Test Base Module
 """
 
 import os
+import json
 import numpy as np
 from netCDF4 import Dataset
 from configparser import ConfigParser
@@ -39,16 +40,6 @@ from configparser import ConfigParser
 import util.netcdf
 import util.variables
 from util.datastructures import LIVVDict
-
-
-def load_json(file_path):
-    """
-    Load a verification configuration file.
-
-    Args:
-        file_path: The absolute path to the file to be loaded
-    """
-    pass
 
 
 def bit_for_bit(model_path, bench_path, var_list):
