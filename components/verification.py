@@ -42,6 +42,11 @@ import util.variables
 from util.datastructures import LIVVDict
 
 
+def run_suite(summary, config):
+    """ Run the full suite of verification tests """
+    pass
+
+
 def bit_for_bit(model_path, bench_path, var_list):
     """
     Checks whether the given files have bit for bit solution matches

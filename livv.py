@@ -40,11 +40,7 @@ Created on Dec 3, 2014
 import os
 import sys
 
-import util.options
 import util.variables
-import util.dependencies
-import util.scheduler
-import util.web
 
 util.variables.base_path = os.path.dirname(os.path.abspath(__file__))
 
@@ -52,6 +48,10 @@ util.variables.base_path = os.path.dirname(os.path.abspath(__file__))
 Direct execution.
 """
 def main():
+
+    import util.options
+    import util.dependencies
+
     util.options.init(util.options.parse(sys.argv[1:]))
 
     print("------------------------------------------------------------------------------")
@@ -70,8 +70,12 @@ def main():
     print("  OS Type: " + util.variables.os_type)
     print("  Machine: " + util.variables.machine)
     print("  " + util.variables.comment)
-
+    
     util.dependencies.check()
+   
+    import util.scheduler
+    import util.web
+
     util.web.setup()
     
     util.scheduler.run_numerics()

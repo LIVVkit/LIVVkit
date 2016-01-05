@@ -73,31 +73,11 @@ def check():
     dep_dir = os.path.join(cwd, 'deps')
 
     # The list of nonstandard python libraries that are used 
-    library_list = ["jinja2", "netCDF4", "numpy", "matplotlib"]
+    library_list = ["numpy", "netCDF4", "matplotlib"]
     # The list of command line programs needed
-    binary_list = ["ncdiff", "ncl"]
     error_list = []
     print(os.linesep + "Beginning Dependency Checks........")
 
-    # If we need to load modules for LCF machines do so now
-    # check_modules()
-
-    # Make sure all environment variables are set
-    if not os.environ.__contains__("NCARG_ROOT"):
-        error_list.append("  NCARG_ROOT not found in environment")
-
-    # Check to make sure that binary files are found
-    print("    Checking for external programs....")
-    for program in binary_list:
-        found = False
-        for path in os.environ["PATH"].split(os.pathsep):
-            path = path.strip('"')
-            file_path = os.path.join(path, program)
-            if os.path.isfile(file_path) and os.access(file_path, os.X_OK):
-                found = True
-        if not found:
-            error_list.append("  " + program + " could not be found in system path.  Please install or update your path!")            
-                
     # For the python dependencies we may need easy_install
     # Make sure we have it, and if not, build it       
     try:

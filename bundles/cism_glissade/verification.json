@@ -1,8 +1,8 @@
 {
-    "globalvar" : "globalval",
     "Dome" : 
       { 
         "data_dir" : "dome",
+        "test_cases" : ["dome"],
         "output_regex" : "^dome.[0-9]{4}.p[0-9]{3}.out.nc$",
         "logfile_regex" : "^dome.[0-9]{4}.p[0-9]{3}.config.oe$",
         "config_regex"  : "^dome.[0-9]{4}.p[0-9]{3}.config$"
@@ -10,6 +10,7 @@
     "ISMIP-HOM" : 
       { 
         "data_dir" : "ismip-hom",
+        "test_cases" : ["ismip-hom-a", "ismip-hom-c", "ismip-hom-f"],
         "output_regex" : "^ismip-hom-[acf].[0-9]{4}.p[0-9]{3}.out.nc$",
         "logfile_regex" : "^ismip-hom-[acf].[0-9]{4}.p[0-9]{3}.config.oe$",
         "config_regex"  : "^ismip-hom-[acf].[0-9]{4}.p[0-9]{3}.config$"
@@ -17,6 +18,7 @@
     "Shelf" : 
       { 
         "data_dir" : "shelf",
+        "test_cases" : ["shelf-circular", "shelf-confined"],
         "output_regex" : "^shelf-(circular|confined).[0-9]{4}.p[0-9]{3}.out.nc$",
         "logfile_regex" : "^shelf-(circular|confined).[0-9]{4}.p[0-9]{3}.config.oe$",
         "config_regex"  : "^shelf-(circular|confined).[0-9]{4}.p[0-9]{3}.config$"
@@ -24,6 +26,7 @@
     "Stream" : 
       { 
         "data_dir" : "stream",
+        "test_cases" : ["steam"],
         "output_regex" : "^stream.[0-9]{4}.p[0-9]{3}.out.nc$",
         "logfile_regex" : "^stream.[0-9]{4}.p[0-9]{3}.config.oe$",
         "config_regex"  : "^stream.[0-9]{4}.p[0-9]{3}.config$"

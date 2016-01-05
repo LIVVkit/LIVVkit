@@ -34,7 +34,6 @@ import os
 import re
 import glob
 import json
-import fnmatch
 import multiprocessing
 
 import util.variables
@@ -62,10 +61,9 @@ def run_verification():
     tests = [t for t in config.keys() if isinstance(config[t], dict)]
 
     for t in tests:
-        cases = set([f.split('.')[0] for f in #TODO Fix this split expliciteness 
-                 os.listdir(os.path.join(util.variables.model_dir, config[t]['data_dir']))
-                 if f.startswith(t.lower())])
-        print(cases) 
+        cases = config[t]["test_cases"] 
+        launch_processes(cases, components.verification.run_suite, **config[t])
+
 
 def run_performance():
     if not os.path.isfile(util.variables.performance):
@@ -87,18 +85,19 @@ def run_validation():
         print(test)
 
 
-def launch_processes(test_list):
+def launch_processes(test_list, run_funct, **config):
     """ Helper method to launch processes and synch output """
     manager = multiprocessing.Manager()
-    output = manager.Queue()
     summary = manager.dict()
-    process_handles
+    process_handles = [multiprocessing.Process(target=run_funct,args=(summary, config)) 
+                       for t in test_list]
     
     for p in process_handles:
         p.start()
     for p in process_handles:
         p.join()
 
+    return dict(summary)
 
 def cleanup():
     pass
