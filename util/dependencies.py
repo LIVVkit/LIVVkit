@@ -73,7 +73,7 @@ def check():
     dep_dir = os.path.join(cwd, 'deps')
 
     # The list of nonstandard python libraries that are used 
-    library_list = ["jinja2", "netCDF4", "numpy", "matplotlib"]
+    library_list = ["jinja2", "netCDF4", "numpy", "matplotlib", "pandas"]
     # The list of command line programs needed
     binary_list = ["ncdiff", "ncl"]
     error_list = []
