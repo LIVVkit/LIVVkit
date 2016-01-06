@@ -34,7 +34,10 @@ import os
 import fnmatch
 import numpy as np
 from netCDF4 import Dataset
-import matplotlib.pyplot as plt
+
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as pyplot
 
 from numerics.base import AbstractTest
 import util.variables
@@ -146,19 +149,19 @@ class Test(AbstractTest):
             
             plt_name = os.path.join(util.variables.index_dir, 'numerics', self.name.capitalize(),\
                         'imgs', exp_type + resolution + '_percent_diff.png')
-            plt.figure()
-            plt.imshow(mean_diff)
-            plt.title('% Difference from mean')
-            plt.colorbar()
-            plt.savefig(plt_name)
+            pyplot.figure()
+            pyplot.imshow(mean_diff)
+            pyplot.title('% Difference from mean')
+            pyplot.colorbar()
+            pyplot.savefig(plt_name)
             plots.append(plt_name.split(os.sep)[-1])
 
             plt_name = os.path.join(util.variables.index_dir, 'numerics', self.name.capitalize(),\
                         'imgs', exp_type + resolution + '_outliers.png')
-            plt.figure()
-            plt.imshow(bad_data,interpolation='nearest')
-            plt.colorbar()
-            plt.title('Data outside of standard deviation')
-            plt.savefig(plt_name)
+            pyplot.figure()
+            pyplot.imshow(bad_data,interpolation='nearest')
+            pyplot.colorbar()
+            pyplot.title('Data outside of standard deviation')
+            pyplot.savefig(plt_name)
             plots.append(plt_name.split(os.sep)[-1])
         return plots
