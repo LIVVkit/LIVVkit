@@ -50,6 +50,7 @@ print("                python_numpy, and python_netcdf4 for best results.\n")
 import os
 import sys
 import time
+import shutil
 import getpass
 import platform
 import socket
@@ -97,6 +98,11 @@ parser.add_argument('--load',
         help='Load saved options.')
 parser.add_argument('--save', 
         help='Save the current options. If no path specification is given, saved options will appear in the configurations directory.')
+
+parser.add_argument('--check',
+        action='store_true',
+        help='Run only the verification self test to check for internal consistency.')
+
 
 # Get the options and the arguments
 options = parser.parse_args()
@@ -165,6 +171,17 @@ print("  " + util.variables.comment + os.linesep)
 util.websetup.setup()
 numerics_summary, verification_summary = dict(), dict()
 validation_summary, performance_summary = dict(), dict()
+
+# Run the verification self test to check internal consistency
+if options.check:
+    verification.ver_utils.self_verification.check()
+    # Remove output as it's just bit4bit plots that get overwitten with each internal test 
+    shutil.rmtree(util.variables.output_dir)
+    print("------------------------------------------------------------------------------")
+    print("Finished checking LIVV for internal consistency.")
+    print("------------------------------------------------------------------------------")
+    sys.exit()
+
 
 # Run the numerics tests
 if util.variables.numerics:

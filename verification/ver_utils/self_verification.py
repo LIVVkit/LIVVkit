@@ -42,6 +42,7 @@ import sys
 import Queue
 import verification.dome
 import util.variables
+import util.websetup
 
 
 def check():   
@@ -51,7 +52,12 @@ def check():
     '''
     print("Beginning internal consistency checks....")
     print("  Verifying integrity of verification tests...."),
+   
+    # make sure paths exist when running stand-alone
+    test_dir = util.variables.index_dir + os.sep + "verification" + os.sep + "dome".capitalize()
+    util.websetup.mkdir_p(test_dir + os.sep + "imgs" + os.sep + "bit4bit")
     
+
     # Redirect standard output so that we don't have to see the output of these tests
     #sys.stdout = open(os.devnull, "w")
     error_list = []
