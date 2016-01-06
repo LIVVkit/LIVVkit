@@ -35,8 +35,6 @@ import fnmatch
 import numpy as np
 from netCDF4 import Dataset
 
-import matplotlib
-matplotlib.use('Agg')
 import matplotlib.pyplot as pyplot
 
 from numerics.base import AbstractTest

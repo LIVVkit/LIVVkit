@@ -127,6 +127,7 @@ def check():
         try:
             __import__(lib)
             print("      Found " + lib + "!")
+            
         except ImportError:
             print("      Could not find " + lib + ".  Building a copy for you...."),
             if not os.path.exists(dep_dir):
@@ -150,6 +151,13 @@ def check():
             __import__(lib)
         except ImportError:
             libs_we_did_not_install.append(lib)
+            
+    
+    # set the matplotlib backend after first import to eliminate backend warnings (e.g. from pyplot)
+    if "matplotlib" not in libs_we_did_not_install:
+        import matplotlib
+        matplotlib.use('Agg')
+        
         
     # for some reason sys path did not get updated so... try running livv again.
     if len(libs_we_did_not_install) > 0:
