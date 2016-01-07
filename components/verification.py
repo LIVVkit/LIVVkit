@@ -32,6 +32,8 @@ Verification Test Base Module
 """
 
 import os
+import re
+import glob
 import json
 import numpy as np
 from netCDF4 import Dataset
@@ -42,10 +44,23 @@ import util.variables
 from util.datastructures import LIVVDict
 
 
-def run_suite(summary, config):
+def run_suite(test_name, summary, config):
     """ Run the full suite of verification tests """
-    pass
+    print("  Running analysis of " + test_name)
+    
+    model_dir = os.path.join(util.variables.model_dir, config['data_dir'])
+    model_files = glob.glob(os.path.join(model_dir, test_name + "*"))
+    model_logs = [f for f in model_files if f.endswith(config["logfile_ext"])]
+    model_configs = [f for f in model_files if f.endswith(config["config_ext"])]
+    model_outputs = [f for f in model_files if f.endswith(config["output_ext"])]
 
+    bench_dir = os.path.join(util.variables.bench_dir, config['data_dir'])
+    bench_files = glob.glob(os.path.join(bench_dir, test_name + "*"))
+    bench_logs = [f for f in bench_files if f.endswith(config["logfile_ext"])]
+    bench_configs = [f for f in bench_files if f.endswith(config["config_ext"])]
+    bench_outputs = [f for f in bench_files if f.endswith(config["output_ext"])]
+
+   
 
 def bit_for_bit(model_path, bench_path, var_list):
     """
