@@ -43,8 +43,6 @@ import gzip
 import pandas
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.stats import linregress
-
 
 from validation.base import AbstractTest
 import util.variables
@@ -73,13 +71,21 @@ def WritePlot(Series,SeriesName,CISM2time,pd):
     else:
         print 'Plotting: '+SeriesName+' timeseries.'
         plt.close("all")
+	
         ax=plt.plot(CISM2time,Series)
         plt.xlabel('CISM2 Model year')
-        plt.ylabel(Series.name)
+	ylabelname=Series.name
+	ylabelname=re.sub('km\^2','$km^2$',ylabelname)
+	ylabelname=re.sub('km\^3','$km^3$',ylabelname)	
+        plt.ylabel(ylabelname.encode('string-escape'))
+	plt.ticklabel_format(style='sci',axis='y',scilimits=[0,0])
+	XAxisPad=(CISM2time.max()-CISM2time.min())*0.05
+	YAxisPad=(Series.max()-Series.min())*0.05
+	plt.axis([CISM2time.min()-XAxisPad,CISM2time.max()+XAxisPad,Series.min()-YAxisPad,Series.max()+YAxisPad])
         Seriesmean=Series.mean()
         Seriesregress=np.polyfit(CISM2time,Series,1)[0]/Seriesmean*100
-        plt.annotate( 'Mean='+str(Seriesmean) , xy=(0.1,0.9) , xycoords='axes fraction')
-        plt.annotate( 'Linear trend='+str(Seriesregress)+' %/yr' , xy=(0.1,0.8) , xycoords='axes fraction')	
+        #plt.annotate( 'Mean='+str(Seriesmean) , xy=(0.1,0.9) , xycoords='axes fraction')
+        #plt.annotate( 'Linear trend='+str(Seriesregress)+' %/yr' , xy=(0.1,0.8) , xycoords='axes fraction')	
         plt.savefig(os.path.join(pd.output_file_base,SeriesName+'.png'))    
 
 
@@ -151,46 +157,57 @@ class Test(AbstractTest):
         MaxSurfaceSpeed=pandas.Series(name='Max sfc spd (m/yr)',dtype=float)
         MaxBasalSpeed=pandas.Series(name='Max base spd (m/yr)',dtype=float)
 
-        #Second: for each log file (in order) open using gzip.open (no need
+        #Second: for each log file (ordered by name according to 'sort') open using gzip.open (no need
         #to unzip) and send each line to ExtractTSData.  For each diagnostic,
         #if the string associated with the Pandas Series is matched, then
         #the relevant numerical value is found (using hard-coded line.split 
         #count value to extract correct substring associated with numerical 
         #value) and appended to the time series.
-        for src_name in glob.glob(os.path.join(pd.log_dir, 'glc.log.*.gz')):
+        for src_name in sorted(glob.glob(os.path.join(pd.log_dir, 'glc.log.*.gz'))):
             print 'Reading log file: '+src_name
-            base=os.path.basename(src_name)
-            with gzip.open(src_name,'rb') as f:
-                for line in f:
-                    CISM2time=ExtractTSData(CISM2time,line,5)
-                    Area=ExtractTSData(Area,line,5)
-                    Volume=ExtractTSData(Volume,line,5)
-                    Energy=ExtractTSData(Energy,line,5)
-                    MeanThickness=ExtractTSData(MeanThickness,line,4)
-                    MeanTemperature=ExtractTSData(MeanTemperature,line,4)
-                    MeanSMB=ExtractTSData(MeanSMB,line,4)
-                    MeanBasalMelt=ExtractTSData(MeanBasalMelt,line,5)
-                    MaxThickness=ExtractTSData(MaxThickness,line,6)	
-                    MaxTemperature=ExtractTSData(MaxTemperature,line,6)
-                    MinTemperature=ExtractTSData(MinTemperature,line,6)	
-                    MaxSurfaceSpeed=ExtractTSData(MaxSurfaceSpeed,line,7)
-                    MaxBasalSpeed=ExtractTSData(MaxBasalSpeed,line,7)	    
+	    base=os.path.basename(src_name)
+	    with gzip.open(src_name,'rb') as f:
+		for line in f:
+		    CISM2time=ExtractTSData(CISM2time,line,5)
+		    Area=ExtractTSData(Area,line,5)
+		    Volume=ExtractTSData(Volume,line,5)
+		    Energy=ExtractTSData(Energy,line,5)
+		    MeanThickness=ExtractTSData(MeanThickness,line,4)
+		    MeanTemperature=ExtractTSData(MeanTemperature,line,4)
+		    MeanSMB=ExtractTSData(MeanSMB,line,4)
+		    MeanBasalMelt=ExtractTSData(MeanBasalMelt,line,5)
+		    MaxThickness=ExtractTSData(MaxThickness,line,6)   
+		    MaxTemperature=ExtractTSData(MaxTemperature,line,6)
+		    MinTemperature=ExtractTSData(MinTemperature,line,6)       
+		    MaxSurfaceSpeed=ExtractTSData(MaxSurfaceSpeed,line,7)
+		    MaxBasalSpeed=ExtractTSData(MaxBasalSpeed,line,7)     
 
         #Third: generate time series plots, including minimal statistics,
         #for each diagnostic.
         WritePlot(Area,'Area',CISM2time,pd)
+	AreaStats=Area.describe()
         WritePlot(Volume,'Volume',CISM2time,pd)
+	VolumeStats=Volume.describe()
         WritePlot(Energy,'Energy',CISM2time,pd)
+	EnergyStats=Energy.describe()	
         WritePlot(MeanThickness,'MeanThickness',CISM2time,pd)
+	MeanThicknessStats=MeanThickness.describe()	
         WritePlot(MeanTemperature,'MeanTemperature',CISM2time,pd)
+	MeanTemperatureStats=MeanTemperature.describe()	
         WritePlot(MeanSMB,'MeanSMB',CISM2time,pd)
+	MeanSMBStats=MeanSMB.describe()	
         WritePlot(MeanBasalMelt,'MeanBasalMelt',CISM2time,pd)
+	MeanBasalMeltStats=MeanBasalMelt.describe()	
         WritePlot(MaxThickness,'MaxThickness',CISM2time,pd)
+	MaxThicknessStats=MaxThickness.describe()	
         WritePlot(MaxTemperature,'MaxTemperature',CISM2time,pd)
+	MaxTemperatureStats=MaxTemperature.describe()	
         WritePlot(MinTemperature,'MinTemperature',CISM2time,pd)
+	MinTemperatureStats=MinTemperature.describe()	
         WritePlot(MaxSurfaceSpeed,'MaxSurfaceSpeed',CISM2time,pd)
+	MaxSurfaceSpeedStats=MaxSurfaceSpeed.describe()	
         WritePlot(MaxBasalSpeed,'MaxBasalSpeed',CISM2time,pd)
-
+	MaxBasalSpeedStats=MaxBasalSpeed.describe()
 
         #FIXME: Need better error check here!
         #if not os.path.exists(output_file_base):
