@@ -46,31 +46,55 @@ from util.datastructures import LIVVDict
 
 def run_suite(test, case, config):
     """ Run the full suite of verification tests """
-    print("   Running analysis on " + case + '...')
     summary = LIVVDict()
     summary[case] = LIVVDict()
     model_dir = os.path.join(util.variables.model_dir, config['data_dir'], case)
     bench_dir = os.path.join(util.variables.bench_dir, config['data_dir'], case)
-    
-    for data_dir, run_summary in zip([model_dir, bench_dir], [LIVVDict(), LIVVDict()]):
+    model_cases = []
+    bench_cases = []
+
+    for data_dir, cases in zip([model_dir, bench_dir], [model_cases, bench_cases]):
         for root, dirs, files in os.walk(data_dir):
             if not dirs:
-                hierarchy = root.strip(data_dir).split(os.sep)
-                summary[case].nested_insert(hierarchy)
-    print(summary)
+                cases.append(root.strip(data_dir).split(os.sep))
+    
+    model_cases = sorted(model_cases)
+    for mcase in model_cases:
+        bench_path = (os.path.join(bench_dir, os.sep.join(mcase)) 
+                        if mcase in bench_cases else None)
+        model_path = os.path.join(model_dir, os.sep.join(mcase))
+        verify_case(model_path, bench_path, config)
+            
 
 def verify_case(model_dir, bench_dir, config):
     """ Runs all of the verification checks on a particular case """
-    model_configs = glob.glob(os.path.join(model_dir, config["config_ext"]))
-    bench_configs = glob.glob(os.path.join(bench_dir, config["config_ext"]))
+    summary = LIVVDict()
+    model_configs = set([os.path.basename(f) for f in 
+                      glob.glob(os.path.join(model_dir, "*" + config["config_ext"]))])
+    model_logs    = set([os.path.basename(f) for f in 
+                      glob.glob(os.path.join(model_dir, "*" + config["logfile_ext"]))])
+    model_output  = set([os.path.basename(f) for f in 
+                      glob.glob(os.path.join(model_dir, "*" + config["output_ext"]))])
     
-    model_logs = glob.glob(os.path.join(model_dir, config["logfile_ext"]))
-    bench_logs = glob.glob(os.path.join(bench_dir, config["logfile_ext"]))
+    if bench_dir is not None:
+        bench_configs = set([os.path.basename(f) for f in
+                          glob.glob(os.path.join(bench_dir, "*" + config["config_ext"]))])
+        bench_logs    = set([os.path.basename(f) for f in
+                          glob.glob(os.path.join(bench_dir, "*" + config["logfile_ext"]))])
+        bench_output  = set([os.path.basename(f) for f in 
+                          glob.glob(os.path.join(bench_dir, "*" + config["output_ext"]))])
+    else:
+        bench_configs = bench_logs = bench_output = set()
 
-    model_output = glob.glob(os.path.join(model_dir, config["output_ext"]))
-    bench_output = glob.glob(os.path.join(bench_dir, config["output_ext"]))
+    outfiles = model_output.intersection(bench_output)
+    configs = model_configs.intersection(bench_output)
 
-
+    for of in outfiles:
+        bit_for_bit(
+                    os.path.join(model_dir, of), 
+                    os.path.join(bench_dir, of), 
+                    config["bit_for_bit_vars"]
+                   )
 
 def bit_for_bit(model_path, bench_path, var_list):
     """
@@ -85,31 +109,33 @@ def bit_for_bit(model_path, bench_path, var_list):
     Returns:
         TODO 
     """
-    max_err   = np.zeros(len(var_list))
-    rms_err   = np.zeros(len(var_list))
-    diff_data = np.zeros(len(var_list))
+    max_err   = LIVVDict() 
+    rms_err   = LIVVDict() 
+    diff_data = LIVVDict() 
 
     if not (os.path.isfile(bench_path) and os.path.isfile(model_path)):
         return
 
     try:
         model_data = Dataset(model_path, 'r')
-        bench_data = Dataset(bench_data, 'r')
+        bench_data = Dataset(bench_path, 'r')
     except:
         print("Error opening datasets!")
         raise
+        exit()
 
     if not (util.netcdf.has_time(model_data) and util.netcdf.has_time(bench_data)):
         return
 
     for i, var in enumerate(var_list):
-        if not (var in model_data.variables and var in bench_data.variables):
-            pass
-        diff_data[i] = model_data.variables[var] - bench_data.variables[var]
-        if diff_data.any():
-            max_err[i] = np.amax(np.absolute(diff_data))
-            rms_err[i] = np.sqrt(np.sum(np.square(diff_data).flatten()) / diff_data.size)
-        
+        if (var in model_data.variables and var in bench_data.variables):
+            diff_data[var] = model_data.variables[var][:] - bench_data.variables[var][:]
+            if diff_data[var].any():
+                max_err[var] = np.amax(np.absolute(diff_data))
+                rms_err[var] = np.sqrt(np.sum(np.square(diff_data).flatten()) / diff_data.size)
+            else:
+                max_err[var] = 0.0
+                rms_err[var] = 0.0
     model_data.close()
     bench_data.close()
 

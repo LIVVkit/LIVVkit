@@ -5,7 +5,8 @@
         "test_cases" : ["dome"],
         "output_ext" : ".out.nc",
         "logfile_ext" : ".config.oe",
-        "config_ext"  : ".config"
+        "config_ext"  : ".config",
+        "bit_for_bit_vars" : ["velnorm", "thk"]
       },
     "ISMIP-HOM" : 
       { 
@@ -13,7 +14,8 @@
         "test_cases" : ["ismip-hom-a", "ismip-hom-c", "ismip-hom-f"],
         "output_ext": ".out.nc",
         "logfile_ext" : ".config.oe",
-        "config_ext"  : ".config"
+        "config_ext"  : ".config",
+        "bit_for_bit_vars" : ["velnorm", "thk"]
       },
     "Shelf" : 
       { 
@@ -21,7 +23,8 @@
         "test_cases" : ["shelf-circular", "shelf-confined"],
         "output_ext" : ".out.nc",
         "logfile_ext" : ".config.oe",
-        "config_ext"  : ".config"
+        "config_ext"  : ".config",
+        "bit_for_bit_vars" : ["velnorm", "thk"]
       },
     "Stream" : 
       { 
@@ -29,6 +32,7 @@
         "test_cases" : ["stream"],
         "output_ext" : ".out.nc",
         "logfile_ext" : ".config.oe",
-        "config_ext"  : ".config"
+        "config_ext"  : ".config",
+        "bit_for_bit_vars" : ["velnorm", "thk"]
       }
 }
