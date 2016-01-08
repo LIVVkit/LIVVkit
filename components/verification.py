@@ -87,14 +87,14 @@ def verify_case(model_dir, bench_dir, config):
         bench_configs = bench_logs = bench_output = set()
 
     outfiles = model_output.intersection(bench_output)
-    configs = model_configs.intersection(bench_output)
-
+    configs = model_configs.intersection(bench_configs)
     for of in outfiles:
-        bit_for_bit(
-                    os.path.join(model_dir, of), 
+        bit_for_bit(os.path.join(model_dir, of), 
                     os.path.join(bench_dir, of), 
-                    config["bit_for_bit_vars"]
-                   )
+                    config["bit_for_bit_vars"])
+    for cf in configs:
+        diff_configurations(os.path.join(model_dir,cf),
+                            os.path.join(bench_dir,cf))
 
 def bit_for_bit(model_path, bench_path, var_list):
     """
@@ -156,13 +156,15 @@ def diff_configurations(model_config, bench_config):
             {section : {variable : (equal, model value, benchmark value) } }
     """
     diff_dict = LIVVDict()
+    model_data = parse_cism_config(model_config)
+    bench_data = parse_cism_config(bench_config)
     model_sections= set(model_data.keys())
     bench_sections = set(bench_data.keys())
-    all_sections = set(model_sections + bench_sections)
+    all_sections = set(model_sections.union(bench_sections))
     for s in all_sections:
         model_vars = set(model_data[s].keys()) if s in model_sections else set()
         bench_vars = set(bench_data[s].keys()) if s in bench_sections else set()
-        all_vars = set(model_vars + bench_vars)
+        all_vars = set(model_vars.union(bench_vars))
         for v in all_vars:
             model_val = model_data[s][v] if s in model_sections and v in model_vars else 'NA'
             bench_val = bench_data[s][v] if s in bench_sections and v in bench_vars else 'NA'
@@ -184,7 +186,8 @@ def parse_cism_config(file_path):
     if not os.path.isfile(file_path):
         return None
     parser = ConfigParser()
-    return parser.read(file_path)
+    parser.read(file_path)
+    return parser._sections
 
 
 def parse_cism_log(file_path):
