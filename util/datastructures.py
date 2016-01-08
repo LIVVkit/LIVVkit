@@ -34,10 +34,12 @@ Module to hold LIVV specific data structures
 class LIVVDict(dict):
     """
     Extension of the dictionary datastructure to allow for auto nesting.
-    Credit to: http://tiny.cc/qerr7x 
     """
     def __getitem__(self, item):
-        """ Tries to get the item, and if it's not found creates it """
+        """ 
+        Tries to get the item, and if it's not found creates it 
+        Credit to: http://tiny.cc/qerr7x 
+        """
         try: 
             return dict.__getitem__(self, item)
         except KeyError:
@@ -46,3 +48,25 @@ class LIVVDict(dict):
             return tmp
 
 
+    def nested_insert(self, item_list):
+        """ Create a series of nested LIVVDicts given a list """
+        if len(item_list) == 1:
+            self[item_list[0]] = None
+        elif len(item_list) > 1:
+            if item_list[0] not in self:
+                self[item_list[0]] = LIVVDict()
+            self[item_list[0]].nested_insert(item_list[1:])
+
+
+    def nested_assign(self, key_list, value):
+        """ Set the value of nested LIVVDicts given a list """
+        if len(key_list) ==1:
+            return LIVVDict({key_list[0] : value})
+        elif len(key_list) > 1:
+            return LIVVDict({key_list[0] : self.nested_assign(key_list[1:], value)})
+        return value
+
+
+    def merge_leaves(self, dict_to_merge):
+        """ Merges another LIVVDict's similar leaf nodes into this one """
+        return self

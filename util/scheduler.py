@@ -57,15 +57,14 @@ def run_verification():
     with open(util.variables.verification, 'r') as f:
         config = json.load(f)
     tests = [t for t in config.keys() if isinstance(config[t], dict)]
+    tests = [(t,c) for t in tests for c in config[t]["test_cases"]]
     
     print("   Beginning verification test suite ")
     print(" -------------------------------------------------------------------")
-    for t in tests:
-        cases = config[t]["test_cases"] 
-        launch_processes(cases, components.verification.run_suite, **config[t])
-
+    launch_processes(tests, components.verification.run_suite, **config)
     print(" -------------------------------------------------------------------")
     print("   Verification test suite complete ")
+
 
 def run_performance():
     if not os.path.isfile(util.variables.performance):
@@ -87,19 +86,16 @@ def run_validation():
         print(test)
 
 
-def launch_processes(test_list, run_funct, **config):
+def launch_processes(test, run_funct, **config):
     """ Helper method to launch processes and synch output """
     manager = multiprocessing.Manager()
-    summary = manager.dict()
-    process_handles = [multiprocessing.Process(target=run_funct,args=(t, summary, config)) 
-                       for t in test_list]
+    process_handles = [multiprocessing.Process(target=run_funct,args=(t, c, config[t])) 
+                       for t,c in test]
     
     for p in process_handles:
         p.start()
     for p in process_handles:
         p.join()
-
-    return dict(summary)
 
 def cleanup():
     pass

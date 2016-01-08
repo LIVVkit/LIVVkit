@@ -44,23 +44,33 @@ import util.variables
 from util.datastructures import LIVVDict
 
 
-def run_suite(test_name, summary, config):
+def run_suite(test, case, config):
     """ Run the full suite of verification tests """
-    print("  Running analysis of " + test_name)
+    print("   Running analysis on " + case + '...')
+    summary = LIVVDict()
+    summary[case] = LIVVDict()
+    model_dir = os.path.join(util.variables.model_dir, config['data_dir'], case)
+    bench_dir = os.path.join(util.variables.bench_dir, config['data_dir'], case)
     
-    model_dir = os.path.join(util.variables.model_dir, config['data_dir'])
-    model_files = glob.glob(os.path.join(model_dir, test_name + "*"))
-    model_logs = [f for f in model_files if f.endswith(config["logfile_ext"])]
-    model_configs = [f for f in model_files if f.endswith(config["config_ext"])]
-    model_outputs = [f for f in model_files if f.endswith(config["output_ext"])]
+    for data_dir, run_summary in zip([model_dir, bench_dir], [LIVVDict(), LIVVDict()]):
+        for root, dirs, files in os.walk(data_dir):
+            if not dirs:
+                hierarchy = root.strip(data_dir).split(os.sep)
+                summary[case].nested_insert(hierarchy)
+    print(summary)
 
-    bench_dir = os.path.join(util.variables.bench_dir, config['data_dir'])
-    bench_files = glob.glob(os.path.join(bench_dir, test_name + "*"))
-    bench_logs = [f for f in bench_files if f.endswith(config["logfile_ext"])]
-    bench_configs = [f for f in bench_files if f.endswith(config["config_ext"])]
-    bench_outputs = [f for f in bench_files if f.endswith(config["output_ext"])]
+def verify_case(model_dir, bench_dir, config):
+    """ Runs all of the verification checks on a particular case """
+    model_configs = glob.glob(os.path.join(model_dir, config["config_ext"]))
+    bench_configs = glob.glob(os.path.join(bench_dir, config["config_ext"]))
+    
+    model_logs = glob.glob(os.path.join(model_dir, config["logfile_ext"]))
+    bench_logs = glob.glob(os.path.join(bench_dir, config["logfile_ext"]))
 
-   
+    model_output = glob.glob(os.path.join(model_dir, config["output_ext"]))
+    bench_output = glob.glob(os.path.join(bench_dir, config["output_ext"]))
+
+
 
 def bit_for_bit(model_path, bench_path, var_list):
     """

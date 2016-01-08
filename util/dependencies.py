@@ -73,7 +73,7 @@ def check():
     dep_dir = os.path.join(cwd, 'deps')
 
     # The list of nonstandard python libraries that are used 
-    library_list = ["numpy", "netCDF4", "matplotlib"]
+    library_list = ["numpy", "netCDF4", "pandas", "matplotlib"]
     # The list of command line programs needed
     error_list = []
     print(os.linesep + "Beginning Dependency Checks........")
