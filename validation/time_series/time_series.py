@@ -182,7 +182,7 @@ class Test(AbstractTest):
 		    MaxSurfaceSpeed=ExtractTSData(MaxSurfaceSpeed,line,7)
 		    MaxBasalSpeed=ExtractTSData(MaxBasalSpeed,line,7)     
 
-        #Third: generate time series plots, including minimal statistics,
+        #Third: generate time series plots and minimal statistics
         #for each diagnostic.
         WritePlot(Area,'Area',CISM2time,pd)
 	AreaStats=Area.describe()
