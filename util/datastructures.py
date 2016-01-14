@@ -30,6 +30,19 @@ Module to hold LIVV specific data structures
 
 @author: arbennett
 """
+import os
+import errno
+
+def mkdir_p(path):
+    """
+    Make parent directories as needed and no error if existing. Works like `mkdir -p`.
+    """
+    try:
+        os.makedirs(path)
+    except OSError as exc: # Python >2.5
+        if exc.errno == errno.EEXIST and os.path.isdir(path):
+            pass
+        else: raise
 
 class LIVVDict(dict):
     """
@@ -51,7 +64,7 @@ class LIVVDict(dict):
     def nested_insert(self, item_list):
         """ Create a series of nested LIVVDicts given a list """
         if len(item_list) == 1:
-            self[item_list[0]] = None
+            self[item_list[0]] = LIVVDict()
         elif len(item_list) > 1:
             if item_list[0] not in self:
                 self[item_list[0]] = LIVVDict()
@@ -60,13 +73,13 @@ class LIVVDict(dict):
 
     def nested_assign(self, key_list, value):
         """ Set the value of nested LIVVDicts given a list """
-        if len(key_list) ==1:
-            return LIVVDict({key_list[0] : value})
+        if len(key_list) == 1:
+            self[key_list[0]] = value
         elif len(key_list) > 1:
             return LIVVDict({key_list[0] : self.nested_assign(key_list[1:], value)})
-        return value
 
 
     def merge_leaves(self, dict_to_merge):
         """ Merges another LIVVDict's similar leaf nodes into this one """
-        return self
+        pass
+

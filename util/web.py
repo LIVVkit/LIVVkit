@@ -82,6 +82,9 @@ def setup():
         print("--------------------------------------------------------------------------")
         shutil.move(util.variables.index_dir, util.variables.index_dir + "_" + prev_time)
         mkdir_p(util.variables.index_dir)
+    else:
+        print("--------------------------------------------------------------------------")
+ 
 
     # Copy over css & imgs directories from source
     shutil.copytree(util.variables.website_dir + os.sep + "css", util.variables.index_dir + os.sep + "css")

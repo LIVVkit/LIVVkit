@@ -30,7 +30,6 @@ Verification Test Base Module
 
 @author: arbennett
 """
-
 import os
 import re
 import glob
@@ -42,7 +41,6 @@ from configparser import ConfigParser
 import util.netcdf
 import util.variables
 from util.datastructures import LIVVDict
-
 
 def run_suite(test, case, config):
     """ Run the full suite of verification tests """
@@ -63,8 +61,10 @@ def run_suite(test, case, config):
         bench_path = (os.path.join(bench_dir, os.sep.join(mcase)) 
                         if mcase in bench_cases else None)
         model_path = os.path.join(model_dir, os.sep.join(mcase))
-        verify_case(model_path, bench_path, config)
-            
+        summary[case].nested_assign(mcase, verify_case(model_path, bench_path, config))
+    print_summary(test, case, summary) # TODO
+    write_summary(test, case, summary)
+
 
 def verify_case(model_dir, bench_dir, config):
     """ Runs all of the verification checks on a particular case """
@@ -89,12 +89,20 @@ def verify_case(model_dir, bench_dir, config):
     outfiles = model_output.intersection(bench_output)
     configs = model_configs.intersection(bench_configs)
     for of in outfiles:
-        bit_for_bit(os.path.join(model_dir, of), 
-                    os.path.join(bench_dir, of), 
-                    config["bit_for_bit_vars"])
+        summary["Output data"][of] = bit_for_bit(os.path.join(model_dir, of), 
+                                                 os.path.join(bench_dir, of), 
+                                                 config["bit_for_bit_vars"])
+
     for cf in configs:
-        diff_configurations(os.path.join(model_dir,cf),
-                            os.path.join(bench_dir,cf))
+        summary["Configurations"][cf] = diff_configurations(
+                                            os.path.join(model_dir,cf),
+                                            os.path.join(bench_dir,cf))
+
+    for lf in model_logs:
+        summary["Output Log"][lf] = parse_cism_log(os.path.join(model_dir,lf))
+
+    return summary
+
 
 def bit_for_bit(model_path, bench_path, var_list):
     """
@@ -109,10 +117,6 @@ def bit_for_bit(model_path, bench_path, var_list):
     Returns:
         TODO 
     """
-    max_err   = LIVVDict() 
-    rms_err   = LIVVDict() 
-    diff_data = LIVVDict() 
-
     if not (os.path.isfile(bench_path) and os.path.isfile(model_path)):
         return
 
@@ -122,25 +126,25 @@ def bit_for_bit(model_path, bench_path, var_list):
     except:
         print("Error opening datasets!")
         raise
-        exit()
 
     if not (util.netcdf.has_time(model_data) and util.netcdf.has_time(bench_data)):
         return
 
+    stats = LIVVDict()
     for i, var in enumerate(var_list):
         if (var in model_data.variables and var in bench_data.variables):
-            diff_data[var] = model_data.variables[var][:] - bench_data.variables[var][:]
-            if diff_data[var].any():
-                max_err[var] = np.amax(np.absolute(diff_data))
-                rms_err[var] = np.sqrt(np.sum(np.square(diff_data).flatten()) / diff_data.size)
+            diff_data = model_data.variables[var][:] - bench_data.variables[var][:]
+            if diff_data.any():
+                stats[var]["Max Error"] = np.amax(np.absolute(diff_data))
+                stats[var]["RMS Error"] = np.sqrt(np.sum(np.square(diff_data).flatten()) / diff_data.size)
+                generate_bit_for_bit_plot(diff_data)
             else:
-                max_err[var] = 0.0
-                rms_err[var] = 0.0
+                stats[var]["Max Error"] = stats[var]["RMS Error"] = 0.0
+            
     model_data.close()
     bench_data.close()
 
-    # TODO: Figure out what data to return and which data to dispatch to somewhere else
-    return
+    return stats 
 
 
 def diff_configurations(model_config, bench_config):
@@ -203,6 +207,7 @@ def parse_cism_log(file_path):
     if not os.path.isfile(file_path):
         return
     with open(file_path, 'r') as f:
+        log_data = LIVVDict()
         dycore_types = {"0" : "Glide", "1" : "Glam", "2" : "Glissade", "3" : "Albany_felix", "4" : "BISICLES"}
         curr_step = 0
         proc_count = 0
@@ -211,30 +216,45 @@ def parse_cism_log(file_path):
         converged_iters = []
         iters_to_converge = []
         for line in f:
+            split = line.split()
             if ('CISM dycore type' in line):
                 if line.split()[-1] == '=':
-                    self.std_out_data['Dycore Type'] = dycore_types[next(logfile).strip()]
+                    dycore_type = dycore_types[next(logfile).strip()]
                 else:
-                    self.std_out_data['Dycore Type'] = dycore_types[line.split()[-1]]
+                    dycore_type = dycore_types[line.split()[-1]]
             elif ('total procs' in line):
-                number_procs += int(line.split()[-1])
+                proc_count += int(line.split()[-1])
             elif ('Nonlinear Solver Step' in line):
-                current_step = int(line.split()[4])
+                curr_step = int(line.split()[4])
             elif ('Compute ice velocities, time = ' in line):
-                current_step = float(line.split()[-1])
+                converged_iters.append(curr_step)
+                curr_step = float(line.split()[-1])
             elif ('"SOLVE_STATUS_CONVERGED"' in line):
                 split = line.split()
                 iters_to_converge.append(int(split[split.index('"SOLVE_STATUS_CONVERGED"') + 2]))
             elif ("Compute dH/dt" in line):
                 iters_to_converge.append(int(iter_number))
-            elif ('Converged!' in line):
-                converged_iters.append(current_step)
-            elif ('Failed!' in line):
-                converged_iters.append(-1*current_step)
-            split = line.split()
-            if len(split) > 0 and split[0].isdigit():
+            elif len(split) > 0 and split[0].isdigit():
                 iter_number = split[0]
+        if iters_to_converge == []: iters_to_converge.append(int(iter_number))
 
-            
+        log_data["Dycore Type"] = dycore_type
+        log_data["Processor Count"] = proc_count
+        log_data["Converged Iterations"] = len(converged_iters)
+        log_data["Avg. Iterations to Converge"] = np.mean(iters_to_converge)
+
+        return log_data
 
 
+def print_summary(test, case, summary):
+    """ Show some statistics from the run """
+    pass
+
+def write_summary(test, case, summary):
+    """ Take the summary and write out a JSON file """
+    outpath = os.path.join(util.variables.output_dir, "Verification", test)
+    util.datastructures.mkdir_p(outpath)
+    with open(os.path.join(outpath, case+".json"), 'w') as f:
+            json.dump(summary, f)
+
+    
