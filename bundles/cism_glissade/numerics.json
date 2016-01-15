@@ -1,0 +1,10 @@
+{
+    "ISMIP-HOM" : 
+        {
+            "data_dir" : "ismip-hom",
+            "test_cases" : ["ismip-hom-a", "ismip-hom-c", "ismip-hom-f"],
+            "output_ext" : ".out.nc",
+            "bench_dir" : "data/numerics/ismip-hom",
+            "bench_ext" : ".txt"
+        }
+}

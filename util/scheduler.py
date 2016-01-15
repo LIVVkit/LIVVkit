@@ -46,9 +46,15 @@ def run_numerics():
         return
     with open(util.variables.numerics, 'r') as f:
         config = json.load(f)
-    tests = config.keys()
-    for test in tests:
-        print(test)
+    tests = [t for t in config.keys() if isinstance(config[t], dict)]
+    tests = [(t,c) for t in tests for c in config[t]["test_cases"]]
+   
+    print("   Beginning numerics test suite ")
+    print(" -------------------------------------------------------------------")
+    launch_processes(tests, components.numerics.run_suite, **config)
+    print(" -------------------------------------------------------------------")
+    print("   Numerics test suite complete ")
+
 
 
 def run_verification():
@@ -71,9 +77,15 @@ def run_performance():
         return
     with open(util.variables.performance, 'r') as f:
         config = json.load(f)
-    tests = config.keys()
-    for test in tests:
-        print(test)
+    tests = [t for t in config.keys() if isinstance(config[t], dict)]
+    tests = [(t,c) for t in tests for c in config[t]["test_cases"]]
+    
+    print("   Beginning performance test suite ")
+    print(" -------------------------------------------------------------------")
+    launch_processes(tests, components.performance.run_suite, **config)
+    print(" -------------------------------------------------------------------")
+    print("   Performance test suite complete ")
+
 
 
 def run_validation():
@@ -81,9 +93,15 @@ def run_validation():
         return
     with open(util.variables.validation, 'r') as f:
         config = json.load(f)
-    tests = config.keys()
-    for test in tests:
-        print(test)
+    tests = [t for t in config.keys() if isinstance(config[t], dict)]
+    tests = [(t,c) for t in tests for c in config[t]["test_cases"]]
+    
+    print("   Beginning validation test suite ")
+    print(" -------------------------------------------------------------------")
+    launch_processes(tests, components.validation.run_suite, **config)
+    print(" -------------------------------------------------------------------")
+    print("   Validation test suite complete ")
+
 
 
 def launch_processes(test, run_funct, **config):
