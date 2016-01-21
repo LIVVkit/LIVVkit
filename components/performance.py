@@ -32,7 +32,11 @@ Performance Test Base Module.
 """
 
 import os
+import glob
+import json
 import util.variables
+import util.datastructures
+
 from util.datastructures import LIVVDict
 
 def run_suite(test, case, config):
@@ -63,9 +67,20 @@ def run_suite(test, case, config):
 def analyze_case(model_dir, bench_dir, config):
     """ Run all of the performance checks on a particular case """
     summary = LIVVDict()
-    model_timings = set([])
-    bench_timings = set([])
+    model_timings = set([os.path.basename(f) for f in 
+                        glob.glob(os.path.join(model_dir, "*" + config["timing_ext"]))])
+
+    if bench_dir is not None:
+        bench_timings = set([os.path.basename(f) for f in 
+                          glob.glob(os.path.join(model_dir, "*" + config["timing_ext"]))])
+    else:
+        bench_timings = set()
     
+    for mtf in model_timings:
+        summary["model"][mtf] = parse_cism_timing(os.path.join(model_dir,mtf))
+        if mtf in bench_timings: 
+            summary["bench"][mtf] = parse_cism_timing(os.path.join(bench_dir,mtf))
+    return summary
 
 def weak_scaling():
     """ Generate weak scaling stats """
@@ -131,7 +146,8 @@ def parse_cism_timing(file_path):
         with open(file_path, 'r') as f:
             for line in f:
                 split = line.split()
-                if not split == []:
+                if not split == [] and (
+                file_path.split(os.sep)[-1].replace('results','config') == line.split()[0]):
                     timing_summary["Run Time"] = float(split[1])
                     break
     return timing_summary
@@ -144,5 +160,8 @@ def print_summary(test,case,summary):
 
 def write_summary(test,case,summary):
     """ Take the summary and write out a JSON file """
-    pass
+    outpath = os.path.join(util.variables.output_dir, "Performance", test)
+    util.datastructures.mkdir_p(outpath)
+    with open(os.path.join(outpath, case+".json"), 'w') as f:
+        json.dump(summary, f)
 

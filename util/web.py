@@ -91,10 +91,9 @@ def setup():
     shutil.copytree(util.variables.website_dir + os.sep + "imgs", util.variables.index_dir + os.sep + "imgs")
 
     # Record when this data was recorded so we can make nice backups
-    f = open(util.variables.index_dir + os.sep + "data.txt", "w")
-    f.write(util.variables.timestamp + "\n")
-    f.write(util.variables.comment)
-    f.close()
+    with open(util.variables.index_dir + os.sep + "data.txt", "w") as f:
+        f.write(util.variables.timestamp + "\n")
+        f.write(util.variables.comment)
 
 
 def generate(numerics_summary, verification_summary, performance_summary, validation_summary):

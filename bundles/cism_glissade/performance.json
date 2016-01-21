@@ -4,7 +4,6 @@
             "data_dir" : "dome",
             "test_cases" : ["dome"],
             "timing_ext" : ".results",
-            "gptl_ext" : ".cism_timing_stats",
-            "gptl_vars" : ["cism", "initial_diag_var_solve", "glissade_assemble_stiffness_mat"]
+            "timing_vars" : ["cism", "initial_diag_var_solve", "glissade_assemble_stiffness_mat"]
         }
 }

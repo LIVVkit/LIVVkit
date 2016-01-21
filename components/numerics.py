@@ -32,7 +32,11 @@ Numerics Test Base Module.
 """
 
 import os
+import glob
+import json
 import util.variables
+import util.datastructures
+
 from util.datastructures import LIVVDict
 
 def run_suite(test, case, config):
@@ -40,7 +44,7 @@ def run_suite(test, case, config):
     summary = LIVVDict()
     summary[case] = LIVVDict()
     model_dir = os.path.join(util.variables.model_dir, config['data_dir'], case)
-    bench_dir = os.path.join(util.variables.bench_dir, config['data_dir'], case)
+    bench_dir = os.path.join(util.variables.cwd, "data", "numerics", config['bench_dir'], case)
     model_cases = []
     bench_cases = []
 
@@ -54,17 +58,22 @@ def run_suite(test, case, config):
         bench_path = (os.path.join(bench_dir, os.sep.join(mcase))
                         if mcase in bench_cases else None)
         model_path = os.path.join(model_dir, os.sep.join(mcase))
-        summary[case].nested_assign(mcase, analyze_case(model_path, bench_path, config))
+        summary[case].nested_assign(mcase, analyze_case(mcase, model_path, bench_path, config))
     print_summary(test,case,summary) #TODO
     write_summary(test,case,summary) #TODO
 
 
-def analyze_case(model_dir, bench_dir, config):
+def analyze_case(case, model_dir, bench_dir, config):
     """ Run all of the numerics checks on a particular case """
     summary = LIVVDict()
-    model_timings = set([])
-    bench_timings = set([])
-    
+    str_to_case = {
+                "ismip-hom" : ismip
+            }
+    model_files = set([os.path.basename(f) for f in 
+                        glob.glob(os.path.join(model_dir, "*" + config["output_ext"]))])
+    if bench_dir is not None:
+        bench_files = set([os.path.basename(f) for f in 
+                        glob.glob(os.path.join(util.variables.cwd , bench_dir, "*" + config["bench_ext"]))])
 
 def ismip(exp_type, resolution):
     """ 
@@ -126,5 +135,9 @@ def print_summary(test,case,summary):
     pass
 
 def write_summary(test,case,summary):
-    pass
+    """ Take the summary and write out a JSON file """
+    outpath = os.path.join(util.variables.output_dir, "Numerics", test)
+    util.datastructures.mkdir_p(outpath)
+    with open(os.path.join(outpath, case+".json"), 'w') as f:
+        json.dump(summary,f)
 
