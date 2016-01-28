@@ -86,12 +86,104 @@ def analyze_case(model_dir, bench_dir, config):
 
 def weak_scaling():
     """ Generate weak scaling stats """
-    pass
+    #work_perProc, plot_vars = [], []
+    #resolutions = sorted(resolutions)
+    ## Find out how much work per processor for each run
+    #for res in resolutions:
+    #    test = test_type + res
+    #    proc_list = self.model_timing_data[test].keys()
+    #    work_perProc.append([(int(res)**2)/int(n_proc)for n_proc in proc_list])
+
+    ## To generate the best plot, figure out which work/processor number 
+    ## was most common, then pull out the resolution, number of processor,
+    ## and the time taken 
+    #work_perProc = [i for sublist in work_perProc for i in sublist]
+    #
+    ## If there's no data quit early
+    #if work_perProc == []:
+    #    return
+    #
+    ## This gets the most applicable data points to plot
+    #scaling_constant = Counter(work_perProc).most_common()[0][0]
+    #for res in resolutions: 
+    #    test= test_type + res
+    #    proc_list = self.model_timing_data[test].keys()
+    #    for n_proc in proc_list:
+    #        if (int(res)**2)/int(n_proc) == scaling_constant:
+    #            plot_vars.append([res, n_proc, 
+    #                self.model_timing_data[test_type + res][n_proc]["Run Time"]])  
+    #
+    ## These are the plotting variables
+    #resolutions = [int(var[0]) for var in plot_vars]
+    #processors = [int(var[1]) for var in plot_vars]
+    #times = [var[2] for var in plot_vars]
+    #mins = [var[-1] for var in times]
+    #maxs = [var[1] for var in times]
+    #times = [var[0] for var in times]
+    ## Plot it and then save the file + record it so we can link to it
+    #fig, ax = pyplot.subplots(1)
+    #pyplot.title("Weak scaling for " + test_type)
+    #pyplot.xlabel("Problem size")
+    #pyplot.ylabel("Time (s)")
+    #pyplot.xticks()
+    #pyplot.yticks()
+    #ax.plot(resolutions, times, 'bo-', label='Model')
+    #ax.plot(resolutions, mins, 'b--')
+    #ax.plot(resolutions, maxs, 'b--')
+    #pyplot.savefig(util.variables.index_dir + os.sep + "performance" + 
+    #               os.sep + self.name + os.sep + "imgs" + os.sep + 
+    #               test_type.strip() +  "_scaling_weak.png")
+    #self.images_generated.append( [test_type.strip() + "_scaling_weak.png", 
+    #                              "Weak scaling for " + test_type])
 
 
 def strong_scaling():
     """ Generate strong scaling stats """
-    pass
+    ## Generate all of the plots
+    #for res in sorted(resolutions):
+    #    test = test_type + res
+    #    # Add the data if it's available and has at least 3 data points
+    #    if self.model_timing_data[test] != {} and len(self.model_timing_data[test].keys()) > 2:
+    #        model_data = self.model_timing_data[test]
+    #        fig, ax = pyplot.subplots(1)
+    #        pyplot.title("Strong scaling for " + test_type  + res)
+    #        pyplot.xlabel("Number of processors")
+    #        pyplot.ylabel("Time (s)")
+    #        pyplot.xticks()
+    #        pyplot.yticks()
+    #        x = sorted(model_data.keys())
+    #        times = [model_data[p]["Run Time"] for p in x] 
+    #        y, mins, maxs = [], [], []
+    #        for time in times:
+    #            y.append(time[0])
+    #            mins.append(time[1])
+    #            maxs.append(time[2])
+
+    #        ax.plot(x, y, 'bo-', label='Model')
+    #        ax.plot(x,mins, 'b--')
+    #        ax.plot(x,maxs, 'b--')
+    #        
+    #        # Add benchmark data if it's there
+    #        if self.bench_timing_data[test] != {}:
+    #            bench_data = self.bench_timing_data[test]
+    #            x = sorted(bench_data.keys())
+    #            times = [bench_data[p]["Run Time"] for p in x] 
+    #            y, mins, maxs = [], [], []
+    #            for time in times:
+    #                y.append(time[0])
+    #                mins.append(time[1])
+    #                maxs.append(time[2])
+    #            ax.plot(x, y, 'r^-', label='Benchmark')
+    #            ax.plot(x,mins, 'r--')
+    #            ax.plot(x,maxs, 'r--')
+    #            pyplot.legend()
+
+    #        pyplot.savefig(util.variables.index_dir + os.sep + "performance" + 
+    #                       os.sep + self.name + os.sep + "imgs" + os.sep + 
+    #                       test_type.strip() + "_" + res +  "_scaling" + ".png")
+    #        self.images_generated.append( [test_type.strip() + "_" + res + "_scaling" + 
+    #                                       ".png", "Strong scaling for " + test_type + res])
+
 
 
 def generate_timing_stats(model_dir, bench_dir, config):

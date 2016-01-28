@@ -49,13 +49,13 @@ def run_numerics():
     tests = [t for t in config.keys() if isinstance(config[t], dict)]
     tests = [(t,c) for t in tests for c in config[t]["test_cases"]]
    
-    print(" -------------------------------------------------------------------")
+    print(" ---------------------------------------------------------------")
     print("   Beginning numerics test suite ")
-    print(" -------------------------------------------------------------------")
+    print(" ---------------------------------------------------------------")
     launch_processes(tests, components.numerics.run_suite, **config)
-    print(" -------------------------------------------------------------------")
+    print(" ---------------------------------------------------------------")
     print("   Numerics test suite complete ")
-    print(" -------------------------------------------------------------------")
+    print(" ---------------------------------------------------------------")
 
 
 
@@ -67,13 +67,13 @@ def run_verification():
     tests = [t for t in config.keys() if isinstance(config[t], dict)]
     tests = [(t,c) for t in tests for c in config[t]["test_cases"]]
     
-    print(" -------------------------------------------------------------------")
+    print(" ---------------------------------------------------------------")
     print("   Beginning verification test suite ")
-    print(" -------------------------------------------------------------------")
+    print(" ---------------------------------------------------------------")
     launch_processes(tests, components.verification.run_suite, **config)
-    print(" -------------------------------------------------------------------")
+    print(" ---------------------------------------------------------------")
     print("   Verification test suite complete ")
-    print(" -------------------------------------------------------------------")
+    print(" ---------------------------------------------------------------")
 
 
 def run_performance():
@@ -83,13 +83,13 @@ def run_performance():
         config = json.load(f)
     tests = [t for t in config.keys() if isinstance(config[t], dict)]
     tests = [(t,c) for t in tests for c in config[t]["test_cases"]]
-    print(" -------------------------------------------------------------------")
+    print(" ---------------------------------------------------------------")
     print("   Beginning performance test suite ")
-    print(" -------------------------------------------------------------------")
+    print(" ---------------------------------------------------------------")
     launch_processes(tests, components.performance.run_suite, **config)
-    print(" -------------------------------------------------------------------")
+    print(" ---------------------------------------------------------------")
     print("   Performance test suite complete ")
-    print(" -------------------------------------------------------------------")
+    print(" ---------------------------------------------------------------")
 
 
 
@@ -101,13 +101,13 @@ def run_validation():
     tests = [t for t in config.keys() if isinstance(config[t], dict)]
     tests = [(t,c) for t in tests for c in config[t]["test_cases"]]
     
-    print(" -------------------------------------------------------------------")
+    print(" ---------------------------------------------------------------")
     print("   Beginning validation test suite ")
-    print(" -------------------------------------------------------------------")
+    print(" ---------------------------------------------------------------")
     launch_processes(tests, components.validation.run_suite, **config)
-    print(" -------------------------------------------------------------------")
+    print(" ---------------------------------------------------------------")
     print("   Validation test suite complete ")
-    print(" -------------------------------------------------------------------")
+    print(" ---------------------------------------------------------------")
 
 
 

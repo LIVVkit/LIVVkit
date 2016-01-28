@@ -50,17 +50,17 @@ Direct execution.
 def main():
 
     import util.options
-    import util.dependencies
+    import util.tests
 
     util.options.init(util.options.parse(sys.argv[1:]))
-    print("------------------------------------------------------------------------------")
-    print("                          __   _____   ___   ____    _ __     ") 
-    print("                         / /  /  _/ | / / | / / /__ (_) /_    ") 
-    print("                        / /___/ / | |/ /| |/ /  '_// / __/    ") 
-    print("                       /____/___/ |___/ |___/_/\_\/_/\__/     ")
+    print("-------------------------------------------------------------------")
+    print("                      __   _____   ___   ____    _ __     ") 
+    print("                     / /  /  _/ | / / | / / /__ (_) /_    ") 
+    print("                    / /___/ / | |/ /| |/ /  '_// / __/    ") 
+    print("                   /____/___/ |___/ |___/_/\_\/_/\__/     ")
     print("")
-    print("                       Land Ice Verification & Validation     ")
-    print("------------------------------------------------------------------------------")
+    print("                   Land Ice Verification & Validation     ")
+    print("-------------------------------------------------------------------")
     print("  Load modules: python, ncl, nco, python_matplotlib, hdf5, netcdf,")
     print("                python_numpy, and python_netcdf4 for best results.")
     print("")
@@ -70,8 +70,9 @@ def main():
     print("  Machine: " + util.variables.machine)
     print("  " + util.variables.comment)
     
-    util.dependencies.check()
-   
+    util.tests.check_dependencies()
+    if util.variables.run_tests: util.tests.run_tests()
+
     import util.scheduler
     import util.web
 
@@ -84,10 +85,10 @@ def main():
 
     util.scheduler.cleanup()
     
-    print("------------------------------------------------------------------------------")
-    print("Finished running LIVV.")
-    print("  Open " + util.variables.output_dir + "/index.html to see test results")
-    print("------------------------------------------------------------------------------")
+    print("-------------------------------------------------------------------")
+    print(" Done!  Results can be seen in a web browser at:")
+    print("        " +  util.variables.output_dir )
+    print("-------------------------------------------------------------------")
 
 if __name__ == "__main__":
     main()

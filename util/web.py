@@ -66,7 +66,7 @@ def setup():
 
     # Check if we need to back up an old run
     if os.listdir(util.variables.index_dir):
-        print("--------------------------------------------------------------------------")
+        print("-------------------------------------------------------------------")
         print('Previous output data found in output directory!')
         try:
             f = open(util.variables.index_dir + os.sep + "data.txt", "r")
@@ -79,11 +79,11 @@ def setup():
 
         print('   Backing up data to:')
         print('   ' + util.variables.index_dir + "_" + prev_time)
-        print("--------------------------------------------------------------------------")
+        print("-------------------------------------------------------------------")
         shutil.move(util.variables.index_dir, util.variables.index_dir + "_" + prev_time)
         mkdir_p(util.variables.index_dir)
     else:
-        print("--------------------------------------------------------------------------")
+        print("-------------------------------------------------------------------")
  
 
     # Copy over css & imgs directories from source

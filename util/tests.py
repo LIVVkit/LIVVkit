@@ -27,18 +27,10 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 """
-Dependency management module for LIVV
-
-Created on January 6, 2015
+Test management module for LIVV
 
 @author: arbennett
 """
-
-#
-# TODO : Try to import urllib2 before checking for setuptools.  If it's not available try using something
-#        like curl or wget from a subprocess to download setuptools and then add urllib2 to the list of
-#        dependencies to check (and obviously install)
-#
 
 import os
 import sys
@@ -46,40 +38,58 @@ import urllib
 import fnmatch
 import subprocess
 
-def find_eggs(tree):
-    """
-    This will recusively look for python '*.egg' files and folders. 
-    """
-    matches = []
-    for base, dirs, files in os.walk(tree):
-        goodfiles = fnmatch.filter(files, '*.egg')
-        matches.extend(os.path.join(base, f) for f in goodfiles)
-        gooddirs = fnmatch.filter(dirs, '*.egg')
-        matches.extend(os.path.join(base, d) for d in gooddirs)
-    return matches
+def run_tests():
+    """ Run unit tests """
+    print("")
+    print("-------------------------------------------------------------------")
+    print("  Running internal tests....") 
+    print("-------------------------------------------------------------------")
+    print("  Tests currently inoperable.  Continuing....")
+    datastructure_tests()
+    input_output_tests()
+    numerics_tests()
+    verification_tests()
+    performance_tests()
+    validation_tests()
 
 
-def check():
-    """
-    Run all of the checks for dependencies required by LIVV
-    
-    Checks if modules are used, and if they are checks to see
-    if they are loaded.  Then, checks for the necessary Python
-    libraries.  If any are missing they are installed via 
-    easy_install.  If easy_install isn't installed, that is 
-    also built.
-    """
+def datastructure_tests():
+    """ Run internal datastructure verification tests """
+    pass
+
+
+def input_output_tests():
+    """ Run internal IO verification tests """
+    pass
+
+
+def numerics_tests():
+    """ Run internal numerics verification tests """
+    pass
+
+
+def verification_tests():
+    """ Run internal verification verification tests """
+    pass
+
+
+def performance_tests():
+    """ Run internal performance verification tests """
+    pass
+
+
+def validation_tests():
+    """ Run internal validation verification tests """
+    pass
+
+def check_dependencies():
+    """ Run all of the checks for dependencies required by LIVV """
     cwd = os.getcwd()
     dep_dir = os.path.join(cwd, 'deps')
-
-    # The list of nonstandard python libraries that are used 
     library_list = ["numpy", "netCDF4", "pandas", "matplotlib"]
-    # The list of command line programs needed
     error_list = []
     print(os.linesep + "Beginning Dependency Checks........")
-
-    # For the python dependencies we may need easy_install
-    # Make sure we have it, and if not, build it       
+    # Make sure we have easy_install, and if not, build it       
     try:
         from setuptools.command import easy_install
     except ImportError:
@@ -99,8 +109,7 @@ def check():
             print("  !------------------------------------------------------")
             exit(1)
 
-    # Make sure all imports are going to work
-    # And if they don't build a copy of the ones that are needed
+    # Check if imports work, and if not build a copy 
     print("    Checking for external libraries....")
     libs_installed=[]
     for lib in library_list:
@@ -114,15 +123,12 @@ def check():
                 sys.path.append(dep_dir)
             easy_install.main(["--user",lib])
             libs_installed.append(lib)
-
     # ez_setup instals into $HOME/.local/lib/python2.7/site-packages/ ...
     egg_files = find_eggs(os.path.join(os.environ['HOME'], '.local'))
-    
     # add the found site-packages to the python path
     for ef in egg_files:
         if not (ef in sys.path):
             sys.path.append(ef)
-
     # check libraries again
     libs_we_did_not_install = []
     for lib in library_list:
@@ -130,7 +136,6 @@ def check():
             __import__(lib)
         except ImportError:
             libs_we_did_not_install.append(lib)
-        
     # for some reason sys path did not get updated so... try running livv again.
     if len(libs_we_did_not_install) > 0:
         print("")
@@ -143,7 +148,6 @@ def check():
         print("------------------------------------------------------------------------------")
         print("")
         exit(0)
-
     # Show all of the dependency errors that were found
     if len(error_list) > 0:
         print("Uh oh!")
@@ -158,103 +162,34 @@ def check():
         print("Okay!" + os.linesep + "Setting up environment....")
 
 
-def check_modules():
-    """
-    Checks if the system running LIVV uses modules to load dependencies.
-    
-    If the system does use modules, this method goes through and makes
-    sure that the correct modules are loaded.  Any modules that are needed
-    but haven't been loaded are added to a module loader script that the
-    user is prompted to source before running LIVV again.
-    """
-    # Check to see if calling 'module list' is a real command
-    cwd = os.getcwd()
-    dep_dir = os.path.join(cwd, 'deps')
-    print("    Checking if modules need to be loaded"),
-    modules = [
-           "python", 
-           "ncl", 
-           "nco", 
-           "python_matplotlib", 
-           "hdf5", 
-           "netcdf", 
-           "python_numpy", 
-           "python_netcdf4"
-          ]
-    check_cmd = ["bash", "-c", "module list"]
-    check_call = subprocess.Popen(check_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    out, err = check_call.communicate()
-
-    # Find out if we need to check if modules are loaded
-    if "bash: module: command not found" in err + out: 
-        print(" nope.  Continuing....")
-        return
-    else:
-        # We need to check if all of the correct modules are loaded
-        if not os.path.exists(dep_dir):
-            os.mkdir(dep_dir)
-            sys.path.append(dep_dir)
-        f = open(os.path.join(dep_dir, "modules"), 'w')
-
-        # Record the modules needed, the modules that have been loaded, and start a list for what's missing
-        module_list_output = out.split() + err.split()
-        modules_needed = []
-
-        # Go through and find out if anything is missing
-        for module in modules:
-            f.write("module load " + module + "\n")
-            if module+'*' not in module_list_output:
-                modules_needed.append(module)
-        f.close()
-
-        # If anything was missing, tell the user what it was and how to fix it
-        if len(modules_needed) != 0:
-            print("")
-            print("  ------------------------------------------")
-            print("  | Could not find all necessary modules!  |")
-            print("  ------------------------------------------")
-            print("    Modules missing:")
-            for each in modules_needed: print("   * " + each)
-            print("")
-            print("  ------------------------------------------")
-            print("  | Use the command: source deps/modules   |")
-            print("  | to load all of the missing modules.    |")
-            print("  | then try running LIVV again.           |")
-            print("  ------------------------------------------")
-            exit(1)
-        else:
-            print(" found all required modules!")
+def find_eggs(tree):
+    """ This will recusively look for python '*.egg' files and folders. """
+    matches = []
+    for base, dirs, files in os.walk(tree):
+        goodfiles = fnmatch.filter(files, '*.egg')
+        matches.extend(os.path.join(base, f) for f in goodfiles)
+        gooddirs = fnmatch.filter(dirs, '*.egg')
+        matches.extend(os.path.join(base, d) for d in gooddirs)
+    return matches
 
 
 def install_setup_tools():
-    """
-    Installs setuptools under the user python libraries
-    
-    If setuptools isn't found on a system it is probably the case that other
-    packages are also not available.   Once setuptools is installed we can
-    access the easy_install command from inside of LIVV if  any python
-    dependencies aren't satisfied
-    """
+    """ Installs setuptools under the user python libraries """
     cwd = os.getcwd()
     url = "https://bootstrap.pypa.io/ez_setup.py"
     file_path = cwd + os.sep + "deps"
     file_name = "ez_setup.py"
-    
     urllib.urlretrieve(url, file_path + os.sep + file_name)
-
     print("Setting up ez_setup module...")
     ez_command = "python " + file_name + " --user 2> ez.err > ez.out"
     ez_commands = ["cd "+file_path, ez_command, 'exit 0']
     subprocess.check_call(str.join(" ; ",ez_commands), executable='/bin/bash', shell=True)
-   
     # ez_setup instals into $HOME/.local/lib/python2.7/site-packages/ ...
     egg_files = find_eggs(os.environ['HOME'] + os.sep + '.local')
-    
     # add the found site-packages to the python path
     for ef in egg_files:
         if not (ef in sys.path):
             sys.path.append(ef)
-
     return ez_command
 
 

@@ -60,7 +60,9 @@ def parse(args):
     parser.add_argument('-c', '--comment', 
             default='Standard V&V.', 
             help="Describe this run. Comment will appear in the output website's footer.")
- 
+    parser.add_argument('--run-tests', action='store_true', 
+            help="Run unit tests.")
+
     parser.add_argument('--numerics',
             default='off',
             help="Specify the numerics tests to run.")
@@ -90,6 +92,7 @@ def init(options):
     util.variables.output_dir     = os.path.abspath(options.out_dir)
     util.variables.img_dir        = util.variables.output_dir + "/imgs"
     util.variables.comment        = options.comment
+    util.variables.run_tests      = options.run_tests
     util.variables.timestamp      = time.strftime("%m-%d-%Y %H:%M:%S")
     util.variables.user           = getpass.getuser()
     util.variables.machine        = socket.gethostname()
