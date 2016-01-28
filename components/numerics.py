@@ -34,8 +34,11 @@ Numerics Test Base Module.
 import os
 import glob
 import json
+import pprint
+import numpy as np
 import util.variables
 import util.datastructures
+from netCDF4 import Dataset
 
 from util.datastructures import LIVVDict
 
@@ -44,7 +47,7 @@ def run_suite(test, case, config):
     summary = LIVVDict()
     summary[case] = LIVVDict()
     model_dir = os.path.join(util.variables.model_dir, config['data_dir'], case)
-    bench_dir = os.path.join(util.variables.cwd, "data", "numerics", config['bench_dir'], case)
+    bench_dir = os.path.join(util.variables.cwd, config['bench_dir'], case)
     model_cases = []
     bench_cases = []
 
@@ -52,11 +55,12 @@ def run_suite(test, case, config):
         for root, dirs, files in os.walk(data_dir):
             if not dirs:
                 cases.append(root.strip(data_dir).split(os.sep))
-   
+    
     model_cases = sorted(model_cases)
     for mcase in model_cases:
-        bench_path = (os.path.join(bench_dir, os.sep.join(mcase))
-                        if mcase in bench_cases else None)
+        # Strip last part since benchmarks don't have processor counts
+        bench_path = (os.path.join(bench_dir, os.sep.join(mcase[0:-1]))
+                if mcase[0:-1] in bench_cases else None)
         model_path = os.path.join(model_dir, os.sep.join(mcase))
         summary[case].nested_assign(mcase, analyze_case(mcase, model_path, bench_path, config))
     print_summary(test,case,summary) #TODO
@@ -69,33 +73,40 @@ def analyze_case(case, model_dir, bench_dir, config):
     str_to_case = {
                 "ismip-hom" : ismip
             }
-    model_files = set([os.path.basename(f) for f in 
-                        glob.glob(os.path.join(model_dir, "*" + config["output_ext"]))])
+    model_files = list(set([os.path.basename(f) for f in 
+                    glob.glob(os.path.join(model_dir, "*" + config["output_ext"]))]))
     if bench_dir is not None:
-        bench_files = set([os.path.basename(f) for f in 
-                        glob.glob(os.path.join(util.variables.cwd , bench_dir, "*" + config["bench_ext"]))])
+        bench_files = list(set([os.path.basename(f) for f in glob.glob(
+            os.path.join(util.variables.cwd , bench_dir, "*" + config["bench_ext"]))]))
+    if len(model_files) > 0 and len(bench_files) > 0:
+        summary[model_files[0]] = ismip(os.path.join(model_dir,model_files[0]), 
+                                        os.path.join(bench_dir,bench_files[0]),
+                                        config)
+    return summary
 
-def ismip(exp_type, resolution):
+
+def ismip(model_path, bench_path, config):
     """ 
     Verify ISMIP-HOM model data against ISMIP's datasets 
     
     Args:
-        exp_type: Which ISMIP experiment to analyze
-        resolution: The size of the dataset
+        model_path: Absolute path to the model data set
+        bench_path: Absolute path to the benchmark data set
+        config: A dictionary containing configuration options
 
     Returns:
-        TODO
+        A summary of the differences between the model and benchmark
     """
-    ismip_path = os.path.join(util.variables.cwd, "datasets",
-            "ismip-hom", exp_type+"."+resolution, ".lmla.txt")
+    summary = LIVVDict()
+    # Python2 equivalent call: np.loadtxt -> np.loadfromtxt
     x, y, vx_u, vx_std, vx_min, vx_max, vy_u, vy_std, vy_min, vy_max = (
-        np.loadfromtxt(ismip_path, unpack=True, delimiter=',',
+        np.loadtxt(bench_path, unpack=True, delimiter=',',
         skiprows=1, usecols=(0,1,2,3,4,5,6,7,8,9)))
     
     n_pts = int(np.sqrt(len(x)))
-    vnorm_mean =  np.reshape(np.sqrt(np.add(np.power(vx_mean,2), np.power(vy_mean,2))),\
+    vnorm_mean =  np.reshape(np.sqrt(np.add(np.power(vx_u,2), np.power(vy_u,2))),\
                              (n_pts,n_pts))
-    vnorm_stdev = np.reshape(np.sqrt(np.add(np.power(vx_stdev,2), np.power(vy_stdev,2))),\
+    vnorm_stdev = np.reshape(np.sqrt(np.add(np.power(vx_std,2), np.power(vy_std,2))),\
                              (n_pts,n_pts))
     vnorm_plus =  np.reshape(np.add(vnorm_mean, vnorm_stdev), (n_pts,n_pts))
     vnorm_minus = np.reshape(np.subtract(vnorm_mean, vnorm_stdev), (n_pts,n_pts))
@@ -105,34 +116,34 @@ def ismip(exp_type, resolution):
                            (n_pts,n_pts))
  
     # Grab the model data
-    data_files = sorted(set(fn for fn in fnmatch.filter(os.listdir(self.model_dir), \
-                            'ismip-hom-' + exp_type + '.'+resolution+'.????.out.nc')))
-    for fname in data_files:
-        dataset = Dataset(os.path.join(self.model_dir,fname),'r')
-        uvel  = dataset.variables['uvel'][0,0,:,:]
-        vvel  = dataset.variables['vvel'][0,0,:,:]
-        shape = np.shape(uvel)
-        vnorm = np.sqrt(np.add(np.power(uvel,2), np.power(vvel,2)))
-        floor = np.subtract(vnorm_min[1:-1,1:-1],   vnorm)
-        ciel  = np.subtract(vnorm_max[1:-1,1:-1],   vnorm)
-        under = np.subtract(vnorm_minus[1:-1,1:-1], vnorm)
-        over  = np.subtract(vnorm_plus[1:-1,1:-1],  vnorm)
-        bad_data = np.zeros(shape)
-        for i in range(shape[0]):
-            for j in range(shape[0]):
-                if floor[i,j]>0:
-                    bad_data[i,j] = -2 # CISM < MIN_ISMIP
-                elif ciel[i,j]<0:
-                    bad_data[i,j] = 2  # CISM > MAX_ISMIP
-                elif under[i,j]>0:
-                    bad_data[i,j] = -1 # CISM < MU - SIGMA 
-                elif over[i,j]<0:
-                    bad_data[i,j] = 1  # CISM > MU + SIGMA
-        mean_diff = 100.0*np.divide(np.subtract(vnorm_mean[1:-1,1:-1], vnorm),\
-                                                vnorm_mean[1:-1,1:-1])
+    dataset = Dataset(model_path,'r')
+    uvel  = dataset.variables['uvel'][0,0,:,:]
+    vvel  = dataset.variables['vvel'][0,0,:,:]
+    shape = np.shape(uvel)
+    vnorm = np.sqrt(np.add(np.power(uvel,2), np.power(vvel,2)))
+    floor = np.subtract(vnorm_min[1:-1,1:-1],   vnorm)
+    ciel  = np.subtract(vnorm_max[1:-1,1:-1],   vnorm)
+    under = np.subtract(vnorm_minus[1:-1,1:-1], vnorm)
+    over  = np.subtract(vnorm_plus[1:-1,1:-1],  vnorm)
+    bad_data = np.zeros(shape)
+    for i in range(shape[0]):
+        for j in range(shape[0]):
+            if floor[i,j]>0:
+                bad_data[i,j] = -2 # CISM < MIN_ISMIP
+            elif ciel[i,j]<0:
+                bad_data[i,j] = 2  # CISM > MAX_ISMIP
+            elif under[i,j]>0:
+                bad_data[i,j] = -1 # CISM < MU - SIGMA 
+            elif over[i,j]<0:
+                bad_data[i,j] = 1  # CISM > MU + SIGMA
+    mean_diff = 100.0*np.divide(np.subtract(vnorm_mean[1:-1,1:-1], vnorm),\
+                                            vnorm_mean[1:-1,1:-1])
+    summary["Mean % Difference"] = np.nanmean(mean_diff)
+    return summary
     
 def print_summary(test,case,summary):
     pass
+
 
 def write_summary(test,case,summary):
     """ Take the summary and write out a JSON file """

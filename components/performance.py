@@ -61,7 +61,7 @@ def run_suite(test, case, config):
         summary[case].nested_assign(mcase, analyze_case(model_path, bench_path, config))
     
     print_summary(test,case,summary) #TODO
-    write_summary(test,case,summary) #TODO
+    write_summary(test,case,summary) 
 
 
 def analyze_case(model_dir, bench_dir, config):
@@ -77,9 +77,11 @@ def analyze_case(model_dir, bench_dir, config):
         bench_timings = set()
     
     for mtf in model_timings:
-        summary["model"][mtf] = parse_cism_timing(os.path.join(model_dir,mtf))
+        summary["model"][mtf] = parse_gptl(os.path.join(model_dir,mtf), 
+                                           config["timing_vars"])
         if mtf in bench_timings: 
-            summary["bench"][mtf] = parse_cism_timing(os.path.join(bench_dir,mtf))
+            summary["bench"][mtf] = parse_gptl(os.path.join(bench_dir,mtf),
+                                               config["timing_vars"])
     return summary
 
 def weak_scaling():
@@ -92,23 +94,26 @@ def strong_scaling():
     pass
 
 
-def generate_timing_stats():
+def generate_timing_stats(model_dir, bench_dir, config):
     """
     Parse all of the timing files, and generate some statistics
     about the run.
 
     Args:
-        TODO
+        model_dir: Path to the model output
+        bench_dir: Path to the benchmark data
+        config: A dictionary containing option specifications
 
     Returns:
-        A LIVVDict containing values that have the form [mean, min, max]
+        A LIVVDict containing values that have the form: 
+            [mean, min, max, mean, diff. from bench mean]
     """
     timing_summary = LIVVDict()
     # TODO
     return timing_summary
 
 
-def parse_gptl_timing(file_path, var_list):
+def parse_gptl(file_path, var_list):
     """
     Read a GPTL timing file and extract some data.
 
@@ -127,29 +132,6 @@ def parse_gptl_timing(file_path, var_list):
                 for line in f:
                     if var in line:
                         timing_summary[var] = float(line.split()[4])/int(line.split()[2])
-    return timing_summary
-
-
-def parse_cism_timing(file_path):
-    """
-    Read a CISM timing file and extract the run time
-
-    Args:
-        file_path: the path to the CISM timing file
-    
-    Returns:
-        A LIVVDict with one key under "Run Time".  This is
-        done to maintain consistency with other methods
-    """
-    timing_summary = LIVVDict()
-    if os.path.isfile(file_path):
-        with open(file_path, 'r') as f:
-            for line in f:
-                split = line.split()
-                if not split == [] and (
-                file_path.split(os.sep)[-1].replace('results','config') == line.split()[0]):
-                    timing_summary["Run Time"] = float(split[1])
-                    break
     return timing_summary
 
 

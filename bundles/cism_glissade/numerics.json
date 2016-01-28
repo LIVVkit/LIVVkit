@@ -5,6 +5,6 @@
             "test_cases" : ["ismip-hom-a", "ismip-hom-c", "ismip-hom-f"],
             "output_ext" : ".out.nc",
             "bench_dir" : "data/numerics/ismip-hom",
-            "bench_ext" : ".txt"
+            "bench_ext" : ".lmla.txt"
         }
 }

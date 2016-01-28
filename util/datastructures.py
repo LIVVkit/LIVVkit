@@ -76,7 +76,9 @@ class LIVVDict(dict):
         if len(key_list) == 1:
             self[key_list[0]] = value
         elif len(key_list) > 1:
-            return LIVVDict({key_list[0] : self.nested_assign(key_list[1:], value)})
+            if key_list[0] not in self:
+                self[key_list[0]] = LIVVDict() 
+            self[key_list[0]].nested_assign(key_list[1:], value)
 
 
     def merge_leaves(self, dict_to_merge):
