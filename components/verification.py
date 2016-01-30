@@ -92,6 +92,9 @@ def verify_case(model_dir, bench_dir, config):
         summary["Output data"][of] = bit_for_bit(os.path.join(model_dir, of), 
                                                  os.path.join(bench_dir, of), 
                                                  config["bit_for_bit_vars"])
+        if len(summary["Output data"][of].keys()) == 0:
+            generate_bit_for_bit_plot(os.path.join(model_dir, of),
+                                      os.path.join(bench_dir, of))
 
     for cf in configs:
         summary["Configurations"][cf] = diff_configurations(
@@ -115,35 +118,32 @@ def bit_for_bit(model_path, bench_path, var_list):
         var_list: the list of variables to compare
     
     Returns:
-        TODO 
+        A LIVVDict formatted as {var : { err_type : amount }} 
     """
+    stats = LIVVDict()
     if not (os.path.isfile(bench_path) and os.path.isfile(model_path)):
-        return
-
+        return stats
     try:
         model_data = Dataset(model_path, 'r')
         bench_data = Dataset(bench_path, 'r')
     except:
         print("Error opening datasets!")
-        raise
-
+        return stats
     if not (util.netcdf.has_time(model_data) and util.netcdf.has_time(bench_data)):
-        return
+        return stats
 
-    stats = LIVVDict()
     for i, var in enumerate(var_list):
         if (var in model_data.variables and var in bench_data.variables):
-            diff_data = model_data.variables[var][:] - bench_data.variables[var][:]
+            model_vardata = model_data.variables[var][:]
+            bench_vardata = bench_data.variables[var][:]
+            diff_data = model_vardata - bench_vardata
             if diff_data.any():
                 stats[var]["Max Error"] = np.amax(np.absolute(diff_data))
-                stats[var]["RMS Error"] = np.sqrt(np.sum(np.square(diff_data).flatten()) / diff_data.size)
-                generate_bit_for_bit_plot(diff_data)
-            else:
-                stats[var]["Max Error"] = stats[var]["RMS Error"] = 0.0
+                stats[var]["RMS Error"] = np.sqrt(np.sum(np.square(diff_data).flatten()) / 
+                                                  diff_data.size)
             
     model_data.close()
     bench_data.close()
-
     return stats 
 
 
@@ -245,6 +245,10 @@ def parse_cism_log(file_path):
 
         return log_data
 
+
+def generate_bit_for_bit_plot(model_file, bench_file):
+    """ Create a bit for bit plot """
+    pass
 
 def print_summary(test, case, summary):
     """ Show some statistics from the run """

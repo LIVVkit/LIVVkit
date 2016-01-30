@@ -28,27 +28,19 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
-Executable script to start a verification and validation test suite.  This script
-handles options and setting up data storage from the options.  Each of the 
-sub-categories (verification, performance, validation, and numerics) are launched
-using their respective schedulers found in their subdirectories.
-
-Created on Dec 3, 2014
+Executable script to start a verification and validation test suite. 
+Management of the tests to be run is handled by the scheduler
 
 @authors: arbennett, jhkennedy
 """
 import os
 import sys
-
 import util.variables
 
 util.variables.base_path = os.path.dirname(os.path.abspath(__file__))
 
-"""
-Direct execution.
-"""
 def main():
-
+    """ Direct execution. """
     import util.options
     import util.tests
 
@@ -65,10 +57,10 @@ def main():
     print("                python_numpy, and python_netcdf4 for best results.")
     print("")
     print("  Current run: " + util.variables.timestamp)
-    print("  User: " + util.variables.user)
-    print("  OS Type: " + util.variables.os_type)
-    print("  Machine: " + util.variables.machine)
-    print("  " + util.variables.comment)
+    print("  User: "        + util.variables.user)
+    print("  OS Type: "     + util.variables.os_type)
+    print("  Machine: "     + util.variables.machine)
+    print("  "              + util.variables.comment)
     
     util.tests.check_dependencies()
     if util.variables.run_tests: util.tests.run_tests()
@@ -90,6 +82,7 @@ def main():
     print("        " +  util.variables.output_dir )
     print("-------------------------------------------------------------------")
 
+# If called from the command line directly, go to the main method (above)
 if __name__ == "__main__":
     main()
 

@@ -38,6 +38,13 @@ import urllib
 import fnmatch
 import subprocess
 
+import util.variables
+import util.datastructures
+from components import numerics
+from components import verification
+from components import performance
+from components import validation
+
 def run_tests():
     """ Run unit tests """
     print("")
@@ -70,7 +77,43 @@ def numerics_tests():
 
 def verification_tests():
     """ Run internal verification verification tests """
-    pass
+    test_vars = ['thk', 'velnorm']
+    config_name = "dome.0010.p001.config"
+    output_name = "dome.0010.p001.out.nc"
+    data_dir = os.path.join(util.variables.cwd, "data", "verification")
+    control_data = os.path.join(data_dir, "data_base")
+    control_config = os.path.join(control_data, config_name)
+    control_output = os.path.join(control_data, output_name)
+    data_sets = ["data_same", "data_diffsmall", "data_difflarge"]
+    expected_output = [{}, 
+                       {'velnorm': 
+                            {'Max Error': 2.3841858e-06, 
+                             'RMS Error': 3.6896214496494918e-07}, 
+                        'thk': 
+                            {'Max Error': 0.00012207031, 
+                             'RMS Error': 3.50528588494366e-05}
+                       },
+                       {'velnorm': 
+                            {'Max Error': 284.28476, 
+                             'RMS Error': 22.477511994314348}, 
+                        'thk': 
+                            {'Max Error': 26.080627, 
+                             'RMS Error': 7.6314350363315722}
+                       }
+                      ]
+    for data_set in data_sets:
+        model_data = os.path.join(data_dir, data_set)
+        model_config = os.path.join(model_data, config_name)
+        model_output = os.path.join(model_data, output_name)
+        output_results = verification.bit_for_bit(model_output, 
+                                                  control_output, 
+                                                  test_vars)
+        config_results = verification.diff_configurations(model_config, 
+                                                          control_config)
+        #TODO: Need to figure out a way to check if the results
+        #      are what we expect.  Can't do if this != that since
+        #      Python does something funky with floats that are
+        #      explicitely declared as above
 
 
 def performance_tests():
@@ -81,6 +124,7 @@ def performance_tests():
 def validation_tests():
     """ Run internal validation verification tests """
     pass
+
 
 def check_dependencies():
     """ Run all of the checks for dependencies required by LIVV """
