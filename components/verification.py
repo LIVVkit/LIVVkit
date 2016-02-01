@@ -61,12 +61,12 @@ def run_suite(test, case, config):
         bench_path = (os.path.join(bench_dir, os.sep.join(mcase)) 
                         if mcase in bench_cases else None)
         model_path = os.path.join(model_dir, os.sep.join(mcase))
-        summary[case].nested_assign(mcase, verify_case(model_path, bench_path, config))
+        summary[case].nested_assign(mcase, analyze_case(model_path, bench_path, config))
     print_summary(test, case, summary) # TODO
     write_summary(test, case, summary)
 
 
-def verify_case(model_dir, bench_dir, config):
+def analyze_case(model_dir, bench_dir, config):
     """ Runs all of the verification checks on a particular case """
     summary = LIVVDict()
     model_configs = set([os.path.basename(f) for f in 

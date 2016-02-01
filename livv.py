@@ -43,6 +43,7 @@ def main():
     """ Direct execution. """
     import util.options
     import util.tests
+    import components
 
     util.options.init(util.options.parse(sys.argv[1:]))
     print("-------------------------------------------------------------------")
@@ -70,10 +71,14 @@ def main():
 
     util.web.setup()
     
-    util.scheduler.run_numerics()
-    util.scheduler.run_verification()
-    util.scheduler.run_performance()
-    util.scheduler.run_validation()
+    util.scheduler.run(
+            "numerics", components.numerics, util.variables.numerics)
+    util.scheduler.run(
+            "verification", components.verification, util.variables.verification)
+    util.scheduler.run(
+            "performance", components.performance, util.variables.performance)
+    util.scheduler.run(
+            "validation", components.validation, util.variables.validation)
 
     util.scheduler.cleanup()
     

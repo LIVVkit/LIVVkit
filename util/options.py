@@ -76,7 +76,7 @@ def parse(args):
             help='Run the performance tests analysis.')
     
     parser.add_argument('--validation',
-            action='store', nargs='*',
+            action='store', 
             default='off',
             help='Specify the location of the configuration files for validation tests.')
    

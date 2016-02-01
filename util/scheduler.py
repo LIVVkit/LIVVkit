@@ -41,74 +41,20 @@ import components.performance
 import components.validation 
 from util.datastructures import LIVVDict
 
-def run_numerics():
-    if not os.path.isfile(util.variables.numerics):
+def run(run_type, module, in_file):
+    if not os.path.isfile(in_file):
         return
-    with open(util.variables.numerics, 'r') as f:
-        config = json.load(f)
-    tests = [t for t in config.keys() if isinstance(config[t], dict)]
-    tests = [(t,c) for t in tests for c in config[t]["test_cases"]]
-   
-    print(" ---------------------------------------------------------------")
-    print("   Beginning numerics test suite ")
-    print(" ---------------------------------------------------------------")
-    launch_processes(tests, components.numerics.run_suite, **config)
-    print(" ---------------------------------------------------------------")
-    print("   Numerics test suite complete ")
-    print(" ---------------------------------------------------------------")
-
-
-
-def run_verification():
-    if not os.path.isfile(util.variables.verification):
-        return
-    with open(util.variables.verification, 'r') as f:
-        config = json.load(f)
-    tests = [t for t in config.keys() if isinstance(config[t], dict)]
-    tests = [(t,c) for t in tests for c in config[t]["test_cases"]]
-    
-    print(" ---------------------------------------------------------------")
-    print("   Beginning verification test suite ")
-    print(" ---------------------------------------------------------------")
-    launch_processes(tests, components.verification.run_suite, **config)
-    print(" ---------------------------------------------------------------")
-    print("   Verification test suite complete ")
-    print(" ---------------------------------------------------------------")
-
-
-def run_performance():
-    if not os.path.isfile(util.variables.performance):
-        return
-    with open(util.variables.performance, 'r') as f:
+    with open(in_file, 'r') as f:
         config = json.load(f)
     tests = [t for t in config.keys() if isinstance(config[t], dict)]
     tests = [(t,c) for t in tests for c in config[t]["test_cases"]]
     print(" ---------------------------------------------------------------")
-    print("   Beginning performance test suite ")
+    print("   Beginning " + run_type.lower() + " test suite ")
     print(" ---------------------------------------------------------------")
-    launch_processes(tests, components.performance.run_suite, **config)
+    launch_processes(tests, module.run_suite, **config)
     print(" ---------------------------------------------------------------")
-    print("   Performance test suite complete ")
+    print("   " + run_type.capitalize() + " test suite complete ")
     print(" ---------------------------------------------------------------")
-
-
-
-def run_validation():
-    if not os.path.isfile(util.variables.validation):
-        return
-    with open(util.variables.validation, 'r') as f:
-        config = json.load(f)
-    tests = [t for t in config.keys() if isinstance(config[t], dict)]
-    tests = [(t,c) for t in tests for c in config[t]["test_cases"]]
-    
-    print(" ---------------------------------------------------------------")
-    print("   Beginning validation test suite ")
-    print(" ---------------------------------------------------------------")
-    launch_processes(tests, components.validation.run_suite, **config)
-    print(" ---------------------------------------------------------------")
-    print("   Validation test suite complete ")
-    print(" ---------------------------------------------------------------")
-
 
 
 def launch_processes(test, run_funct, **config):
@@ -116,14 +62,12 @@ def launch_processes(test, run_funct, **config):
     manager = multiprocessing.Manager()
     process_handles = [multiprocessing.Process(target=run_funct,args=(t, c, config[t])) 
                        for t,c in test]
-    
     for p in process_handles:
         p.start()
     for p in process_handles:
         p.join()
 
+
 def cleanup():
     pass
-
-
 
