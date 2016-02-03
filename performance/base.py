@@ -147,8 +147,7 @@ class AbstractTest(object):
         pyplot.xticks()
         pyplot.yticks()
         ax.plot(resolutions, times, 'bo-', label='Model')
-        ax.plot(resolutions, mins, 'b--')
-        ax.plot(resolutions, maxs, 'b--')
+        ax.fill_between(resolutions, maxs, mins, facecolor='#99ccff', alpha=0.5, interpolate=True)
         #print("Saving plot to " + util.variables.img_dir + os.sep + self.name.capitalize() + os.sep + test_type +  "_scaling_weak.png")
         pyplot.savefig(util.variables.index_dir + os.sep + "performance" + os.sep + self.name + os.sep + "imgs" + os.sep + test_type.strip() +  "_scaling_weak.png")
         self.images_generated.append( [test_type.strip() + "_scaling_weak.png", "Weak scaling for " + test_type])
@@ -184,9 +183,7 @@ class AbstractTest(object):
                     maxs.append(time[2])
 
                 ax.plot(x, y, 'bo-', label='Model')
-                ax.plot(x,mins, 'b--')
-                ax.plot(x,maxs, 'b--')
-                
+                ax.fill_between(map(int,x),mins,maxs, facecolor='#99ccff', alpha=0.5)        
                 # Add benchmark data if it's there
                 if self.bench_timing_data[test] != {}:
                     bench_data = self.bench_timing_data[test]
@@ -198,8 +195,7 @@ class AbstractTest(object):
                         mins.append(time[1])
                         maxs.append(time[2])
                     ax.plot(x, y, 'r^-', label='Benchmark')
-                    ax.plot(x,mins, 'r--')
-                    ax.plot(x,maxs, 'r--')
+                    ax.fill_between(map(int,x), maxs, mins, facecolor='#ff9999', alpha=0.5, interpolate=True)
                     pyplot.legend()
 
                 pyplot.savefig(util.variables.index_dir + os.sep + "performance" + os.sep + self.name + os.sep + "imgs" + os.sep + test_type.strip() + "_" + res +  "_scaling" + ".png")
