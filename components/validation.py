@@ -41,13 +41,10 @@ def run_suite(test, case, config):
     """ Run the full suite of validation tests """
     summary = LIVVDict()
     summary[case] = LIVVDict()
-    for conf, vals in config.items():
-        for test_name, test_params in vals.items():
-            m = importlib.import_module(test_params['module'])
-            summary[case] = m.run(**test_params)
+    m = importlib.import_module(config['module'])
+    summary[case] = m.run(test, **config)
     print_summary()
     write_summary()
-
 
 def print_summary():
     pass

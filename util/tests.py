@@ -77,6 +77,11 @@ def numerics_tests():
 
 def verification_tests():
     """ Run internal verification verification tests """
+    # TODO: Looks like there should be a way to get tol -> 0.  Only tests
+    #       that fail are the ones not in scientific notation.  Figure out
+    #       how to force that style of printing and hard code those values 
+    #       here.  Till then, tol > 0 for ease of use.  
+    tol = 1e-6
     test_vars = ['thk', 'velnorm']
     config_name = "dome.0010.p001.config"
     output_name = "dome.0010.p001.out.nc"
@@ -85,7 +90,13 @@ def verification_tests():
     control_config = os.path.join(control_data, config_name)
     control_output = os.path.join(control_data, output_name)
     data_sets = ["data_same", "data_diffsmall", "data_difflarge"]
-    expected_output = [{}, 
+    expected_output = [{'velnorm':
+                            {'Max Error': 0,
+                             'RMS Error': 0},
+                        'thk':
+                            {'Max Error': 0,
+                             'RMS Error': 0}
+                       }, 
                        {'velnorm': 
                             {'Max Error': 2.3841858e-06, 
                              'RMS Error': 3.6896214496494918e-07}, 
@@ -101,20 +112,27 @@ def verification_tests():
                              'RMS Error': 7.6314350363315722}
                        }
                       ]
-    for data_set in data_sets:
+    
+    for idx, data_set in enumerate(data_sets):
         model_data = os.path.join(data_dir, data_set)
         model_config = os.path.join(model_data, config_name)
         model_output = os.path.join(model_data, output_name)
         output_results = verification.bit_for_bit(model_output, 
                                                   control_output, 
-                                                  test_vars)
+                                                  test_vars,
+                                                  False)
         config_results = verification.diff_configurations(model_config, 
                                                           control_config)
-        #TODO: Need to figure out a way to check if the results
-        #      are what we expect.  Can't do if this != that since
-        #      Python does something funky with floats that are
-        #      explicitely declared as above
-
+        for var in test_vars:
+            for err_type in ["Max Error", "RMS Error"]:
+                err = abs(output_results[var][err_type] -
+                        expected_output[idx][var][err_type])
+                if tol < err:
+                    print("Error too large!")
+                    print(err)
+                else:
+                    print("Test successful!")
+   
 
 def performance_tests():
     """ Run internal performance verification tests """

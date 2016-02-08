@@ -55,7 +55,7 @@ def run_suite(test, case, config):
         for root, dirs, files in os.walk(data_dir):
             if not dirs:
                 cases.append(root.strip(data_dir).split(os.sep))
-    
+     
     model_cases = sorted(model_cases)
     for mcase in model_cases:
         bench_path = (os.path.join(bench_dir, os.sep.join(mcase)) 
@@ -66,7 +66,7 @@ def run_suite(test, case, config):
     write_summary(test, case, summary)
 
 
-def analyze_case(model_dir, bench_dir, config):
+def analyze_case(model_dir, bench_dir, config, plot=True):
     """ Runs all of the verification checks on a particular case """
     summary = LIVVDict()
     model_configs = set([os.path.basename(f) for f in 
@@ -78,11 +78,11 @@ def analyze_case(model_dir, bench_dir, config):
     
     if bench_dir is not None:
         bench_configs = set([os.path.basename(f) for f in
-                          glob.glob(os.path.join(bench_dir, "*" + config["config_ext"]))])
-        bench_logs    = set([os.path.basename(f) for f in
-                          glob.glob(os.path.join(bench_dir, "*" + config["logfile_ext"]))])
-        bench_output  = set([os.path.basename(f) for f in 
-                          glob.glob(os.path.join(bench_dir, "*" + config["output_ext"]))])
+                          glob.glob(os.path.join(bench_dir,"*"+config["config_ext"]))])
+        bench_logs = set([os.path.basename(f) for f in
+                       glob.glob(os.path.join(bench_dir,"*"+config["logfile_ext"]))])
+        bench_output = set([os.path.basename(f) for f in 
+                         glob.glob(os.path.join(bench_dir,"*"+config["output_ext"]))])
     else:
         bench_configs = bench_logs = bench_output = set()
 
@@ -91,23 +91,18 @@ def analyze_case(model_dir, bench_dir, config):
     for of in outfiles:
         summary["Output data"][of] = bit_for_bit(os.path.join(model_dir, of), 
                                                  os.path.join(bench_dir, of), 
-                                                 config["bit_for_bit_vars"])
-        if len(summary["Output data"][of].keys()) == 0:
-            generate_bit_for_bit_plot(os.path.join(model_dir, of),
-                                      os.path.join(bench_dir, of))
-
+                                                 config["bit_for_bit_vars"], 
+                                                 plot)
     for cf in configs:
         summary["Configurations"][cf] = diff_configurations(
                                             os.path.join(model_dir,cf),
                                             os.path.join(bench_dir,cf))
-
     for lf in model_logs:
         summary["Output Log"][lf] = parse_cism_log(os.path.join(model_dir,lf))
-
     return summary
 
 
-def bit_for_bit(model_path, bench_path, var_list):
+def bit_for_bit(model_path, bench_path, var_list, plot=True):
     """
     Checks whether the given files have bit for bit solution matches
     on the given variable list.
@@ -116,6 +111,7 @@ def bit_for_bit(model_path, bench_path, var_list):
         model_path: absolute path to the model dataset
         bench_path: absolute path to the benchmark dataset
         var_list: the list of variables to compare
+        plot: a boolean of whether or not to generate plots
     
     Returns:
         A LIVVDict formatted as {var : { err_type : amount }} 
@@ -139,9 +135,12 @@ def bit_for_bit(model_path, bench_path, var_list):
             diff_data = model_vardata - bench_vardata
             if diff_data.any():
                 stats[var]["Max Error"] = np.amax(np.absolute(diff_data))
-                stats[var]["RMS Error"] = np.sqrt(np.sum(np.square(diff_data).flatten()) / 
+                stats[var]["RMS Error"] = np.sqrt(np.sum(np.square(diff_data).flatten())/
                                                   diff_data.size)
-            
+            else:
+                stats[var]["Max Error"] = stats[var]["RMS Error"] = 0
+            if plot and stats[var]["Max Error"] > 0:
+                plot_bit_for_bit(model_vardata, bench_vardata)
     model_data.close()
     bench_data.close()
     return stats 
@@ -246,7 +245,7 @@ def parse_cism_log(file_path):
         return log_data
 
 
-def generate_bit_for_bit_plot(model_file, bench_file):
+def plot_bit_for_bit(model_data, bench_data):
     """ Create a bit for bit plot """
     pass
 

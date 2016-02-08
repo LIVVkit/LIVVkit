@@ -97,7 +97,7 @@ def init(options):
     util.variables.user           = getpass.getuser()
     util.variables.machine        = socket.gethostname()
     util.variables.os_type        = platform.system() + " " + platform.release()
-    util.variables.website_dir    = os.path.join(util.variables.cwd, "web")
+    util.variables.website_dir    = os.path.join(util.variables.cwd, "resources")
     util.variables.template_dir   = os.path.join(util.variables.website_dir, "templates")
     util.variables.index_dir      = util.variables.output_dir
     util.variables.numerics       = options.numerics

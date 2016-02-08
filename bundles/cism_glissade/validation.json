@@ -1,0 +1,25 @@
+{
+    "Coverage" :
+      {
+        "test_cases" : ["coverage"],
+        "module" : "validation.coverage.coverage",
+        "plot_file" : "validation/coverage/coverage.ncl",
+        "description" : "A test to compare the coverage of the ice sheet on greenland.",
+        "model_data" : "/home/bzq/workspace/vizcaino-plots/CISM/gis_5km.nc",
+        "bench_data" : "/home/bzq/workspace/vizcaino-plots/CISM/fig1_minimal.nc"
+      },
+    "lvargo" : 
+      {
+        "test_cases" : ["lvargo13"],
+        "module" : "validation.lvargo13.lvargo13",
+        "description" : "An analysis of CESM.",
+        "plot_script" : "validation/lvargo13/lvargo13.ncl",
+        "gl_data" : "/home/user/data/lvargo13/Greenland_5km_v1.1_SacksRev_c110629.nc",
+        "vel_data" : "/home/user/data/lvargo13/greenland_1km_2015_06_03.mcb.nc",
+        "model_dir" : "/home/user/data/lvargo13",
+        "model_prefix" : "BG_CISM1_parallel_updating.cism.h",
+        "model_suffix" : "-01-01-00000.nc",
+        "model_start" : "208",
+        "model_end" : "210"
+      }
+}
