@@ -44,8 +44,10 @@ def main():
     import util.options
     import util.tests
     import components
-
+    
+    import importlib
     util.options.init(util.options.parse(sys.argv[1:]))
+
     print("-------------------------------------------------------------------")
     print("                      __   _____   ___   ____    _ __     ") 
     print("                     / /  /  _/ | / / | / / /__ (_) /_    ") 
@@ -72,13 +74,25 @@ def main():
     util.web.setup()
     
     util.scheduler.run(
-            "numerics", components.numerics, util.variables.numerics)
+            "numerics", 
+            components.numerics, 
+            util.variables.numerics_model_config)
+    print("")
     util.scheduler.run(
-            "verification", components.verification, util.variables.verification)
+            "verification", 
+            components.verification, 
+            util.variables.verification_model_config)
+    print("")
     util.scheduler.run(
-            "performance", components.performance, util.variables.performance)
+            "performance", 
+            components.performance, 
+            util.variables.performance_model_config)
+    print("")
     util.scheduler.run(
-            "validation", components.validation, util.variables.validation)
+            "validation", 
+            components.validation, 
+            util.variables.validation_model_config)
+    print("")
 
     util.scheduler.cleanup()
     

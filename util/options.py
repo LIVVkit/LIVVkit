@@ -32,52 +32,39 @@ import socket
 import getpass
 import platform
 import argparse
+import importlib
 
 import util.variables
 
-"""
-Handles the parsing of options for LIVV's command line interface
-@authors: arbennett, jhkennedy
-
-Args:
-    args: The list of arguments, typically sys.argv[1:]
-"""
 def parse(args):
+    """
+    Handles the parsing of options for LIVV's command line interface
+    @authors: arbennett, jhkennedy
+    
+    Args:
+        args: The list of arguments, typically sys.argv[1:]
+    """
     parser = argparse.ArgumentParser(description="Main script to run LIVV.",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
         fromfile_prefix_chars='@')
 
-    parser.add_argument('-b', '--bench-dir', 
-            default="reg_bench" + os.sep + "linux-gnu",
-            help='Location of the input for running verification.')
-    parser.add_argument('-m', '--model-dir', 
-            default="reg_test" + os.sep + "linux-gnu",
-            help='Location of the input for running verification.')
     parser.add_argument('-o', '--out-dir', 
             default="vv_" + time.strftime("%m-%d-%Y"),
             help='Location to output the LIVV webpages.')
     
-    parser.add_argument('-c', '--comment', 
-            default='Standard V&V.', 
-            help="Describe this run. Comment will appear in the output website's footer.")
     parser.add_argument('--run-tests', action='store_true', 
             help="Run unit tests.")
 
-    parser.add_argument('--numerics',
-            default='off',
-            help="Specify the numerics tests to run.")
-   
     parser.add_argument('--verification',
-            default=os.path.join(util.variables.base_path, "bundles", "cism_glissade", "verification.json"),
-            help='Run the verification tests analysis.')
+            nargs='*',
+            action='store',
+            default=[],
+            help='Specify the locations of the test bundle to verify.')
 
-    parser.add_argument('--performance', 
-            default='off', 
-            help='Run the performance tests analysis.')
-    
     parser.add_argument('--validation',
             action='store', 
-            default='off',
+            nargs='*',            
+            default=[],
             help='Specify the location of the configuration files for validation tests.')
    
     return parser.parse_args()
@@ -87,11 +74,8 @@ def init(options):
     """ Initialize some defaults """
     util.variables.cwd            = os.getcwd()
     util.variables.config_dir     = os.path.join(util.variables.cwd, "configurations")
-    util.variables.model_dir      = os.path.abspath(options.model_dir + os.sep + 'higher-order')
-    util.variables.bench_dir      = os.path.abspath(options.bench_dir + os.sep + 'higher-order')
     util.variables.output_dir     = os.path.abspath(options.out_dir)
     util.variables.img_dir        = util.variables.output_dir + "/imgs"
-    util.variables.comment        = options.comment
     util.variables.run_tests      = options.run_tests
     util.variables.timestamp      = time.strftime("%m-%d-%Y %H:%M:%S")
     util.variables.user           = getpass.getuser()
@@ -100,8 +84,31 @@ def init(options):
     util.variables.website_dir    = os.path.join(util.variables.cwd, "resources")
     util.variables.template_dir   = os.path.join(util.variables.website_dir, "templates")
     util.variables.index_dir      = util.variables.output_dir
-    util.variables.numerics       = options.numerics
-    util.variables.verification   = options.verification 
-    util.variables.performance    = options.performance
-    util.variables.validation     = options.validation
+
+    available_bundles = os.listdir(os.path.join(util.variables.cwd, "bundles"))
+    util.variables.model_dir = options.verification[0]
+    util.variables.bench_dir = options.verification[1]
+    util.variables.model_bundle = options.verification[0].split(os.sep)[-1]
+    util.variables.bench_bundle = options.verification[1].split(os.sep)[-1]
+
+    if util.variables.model_bundle in available_bundles:
+        util.variables.numerics_model_config = os.sep.join(
+             [util.variables.cwd, "bundles", util.variables.model_bundle, "numerics.json"])
+        util.variables.numerics_model_module = importlib.import_module(
+             ".".join(["bundles", util.variables.model_bundle, "numerics"]))
+        
+        util.variables.verification_model_config = os.sep.join(
+             [util.variables.cwd, "bundles", util.variables.model_bundle, "verification.json"])
+        util.variables.verification_model_module = importlib.import_module(
+             ".".join(["bundles", util.variables.model_bundle, "verification"]))
+       
+        util.variables.performance_model_config = os.sep.join(
+             [util.variables.cwd, "bundles", util.variables.model_bundle, "performance.json"])
+        util.variables.performance_model_module = importlib.import_module(
+             ".".join(["bundles", util.variables.model_bundle, "performance"]))
+        
+        util.variables.validation_model_config = os.sep.join(
+             [util.variables.cwd, "bundles", util.variables.model_bundle, "validation.json"])
+        util.variables.validation_model_module = importlib.import_module(
+             ".".join(["bundles", util.variables.model_bundle, "validation"]))
 

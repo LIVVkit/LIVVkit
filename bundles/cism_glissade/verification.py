@@ -1,0 +1,111 @@
+# Copyright (c) 2015, UT-BATTELLE, LLC
+# All rights reserved.
+# 
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+# 
+# 1. Redistributions of source code must retain the above copyright notice, this
+# list of conditions and the following disclaimer.
+# 
+# 2. Redistributions in binary form must reproduce the above copyright notice,
+# this list of conditions and the following disclaimer in the documentation
+# and/or other materials provided with the distribution.
+# 
+# 3. Neither the name of the copyright holder nor the names of its contributors
+# may be used to endorse or promote products derived from this software without
+# specific prior written permission.
+# 
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+# ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+# FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+# SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+# CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+# OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+"""
+Provides CISM-Glissade specific verification tools
+
+@author: arbennett
+"""
+
+import os
+import numpy as np
+from configparser import ConfigParser
+
+from util.datastructures import LIVVDict
+
+def parse_log(file_path):
+    """
+    Parse a CISM output log and extract some information.
+
+    Args:
+        file_path: absolute path to the log file
+
+    Return:
+        TODO
+    """
+    if not os.path.isfile(file_path):
+        return
+    with open(file_path, 'r') as f:
+        log_data = LIVVDict()
+        dycore_types = {"0":"Glide", "1":"Glam", "2":"Glissade", "3":"Albany_felix", "4":"BISICLES"}
+        curr_step = 0
+        proc_count = 0
+        iter_count = 0
+        avg_iters_to_converge = 0
+        converged_iters = []
+        iters_to_converge = []
+        for line in f:
+            split = line.split()
+            if ('CISM dycore type' in line):
+                if line.split()[-1] == '=':
+                    dycore_type = dycore_types[next(logfile).strip()]
+                else:
+                    dycore_type = dycore_types[line.split()[-1]]
+            elif ('total procs' in line):
+                proc_count += int(line.split()[-1])
+            elif ('Nonlinear Solver Step' in line):
+                curr_step = int(line.split()[4])
+            elif ('Compute ice velocities, time = ' in line):
+                converged_iters.append(curr_step)
+                curr_step = float(line.split()[-1])
+            elif ('"SOLVE_STATUS_CONVERGED"' in line):
+                split = line.split()
+                iters_to_converge.append(int(split[split.index('"SOLVE_STATUS_CONVERGED"') + 2]))
+            elif ("Compute dH/dt" in line):
+                iters_to_converge.append(int(iter_number))
+            elif len(split) > 0 and split[0].isdigit():
+                iter_number = split[0]
+        if iters_to_converge == []: iters_to_converge.append(int(iter_number))
+
+        log_data["Dycore Type"] = dycore_type
+        log_data["Processor Count"] = proc_count
+        log_data["Converged Iterations"] = len(converged_iters)
+        log_data["Avg. Iterations to Converge"] = np.mean(iters_to_converge)
+
+        return log_data
+
+
+def parse_config(file_path):
+    """
+    Convert the CISM configuration file to a python dictionary
+
+    Args:
+        file_path: absolute path to the configuration file
+
+    Returns:
+        A dictionary representation of the given file
+    """
+    if not os.path.isfile(file_path):
+        return None
+    parser = ConfigParser()
+    parser.read(file_path)
+    return parser._sections
+
+
+def extract_data(dataset, var):
+    """ Pulls a variable out of a NetCDF dataset """
+    pass

@@ -41,9 +41,14 @@ import components.performance
 import components.validation 
 from util.datastructures import LIVVDict
 
-def run(run_type, module, in_file):
+def run(run_type, module, bundle):
+    model_conf = os.path.join(util.variables.cwd, "bundles", 
+            util.variables.model_bundle, run_type + ".json")
+    bench_conf = os.path.join(util.variables.cwd, "bundles", 
+            util.variables.bench_bundle, run_type + ".json")
+    in_file = model_conf
     if not os.path.isfile(in_file):
-        return
+        print("Configuration file for " + run_type + " not found!")
     with open(in_file, 'r') as f:
         config = json.load(f)
     tests = [t for t in config.keys() if isinstance(config[t], dict)]
