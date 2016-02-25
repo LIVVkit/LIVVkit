@@ -39,7 +39,7 @@ import util.datastructures
 
 from util.datastructures import LIVVDict
 
-def run_suite(test, case, config):
+def run_suite(case, config):
     """ Run the full suite of performance tests """
     summary = LIVVDict()
     summary[case] = LIVVDict()
@@ -60,8 +60,8 @@ def run_suite(test, case, config):
         model_path = os.path.join(model_dir, os.sep.join(mcase))
         summary[case].nested_assign(mcase, analyze_case(model_path, bench_path, config))
     
-    print_summary(test,case,summary) #TODO
-    write_summary(test,case,summary) 
+    print_summary(case,summary) #TODO
+    write_summary(case,summary) 
 
 
 def analyze_case(model_dir, bench_dir, config):
@@ -227,15 +227,15 @@ def parse_gptl(file_path, var_list):
     return timing_summary
 
 
-def print_summary(test,case,summary):
+def print_summary(case,summary):
     """ Show some statistics from the run """
     pass
 
 
-def write_summary(test,case,summary):
+def write_summary(case,summary):
     """ Take the summary and write out a JSON file """
-    outpath = os.path.join(util.variables.output_dir, "Performance", test)
+    outpath = os.path.join(util.variables.output_dir, "Performance", case)
     util.datastructures.mkdir_p(outpath)
     with open(os.path.join(outpath, case+".json"), 'w') as f:
-        json.dump(summary, f)
+        json.dump(summary, f, indent=4)
 

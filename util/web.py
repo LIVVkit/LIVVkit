@@ -61,11 +61,8 @@ def setup():
     Args:
         tests_run: the top level names of each of the tests run
     """
-    # blindly make the output directory
-    mkdir_p(util.variables.index_dir)
-
     # Check if we need to back up an old run
-    if os.listdir(util.variables.index_dir):
+    if os.path.isdir(util.variables.index_dir):
         print("-------------------------------------------------------------------")
         print('Previous output data found in output directory!')
         try:
@@ -81,45 +78,14 @@ def setup():
         print('   ' + util.variables.index_dir + "_" + prev_time)
         print("-------------------------------------------------------------------")
         shutil.move(util.variables.index_dir, util.variables.index_dir + "_" + prev_time)
-        mkdir_p(util.variables.index_dir)
     else:
         print("-------------------------------------------------------------------")
- 
 
     # Copy over css & imgs directories from source
-    shutil.copytree(util.variables.website_dir + os.sep + "css", util.variables.index_dir + os.sep + "css")
-    shutil.copytree(util.variables.website_dir + os.sep + "imgs", util.variables.index_dir + os.sep + "imgs")
+    shutil.copytree(util.variables.website_dir, util.variables.index_dir)
 
     # Record when this data was recorded so we can make nice backups
     with open(util.variables.index_dir + os.sep + "data.txt", "w") as f:
         f.write(util.variables.timestamp + "\n")
         f.write(util.variables.comment)
 
-
-def generate(numerics_summary, verification_summary, performance_summary, validation_summary):
-    """
-    Build the index
-    
-    Args:
-        verification_summary: A summary of the verification verification run
-        performance_summary: A summary of the performance verification run
-        validation_summary: A summary of the validation verification run
-    """
-    template_loader = jinja2.FileSystemLoader(searchpath=util.variables.template_dir)
-    template_env = jinja2.Environment(loader=template_loader)
-    template_file = os.sep + "index.html"
-    template = template_env.get_template(template_file)
-    template_vars = {"index_dir" : ".",
-                    "numerics_summary" : numerics_summary,
-                    "verification_summary" : verification_summary,
-                    "performance_summary" : performance_summary,
-                    "validation_summary" : validation_summary,
-                    "timestamp" : util.variables.timestamp,
-                    "user" : util.variables.user,
-                    "comment" : util.variables.comment,
-                    "css_dir" : "css", 
-                    "img_dir" : "imgs"}
-    output_text = template.render(template_vars)
-    page = open(util.variables.index_dir + os.sep + "index.html", "w")
-    page.write(output_text)
-    page.close()

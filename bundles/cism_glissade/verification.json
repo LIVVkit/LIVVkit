@@ -1,35 +1,55 @@
 {
-    "Dome" : 
+    "dome" : 
       { 
         "data_dir" : "dome",
-        "test_cases" : ["dome"],
         "output_ext" : ".out.nc",
         "logfile_ext" : ".config.oe",
         "config_ext"  : ".config",
         "bit_for_bit_vars" : ["velnorm", "thk"]
       },
-    "ISMIP-HOM" : 
+    "ismip-hom-a" : 
       { 
         "data_dir" : "ismip-hom",
-        "test_cases" : ["ismip-hom-a", "ismip-hom-c", "ismip-hom-f"],
         "output_ext": ".out.nc",
         "logfile_ext" : ".config.oe",
         "config_ext"  : ".config",
         "bit_for_bit_vars" : ["velnorm", "thk"]
       },
-    "Shelf" : 
+    "ismip-hom-c" : 
+      { 
+        "data_dir" : "ismip-hom",
+        "output_ext": ".out.nc",
+        "logfile_ext" : ".config.oe",
+        "config_ext"  : ".config",
+        "bit_for_bit_vars" : ["velnorm", "thk"]
+      },
+    "ismip-hom-f" : 
+      { 
+        "data_dir" : "ismip-hom",
+        "output_ext": ".out.nc",
+        "logfile_ext" : ".config.oe",
+        "config_ext"  : ".config",
+        "bit_for_bit_vars" : ["velnorm", "thk"]
+      },
+    "shelf-circular" : 
       { 
         "data_dir" : "shelf",
-        "test_cases" : ["shelf-circular", "shelf-confined"],
         "output_ext" : ".out.nc",
         "logfile_ext" : ".config.oe",
         "config_ext"  : ".config",
         "bit_for_bit_vars" : ["velnorm", "thk"]
       },
-    "Stream" : 
+    "shelf-confined" : 
+      { 
+        "data_dir" : "shelf",
+        "output_ext" : ".out.nc",
+        "logfile_ext" : ".config.oe",
+        "config_ext"  : ".config",
+        "bit_for_bit_vars" : ["velnorm", "thk"]
+      },
+    "stream" : 
       { 
         "data_dir" : "stream",
-        "test_cases" : ["stream"],
         "output_ext" : ".out.nc",
         "logfile_ext" : ".config.oe",
         "config_ext"  : ".config",

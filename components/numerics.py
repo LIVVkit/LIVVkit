@@ -42,7 +42,7 @@ from netCDF4 import Dataset
 
 from util.datastructures import LIVVDict
 
-def run_suite(test, case, config):
+def run_suite(case, config):
     """ Run the full suite of numerics tests """
     summary = LIVVDict()
     summary[case] = LIVVDict()
@@ -63,8 +63,8 @@ def run_suite(test, case, config):
                 if mcase[0:-1] in bench_cases else None)
         model_path = os.path.join(model_dir, os.sep.join(mcase))
         summary[case].nested_assign(mcase, analyze_case(mcase, model_path, bench_path, config))
-    print_summary(test,case,summary) #TODO
-    write_summary(test,case,summary) #TODO
+    print_summary(case,summary) #TODO
+    write_summary(case,summary) #TODO
 
 
 def analyze_case(case, model_dir, bench_dir, config):
@@ -141,14 +141,14 @@ def ismip(model_path, bench_path, config):
     summary["Mean % Difference"] = np.nanmean(mean_diff)
     return summary
     
-def print_summary(test,case,summary):
+def print_summary(case,summary):
     pass
 
 
-def write_summary(test,case,summary):
+def write_summary(case,summary):
     """ Take the summary and write out a JSON file """
-    outpath = os.path.join(util.variables.output_dir, "Numerics", test)
+    outpath = os.path.join(util.variables.output_dir, "Numerics", case)
     util.datastructures.mkdir_p(outpath)
     with open(os.path.join(outpath, case+".json"), 'w') as f:
-        json.dump(summary,f)
+        json.dump(summary, f, indent=4)
 

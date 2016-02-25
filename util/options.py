@@ -39,7 +39,6 @@ import util.variables
 def parse(args):
     """
     Handles the parsing of options for LIVV's command line interface
-    @authors: arbennett, jhkennedy
     
     Args:
         args: The list of arguments, typically sys.argv[1:]
@@ -85,11 +84,26 @@ def init(options):
     util.variables.template_dir   = os.path.join(util.variables.website_dir, "templates")
     util.variables.index_dir      = util.variables.output_dir
 
+    # TODO: This is a workaround to handle the case when no --verification or 
+    #       --validation options are given.  Need to also fix the way that 
+    #       the validation/performance handling is done in the if 
+    #       options.validation != [] block.  Things currently seem to work but 
+    #       this can definitely be made cleaner -- arbennett 2/21/16 
+    util.variables.model_dir = ""
+    util.variables.model_config = ""
+    util.variables.bench_dir = ""
+    util.variables.bench_config = ""
+    util.variables.performance_model_config = ""
+    util.variables.performance_model_module = ""
+    util.variables.validation_model_config = ""
+    util.variables.validation_model_module = ""
+
     available_bundles = os.listdir(os.path.join(util.variables.cwd, "bundles"))
-    util.variables.model_dir = options.verification[0]
-    util.variables.bench_dir = options.verification[1]
-    util.variables.model_bundle = options.verification[0].split(os.sep)[-1]
-    util.variables.bench_bundle = options.verification[1].split(os.sep)[-1]
+    # rstrip accounts for trailing path separators
+    util.variables.model_dir = options.verification[0].rstrip(os.sep)
+    util.variables.bench_dir = options.verification[1].rstrip(os.sep)
+    util.variables.model_bundle = util.variables.model_dir.split(os.sep)[-1]
+    util.variables.bench_bundle = util.variables.bench_dir.split(os.sep)[-1]
 
     if util.variables.model_bundle in available_bundles:
         util.variables.numerics_model_config = os.sep.join(
@@ -101,7 +115,8 @@ def init(options):
              [util.variables.cwd, "bundles", util.variables.model_bundle, "verification.json"])
         util.variables.verification_model_module = importlib.import_module(
              ".".join(["bundles", util.variables.model_bundle, "verification"]))
-       
+    
+    if options.validation != []:
         util.variables.performance_model_config = os.sep.join(
              [util.variables.cwd, "bundles", util.variables.model_bundle, "performance.json"])
         util.variables.performance_model_module = importlib.import_module(

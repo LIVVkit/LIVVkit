@@ -77,23 +77,20 @@ def main():
             "numerics", 
             components.numerics, 
             util.variables.numerics_model_config)
-    print("")
     util.scheduler.run(
             "verification", 
             components.verification, 
             util.variables.verification_model_config)
-    print("")
     util.scheduler.run(
             "performance", 
             components.performance, 
             util.variables.performance_model_config)
-    print("")
     util.scheduler.run(
             "validation", 
             components.validation, 
             util.variables.validation_model_config)
-    print("")
 
+    util.scheduler.summarize()
     util.scheduler.cleanup()
     
     print("-------------------------------------------------------------------")

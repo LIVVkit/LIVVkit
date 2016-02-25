@@ -64,7 +64,7 @@ def run(name, *args, **kwargs):
 
     # Generate the script
     output_dir = os.path.join(util.variables.index_dir, 
-                              'validation', name, 'imgs')
+                              'Validation', name, 'imgs')
     output_path = os.path.join(output_dir, "coverage.png")
     util.datastructures.mkdir_p(output_dir)
     plot_coverage(plot_file, model_data, bench_data, output_path)

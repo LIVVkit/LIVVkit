@@ -41,36 +41,44 @@ import components.performance
 import components.validation 
 from util.datastructures import LIVVDict
 
-def run(run_type, module, bundle):
-    model_conf = os.path.join(util.variables.cwd, "bundles", 
-            util.variables.model_bundle, run_type + ".json")
-    bench_conf = os.path.join(util.variables.cwd, "bundles", 
-            util.variables.bench_bundle, run_type + ".json")
-    in_file = model_conf
-    if not os.path.isfile(in_file):
-        print("Configuration file for " + run_type + " not found!")
-    with open(in_file, 'r') as f:
+def run(run_type, module, config_path):
+    """
+    Collects the analyses cases to be run and launches processes for each of 
+    them.
+
+    Args:
+        run_type: A string representation of the run type (eg. verification)
+        module: The module corresponding to the run.  Must have a run_suite function
+        config_path: The path to the configuration file for the bundle
+    """
+    if not os.path.isfile(config_path):
+        return
+    with open(config_path, 'r') as f:
         config = json.load(f)
     tests = [t for t in config.keys() if isinstance(config[t], dict)]
-    tests = [(t,c) for t in tests for c in config[t]["test_cases"]]
     print(" ---------------------------------------------------------------")
     print("   Beginning " + run_type.lower() + " test suite ")
     print(" ---------------------------------------------------------------")
-    launch_processes(tests, module.run_suite, **config)
+    launch_processes(tests, module, **config)
     print(" ---------------------------------------------------------------")
     print("   " + run_type.capitalize() + " test suite complete ")
     print(" ---------------------------------------------------------------")
+    print("")
 
 
-def launch_processes(test, run_funct, **config):
+def launch_processes(tests, run_module, **config):
     """ Helper method to launch processes and synch output """
     manager = multiprocessing.Manager()
-    process_handles = [multiprocessing.Process(target=run_funct,args=(t, c, config[t])) 
-                       for t,c in test]
+    process_handles = [multiprocessing.Process(target=run_module.run_suite, 
+                       args=(c, config[c])) for c in tests]
     for p in process_handles:
         p.start()
     for p in process_handles:
         p.join()
+
+
+def summarize():
+    pass
 
 
 def cleanup():

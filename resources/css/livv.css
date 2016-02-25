@@ -35,12 +35,6 @@
 html {
 	font-family: 'Lato', helvetica, sans-serif;
 	height: 100%;
-    background: url(../imgs/temp.jpg) no-repeat center center fixed;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-    background-color: #5983AC;
 }
 
 body {
@@ -55,187 +49,52 @@ h1, h2, h3, h4 {
 	font-family: 'Lato', helvetica, sans-serif;
 }
 
-table, ul {
-	margin-top: 10px;
-	border-bottom: 1px solid #47A3FF;
-    border-collapse: collapse;
-    width: 100%;
-}
-
-img { 
-	max-width: 100%;
-	height: auto;
-	width: auto\9;
-}
-
-th, td {
-    text-align: center;
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-bottom: 5px;
-}
-
-th {
-    font-family: helvetica, sans-serif;	
-	color: #FFFFFF;
-	background-color: #47A3FF;
-	padding-top: 5px;
-}
-
 hr {
-	width: 98%;
-	border:0;
-	margin-top: 0px;
-	color: #EEEEEE;
-	background-color: #EEEEEE;
-	height:1px;
+    width: 90%;
+    color: #222222;
 }
-
-
-/******************************************************************************
-  LIVV Global Styling
-******************************************************************************/
-#page {
-    background-color: rgba(255,255,255,1);
-    margin-left: auto;
-    margin-right: auto;
-    width: 70%;
-    min-width: 800px;
-	margin-top: 0;
-	padding-bottom: 15px;
-    border-top: 3px;
-    border-left: 0;
-    border-right: 0;
-    border-bottom: 0;
-    border-style: solid;
-    border-color: #47A3FF;
-}
-
-#page:after {
-	content: "";
-	display: block;
-}
-
-#fancy {
-    font-size: medium;
-    text-align: center;
-}
-
-.tabbed {
-    margin-left: 50px;
-}
-
-.SUCCESS {
-    color: green;
-    font-weight: 600;
-}
-
-.FAILURE {
-    color: red;
-    font-weight: 600;
-}
-
-.SKIPPED {
-    color: orange;
-    font-weight: 600;
-}
-
-.label-header {
-    font-family: helvetica, sans-serif;
-    background-color: #696969; 
-    color: #fff;
-    display:inline-block; 
-    padding:5px 20px;
-    margin-bottom: 0px;
-}
-
-.separator {
-    border-top:solid 2px #696969; 
-    padding: 15px;
-}
-
-.description {
-	margin-left: 30px;
-	width: 80%;
-}
-
 
 /******************************************************************************
   Header/Footer Styling
 ******************************************************************************/
 #header {
-    height: 40px;
-	background-color: #111111;
-	color: white;
-    width: 70%;
-    min-width: 800px;
+    height: 60px;
+	background-color: #222222;
+    border-bottom: 1px solid #222222;
     margin-left: auto;
     margin-right: auto;
+    font-size: 1.75em;
+    font-weight: 900;
 }
 
-#header-spacer {
-	width: 96%;
-	min-width: 800px;
-	margin-left: auto;
-	margin-right: auto;
+#header a{
+    text-decoration: none;
 }
 
 #header-content {
-	color: white;
 	position: absolute;
-    height: 0.85em;
-   	line-height: 0.85em;
+    color: #66c2ff;
+    height: 1.25em;
+   	line-height: 1.25em;
    	margin-top: 15px;
 }
 
 #wiki-content {
-	color: white;
 	float: right;
-	height: 0.85em;
-	line-height: 0.85em;
+	height: 1.25em;
+    color: #66c2ff;
+	line-height: 1.25em;
 	margin-top: 15px;
-    padding-right: 10px;
-}
-
-#info {
-	padding-left: 10px;
+    padding-right: 15px;
 }
 
 #content {
-
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background-color: #dedede;
 }
 
-#footer {
-    width: 70%;
-    min-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
-    height: auto;
-    border-top: 3px;
-    border-left: 0;
-    border-right: 0;
-    border-bottom: 0;
-    border-style: solid;
-    border-color: #47A3FF;
-    color: #FFFFFF;
-    background-color: #111111;
-    padding-bottom: 15px;
+#content div {
+    background-color: white;
 }
 
-#footer h2 {
-	color: white;
-    margin: 0;
-    text-align: center;
-}
-
-#footer a {
-	color: white;
-}
-
-#nav {
-    width: calc(100% + 10px);
-    height: 3em;
-    float: left;
-    transform: translate(-5px,-5px);
-    background-color: #47A3FF;
-}
