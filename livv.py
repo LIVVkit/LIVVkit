@@ -70,27 +70,29 @@ def main():
 
     import util.scheduler
     import util.web
+    from util.datastructures import LIVVDict
 
     util.web.setup()
+   
+    summary = LIVVDict()
+    summary["Numerics"] = util.scheduler.run(
+                                "numerics", 
+                                components.numerics, 
+                                util.variables.numerics_model_config)
+    summary["Verification"] = util.scheduler.run(
+                                "verification", 
+                                components.verification, 
+                                util.variables.verification_model_config)
+    summary["Performance"] = util.scheduler.run(
+                                "performance", 
+                                components.performance, 
+                                util.variables.performance_model_config)
+    summary["Validation"] = util.scheduler.run(
+                                "validation", 
+                                components.validation, 
+                                util.variables.validation_model_config)
     
-    util.scheduler.run(
-            "numerics", 
-            components.numerics, 
-            util.variables.numerics_model_config)
-    util.scheduler.run(
-            "verification", 
-            components.verification, 
-            util.variables.verification_model_config)
-    util.scheduler.run(
-            "performance", 
-            components.performance, 
-            util.variables.performance_model_config)
-    util.scheduler.run(
-            "validation", 
-            components.validation, 
-            util.variables.validation_model_config)
-
-    util.scheduler.summarize()
+    util.scheduler.summarize(summary)
     util.scheduler.cleanup()
     
     print("-------------------------------------------------------------------")

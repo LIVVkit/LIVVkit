@@ -42,10 +42,10 @@ from netCDF4 import Dataset
 
 from util.datastructures import LIVVDict
 
-def run_suite(case, config):
+def run_suite(case, config, summary):
     """ Run the full suite of numerics tests """
-    summary = LIVVDict()
-    summary[case] = LIVVDict()
+    result = LIVVDict()
+    result[case] = LIVVDict()
     model_dir = os.path.join(util.variables.model_dir, config['data_dir'], case)
     bench_dir = os.path.join(util.variables.cwd, config['bench_dir'], case)
     model_cases = []
@@ -62,14 +62,14 @@ def run_suite(case, config):
         bench_path = (os.path.join(bench_dir, os.sep.join(mcase[0:-1]))
                 if mcase[0:-1] in bench_cases else None)
         model_path = os.path.join(model_dir, os.sep.join(mcase))
-        summary[case].nested_assign(mcase, analyze_case(mcase, model_path, bench_path, config))
-    print_summary(case,summary) #TODO
-    write_summary(case,summary) #TODO
-
+        result[case].nested_assign(mcase, analyze_case(mcase, model_path, bench_path, config))
+    print_result(case,result) #TODO
+    write_result(case,result) #TODO
+    summarize_result(case, result, summary)
 
 def analyze_case(case, model_dir, bench_dir, config):
     """ Run all of the numerics checks on a particular case """
-    summary = LIVVDict()
+    result = LIVVDict()
     str_to_case = {
                 "ismip-hom" : ismip
             }
@@ -79,10 +79,10 @@ def analyze_case(case, model_dir, bench_dir, config):
         bench_files = list(set([os.path.basename(f) for f in glob.glob(
             os.path.join(util.variables.cwd , bench_dir, "*" + config["bench_ext"]))]))
     if len(model_files) > 0 and len(bench_files) > 0:
-        summary[model_files[0]] = ismip(os.path.join(model_dir,model_files[0]), 
+        result[model_files[0]] = ismip(os.path.join(model_dir,model_files[0]), 
                                         os.path.join(bench_dir,bench_files[0]),
                                         config)
-    return summary
+    return result
 
 
 def ismip(model_path, bench_path, config):
@@ -95,9 +95,9 @@ def ismip(model_path, bench_path, config):
         config: A dictionary containing configuration options
 
     Returns:
-        A summary of the differences between the model and benchmark
+        A result of the differences between the model and benchmark
     """
-    summary = LIVVDict()
+    result = LIVVDict()
     # Python2 equivalent call: np.loadtxt -> np.loadfromtxt
     x, y, vx_u, vx_std, vx_min, vx_max, vy_u, vy_std, vy_min, vy_max = (
         np.loadtxt(bench_path, unpack=True, delimiter=',',
@@ -138,17 +138,23 @@ def ismip(model_path, bench_path, config):
                 bad_data[i,j] = 1  # CISM > MU + SIGMA
     mean_diff = 100.0*np.divide(np.subtract(vnorm_mean[1:-1,1:-1], vnorm),\
                                             vnorm_mean[1:-1,1:-1])
-    summary["Mean % Difference"] = np.nanmean(mean_diff)
-    return summary
+    result["Mean % Difference"] = np.nanmean(mean_diff)
+    return result
     
-def print_summary(case,summary):
+def print_result(case,result):
     pass
 
 
-def write_summary(case,summary):
-    """ Take the summary and write out a JSON file """
+def write_result(case,result):
+    """ Take the result and write out a JSON file """
     outpath = os.path.join(util.variables.output_dir, "Numerics", case)
     util.datastructures.mkdir_p(outpath)
     with open(os.path.join(outpath, case+".json"), 'w') as f:
-        json.dump(summary, f, indent=4)
+        json.dump(result, f, indent=4)
+
+def summarize_result(case, result, summary):
+    """ Trim out some data to return for the index page """
+    # Get the number of bit for bit failures
+    # Get the number of config matches
+    # Get the number of files parsed
 

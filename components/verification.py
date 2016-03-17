@@ -32,21 +32,24 @@ Verification Test Base Module
 """
 import os
 import re
+import copy
 import glob
 import json
 import numpy as np
+import multiprocessing
+from operator import add
 from netCDF4 import Dataset
 from matplotlib import pyplot
-
 import util.netcdf
 import util.variables
 from util.datastructures import LIVVDict
 
-def run_suite(case, config):
+def run_suite(case, config, summary):
     """ Run the full suite of verification tests """
     config["name"] = case
-    summary = LIVVDict()
-    summary[case] = LIVVDict()
+    result = LIVVDict()
+    summary[case] = util.variables.manager.dict()
+    result[case] = LIVVDict()
     model_dir = os.path.join(util.variables.model_dir, config['data_dir'], case)
     bench_dir = os.path.join(util.variables.bench_dir, config['data_dir'], case)
     model_cases = []
@@ -62,15 +65,16 @@ def run_suite(case, config):
         bench_path = (os.path.join(bench_dir, os.sep.join(mcase)) 
                         if mcase in bench_cases else None)
         model_path = os.path.join(model_dir, os.sep.join(mcase))
-        summary[case].nested_assign(mcase, analyze_case(model_path, bench_path, config))
-    print_summary(case, summary) # TODO
-    write_summary(case, summary)
-
+        case_result = analyze_case(model_path, bench_path, config)
+        result[case].nested_assign(mcase, case_result)
+        summary[case] = summarize_result(case_result, summary[case])
+    print_result(case, result) # TODO
+    write_result(case, result)
 
 def analyze_case(model_dir, bench_dir, config, plot=True):
     """ Runs all of the verification checks on a particular case """
     bundle = util.variables.verification_model_module
-    summary = LIVVDict()
+    result = LIVVDict()
     model_configs = set([os.path.basename(f) for f in 
                       glob.glob(os.path.join(model_dir, "*" + config["config_ext"]))])
     model_logs    = set([os.path.basename(f) for f in 
@@ -91,18 +95,18 @@ def analyze_case(model_dir, bench_dir, config, plot=True):
     outfiles = model_output.intersection(bench_output)
     configs = model_configs.intersection(bench_configs)
     for of in outfiles:
-        summary["Output data"][of] = bit_for_bit(os.path.join(model_dir, of), 
+        result["Output data"][of] = bit_for_bit(os.path.join(model_dir, of), 
                                                  os.path.join(bench_dir, of), 
                                                  config, 
                                                  plot)
     for cf in configs:
-        summary["Configurations"][cf] = diff_configurations(
+        result["Configurations"][cf] = diff_configurations(
                                             os.path.join(model_dir,cf),
                                             os.path.join(bench_dir,cf),
                                             bundle, bundle)
     for lf in model_logs:
-        summary["Output Log"][lf] = bundle.parse_log(os.path.join(model_dir,lf))
-    return summary
+        result["Output Log"][lf] = bundle.parse_log(os.path.join(model_dir,lf))
+    return result
 
 
 def bit_for_bit(model_path, bench_path, config, plot=True):
@@ -221,15 +225,52 @@ def validation_configuration(config):
     """ Make sure that the configuration contains all the needed data """
     pass
 
-def print_summary(case, summary):
+def print_result(case, result):
     """ Show some statistics from the run """
     pass
 
-def write_summary(case, summary):
-    """ Take the summary and write out a JSON file """
+def write_result(case, result):
+    """ Take the result and write out a JSON file """
     outpath = os.path.join(util.variables.output_dir, "Verification", case)
     util.datastructures.mkdir_p(outpath)
     with open(os.path.join(outpath, case+".json"), 'w') as f:
-            json.dump(summary, f, indent=4)
+            json.dump(result, f, indent=4)
 
-    
+def summarize_result(result, summary):
+    """ Trim out some data to return for the index page """
+    if not "Bit for Bit" in summary:
+        summary["Bit for Bit"] = [0,0]
+    if not "Configurations" in summary:
+        summary["Configurations"] = [0,0]
+    if not "Std. Out Files" in summary:
+        summary["Std. Out Files"] = 0
+
+    # Get the number of bit for bit failures
+    total_count = failure_count = 0
+    summary_data = summary["Bit for Bit"]
+    for vals in result["Output data"].values():
+        for data in vals.values():
+            total_count += 1
+            if data["Max Error"] != 0:
+                failure_count += 1
+    summary_data = np.add(summary_data, [failure_count, total_count]) 
+    summary["Bit for Bit"] = summary_data
+
+    # Get the number of config matches
+    total_count = failure_count = 0
+    summary_Data = summary["Configurations"]
+    for vals in result["Configurations"].values():
+        for each in vals.values():
+            total_count += 1
+            for any in each.values():
+                if not any[0]:
+                    failure_count += 1
+                    break
+    summary_data = np.add(summary_data, [failure_count, total_count]) 
+    summary["Configurations"] = summary_data
+
+
+    # Get the number of files parsed
+    summary["Std. Out Files"] += len(result["Output Log"].keys())
+
+    return summary

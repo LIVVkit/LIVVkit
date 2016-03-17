@@ -68,18 +68,18 @@ def run(run_type, module, config_path):
 
 def launch_processes(tests, run_module, **config):
     """ Helper method to launch processes and synch output """
-    manager = multiprocessing.Manager()
+    util.variables.manager = multiprocessing.Manager()
+    summary = util.variables.manager.dict()
     process_handles = [multiprocessing.Process(target=run_module.run_suite, 
-                       args=(c, config[c])) for c in tests]
+                       args=(test, config[test], summary)) for test in tests]
     for p in process_handles:
         p.start()
     for p in process_handles:
         p.join()
+    print(summary)
 
-
-def summarize():
+def summarize(summary):
     pass
-
 
 def cleanup():
     pass

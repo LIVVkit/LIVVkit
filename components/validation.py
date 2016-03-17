@@ -37,18 +37,22 @@ import importlib
 import util.variables
 from util.datastructures import LIVVDict
 
-def run_suite(case, config):
+def run_suite(case, config, summary):
     """ Run the full suite of validation tests """
-    summary = LIVVDict()
-    summary[case] = LIVVDict()
+    result = LIVVDict()
+    result[case] = LIVVDict()
     m = importlib.import_module(config['module'])
-    summary[case] = m.run(case, **config)
-    print_summary()
-    write_summary()
+    result[case] = m.run(case, **config)
+    print_result()
+    write_result()
+    summarize_result()
 
-def print_summary():
+def print_result():
     pass
 
-def write_summary():
+def write_result():
+    pass
+
+def summarize_result():
     pass
 

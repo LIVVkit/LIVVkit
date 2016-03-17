@@ -39,10 +39,10 @@ import util.datastructures
 
 from util.datastructures import LIVVDict
 
-def run_suite(case, config):
+def run_suite(case, config, summary):
     """ Run the full suite of performance tests """
-    summary = LIVVDict()
-    summary[case] = LIVVDict()
+    result = LIVVDict()
+    result[case] = LIVVDict()
     model_dir = os.path.join(util.variables.model_dir, config['data_dir'], case)
     bench_dir = os.path.join(util.variables.bench_dir, config['data_dir'], case)
     model_cases = []
@@ -58,15 +58,15 @@ def run_suite(case, config):
         bench_path = (os.path.join(bench_dir, os.sep.join(mcase))
                         if mcase in bench_cases else None)
         model_path = os.path.join(model_dir, os.sep.join(mcase))
-        summary[case].nested_assign(mcase, analyze_case(model_path, bench_path, config))
+        result[case].nested_assign(mcase, analyze_case(model_path, bench_path, config))
     
-    print_summary(case,summary) #TODO
-    write_summary(case,summary) 
-
+    print_result(case,result) #TODO
+    write_result(case,result) 
+    summarize_result(case, result, summary) #TODO
 
 def analyze_case(model_dir, bench_dir, config):
     """ Run all of the performance checks on a particular case """
-    summary = LIVVDict()
+    result = LIVVDict()
     model_timings = set([os.path.basename(f) for f in 
                         glob.glob(os.path.join(model_dir, "*" + config["timing_ext"]))])
 
@@ -77,12 +77,12 @@ def analyze_case(model_dir, bench_dir, config):
         bench_timings = set()
     
     for mtf in model_timings:
-        summary["model"][mtf] = parse_gptl(os.path.join(model_dir,mtf), 
+        result["model"][mtf] = parse_gptl(os.path.join(model_dir,mtf), 
                                            config["timing_vars"])
         if mtf in bench_timings: 
-            summary["bench"][mtf] = parse_gptl(os.path.join(bench_dir,mtf),
+            result["bench"][mtf] = parse_gptl(os.path.join(bench_dir,mtf),
                                                config["timing_vars"])
-    return summary
+    return result
 
 def weak_scaling():
     """ Generate weak scaling stats """
@@ -200,9 +200,9 @@ def generate_timing_stats(model_dir, bench_dir, config):
         A LIVVDict containing values that have the form: 
             [mean, min, max, mean, diff. from bench mean]
     """
-    timing_summary = LIVVDict()
+    timing_result = LIVVDict()
     # TODO
-    return timing_summary
+    return timing_result
 
 
 def parse_gptl(file_path, var_list):
@@ -217,25 +217,31 @@ def parse_gptl(file_path, var_list):
         A LIVVDict containing key-value pairs of the variables
         and the times associated with them
     """
-    timing_summary = LIVVDict()
+    timing_result = LIVVDict()
     if os.path.isfile(file_path):
         with open(file_path, 'r') as f:
             for var in var_list:
                 for line in f:
                     if var in line:
-                        timing_summary[var] = float(line.split()[4])/int(line.split()[2])
-    return timing_summary
+                        timing_result[var] = float(line.split()[4])/int(line.split()[2])
+    return timing_result
 
 
-def print_summary(case,summary):
+def print_result(case,result):
     """ Show some statistics from the run """
     pass
 
 
-def write_summary(case,summary):
-    """ Take the summary and write out a JSON file """
+def write_result(case,result):
+    """ Take the result and write out a JSON file """
     outpath = os.path.join(util.variables.output_dir, "Performance", case)
     util.datastructures.mkdir_p(outpath)
     with open(os.path.join(outpath, case+".json"), 'w') as f:
-        json.dump(summary, f, indent=4)
+        json.dump(result, f, indent=4)
+
+def summarize_result(case, result, summary):
+    """ Trim out some data to return for the index page """
+    # Get the number of bit for bit failures
+    # Get the number of config matches
+    # Get the number of files parsed
 
