@@ -37,7 +37,6 @@ import glob
 import json
 import numpy as np
 import multiprocessing
-from operator import add
 from netCDF4 import Dataset
 from matplotlib import pyplot
 import util.netcdf
@@ -61,15 +60,21 @@ def run_suite(case, config, summary):
                 cases.append(root.strip(data_dir).split(os.sep))
      
     model_cases = sorted(model_cases)
+    case_summary = {}
     for mcase in model_cases:
         bench_path = (os.path.join(bench_dir, os.sep.join(mcase)) 
                         if mcase in bench_cases else None)
         model_path = os.path.join(model_dir, os.sep.join(mcase))
         case_result = analyze_case(model_path, bench_path, config)
         result[case].nested_assign(mcase, case_result)
-        summary[case] = summarize_result(case_result, summary[case])
+        if mcase[0] not in case_summary: 
+            case_summary[mcase[0]] = {}
+        case_summary[mcase[0]] = summarize_result(case_result, 
+                case_summary[mcase[0]])
+    summary[case] = case_summary
     print_result(case, result) # TODO
     write_result(case, result)
+
 
 def analyze_case(model_dir, bench_dir, config, plot=True):
     """ Runs all of the verification checks on a particular case """
@@ -229,6 +234,7 @@ def print_result(case, result):
     """ Show some statistics from the run """
     pass
 
+
 def write_result(case, result):
     """ Take the result and write out a JSON file """
     outpath = os.path.join(util.variables.output_dir, "Verification", case)
@@ -236,41 +242,44 @@ def write_result(case, result):
     with open(os.path.join(outpath, case+".json"), 'w') as f:
             json.dump(result, f, indent=4)
 
+
 def summarize_result(result, summary):
     """ Trim out some data to return for the index page """
-    if not "Bit for Bit" in summary:
+    if "Bit for Bit" not in summary:
         summary["Bit for Bit"] = [0,0]
-    if not "Configurations" in summary:
+    if "Configurations" not in summary:
         summary["Configurations"] = [0,0]
-    if not "Std. Out Files" in summary:
+    if "Std. Out Files" not in summary:
         summary["Std. Out Files"] = 0
 
     # Get the number of bit for bit failures
     total_count = failure_count = 0
     summary_data = summary["Bit for Bit"]
     for vals in result["Output data"].values():
+        total_count += 1
         for data in vals.values():
-            total_count += 1
             if data["Max Error"] != 0:
                 failure_count += 1
-    summary_data = np.add(summary_data, [failure_count, total_count]) 
+                break
+    summary_data = np.add(summary_data, [failure_count, total_count]).tolist() 
     summary["Bit for Bit"] = summary_data
 
     # Get the number of config matches
     total_count = failure_count = 0
-    summary_Data = summary["Configurations"]
-    for vals in result["Configurations"].values():
-        for each in vals.values():
-            total_count += 1
-            for any in each.values():
-                if not any[0]:
+    summary_data = summary["Configurations"]
+    for file, section in result["Configurations"].items():
+        total_count += 1
+        for section_name, varlist in section.items():
+            for var, val in varlist.items():
+                if not val[0]:
                     failure_count += 1
                     break
-    summary_data = np.add(summary_data, [failure_count, total_count]) 
+    summary_data = np.add(summary_data, [failure_count, total_count]).tolist()
     summary["Configurations"] = summary_data
-
 
     # Get the number of files parsed
     summary["Std. Out Files"] += len(result["Output Log"].keys())
 
     return summary
+
+

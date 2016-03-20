@@ -59,11 +59,12 @@ def run(run_type, module, config_path):
     print(" ---------------------------------------------------------------")
     print("   Beginning " + run_type.lower() + " test suite ")
     print(" ---------------------------------------------------------------")
-    launch_processes(tests, module, **config)
+    summary = launch_processes(tests, module, **config)
     print(" ---------------------------------------------------------------")
     print("   " + run_type.capitalize() + " test suite complete ")
     print(" ---------------------------------------------------------------")
     print("")
+    return dict(summary)
 
 
 def launch_processes(tests, run_module, **config):
@@ -76,10 +77,13 @@ def launch_processes(tests, run_module, **config):
         p.start()
     for p in process_handles:
         p.join()
-    print(summary)
+    return summary 
 
 def summarize(summary):
-    pass
+    """ Write the summary to a JSON file """
+    util.datastructures.mkdir_p(util.variables.output_dir)
+    with open(os.path.join(util.variables.output_dir, "index.json"), 'w') as f:
+            json.dump(summary, f, indent=4)
 
 def cleanup():
     pass
