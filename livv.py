@@ -91,7 +91,6 @@ def main():
                                 "validation", 
                                 components.validation, 
                                 util.variables.validation_model_config)
-    
     util.scheduler.summarize(summary)
     util.scheduler.cleanup()
     

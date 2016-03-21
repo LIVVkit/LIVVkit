@@ -75,7 +75,6 @@ def run_suite(case, config, summary):
     print_result(case, result) # TODO
     write_result(case, result)
 
-
 def analyze_case(model_dir, bench_dir, config, plot=True):
     """ Runs all of the verification checks on a particular case """
     bundle = util.variables.verification_model_module
@@ -279,7 +278,6 @@ def summarize_result(result, summary):
 
     # Get the number of files parsed
     summary["Std. Out Files"] += len(result["Output Log"].keys())
-
     return summary
 
 
