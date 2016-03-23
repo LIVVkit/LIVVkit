@@ -56,13 +56,14 @@ def run(run_type, module, config_path):
     with open(config_path, 'r') as f:
         config = json.load(f)
     tests = [t for t in config.keys() if isinstance(config[t], dict)]
-    print(" ---------------------------------------------------------------")
+    print(" -----------------------------------------------------------------")
     print("   Beginning " + run_type.lower() + " test suite ")
-    print(" ---------------------------------------------------------------")
+    print(" -----------------------------------------------------------------")
+    print("")
     summary = launch_processes(tests, module, **config)
-    print(" ---------------------------------------------------------------")
+    print(" -----------------------------------------------------------------")
     print("   " + run_type.capitalize() + " test suite complete ")
-    print(" ---------------------------------------------------------------")
+    print(" -----------------------------------------------------------------")
     print("")
     return dict(summary)
 

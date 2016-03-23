@@ -63,6 +63,7 @@ def run_suite(case, config, summary):
                 if mcase[0:-1] in bench_cases else None)
         model_path = os.path.join(model_dir, os.sep.join(mcase))
         result[case].nested_assign(mcase, analyze_case(mcase, model_path, bench_path, config))
+    summary["Metadata"] = populate_metadata()
     print_result(case,result) #TODO
     write_result(case,result) #TODO
     summarize_result(case, result, summary)
@@ -158,3 +159,10 @@ def summarize_result(case, result, summary):
     # Get the number of config matches
     # Get the number of files parsed
 
+def populate_metadata():
+    """ Provide some top level information """
+    metadata = {}
+    metadata["Format"] = "Summary"
+    metadata["Type"] = "Numerics"
+    metadata["Headers"] = ["Max Error", "RMSE"]
+    return metadata

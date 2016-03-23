@@ -58,6 +58,7 @@ hr {
   Header/Footer Styling
 ******************************************************************************/
 #header {
+    min-width: 600px;
     height: 60px;
 	background-color: #222222;
     border-bottom: 1px solid #222222;
@@ -89,12 +90,38 @@ hr {
 }
 
 #content {
+    width: 80%;
+    margin: auto;
     padding-top: 10px;
     padding-bottom: 10px;
-    background-color: #dedede;
 }
 
 #content div {
     background-color: white;
 }
 
+/******************************************************************************
+  TableStyling
+******************************************************************************/
+table {
+    margin: auto;
+    border: 2px solid #66c2ff;
+    width: 90%;
+    border-spacing: 0;
+}
+
+th {
+   background-color: #66c2ff;
+   color: #ffffff;
+   padding: 10px;
+}
+
+td {
+    padding: 2px;
+    text-align: center;
+}
+
+.testName tr {
+   background-color: #66c2ff;
+   color: #ffffff;
+}

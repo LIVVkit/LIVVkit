@@ -71,8 +71,9 @@ def run_suite(case, config, summary):
             case_summary[mcase[0]] = {}
         case_summary[mcase[0]] = summarize_result(case_result, 
                 case_summary[mcase[0]])
+    summary["Metadata"] = populate_metadata()
     summary[case] = case_summary
-    print_result(case, result) # TODO
+    print_summary(case, summary[case]) # TODO
     write_result(case, result)
 
 def analyze_case(model_dir, bench_dir, config, plot=True):
@@ -229,10 +230,19 @@ def validation_configuration(config):
     """ Make sure that the configuration contains all the needed data """
     pass
 
-def print_result(case, result):
-    """ Show some statistics from the run """
-    pass
 
+def print_summary(case, summary):
+    """ Show some statistics from the run """
+    for dof, data in summary.items():
+        b4b = data["Bit for Bit"]
+        conf = data["Configurations"]
+        stdout = data["Std. Out Files"]
+        print("    " + case + " " + str(dof))
+        print("    --------------------")
+        print("     Bit for bit failures  : " + str(b4b[0]) + " of " + str(b4b[1]))
+        print("     Configuration matches : " + str(conf[0])+ " of " + str(conf[1]))
+        print("     Std. Out files parsed : " + str(stdout))
+        print("")
 
 def write_result(case, result):
     """ Take the result and write out a JSON file """
@@ -280,4 +290,12 @@ def summarize_result(result, summary):
     summary["Std. Out Files"] += len(result["Output Log"].keys())
     return summary
 
+
+def populate_metadata():
+    """ Provide some top level information """
+    metadata = {}
+    metadata["Format"] = "Summary"
+    metadata["Type"] = "Verification"
+    metadata["Headers"] = ["Bit for Bit", "Configurations", "Std. Out Files"]
+    return metadata
 
