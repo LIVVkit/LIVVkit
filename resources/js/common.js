@@ -38,7 +38,6 @@ function drawContent(vv_type) {
 function drawIndex() {
     html = "";
     var data = loadJSON('./index.json');
-    console.log(data); 
     for (var cat in data) {
         if (data[cat] != null) {
             html += "<h1>" + cat + "</h1>\n";
@@ -54,24 +53,27 @@ function drawIndex() {
                 if (testName != "Metadata") {
                     html += "<tr class=\"testName\"><td>" + testName + "</td></tr>\n";
                     for (var testCase in data[cat][testName]) {
-                        html += "<tr>\n";
-                        html += "<td>" + testCase + "</td>\n";
+                        html_tmp1 = "<tr ";
+                        html_tmp2 = ">\n<td class=\"testCase\">" + testCase + "</td>\n";
                         for (var headerIdx in data[cat]["Metadata"]["Headers"]) {
                             header = data[cat]["Metadata"]["Headers"][headerIdx];
-                            html += "<td>"; 
+                            html_tmp2 += "<td>"; 
                             value = data[cat][testName][testCase][header];
                             dtype = typeof value;
-                            
+                            style = "";  
                             if (dtype == 'number') {
-                                html += value;
+                                html_tmp2 += value;
                             } else if (dtype == 'object') {
                                 if (value.length == 2) {
-                                    html += value[0] + " of " + value[1];
+                                    html_tmp2 += value[0] + " of " + value[1];
+                                    if (value[0] != value[1]) {
+                                        style = " style=\"color:red\"; ";
+                                    }
                                 }
                             }
-                            html += "</td>\n";
+                            html_tmp2 += "</td>\n";
                         }
-                        html += "</tr>\n";
+                        html += html_tmp1 + style + html_tmp2 + "</tr>\n";
                     }
                 }
             }

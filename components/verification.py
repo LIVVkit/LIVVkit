@@ -239,7 +239,7 @@ def print_summary(case, summary):
         stdout = data["Std. Out Files"]
         print("    " + case + " " + str(dof))
         print("    --------------------")
-        print("     Bit for bit failures  : " + str(b4b[0]) + " of " + str(b4b[1]))
+        print("     Bit for bit matches   : " + str(b4b[0]) + " of " + str(b4b[1]))
         print("     Configuration matches : " + str(conf[0])+ " of " + str(conf[1]))
         print("     Std. Out files parsed : " + str(stdout))
         print("")
@@ -262,28 +262,29 @@ def summarize_result(result, summary):
         summary["Std. Out Files"] = 0
 
     # Get the number of bit for bit failures
-    total_count = failure_count = 0
+    total_count = success_count = 0
     summary_data = summary["Bit for Bit"]
     for vals in result["Output data"].values():
         total_count += 1
         for data in vals.values():
-            if data["Max Error"] != 0:
-                failure_count += 1
+            if data["Max Error"] == 0:
+                success_count += 1
                 break
-    summary_data = np.add(summary_data, [failure_count, total_count]).tolist() 
+    summary_data = np.add(summary_data, [success_count, total_count]).tolist() 
     summary["Bit for Bit"] = summary_data
 
     # Get the number of config matches
-    total_count = failure_count = 0
+    total_count = success_count = 0
     summary_data = summary["Configurations"]
     for file, section in result["Configurations"].items():
         total_count += 1
         for section_name, varlist in section.items():
             for var, val in varlist.items():
                 if not val[0]:
-                    failure_count += 1
+                    success_count += 1
                     break
-    summary_data = np.add(summary_data, [failure_count, total_count]).tolist()
+    success_count = total_count - success_count
+    summary_data = np.add(summary_data, [success_count, total_count]).tolist()
     summary["Configurations"] = summary_data
 
     # Get the number of files parsed
