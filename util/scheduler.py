@@ -65,19 +65,24 @@ def run(run_type, module, config_path):
     print("   " + run_type.capitalize() + " test suite complete ")
     print(" -----------------------------------------------------------------")
     print("")
-    return dict(summary)
+    return summary
 
 
 def launch_processes(tests, run_module, **config):
     """ Helper method to launch processes and synch output """
     util.variables.manager = multiprocessing.Manager()
-    summary = util.variables.manager.dict()
+    summary = {}
+    test_data = util.variables.manager.dict()
+    meta_data = run_module.populate_metadata()
     process_handles = [multiprocessing.Process(target=run_module.run_suite, 
-                       args=(test, config[test], summary)) for test in tests]
+                       args=(test, config[test], test_data)) for test in tests]
     for p in process_handles:
         p.start()
     for p in process_handles:
         p.join()
+    
+    summary['meta-data'] = meta_data
+    summary['test-data'] = dict(test_data)
     return summary 
 
 def summarize(summary):

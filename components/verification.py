@@ -71,7 +71,6 @@ def run_suite(case, config, summary):
             case_summary[mcase[0]] = {}
         case_summary[mcase[0]] = summarize_result(case_result, 
                 case_summary[mcase[0]])
-    summary["Metadata"] = populate_metadata()
     summary[case] = case_summary
     print_summary(case, summary[case]) # TODO
     write_result(case, result)
