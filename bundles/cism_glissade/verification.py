@@ -103,6 +103,10 @@ def parse_config(file_path):
         return None
     parser = ConfigParser()
     parser.read(file_path)
+    # Strip out inline comments
+    for s in parser._sections:
+        for v in parser._sections[s].keys():
+            parser._sections[s][v] = parser._sections[s][v].split("#")[0].strip()
     return parser._sections
 
 

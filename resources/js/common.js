@@ -27,7 +27,7 @@ function drawContent(vv_type) {
             content = drawIndex();
             break;
         case "verification":
-            content = drawVerification(sum);
+            content = drawVerification();
             break;
         case "validation":
             content = drawValidation(sum);
@@ -50,7 +50,7 @@ function drawIndex() {
     var data = loadJSON('./index.json');
     for (var cat in data) {
         if (data[cat] != null) {
-            html += "<h1>" + cat + "</h1>\n";
+            html += "<h1><a href=" + cat.toLowerCase() + ".html>" + cat + "</a></h1>\n";
             elemType = data[cat]["meta-data"]["Format"];
             html += elementMap[data[cat]["meta-data"]["Format"]](data[cat]["meta-data"],data[cat]["test-data"]);
         }
@@ -62,8 +62,9 @@ function drawIndex() {
 /**
  * Generates the verification content page
  */
-function drawVerification(verSummary) {
+function drawVerification() {
     html = "";
+    listJSON("./Verification/");
     return html;
 }
 
@@ -176,3 +177,17 @@ function loadJSON(path) {
     return data;
 }
 
+
+function listJSON(path) {
+    var jsonFiles = [];
+    console.log(path);
+    $.ajax({
+        'url' : path,
+        'success' : function(data) {
+            $(data).find("a").each(function() {
+                console.log(this);
+            });
+        }
+    });
+    return jsonFiles;
+}

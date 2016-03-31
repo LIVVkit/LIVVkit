@@ -65,7 +65,7 @@ def run_suite(case, config, summary):
         bench_path = (os.path.join(bench_dir, os.sep.join(mcase)) 
                         if mcase in bench_cases else None)
         model_path = os.path.join(model_dir, os.sep.join(mcase))
-        case_result = analyze_case(model_path, bench_path, config)
+        case_result = analyze_case(model_path, bench_path, config, case)
         result[case].nested_assign(mcase, case_result)
         if mcase[0] not in case_summary: 
             case_summary[mcase[0]] = {}
@@ -75,7 +75,8 @@ def run_suite(case, config, summary):
     print_summary(case, summary[case]) # TODO
     write_result(case, result)
 
-def analyze_case(model_dir, bench_dir, config, plot=True):
+
+def analyze_case(model_dir, bench_dir, config, case, plot=True):
     """ Runs all of the verification checks on a particular case """
     bundle = util.variables.verification_model_module
     result = LIVVDict()
@@ -138,7 +139,7 @@ def bit_for_bit(model_path, bench_path, config, plot=True):
         return stats
     if not (util.netcdf.has_time(model_data) and util.netcdf.has_time(bench_data)):
         return stats
-
+    
     for i, var in enumerate(config["bit_for_bit_vars"]):
         if (var in model_data.variables and var in bench_data.variables):
             m_vardata = model_data.variables[var][:]
@@ -192,7 +193,7 @@ def diff_configurations(model_config, bench_config, model_bundle, bench_bundle):
 
 def plot_bit_for_bit(case, var_name, model_data, bench_data, diff_data):
     """ Create a bit for bit plot """
-    plot_path = os.sep.join([util.variables.output_dir,"plots","bit_for_bit",case])
+    plot_path = os.sep.join([util.variables.output_dir, "Verification", case])
     util.datastructures.mkdir_p(plot_path)
     pyplot.figure(figsize=(12,3), dpi=80)
     pyplot.clf()
@@ -243,9 +244,10 @@ def print_summary(case, summary):
         print("     Std. Out files parsed : " + str(stdout))
         print("")
 
+
 def write_result(case, result):
     """ Take the result and write out a JSON file """
-    outpath = os.path.join(util.variables.output_dir, "Verification", case)
+    outpath = os.path.join(util.variables.output_dir, "Verification")
     util.datastructures.mkdir_p(outpath)
     with open(os.path.join(outpath, case+".json"), 'w') as f:
             json.dump(result, f, indent=4)
