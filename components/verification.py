@@ -280,21 +280,29 @@ def summarize_result(result, summary):
         summary["Std. Out Files"] = 0
 
     # Get the number of bit for bit failures
-    total_count = success_count = 0
+    total_count = failure_count = 0
+    for elem in result["Elements"]:
+        if elem["Title"] == "Bit for Bit":
+           elem_data = elem["Data"]
+           break
     summary_data = summary["Bit for Bit"]
-    for vals in result["Output data"].values():
+    for file in elem_data:
         total_count += 1
-        for data in vals.values():
-            if data["Max Error"] == 0:
-                success_count += 1
+        for var in elem_data[file]:
+            if elem_data[file][var]["Max Error"] != 0:
+                failure_count += 1
                 break
-    summary_data = np.add(summary_data, [success_count, total_count]).tolist() 
+    summary_data = np.add(summary_data, [total_count-failure_count, total_count]).tolist() 
     summary["Bit for Bit"] = summary_data
 
     # Get the number of config matches
     total_count = success_count = 0
+    for elem in result["Elements"]:
+        if elem["Title"] == "Configuration Comparison":
+            elem_data = elem["Data"]
+            break
     summary_data = summary["Configurations"]
-    for file, section in result["Configurations"].items():
+    for file, section in elem_data.items():
         total_count += 1
         for section_name, varlist in section.items():
             for var, val in varlist.items():
@@ -306,7 +314,11 @@ def summarize_result(result, summary):
     summary["Configurations"] = summary_data
 
     # Get the number of files parsed
-    summary["Std. Out Files"] += len(result["Output Log"].keys())
+    for elem in result["Elements"]:
+        if elem["Title"] == "Output Log":
+            elem_data = elem["Data"]
+            break
+    summary["Std. Out Files"] += len(elem_data.keys())
     return summary
 
 

@@ -92,7 +92,7 @@ class ElementHelper:
     Helper class to make building new display elements in the output
     files easier and less error prone
     """
-    def table(title, headers, data_node):
+    def table(self, title, headers, data_node):
         """ Returns a dictionary representing a new table element """
         tb = {}
         tb["Type"] = "Table"
@@ -102,7 +102,7 @@ class ElementHelper:
         return tb
 
 
-    def gallery(title, image_elem_list):
+    def gallery(self, title, image_elem_list):
         """ Builds an image gallery out of a list of image elements """
         gal = {}
         gal["Type"] = "Gallery"
@@ -111,7 +111,7 @@ class ElementHelper:
         return gal
 
 
-    def image_element(title, desc, image_path):
+    def image_element(self, title, desc, image_path):
         """ Builds an image element """
         ie = {}
         ie["Type"] = "Image"
@@ -121,7 +121,7 @@ class ElementHelper:
         return ie
 
 
-    def file_diff(title, diff_data):
+    def diff(self, title, diff_data):
         """ Builds a file diff element """
         fd = {}
         fd["Type"] = "Diff"
