@@ -44,6 +44,7 @@ def mkdir_p(path):
             pass
         else: raise
 
+
 class LIVVDict(dict):
     """
     Extension of the dictionary datastructure to allow for auto nesting.
@@ -84,4 +85,47 @@ class LIVVDict(dict):
     def merge_leaves(self, dict_to_merge):
         """ Merges another LIVVDict's similar leaf nodes into this one """
         pass
+
+
+class ElementHelper:
+    """
+    Helper class to make building new display elements in the output
+    files easier and less error prone
+    """
+    def table(title, headers, data_node):
+        """ Returns a dictionary representing a new table element """
+        tb = {}
+        tb["Type"] = "Table"
+        tb["Title"] = title
+        tb["Headers"] = headers
+        tb["Data"] = data_node
+        return tb
+
+
+    def gallery(title, image_elem_list):
+        """ Builds an image gallery out of a list of image elements """
+        gal = {}
+        gal["Type"] = "Gallery"
+        gal["Title"] = title
+        gal["Data"] = image_elem_list
+        return gal
+
+
+    def image_element(title, desc, image_path):
+        """ Builds an image element """
+        ie = {}
+        ie["Type"] = "Image"
+        ie["Title"] = title
+        ie["Desciption"] = desc
+        ie["Data"] = image_path
+        return ie
+
+
+    def file_diff(title, diff_data):
+        """ Builds a file diff element """
+        fd = {}
+        fd["Type"] = "Diff"
+        fd["Title"] = title
+        fd["Data"] = diff_data
+        return fd
 

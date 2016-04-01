@@ -42,6 +42,7 @@ from matplotlib import pyplot
 import util.netcdf
 import util.variables
 from util.datastructures import LIVVDict
+from util.datastructures import ElementHelper
 
 def run_suite(case, config, summary):
     """ Run the full suite of verification tests """
@@ -80,6 +81,8 @@ def analyze_case(model_dir, bench_dir, config, case, plot=True):
     """ Runs all of the verification checks on a particular case """
     bundle = util.variables.verification_model_module
     result = LIVVDict()
+    element = ElementHelper()
+    element_list = []
     model_configs = set([os.path.basename(f) for f in 
                       glob.glob(os.path.join(model_dir, "*" + config["config_ext"]))])
     model_logs    = set([os.path.basename(f) for f in 
@@ -99,18 +102,32 @@ def analyze_case(model_dir, bench_dir, config, case, plot=True):
 
     outfiles = model_output.intersection(bench_output)
     configs = model_configs.intersection(bench_configs)
+    
+
+    out_data = {}
+    out_headers = ["RMS Error", "Max Error", "Plot"]
     for of in outfiles:
-        result["Output data"][of] = bit_for_bit(os.path.join(model_dir, of), 
+        out_data[of] = bit_for_bit(os.path.join(model_dir, of), 
                                                  os.path.join(bench_dir, of), 
                                                  config, 
                                                  plot)
+    config_data = {}
     for cf in configs:
-        result["Configurations"][cf] = diff_configurations(
+        config_data[cf] = diff_configurations(
                                             os.path.join(model_dir,cf),
                                             os.path.join(bench_dir,cf),
                                             bundle, bundle)
+    log_data = {}
+    log_headers = ["Converged Iterations", "Avg. Iterations to Converge", "Processor Count", "Dycore Type"]
     for lf in model_logs:
-        result["Output Log"][lf] = bundle.parse_log(os.path.join(model_dir,lf))
+        log_data[lf] = bundle.parse_log(os.path.join(model_dir,lf))
+    
+    element_list = [
+            element.table("Bit for Bit", out_headers, out_data),
+            element.table("Output Log", log_headers, log_data),
+            element.diff("Configuration Comparison", config_data)
+        ]
+    result["Elements"] = element_list
     return result
 
 
