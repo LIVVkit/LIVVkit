@@ -73,7 +73,7 @@ def launch_processes(tests, run_module, **config):
     util.variables.manager = multiprocessing.Manager()
     summary = {}
     test_data = util.variables.manager.dict()
-    meta_data = run_module.populate_metadata()
+    summary = run_module.populate_metadata()
     process_handles = [multiprocessing.Process(target=run_module.run_suite, 
                        args=(test, config[test], test_data)) for test in tests]
     for p in process_handles:
@@ -81,8 +81,7 @@ def launch_processes(tests, run_module, **config):
     for p in process_handles:
         p.join()
     
-    summary['meta-data'] = meta_data
-    summary['test-data'] = dict(test_data)
+    summary["Data"] = dict(test_data)
     return summary 
 
 def summarize(summary):

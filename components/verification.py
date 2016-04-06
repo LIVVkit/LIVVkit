@@ -39,8 +39,10 @@ import numpy as np
 import multiprocessing
 from netCDF4 import Dataset
 from matplotlib import pyplot
-import util.netcdf
-import util.variables
+
+from util import netcdf
+from util import functions
+from util import variables
 from util.datastructures import LIVVDict
 from util.datastructures import ElementHelper
 
@@ -48,10 +50,10 @@ def run_suite(case, config, summary):
     """ Run the full suite of verification tests """
     config["name"] = case
     result = LIVVDict()
-    summary[case] = util.variables.manager.dict()
     result[case] = LIVVDict()
-    model_dir = os.path.join(util.variables.model_dir, config['data_dir'], case)
-    bench_dir = os.path.join(util.variables.bench_dir, config['data_dir'], case)
+    summary[case] = variables.manager.dict()
+    model_dir = os.path.join(variables.model_dir, config['data_dir'], case)
+    bench_dir = os.path.join(variables.bench_dir, config['data_dir'], case)
     model_cases = []
     bench_cases = []
 
@@ -73,13 +75,13 @@ def run_suite(case, config, summary):
         case_summary[mcase[0]] = summarize_result(case_result, 
                 case_summary[mcase[0]])
     summary[case] = case_summary
-    print_summary(case, summary[case]) # TODO
-    write_result(case, result)
+    print_summary(case, summary[case])
+    functions.write_json(result, os.path.join(variables.output_dir,"Verification"), case+".json")
 
 
 def analyze_case(model_dir, bench_dir, config, case, plot=True):
     """ Runs all of the verification checks on a particular case """
-    bundle = util.variables.verification_model_module
+    bundle = variables.verification_model_module
     result = LIVVDict()
     element = ElementHelper()
     element_list = []
@@ -102,21 +104,16 @@ def analyze_case(model_dir, bench_dir, config, case, plot=True):
 
     outfiles = model_output.intersection(bench_output)
     configs = model_configs.intersection(bench_configs)
-    
 
     out_data = {}
     out_headers = ["RMS Error", "Max Error", "Plot"]
     for of in outfiles:
         out_data[of] = bit_for_bit(os.path.join(model_dir, of), 
-                                                 os.path.join(bench_dir, of), 
-                                                 config, 
-                                                 plot)
+                         os.path.join(bench_dir, of), config, plot)
     config_data = {}
     for cf in configs:
-        config_data[cf] = diff_configurations(
-                                            os.path.join(model_dir,cf),
-                                            os.path.join(bench_dir,cf),
-                                            bundle, bundle)
+        config_data[cf] = diff_configurations(os.path.join(model_dir,cf),
+                            os.path.join(bench_dir,cf), bundle, bundle)
     log_data = {}
     log_headers = ["Converged Iterations", "Avg. Iterations to Converge", "Processor Count", "Dycore Type"]
     for lf in model_logs:
@@ -154,7 +151,7 @@ def bit_for_bit(model_path, bench_path, config, plot=True):
     except:
         print("Error opening datasets!")
         return stats
-    if not (util.netcdf.has_time(model_data) and util.netcdf.has_time(bench_data)):
+    if not (netcdf.has_time(model_data) and netcdf.has_time(bench_data)):
         return stats
     
     for i, var in enumerate(config["bit_for_bit_vars"]):
@@ -210,8 +207,8 @@ def diff_configurations(model_config, bench_config, model_bundle, bench_bundle):
 
 def plot_bit_for_bit(case, var_name, model_data, bench_data, diff_data):
     """ Create a bit for bit plot """
-    plot_path = os.sep.join([util.variables.output_dir, "Verification", case])
-    util.datastructures.mkdir_p(plot_path)
+    plot_path = os.sep.join([variables.output_dir, "Verification", case])
+    util.functions.mkdir_p(plot_path)
     pyplot.figure(figsize=(12,3), dpi=80)
     pyplot.clf()
     # Calculate min and max to scale the colorbars
@@ -260,14 +257,6 @@ def print_summary(case, summary):
         print("     Configuration matches : " + str(conf[0])+ " of " + str(conf[1]))
         print("     Std. Out files parsed : " + str(stdout))
         print("")
-
-
-def write_result(case, result):
-    """ Take the result and write out a JSON file """
-    outpath = os.path.join(util.variables.output_dir, "Verification")
-    util.datastructures.mkdir_p(outpath)
-    with open(os.path.join(outpath, case+".json"), 'w') as f:
-            json.dump(result, f, indent=4)
 
 
 def summarize_result(result, summary):
@@ -325,8 +314,8 @@ def summarize_result(result, summary):
 def populate_metadata():
     """ Provide some top level information """
     metadata = {}
-    metadata["Format"] = "Summary"
-    metadata["Type"] = "Verification"
+    metadata["Type"] = "Table"
+    metadata["Title"] = "Verification"
     metadata["Headers"] = ["Bit for Bit", "Configurations", "Std. Out Files"]
     return metadata
 

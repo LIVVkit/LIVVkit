@@ -30,21 +30,6 @@ Module to hold LIVV specific data structures
 
 @author: arbennett
 """
-import os
-import errno
-
-def mkdir_p(path):
-    """
-    Make parent directories as needed and no error if existing. Works like `mkdir -p`.
-    """
-    try:
-        os.makedirs(path)
-    except OSError as exc: # Python >2.5
-        if exc.errno == errno.EEXIST and os.path.isdir(path):
-            pass
-        else: raise
-
-
 class LIVVDict(dict):
     """
     Extension of the dictionary datastructure to allow for auto nesting.
@@ -61,7 +46,6 @@ class LIVVDict(dict):
             self[item] = tmp
             return tmp
 
-
     def nested_insert(self, item_list):
         """ Create a series of nested LIVVDicts given a list """
         if len(item_list) == 1:
@@ -71,7 +55,6 @@ class LIVVDict(dict):
                 self[item_list[0]] = LIVVDict()
             self[item_list[0]].nested_insert(item_list[1:])
 
-
     def nested_assign(self, key_list, value):
         """ Set the value of nested LIVVDicts given a list """
         if len(key_list) == 1:
@@ -80,7 +63,6 @@ class LIVVDict(dict):
             if key_list[0] not in self:
                 self[key_list[0]] = LIVVDict() 
             self[key_list[0]].nested_assign(key_list[1:], value)
-
 
     def merge_leaves(self, dict_to_merge):
         """ Merges another LIVVDict's similar leaf nodes into this one """
@@ -101,7 +83,6 @@ class ElementHelper:
         tb["Data"] = data_node
         return tb
 
-
     def gallery(self, title, image_elem_list):
         """ Builds an image gallery out of a list of image elements """
         gal = {}
@@ -109,7 +90,6 @@ class ElementHelper:
         gal["Title"] = title
         gal["Data"] = image_elem_list
         return gal
-
 
     def image_element(self, title, desc, image_path):
         """ Builds an image element """
@@ -119,7 +99,6 @@ class ElementHelper:
         ie["Desciption"] = desc
         ie["Data"] = image_path
         return ie
-
 
     def diff(self, title, diff_data):
         """ Builds a file diff element """

@@ -8,7 +8,6 @@ $(document).ready(function() {
     
     // Used to draw the correct element type
     elementMap = {
-        "Summary" : drawSummary,
         "Table" : drawTable,
         "Gallery" : drawGallery
     }
@@ -48,11 +47,12 @@ function drawContent(vv_type) {
 function drawIndex() {
     html = "";
     var data = loadJSON('./index.json');
-    for (var cat in data) {
-        if (data[cat] != null) {
-            html += "<h1><a href=" + cat.toLowerCase() + ".html>" + cat + "</a></h1>\n";
-            elemType = data[cat]["meta-data"]["Format"];
-            html += elementMap[data[cat]["meta-data"]["Format"]](data[cat]["meta-data"],data[cat]["test-data"]);
+    for (var cat in data["Elements"]) {
+        if (data["Elements"][cat] != null) {
+            html += "<h1><a href=" + data["Elements"][cat]["Title"].toLowerCase() + ".html>" + data["Elements"][cat]["Title"] + "</a></h1>\n";
+            elemType = data["Elements"][cat]["Type"];
+            console.log(elementMap[elemType]);
+            html += elementMap[elemType](data["Elements"][cat]);
         }
     }
     return html;
@@ -97,27 +97,27 @@ function drawNumerics(numSummary) {
 
 
 /**
- * Build a summary 
+ * Build a table
  */
-function drawSummary(meta, data) {
+function drawTable(data) {
     var tableHTML = "<table>\n";
-  
+    console.log(data); 
     // Add the headers
     tableHTML += "<th></th>\n";
-    for (var header in meta["Headers"]) {
-        tableHTML += "<th>" + meta["Headers"][header] + "</th>\n";
+    for (var header in data["Headers"]) {
+        tableHTML += "<th>" + data["Headers"][header] + "</th>\n";
     }
             
     // Add the data
-    for (var testName in data) {
+    for (var testName in data["Data"]) {
         tableHTML += "<tr class=\"testName\"><td>" + testName + "</td></tr>\n";
-        for (var testCase in data[testName]) {
+        for (var testCase in data["Data"][testName]) {
             html_tmp1 = "<tr ";
             html_tmp2 = ">\n<td class=\"testCase\">" + testCase + "</td>\n";
-            for (var headerIdx in meta["Headers"]) {
-                header = meta["Headers"][headerIdx];
+            for (var headerIdx in data["Headers"]) {
+                header = data["Headers"][headerIdx];
                 html_tmp2 += "<td>"; 
-                value = data[testName][testCase][header];
+                value = data["Data"][testName][testCase][header];
                 dtype = typeof value;
                 style = "";  
                 if (dtype == 'number') {
@@ -138,15 +138,6 @@ function drawSummary(meta, data) {
     }
     
     tableHTML += "</table>\n";
-    return tableHTML;
-}
-
-
-/**
- * Build a table
- */
-function drawTable(meta, data) {
-    var tableHTML = "";
     return tableHTML;
 }
 

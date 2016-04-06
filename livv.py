@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 # Copyright (c) 2015, UT-BATTELLE, LLC
 # All rights reserved.
 # 
@@ -35,18 +34,15 @@ Management of the tests to be run is handled by the scheduler
 """
 import os
 import sys
-import util.variables
-
-util.variables.base_path = os.path.dirname(os.path.abspath(__file__))
+from util import variables
+variables.base_path = os.path.dirname(os.path.abspath(__file__))
 
 def main():
     """ Direct execution. """
-    import util.options
-    import util.tests
+    from util import options, tests
     import components
-    
     import importlib
-    util.options.init(util.options.parse(sys.argv[1:]))
+    options.init(options.parse(sys.argv[1:]))
 
     print("-------------------------------------------------------------------")
     print("                      __   _____   ___   ____    _ __     ") 
@@ -59,44 +55,30 @@ def main():
     print("  Load modules: python, ncl, nco, python_matplotlib, hdf5, netcdf,")
     print("                python_numpy, and python_netcdf4 for best results.")
     print("")
-    print("  Current run: " + util.variables.timestamp)
-    print("  User: "        + util.variables.user)
-    print("  OS Type: "     + util.variables.os_type)
-    print("  Machine: "     + util.variables.machine)
-    print("  "              + util.variables.comment)
+    print("  Current run: " + variables.timestamp)
+    print("  User: "        + variables.user)
+    print("  OS Type: "     + variables.os_type)
+    print("  Machine: "     + variables.machine)
+    print("  "              + variables.comment)
     
-    util.tests.check_dependencies()
-    if util.variables.run_tests: util.tests.run_tests()
+    tests.check_dependencies()
+    if variables.run_tests: tests.run_tests()
 
-    import util.scheduler
-    import util.web
+    from util import scheduler, web, functions
     from util.datastructures import LIVVDict
-
-    util.web.setup()
-   
-    summary = LIVVDict()
-    summary["Numerics"] = util.scheduler.run(
-                                "numerics", 
-                                components.numerics, 
-                                util.variables.numerics_model_config)
-    summary["Verification"] = util.scheduler.run(
-                                "verification", 
-                                components.verification, 
-                                util.variables.verification_model_config)
-    summary["Performance"] = util.scheduler.run(
-                                "performance", 
-                                components.performance, 
-                                util.variables.performance_model_config)
-    summary["Validation"] = util.scheduler.run(
-                                "validation", 
-                                components.validation, 
-                                util.variables.validation_model_config)
-    util.scheduler.summarize(summary)
-    util.scheduler.cleanup()
+    web.setup()
+    l = [
+         scheduler.run("numerics", components.numerics, variables.numerics_model_config),
+         scheduler.run("verification", components.verification, variables.verification_model_config),
+         scheduler.run("performance", components.performance, variables.performance_model_config),
+         scheduler.run("validation", components.validation, variables.validation_model_config)
+        ]
+    functions.write_json({"Elements":l}, variables.output_dir, "index.json")
+    scheduler.cleanup()
     
     print("-------------------------------------------------------------------")
     print(" Done!  Results can be seen in a web browser at:")
-    print("        " +  util.variables.output_dir )
+    print("        " +  variables.output_dir )
     print("-------------------------------------------------------------------")
 
 # If called from the command line directly, go to the main method (above)

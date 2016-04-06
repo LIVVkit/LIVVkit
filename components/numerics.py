@@ -30,24 +30,24 @@ Numerics Test Base Module.
 
 @author: arbennett
 """
-
 import os
 import glob
 import json
 import pprint
 import numpy as np
-import util.variables
-import util.datastructures
 from netCDF4 import Dataset
 
+from util import functions
+from util import variables
 from util.datastructures import LIVVDict
+from util.datastructures import ElementHelper
 
 def run_suite(case, config, summary):
     """ Run the full suite of numerics tests """
     result = LIVVDict()
     result[case] = LIVVDict()
-    model_dir = os.path.join(util.variables.model_dir, config['data_dir'], case)
-    bench_dir = os.path.join(util.variables.cwd, config['bench_dir'], case)
+    model_dir = os.path.join(variables.model_dir, config['data_dir'], case)
+    bench_dir = os.path.join(variables.cwd, config['bench_dir'], case)
     model_cases = []
     bench_cases = []
 
@@ -64,8 +64,9 @@ def run_suite(case, config, summary):
         model_path = os.path.join(model_dir, os.sep.join(mcase))
         result[case].nested_assign(mcase, analyze_case(mcase, model_path, bench_path, config))
     print_result(case,result) #TODO
-    write_result(case,result) #TODO
+    functions.write_json(result, os.path.join(variables.output_dir,"Numerics"), case+".json")
     summarize_result(case, result, summary)
+
 
 def analyze_case(case, model_dir, bench_dir, config):
     """ Run all of the numerics checks on a particular case """
@@ -77,7 +78,7 @@ def analyze_case(case, model_dir, bench_dir, config):
                     glob.glob(os.path.join(model_dir, "*" + config["output_ext"]))]))
     if bench_dir is not None:
         bench_files = list(set([os.path.basename(f) for f in glob.glob(
-            os.path.join(util.variables.cwd , bench_dir, "*" + config["bench_ext"]))]))
+            os.path.join(variables.cwd , bench_dir, "*" + config["bench_ext"]))]))
     if len(model_files) > 0 and len(bench_files) > 0:
         result[model_files[0]] = ismip(os.path.join(model_dir,model_files[0]), 
                                         os.path.join(bench_dir,bench_files[0]),
@@ -140,17 +141,11 @@ def ismip(model_path, bench_path, config):
                                             vnorm_mean[1:-1,1:-1])
     result["Mean % Difference"] = np.nanmean(mean_diff)
     return result
-    
+   
+
 def print_result(case,result):
     pass
 
-
-def write_result(case,result):
-    """ Take the result and write out a JSON file """
-    outpath = os.path.join(util.variables.output_dir, "Numerics", case)
-    util.datastructures.mkdir_p(outpath)
-    with open(os.path.join(outpath, case+".json"), 'w') as f:
-        json.dump(result, f, indent=4)
 
 def summarize_result(case, result, summary):
     """ Trim out some data to return for the index page """
@@ -158,10 +153,12 @@ def summarize_result(case, result, summary):
     # Get the number of config matches
     # Get the number of files parsed
 
+
 def populate_metadata():
     """ Provide some top level information """
     metadata = {}
-    metadata["Format"] = "Summary"
-    metadata["Type"] = "Numerics"
+    metadata["Type"] = "Table"
+    metadata["Title"] = "Numerics"
     metadata["Headers"] = ["Max Error", "RMSE"]
     return metadata
+
