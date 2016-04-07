@@ -64,7 +64,7 @@ def run_suite(case, config, summary):
         model_path = os.path.join(model_dir, os.sep.join(mcase))
         result[case].nested_assign(mcase, analyze_case(mcase, model_path, bench_path, config))
     print_result(case,result) #TODO
-    functions.write_json(result, os.path.join(variables.output_dir,"Numerics"), case+".json")
+    functions.write_json(result, os.path.join(variables.output_dir,"numerics"), case+".json")
     summarize_result(case, result, summary)
 
 
@@ -157,7 +157,7 @@ def summarize_result(case, result, summary):
 def populate_metadata():
     """ Provide some top level information """
     metadata = {}
-    metadata["Type"] = "Table"
+    metadata["Type"] = "Summary"
     metadata["Title"] = "Numerics"
     metadata["Headers"] = ["Max Error", "RMSE"]
     return metadata

@@ -76,7 +76,7 @@ def run_suite(case, config, summary):
                 case_summary[mcase[0]])
     summary[case] = case_summary
     print_summary(case, summary[case])
-    functions.write_json(result, os.path.join(variables.output_dir,"Verification"), case+".json")
+    functions.write_json(result, os.path.join(variables.output_dir,"verification"), case+".json")
 
 
 def analyze_case(model_dir, bench_dir, config, case, plot=True):
@@ -314,7 +314,7 @@ def summarize_result(result, summary):
 def populate_metadata():
     """ Provide some top level information """
     metadata = {}
-    metadata["Type"] = "Table"
+    metadata["Type"] = "Summary"
     metadata["Title"] = "Verification"
     metadata["Headers"] = ["Bit for Bit", "Configurations", "Std. Out Files"]
     return metadata

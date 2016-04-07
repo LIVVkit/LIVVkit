@@ -34,7 +34,7 @@ import platform
 import argparse
 import importlib
 
-import util.variables
+from util import variables
 
 def parse(args):
     """
@@ -71,59 +71,59 @@ def parse(args):
 
 def init(options):
     """ Initialize some defaults """
-    util.variables.cwd            = os.getcwd()
-    util.variables.config_dir     = os.path.join(util.variables.cwd, "configurations")
-    util.variables.output_dir     = os.path.abspath(options.out_dir)
-    util.variables.img_dir        = util.variables.output_dir + "/imgs"
-    util.variables.run_tests      = options.run_tests
-    util.variables.timestamp      = time.strftime("%m-%d-%Y %H:%M:%S")
-    util.variables.user           = getpass.getuser()
-    util.variables.machine        = socket.gethostname()
-    util.variables.os_type        = platform.system() + " " + platform.release()
-    util.variables.website_dir    = os.path.join(util.variables.cwd, "resources")
-    util.variables.template_dir   = os.path.join(util.variables.website_dir, "templates")
-    util.variables.index_dir      = util.variables.output_dir
+    variables.cwd            = os.getcwd()
+    variables.config_dir     = os.path.join(variables.cwd, "configurations")
+    variables.output_dir     = os.path.abspath(options.out_dir)
+    variables.img_dir        = variables.output_dir + "/imgs"
+    variables.run_tests      = options.run_tests
+    variables.timestamp      = time.strftime("%m-%d-%Y %H:%M:%S")
+    variables.user           = getpass.getuser()
+    variables.machine        = socket.gethostname()
+    variables.os_type        = platform.system() + " " + platform.release()
+    variables.website_dir    = os.path.join(variables.cwd, "resources")
+    variables.template_dir   = os.path.join(variables.website_dir, "templates")
+    variables.index_dir      = variables.output_dir
 
     # TODO: This is a workaround to handle the case when no --verification or 
     #       --validation options are given.  Need to also fix the way that 
     #       the validation/performance handling is done in the if 
     #       options.validation != [] block.  Things currently seem to work but 
     #       this can definitely be made cleaner -- arbennett 2/21/16 
-    util.variables.model_dir = ""
-    util.variables.model_config = ""
-    util.variables.bench_dir = ""
-    util.variables.bench_config = ""
-    util.variables.performance_model_config = ""
-    util.variables.performance_model_module = ""
-    util.variables.validation_model_config = ""
-    util.variables.validation_model_module = ""
+    variables.model_dir = ""
+    variables.model_config = ""
+    variables.bench_dir = ""
+    variables.bench_config = ""
+    variables.performance_model_config = ""
+    variables.performance_model_module = ""
+    variables.validation_model_config = ""
+    variables.validation_model_module = ""
 
-    available_bundles = os.listdir(os.path.join(util.variables.cwd, "bundles"))
+    available_bundles = os.listdir(os.path.join(variables.cwd, "bundles"))
     # rstrip accounts for trailing path separators
-    util.variables.model_dir = options.verification[0].rstrip(os.sep)
-    util.variables.bench_dir = options.verification[1].rstrip(os.sep)
-    util.variables.model_bundle = util.variables.model_dir.split(os.sep)[-1]
-    util.variables.bench_bundle = util.variables.bench_dir.split(os.sep)[-1]
+    variables.model_dir = options.verification[0].rstrip(os.sep)
+    variables.bench_dir = options.verification[1].rstrip(os.sep)
+    variables.model_bundle = variables.model_dir.split(os.sep)[-1]
+    variables.bench_bundle = variables.bench_dir.split(os.sep)[-1]
 
-    if util.variables.model_bundle in available_bundles:
-        util.variables.numerics_model_config = os.sep.join(
-             [util.variables.cwd, "bundles", util.variables.model_bundle, "numerics.json"])
-        util.variables.numerics_model_module = importlib.import_module(
-             ".".join(["bundles", util.variables.model_bundle, "numerics"]))
+    if variables.model_bundle in available_bundles:
+        variables.numerics_model_config = os.sep.join(
+             [variables.cwd, "bundles", variables.model_bundle, "numerics.json"])
+        variables.numerics_model_module = importlib.import_module(
+             ".".join(["bundles", variables.model_bundle, "numerics"]))
         
-        util.variables.verification_model_config = os.sep.join(
-             [util.variables.cwd, "bundles", util.variables.model_bundle, "verification.json"])
-        util.variables.verification_model_module = importlib.import_module(
-             ".".join(["bundles", util.variables.model_bundle, "verification"]))
+        variables.verification_model_config = os.sep.join(
+             [variables.cwd, "bundles", variables.model_bundle, "verification.json"])
+        variables.verification_model_module = importlib.import_module(
+             ".".join(["bundles", variables.model_bundle, "verification"]))
     
     if options.validation != []:
-        util.variables.performance_model_config = os.sep.join(
-             [util.variables.cwd, "bundles", util.variables.model_bundle, "performance.json"])
-        util.variables.performance_model_module = importlib.import_module(
-             ".".join(["bundles", util.variables.model_bundle, "performance"]))
+        variables.performance_model_config = os.sep.join(
+             [variables.cwd, "bundles", variables.model_bundle, "performance.json"])
+        variables.performance_model_module = importlib.import_module(
+             ".".join(["bundles", variables.model_bundle, "performance"]))
         
-        util.variables.validation_model_config = os.sep.join(
-             [util.variables.cwd, "bundles", util.variables.model_bundle, "validation.json"])
-        util.variables.validation_model_module = importlib.import_module(
-             ".".join(["bundles", util.variables.model_bundle, "validation"]))
+        variables.validation_model_config = os.sep.join(
+             [variables.cwd, "bundles", variables.model_bundle, "validation.json"])
+        variables.validation_model_module = importlib.import_module(
+             ".".join(["bundles", variables.model_bundle, "validation"]))
 

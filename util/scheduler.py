@@ -34,11 +34,12 @@ import os
 import json
 import multiprocessing
 
-import util.variables
 import components.numerics 
 import components.verification 
 import components.performance 
 import components.validation 
+from util import functions
+from util import variables
 from util.datastructures import LIVVDict
 
 def run(run_type, module, config_path):
@@ -56,6 +57,7 @@ def run(run_type, module, config_path):
     with open(config_path, 'r') as f:
         config = json.load(f)
     tests = [t for t in config.keys() if isinstance(config[t], dict)]
+    functions.write_json({"Tests":tests},os.path.join(variables.output_dir,run_type),"manifest.json")
     print(" -----------------------------------------------------------------")
     print("   Beginning " + run_type.lower() + " test suite ")
     print(" -----------------------------------------------------------------")
@@ -70,9 +72,9 @@ def run(run_type, module, config_path):
 
 def launch_processes(tests, run_module, **config):
     """ Helper method to launch processes and synch output """
-    util.variables.manager = multiprocessing.Manager()
+    variables.manager = multiprocessing.Manager()
     summary = {}
-    test_data = util.variables.manager.dict()
+    test_data = variables.manager.dict()
     summary = run_module.populate_metadata()
     process_handles = [multiprocessing.Process(target=run_module.run_suite, 
                        args=(test, config[test], test_data)) for test in tests]
@@ -86,8 +88,8 @@ def launch_processes(tests, run_module, **config):
 
 def summarize(summary):
     """ Write the summary to a JSON file """
-    util.datastructures.mkdir_p(util.variables.output_dir)
-    with open(os.path.join(util.variables.output_dir, "index.json"), 'w') as f:
+    util.datastructures.mkdir_p(variables.output_dir)
+    with open(os.path.join(variables.output_dir, "index.json"), 'w') as f:
             json.dump(summary, f, indent=4)
 
 def cleanup():

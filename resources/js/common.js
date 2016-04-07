@@ -8,6 +8,7 @@ $(document).ready(function() {
     
     // Used to draw the correct element type
     elementMap = {
+        "Summary" : drawSummary,
         "Table" : drawTable,
         "Gallery" : drawGallery
     }
@@ -29,13 +30,13 @@ function drawContent(vv_type) {
             content = drawVerification();
             break;
         case "validation":
-            content = drawValidation(sum);
+            content = drawValidation();
             break;
         case "performance":
-            content = drawPerformance(sum);
+            content = drawPerformance();
             break;
         case "numerics":
-            content = drawNumerics(sum);
+            content = drawNumerics();
             break;
     }
     return content;
@@ -51,7 +52,6 @@ function drawIndex() {
         if (data["Elements"][cat] != null) {
             html += "<h1><a href=" + data["Elements"][cat]["Title"].toLowerCase() + ".html>" + data["Elements"][cat]["Title"] + "</a></h1>\n";
             elemType = data["Elements"][cat]["Type"];
-            console.log(elementMap[elemType]);
             html += elementMap[elemType](data["Elements"][cat]);
         }
     }
@@ -99,9 +99,8 @@ function drawNumerics(numSummary) {
 /**
  * Build a table
  */
-function drawTable(data) {
+function drawSummary(data) {
     var tableHTML = "<table>\n";
-    console.log(data); 
     // Add the headers
     tableHTML += "<th></th>\n";
     for (var header in data["Headers"]) {
@@ -138,6 +137,15 @@ function drawTable(data) {
     }
     
     tableHTML += "</table>\n";
+    return tableHTML;
+}
+
+
+/**
+ * Build a table
+ */
+function drawTable(data) {
+    tableHTML = "";
     return tableHTML;
 }
 

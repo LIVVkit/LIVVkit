@@ -33,6 +33,10 @@ Module to hold LIVV specific functions
 import os
 import json
 import errno
+import shutil
+from datetime import datetime 
+
+from util import variables
 
 def mkdir_p(path):
     """
@@ -61,4 +65,37 @@ def write_json(data, path, file_name):
         mkdir_p(path)
     with open(os.path.join(path, file_name),'w') as f:
         json.dump(data, f, indent=4)
+
+
+def backup():
+    """
+    Copies old run data into a timestamped directory
+    """
+    # Check if we need to back up an old run
+    if os.path.isdir(variables.index_dir):
+        print("-------------------------------------------------------------------")
+        print('Previous output data found in output directory!')
+        try:
+            f = open(variables.index_dir + os.sep + "data.txt", "r")
+            prev_time = f.readline().replace(":","").replace("-","").replace(" ","_").rstrip()
+            prev_comment = f.readline().rstrip()
+            f.close()
+        except IOError:
+            prev_time = "bkd_"+datetime.now().strftime("%Y%m%d_%H%M%S")
+            prev_comment = "Warning: could not find previous runtime and comment."
+
+        print('   Backing up data to:')
+        print('   ' + variables.index_dir + "_" + prev_time)
+        print("-------------------------------------------------------------------")
+        shutil.move(variables.index_dir, variables.index_dir + "_" + prev_time)
+    else:
+        print("-------------------------------------------------------------------")
+
+    # Copy over css & imgs directories from source
+    shutil.copytree(variables.website_dir, variables.index_dir)
+
+    # Record when this data was recorded so we can make nice backups
+    with open(variables.index_dir + os.sep + "data.txt", "w") as f:
+        f.write(variables.timestamp + "\n")
+        f.write(variables.comment)
 
