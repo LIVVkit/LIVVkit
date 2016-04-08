@@ -30,12 +30,9 @@ Provides CISM-Glissade specific verification tools
 
 @author: arbennett
 """
-
 import os
 import numpy as np
 from configparser import ConfigParser
-
-from util.datastructures import LIVVDict
 
 def parse_log(file_path):
     """
@@ -45,12 +42,11 @@ def parse_log(file_path):
         file_path: absolute path to the log file
 
     Return:
-        TODO
+        A dictionary with key quantities from the file
     """
     if not os.path.isfile(file_path):
-        return
+        return {}
     with open(file_path, 'r') as f:
-        log_data = LIVVDict()
         dycore_types = {"0":"Glide", "1":"Glam", "2":"Glissade", "3":"Albany_felix", "4":"BISICLES"}
         curr_step = 0
         proc_count = 0
@@ -79,14 +75,15 @@ def parse_log(file_path):
                 iters_to_converge.append(int(iter_number))
             elif len(split) > 0 and split[0].isdigit():
                 iter_number = split[0]
-        if iters_to_converge == []: iters_to_converge.append(int(iter_number))
-
-        log_data["Dycore Type"] = dycore_type
-        log_data["Processor Count"] = proc_count
-        log_data["Converged Iterations"] = len(converged_iters)
-        log_data["Avg. Iterations to Converge"] = np.mean(iters_to_converge)
-
-        return log_data
+        if iters_to_converge == []: 
+            iters_to_converge.append(int(iter_number))
+    log_data = { 
+        "Dycore Type" : dycore_type,
+        "Processor Count" : proc_count,
+        "Converged Iterations" : len(converged_iters),
+        "Avg. Iterations to Converge": np.mean(iters_to_converge)
+    }
+    return log_data
 
 
 def parse_config(file_path):

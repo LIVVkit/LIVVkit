@@ -11,36 +11,22 @@ $(document).ready(function() {
         "Summary" : drawSummary,
         "Table" : drawTable,
         "Gallery" : drawGallery
-    }
+    };
+
+    // Used to draw the correct page
+    contentMap = {
+        "index" : drawIndex,
+        "verification" : drawVerification,
+        "validation" : drawValidation,
+        "performance" : drawPerformance,
+        "numerics" : drawNumerics
+    };
 
     // Append the generated content
-    $('#content').append(drawContent(vv_type));
+    $('#content').append(contentMap[vv_type]());
+    $("#tabs").tabs();
 });
 
-/**
- * Branch on the type of content
- */
-function drawContent(vv_type) {
-    var content = "";
-    switch(vv_type) {
-        case "index":
-            content = drawIndex();
-            break;
-        case "verification":
-            content = drawVerification();
-            break;
-        case "validation":
-            content = drawValidation();
-            break;
-        case "performance":
-            content = drawPerformance();
-            break;
-        case "numerics":
-            content = drawNumerics();
-            break;
-    }
-    return content;
-}
 
 /**
  * Generatees the summary content page
@@ -63,8 +49,31 @@ function drawIndex() {
  * Generates the verification content page
  */
 function drawVerification() {
-    html = "";
-    listJSON("./Verification/");
+    // Add the tabs and load up all the datasets
+    var testList = loadJSON('./verification/manifest.json');
+    testList = testList["Tests"].sort(); 
+    data = {};
+    html = "<div id=\"tabs\">\n";
+    html += "<ul>\n";
+    for (var test in testList) {
+        html += "  <li> <a href=\"#" + testList[test] + "\">" + testList[test] + "</a> </li>\n";
+        data[testList[test]] = loadJSON("./verification/" + testList[test] + ".json");
+    }
+    html += "</ul>\n";
+
+    console.log(data);
+
+    // Add the content
+    for (var test in testList) {
+        html += "<div id=\"" + testList[test] + "\">\n";
+        elements = [];
+        for (var elem in elements) {
+            html += "<h2>" + elements[elem]["Title"] + "</h2>\n";
+        }
+        html += "</div>\n";
+    }
+
+    html += "</div>\n";
     return html;
 }
 
@@ -72,7 +81,7 @@ function drawVerification() {
 /**
  * Generates the validation content page
  */
-function drawValidation(valSummary) {
+function drawValidation() {
     html = "";
     return html;
 }
@@ -81,7 +90,7 @@ function drawValidation(valSummary) {
 /**
  * Generates the performance content page
  */
-function drawPerformance(perfSummary) {
+function drawPerformance() {
     html = "";
     return html;
 }
@@ -90,7 +99,7 @@ function drawPerformance(perfSummary) {
 /**
  * Generates the numerics content page
  */
-function drawNumerics(numSummary) {
+function drawNumerics() {
     html = "";
     return html;
 }
@@ -106,9 +115,12 @@ function drawSummary(data) {
     for (var header in data["Headers"]) {
         tableHTML += "<th>" + data["Headers"][header] + "</th>\n";
     }
-            
+    
+
     // Add the data
-    for (var testName in data["Data"]) {
+    var testNames = Object.keys(data["Data"]).sort();
+    for (var idx in testNames) {
+        testName = testNames[idx];
         tableHTML += "<tr class=\"testName\"><td>" + testName + "</td></tr>\n";
         for (var testCase in data["Data"][testName]) {
             html_tmp1 = "<tr ";
@@ -176,17 +188,3 @@ function loadJSON(path) {
     return data;
 }
 
-
-function listJSON(path) {
-    var jsonFiles = [];
-    console.log(path);
-    $.ajax({
-        'url' : path,
-        'success' : function(data) {
-            $(data).find("a").each(function() {
-                console.log(this);
-            });
-        }
-    });
-    return jsonFiles;
-}
