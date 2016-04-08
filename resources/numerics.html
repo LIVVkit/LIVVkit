@@ -3,17 +3,27 @@
     <head>
         <meta charset="utf-8">
         <title>LIVV</title>
-        <link href="css/livv.css" type="text/css" rel="stylesheet">
-        <link href="css/acknowledgments.css" type="text/css" rel="stylesheet">
+        <link href="../css/livv.css" type="text/css" rel="stylesheet">
+        <link href="../css/acknowledgments.css" type="text/css" rel="stylesheet">
+        <link href="../css/jquery-ui.min.css" type="text/css" rel="stylesheet">
         <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
         <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
-        <script src="js/common.js"></script>
+        <script
+			  src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"
+			  integrity="sha256-xNjb53/rY+WmG+4L6tTl9m6PpqknWZvRt0rO1SRnJzw="
+			  crossorigin="anonymous">
+        </script>
+        <script>    
+            var vvType = "numerics";
+            var indexPath = "..";
+        </script>
+        <script src="../js/common.js"></script>
     </head>
 
     <div id="header">
         <div id="header-spacer">
-            <img src="imgs/gicon.svg" style="width: 40px; float: left; padding: 10px; padding-left: 15px;">
-            <a id="header-content" href="index.html">
+            <img src="../imgs/gicon.svg" style="width: 40px; float: left; padding: 10px; padding-left: 15px;">
+            <a id="header-content" href="../index.html">
                 LIVV: Land Ice Verification &amp; Validation
             </a>
             <a id="wiki-content" target="_blank" href="https://github.com/LIVVkit/LIVVkit/wiki">
@@ -22,23 +32,29 @@
         </div> 
     </div>
 
-    <div id="content">
+
+    <div id="wrapper">
+        <div id="nav">
+        </div>
+
+        <div id="content">
+        </div>
     </div>
 
-    <hr>
 
     <div id="acknowledgments">
+    <hr>
         <div id=acklogo>
-            <a><img id="logoORNL" src="imgs/ORNL_Stacked_color.png" alt="ORNL"></img></a>
-            <a><img id="logoDOESC" src="imgs/RGB_Color-Seal_Green-Mark_SC_Horizontal.png" alt="DOE Office of Science" style="align: middle;"></img></a>
-            <a><img id="logoLANL" src="imgs/los-alamos-lab-logo-color.png" alt="LANL" style="float: right;"></img></a>
+            <a><img id="logoORNL" src="../imgs/ORNL_Stacked_color.png" alt="ORNL"></img></a>
+            <a><img id="logoDOESC" src="../imgs/RGB_Color-Seal_Green-Mark_SC_Horizontal.png" alt="DOE Office of Science" style="align: middle;"></img></a>
+            <a><img id="logoLANL" src="../imgs/los-alamos-lab-logo-color.png" alt="LANL" style="float: right;"></img></a>
             <span style="width: 100%; display: inline-block; line-height: 0;"></span>
         </div>
         <p id="piscees">
             LIVVkit was developed under <a href="http://www.scidac.gov/PISCEES/" target=_blank>PISCEES</a>, a BER/ASCR SciDAC Earth System Modeling project.
         </p>
         <h3 style="text-align: center;"> <a href="https://github.com/LIVVkit/LIVVkit/issues" target=_blank>Contact us on github</a> </h3>
+    <hr>
     </div>
 
-    <hr>
 </html>

@@ -50,7 +50,6 @@ h1, h2, h3, h4 {
 }
 
 hr {
-    width: 90%;
     color: #222222;
 }
 
@@ -63,7 +62,7 @@ a {
   Header/Footer Styling
 ******************************************************************************/
 #header {
-    min-width: 700px;
+    min-width: 800px;
     height: 60px;
 	background-color: #222222;
     border-bottom: 1px solid #222222;
@@ -94,11 +93,22 @@ a {
     padding-right: 15px;
 }
 
-#content {
-    width: 80%;
+#wrapper {
     margin: auto;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    width: 90%;
+    min-width: 800px;
+}
+
+#nav {
+    width: 10%;
+    float: left;
+    padding: 20px;
+}
+
+#content {
+    padding: 10px;
+    width: 80%;
+    float: left;
 }
 
 #content div {
@@ -109,7 +119,6 @@ a {
   TableStyling
 ******************************************************************************/
 table {
-    margin: auto;
     border: 2px solid #66c2ff;
     width: 90%;
     border-spacing: 0;

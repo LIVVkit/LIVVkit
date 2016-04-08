@@ -66,7 +66,7 @@ def main():
 
     from util import scheduler, functions
     from util.datastructures import LIVVDict
-    functions.backup()
+    functions.setup_output()
     l = [
          scheduler.run("numerics", components.numerics, variables.numerics_model_config),
          scheduler.run("verification", components.verification, variables.verification_model_config),

@@ -50,6 +50,11 @@ def mkdir_p(path):
         else: raise
 
 
+def create_page_from_template(template_file, output_path):
+    """ Copy the correct html template file to the output directory """
+    shutil.copy(os.path.join(variables.website_dir, template_file), output_path)
+
+
 def write_json(data, path, file_name):
     """
     Write out data to a json file.
@@ -67,10 +72,8 @@ def write_json(data, path, file_name):
         json.dump(data, f, indent=4)
 
 
-def backup():
-    """
-    Copies old run data into a timestamped directory
-    """
+def setup_output():
+    """ Copies old run data into a timestamped directory and sets up the new directory """
     # Check if we need to back up an old run
     if os.path.isdir(variables.index_dir):
         print("-------------------------------------------------------------------")
@@ -91,9 +94,13 @@ def backup():
     else:
         print("-------------------------------------------------------------------")
 
-    # Copy over css & imgs directories from source
-    shutil.copytree(variables.website_dir, variables.index_dir)
-
+    # Copy over js, css, & imgs directories from source
+    mkdir_p(variables.website_dir)
+    shutil.copytree(os.path.join(variables.website_dir,"css"), os.path.join(variables.index_dir,"css"))
+    shutil.copytree(os.path.join(variables.website_dir,"js"), os.path.join(variables.index_dir,"js"))
+    shutil.copytree(os.path.join(variables.website_dir,"imgs"), os.path.join(variables.index_dir,"imgs"))
+    shutil.copy(os.path.join(variables.website_dir, "index.html"), 
+                os.path.join(variables.index_dir, "index.html"))
     # Record when this data was recorded so we can make nice backups
     with open(variables.index_dir + os.sep + "data.txt", "w") as f:
         f.write(variables.timestamp + "\n")

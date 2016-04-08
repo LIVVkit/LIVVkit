@@ -50,7 +50,6 @@ def run_suite(case, config, summary):
     """ Run the full suite of verification tests """
     config["name"] = case
     result = LIVVDict()
-    result[case] = LIVVDict()
     summary[case] = variables.manager.dict()
     model_dir = os.path.join(variables.model_dir, config['data_dir'], case)
     bench_dir = os.path.join(variables.bench_dir, config['data_dir'], case)
@@ -69,13 +68,15 @@ def run_suite(case, config, summary):
                         if mcase in bench_cases else None)
         model_path = os.path.join(model_dir, os.sep.join(mcase))
         case_result = analyze_case(model_path, bench_path, config, case)
-        result[case].nested_assign(mcase, case_result)
+        result.nested_assign(mcase, case_result)
         if mcase[0] not in case_summary: 
             case_summary[mcase[0]] = {}
         case_summary[mcase[0]] = summarize_result(case_result, 
                 case_summary[mcase[0]])
     summary[case] = case_summary
     print_summary(case, summary[case])
+    functions.create_page_from_template("verification.html", 
+            os.path.join(variables.index_dir, "verification", case + ".html"))
     functions.write_json(result, os.path.join(variables.output_dir,"verification"), case+".json")
 
 

@@ -30,7 +30,8 @@
 
 
 #acknowledgments {
-    width: 70%;
+    clear: both;
+    width: 90%;
     min-width: 800px;
     padding: 1em 0px 0.5em 0px;
     border: 0px solid white; 

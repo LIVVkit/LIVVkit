@@ -2,10 +2,6 @@
  * When the page is loaded, do some stuff
  */
 $(document).ready(function() {
-    // Figure out what we are going to draw
-    var vv_type = window.location.href.substr(
-            window.location.href.lastIndexOf("/")+1).replace(".html", "");
-    
     // Used to draw the correct element type
     elementMap = {
         "Summary" : drawSummary,
@@ -23,20 +19,39 @@ $(document).ready(function() {
     };
 
     // Append the generated content
-    $('#content').append(contentMap[vv_type]());
+    $('#nav').append(drawNav());
+    $('#content').append(contentMap[vvType]());
     $("#tabs").tabs();
 });
 
+/**
+ * Draw the navigation sidebar
+ */
+function drawNav() {
+    html = "";
+    var data = loadJSON(indexPath + '/index.json');
+    for (var cat in data["Elements"]) {
+        if (data["Elements"][cat] != null && Object.keys(data["Elements"][cat]["Data"]).length > 0) {
+            html += "<h3>" + data["Elements"][cat]["Title"] + "</h3>\n";
+            testList = Object.keys(data["Elements"][cat]["Data"]).sort();
+            for (idx in testList) {
+                html += "<a href=" + indexPath + "/" + data["Elements"][cat]["Title"].toLowerCase() + "/" + testList[idx] + ".html>" + testList[idx] + "</p>\n";
+            }
+        }
+    }
+
+    return html;
+}
 
 /**
  * Generatees the summary content page
  */
 function drawIndex() {
     html = "";
-    var data = loadJSON('./index.json');
+    var data = loadJSON(indexPath + '/index.json');
     for (var cat in data["Elements"]) {
-        if (data["Elements"][cat] != null) {
-            html += "<h1><a href=" + data["Elements"][cat]["Title"].toLowerCase() + ".html>" + data["Elements"][cat]["Title"] + "</a></h1>\n";
+        if (data["Elements"][cat] != null && Object.keys(data["Elements"][cat]["Data"]).length > 0) {
+            html += "<h1>" + data["Elements"][cat]["Title"] + "</h1>\n";
             elemType = data["Elements"][cat]["Type"];
             html += elementMap[elemType](data["Elements"][cat]);
         }
@@ -49,30 +64,27 @@ function drawIndex() {
  * Generates the verification content page
  */
 function drawVerification() {
-    // Add the tabs and load up all the datasets
-    var testList = loadJSON('./verification/manifest.json');
-    testList = testList["Tests"].sort(); 
-    data = {};
+    var verType = window.location.href.substr(
+            window.location.href.lastIndexOf("/")+1).split("#")[0].replace(".html", "");
+    var data = loadJSON('./' + verType + ".json");
+    var testCases = Object.keys(data).sort();
+    
+    // Add the tabs
     html = "<div id=\"tabs\">\n";
     html += "<ul>\n";
-    for (var test in testList) {
-        html += "  <li> <a href=\"#" + testList[test] + "\">" + testList[test] + "</a> </li>\n";
-        data[testList[test]] = loadJSON("./verification/" + testList[test] + ".json");
+    for (var idx in testCases) {
+        html += "<li><a href=\"#" + testCases[idx] + "\">" + testCases[idx] + "</a></li>\n";
     }
     html += "</ul>\n";
-
-    console.log(data);
-
+    
     // Add the content
-    for (var test in testList) {
-        html += "<div id=\"" + testList[test] + "\">\n";
-        elements = [];
-        for (var elem in elements) {
-            html += "<h2>" + elements[elem]["Title"] + "</h2>\n";
-        }
+    for (var idx in testCases) {
+        html += "<div id=\"" + testCases[idx] + "\">\n";
+
         html += "</div>\n";
     }
-
+    
+    // End #tabs div
     html += "</div>\n";
     return html;
 }
