@@ -37,6 +37,7 @@ import shutil
 from datetime import datetime 
 
 from util import variables
+from util.datastructures import LIVVDict
 
 def mkdir_p(path):
     """
@@ -70,6 +71,17 @@ def write_json(data, path, file_name):
         mkdir_p(path)
     with open(os.path.join(path, file_name),'w') as f:
         json.dump(data, f, indent=4)
+
+
+def collect_cases(data_dir):
+    """ Find all cases and subcases of a particular run type """
+    cases = LIVVDict()
+    for root, dirs, files in os.walk(data_dir):
+        if not dirs:
+            split_case = root.strip(data_dir).split(os.sep)
+            if split_case[0] not in cases: cases[split_case[0]] = []
+            cases[split_case[0]].append("-".join(split_case[1:]))
+    return cases
 
 
 def setup_output():

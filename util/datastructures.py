@@ -74,6 +74,14 @@ class ElementHelper:
     Helper class to make building new display elements in the output
     files easier and less error prone
     """
+    def section(self, title, elementList):
+        """ Returns a dictionary representing a new section to display elements"""
+        sect = {}
+        sect["Type"] = "Section"
+        sect["Title"] = title
+        sect["Elements"] = elementList
+        return sect
+
     def table(self, title, headers, data_node):
         """ Returns a dictionary representing a new table element """
         tb = {}

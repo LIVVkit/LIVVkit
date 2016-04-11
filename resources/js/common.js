@@ -6,6 +6,7 @@ $(document).ready(function() {
     elementMap = {
         "Summary" : drawSummary,
         "Table" : drawTable,
+        "Diff" : drawDiff,
         "Gallery" : drawGallery
     };
 
@@ -24,11 +25,13 @@ $(document).ready(function() {
     $("#tabs").tabs();
 });
 
+
 /**
  * Draw the navigation sidebar
  */
 function drawNav() {
     html = "";
+    console.log(indexPath);
     var data = loadJSON(indexPath + '/index.json');
     for (var cat in data["Elements"]) {
         if (data["Elements"][cat] != null && Object.keys(data["Elements"][cat]["Data"]).length > 0) {
@@ -39,9 +42,9 @@ function drawNav() {
             }
         }
     }
-
     return html;
 }
+
 
 /**
  * Generatees the summary content page
@@ -78,9 +81,17 @@ function drawVerification() {
     html += "</ul>\n";
     
     // Add the content
+    var section;
     for (var idx in testCases) {
         html += "<div id=\"" + testCases[idx] + "\">\n";
-
+        console.log(testCases[idx]);
+        for (var subcase in data[testCases[idx]]) {
+            var section = data[testCases[idx]][subcase];
+            html += "<h1>" + section["Title"] + "</h1>\n";
+            for (var idx2 in data[testCases[idx]][subcase]["Elements"]) {
+                html += elementMap[section["Elements"][idx2]["Type"]](section["Elements"][idx2]);
+            }
+        }
         html += "</div>\n";
     }
     
@@ -127,7 +138,6 @@ function drawSummary(data) {
     for (var header in data["Headers"]) {
         tableHTML += "<th>" + data["Headers"][header] + "</th>\n";
     }
-    
 
     // Add the data
     var testNames = Object.keys(data["Data"]).sort();
@@ -166,10 +176,19 @@ function drawSummary(data) {
 
 
 /**
+ * Build a diff
+ */
+function drawDiff(data) {
+    diffHTML = "<h3>" + data["Title"] + "</h3>\n";
+    return diffHTML;
+}
+
+
+/**
  * Build a table
  */
 function drawTable(data) {
-    tableHTML = "";
+    tableHTML = "<h3>" + data["Title"] + "</h3>\n";
     return tableHTML;
 }
 
@@ -198,5 +217,18 @@ function loadJSON(path) {
         }
     });
     return data;
+}
+
+/**
+ * Recursively go through json data and search for the "Elements" list
+ */
+function getElements(json) {
+    if (json.hasOwnProperty("Elements")) {
+        return json["Elements"];
+    } else { 
+        for (section in json) {
+            return getElements(json[section]);
+        }
+    }
 }
 

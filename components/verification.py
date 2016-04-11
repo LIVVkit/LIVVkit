@@ -35,6 +35,7 @@ import re
 import copy
 import glob
 import json
+import pprint
 import numpy as np
 import multiprocessing
 from netCDF4 import Dataset
@@ -49,30 +50,30 @@ from util.datastructures import ElementHelper
 def run_suite(case, config, summary):
     """ Run the full suite of verification tests """
     config["name"] = case
-    result = LIVVDict()
+    element = ElementHelper()
     summary[case] = variables.manager.dict()
     model_dir = os.path.join(variables.model_dir, config['data_dir'], case)
     bench_dir = os.path.join(variables.bench_dir, config['data_dir'], case)
     model_cases = []
     bench_cases = []
-
-    for data_dir, cases in zip([model_dir, bench_dir], [model_cases, bench_cases]):
-        for root, dirs, files in os.walk(data_dir):
-            if not dirs:
-                cases.append(root.strip(data_dir).split(os.sep))
-     
-    model_cases = sorted(model_cases)
-    case_summary = {}
-    for mcase in model_cases:
-        bench_path = (os.path.join(bench_dir, os.sep.join(mcase)) 
-                        if mcase in bench_cases else None)
-        model_path = os.path.join(model_dir, os.sep.join(mcase))
-        case_result = analyze_case(model_path, bench_path, config, case)
-        result.nested_assign(mcase, case_result)
-        if mcase[0] not in case_summary: 
-            case_summary[mcase[0]] = {}
-        case_summary[mcase[0]] = summarize_result(case_result, 
-                case_summary[mcase[0]])
+    section_list = []
+    result = LIVVDict()
+    case_summary = LIVVDict()
+    model_cases = functions.collect_cases(model_dir)
+    bench_cases = functions.collect_cases(bench_dir)
+    
+    for subcase in sorted(model_cases.keys()):
+        bench_subcases = bench_cases[subcase] if subcase in bench_cases else None
+        result[subcase] = []
+        for mcase in model_cases[subcase]:
+            bpath = (os.path.join(bench_dir, subcase, mcase.replace("-",os.sep)) 
+                    if mcase in bench_subcases else None)
+            mpath = os.path.join(model_dir, subcase, mcase.replace("-",os.sep))
+            case_result = analyze_case(mpath, bpath, config, case)
+            result[subcase].append(element.section(mcase, case_result))
+            case_summary[subcase] = summarize_result(case_result, 
+                    case_summary[subcase])
+            
     summary[case] = case_summary
     print_summary(case, summary[case])
     functions.create_page_from_template("verification.html", 
@@ -83,9 +84,7 @@ def run_suite(case, config, summary):
 def analyze_case(model_dir, bench_dir, config, case, plot=True):
     """ Runs all of the verification checks on a particular case """
     bundle = variables.verification_model_module
-    result = LIVVDict()
     element = ElementHelper()
-    element_list = []
     model_configs = set([os.path.basename(f) for f in 
                       glob.glob(os.path.join(model_dir, "*" + config["config_ext"]))])
     model_logs    = set([os.path.basename(f) for f in 
@@ -125,8 +124,7 @@ def analyze_case(model_dir, bench_dir, config, case, plot=True):
             element.table("Output Log", log_headers, log_data),
             element.diff("Configuration Comparison", config_data)
         ]
-    result["Elements"] = element_list
-    return result
+    return element_list
 
 
 def bit_for_bit(model_path, bench_path, config, plot=True):
@@ -271,7 +269,7 @@ def summarize_result(result, summary):
 
     # Get the number of bit for bit failures
     total_count = failure_count = 0
-    for elem in result["Elements"]:
+    for elem in result:
         if elem["Title"] == "Bit for Bit":
            elem_data = elem["Data"]
            break
@@ -287,7 +285,7 @@ def summarize_result(result, summary):
 
     # Get the number of config matches
     total_count = success_count = 0
-    for elem in result["Elements"]:
+    for elem in result:
         if elem["Title"] == "Configuration Comparison":
             elem_data = elem["Data"]
             break
@@ -304,7 +302,7 @@ def summarize_result(result, summary):
     summary["Configurations"] = summary_data
 
     # Get the number of files parsed
-    for elem in result["Elements"]:
+    for elem in result:
         if elem["Title"] == "Output Log":
             elem_data = elem["Data"]
             break
@@ -313,7 +311,7 @@ def summarize_result(result, summary):
 
 
 def populate_metadata():
-    """ Provide some top level information """
+    """ Provide some top level information for the summary """
     metadata = {}
     metadata["Type"] = "Summary"
     metadata["Title"] = "Verification"
