@@ -75,7 +75,6 @@ def main():
         ]
     functions.write_json({"Elements":l}, variables.output_dir, "index.json")
     scheduler.cleanup()
-    
     print("-------------------------------------------------------------------")
     print(" Done!  Results can be seen in a web browser at:")
     print("        " +  variables.output_dir )

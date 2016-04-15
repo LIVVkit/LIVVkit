@@ -91,6 +91,15 @@ class ElementHelper:
         tb["Data"] = data_node
         return tb
 
+    def bit_for_bit(self, title, headers, data_node):
+        """ Returns a dictionary representing a new bit for bit table element """
+        b4b = {}
+        b4b["Type"] = "Bit for Bit"
+        b4b["Title"] = title
+        b4b["Headers"] = headers
+        b4b["Data"] = data_node
+        return b4b
+
     def gallery(self, title, image_elem_list):
         """ Builds an image gallery out of a list of image elements """
         gal = {}

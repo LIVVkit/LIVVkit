@@ -34,6 +34,7 @@ import os
 import json
 import errno
 import shutil
+import fnmatch
 from datetime import datetime 
 
 from util import variables
@@ -49,6 +50,15 @@ def mkdir_p(path):
         if exc.errno == errno.EEXIST and os.path.isdir(path):
             pass
         else: raise
+
+
+def find_file(search_dir, file_pattern):
+    """ Search for a file in a directory, and return the first match """
+    for root, dirnames, fnames in os.walk(search_dir):
+            for fname in fnames:
+                if fnmatch.fnmatch(fname, file_pattern):
+                    return os.path.join(root, fname)
+    return "" 
 
 
 def create_page_from_template(template_file, output_path):

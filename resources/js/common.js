@@ -6,6 +6,7 @@ $(document).ready(function() {
     elementMap = {
         "Summary" : drawSummary,
         "Table" : drawTable,
+        "Bit for Bit" : drawBitForBit,
         "Diff" : drawDiff,
         "Gallery" : drawGallery
     };
@@ -31,7 +32,6 @@ $(document).ready(function() {
  */
 function drawNav() {
     html = "";
-    console.log(indexPath);
     var data = loadJSON(indexPath + '/index.json');
     for (var cat in data["Elements"]) {
         if (data["Elements"][cat] != null && Object.keys(data["Elements"][cat]["Data"]).length > 0) {
@@ -84,7 +84,6 @@ function drawVerification() {
     var section;
     for (var idx in testCases) {
         html += "<div id=\"" + testCases[idx] + "\">\n";
-        console.log(testCases[idx]);
         for (var subcase in data[testCases[idx]]) {
             var section = data[testCases[idx]][subcase];
             html += "<h1>" + section["Title"] + "</h1>\n";
@@ -185,10 +184,45 @@ function drawDiff(data) {
 
 
 /**
+ * Build a bit for bit table
+ */
+function drawBitForBit(data) {
+    html = "<h3>" + data["Title"] + "</h3>\n";
+    html += "<table>\n";
+    html += "<th>Variable</th>\n";
+    for (var idx in data["Headers"]) {
+        html += "<th>" + data["Headers"][idx] + "</th>\n";
+    }
+    // TODO: Make plot an image if the string is N/A
+    for (var varName in data["Data"]) {
+        html += "<tr>\n";
+        html += "<td>" + varName + "</td>\n";
+        for (var j in data["Headers"]) {
+            html += "<td>" + data["Data"][varName][data["Headers"][j]] + "</td>\n";
+        }
+        html += "</tr>\n";
+    }
+
+    html += "</table>\n";
+    return html;
+}
+
+/**
  * Build a table
  */
 function drawTable(data) {
     tableHTML = "<h3>" + data["Title"] + "</h3>\n";
+    tableHTML += "<table>\n";
+    for (var idx in data["Headers"]) {
+        tableHTML += "<th>" + data["Headers"][idx] + "</th>\n";
+    }
+
+    tableHTML += "<tr>\n";
+    for (var idx in data["Headers"]) {
+        tableHTML += "<td>" + data["Data"][data["Headers"][idx]] + "</td>\n";
+    }
+    tableHTML += "</tr>\n";
+    tableHTML += "</table>\n";
     return tableHTML;
 }
 

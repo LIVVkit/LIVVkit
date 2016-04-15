@@ -31,13 +31,7 @@ Verification Test Base Module
 @author: arbennett
 """
 import os
-import re
-import copy
-import glob
-import json
-import pprint
 import numpy as np
-import multiprocessing
 from netCDF4 import Dataset
 from matplotlib import pyplot
 
@@ -51,12 +45,10 @@ def run_suite(case, config, summary):
     """ Run the full suite of verification tests """
     config["name"] = case
     element = ElementHelper()
-    summary[case] = variables.manager.dict()
     model_dir = os.path.join(variables.model_dir, config['data_dir'], case)
     bench_dir = os.path.join(variables.bench_dir, config['data_dir'], case)
     model_cases = []
     bench_cases = []
-    section_list = []
     result = LIVVDict()
     case_summary = LIVVDict()
     model_cases = functions.collect_cases(model_dir)
@@ -66,9 +58,9 @@ def run_suite(case, config, summary):
         bench_subcases = bench_cases[subcase] if subcase in bench_cases else None
         result[subcase] = []
         for mcase in model_cases[subcase]:
-            bpath = (os.path.join(bench_dir, subcase, mcase.replace("-",os.sep)) 
+            bpath = (os.path.join(bench_dir, subcase, mcase.replace("-", os.sep)) 
                     if mcase in bench_subcases else None)
-            mpath = os.path.join(model_dir, subcase, mcase.replace("-",os.sep))
+            mpath = os.path.join(model_dir, subcase, mcase.replace("-", os.sep))
             case_result = analyze_case(mpath, bpath, config, case)
             result[subcase].append(element.section(mcase, case_result))
             case_summary[subcase] = summarize_result(case_result, 
@@ -78,49 +70,31 @@ def run_suite(case, config, summary):
     print_summary(case, summary[case])
     functions.create_page_from_template("verification.html", 
             os.path.join(variables.index_dir, "verification", case + ".html"))
-    functions.write_json(result, os.path.join(variables.output_dir,"verification"), case+".json")
+    functions.write_json(result, os.path.join(variables.output_dir, "verification"), case+".json")
 
 
 def analyze_case(model_dir, bench_dir, config, case, plot=True):
     """ Runs all of the verification checks on a particular case """
     bundle = variables.verification_model_module
     element = ElementHelper()
-    model_configs = set([os.path.basename(f) for f in 
-                      glob.glob(os.path.join(model_dir, "*" + config["config_ext"]))])
-    model_logs    = set([os.path.basename(f) for f in 
-                      glob.glob(os.path.join(model_dir, "*" + config["logfile_ext"]))])
-    model_output  = set([os.path.basename(f) for f in 
-                      glob.glob(os.path.join(model_dir, "*" + config["output_ext"]))])
+    out_data = config_data = log_data = {}
     
-    if bench_dir is not None:
-        bench_configs = set([os.path.basename(f) for f in
-                          glob.glob(os.path.join(bench_dir,"*"+config["config_ext"]))])
-        bench_logs = set([os.path.basename(f) for f in
-                       glob.glob(os.path.join(bench_dir,"*"+config["logfile_ext"]))])
-        bench_output = set([os.path.basename(f) for f in 
-                         glob.glob(os.path.join(bench_dir,"*"+config["output_ext"]))])
-    else:
-        bench_configs = bench_logs = bench_output = set()
-
-    outfiles = model_output.intersection(bench_output)
-    configs = model_configs.intersection(bench_configs)
-
-    out_data = {}
     out_headers = ["RMS Error", "Max Error", "Plot"]
-    for of in outfiles:
-        out_data[of] = bit_for_bit(os.path.join(model_dir, of), 
-                         os.path.join(bench_dir, of), config, plot)
-    config_data = {}
-    for cf in configs:
-        config_data[cf] = diff_configurations(os.path.join(model_dir,cf),
-                            os.path.join(bench_dir,cf), bundle, bundle)
-    log_data = {}
+    model_out = functions.find_file(model_dir, "*"+config["output_ext"])
+    bench_out = functions.find_file(bench_dir, "*"+config["output_ext"])
+    out_data = bit_for_bit(model_out, bench_out, config, plot) 
+   
+    model_config = functions.find_file(model_dir, "*"+config["config_ext"])
+    bench_config = functions.find_file(bench_dir, "*"+config["config_ext"])
+    config_data = diff_configurations(model_config, bench_config, bundle, bundle)
+   
     log_headers = ["Converged Iterations", "Avg. Iterations to Converge", "Processor Count", "Dycore Type"]
-    for lf in model_logs:
-        log_data[lf] = bundle.parse_log(os.path.join(model_dir,lf))
-    
+    model_log = functions.find_file(model_dir, "*"+config["logfile_ext"])
+    bench_log = functions.find_file(bench_dir, "*"+config["logfile_ext"])
+    log_data = bundle.parse_log(model_log)
+
     element_list = [
-            element.table("Bit for Bit", out_headers, out_data),
+            element.bit_for_bit("Bit for Bit", out_headers, out_data),
             element.table("Output Log", log_headers, log_data),
             element.diff("Configuration Comparison", config_data)
         ]
@@ -166,7 +140,8 @@ def bit_for_bit(model_path, bench_path, config, plot=True):
                 stats[var]["Max Error"] = stats[var]["RMS Error"] = 0
             if plot and stats[var]["Max Error"] > 0:
                 pf = plot_bit_for_bit(config["name"], var, m_vardata, b_vardata,  diff_data)
-            else: pf = "N/A"
+            else: 
+                pf = "N/A"
             stats[var]["Plot"] = pf
     
     model_data.close()
@@ -207,7 +182,7 @@ def diff_configurations(model_config, bench_config, model_bundle, bench_bundle):
 def plot_bit_for_bit(case, var_name, model_data, bench_data, diff_data):
     """ Create a bit for bit plot """
     plot_path = os.sep.join([variables.output_dir, "Verification", case])
-    util.functions.mkdir_p(plot_path)
+    functions.mkdir_p(plot_path)
     pyplot.figure(figsize=(12,3), dpi=80)
     pyplot.clf()
     # Calculate min and max to scale the colorbars
@@ -271,15 +246,13 @@ def summarize_result(result, summary):
     total_count = failure_count = 0
     for elem in result:
         if elem["Title"] == "Bit for Bit":
-           elem_data = elem["Data"]
-           break
-    summary_data = summary["Bit for Bit"]
-    for file in elem_data:
-        total_count += 1
-        for var in elem_data[file]:
-            if elem_data[file][var]["Max Error"] != 0:
-                failure_count += 1
-                break
+            elem_data = elem["Data"]
+            summary_data = summary["Bit for Bit"]
+            total_count += 1
+            for var in elem_data.keys():
+                if elem_data[var]["Max Error"] != 0:
+                    failure_count += 1
+                    break
     summary_data = np.add(summary_data, [total_count-failure_count, total_count]).tolist() 
     summary["Bit for Bit"] = summary_data
 
@@ -288,15 +261,13 @@ def summarize_result(result, summary):
     for elem in result:
         if elem["Title"] == "Configuration Comparison":
             elem_data = elem["Data"]
-            break
-    summary_data = summary["Configurations"]
-    for file, section in elem_data.items():
-        total_count += 1
-        for section_name, varlist in section.items():
-            for var, val in varlist.items():
-                if not val[0]:
-                    success_count += 1
-                    break
+            summary_data = summary["Configurations"]
+            total_count += 1
+            for section_name, varlist in elem_data.items():
+                for var, val in varlist.items():
+                    if not val[0]:
+                        success_count += 1
+                        break
     success_count = total_count - success_count
     summary_data = np.add(summary_data, [success_count, total_count]).tolist()
     summary["Configurations"] = summary_data
@@ -304,9 +275,8 @@ def summarize_result(result, summary):
     # Get the number of files parsed
     for elem in result:
         if elem["Title"] == "Output Log":
-            elem_data = elem["Data"]
+            summary["Std. Out Files"] += 1
             break
-    summary["Std. Out Files"] += len(elem_data.keys())
     return summary
 
 

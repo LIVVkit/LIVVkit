@@ -97,7 +97,7 @@ def parse_config(file_path):
         A dictionary representation of the given file
     """
     if not os.path.isfile(file_path):
-        return None
+        return {}
     parser = ConfigParser()
     parser.read(file_path)
     # Strip out inline comments
