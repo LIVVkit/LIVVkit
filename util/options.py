@@ -55,15 +55,14 @@ def parse(args):
             help="Run unit tests.")
 
     parser.add_argument('--verification',
-            nargs='*',
-            action='store',
-            default=[],
+            nargs=2,
+            default=None,
             help='Specify the locations of the test bundle to verify.')
 
     parser.add_argument('--validation',
             action='store', 
-            nargs='*',            
-            default=[],
+            nargs='+',            
+            default=None,
             help='Specify the location of the configuration files for validation tests.')
    
     return parser.parse_args()
@@ -83,7 +82,8 @@ def init(options):
     variables.website_dir    = os.path.join(variables.cwd, "resources")
     variables.template_dir   = os.path.join(variables.website_dir, "templates")
     variables.index_dir      = variables.output_dir
-
+    variables.verify = True if options.verification is not None else False
+    variables.validate = True if options.validation is not None else False
     # TODO: This is a workaround to handle the case when no --verification or 
     #       --validation options are given.  Need to also fix the way that 
     #       the validation/performance handling is done in the if 
@@ -93,6 +93,8 @@ def init(options):
     variables.model_config = ""
     variables.bench_dir = ""
     variables.bench_config = ""
+    variables.numerics_model_config = ""
+    variables.verification_model_config = ""
     variables.performance_model_config = ""
     variables.performance_model_module = ""
     variables.validation_model_config = ""
@@ -100,23 +102,24 @@ def init(options):
 
     available_bundles = os.listdir(os.path.join(variables.cwd, "bundles"))
     # rstrip accounts for trailing path separators
-    variables.model_dir = options.verification[0].rstrip(os.sep)
-    variables.bench_dir = options.verification[1].rstrip(os.sep)
-    variables.model_bundle = variables.model_dir.split(os.sep)[-1]
-    variables.bench_bundle = variables.bench_dir.split(os.sep)[-1]
+    if options.verification is not None:
+        variables.model_dir = options.verification[0].rstrip(os.sep)
+        variables.bench_dir = options.verification[1].rstrip(os.sep)
+        variables.model_bundle = variables.model_dir.split(os.sep)[-1]
+        variables.bench_bundle = variables.bench_dir.split(os.sep)[-1]
 
-    if variables.model_bundle in available_bundles:
-        variables.numerics_model_config = os.sep.join(
-             [variables.cwd, "bundles", variables.model_bundle, "numerics.json"])
-        variables.numerics_model_module = importlib.import_module(
-             ".".join(["bundles", variables.model_bundle, "numerics"]))
+        if variables.model_bundle in available_bundles:
+            variables.numerics_model_config = os.sep.join(
+                [variables.cwd, "bundles", variables.model_bundle, "numerics.json"])
+            variables.numerics_model_module = importlib.import_module(
+                ".".join(["bundles", variables.model_bundle, "numerics"]))
         
-        variables.verification_model_config = os.sep.join(
-             [variables.cwd, "bundles", variables.model_bundle, "verification.json"])
-        variables.verification_model_module = importlib.import_module(
-             ".".join(["bundles", variables.model_bundle, "verification"]))
+            variables.verification_model_config = os.sep.join(
+                 [variables.cwd, "bundles", variables.model_bundle, "verification.json"])
+            variables.verification_model_module = importlib.import_module(
+                 ".".join(["bundles", variables.model_bundle, "verification"]))
     
-    if options.validation != []:
+    if options.validation is not None:
         variables.performance_model_config = os.sep.join(
              [variables.cwd, "bundles", variables.model_bundle, "performance.json"])
         variables.performance_model_module = importlib.import_module(
@@ -126,4 +129,18 @@ def init(options):
              [variables.cwd, "bundles", variables.model_bundle, "validation.json"])
         variables.validation_model_module = importlib.import_module(
              ".".join(["bundles", variables.model_bundle, "validation"]))
+
+    if not (variables.verify or variables.validate):
+        print("----------------------------------------------------------")
+        print("                       UH OH!")
+        print("----------------------------------------------------------")
+        print("    No verification or validation tests submitted!")
+        print("")
+        print("    Use either one or both of the --verification and")
+        print("    --validation options to run tests.  For more ")
+        print("    information use the --help option, view the README")
+        print("    or check https://github.com/LIVVkit/LIVVkit/wiki")
+        print("----------------------------------------------------------")
+        print("")
+        exit()
 

@@ -67,12 +67,13 @@ def main():
     from util import scheduler, functions
     from util.datastructures import LIVVDict
     functions.setup_output()
-    l = [
-         scheduler.run("numerics", components.numerics, variables.numerics_model_config),
-         scheduler.run("verification", components.verification, variables.verification_model_config),
-         scheduler.run("performance", components.performance, variables.performance_model_config),
-         scheduler.run("validation", components.validation, variables.validation_model_config)
-        ]
+    l = []
+    if variables.verify:
+        l.append(scheduler.run("numerics", components.numerics, variables.numerics_model_config))
+        l.append(scheduler.run("verification", components.verification, variables.verification_model_config))
+    if variables.validate:
+        l.append(scheduler.run("performance", components.performance, variables.performance_model_config))
+        l.append(scheduler.run("validation", components.validation, variables.validation_model_config))
     functions.write_json({"Elements":l}, variables.output_dir, "index.json")
     scheduler.cleanup()
     print("-------------------------------------------------------------------")
