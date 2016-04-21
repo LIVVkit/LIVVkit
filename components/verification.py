@@ -44,25 +44,22 @@ from util.datastructures import ElementHelper
 def run_suite(case, config, summary):
     """ Run the full suite of verification tests """
     config["name"] = case
-    element = ElementHelper()
     model_dir = os.path.join(variables.model_dir, config['data_dir'], case)
     bench_dir = os.path.join(variables.bench_dir, config['data_dir'], case)
-    model_cases = []
-    bench_cases = []
     result = LIVVDict()
     case_summary = LIVVDict()
     model_cases = functions.collect_cases(model_dir)
     bench_cases = functions.collect_cases(bench_dir)
-    
+   
     for subcase in sorted(model_cases.keys()):
-        bench_subcases = bench_cases[subcase] if subcase in bench_cases else None
+        bench_subcases = bench_cases[subcase] if subcase in bench_cases else [] 
         result[subcase] = []
         for mcase in model_cases[subcase]:
             bpath = (os.path.join(bench_dir, subcase, mcase.replace("-", os.sep)) 
-                    if mcase in bench_subcases else None)
+                      if mcase in bench_subcases else "")
             mpath = os.path.join(model_dir, subcase, mcase.replace("-", os.sep))
             case_result = analyze_case(mpath, bpath, config, case)
-            result[subcase].append(element.section(mcase, case_result))
+            result[subcase].append(ElementHelper.section(mcase, case_result))
             case_summary[subcase] = summarize_result(case_result, 
                     case_summary[subcase])
             
@@ -76,29 +73,18 @@ def run_suite(case, config, summary):
 def analyze_case(model_dir, bench_dir, config, case, plot=True):
     """ Runs all of the verification checks on a particular case """
     bundle = variables.verification_model_module
-    element = ElementHelper()
-    out_data = config_data = log_data = {}
-    
-    out_headers = ["RMS Error", "Max Error", "Plot"]
     model_out = functions.find_file(model_dir, "*"+config["output_ext"])
     bench_out = functions.find_file(bench_dir, "*"+config["output_ext"])
-    out_data = bit_for_bit(model_out, bench_out, config, plot) 
-   
     model_config = functions.find_file(model_dir, "*"+config["config_ext"])
     bench_config = functions.find_file(bench_dir, "*"+config["config_ext"])
-    config_data = diff_configurations(model_config, bench_config, bundle, bundle)
-   
-    log_headers = ["Converged Iterations", "Avg. Iterations to Converge", "Processor Count", "Dycore Type"]
     model_log = functions.find_file(model_dir, "*"+config["logfile_ext"])
     bench_log = functions.find_file(bench_dir, "*"+config["logfile_ext"])
-    log_data = bundle.parse_log(model_log)
-
-    element_list = [
-            element.bit_for_bit("Bit for Bit", out_headers, out_data),
-            element.table("Output Log", log_headers, log_data),
-            element.diff("Configuration Comparison", config_data)
-        ]
-    return element_list
+    el = [
+            bit_for_bit(model_out, bench_out, config, plot),
+            diff_configurations(model_config, bench_config, bundle, bundle),
+            bundle.parse_log(model_log)
+         ]
+    return el
 
 
 def bit_for_bit(model_path, bench_path, config, plot=True):
@@ -113,20 +99,26 @@ def bit_for_bit(model_path, bench_path, config, plot=True):
         plot: a boolean of whether or not to generate plots
     
     Returns:
-        A LIVVDict formatted as {var : { err_type : amount }} 
+        A dictionary created by the ElementHelper object corresponding to
+        the results of the bit for bit testing
     """
-    stats = LIVVDict()
+    # Error handling
     if not (os.path.isfile(bench_path) and os.path.isfile(model_path)):
-        return stats
+        return ElementHelper.error("Bit for Bit", 
+                "File named " + model_path.split(os.sep)[-1] + " has no suitable match!")
     try:
         model_data = Dataset(model_path, 'r')
         bench_data = Dataset(bench_path, 'r')
     except:
-        print("Error opening datasets!")
-        return stats
+        return ElementHelper.error("Bit for Bit", 
+                "File named " + model_path.split(os.sep)[-1] + " could not be read!")
     if not (netcdf.has_time(model_data) and netcdf.has_time(bench_data)):
-        return stats
-    
+        return ElementHelper.error("Bit for Bit", 
+                "File named " + model_path.split(os.sep)[-1] + " could not be read!")
+
+    # Begin bit for bit analysis
+    headers = ["Max Error", "RMS Error", "Plot"]
+    stats = LIVVDict()
     for i, var in enumerate(config["bit_for_bit_vars"]):
         if (var in model_data.variables and var in bench_data.variables):
             m_vardata = model_data.variables[var][:]
@@ -143,10 +135,11 @@ def bit_for_bit(model_path, bench_path, config, plot=True):
             else: 
                 pf = "N/A"
             stats[var]["Plot"] = pf
-    
+        else:
+            stats[var] = {"Max Error": "No Match", "RMS Error": "N/A", "Plot": "N/A"}
     model_data.close()
     bench_data.close()
-    return stats 
+    return ElementHelper.bit_for_bit("Bit for Bit", headers, stats) 
 
 
 def diff_configurations(model_config, bench_config, model_bundle, bench_bundle):
@@ -158,12 +151,15 @@ def diff_configurations(model_config, bench_config, model_bundle, bench_bundle):
         bench_config: a dictionary with the benchmark configuration data
 
     Returns:
-        a nested dictionary with the format 
-            {section : {variable : (equal, model value, benchmark value) } }
+        A dictionary created by the ElementHelper object corresponding to
+        the results of the bit for bit testing
     """
     diff_dict = LIVVDict()
     model_data = model_bundle.parse_config(model_config)
     bench_data = bench_bundle.parse_config(bench_config)
+    if model_data == {} and bench_data == {}:
+        return ElementHelper.error("Configuration Comparison", 
+                "Could not open file: " + model_config.split(os.sep)[-1])
     model_sections= set(model_data.keys())
     bench_sections = set(bench_data.keys())
     all_sections = set(model_sections.union(bench_sections))
@@ -176,7 +172,7 @@ def diff_configurations(model_config, bench_config, model_bundle, bench_bundle):
             bench_val = bench_data[s][v] if s in bench_sections and v in bench_vars else 'NA'
             same = True if model_val == bench_val and model_val != 'NA' else False
             diff_dict[s][v] = (same, model_val, bench_val)
-    return diff_dict
+    return ElementHelper.diff("Configuration Comparison", diff_dict)
 
 
 def plot_bit_for_bit(case, var_name, model_data, bench_data, diff_data):
@@ -196,7 +192,7 @@ def plot_bit_for_bit(case, var_name, model_data, bench_data, diff_data):
     pyplot.imshow(model_data, vmin=min, vmax=max, interpolation='nearest')
     pyplot.colorbar()
     pyplot.tight_layout()
-
+  
     # Plot the benchmark data
     pyplot.subplot(3,1,2)
     pyplot.xlabel("Benchmark Data")
@@ -244,8 +240,9 @@ def summarize_result(result, summary):
 
     # Get the number of bit for bit failures
     total_count = failure_count = 0
+    summary_data = None
     for elem in result:
-        if elem["Title"] == "Bit for Bit":
+        if elem["Type"] == "Bit for Bit" and "Data" in elem:
             elem_data = elem["Data"]
             summary_data = summary["Bit for Bit"]
             total_count += 1
@@ -253,13 +250,15 @@ def summarize_result(result, summary):
                 if elem_data[var]["Max Error"] != 0:
                     failure_count += 1
                     break
-    summary_data = np.add(summary_data, [total_count-failure_count, total_count]).tolist() 
-    summary["Bit for Bit"] = summary_data
+    if summary_data is not None:
+        summary_data = np.add(summary_data, [total_count-failure_count, total_count]).tolist() 
+        summary["Bit for Bit"] = summary_data
 
     # Get the number of config matches
+    summary_data = None
     total_count = success_count = 0
     for elem in result:
-        if elem["Title"] == "Configuration Comparison":
+        if elem["Title"] == "Configuration Comparison" and elem["Type"] == "Diff":
             elem_data = elem["Data"]
             summary_data = summary["Configurations"]
             total_count += 1
@@ -268,13 +267,14 @@ def summarize_result(result, summary):
                     if not val[0]:
                         success_count += 1
                         break
-    success_count = total_count - success_count
-    summary_data = np.add(summary_data, [success_count, total_count]).tolist()
-    summary["Configurations"] = summary_data
+    if summary_data is not None:
+        success_count = total_count - success_count
+        summary_data = np.add(summary_data, [success_count, total_count]).tolist()
+        summary["Configurations"] = summary_data
 
     # Get the number of files parsed
     for elem in result:
-        if elem["Title"] == "Output Log":
+        if elem["Title"] == "Output Log" and elem["Type"] == "Table":
             summary["Std. Out Files"] += 1
             break
     return summary

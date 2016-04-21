@@ -34,6 +34,8 @@ import os
 import numpy as np
 from configparser import ConfigParser
 
+from util.datastructures import ElementHelper
+
 def parse_log(file_path):
     """
     Parse a CISM output log and extract some information.
@@ -42,10 +44,12 @@ def parse_log(file_path):
         file_path: absolute path to the log file
 
     Return:
-        A dictionary with key quantities from the file
+        A dictionary created by the ElementHelper object corresponding to
+        the results of the bit for bit testing
     """
     if not os.path.isfile(file_path):
-        return {}
+        return ElementHelper.error("Output Log", "Could not open file: " + file_path.split(os.sep)[-1])
+    headers = ["Converged Iterations", "Avg. Iterations to Converge", "Processor Count", "Dycore Type"]
     with open(file_path, 'r') as f:
         dycore_types = {"0":"Glide", "1":"Glam", "2":"Glissade", "3":"Albany_felix", "4":"BISICLES"}
         curr_step = 0
@@ -77,13 +81,13 @@ def parse_log(file_path):
                 iter_number = split[0]
         if iters_to_converge == []: 
             iters_to_converge.append(int(iter_number))
-    log_data = { 
+    data = { 
         "Dycore Type" : dycore_type,
         "Processor Count" : proc_count,
         "Converged Iterations" : len(converged_iters),
         "Avg. Iterations to Converge": np.mean(iters_to_converge)
     }
-    return log_data
+    return ElementHelper.table("Output Log", headers, data)
 
 
 def parse_config(file_path):

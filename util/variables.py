@@ -27,31 +27,10 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 """
-Storage for global variables.  These are set upon startup in the main 
-livv.py module
+Storage for global variables.  These are set upon startup in the options module
 
 @authors: arbennett, jhkennedy
 """
-cwd                = "" 
-config_dir         = "" 
-input_dir          = "" 
-benchmark_dir      = "" 
-output_dir         = "" 
-img_dir            = "" 
-comment            = "" 
-run_tests          = ""
-timestamp          = "" 
-user               = "" 
-machine            = "" 
-os_type            = "" 
-website_dir        = "" 
-template_dir       = "" 
-index_dir          = "" 
-numerics           = "" 
-verification       = "" 
-performance        = "" 
-validation         = "" 
-
 def print_vars():
     """ Print out the variables that are contained in this module """
     for k,v in globals().items():

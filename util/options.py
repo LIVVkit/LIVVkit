@@ -35,6 +35,7 @@ import argparse
 import importlib
 
 from util import variables
+from util import datastructures
 
 def parse(args):
     """
@@ -70,6 +71,7 @@ def parse(args):
 
 def init(options):
     """ Initialize some defaults """
+    variables.comment        = ""
     variables.cwd            = os.getcwd()
     variables.config_dir     = os.path.join(variables.cwd, "configurations")
     variables.output_dir     = os.path.abspath(options.out_dir)
@@ -113,12 +115,13 @@ def init(options):
                 [variables.cwd, "bundles", variables.model_bundle, "numerics.json"])
             variables.numerics_model_module = importlib.import_module(
                 ".".join(["bundles", variables.model_bundle, "numerics"]))
-        
             variables.verification_model_config = os.sep.join(
                  [variables.cwd, "bundles", variables.model_bundle, "verification.json"])
             variables.verification_model_module = importlib.import_module(
                  ".".join(["bundles", variables.model_bundle, "verification"]))
-    
+        else:
+            variables.verify = False
+
     if options.validation is not None:
         variables.performance_model_config = os.sep.join(
              [variables.cwd, "bundles", variables.model_bundle, "performance.json"])
@@ -131,10 +134,11 @@ def init(options):
              ".".join(["bundles", variables.model_bundle, "validation"]))
 
     if not (variables.verify or variables.validate):
+        print("")
         print("----------------------------------------------------------")
         print("                       UH OH!")
         print("----------------------------------------------------------")
-        print("    No verification or validation tests submitted!")
+        print("    No verification or validation tests found/submitted!")
         print("")
         print("    Use either one or both of the --verification and")
         print("    --validation options to run tests.  For more ")

@@ -4,6 +4,7 @@
 $(document).ready(function() {
     // Used to draw the correct element type
     elementMap = {
+        "Error" : drawError,
         "Summary" : drawSummary,
         "Table" : drawTable,
         "Bit for Bit" : drawBitForBit,
@@ -171,6 +172,16 @@ function drawSummary(data) {
     
     tableHTML += "</table>\n";
     return tableHTML;
+}
+
+
+/**
+ * Build an error message
+ */
+function drawError(data) {
+    html = "<h3>" + data["Title"] + "</h3>\n";
+    html += "<p>ERROR: " + data["Message"] + "</p>\n";
+    return html;
 }
 
 

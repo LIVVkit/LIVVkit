@@ -72,9 +72,16 @@ class LIVVDict(dict):
 class ElementHelper:
     """
     Helper class to make building new display elements in the output
-    files easier and less error prone
+    files easier and less error prone.  This is more useful as a 
+    conceptual grouping of functions rather than a full fledged object.
+
+    Implementing new elements is possible simply by adding new functions
+    to this class.  They will be written out to the JSON files as sub-objects, 
+    which must be interpreted by the Javascript which is found in the resources
+    directory.
     """
-    def section(self, title, elementList):
+    @staticmethod
+    def section(title, elementList):
         """ Returns a dictionary representing a new section to display elements"""
         sect = {}
         sect["Type"] = "Section"
@@ -82,7 +89,8 @@ class ElementHelper:
         sect["Elements"] = elementList
         return sect
 
-    def table(self, title, headers, data_node):
+    @staticmethod
+    def table(title, headers, data_node):
         """ Returns a dictionary representing a new table element """
         tb = {}
         tb["Type"] = "Table"
@@ -91,7 +99,8 @@ class ElementHelper:
         tb["Data"] = data_node
         return tb
 
-    def bit_for_bit(self, title, headers, data_node):
+    @staticmethod
+    def bit_for_bit(title, headers, data_node):
         """ Returns a dictionary representing a new bit for bit table element """
         b4b = {}
         b4b["Type"] = "Bit for Bit"
@@ -100,7 +109,8 @@ class ElementHelper:
         b4b["Data"] = data_node
         return b4b
 
-    def gallery(self, title, image_elem_list):
+    @staticmethod
+    def gallery(title, image_elem_list):
         """ Builds an image gallery out of a list of image elements """
         gal = {}
         gal["Type"] = "Gallery"
@@ -108,7 +118,8 @@ class ElementHelper:
         gal["Data"] = image_elem_list
         return gal
 
-    def image_element(self, title, desc, image_path):
+    @staticmethod
+    def image_element(title, desc, image_path):
         """ Builds an image element """
         ie = {}
         ie["Type"] = "Image"
@@ -117,11 +128,21 @@ class ElementHelper:
         ie["Data"] = image_path
         return ie
 
-    def diff(self, title, diff_data):
+    @staticmethod
+    def diff(title, diff_data):
         """ Builds a file diff element """
         fd = {}
         fd["Type"] = "Diff"
         fd["Title"] = title
         fd["Data"] = diff_data
         return fd
+
+    @staticmethod
+    def error(title, error_msg):
+        """ Builds an error element """
+        err = {}
+        err["Type"] = "Error"
+        err["Title"] = title
+        err["Message"] = error_msg
+        return err
 
