@@ -131,7 +131,7 @@ def bit_for_bit(model_path, bench_path, config, plot=True):
             else:
                 stats[var]["Max Error"] = stats[var]["RMS Error"] = 0
             if plot and stats[var]["Max Error"] > 0:
-                pf = plot_bit_for_bit(config["name"], var, m_vardata, b_vardata,  diff_data)
+                pf = "Failed" #plot_bit_for_bit(config["name"], var, m_vardata, b_vardata,  diff_data)
             else: 
                 pf = "N/A"
             stats[var]["Plot"] = pf
@@ -186,6 +186,8 @@ def plot_bit_for_bit(case, var_name, model_data, bench_data, diff_data):
     min = np.amin([np.amin(model_data), np.amin(bench_data)])
     
     # Plot the model output
+    print(np.ndim(model_data))
+    print(np.shape(model_data))
     pyplot.subplot(3,1,1)
     pyplot.xlabel("Model Data")
     pyplot.ylabel(var_name)
@@ -256,19 +258,20 @@ def summarize_result(result, summary):
 
     # Get the number of config matches
     summary_data = None
-    total_count = success_count = 0
+    total_count = failure_count = 0
     for elem in result:
         if elem["Title"] == "Configuration Comparison" and elem["Type"] == "Diff":
             elem_data = elem["Data"]
             summary_data = summary["Configurations"]
             total_count += 1
+            failed = False
             for section_name, varlist in elem_data.items():
                 for var, val in varlist.items():
                     if not val[0]:
-                        success_count += 1
-                        break
+                        failed = True
+            if failed: failure_count += 1
     if summary_data is not None:
-        success_count = total_count - success_count
+        success_count = total_count - failure_count
         summary_data = np.add(summary_data, [success_count, total_count]).tolist()
         summary["Configurations"] = summary_data
 
