@@ -88,7 +88,7 @@ def collect_cases(data_dir):
     cases = LIVVDict()
     for root, dirs, files in os.walk(data_dir):
         if not dirs:
-            split_case = root.replace(data_dir,"").strip(os.sep).split(os.sep)
+            split_case = os.path.relpath(root,data_dir).split(os.sep)
             if split_case[0] not in cases: cases[split_case[0]] = []
             cases[split_case[0]].append("-".join(split_case[1:]))
     return cases
