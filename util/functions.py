@@ -91,7 +91,6 @@ def collect_cases(data_dir):
             split_case = root.replace(data_dir,"").strip(os.sep).split(os.sep)
             if split_case[0] not in cases: cases[split_case[0]] = []
             cases[split_case[0]].append("-".join(split_case[1:]))
-    print(cases)
     return cases
 
 
