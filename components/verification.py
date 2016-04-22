@@ -131,7 +131,7 @@ def bit_for_bit(model_path, bench_path, config, plot=True):
             else:
                 stats[var]["Max Error"] = stats[var]["RMS Error"] = 0
             if plot and stats[var]["Max Error"] > 0:
-                pf = "Failed" #plot_bit_for_bit(config["name"], var, m_vardata, b_vardata,  diff_data)
+                pf = plot_bit_for_bit(config["name"], var, m_vardata, b_vardata, diff_data)
             else: 
                 pf = "N/A"
             stats[var]["Plot"] = pf
@@ -160,7 +160,7 @@ def diff_configurations(model_config, bench_config, model_bundle, bench_bundle):
     if model_data == {} and bench_data == {}:
         return ElementHelper.error("Configuration Comparison", 
                 "Could not open file: " + model_config.split(os.sep)[-1])
-    model_sections= set(model_data.keys())
+    model_sections = set(model_data.keys())
     bench_sections = set(bench_data.keys())
     all_sections = set(model_sections.union(bench_sections))
     for s in all_sections:
@@ -179,15 +179,25 @@ def plot_bit_for_bit(case, var_name, model_data, bench_data, diff_data):
     """ Create a bit for bit plot """
     plot_path = os.sep.join([variables.output_dir, "Verification", case])
     functions.mkdir_p(plot_path)
-    pyplot.figure(figsize=(12,3), dpi=80)
+    m_ndim = np.ndim(model_data)
+    b_ndim = np.ndim(bench_data)
+    if m_ndim != b_ndim:
+        return "Dataset dimensions didn't match!"
+    if m_ndim == 3:
+        model_data = model_data[-1]
+        bench_data = bench_data[-1]
+        diff_data = diff_data[-1]
+    elif m_ndim == 4:
+        model_data = model_data[-1][0]
+        bench_data = bench_data[-1][0]
+        diff_data = diff_data[-1][0]
+    pyplot.figure(figsize=(8,12), dpi=80)
     pyplot.clf()
     # Calculate min and max to scale the colorbars
     max = np.amax([np.amax(model_data), np.amax(bench_data)])
     min = np.amin([np.amin(model_data), np.amin(bench_data)])
     
     # Plot the model output
-    print(np.ndim(model_data))
-    print(np.shape(model_data))
     pyplot.subplot(3,1,1)
     pyplot.xlabel("Model Data")
     pyplot.ylabel(var_name)
@@ -210,6 +220,7 @@ def plot_bit_for_bit(case, var_name, model_data, bench_data, diff_data):
     pyplot.tight_layout()
     
     pyplot.savefig(os.sep.join([plot_path, case+".png"]))
+    return os.path.join(plot_path, case+".png")
 
 
 def validation_configuration(config):
