@@ -85,4 +85,13 @@ def ismip(model_path, bench_path, config):
                                             vnorm_mean[1:-1,1:-1])
     result["Mean % Difference"] = np.nanmean(mean_diff)
     return result
- 
+
+
+def populate_metadata():
+    """ Provide some top level information for the summary """
+    metadata = {}
+    metadata["Type"] = "Summary"
+    metadata["Title"] = "Numerics"
+    metadata["Headers"] = ["Test1", "Test2"]
+    return metadata
+

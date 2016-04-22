@@ -50,11 +50,12 @@ def run_suite(case, config, summary):
     case_summary = LIVVDict()
     model_cases = functions.collect_cases(model_dir)
     bench_cases = functions.collect_cases(bench_dir)
-   
+
     for subcase in sorted(model_cases.keys()):
         bench_subcases = bench_cases[subcase] if subcase in bench_cases else [] 
         result[subcase] = []
         for mcase in model_cases[subcase]:
+            #print(subcase + " - " + mcase)
             bpath = (os.path.join(bench_dir, subcase, mcase.replace("-", os.sep)) 
                       if mcase in bench_subcases else "")
             mpath = os.path.join(model_dir, subcase, mcase.replace("-", os.sep))

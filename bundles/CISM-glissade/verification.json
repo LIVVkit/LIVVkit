@@ -7,7 +7,7 @@
         "config_ext"  : ".config",
         "bit_for_bit_vars" : ["velnorm", "thk"]
       },
-    "ismip-hom-a" : 
+    "a" : 
       { 
         "data_dir" : "ismip-hom",
         "output_ext": ".out.nc",
@@ -15,7 +15,7 @@
         "config_ext"  : ".config",
         "bit_for_bit_vars" : ["velnorm", "thk"]
       },
-    "ismip-hom-c" : 
+    "c" : 
       { 
         "data_dir" : "ismip-hom",
         "output_ext": ".out.nc",
@@ -23,7 +23,7 @@
         "config_ext"  : ".config",
         "bit_for_bit_vars" : ["velnorm", "thk"]
       },
-    "ismip-hom-f" : 
+    "f" : 
       { 
         "data_dir" : "ismip-hom",
         "output_ext": ".out.nc",
@@ -31,7 +31,7 @@
         "config_ext"  : ".config",
         "bit_for_bit_vars" : ["velnorm", "thk"]
       },
-    "shelf-circular" : 
+    "circular" : 
       { 
         "data_dir" : "shelf",
         "output_ext" : ".out.nc",
@@ -39,7 +39,7 @@
         "config_ext"  : ".config",
         "bit_for_bit_vars" : ["velnorm", "thk"]
       },
-    "shelf-confined" : 
+    "confined" : 
       { 
         "data_dir" : "shelf",
         "output_ext" : ".out.nc",
