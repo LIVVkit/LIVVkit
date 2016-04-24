@@ -86,62 +86,7 @@ def analyze_case(case, model_dir, bench_dir, config):
     return result
 
 
-def ismip(model_path, bench_path, config):
-    """ 
-    Verify ISMIP-HOM model data against ISMIP's datasets 
-    
-    Args:
-        model_path: Absolute path to the model data set
-        bench_path: Absolute path to the benchmark data set
-        config: A dictionary containing configuration options
-
-    Returns:
-        A result of the differences between the model and benchmark
-    """
-    result = LIVVDict()
-    # Python2 equivalent call: np.loadtxt -> np.loadfromtxt
-    x, y, vx_u, vx_std, vx_min, vx_max, vy_u, vy_std, vy_min, vy_max = (
-        np.loadtxt(bench_path, unpack=True, delimiter=',',
-        skiprows=1, usecols=(0,1,2,3,4,5,6,7,8,9)))
-    
-    n_pts = int(np.sqrt(len(x)))
-    vnorm_mean =  np.reshape(np.sqrt(np.add(np.power(vx_u,2), np.power(vy_u,2))),\
-                             (n_pts,n_pts))
-    vnorm_stdev = np.reshape(np.sqrt(np.add(np.power(vx_std,2), np.power(vy_std,2))),\
-                             (n_pts,n_pts))
-    vnorm_plus =  np.reshape(np.add(vnorm_mean, vnorm_stdev), (n_pts,n_pts))
-    vnorm_minus = np.reshape(np.subtract(vnorm_mean, vnorm_stdev), (n_pts,n_pts))
-    vnorm_max = np.reshape(np.sqrt(np.add(np.power(vx_max,2), np.power(vy_max,2))),\
-                           (n_pts,n_pts))
-    vnorm_min = np.reshape(np.sqrt(np.add(np.power(vx_min,2), np.power(vy_min,2))),\
-                           (n_pts,n_pts))
- 
-    # Grab the model data
-    dataset = Dataset(model_path,'r')
-    uvel  = dataset.variables['uvel'][0,0,:,:]
-    vvel  = dataset.variables['vvel'][0,0,:,:]
-    shape = np.shape(uvel)
-    vnorm = np.sqrt(np.add(np.power(uvel,2), np.power(vvel,2)))
-    floor = np.subtract(vnorm_min[1:-1,1:-1],   vnorm)
-    ciel  = np.subtract(vnorm_max[1:-1,1:-1],   vnorm)
-    under = np.subtract(vnorm_minus[1:-1,1:-1], vnorm)
-    over  = np.subtract(vnorm_plus[1:-1,1:-1],  vnorm)
-    bad_data = np.zeros(shape)
-    for i in range(shape[0]):
-        for j in range(shape[0]):
-            if floor[i,j]>0:
-                bad_data[i,j] = -2 # CISM < MIN_ISMIP
-            elif ciel[i,j]<0:
-                bad_data[i,j] = 2  # CISM > MAX_ISMIP
-            elif under[i,j]>0:
-                bad_data[i,j] = -1 # CISM < MU - SIGMA 
-            elif over[i,j]<0:
-                bad_data[i,j] = 1  # CISM > MU + SIGMA
-    mean_diff = 100.0*np.divide(np.subtract(vnorm_mean[1:-1,1:-1], vnorm),\
-                                            vnorm_mean[1:-1,1:-1])
-    result["Mean % Difference"] = np.nanmean(mean_diff)
-    return result
-   
+  
 
 def print_result(case,result):
     pass

@@ -102,19 +102,20 @@ def bit_for_bit(model_path, bench_path, config, plot=True):
         A dictionary created by the ElementHelper object corresponding to
         the results of the bit for bit testing
     """
+    fname = model_path.split(os.sep)[-1]
     # Error handling
     if not (os.path.isfile(bench_path) and os.path.isfile(model_path)):
         return ElementHelper.error("Bit for Bit", 
-                "File named " + model_path.split(os.sep)[-1] + " has no suitable match!")
+                "File named " + fname + " has no suitable match!")
     try:
         model_data = Dataset(model_path, 'r')
         bench_data = Dataset(bench_path, 'r')
     except:
         return ElementHelper.error("Bit for Bit", 
-                "File named " + model_path.split(os.sep)[-1] + " could not be read!")
+                "File named " + fname + " could not be read!")
     if not (netcdf.has_time(model_data) and netcdf.has_time(bench_data)):
         return ElementHelper.error("Bit for Bit", 
-                "File named " + model_path.split(os.sep)[-1] + " could not be read!")
+                "File named " + fname + " could not be read!")
 
     # Begin bit for bit analysis
     headers = ["Max Error", "RMS Error", "Plot"]
@@ -128,11 +129,9 @@ def bit_for_bit(model_path, bench_path, config, plot=True):
                 stats[var]["Max Error"] = np.amax(np.absolute(diff_data))
                 stats[var]["RMS Error"] = np.sqrt(np.sum(np.square(diff_data).flatten())/
                                                   diff_data.size)
+                pf = plot_bit_for_bit(fname, var, m_vardata, b_vardata, diff_data)
             else:
                 stats[var]["Max Error"] = stats[var]["RMS Error"] = 0
-            if plot and stats[var]["Max Error"] > 0:
-                pf = plot_bit_for_bit(config["name"], var, m_vardata, b_vardata, diff_data)
-            else: 
                 pf = "N/A"
             stats[var]["Plot"] = pf
         else:
@@ -177,7 +176,7 @@ def diff_configurations(model_config, bench_config, model_bundle, bench_bundle):
 
 def plot_bit_for_bit(case, var_name, model_data, bench_data, diff_data):
     """ Create a bit for bit plot """
-    plot_path = os.sep.join([variables.output_dir, "Verification", case])
+    plot_path = os.path.join(variables.output_dir, "verification", "imgs")
     functions.mkdir_p(plot_path)
     m_ndim = np.ndim(model_data)
     b_ndim = np.ndim(bench_data)
@@ -191,8 +190,9 @@ def plot_bit_for_bit(case, var_name, model_data, bench_data, diff_data):
         model_data = model_data[-1][0]
         bench_data = bench_data[-1][0]
         diff_data = diff_data[-1][0]
-    pyplot.figure(figsize=(8,12), dpi=80)
+    pyplot.figure(figsize=(12,3), dpi=80)
     pyplot.clf()
+
     # Calculate min and max to scale the colorbars
     max = np.amax([np.amax(model_data), np.amax(bench_data)])
     min = np.amin([np.amin(model_data), np.amin(bench_data)])

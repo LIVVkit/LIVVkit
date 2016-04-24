@@ -180,7 +180,7 @@ function drawSummary(data) {
  */
 function drawError(data) {
     html = "<h3>" + data["Title"] + "</h3>\n";
-    html += "<p>ERROR: " + data["Message"] + "</p>\n";
+    html += "<p style=\"color: red;\">ERROR: " + data["Message"] + "</p>\n";
     return html;
 }
 
@@ -209,7 +209,14 @@ function drawBitForBit(data) {
         html += "<tr>\n";
         html += "<td>" + varName + "</td>\n";
         for (var j in data["Headers"]) {
-            html += "<td>" + data["Data"][varName][data["Headers"][j]] + "</td>\n";
+            var header = data["Headers"][j];
+            var hData = data["Data"][varName][header];
+            if (header == "Plot" && (hData !== "N/A" || hData.indexOf("ERROR:")!==-1)) {
+                // TODO: Fix this to display an image thumbnail! 
+                html += "<td>" + "DOSOMETHING" + "</td>\n";
+            } else {
+                html += "<td>" + hData + "</td>\n";
+            }
         }
         html += "</tr>\n";
     }
