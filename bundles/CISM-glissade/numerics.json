@@ -2,7 +2,7 @@
     "ismip" : 
         {
             "data_dir" : "ismip-hom",
-            "test_cases" : ["a", "c", "f"],
+            "test_cases" : ["ismip-hom-a", "ismip-hom-c", "ismip-hom-f"],
             "output_ext" : ".out.nc",
             "bench_dir" : "data/numerics/ismip-hom",
             "bench_ext" : ".lmla.txt"
