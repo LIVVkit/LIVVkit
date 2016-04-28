@@ -38,6 +38,7 @@ from matplotlib import pyplot
 from util import netcdf
 from util import functions
 from util import variables
+from util import colormaps
 from util.datastructures import LIVVDict
 from util.datastructures import ElementHelper
 
@@ -198,24 +199,24 @@ def plot_bit_for_bit(case, var_name, model_data, bench_data, diff_data):
     min = np.amin([np.amin(model_data), np.amin(bench_data)])
     
     # Plot the model output
-    pyplot.subplot(3,1,1)
+    pyplot.subplot(1,3,1)
     pyplot.xlabel("Model Data")
     pyplot.ylabel(var_name)
-    pyplot.imshow(model_data, vmin=min, vmax=max, interpolation='nearest')
+    pyplot.imshow(model_data, vmin=min, vmax=max, interpolation='nearest', cmap=colormaps.viridis)
     pyplot.colorbar()
     pyplot.tight_layout()
   
     # Plot the benchmark data
-    pyplot.subplot(3,1,2)
+    pyplot.subplot(1,3,2)
     pyplot.xlabel("Benchmark Data")
-    pyplot.imshow(bench_data, vmin=min, vmax=max, interpolation='nearest')
+    pyplot.imshow(bench_data, vmin=min, vmax=max, interpolation='nearest', cmap=colormaps.viridis)
     pyplot.colorbar()
     pyplot.tight_layout()
 
     # Plot the difference
-    pyplot.subplot(3,1,3)
+    pyplot.subplot(1,3,3)
     pyplot.xlabel("Difference")
-    pyplot.imshow(diff_data, interpolation='nearest')
+    pyplot.imshow(diff_data, interpolation='nearest', cmap=colormaps.viridis)
     pyplot.colorbar()
     pyplot.tight_layout()
     

@@ -147,12 +147,12 @@ function drawSummary(data) {
         for (var testCase in data["Data"][testName]) {
             html_tmp1 = "<tr ";
             html_tmp2 = ">\n<td class=\"testCase\">" + testCase + "</td>\n";
+            style = "";  
             for (var headerIdx in data["Headers"]) {
                 header = data["Headers"][headerIdx];
                 html_tmp2 += "<td>"; 
                 value = data["Data"][testName][testCase][header];
                 dtype = typeof value;
-                style = "";  
                 if (dtype == 'number') {
                     html_tmp2 += value;
                 } else if (dtype == 'object') {
@@ -213,8 +213,11 @@ function drawBitForBit(data) {
             var hData = data["Data"][varName][header];
             if (header == "Plot" && (hData !== "N/A" || hData.indexOf("ERROR:")!==-1)) {
                 // TODO: Fix this to display an image thumbnail! 
-                html += "<td>" + "DOSOMETHING" + "</td>\n";
+                html += "<td>" + drawThumbnail(hData) + "</td>\n";
             } else {
+                if (typeof hData == 'number') {
+                    hData = hData.toExponential(5);
+                }
                 html += "<td>" + hData + "</td>\n";
             }
         }
@@ -253,6 +256,13 @@ function drawGallery(meta, data) {
     return galleryHTML;
 }
 
+
+function drawThumbnail(path) {
+    html = "<a target=\"_blank\" href=\"" + path + "\">";
+    html += "<img src=\"" + path + "\" style=\"height: 50px; overflow: hidden; position: relative\">";
+    html += "</a>";
+    return html;
+}
 
 /**
  * Load a json file into a variable
