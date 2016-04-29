@@ -41,6 +41,7 @@ from util import functions
 from util import variables
 from util.datastructures import LIVVDict
 from util.datastructures import ElementHelper
+import components.numerics_tests.ismip as ismip
 
 def run_suite(case, config, summary):
     """ Run the full suite of numerics tests """
@@ -48,16 +49,9 @@ def run_suite(case, config, summary):
     result[case] = LIVVDict()
     model_dir = os.path.join(variables.model_dir, config['data_dir'], case)
     bench_dir = os.path.join(variables.cwd, config['bench_dir'], case)
-    model_cases = []
-    bench_cases = []
-
-    for data_dir, cases in zip([model_dir, bench_dir], [model_cases, bench_cases]):
-        for root, dirs, files in os.walk(data_dir):
-            if not dirs:
-                cases.append(root.strip(data_dir).split(os.sep))
-    
-    model_cases = sorted(model_cases)
-    for mcase in model_cases:
+    model_cases = functions.collect_cases(model_dir) 
+    bench_cases = functions.collect_cases(bench_dir)
+    for mcase in sorted(model_cases):
         # Strip last part since benchmarks don't have processor counts
         bench_path = (os.path.join(bench_dir, os.sep.join(mcase[0:-1]))
                 if mcase[0:-1] in bench_cases else None)
@@ -65,7 +59,7 @@ def run_suite(case, config, summary):
         result[case].nested_assign(mcase, analyze_case(mcase, model_path, bench_path, config))
     print_result(case,result) #TODO
     functions.write_json(result, os.path.join(variables.output_dir,"numerics"), case+".json")
-    summarize_result(case, result, summary)
+    summarize_result(result, summary)
 
 
 def analyze_case(case, model_dir, bench_dir, config):
@@ -86,13 +80,11 @@ def analyze_case(case, model_dir, bench_dir, config):
     return result
 
 
-  
-
 def print_result(case,result):
     pass
 
 
-def summarize_result(case, result, summary):
+def summarize_result(result, summary):
     """ Trim out some data to return for the index page """
     # Get the number of bit for bit failures
     # Get the number of config matches
@@ -101,9 +93,7 @@ def summarize_result(case, result, summary):
 
 def populate_metadata():
     """ Provide some top level information """
-    metadata = {}
-    metadata["Type"] = "Summary"
-    metadata["Title"] = "Numerics"
-    metadata["Headers"] = ["Max Error", "RMSE"]
-    return metadata
+    return {"Type" : "Summary",
+            "Title" : "Numerics",
+            "Headers" : ["Max Error", "RMSE"]}
 

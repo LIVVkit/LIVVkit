@@ -71,8 +71,8 @@ def main():
     if variables.verify:
         l.append(scheduler.run("numerics", components.numerics, variables.numerics_model_config))
         l.append(scheduler.run("verification", components.verification, variables.verification_model_config))
-    if variables.validate:
         l.append(scheduler.run("performance", components.performance, variables.performance_model_config))
+    if variables.validate:
         l.append(scheduler.run("validation", components.validation, variables.validation_model_config))
     functions.write_json({"Elements":l}, variables.output_dir, "index.json")
     scheduler.cleanup()

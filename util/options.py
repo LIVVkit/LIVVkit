@@ -119,15 +119,14 @@ def init(options):
                  [variables.cwd, "bundles", variables.model_bundle, "verification.json"])
             variables.verification_model_module = importlib.import_module(
                  ".".join(["bundles", variables.model_bundle, "verification"]))
+            variables.performance_model_config = os.sep.join(
+                 [variables.cwd, "bundles", variables.model_bundle, "performance.json"])
+            variables.performance_model_module = importlib.import_module(
+                 ".".join(["bundles", variables.model_bundle, "performance"]))
         else:
             variables.verify = False
 
     if options.validation is not None:
-        variables.performance_model_config = os.sep.join(
-             [variables.cwd, "bundles", variables.model_bundle, "performance.json"])
-        variables.performance_model_module = importlib.import_module(
-             ".".join(["bundles", variables.model_bundle, "performance"]))
-        
         variables.validation_model_config = os.sep.join(
              [variables.cwd, "bundles", variables.model_bundle, "validation.json"])
         variables.validation_model_module = importlib.import_module(

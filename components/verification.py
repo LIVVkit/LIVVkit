@@ -202,6 +202,8 @@ def plot_bit_for_bit(case, var_name, model_data, bench_data, diff_data):
     pyplot.subplot(1,3,1)
     pyplot.xlabel("Model Data")
     pyplot.ylabel(var_name)
+    pyplot.xticks([])
+    pyplot.yticks([])
     pyplot.imshow(model_data, vmin=min, vmax=max, interpolation='nearest', cmap=colormaps.viridis)
     pyplot.colorbar()
     pyplot.tight_layout()
@@ -209,6 +211,8 @@ def plot_bit_for_bit(case, var_name, model_data, bench_data, diff_data):
     # Plot the benchmark data
     pyplot.subplot(1,3,2)
     pyplot.xlabel("Benchmark Data")
+    pyplot.xticks([])
+    pyplot.yticks([])
     pyplot.imshow(bench_data, vmin=min, vmax=max, interpolation='nearest', cmap=colormaps.viridis)
     pyplot.colorbar()
     pyplot.tight_layout()
@@ -216,6 +220,8 @@ def plot_bit_for_bit(case, var_name, model_data, bench_data, diff_data):
     # Plot the difference
     pyplot.subplot(1,3,3)
     pyplot.xlabel("Difference")
+    pyplot.xticks([])
+    pyplot.yticks([])
     pyplot.imshow(diff_data, interpolation='nearest', cmap=colormaps.viridis)
     pyplot.colorbar()
     pyplot.tight_layout()
@@ -297,9 +303,7 @@ def summarize_result(result, summary):
 
 def populate_metadata():
     """ Provide some top level information for the summary """
-    metadata = {}
-    metadata["Type"] = "Summary"
-    metadata["Title"] = "Verification"
-    metadata["Headers"] = ["Bit for Bit", "Configurations", "Std. Out Files"]
-    return metadata
+    return {"Type" : "Summary",
+            "Title" : "Verification",
+            "Headers" : ["Bit for Bit", "Configurations", "Std. Out Files"]}
 

@@ -30,39 +30,38 @@ Performance Test Base Module.
 
 @author: arbennett
 """
-
 import os
 import glob
 import json
-import util.variables
-import util.datastructures
 
+from util import functions
+from util import variables
+from util import colormaps
 from util.datastructures import LIVVDict
+from util.datastructures import ElementHelper
 
 def run_suite(case, config, summary):
     """ Run the full suite of performance tests """
+    config["name"] = case
     result = LIVVDict()
-    result[case] = LIVVDict()
-    model_dir = os.path.join(util.variables.model_dir, config['data_dir'], case)
-    bench_dir = os.path.join(util.variables.bench_dir, config['data_dir'], case)
-    model_cases = []
-    bench_cases = []
-
-    for data_dir, cases in zip([model_dir, bench_dir], [model_cases, bench_cases]):
-        for root, dirs, files in os.walk(data_dir):
-            if not dirs:
-                cases.append(root.strip(data_dir).split(os.sep))
-   
-    model_cases = sorted(model_cases)
-    for mcase in model_cases:
+    case_summary = LIVVDict()
+    model_dir = os.path.join(variables.model_dir, config['data_dir'], case)
+    bench_dir = os.path.join(variables.bench_dir, config['data_dir'], case)
+    model_cases = functions.collect_cases(model_dir)
+    bench_cases = functions.collect_cases(bench_dir)
+    for mcase in sorted(model_cases):
         bench_path = (os.path.join(bench_dir, os.sep.join(mcase))
                         if mcase in bench_cases else None)
         model_path = os.path.join(model_dir, os.sep.join(mcase))
         result[case].nested_assign(mcase, analyze_case(model_path, bench_path, config))
-    
+        case_summary = summarize_result(result[case], case_summary)
+
+    summary[case] = case_summary
     print_result(case,result) #TODO
-    write_result(case,result) 
-    summarize_result(case, result, summary) #TODO
+    functions.create_page_from_template("performance.html",
+            os.path.join(variables.index_dir, "performance", case+".html"))
+    functions.write_json(result, os.path.join(variables.output_dir, "performance"), case+".json") 
+
 
 def analyze_case(model_dir, bench_dir, config):
     """ Run all of the performance checks on a particular case """
@@ -83,6 +82,7 @@ def analyze_case(model_dir, bench_dir, config):
             result["bench"][mtf] = parse_gptl(os.path.join(bench_dir,mtf),
                                                config["timing_vars"])
     return result
+
 
 def weak_scaling():
     """ Generate weak scaling stats """
@@ -130,7 +130,7 @@ def weak_scaling():
     #ax.plot(resolutions, times, 'bo-', label='Model')
     #ax.plot(resolutions, mins, 'b--')
     #ax.plot(resolutions, maxs, 'b--')
-    #pyplot.savefig(util.variables.index_dir + os.sep + "performance" + 
+    #pyplot.savefig(variables.index_dir + os.sep + "performance" + 
     #               os.sep + self.name + os.sep + "imgs" + os.sep + 
     #               test_type.strip() +  "_scaling_weak.png")
     #self.images_generated.append( [test_type.strip() + "_scaling_weak.png", 
@@ -178,7 +178,7 @@ def strong_scaling():
     #            ax.plot(x,maxs, 'r--')
     #            pyplot.legend()
 
-    #        pyplot.savefig(util.variables.index_dir + os.sep + "performance" + 
+    #        pyplot.savefig(variables.index_dir + os.sep + "performance" + 
     #                       os.sep + self.name + os.sep + "imgs" + os.sep + 
     #                       test_type.strip() + "_" + res +  "_scaling" + ".png")
     #        self.images_generated.append( [test_type.strip() + "_" + res + "_scaling" + 
@@ -234,14 +234,19 @@ def print_result(case,result):
 
 def write_result(case,result):
     """ Take the result and write out a JSON file """
-    outpath = os.path.join(util.variables.output_dir, "Performance", case)
-    util.datastructures.mkdir_p(outpath)
+    outpath = os.path.join(variables.output_dir, "Performance", case)
+    util.functions.mkdir_p(outpath)
     with open(os.path.join(outpath, case+".json"), 'w') as f:
         json.dump(result, f, indent=4)
 
-def summarize_result(case, result, summary):
+def summarize_result(result, summary):
     """ Trim out some data to return for the index page """
     # Get the number of bit for bit failures
     # Get the number of config matches
     # Get the number of files parsed
 
+def populate_metadata():
+    """ Provide some top level information for the summary """
+    return {"Type"    : "Summary",
+            "Title"   : "Performance",
+            "Headers" : []}
