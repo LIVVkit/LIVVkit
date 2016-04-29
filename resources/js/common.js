@@ -22,9 +22,8 @@ $(document).ready(function() {
     };
 
     // Append the generated content
-    $('#nav').append(drawNav());
-    $('#content').append(contentMap[vvType]());
-    $("#tabs").tabs();
+    drawNav();
+    contentMap[vvType]();
 });
 
 
@@ -43,7 +42,7 @@ function drawNav() {
             }
         }
     }
-    return html;
+    $("#nav").append(html);
 }
 
 
@@ -51,16 +50,14 @@ function drawNav() {
  * Generatees the summary content page
  */
 function drawIndex() {
-    html = "";
     var data = loadJSON(indexPath + '/index.json');
     for (var cat in data["Elements"]) {
         if (data["Elements"][cat] != null && Object.keys(data["Elements"][cat]["Data"]).length > 0) {
-            html += "<h1>" + data["Elements"][cat]["Title"] + "</h1>\n";
+            $("#content").append("<h1>" + data["Elements"][cat]["Title"] + "</h1>");
             elemType = data["Elements"][cat]["Type"];
-            html += elementMap[elemType](data["Elements"][cat]);
+            elementMap[elemType](data["Elements"][cat], "#content");
         }
     }
-    return html;
 }
 
 
@@ -80,24 +77,27 @@ function drawVerification() {
         html += "<li><a href=\"#" + testCases[idx] + "\">" + testCases[idx] + "</a></li>\n";
     }
     html += "</ul>\n";
-    
-    // Add the content
-    var section;
     for (var idx in testCases) {
-        html += "<div id=\"" + testCases[idx] + "\">\n";
+        html += "<div id=\"" + testCases[idx] + "\"></div>";
+    }
+    html += "</div>";
+    $("#content").append(html);
+
+    // Add the content
+    for (var idx in testCases) {
+        testName = testCases[idx];
         for (var subcase in data[testCases[idx]]) {
-            var section = data[testCases[idx]][subcase];
-            html += "<h1>" + section["Title"] + "</h1>\n";
+            section = data[testName][subcase];
+            sectionName = testName + "_" + subcase;
+            $("#"+testName).append("<div id=\"" + sectionName + "\"></div>");
+            $("#"+sectionName).append("<h1>" + section["Title"] + "</h1>");
             for (var idx2 in data[testCases[idx]][subcase]["Elements"]) {
-                html += elementMap[section["Elements"][idx2]["Type"]](section["Elements"][idx2]);
+                elem = section["Elements"][idx2];
+                elementMap[elem["Type"]](elem, "#"+sectionName);
             }
         }
-        html += "</div>\n";
     }
-    
-    // End #tabs div
-    html += "</div>\n";
-    return html;
+    $("#tabs").tabs();
 }
 
 
@@ -131,19 +131,18 @@ function drawNumerics() {
 /**
  * Build a table
  */
-function drawSummary(data) {
-    var tableHTML = "<table>\n";
+function drawSummary(data, div) {
+    var html = "<table>\n";
     // Add the headers
-    tableHTML += "<th></th>\n";
+    html += "<th></th>\n";
     for (var header in data["Headers"]) {
-        tableHTML += "<th>" + data["Headers"][header] + "</th>\n";
+        html += "<th>" + data["Headers"][header] + "</th>\n";
     }
-
     // Add the data
     var testNames = Object.keys(data["Data"]).sort();
     for (var idx in testNames) {
         testName = testNames[idx];
-        tableHTML += "<tr class=\"testName\"><td>" + testName + "</td></tr>\n";
+        html += "<tr class=\"testName\"><td>" + testName + "</td></tr>\n";
         for (var testCase in data["Data"][testName]) {
             html_tmp1 = "<tr ";
             html_tmp2 = ">\n<td class=\"testCase\">" + testCase + "</td>\n";
@@ -166,45 +165,67 @@ function drawSummary(data) {
                 }
                 html_tmp2 += "</td>\n";
             }
-            tableHTML += html_tmp1 + style + html_tmp2 + "</tr>\n";
+            html += html_tmp1 + style + html_tmp2 + "</tr>\n";
         }
     }
-    
-    tableHTML += "</table>\n";
-    return tableHTML;
+    html += "</table>\n";
+    $(div).append(html);
 }
 
 
 /**
  * Build an error message
  */
-function drawError(data) {
+function drawError(data, div) {
     html = "<h3>" + data["Title"] + "</h3>\n";
-    html += "<p style=\"color: red;\">ERROR: " + data["Message"] + "</p>\n";
-    return html;
+    html += "<div class=\"error\">";
+    html += "<p>ERROR: " + data["Message"] + "</p>\n";
+    html += "</div>";
+    $(div).append(html);
 }
 
 
 /**
  * Build a diff
  */
-function drawDiff(data) {
-    diffHTML = "<h3>" + data["Title"] + "</h3>\n";
-    return diffHTML;
+function drawDiff(data, div) {
+    controller = "sheeeit";//div.replace("#","") + "_controller";
+    // TODO: What's up with this button!?
+    html = "<h3>" + data["Title"] +"</h3>";//+"  <button id=\"" + controller + "\">Hide/Show</button></h3>";
+    html += "<div class=\"diff\" id=\""+div+"\">";
+    for (var section in data["Data"]) {
+        html += "<b>[" + section + "]</b>";
+        for (var varName in data["Data"][section]) {
+            arr = data["Data"][section][varName];
+            if (arr[0]) {
+                html += "<p>   " + varName + " = " + arr[1] + "</p>";
+            } else {
+                html += "<p class=\"new\"> + " + varName + " = " + arr[1] + "</p>";
+                html += "<p class=\"old\"> - " + varName + " = " + arr[2] + "</p>";
+            }
+        }
+    }
+    html += "</div>";
+    $(div).append(html);
+    $("."+controller).click(function() {
+        $(div).toggle();
+        console.log(div);
+        console.log(controller);
+    });
 }
 
 
 /**
  * Build a bit for bit table
  */
-function drawBitForBit(data) {
+function drawBitForBit(data, div) {
     html = "<h3>" + data["Title"] + "</h3>\n";
+    html += "<div class=\"bitForBit\">";
     html += "<table>\n";
     html += "<th>Variable</th>\n";
     for (var idx in data["Headers"]) {
         html += "<th>" + data["Headers"][idx] + "</th>\n";
     }
-    // TODO: Make plot an image if the string is N/A
     for (var varName in data["Data"]) {
         html += "<tr>\n";
         html += "<td>" + varName + "</td>\n";
@@ -212,7 +233,6 @@ function drawBitForBit(data) {
             var header = data["Headers"][j];
             var hData = data["Data"][varName][header];
             if (header == "Plot" && (hData !== "N/A" || hData.indexOf("ERROR:")!==-1)) {
-                // TODO: Fix this to display an image thumbnail! 
                 html += "<td>" + drawThumbnail(hData) + "</td>\n";
             } else {
                 if (typeof hData == 'number') {
@@ -223,37 +243,39 @@ function drawBitForBit(data) {
         }
         html += "</tr>\n";
     }
-
     html += "</table>\n";
-    return html;
+    html += "</div>";
+    $(div).append(html);
 }
 
 /**
  * Build a table
  */
-function drawTable(data) {
-    tableHTML = "<h3>" + data["Title"] + "</h3>\n";
-    tableHTML += "<table>\n";
+function drawTable(data, div) {
+    html = "<h3>" + data["Title"] + "</h3>\n";
+    html += "<div class=\"table\">";
+    html += "<table>\n";
     for (var idx in data["Headers"]) {
-        tableHTML += "<th>" + data["Headers"][idx] + "</th>\n";
+        html += "<th>" + data["Headers"][idx] + "</th>\n";
     }
 
-    tableHTML += "<tr>\n";
+    html += "<tr>\n";
     for (var idx in data["Headers"]) {
-        tableHTML += "<td>" + data["Data"][data["Headers"][idx]] + "</td>\n";
+        html += "<td>" + data["Data"][data["Headers"][idx]] + "</td>\n";
     }
-    tableHTML += "</tr>\n";
-    tableHTML += "</table>\n";
-    return tableHTML;
+    html += "</tr>\n";
+    html += "</table>\n";
+    html += "</div>";
+    $(div).append(html);
 }
 
 
 /**
  * Build a gallery
  */
-function drawGallery(meta, data) {
-    var galleryHTML = "";
-    return galleryHTML;
+function drawGallery(data, div) {
+    var html = "";
+    $(div).append(html);
 }
 
 

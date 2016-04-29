@@ -119,8 +119,8 @@ a {
   TableStyling
 ******************************************************************************/
 table {
+    width: 100%;
     border: 2px solid #66c2ff;
-    width: 90%;
     border-spacing: 0;
 }
 
@@ -143,3 +143,39 @@ td {
 .testCase {
     text-align: right;
 }
+
+/******************************************************************************
+  Element Styling 
+******************************************************************************/
+.error {}
+
+.error p {
+    color: red;
+}
+
+.diff {
+    border: 2px solid #66c2ff;
+    padding: 4px;
+}
+
+.diff p {
+    line-height: 1.05em;
+    margin: 0px;
+    padding-left:10%;
+    font-family: monospace;
+}
+
+.diff p.old {
+    background-color: #ffcccc;
+}
+
+.diff p.new {
+    background-color: #ccffcc;
+}
+
+.bitForBit {}
+
+.table {}
+
+.gallery {}
+
