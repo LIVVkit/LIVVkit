@@ -177,7 +177,7 @@ def diff_configurations(model_config, bench_config, model_bundle, bench_bundle):
 
 def plot_bit_for_bit(case, var_name, model_data, bench_data, diff_data):
     """ Create a bit for bit plot """
-    plot_path = os.path.join(variables.output_dir, "verification", "imgs")
+    plot_path = os.path.join(os.path.join(variables.output_dir, "verification", "imgs"))
     functions.mkdir_p(plot_path)
     m_ndim = np.ndim(model_data)
     b_ndim = np.ndim(bench_data)
@@ -221,7 +221,7 @@ def plot_bit_for_bit(case, var_name, model_data, bench_data, diff_data):
     pyplot.tight_layout()
     
     pyplot.savefig(os.sep.join([plot_path, case+".png"]))
-    return os.path.join(plot_path, case+".png")
+    return os.path.join(os.path.relpath(plot_path, os.path.join(variables.output_dir, "verification")), case+".png")
 
 
 def validation_configuration(config):

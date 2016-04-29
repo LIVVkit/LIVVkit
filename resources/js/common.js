@@ -189,7 +189,7 @@ function drawError(data, div) {
  * Build a diff
  */
 function drawDiff(data, div) {
-    controller = "sheeeit";//div.replace("#","") + "_controller";
+    controller = div.replace("#","") + "_controller";
     // TODO: What's up with this button!?
     html = "<h3>" + data["Title"] +"</h3>";//+"  <button id=\"" + controller + "\">Hide/Show</button></h3>";
     html += "<div class=\"diff\" id=\""+div+"\">";
