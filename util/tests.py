@@ -34,7 +34,7 @@ Test management module for LIVV
 
 import os
 import sys
-import urllib
+import urllib.request
 import fnmatch
 import subprocess
 
@@ -63,8 +63,10 @@ def check_dependencies():
             print("  !------------------------------------------------------")
             print("  ! ERROR: Could not install the setuptools module!")
             print("  !        Try installing it yourself, and rerunning LIVVkit:")
+            print("  !           cd deps/")
             print("  !           " + ez_command)
-            print("  !           python livv.py...")
+            print("  !           cd ..")
+            print("  !           python3 livv.py...")
             print("  !------------------------------------------------------")
             exit(1)
 
@@ -140,7 +142,7 @@ def install_setup_tools():
     file_name = "ez_setup.py"
     urllib.request.urlretrieve(url, file_path + os.sep + file_name)
     print("Setting up ez_setup module...")
-    ez_command = "python " + file_name + " --user 2> ez.err > ez.out"
+    ez_command = "python3 " + file_name + " --user 2> ez.err > ez.out"
     ez_commands = ["cd "+file_path, ez_command, 'exit 0']
     subprocess.check_call(str.join(" ; ",ez_commands), executable='/bin/bash', shell=True)
     # ez_setup instals into $HOME/.local/lib/python2.7/site-packages/ ...
