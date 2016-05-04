@@ -49,18 +49,22 @@ def run_suite(case, config, summary):
     bench_dir = os.path.join(variables.bench_dir, config['data_dir'], case)
     model_cases = functions.collect_cases(model_dir)
     bench_cases = functions.collect_cases(bench_dir)
-    for mcase in sorted(model_cases):
-        bench_path = (os.path.join(bench_dir, os.sep.join(mcase))
-                        if mcase in bench_cases else None)
-        model_path = os.path.join(model_dir, os.sep.join(mcase))
-        result[case].nested_assign(mcase, analyze_case(model_path, bench_path, config))
-        case_summary = summarize_result(result[case], case_summary)
+    
+    for subcase in sorted(model_cases):
+        bench_subcases = bench_cases[subcase] if subcase in bench_cases else []
+        result[subcase] = []
+        for mcase in model_cases[subcase]:
+            bpath = (os.path.join(bench_dir, subcase, mcase.replace("-", os.sep))
+                            if subcase in bench_subcases else None)
+            mpath = os.path.join(model_dir, subcase, mcase.replace("-", os.sep))
+            case_result = analyze_case(mpath, bpath, config)
+            case_summary[subcase] = summarize_result(case_result, case_summary[subcase])
 
     summary[case] = case_summary
     print_result(case,result) #TODO
     functions.create_page_from_template("performance.html",
             os.path.join(variables.index_dir, "performance", case+".html"))
-    functions.write_json(result, os.path.join(variables.output_dir, "performance"), case+".json") 
+    functions.write_json(result, os.path.join(variables.output_dir, "performance"), case+".json")
 
 
 def analyze_case(model_dir, bench_dir, config):
@@ -68,7 +72,6 @@ def analyze_case(model_dir, bench_dir, config):
     result = LIVVDict()
     model_timings = set([os.path.basename(f) for f in 
                         glob.glob(os.path.join(model_dir, "*" + config["timing_ext"]))])
-
     if bench_dir is not None:
         bench_timings = set([os.path.basename(f) for f in 
                           glob.glob(os.path.join(model_dir, "*" + config["timing_ext"]))])
@@ -123,7 +126,7 @@ def weak_scaling():
     ## Plot it and then save the file + record it so we can link to it
     #fig, ax = pyplot.subplots(1)
     #pyplot.title("Weak scaling for " + test_type)
-    #pyplot.xlabel("Problem size")
+    #pyplot.xlabel("Problem size)")
     #pyplot.ylabel("Time (s)")
     #pyplot.xticks()
     #pyplot.yticks()

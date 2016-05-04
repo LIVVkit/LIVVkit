@@ -45,12 +45,14 @@ import components.numerics_tests.ismip as ismip
 
 def run_suite(case, config, summary):
     """ Run the full suite of numerics tests """
+    config["name"] = case
     result = LIVVDict()
     result[case] = LIVVDict()
     model_dir = os.path.join(variables.model_dir, config['data_dir'], case)
     bench_dir = os.path.join(variables.cwd, config['bench_dir'], case)
     model_cases = functions.collect_cases(model_dir) 
     bench_cases = functions.collect_cases(bench_dir)
+    
     for mcase in sorted(model_cases):
         # Strip last part since benchmarks don't have processor counts
         bench_path = (os.path.join(bench_dir, os.sep.join(mcase[0:-1]))
@@ -58,6 +60,8 @@ def run_suite(case, config, summary):
         model_path = os.path.join(model_dir, os.sep.join(mcase))
         result[case].nested_assign(mcase, analyze_case(mcase, model_path, bench_path, config))
     print_result(case,result) #TODO
+    functions.create_page_from_template("numerics.html",
+            os.path.join(variables.index_dir, "numerics", case+".html"))
     functions.write_json(result, os.path.join(variables.output_dir,"numerics"), case+".json")
     summarize_result(result, summary)
 

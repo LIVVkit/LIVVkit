@@ -38,7 +38,7 @@ function drawNav() {
             html += "<h3>" + data["Elements"][cat]["Title"] + "</h3>\n";
             testList = Object.keys(data["Elements"][cat]["Data"]).sort();
             for (idx in testList) {
-                html += "<a href=" + indexPath + "/" + data["Elements"][cat]["Title"].toLowerCase() + "/" + testList[idx] + ".html>" + testList[idx] + "</a>\n";
+                html += "<a href=" + indexPath + "/" + data["Elements"][cat]["Title"].toLowerCase() + "/" + testList[idx] + ".html>" + testList[idx] + "</a></br>";
             }
         }
     }

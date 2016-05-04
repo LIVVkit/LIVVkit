@@ -59,7 +59,7 @@ def run_suite(case, config, summary):
             bpath = (os.path.join(bench_dir, subcase, mcase.replace("-", os.sep)) 
                       if mcase in bench_subcases else "")
             mpath = os.path.join(model_dir, subcase, mcase.replace("-", os.sep))
-            case_result = analyze_case(mpath, bpath, config, case)
+            case_result = analyze_case(mpath, bpath, config)
             result[subcase].append(ElementHelper.section(mcase, case_result))
             case_summary[subcase] = summarize_result(case_result, 
                     case_summary[subcase])
@@ -71,7 +71,7 @@ def run_suite(case, config, summary):
     functions.write_json(result, os.path.join(variables.output_dir, "verification"), case+".json")
 
 
-def analyze_case(model_dir, bench_dir, config, case, plot=True):
+def analyze_case(model_dir, bench_dir, config, plot=True):
     """ Runs all of the verification checks on a particular case """
     bundle = variables.verification_model_module
     model_out = functions.find_file(model_dir, "*"+config["output_ext"])

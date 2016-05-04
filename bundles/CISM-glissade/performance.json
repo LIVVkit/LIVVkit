@@ -2,7 +2,6 @@
     "dome" :
         {
             "data_dir" : "dome",
-            "test_cases" : ["dome"],
             "timing_ext" : ".cism_timing_stats",
             "timing_vars" : ["cism", "initial_diag_var_solve", "glissade_assemble_stiffness_mat"]
         }
