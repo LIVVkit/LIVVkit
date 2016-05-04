@@ -31,6 +31,22 @@ Storage for global variables.  These are set upon startup in the options module
 
 @authors: arbennett, jhkennedy
 """
+import os
+import time
+import getpass
+import platform
+import socket
+
+comment        = ""
+cwd            = os.getcwd()
+config_dir     = os.path.join(cwd, "configurations")
+timestamp      = time.strftime("%m-%d-%Y %H:%M:%S")
+user           = getpass.getuser()
+machine        = socket.gethostname()
+os_type        = platform.system() + " " + platform.release()
+website_dir    = os.path.join(cwd, "resources")
+template_dir   = os.path.join(website_dir, "templates")
+
 def print_vars():
     """ Print out the variables that are contained in this module """
     for k,v in globals().items():

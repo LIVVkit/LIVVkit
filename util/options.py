@@ -71,18 +71,8 @@ def parse(args):
 
 def init(options):
     """ Initialize some defaults """
-    variables.comment        = ""
-    variables.cwd            = os.getcwd()
-    variables.config_dir     = os.path.join(variables.cwd, "configurations")
     variables.output_dir     = os.path.abspath(options.out_dir)
     variables.img_dir        = variables.output_dir + "/imgs"
-    variables.run_tests      = options.run_tests
-    variables.timestamp      = time.strftime("%m-%d-%Y %H:%M:%S")
-    variables.user           = getpass.getuser()
-    variables.machine        = socket.gethostname()
-    variables.os_type        = platform.system() + " " + platform.release()
-    variables.website_dir    = os.path.join(variables.cwd, "resources")
-    variables.template_dir   = os.path.join(variables.website_dir, "templates")
     variables.index_dir      = variables.output_dir
     variables.verify = True if options.verification is not None else False
     variables.validate = True if options.validation is not None else False

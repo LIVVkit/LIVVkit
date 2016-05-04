@@ -41,7 +41,6 @@ def main():
     """ Direct execution. """
     from util import options, tests
     import importlib
-    options.init(options.parse(sys.argv[1:]))
 
     print("-------------------------------------------------------------------")
     print("                      __   _____   ___   ____    _ __     ") 
@@ -61,7 +60,7 @@ def main():
     print("  "              + variables.comment)
     
     tests.check_dependencies()
-    if variables.run_tests: tests.run_tests()
+    options.init(options.parse(sys.argv[1:]))
 
     import components
     from util import scheduler, functions
