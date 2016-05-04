@@ -40,7 +40,6 @@ variables.base_path = os.path.dirname(os.path.abspath(__file__))
 def main():
     """ Direct execution. """
     from util import options, tests
-    import components
     import importlib
     options.init(options.parse(sys.argv[1:]))
 
@@ -64,6 +63,7 @@ def main():
     tests.check_dependencies()
     if variables.run_tests: tests.run_tests()
 
+    import components
     from util import scheduler, functions
     from util.datastructures import LIVVDict
     functions.setup_output()
