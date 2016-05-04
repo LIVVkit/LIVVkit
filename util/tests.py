@@ -138,7 +138,7 @@ def install_setup_tools():
     url = "https://bootstrap.pypa.io/ez_setup.py"
     file_path = cwd + os.sep + "deps"
     file_name = "ez_setup.py"
-    urllib.urlretrieve(url, file_path + os.sep + file_name)
+    urllib.request.urlretrieve(url, file_path + os.sep + file_name)
     print("Setting up ez_setup module...")
     ez_command = "python " + file_name + " --user 2> ez.err > ez.out"
     ez_commands = ["cd "+file_path, ez_command, 'exit 0']
