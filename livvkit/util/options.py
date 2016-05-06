@@ -30,12 +30,15 @@ import os
 import time
 import socket
 import getpass
+import pkgutil
 import platform
 import argparse
 import importlib
 
-from util import variables
-from util import datastructures
+from livvkit.util import variables
+from livvkit.util import datastructures
+from livvkit import bundles
+from livvkit import resources
 
 def parse(args):
     """
@@ -49,7 +52,7 @@ def parse(args):
         fromfile_prefix_chars='@')
 
     parser.add_argument('-o', '--out-dir', 
-            default="vv_" + time.strftime("%m-%d-%Y"),
+            default=os.path.join(os.getcwd(), "vv_" + time.strftime("%m-%d-%Y")),
             help='Location to output the LIVV webpages.')
     
     parser.add_argument('--run-tests', action='store_true', 
@@ -71,6 +74,7 @@ def parse(args):
 
 def init(options):
     """ Initialize some defaults """
+    variables.resource_dir   = os.sep.join(resources.__path__) 
     variables.output_dir     = os.path.abspath(options.out_dir)
     variables.img_dir        = variables.output_dir + "/imgs"
     variables.index_dir      = variables.output_dir
@@ -92,7 +96,7 @@ def init(options):
     variables.validation_model_config = ""
     variables.validation_model_module = ""
 
-    available_bundles = os.listdir(os.path.join(variables.cwd, "bundles"))
+    available_bundles = [mod for imp, mod, ispkg in pkgutil.iter_modules(bundles.__path__)]
     # rstrip accounts for trailing path separators
     if options.verification is not None:
         variables.model_dir = options.verification[0].rstrip(os.sep)
@@ -102,17 +106,17 @@ def init(options):
 
         if variables.model_bundle in available_bundles:
             variables.numerics_model_config = os.sep.join(
-                [variables.cwd, "bundles", variables.model_bundle, "numerics.json"])
+                bundles.__path__ + [variables.model_bundle, "numerics.json"])
             variables.numerics_model_module = importlib.import_module(
-                ".".join(["bundles", variables.model_bundle, "numerics"]))
+                ".".join(["livvkit.bundles", variables.model_bundle, "numerics"]))
             variables.verification_model_config = os.sep.join(
-                 [variables.cwd, "bundles", variables.model_bundle, "verification.json"])
+                 bundles.__path__ + [variables.model_bundle, "verification.json"])
             variables.verification_model_module = importlib.import_module(
-                 ".".join(["bundles", variables.model_bundle, "verification"]))
+                 ".".join(["livvkit.bundles", variables.model_bundle, "verification"]))
             variables.performance_model_config = os.sep.join(
-                 [variables.cwd, "bundles", variables.model_bundle, "performance.json"])
+                 bundles.__path__ + [variables.model_bundle, "performance.json"])
             variables.performance_model_module = importlib.import_module(
-                 ".".join(["bundles", variables.model_bundle, "performance"]))
+                 ".".join(["livvkit.bundles", variables.model_bundle, "performance"]))
         else:
             variables.verify = False
 

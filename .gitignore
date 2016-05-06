@@ -3,6 +3,7 @@ reg_bench
 reg_test
 www/
 www_*/
+vv_*/
 deps/
 
 ####=== NCL ===####

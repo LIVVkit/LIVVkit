@@ -37,8 +37,8 @@ import shutil
 import fnmatch
 from datetime import datetime 
 
-from util import variables
-from util.datastructures import LIVVDict
+from livvkit.util import variables
+from livvkit.util.datastructures import LIVVDict
 
 def mkdir_p(path):
     """
@@ -63,7 +63,8 @@ def find_file(search_dir, file_pattern):
 
 def create_page_from_template(template_file, output_path):
     """ Copy the correct html template file to the output directory """
-    shutil.copy(os.path.join(variables.website_dir, template_file), output_path)
+    mkdir_p(os.path.dirname(output_path))
+    shutil.copy(os.path.join(variables.resource_dir, template_file), output_path)
 
 
 def write_json(data, path, file_name):
@@ -108,7 +109,6 @@ def setup_output():
         except IOError:
             prev_time = "bkd_"+datetime.now().strftime("%Y%m%d_%H%M%S")
             prev_comment = "Warning: could not find previous runtime and comment."
-
         print('   Backing up data to:')
         print('   ' + variables.index_dir + "_" + prev_time)
         print("-------------------------------------------------------------------")
@@ -118,10 +118,10 @@ def setup_output():
 
     # Copy over js, css, & imgs directories from source
     mkdir_p(variables.website_dir)
-    shutil.copytree(os.path.join(variables.website_dir,"css"), os.path.join(variables.index_dir,"css"))
-    shutil.copytree(os.path.join(variables.website_dir,"js"), os.path.join(variables.index_dir,"js"))
-    shutil.copytree(os.path.join(variables.website_dir,"imgs"), os.path.join(variables.index_dir,"imgs"))
-    shutil.copy(os.path.join(variables.website_dir, "index.html"), 
+    shutil.copytree(os.path.join(variables.resource_dir,"css"), os.path.join(variables.index_dir,"css"))
+    shutil.copytree(os.path.join(variables.resource_dir,"js"), os.path.join(variables.index_dir,"js"))
+    shutil.copytree(os.path.join(variables.resource_dir,"imgs"), os.path.join(variables.index_dir,"imgs"))
+    shutil.copy(os.path.join(variables.resource_dir, "index.html"), 
                 os.path.join(variables.index_dir, "index.html"))
     # Record when this data was recorded so we can make nice backups
     with open(variables.index_dir + os.sep + "data.txt", "w") as f:

@@ -34,14 +34,10 @@ Management of the tests to be run is handled by the scheduler
 """
 import os
 import sys
-from util import variables
-variables.base_path = os.path.dirname(os.path.abspath(__file__))
+from livvkit.util import variables, options
 
 def main():
     """ Direct execution. """
-    from util import options, tests
-    import importlib
-
     print("-------------------------------------------------------------------")
     print("                      __   _____   ___   ____    _ __     ") 
     print("                     / /  /  _/ | / / | / / /__ (_) /_    ") 
@@ -58,13 +54,12 @@ def main():
     print("  OS Type: "     + variables.os_type)
     print("  Machine: "     + variables.machine)
     print("  "              + variables.comment)
-    
-    tests.check_dependencies()
+   
     options.init(options.parse(sys.argv[1:]))
 
-    import components
-    from util import scheduler, functions
-    from util.datastructures import LIVVDict
+    from livvkit import components
+    from livvkit.util import scheduler, functions
+    from livvkit.util.datastructures import LIVVDict
     functions.setup_output()
     l = []
     if variables.verify:

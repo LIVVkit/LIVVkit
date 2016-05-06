@@ -34,7 +34,7 @@ import os
 import numpy as np
 from configparser import ConfigParser
 
-from util.datastructures import ElementHelper
+from livvkit.util.datastructures import ElementHelper
 
 def parse_log(file_path):
     """

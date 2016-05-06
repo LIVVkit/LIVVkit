@@ -34,8 +34,8 @@ import os
 import glob
 import importlib
 
-import util.variables
-from util.datastructures import LIVVDict
+import livvkit.util.variables
+from livvkit.util.datastructures import LIVVDict
 
 def run_suite(case, config, summary):
     """ Run the full suite of validation tests """

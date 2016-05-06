@@ -37,11 +37,11 @@ import pprint
 import numpy as np
 from netCDF4 import Dataset
 
-from util import functions
-from util import variables
-from util.datastructures import LIVVDict
-from util.datastructures import ElementHelper
-import components.numerics_tests.ismip as ismip
+from livvkit.util import functions
+from livvkit.util import variables
+from livvkit.util.datastructures import LIVVDict
+from livvkit.util.datastructures import ElementHelper
+import livvkit.components.numerics_tests.ismip as ismip
 
 def run_suite(case, config, summary):
     """ Run the full suite of numerics tests """

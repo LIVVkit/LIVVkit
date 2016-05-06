@@ -34,13 +34,13 @@ import os
 import json
 import multiprocessing
 
-import components.numerics 
-import components.verification 
-import components.performance 
-import components.validation 
-from util import functions
-from util import variables
-from util.datastructures import LIVVDict
+import livvkit.components.numerics 
+import livvkit.components.verification 
+import livvkit.components.performance 
+import livvkit.components.validation 
+from livvkit.util import functions
+from livvkit.util import variables
+from livvkit.util.datastructures import LIVVDict
 
 def run(run_type, module, config_path):
     """
@@ -57,7 +57,6 @@ def run(run_type, module, config_path):
     with open(config_path, 'r') as f:
         config = json.load(f)
     tests = [t for t in config.keys() if isinstance(config[t], dict)]
-    functions.write_json({"Tests":tests},os.path.join(variables.output_dir,run_type),"manifest.json")
     print(" -----------------------------------------------------------------")
     print("   Beginning " + run_type.lower() + " test suite ")
     print(" -----------------------------------------------------------------")

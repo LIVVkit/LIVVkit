@@ -35,12 +35,12 @@ import numpy as np
 from netCDF4 import Dataset
 from matplotlib import pyplot
 
-from util import netcdf
-from util import functions
-from util import variables
-from util import colormaps
-from util.datastructures import LIVVDict
-from util.datastructures import ElementHelper
+from livvkit.util import netcdf
+from livvkit.util import functions
+from livvkit.util import variables
+from livvkit.util import colormaps
+from livvkit.util.datastructures import LIVVDict
+from livvkit.util.datastructures import ElementHelper
 
 def run_suite(case, config, summary):
     """ Run the full suite of verification tests """
@@ -51,7 +51,6 @@ def run_suite(case, config, summary):
     case_summary = LIVVDict()
     model_cases = functions.collect_cases(model_dir)
     bench_cases = functions.collect_cases(bench_dir)
-
     for subcase in sorted(model_cases.keys()):
         bench_subcases = bench_cases[subcase] if subcase in bench_cases else [] 
         result[subcase] = []

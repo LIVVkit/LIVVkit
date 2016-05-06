@@ -34,11 +34,11 @@ import os
 import glob
 import json
 
-from util import functions
-from util import variables
-from util import colormaps
-from util.datastructures import LIVVDict
-from util.datastructures import ElementHelper
+from livvkit.util import functions
+from livvkit.util import variables
+from livvkit.util import colormaps
+from livvkit.util.datastructures import LIVVDict
+from livvkit.util.datastructures import ElementHelper
 
 def run_suite(case, config, summary):
     """ Run the full suite of performance tests """
