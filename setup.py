@@ -1,4 +1,23 @@
+import os
+import sys
+import fnmatch
 from setuptools import setup
+from setuptools.command.build_ext import build_ext as _build_ext
+
+def find_eggs(path):
+    matches = []
+    for base, dirs, files in os.walk(path):
+        matches.extend(os.path.join(base, f) for f in fnmatch.filter(files, '*.egg'))
+        matches.extend(os.path.join(base, d) for d in fnmatch.filter(dirs, '*.egg'))
+    return matches
+
+try:
+    import numpy
+except ImportError:
+    from setuptools.command import easy_install
+    easy_install.main(["--user", 'numpy'])
+    [sys.path.append(ef) for ef in find_eggs(os.environ['HOME']+'/'+'.local') if ef not in sys.path]
+
 
 setup(name='livvkit',
       version='1.0',
@@ -8,9 +27,8 @@ setup(name='livvkit',
       author_email='evanskj@ornl.gov',
       license='BSD',
       include_package_data=True,
-      scripts=['livvkit/livv'],
+      scripts=['livv'],
       install_requires=[
-                        'numpy',
                         'netCDF4',
                         'matplotlib'
                        ],
