@@ -1,23 +1,20 @@
-import os
-import sys
-import fnmatch
 from setuptools import setup
-from setuptools.command.build_ext import build_ext as _build_ext
-
-def find_eggs(path):
-    matches = []
-    for base, dirs, files in os.walk(path):
-        matches.extend(os.path.join(base, f) for f in fnmatch.filter(files, '*.egg'))
-        matches.extend(os.path.join(base, d) for d in fnmatch.filter(dirs, '*.egg'))
-    return matches
 
 try:
     import numpy
 except ImportError:
     from setuptools.command import easy_install
     easy_install.main(["--user", 'numpy'])
-    [sys.path.append(ef) for ef in find_eggs(os.environ['HOME']+'/'+'.local') if ef not in sys.path]
-
+    print("")
+    print("--------------------------------------------------------------------")
+    print("|                       *** ATTENTION! ***                         |")
+    print("|                                                                  |")
+    print("|    Numpy has been installed, but the build process must be       |")
+    print("|    restarted in order to complete successfully.  Please run      |")
+    print("|    the setup command again to proceed.                           |")
+    print("|                                                                  |")
+    print("--------------------------------------------------------------------")
+    print("")
 
 setup(name='livvkit',
       version='1.0',
