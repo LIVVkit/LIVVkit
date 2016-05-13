@@ -33,6 +33,8 @@ Performance Test Base Module.
 import os
 import glob
 import json
+import pprint
+import numpy as np
 
 from livvkit.util import functions
 from livvkit.util import variables
@@ -43,8 +45,9 @@ from livvkit.util.datastructures import ElementHelper
 def run_suite(case, config, summary):
     """ Run the full suite of performance tests """
     config["name"] = case
-    result = LIVVDict()
-    case_summary = LIVVDict()
+    result = LIVVDict() 
+    timing_data = LIVVDict()
+    timing_plots = []
     model_dir = os.path.join(variables.model_dir, config['data_dir'], case)
     bench_dir = os.path.join(variables.bench_dir, config['data_dir'], case)
     model_cases = functions.collect_cases(model_dir)
@@ -52,16 +55,18 @@ def run_suite(case, config, summary):
     
     for subcase in sorted(model_cases):
         bench_subcases = bench_cases[subcase] if subcase in bench_cases else []
-        result[subcase] = []
         for mcase in model_cases[subcase]:
+            config["case"] = "-".join([subcase, mcase])
             bpath = (os.path.join(bench_dir, subcase, mcase.replace("-", os.sep))
-                            if subcase in bench_subcases else None)
+                            if mcase in bench_subcases else None)
             mpath = os.path.join(model_dir, subcase, mcase.replace("-", os.sep))
-            case_result = analyze_case(mpath, bpath, config)
-            case_summary[subcase] = summarize_result(case_result, case_summary[subcase])
+            timing_data[subcase][mcase] = analyze_case(mpath, bpath, config)
+    
+    timing_plots.append(weak_scaling(timing_data, config))
+    timing_plots.append(strong_scaling(timing_data, config))
 
-    summary[case] = case_summary
-    print_result(case,result) #TODO
+    summary = summarize_result(timing_data, summary)
+    print_result(case, summary) #TODO
     functions.create_page_from_template("performance.html",
             os.path.join(variables.index_dir, "performance", case+".html"))
     functions.write_json(result, os.path.join(variables.output_dir, "performance"), case+".json")
@@ -69,127 +74,31 @@ def run_suite(case, config, summary):
 
 def analyze_case(model_dir, bench_dir, config):
     """ Run all of the performance checks on a particular case """
-    result = LIVVDict()
-    model_timings = set([os.path.basename(f) for f in 
-                        glob.glob(os.path.join(model_dir, "*" + config["timing_ext"]))])
+    model_timings = set(glob.glob(os.path.join(model_dir, "*" + config["timing_ext"])))
     if bench_dir is not None:
-        bench_timings = set([os.path.basename(f) for f in 
-                          glob.glob(os.path.join(model_dir, "*" + config["timing_ext"]))])
+        bench_timings = set(glob.glob(os.path.join(model_dir, "*" + config["timing_ext"])))
     else:
         bench_timings = set()
+    if not len(model_timings):
+        return dict(model=dict(), bench=dict()) 
     
-    for mtf in model_timings:
-        result["model"][mtf] = parse_gptl(os.path.join(model_dir,mtf), 
-                                           config["timing_vars"])
-        if mtf in bench_timings: 
-            result["bench"][mtf] = parse_gptl(os.path.join(bench_dir,mtf),
-                                               config["timing_vars"])
-    return result
+    model_stats = generate_timing_stats(model_timings, config['timing_vars'])
+    bench_stats = generate_timing_stats(bench_timings, config['timing_vars'])
+     
+    return dict(model=model_stats, bench=bench_stats) 
 
 
-def weak_scaling():
+def weak_scaling(stats, config):
     """ Generate weak scaling stats """
-    #work_perProc, plot_vars = [], []
-    #resolutions = sorted(resolutions)
-    ## Find out how much work per processor for each run
-    #for res in resolutions:
-    #    test = test_type + res
-    #    proc_list = self.model_timing_data[test].keys()
-    #    work_perProc.append([(int(res)**2)/int(n_proc)for n_proc in proc_list])
-
-    ## To generate the best plot, figure out which work/processor number 
-    ## was most common, then pull out the resolution, number of processor,
-    ## and the time taken 
-    #work_perProc = [i for sublist in work_perProc for i in sublist]
-    #
-    ## If there's no data quit early
-    #if work_perProc == []:
-    #    return
-    #
-    ## This gets the most applicable data points to plot
-    #scaling_constant = Counter(work_perProc).most_common()[0][0]
-    #for res in resolutions: 
-    #    test= test_type + res
-    #    proc_list = self.model_timing_data[test].keys()
-    #    for n_proc in proc_list:
-    #        if (int(res)**2)/int(n_proc) == scaling_constant:
-    #            plot_vars.append([res, n_proc, 
-    #                self.model_timing_data[test_type + res][n_proc]["Run Time"]])  
-    #
-    ## These are the plotting variables
-    #resolutions = [int(var[0]) for var in plot_vars]
-    #processors = [int(var[1]) for var in plot_vars]
-    #times = [var[2] for var in plot_vars]
-    #mins = [var[-1] for var in times]
-    #maxs = [var[1] for var in times]
-    #times = [var[0] for var in times]
-    ## Plot it and then save the file + record it so we can link to it
-    #fig, ax = pyplot.subplots(1)
-    #pyplot.title("Weak scaling for " + test_type)
-    #pyplot.xlabel("Problem size)")
-    #pyplot.ylabel("Time (s)")
-    #pyplot.xticks()
-    #pyplot.yticks()
-    #ax.plot(resolutions, times, 'bo-', label='Model')
-    #ax.plot(resolutions, mins, 'b--')
-    #ax.plot(resolutions, maxs, 'b--')
-    #pyplot.savefig(variables.index_dir + os.sep + "performance" + 
-    #               os.sep + self.name + os.sep + "imgs" + os.sep + 
-    #               test_type.strip() +  "_scaling_weak.png")
-    #self.images_generated.append( [test_type.strip() + "_scaling_weak.png", 
-    #                              "Weak scaling for " + test_type])
+    return ElementHelper.image_element("Weak Scaling", "", "") 
 
 
-def strong_scaling():
+def strong_scaling(stats, config):
     """ Generate strong scaling stats """
-    ## Generate all of the plots
-    #for res in sorted(resolutions):
-    #    test = test_type + res
-    #    # Add the data if it's available and has at least 3 data points
-    #    if self.model_timing_data[test] != {} and len(self.model_timing_data[test].keys()) > 2:
-    #        model_data = self.model_timing_data[test]
-    #        fig, ax = pyplot.subplots(1)
-    #        pyplot.title("Strong scaling for " + test_type  + res)
-    #        pyplot.xlabel("Number of processors")
-    #        pyplot.ylabel("Time (s)")
-    #        pyplot.xticks()
-    #        pyplot.yticks()
-    #        x = sorted(model_data.keys())
-    #        times = [model_data[p]["Run Time"] for p in x] 
-    #        y, mins, maxs = [], [], []
-    #        for time in times:
-    #            y.append(time[0])
-    #            mins.append(time[1])
-    #            maxs.append(time[2])
-
-    #        ax.plot(x, y, 'bo-', label='Model')
-    #        ax.plot(x,mins, 'b--')
-    #        ax.plot(x,maxs, 'b--')
-    #        
-    #        # Add benchmark data if it's there
-    #        if self.bench_timing_data[test] != {}:
-    #            bench_data = self.bench_timing_data[test]
-    #            x = sorted(bench_data.keys())
-    #            times = [bench_data[p]["Run Time"] for p in x] 
-    #            y, mins, maxs = [], [], []
-    #            for time in times:
-    #                y.append(time[0])
-    #                mins.append(time[1])
-    #                maxs.append(time[2])
-    #            ax.plot(x, y, 'r^-', label='Benchmark')
-    #            ax.plot(x,mins, 'r--')
-    #            ax.plot(x,maxs, 'r--')
-    #            pyplot.legend()
-
-    #        pyplot.savefig(variables.index_dir + os.sep + "performance" + 
-    #                       os.sep + self.name + os.sep + "imgs" + os.sep + 
-    #                       test_type.strip() + "_" + res +  "_scaling" + ".png")
-    #        self.images_generated.append( [test_type.strip() + "_" + res + "_scaling" + 
-    #                                       ".png", "Strong scaling for " + test_type + res])
+    return ElementHelper.image_element("Strong Scaling", "", "")
 
 
-
-def generate_timing_stats(model_dir, bench_dir, config):
+def generate_timing_stats(file_list, var_list):
     """
     Parse all of the timing files, and generate some statistics
     about the run.
@@ -204,8 +113,19 @@ def generate_timing_stats(model_dir, bench_dir, config):
             [mean, min, max, mean, diff. from bench mean]
     """
     timing_result = LIVVDict()
-    # TODO
-    return timing_result
+    timing_summary = LIVVDict()
+    for file in file_list:
+        timing_result[file] = parse_gptl(file, var_list)
+    for var in var_list:
+        var_time = []
+        for f, data in timing_result.items():
+            if var in data: var_time.append(data[var])
+        if len(var_time):
+            var_mean = np.mean(var_time)
+            var_max  = np.max(var_time)
+            var_min  = np.min(var_time)
+            timing_summary[var] = {'mean':var_mean, 'max':var_max, 'min':var_min}
+    return timing_summary
 
 
 def parse_gptl(file_path, var_list):
@@ -247,6 +167,7 @@ def summarize_result(result, summary):
     # Get the number of bit for bit failures
     # Get the number of config matches
     # Get the number of files parsed
+    return summary
 
 def populate_metadata():
     """ Provide some top level information for the summary """
