@@ -37,7 +37,7 @@ import importlib
 import livvkit.util.variables
 from livvkit.util.datastructures import LIVVDict
 
-def run_suite(case, config, summary):
+def _run_suite(case, config, summary):
     """ Run the full suite of validation tests """
     result = LIVVDict()
     result[case] = LIVVDict()

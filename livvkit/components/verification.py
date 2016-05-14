@@ -42,7 +42,7 @@ from livvkit.util import colormaps
 from livvkit.util.datastructures import LIVVDict
 from livvkit.util.datastructures import ElementHelper
 
-def run_suite(case, config, summary):
+def _run_suite(case, config, summary):
     """ Run the full suite of verification tests """
     config["name"] = case
     model_dir = os.path.join(variables.model_dir, config['data_dir'], case)
@@ -58,7 +58,7 @@ def run_suite(case, config, summary):
             bpath = (os.path.join(bench_dir, subcase, mcase.replace("-", os.sep)) 
                       if mcase in bench_subcases else "")
             mpath = os.path.join(model_dir, subcase, mcase.replace("-", os.sep))
-            case_result = analyze_case(mpath, bpath, config)
+            case_result = _analyze_case(mpath, bpath, config)
             result[subcase].append(ElementHelper.section(mcase, case_result))
             case_summary[subcase] = summarize_result(case_result, 
                     case_summary[subcase])
@@ -70,7 +70,7 @@ def run_suite(case, config, summary):
     functions.write_json(result, os.path.join(variables.output_dir, "verification"), case+".json")
 
 
-def analyze_case(model_dir, bench_dir, config, plot=True):
+def _analyze_case(model_dir, bench_dir, config, plot=True):
     """ Runs all of the verification checks on a particular case """
     bundle = variables.verification_model_module
     model_out = functions.find_file(model_dir, "*"+config["output_ext"])

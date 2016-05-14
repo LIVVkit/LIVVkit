@@ -75,7 +75,7 @@ def launch_processes(tests, run_module, **config):
     summary = {}
     test_data = variables.manager.dict()
     summary = run_module.populate_metadata()
-    process_handles = [multiprocessing.Process(target=run_module.run_suite, 
+    process_handles = [multiprocessing.Process(target=run_module._run_suite, 
                        args=(test, config[test], test_data)) for test in tests]
     for p in process_handles:
         p.start()

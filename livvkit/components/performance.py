@@ -33,8 +33,9 @@ Performance Test Base Module.
 import os
 import glob
 import json
-import pprint
 import numpy as np
+
+import pprint
 
 from livvkit.util import functions
 from livvkit.util import variables
@@ -42,12 +43,13 @@ from livvkit.util import colormaps
 from livvkit.util.datastructures import LIVVDict
 from livvkit.util.datastructures import ElementHelper
 
-def run_suite(case, config, summary):
+def _run_suite(case, config, summary):
     """ Run the full suite of performance tests """
     config["name"] = case
     result = LIVVDict() 
     timing_data = LIVVDict()
     timing_plots = []
+    bundle = variables.performance_model_module
     model_dir = os.path.join(variables.model_dir, config['data_dir'], case)
     bench_dir = os.path.join(variables.bench_dir, config['data_dir'], case)
     model_cases = functions.collect_cases(model_dir)
@@ -60,10 +62,14 @@ def run_suite(case, config, summary):
             bpath = (os.path.join(bench_dir, subcase, mcase.replace("-", os.sep))
                             if mcase in bench_subcases else None)
             mpath = os.path.join(model_dir, subcase, mcase.replace("-", os.sep))
-            timing_data[subcase][mcase] = analyze_case(mpath, bpath, config)
+            timing_data[subcase][mcase] = _analyze_case(mpath, bpath, config)
     
-    timing_plots.append(weak_scaling(timing_data, config))
-    timing_plots.append(strong_scaling(timing_data, config))
+    timing_plots.append(generate_scaling_plot(
+        bundle.weak_scaling(timing_data, config['scaling_var']))
+        )
+    timing_plots.append(generate_scaling_plot(
+        bundle.weak_scaling(timing_data, config['scaling_var']))
+        )
 
     summary = summarize_result(timing_data, summary)
     print_result(case, summary) #TODO
@@ -72,7 +78,7 @@ def run_suite(case, config, summary):
     functions.write_json(result, os.path.join(variables.output_dir, "performance"), case+".json")
 
 
-def analyze_case(model_dir, bench_dir, config):
+def _analyze_case(model_dir, bench_dir, config):
     """ Run all of the performance checks on a particular case """
     model_timings = set(glob.glob(os.path.join(model_dir, "*" + config["timing_ext"])))
     if bench_dir is not None:
@@ -86,16 +92,6 @@ def analyze_case(model_dir, bench_dir, config):
     bench_stats = generate_timing_stats(bench_timings, config['timing_vars'])
      
     return dict(model=model_stats, bench=bench_stats) 
-
-
-def weak_scaling(stats, config):
-    """ Generate weak scaling stats """
-    return ElementHelper.image_element("Weak Scaling", "", "") 
-
-
-def strong_scaling(stats, config):
-    """ Generate strong scaling stats """
-    return ElementHelper.image_element("Strong Scaling", "", "")
 
 
 def generate_timing_stats(file_list, var_list):
@@ -126,6 +122,11 @@ def generate_timing_stats(file_list, var_list):
             var_min  = np.min(var_time)
             timing_summary[var] = {'mean':var_mean, 'max':var_max, 'min':var_min}
     return timing_summary
+
+
+def generate_scaling_plot(timing_data):
+    """ Description """
+    return ElementHelper.image_element("Scaling", "", None)
 
 
 def parse_gptl(file_path, var_list):

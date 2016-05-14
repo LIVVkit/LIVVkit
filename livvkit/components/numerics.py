@@ -43,7 +43,7 @@ from livvkit.util.datastructures import LIVVDict
 from livvkit.util.datastructures import ElementHelper
 import livvkit.components.numerics_tests.ismip as ismip
 
-def run_suite(case, config, summary):
+def _run_suite(case, config, summary):
     """ Run the full suite of numerics tests """
     config["name"] = case
     result = LIVVDict()
@@ -58,7 +58,7 @@ def run_suite(case, config, summary):
         bench_path = (os.path.join(bench_dir, os.sep.join(mcase[0:-1]))
                 if mcase[0:-1] in bench_cases else None)
         model_path = os.path.join(model_dir, os.sep.join(mcase))
-        result[case].nested_assign(mcase, analyze_case(mcase, model_path, bench_path, config))
+        result[case].nested_assign(mcase, _analyze_case(mcase, model_path, bench_path, config))
     print_result(case,result) #TODO
     functions.create_page_from_template("numerics.html",
             os.path.join(variables.index_dir, "numerics", case+".html"))
@@ -66,7 +66,7 @@ def run_suite(case, config, summary):
     summarize_result(result, summary)
 
 
-def analyze_case(case, model_dir, bench_dir, config):
+def _analyze_case(case, model_dir, bench_dir, config):
     """ Run all of the numerics checks on a particular case """
     result = LIVVDict()
     str_to_case = {

@@ -110,7 +110,3 @@ def parse_config(file_path):
             parser._sections[s][v] = parser._sections[s][v].split("#")[0].strip()
     return parser._sections
 
-
-def extract_data(dataset, var):
-    """ Pulls a variable out of a NetCDF dataset """
-    pass
