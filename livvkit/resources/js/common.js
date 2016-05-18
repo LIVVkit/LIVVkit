@@ -114,8 +114,21 @@ function drawValidation() {
  * Generates the performance content page
  */
 function drawPerformance() {
-    html = "";
-    return html;
+    var verType = window.location.href.substr(
+            window.location.href.lastIndexOf("/")+1).split("#")[0].replace(".html", "");
+    var data = loadJSON('./' + verType + ".json");
+     
+    html = "<div id=" + data["Title"] + ">";
+    html += "<h2>" + data["Title"] + "</h2>";
+    html += "<p>" + data["Description"];
+    html += "</div>";
+    $("#content").append(html); 
+    
+    // Add the content
+    for (var idx in data["Elements"]) {
+        elem = data["Elements"][idx];
+        elementMap[elem["Type"]](elem, "#"+data["Title"]);
+    }
 }
 
 
@@ -274,7 +287,7 @@ function drawTable(data, div) {
  * Build a gallery
  */
 function drawGallery(data, div) {
-    var html = "";
+    var html = "<h3>" + data["Title"] + "</h3>";
     $(div).append(html);
 }
 
@@ -290,6 +303,7 @@ function drawThumbnail(path) {
  * Load a json file into a variable
  */
 function loadJSON(path) {
+    console.log(path);
     var data;
     $.ajax({
         'async': false,
@@ -300,6 +314,7 @@ function loadJSON(path) {
             data = json;
         }
     });
+    console.log(data);
     return data;
 }
 

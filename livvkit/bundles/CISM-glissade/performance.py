@@ -34,7 +34,9 @@ CISM-glissade module for performance analysis
 import os
 import matplotlib
 import numpy as np
+import pprint
 
+from livvkit.util.datastructures import LIVVDict
 from livvkit.util.datastructures import ElementHelper
 
 def weak_scaling(timing_stats, scaling_var):
@@ -52,22 +54,27 @@ def weak_scaling(timing_stats, scaling_var):
         # TODO : Currently returns a dict with model, 
                  bench, and proc data containing lists
     """
+    timing_data = LIVVDict()
     data_points = [['s0','p1'],['s1','p4'],['s2','p16'],['s3','p64'],['s4','p256']]
-    bench_times = []
-    model_times = []
-    proc_counts = []
-    for point in data_points:
-        size = point[0]
-        proc = point[1]
-        if size in timing_stats and proc in timing_stats[size]:
-            bench_data = timing_stats[size][proc]['bench'][scaling_var]
-            model_data = timing_stats[size][proc]['model'][scaling_var]
-            proc_counts.append(int(proc.strip('p')))
-            bench_times.append(bench_data['mean'])
-            model_times.append(model_data['mean'])
-    return dict(model=model_times, bench=bench_times, procs=proc_counts)
+    proc_counts = [1, 4, 16, 64, 256]
+    for case in ['bench', 'model']:
+        means = []
+        mins = []
+        maxs = []
+        for point in data_points:
+            size = point[0]
+            proc = point[1]
+            if timing_stats[size][proc][case][scaling_var] is not None:
+                data = timing_stats[size][proc][case][scaling_var]
+                means.append(data['mean'])
+                mins.append(data['min'])
+                maxs.append(data['max'])
+                timing_data[case] = dict(mins=mins, means=means, maxs=maxs)
+    timing_data['proc_counts'] = proc_counts
+    return timing_data 
 
 
 def strong_scaling(timing_stats):
     """ Description """
     return ElementHelper.image_element("Strong Scaling", "", None)
+

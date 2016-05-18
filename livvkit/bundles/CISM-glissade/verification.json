@@ -1,6 +1,7 @@
 {
     "dome" : 
       { 
+        "description" : "todo",
         "data_dir" : "dome",
         "output_ext" : ".out.nc",
         "logfile_ext" : ".config.oe",
@@ -9,6 +10,7 @@
       },
     "ismip-hom-a" : 
       { 
+        "description" : "todo",
         "data_dir" : "ismip-hom",
         "output_ext": ".out.nc",
         "logfile_ext" : ".config.oe",
@@ -17,6 +19,7 @@
       },
     "ismip-hom-c" : 
       { 
+        "description" : "todo",
         "data_dir" : "ismip-hom",
         "output_ext": ".out.nc",
         "logfile_ext" : ".config.oe",
@@ -25,6 +28,7 @@
       },
     "ismip-hom-f" : 
       { 
+        "description" : "todo",
         "data_dir" : "ismip-hom",
         "output_ext": ".out.nc",
         "logfile_ext" : ".config.oe",
@@ -33,6 +37,7 @@
       },
     "shelf-circular" : 
       { 
+        "description" : "todo",
         "data_dir" : "shelf",
         "output_ext" : ".out.nc",
         "logfile_ext" : ".config.oe",
@@ -41,6 +46,7 @@
       },
     "shelf-confined" : 
       { 
+        "description" : "todo",
         "data_dir" : "shelf",
         "output_ext" : ".out.nc",
         "logfile_ext" : ".config.oe",
@@ -49,6 +55,7 @@
       },
     "stream" : 
       { 
+        "description" : "todo",
         "data_dir" : "stream",
         "output_ext" : ".out.nc",
         "logfile_ext" : ".config.oe",

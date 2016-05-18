@@ -34,8 +34,7 @@ import os
 import glob
 import json
 import numpy as np
-
-import pprint
+import matplotlib.pyplot as plt
 
 from livvkit.util import functions
 from livvkit.util import variables
@@ -48,13 +47,15 @@ def _run_suite(case, config, summary):
     config["name"] = case
     result = LIVVDict() 
     timing_data = LIVVDict()
-    timing_plots = []
     bundle = variables.performance_model_module
     model_dir = os.path.join(variables.model_dir, config['data_dir'], case)
     bench_dir = os.path.join(variables.bench_dir, config['data_dir'], case)
+    plot_dir = os.path.join(variables.output_dir, "performance", "imgs")
+    plot_relpath = os.path.relpath(plot_dir, os.path.dirname(plot_dir))
     model_cases = functions.collect_cases(model_dir)
     bench_cases = functions.collect_cases(bench_dir)
-    
+    functions.mkdir_p(plot_dir)
+
     for subcase in sorted(model_cases):
         bench_subcases = bench_cases[subcase] if subcase in bench_cases else []
         for mcase in model_cases[subcase]:
@@ -64,13 +65,30 @@ def _run_suite(case, config, summary):
             mpath = os.path.join(model_dir, subcase, mcase.replace("-", os.sep))
             timing_data[subcase][mcase] = _analyze_case(mpath, bpath, config)
     
-    timing_plots.append(generate_scaling_plot(
-        bundle.weak_scaling(timing_data, config['scaling_var']))
-        )
-    timing_plots.append(generate_scaling_plot(
-        bundle.weak_scaling(timing_data, config['scaling_var']))
-        )
+    timing_plots = [
+        generate_scaling_plot(
+            bundle.weak_scaling(timing_data, config['scaling_var']),
+            "Weak Scaling for " + case.capitalize(), "", 
+            os.path.join(plot_dir, case + "_weak_scaling.png")
+        ),
+        generate_scaling_plot(
+                bundle.weak_scaling(timing_data, config['scaling_var']),
+                "Strong Scaling for " + case.capitalize(), "",
+                os.path.join(plot_dir, case + "_strong_scaling.png")
+        ),
+        generate_timing_breakdown_plot(timing_data,
+            "Timing Breakdown for " + case.capitalize(), "",
+            os.path.join(plot_dir, case+"_timing_breakdown.png")
+        )]
 
+    el = [
+            ElementHelper.gallery("Performance Plots", timing_plots)
+         ]
+    result = {
+                "Title" : case,
+                "Description" : config["description"],
+                "Elements" : el
+             }
     summary = summarize_result(timing_data, summary)
     print_result(case, summary) #TODO
     functions.create_page_from_template("performance.html",
@@ -86,12 +104,12 @@ def _analyze_case(model_dir, bench_dir, config):
     else:
         bench_timings = set()
     if not len(model_timings):
-        return dict(model=dict(), bench=dict()) 
+        return LIVVDict(model=LIVVDict(), bench=LIVVDict()) 
     
     model_stats = generate_timing_stats(model_timings, config['timing_vars'])
     bench_stats = generate_timing_stats(bench_timings, config['timing_vars'])
      
-    return dict(model=model_stats, bench=bench_stats) 
+    return LIVVDict(model=model_stats, bench=bench_stats) 
 
 
 def generate_timing_stats(file_list, var_list):
@@ -120,13 +138,34 @@ def generate_timing_stats(file_list, var_list):
             var_mean = np.mean(var_time)
             var_max  = np.max(var_time)
             var_min  = np.min(var_time)
-            timing_summary[var] = {'mean':var_mean, 'max':var_max, 'min':var_min}
+            var_std  = np.std(var_time)
+            timing_summary[var] = {'mean':var_mean, 'max':var_max, 'min':var_min, 'std':var_time}
     return timing_summary
 
 
-def generate_scaling_plot(timing_data):
+def generate_scaling_plot(timing_data, title, description, plot_file):
     """ Description """
-    return ElementHelper.image_element("Scaling", "", None)
+    proc_counts = timing_data['proc_counts']
+    fig, ax = plt.subplots(1)
+    plt.title("Scaling for X")
+    plt.xlabel("Number of processors")
+    plt.ylabel("Runtime (s)")
+    for case, color in zip(['bench','model'], ['r','b']):
+        case_data = timing_data[case]
+        means = case_data['means']
+        mins = case_data['mins']
+        maxs = case_data['maxs']
+        ax.plot(proc_counts, means, color+'o-', label=case)
+        ax.plot(proc_counts, mins, color+'--')
+        ax.plot(proc_counts, maxs, color+'--')
+    plt.legend()
+    plt.savefig(plot_file) 
+    return ElementHelper.image_element("Scaling", "", os.path.basename(plot_file))
+
+
+def generate_timing_breakdown_plot(timing_stats, title, descripion, plot_file):
+    """ Description """
+    return ElementHelper.image_element("Timing Breakdown", "", os.path.basename(plot_file))
 
 
 def parse_gptl(file_path, var_list):
