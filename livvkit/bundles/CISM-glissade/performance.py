@@ -51,12 +51,12 @@ def weak_scaling(timing_stats, scaling_var):
                      (can be provided in configurations via the 'scaling_var' key)
 
     Returns:
-        # TODO : Currently returns a dict with model, 
+        TODO : Currently returns a dict with model, 
                  bench, and proc data containing lists
     """
     timing_data = LIVVDict()
     data_points = [['s0','p1'],['s1','p4'],['s2','p16'],['s3','p64'],['s4','p256']]
-    proc_counts = [1, 4, 16, 64, 256]
+    timing_data['proc_counts'] = [1, 4, 16, 64, 256]
     for case in ['bench', 'model']:
         means = []
         mins = []
@@ -70,11 +70,39 @@ def weak_scaling(timing_stats, scaling_var):
                 mins.append(data['min'])
                 maxs.append(data['max'])
                 timing_data[case] = dict(mins=mins, means=means, maxs=maxs)
-    timing_data['proc_counts'] = proc_counts
     return timing_data 
 
 
-def strong_scaling(timing_stats):
-    """ Description """
-    return ElementHelper.image_element("Strong Scaling", "", None)
+def strong_scaling(timing_stats, scaling_var):
+    """
+    Generate data for plotting strong scaling.  The data points keep
+    the problem size the same and varies the number of processors
+    used to complete the job.
+
+    Args:
+        timing_stats: the result of livvkit.components.performance's
+                      generate_timing_stats function
+        scaling_var: the variable to select from the timing_stats dictionary
+                     (can be provided in configurations via the 'scaling_var' key)
+
+    Returns:
+        TODO: A LIVVDict() of the form...
+    """
+    timing_data = LIVVDict()
+    data_points = [['s0', 'p1'],['s0','p2'],['s0','p4'],['s0','p8']]
+    timing_data['proc_counts'] = [1,2,4,8]
+    for case in ['bench', 'model']:
+        means = []
+        mins = []
+        maxs = []
+        for point in data_points:
+            size = point[0]
+            proc = point[1]
+            if timing_stats[size][proc][case][scaling_var] is not None:
+                data = timing_stats[size][proc][case][scaling_var]
+                means.append(data['mean'])
+                mins.append(data['min'])
+                maxs.append(data['max'])
+                timing_data[case] = dict(mins=mins, means=means, maxs=maxs)
+    return timing_data
 

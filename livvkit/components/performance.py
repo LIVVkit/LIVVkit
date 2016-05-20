@@ -33,12 +33,12 @@ Performance Test Base Module.
 import os
 import glob
 import json
+import pprint
 import numpy as np
 import matplotlib.pyplot as plt
 
 from livvkit.util import functions
 from livvkit.util import variables
-from livvkit.util import colormaps
 from livvkit.util.datastructures import LIVVDict
 from livvkit.util.datastructures import ElementHelper
 
@@ -72,25 +72,28 @@ def _run_suite(case, config, summary):
             os.path.join(plot_dir, case + "_weak_scaling.png")
         ),
         generate_scaling_plot(
-                bundle.weak_scaling(timing_data, config['scaling_var']),
+                bundle.strong_scaling(timing_data, config['scaling_var']),
                 "Strong Scaling for " + case.capitalize(), "",
                 os.path.join(plot_dir, case + "_strong_scaling.png")
-        ),
-        generate_timing_breakdown_plot(timing_data,
-            "Timing Breakdown for " + case.capitalize(), "",
-            os.path.join(plot_dir, case+"_timing_breakdown.png")
-        )]
-
+        )
+        ]
+    timing_plots.append(
+        [generate_timing_breakdown_plot(timing_data[s],
+            "Timing Breakdown for " + case.capitalize()+"_"+s, "",
+            os.path.join(plot_dir, case+"_"+s+"_timing_breakdown.png")
+        ) for s in timing_data.keys()]
+    )
     el = [
             ElementHelper.gallery("Performance Plots", timing_plots)
          ]
+
     result = {
                 "Title" : case,
                 "Description" : config["description"],
                 "Elements" : el
              }
-    summary = summarize_result(timing_data, summary)
-    print_result(case, summary) #TODO
+    summary[case] = _summarize_result(timing_data, config)
+    _print_result(case, summary) #TODO
     functions.create_page_from_template("performance.html",
             os.path.join(variables.index_dir, "performance", case+".html"))
     functions.write_json(result, os.path.join(variables.output_dir, "performance"), case+".json")
@@ -110,6 +113,50 @@ def _analyze_case(model_dir, bench_dir, config):
     bench_stats = generate_timing_stats(bench_timings, config['timing_vars'])
      
     return LIVVDict(model=model_stats, bench=bench_stats) 
+
+
+def _print_result(case, summary):
+    """ Show some statistics from the run """
+    for case, case_data in summary.items():
+        for dof, data in case_data.items():
+            print("    " + case + " " + dof)
+            print("    -------------------")
+            for header, val in data.items():
+                print("    " + header + " : " + str(val))
+            print("")
+
+
+def _write_result(case,result):
+    """ Take the result and write out a JSON file """
+    outpath = os.path.join(variables.output_dir, "Performance", case)
+    util.functions.mkdir_p(outpath)
+    with open(os.path.join(outpath, case+".json"), 'w') as f:
+        json.dump(result, f, indent=4)
+
+
+def _summarize_result(result, config):
+    """ Trim out some data to return for the index page """
+    timing_var = config['scaling_var']
+    summary = LIVVDict()
+    for size, res in result.items():
+        proc_counts = []
+        bench_times = []
+        model_times = []
+        for proc, data in res.items():
+            proc_counts.append(int(proc[1:]))
+            bench_times.append(data['bench'][timing_var]['mean'])
+            model_times.append(data['model'][timing_var]['mean'])
+        time_diff = np.mean(model_times)/np.mean(bench_times)
+        summary[size]['Proc. Counts'] = ", ".join([str(x) for x in sorted(proc_counts)])
+        summary[size]['Mean Time Diff (% of benchmark)'] = time_diff
+    return summary
+
+
+def _populate_metadata():
+    """ Provide some top level information for the summary """
+    return {"Type"    : "Summary",
+            "Title"   : "Performance",
+            "Headers" : ["Proc. Counts", "Mean Time Diff (% of benchmark)"]}
 
 
 def generate_timing_stats(file_list, var_list):
@@ -144,10 +191,21 @@ def generate_timing_stats(file_list, var_list):
 
 
 def generate_scaling_plot(timing_data, title, description, plot_file):
-    """ Description """
+    """ 
+    Generate a scaling plot.  
+
+    Args:
+        timing_data: data returned from a bundle's *_scaling method
+        tite: the title of the plot
+        description: a description of the plot
+        plot_file: the file to write out to
+
+    Returns:
+        an image element containing the plot file and metadata
+    """
     proc_counts = timing_data['proc_counts']
     fig, ax = plt.subplots(1)
-    plt.title("Scaling for X")
+    plt.title(title)
     plt.xlabel("Number of processors")
     plt.ylabel("Runtime (s)")
     for case, color in zip(['bench','model'], ['r','b']):
@@ -160,12 +218,19 @@ def generate_scaling_plot(timing_data, title, description, plot_file):
         ax.plot(proc_counts, maxs, color+'--')
     plt.legend()
     plt.savefig(plot_file) 
-    return ElementHelper.image_element("Scaling", "", os.path.basename(plot_file))
+    return ElementHelper.image_element(title, description, os.path.basename(plot_file))
 
 
-def generate_timing_breakdown_plot(timing_stats, title, descripion, plot_file):
+def generate_timing_breakdown_plot(timing_stats, title, description, plot_file):
     """ Description """
-    return ElementHelper.image_element("Timing Breakdown", "", os.path.basename(plot_file))
+    var_means = LIVVDict()
+    for p_count, case_data in timing_stats.items():
+        for case, var_data in case_data.items():
+            for var, data in var_data.items():
+                print(var)
+                print(data)
+                print("")
+    return ElementHelper.image_element(title, description, os.path.basename(plot_file))
 
 
 def parse_gptl(file_path, var_list):
@@ -187,30 +252,6 @@ def parse_gptl(file_path, var_list):
                 for line in f:
                     if var in line:
                         timing_result[var] = float(line.split()[4])/int(line.split()[2])
+                        break
     return timing_result
 
-
-def print_result(case,result):
-    """ Show some statistics from the run """
-    pass
-
-
-def write_result(case,result):
-    """ Take the result and write out a JSON file """
-    outpath = os.path.join(variables.output_dir, "Performance", case)
-    util.functions.mkdir_p(outpath)
-    with open(os.path.join(outpath, case+".json"), 'w') as f:
-        json.dump(result, f, indent=4)
-
-def summarize_result(result, summary):
-    """ Trim out some data to return for the index page """
-    # Get the number of bit for bit failures
-    # Get the number of config matches
-    # Get the number of files parsed
-    return summary
-
-def populate_metadata():
-    """ Provide some top level information for the summary """
-    return {"Type"    : "Summary",
-            "Title"   : "Performance",
-            "Headers" : []}

@@ -179,3 +179,18 @@ td {
 
 .gallery {}
 
+.gallery p {
+    text-align: center;
+    padding: none;
+    margin: none;
+}
+
+.gallery div {
+    float: left;
+    margin: 10px;
+    display: inline;
+}
+
+.gallery img {
+    border: 1px solid #66c2ff;
+}

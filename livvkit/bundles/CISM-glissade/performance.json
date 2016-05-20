@@ -4,7 +4,7 @@
             "description" : "todo",
             "data_dir" : "dome",
             "timing_ext" : ".cism_timing_stats",
-            "timing_vars" : ["cism", "initial_diag_var_solve", "glissade_assemble_stiffness_mat"],
+            "timing_vars" : ["cism", "initial_diag_var_solve", "glissade_assemble_3d"],
             "scaling_var" : "cism"
         }
 }

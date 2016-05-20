@@ -32,7 +32,6 @@ Management of the tests to be run is handled by the scheduler
 
 @authors: arbennett, jhkennedy
 """
-import os
 import sys
 from livvkit.util import variables, options
 
@@ -69,7 +68,6 @@ def main():
     if variables.validate:
         l.append(scheduler.run("validation", components.validation, variables.validation_model_config))
     functions.write_json({"Elements":l}, variables.output_dir, "index.json")
-    scheduler.cleanup()
     print("-------------------------------------------------------------------")
     print(" Done!  Results can be seen in a web browser at:")
     print("        " +  variables.output_dir )

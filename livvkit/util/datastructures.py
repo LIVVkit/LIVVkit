@@ -125,7 +125,7 @@ class ElementHelper:
         ie["Type"] = "Image"
         ie["Title"] = title
         ie["Desciption"] = desc
-        ie["Data"] = image_path
+        ie["Plot File"] = image_path
         return ie
 
     @staticmethod

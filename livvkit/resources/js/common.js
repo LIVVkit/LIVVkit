@@ -32,7 +32,9 @@ $(document).ready(function() {
  */
 function drawNav() {
     html = "";
-    var data = loadJSON(indexPath + '/index.json');
+    getUrl = window.location.href.substr(0,window.location.href.lastIndexOf('/')+1);
+    data = loadJSON(getUrl + indexPath + '/index.json');
+    console.log(data);
     for (var cat in data["Elements"]) {
         if (data["Elements"][cat] != null && Object.keys(data["Elements"][cat]["Data"]).length > 0) {
             html += "<h3>" + data["Elements"][cat]["Title"] + "</h3>\n";
@@ -52,6 +54,7 @@ function drawNav() {
 function drawIndex() {
     var data = loadJSON(indexPath + '/index.json');
     for (var cat in data["Elements"]) {
+        console.log(data["Elements"][cat]);
         if (data["Elements"][cat] != null && Object.keys(data["Elements"][cat]["Data"]).length > 0) {
             $("#content").append("<h1>" + data["Elements"][cat]["Title"] + "</h1>");
             elemType = data["Elements"][cat]["Type"];
@@ -165,7 +168,8 @@ function drawSummary(data, div) {
                 html_tmp2 += "<td>"; 
                 value = data["Data"][testName][testCase][header];
                 dtype = typeof value;
-                if (dtype == 'number') {
+                console.log(dtype);
+                if (dtype == 'number' || dtype == 'string') {
                     html_tmp2 += value;
                 } else if (dtype == 'object') {
                     if (value.length == 2) {
@@ -222,8 +226,6 @@ function drawDiff(data, div) {
     $(div).append(html);
     $("."+controller).click(function() {
         $(div).toggle();
-        console.log(div);
-        console.log(controller);
     });
 }
 
@@ -246,7 +248,7 @@ function drawBitForBit(data, div) {
             var header = data["Headers"][j];
             var hData = data["Data"][varName][header];
             if (header == "Plot" && (hData !== "N/A" || hData.indexOf("ERROR:")!==-1)) {
-                html += "<td>" + drawThumbnail(hData) + "</td>\n";
+                html += "<td>" + drawThumbnail(hData, 50) + "</td>\n";
             } else {
                 if (typeof hData == 'number') {
                     hData = hData.toExponential(5);
@@ -287,14 +289,29 @@ function drawTable(data, div) {
  * Build a gallery
  */
 function drawGallery(data, div) {
-    var html = "<h3>" + data["Title"] + "</h3>";
+    var html = "<div class=\"gallery\">";
+    html += "<h3>" + data["Title"] + "</h3>";
+    html += "</div>";
+    $(div).append(html);
+    for (var idx in data["Data"]) {
+        img_elem = data["Data"][idx];
+        $(".gallery").append("<div id=img_"+idx+"></div>")
+        drawImage(img_elem, $("#img_"+idx));
+    }
+}
+
+
+function drawImage(img_elem, div) {
+    img_dir = window.location.href.substr(0,window.location.href.lastIndexOf('/')+1) + "imgs/";
+    var html = "<p>" + img_elem["Title"] + "</p>";
+    html += drawThumbnail(img_dir + img_elem["Plot File"], 200);
     $(div).append(html);
 }
 
 
-function drawThumbnail(path) {
+function drawThumbnail(path, size) {
     html = "<a target=\"_blank\" href=\"" + path + "\">";
-    html += "<img src=\"" + path + "\" style=\"height: 50px; overflow: hidden; position: relative\">";
+    html += "<img src=\"" + path + "\" style=\"height: " + size + "px; overflow: hidden; position: relative\">";
     html += "</a>";
     return html;
 }
@@ -303,7 +320,6 @@ function drawThumbnail(path) {
  * Load a json file into a variable
  */
 function loadJSON(path) {
-    console.log(path);
     var data;
     $.ajax({
         'async': false,
@@ -314,7 +330,6 @@ function loadJSON(path) {
             data = json;
         }
     });
-    console.log(data);
     return data;
 }
 

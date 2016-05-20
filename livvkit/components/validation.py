@@ -43,16 +43,19 @@ def _run_suite(case, config, summary):
     result[case] = LIVVDict()
     m = importlib.import_module(config['module'])
     result[case] = m.run(case, **config)
-    print_result()
-    write_result()
-    summarize_result()
+    _print_result()
+    _write_result()
+    _summarize_result()
 
-def print_result():
+def _print_result():
     pass
 
-def write_result():
+def _write_result():
     pass
 
-def summarize_result():
+def _summarize_result():
+    pass
+
+def _populate_metadata():
     pass
 

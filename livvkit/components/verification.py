@@ -60,11 +60,11 @@ def _run_suite(case, config, summary):
             mpath = os.path.join(model_dir, subcase, mcase.replace("-", os.sep))
             case_result = _analyze_case(mpath, bpath, config)
             result[subcase].append(ElementHelper.section(mcase, case_result))
-            case_summary[subcase] = summarize_result(case_result, 
+            case_summary[subcase] = _summarize_result(case_result, 
                     case_summary[subcase])
             
     summary[case] = case_summary
-    print_summary(case, summary[case])
+    _print_summary(case, summary[case])
     functions.create_page_from_template("verification.html", 
             os.path.join(variables.index_dir, "verification", case + ".html"))
     functions.write_json(result, os.path.join(variables.output_dir, "verification"), case+".json")
@@ -85,6 +85,80 @@ def _analyze_case(model_dir, bench_dir, config, plot=True):
             bundle.parse_log(model_log)
          ]
     return el
+
+
+def _print_summary(case, summary):
+    """ Show some statistics from the run """
+    for dof, data in summary.items():
+        b4b = data["Bit for Bit"]
+        conf = data["Configurations"]
+        stdout = data["Std. Out Files"]
+        print("    " + case + " " + str(dof))
+        print("    --------------------")
+        print("     Bit for bit matches   : " + str(b4b[0]) + " of " + str(b4b[1]))
+        print("     Configuration matches : " + str(conf[0])+ " of " + str(conf[1]))
+        print("     Std. Out files parsed : " + str(stdout))
+        print("")
+
+
+def _summarize_result(result, summary):
+    """ Trim out some data to return for the index page """
+    if "Bit for Bit" not in summary:
+        summary["Bit for Bit"] = [0,0]
+    if "Configurations" not in summary:
+        summary["Configurations"] = [0,0]
+    if "Std. Out Files" not in summary:
+        summary["Std. Out Files"] = 0
+
+    # Get the number of bit for bit failures
+    total_count = failure_count = 0
+    summary_data = None
+    for elem in result:
+        if elem["Type"] == "Bit for Bit" and "Data" in elem:
+            elem_data = elem["Data"]
+            summary_data = summary["Bit for Bit"]
+            total_count += 1
+            for var in elem_data.keys():
+                if elem_data[var]["Max Error"] != 0:
+                    failure_count += 1
+                    break
+    if summary_data is not None:
+        summary_data = np.add(summary_data, [total_count-failure_count, total_count]).tolist() 
+        summary["Bit for Bit"] = summary_data
+
+    # Get the number of config matches
+    summary_data = None
+    total_count = failure_count = 0
+    for elem in result:
+        if elem["Title"] == "Configuration Comparison" and elem["Type"] == "Diff":
+            elem_data = elem["Data"]
+            summary_data = summary["Configurations"]
+            total_count += 1
+            failed = False
+            for section_name, varlist in elem_data.items():
+                for var, val in varlist.items():
+                    if not val[0]:
+                        failed = True
+            if failed: failure_count += 1
+    if summary_data is not None:
+        success_count = total_count - failure_count
+        summary_data = np.add(summary_data, [success_count, total_count]).tolist()
+        summary["Configurations"] = summary_data
+
+    # Get the number of files parsed
+    for elem in result:
+        if elem["Title"] == "Output Log" and elem["Type"] == "Table":
+            summary["Std. Out Files"] += 1
+            break
+    return summary
+
+
+def _populate_metadata():
+    """ Provide some top level information for the summary """
+    return {"Type" : "Summary",
+            "Title" : "Verification",
+            "Headers" : ["Bit for Bit", "Configurations", "Std. Out Files"]}
+
 
 
 def bit_for_bit(model_path, bench_path, config, plot=True):
@@ -227,82 +301,4 @@ def plot_bit_for_bit(case, var_name, model_data, bench_data, diff_data):
     
     pyplot.savefig(os.sep.join([plot_path, case+".png"]))
     return os.path.join(os.path.relpath(plot_path, os.path.join(variables.output_dir, "verification")), case+".png")
-
-
-def validation_configuration(config):
-    """ Make sure that the configuration contains all the needed data """
-    pass
-
-
-def print_summary(case, summary):
-    """ Show some statistics from the run """
-    for dof, data in summary.items():
-        b4b = data["Bit for Bit"]
-        conf = data["Configurations"]
-        stdout = data["Std. Out Files"]
-        print("    " + case + " " + str(dof))
-        print("    --------------------")
-        print("     Bit for bit matches   : " + str(b4b[0]) + " of " + str(b4b[1]))
-        print("     Configuration matches : " + str(conf[0])+ " of " + str(conf[1]))
-        print("     Std. Out files parsed : " + str(stdout))
-        print("")
-
-
-def summarize_result(result, summary):
-    """ Trim out some data to return for the index page """
-    if "Bit for Bit" not in summary:
-        summary["Bit for Bit"] = [0,0]
-    if "Configurations" not in summary:
-        summary["Configurations"] = [0,0]
-    if "Std. Out Files" not in summary:
-        summary["Std. Out Files"] = 0
-
-    # Get the number of bit for bit failures
-    total_count = failure_count = 0
-    summary_data = None
-    for elem in result:
-        if elem["Type"] == "Bit for Bit" and "Data" in elem:
-            elem_data = elem["Data"]
-            summary_data = summary["Bit for Bit"]
-            total_count += 1
-            for var in elem_data.keys():
-                if elem_data[var]["Max Error"] != 0:
-                    failure_count += 1
-                    break
-    if summary_data is not None:
-        summary_data = np.add(summary_data, [total_count-failure_count, total_count]).tolist() 
-        summary["Bit for Bit"] = summary_data
-
-    # Get the number of config matches
-    summary_data = None
-    total_count = failure_count = 0
-    for elem in result:
-        if elem["Title"] == "Configuration Comparison" and elem["Type"] == "Diff":
-            elem_data = elem["Data"]
-            summary_data = summary["Configurations"]
-            total_count += 1
-            failed = False
-            for section_name, varlist in elem_data.items():
-                for var, val in varlist.items():
-                    if not val[0]:
-                        failed = True
-            if failed: failure_count += 1
-    if summary_data is not None:
-        success_count = total_count - failure_count
-        summary_data = np.add(summary_data, [success_count, total_count]).tolist()
-        summary["Configurations"] = summary_data
-
-    # Get the number of files parsed
-    for elem in result:
-        if elem["Title"] == "Output Log" and elem["Type"] == "Table":
-            summary["Std. Out Files"] += 1
-            break
-    return summary
-
-
-def populate_metadata():
-    """ Provide some top level information for the summary """
-    return {"Type" : "Summary",
-            "Title" : "Verification",
-            "Headers" : ["Bit for Bit", "Configurations", "Std. Out Files"]}
 

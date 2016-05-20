@@ -59,11 +59,11 @@ def _run_suite(case, config, summary):
                 if mcase[0:-1] in bench_cases else None)
         model_path = os.path.join(model_dir, os.sep.join(mcase))
         result[case].nested_assign(mcase, _analyze_case(mcase, model_path, bench_path, config))
-    print_result(case,result) #TODO
+    _print_result(case,result) #TODO
     functions.create_page_from_template("numerics.html",
             os.path.join(variables.index_dir, "numerics", case+".html"))
     functions.write_json(result, os.path.join(variables.output_dir,"numerics"), case+".json")
-    summarize_result(result, summary)
+    _summarize_result(result, summary)
 
 
 def _analyze_case(case, model_dir, bench_dir, config):
@@ -84,18 +84,16 @@ def _analyze_case(case, model_dir, bench_dir, config):
     return result
 
 
-def print_result(case,result):
+def _print_result(case,result):
     pass
 
 
-def summarize_result(result, summary):
+def _summarize_result(result, summary):
     """ Trim out some data to return for the index page """
-    # Get the number of bit for bit failures
-    # Get the number of config matches
-    # Get the number of files parsed
+    pass
 
 
-def populate_metadata():
+def _populate_metadata():
     """ Provide some top level information """
     return {"Type" : "Summary",
             "Title" : "Numerics",
