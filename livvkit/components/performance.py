@@ -39,6 +39,7 @@ import matplotlib.pyplot as plt
 
 from livvkit.util import functions
 from livvkit.util import variables
+from livvkit.util import colormaps
 from livvkit.util.datastructures import LIVVDict
 from livvkit.util.datastructures import ElementHelper
 
@@ -76,13 +77,11 @@ def _run_suite(case, config, summary):
                 "Strong Scaling for " + case.capitalize(), "",
                 os.path.join(plot_dir, case + "_strong_scaling.png")
         )
-        ]
-    timing_plots.append(
-        [generate_timing_breakdown_plot(timing_data[s],
-            "Timing Breakdown for " + case.capitalize()+"_"+s, "",
+        ] + [generate_timing_breakdown_plot(timing_data[s], config['scaling_var'],
+            "Timing Breakdown for " + case.capitalize()+" "+s, "",
             os.path.join(plot_dir, case+"_"+s+"_timing_breakdown.png")
         ) for s in timing_data.keys()]
-    )
+  
     el = [
             ElementHelper.gallery("Performance Plots", timing_plots)
          ]
@@ -108,10 +107,8 @@ def _analyze_case(model_dir, bench_dir, config):
         bench_timings = set()
     if not len(model_timings):
         return LIVVDict(model=LIVVDict(), bench=LIVVDict()) 
-    
     model_stats = generate_timing_stats(model_timings, config['timing_vars'])
     bench_stats = generate_timing_stats(bench_timings, config['timing_vars'])
-     
     return LIVVDict(model=model_stats, bench=bench_stats) 
 
 
@@ -221,15 +218,45 @@ def generate_scaling_plot(timing_data, title, description, plot_file):
     return ElementHelper.image_element(title, description, os.path.basename(plot_file))
 
 
-def generate_timing_breakdown_plot(timing_stats, title, description, plot_file):
-    """ Description """
-    var_means = LIVVDict()
-    for p_count, case_data in timing_stats.items():
+def generate_timing_breakdown_plot(timing_stats, scaling_var, title, description, plot_file):
+    """ 
+    Description
+
+    Args:
+        timing_stats: a dictionary of the form 
+            {proc_count : {model/bench : { var : { stat : val }}}}
+        scaling_var: the variable that accounts for the total runtime
+        title: the title of the plot
+        description: the description of the plot
+        plot_file: the file to write the plot out to
+    Returns:
+        an image element containing the plot file and metadata
+    """
+    cmap_data = colormaps._viridis_data
+    n_subplots = len(timing_stats.keys())
+    bar_width = 0.75
+    left_bounds = [i+1 for i in range(n_subplots)]
+    fig, ax = plt.subplots(1, n_subplots, figsize=(3*(n_subplots+1), 5))
+    for plot_num, case_data in enumerate(timing_stats.items()):
+        sub_ax = plt.subplot(1, n_subplots, plot_num+1)
+        p_count = case_data[0]
+        case_data = case_data[1]
+        sub_ax.set_title(p_count)
         for case, var_data in case_data.items():
-            for var, data in var_data.items():
-                print(var)
-                print(data)
-                print("")
+            vars = var_data.keys()
+            cmap_stride = int(len(cmap_data)/len(vars))
+            colors = [cmap_data[i*cmap_stride] for i in range(len(vars))]
+            offset = 0
+            for idx, var in enumerate(vars):
+                if var != scaling_var:
+                    plt.bar(1, var_data[var]['mean'], bottom=offset, 
+                            color=colors[idx], label=var)
+                    offset+=var_data[var]['mean']
+                else: s_idx = idx
+            plt.bar(1, var_data[scaling_var]['mean']-offset, bottom=offset, 
+                    color=colors[s_idx], label=scaling_var)
+    plt.legend()
+    plt.savefig(plot_file)
     return ElementHelper.image_element(title, description, os.path.basename(plot_file))
 
 
