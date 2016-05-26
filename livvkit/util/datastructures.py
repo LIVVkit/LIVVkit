@@ -64,10 +64,6 @@ class LIVVDict(dict):
                 self[key_list[0]] = LIVVDict() 
             self[key_list[0]].nested_assign(key_list[1:], value)
 
-    def merge_leaves(self, dict_to_merge):
-        """ Merges another LIVVDict's similar leaf nodes into this one """
-        pass
-
 
 class ElementHelper:
     """
