@@ -37,6 +37,7 @@ import pprint
 import numpy as np
 import matplotlib.pyplot as plt
 
+
 from livvkit.util import functions
 from livvkit.util import variables
 from livvkit.util import colormaps
@@ -210,20 +211,23 @@ def generate_scaling_plot(timing_data, title, description, plot_file):
         an image element containing the plot file and metadata
     """
     proc_counts = timing_data['proc_counts']
-    fig, ax = plt.subplots(1)
-    plt.title(title)
-    plt.xlabel("Number of processors")
-    plt.ylabel("Runtime (s)")
-    for case, color in zip(['bench','model'], ['r','b']):
-        case_data = timing_data[case]
-        means = case_data['means']
-        mins = case_data['mins']
-        maxs = case_data['maxs']
-        ax.plot(proc_counts, means, color+'o-', label=case)
-        ax.plot(proc_counts, mins, color+'--')
-        ax.plot(proc_counts, maxs, color+'--')
-    plt.legend()
-    plt.savefig(plot_file) 
+    if len(proc_counts) > 2:
+        plt.figure(figsize=(10,8), dpi=150)
+        plt.title(title)
+        plt.xlabel("Number of processors")
+        plt.ylabel("Runtime (s)")
+        
+        for case, case_color in zip(['bench','model'], ['#91bfdb','#fc8d59']):
+            case_data = timing_data[case]
+            means = case_data['means']
+            mins = case_data['mins']
+            maxs = case_data['maxs']
+
+            plt.fill_between(proc_counts, mins, maxs, facecolor=case_color, alpha=0.5)
+            plt.plot(proc_counts, means, 'o-', color=case_color, label=case)
+
+        plt.legend(loc='best')
+        plt.savefig(plot_file) 
     return ElementHelper.image_element(title, description, os.path.basename(plot_file))
 
 
@@ -243,29 +247,50 @@ def generate_timing_breakdown_plot(timing_stats, scaling_var, title, description
     """
     cmap_data = colormaps._viridis_data
     n_subplots = len(timing_stats.keys())
-    bar_width = 0.75
     left_bounds = [i+1 for i in range(n_subplots)]
-    fig, ax = plt.subplots(1, n_subplots, figsize=(3*(n_subplots+1), 5))
+    fig, ax = plt.subplots(1, n_subplots+1, figsize=(3*(n_subplots+2), 5))
     for plot_num, case_data in enumerate(timing_stats.items()):
         p_count = case_data[0]
         case_data = case_data[1]
-        sub_ax = plt.subplot(1, n_subplots, plot_num+1)
+        sub_ax = plt.subplot(1, n_subplots+1, plot_num+1)
         sub_ax.set_title(p_count)
+        sub_ax.set_ylabel('Runtime (s)') 
         for case, var_data in case_data.items():
-            vars = var_data.keys()
-            cmap_stride = int(len(cmap_data)/(len(vars)+1))
-            colors = [cmap_data[i*cmap_stride] for i in range(len(vars))]
+            if case == 'bench':
+                bar_num = 2
+            else: 
+                bar_num = 1
+
+            var_datum = var_data.keys()
+            
+            cmap_stride = int(len(cmap_data)/(len(var_datum)+1))
+            colors = [cmap_data[i*cmap_stride] for i in range(len(var_datum))]
+            
             offset = 0
             if var_data != {}:
-                for idx, var in enumerate(vars):
+                for idx, var in enumerate(var_datum):
                     if var != scaling_var:
-                        plt.bar(1, var_data[var]['mean'], bottom=offset, 
-                                color=colors[idx], label=var)
+                        plt.bar(bar_num, var_data[var]['mean'], 0.8, bottom=offset, 
+                                color=colors[idx], label=(var if bar_num == 1 else '_none') )
                         offset+=var_data[var]['mean']
-                    else: s_idx = idx
-                plt.bar(1, var_data[scaling_var]['mean']-offset, bottom=offset, 
-                        color=colors[s_idx], label=scaling_var)
-    plt.legend()
+                    else: 
+                        s_idx = idx
+                
+                plt.bar(bar_num, var_data[scaling_var]['mean']-offset, 0.8, bottom=offset, 
+                        color=colors[s_idx], label=(scaling_var if bar_num == 1 else '_none') )
+                
+                sub_ax.set_xticks([1.4, 2.4])
+                sub_ax.set_xticklabels(('test', 'bench'))
+    
+    plt.legend(loc=6, bbox_to_anchor=(1.05,0.5))
+    plt.tight_layout()
+
+    sub_ax = plt.subplot(1, n_subplots+1, n_subplots+1)
+    hid_bar = plt.bar(1, 100)
+    for group in hid_bar:
+            group.set_visible(False)
+    sub_ax.set_visible(False)
+    
     plt.savefig(plot_file)
     return ElementHelper.image_element(title, description, os.path.basename(plot_file))
 

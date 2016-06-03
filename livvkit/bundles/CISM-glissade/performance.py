@@ -55,7 +55,8 @@ def weak_scaling(timing_stats, scaling_var):
                  bench, and proc data containing lists
     """
     timing_data = LIVVDict()
-    data_points = [['s0','p1'],['s1','p4'],['s2','p16'],['s3','p64'],['s4','p256']]
+    #data_points = [['s0','p1'],['s1','p4'],['s2','p16'],['s3','p64'],['s4','p256']]
+    data_points = [['s0','p1'],['s1','p4'],['s2','p16']]
     proc_counts = []
     bench_means = []
     bench_mins = []
@@ -66,10 +67,10 @@ def weak_scaling(timing_stats, scaling_var):
     for point in data_points:
         size = point[0]
         proc = point[1]
+        proc_counts.append(proc)
         try:
             model_data = timing_stats[size][proc]['model'][scaling_var]
             bench_data = timing_stats[size][proc]['bench'][scaling_var]
-            proc_counts.append(proc)
             model_means.append(model_data['mean'])
             model_mins.append(model_data['min'])
             model_maxs.append(model_data['max'])
@@ -101,21 +102,47 @@ def strong_scaling(timing_stats, scaling_var):
     """
     timing_data = LIVVDict()
     data_points = [['s0', 'p1'],['s0','p2'],['s0','p4'],['s0','p8']]
-    timing_data['proc_counts'] = [1,2,4,8]
-    for case in ['bench', 'model']:
-        means = []
-        mins = []
-        maxs = []
-        for point in data_points:
-            size = point[0]
-            proc = point[1]
-            try:
-                data = timing_stats[size][proc][case][scaling_var]
-                means.append(data['mean'])
-                mins.append(data['min'])
-                maxs.append(data['max'])
-                timing_data[case] = dict(mins=mins, means=means, maxs=maxs)
-            except:
-                pass
-    return timing_data
-
+#    timing_data['proc_counts'] = [1,2,4,8]
+#    for case in ['bench', 'model']:
+#        means = []
+#        mins = []
+#        maxs = []
+#        for point in data_points:
+#            size = point[0]
+#            proc = point[1]
+#            try:
+#                data = timing_stats[size][proc][case][scaling_var]
+#                means.append(data['mean'])
+#                mins.append(data['min'])
+#                maxs.append(data['max'])
+#                timing_data[case] = dict(mins=mins, means=means, maxs=maxs)
+#            except:
+#                pass
+#    return timing_data
+#
+    proc_counts = []
+    bench_means = []
+    bench_mins = []
+    bench_maxs = []
+    model_means = []
+    model_mins = []
+    model_maxs = []
+    for point in data_points:
+        size = point[0]
+        proc = point[1]
+        proc_counts.append(proc)
+        try:
+            model_data = timing_stats[size][proc]['model'][scaling_var]
+            bench_data = timing_stats[size][proc]['bench'][scaling_var]
+            model_means.append(model_data['mean'])
+            model_mins.append(model_data['min'])
+            model_maxs.append(model_data['max'])
+            bench_means.append(bench_data['mean'])
+            bench_mins.append(bench_data['min'])
+            bench_maxs.append(bench_data['max'])
+        except KeyError:
+            pass
+    timing_data['bench'] = dict(mins=bench_mins, means=bench_means, maxs=bench_maxs)
+    timing_data['model'] = dict(mins=model_mins, means=model_means, maxs=model_maxs)
+    timing_data['proc_counts'] = [int(pc[1:]) for pc in proc_counts]
+    return timing_data 

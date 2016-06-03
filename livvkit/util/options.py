@@ -101,6 +101,27 @@ def init(options):
     if options.verification is not None:
         variables.model_dir = options.verification[0].rstrip(os.sep)
         variables.bench_dir = options.verification[1].rstrip(os.sep)
+        if not os.path.isdir(variables.model_dir): 
+            print("")
+            print("----------------------------------------------------------")
+            print("                       UH OH!")
+            print("----------------------------------------------------------")
+            print("    Your comparison directory does not exist; please check")
+            print("    the path:")
+            print("\n"+variables.model_dir+"\n\n")
+            exit()
+        
+        if not os.path.isdir(variables.bench_dir):
+            print("")
+            print("----------------------------------------------------------")
+            print("                       UH OH!")
+            print("----------------------------------------------------------")
+            print("    Your benchmark directory does not exist; please check")
+            print("    the path:")
+            print("\n"+variables.bench_dir+"\n\n")
+            exit()
+            
+        
         variables.model_bundle = variables.model_dir.split(os.sep)[-1]
         variables.bench_bundle = variables.bench_dir.split(os.sep)[-1]
 
@@ -118,6 +139,7 @@ def init(options):
             variables.performance_model_module = importlib.import_module(
                  ".".join(["livvkit.bundles", variables.model_bundle, "performance"]))
         else:
+            #TODO: Should implement some error checking here...
             variables.verify = False
 
     if options.validation is not None:
