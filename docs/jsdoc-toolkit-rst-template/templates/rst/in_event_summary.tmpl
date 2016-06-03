@@ -1,0 +1,44 @@
+{!
+var ownEvents = g.ownEvents;
+!}
+
+        <if test="ownEvents.length">
+
+          <for each="member" in="ownEvents">
+            {!
+              if (member.isPrivate) output += "<private> ";
+              if (member.isInner) output += "<inner> ";
+              if (member.isStatic) output += "<static> ";
+            !}
+            <if test="member.isStatic && member.memberOf != '_global_'">{+member.memberOf+}.</if>{+new Link().toSymbol(member.alias).withText(member.name)+} {+makeSignature(member.params)+}
+              {+reJoin(toRst(resolveLinks(summarize(member.desc))))+}
+          </for>
+        </if>
+
+        <if test="data.inheritsFrom.length">
+        <dl class="inheritsList">
+        {!
+          var borrowedMembers = data.events.filter(function($) {return $.memberOf != data.alias});
+          var contributers = [];
+          borrowedMembers.map(function($) {if (contributers.indexOf($.memberOf) < 0) contributers.push($.memberOf)});
+          for (var i = 0, l = contributers.length; i < l; i++) {
+            output +=
+              "<dt>Events borrowed from class "+new Link().toSymbol(contributers[i])+": </dt>"
+              +
+              "<dd>" +
+              borrowedMembers
+              .filter(
+                function($) { return $.memberOf == contributers[i] }
+              )
+              .sort(makeSortby("name"))
+              .map(
+                function($) { return new Link().toSymbol($.alias).withText($.name) }
+              )
+              .join(", ")
+              +
+              "</dd>";
+          }
+
+        !}
+        </dl>
+        </if>

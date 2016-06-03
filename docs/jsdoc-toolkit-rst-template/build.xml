@@ -1,0 +1,101 @@
+<project name="jsdoc-toolkit-rst-template" default="build" basedir=".">
+  <description>Project provides the ReStructuredText -compliant template for JsDoc-Toolkit</description>
+
+  <property file="local.properties" />
+  <property file="build.properties" />
+
+  <!-- set global properties for this build -->
+  <property name="templates" location="${basedir}/templates"/>
+  <property name="doc" location="doc"/>
+  <property name="build" location="build"/>
+  <property name="dist" value="${basedir}/dist"/>
+  <property name="test" location="test"/>
+  <property name="tmpl" location="templates"/>
+  <property name="version" value="1.0"/>
+
+  <macrodef name="jsdoc">
+    <attribute name="tmpldir" default="${jsdoc-toolkit.dir}/templates/jsdoc"/>
+    <attribute name="outdir" default="${doc}/api"/>
+    <attribute name="srcdir" default="${jsdoc-toolkit.dir}/app/"/>
+    <attribute name="rlevel" default="5"/>
+
+    <sequential>
+      <echo>Generating api documentation from @{srcdir} (template dir: @{tmpldir})</echo>
+      <mkdir dir="@{outdir}" />
+      <java
+        dir="${basedir}"
+        jar="${jsdoc-toolkit.dir}/jsrun.jar"
+        fork="true"
+        failonerror="true"
+        maxmemory="128m"
+        >
+        <jvmarg value="-Djsdoc.dir=${jsdoc-toolkit.dir}"/>
+        <jvmarg value="-Djsdoc.template.dir=${tmpldir}"/>
+        <arg value="${jsdoc-toolkit.dir}/app/run.js"/>
+        <arg value="--recurse=@{rlevel}"/>
+        <arg value="--template=@{tmpldir}"/>
+        <arg value="--directory=@{outdir}"/>
+        <arg value="--verbose"/>
+        <arg value="@{srcdir}"/>
+      </java>
+      <echo>generation finished. output dir: @{outdir}</echo>
+    </sequential>
+  </macrodef>
+
+  <macrodef name="sphinxb">
+    <attribute name="builder" default="html"/>
+    <attribute name="source" default="${basedir}/doc"/>
+    <attribute name="target" default="${dist}/doc/@{builder}"/>
+    <sequential>
+      <mkdir dir="@{target}" />
+      <exec executable="sphinx-build">
+        <arg line="-E -b @{builder} @{source} @{target}"/>
+      </exec>
+    </sequential>
+  </macrodef>
+  
+  <target name="init">
+    <tstamp/>
+    <!-- Create the build directory structure used by compile -->
+    <mkdir dir="${build}"/>
+    <mkdir dir="${build}/api"/>
+  </target>
+
+  <target name="build" depends="init" description="Generate RST files from JS sources">
+    <jsdoc tmpldir="${tmpl.dir}" srcdir="${js.src.dir}" outdir="${js.rst.dir}"/>
+  </target>
+
+  <target name="test" description="Test template with jsdoc-tookit itself">
+    <jsdoc tmpldir="${tmpl.dir}" srcdir="${jsdoc-toolkit.dir}/app" outdir="${doc}/api/jsdoc-toolkit/" />
+    <jsdoc tmpldir="${jsdoc-toolkit.dir}/templates/jsdoc" srcdir="${jsdoc-toolkit.dir}/app" outdir="${dist}/jsdoc-toolkit.html/"/>
+  </target>
+
+  <target name="doc" description="Build the documentation">
+    <jsdoc tmpldir="${tmpl.dir}" srcdir="${tmpl}/rst/" outdir="${doc}/api/template/" />
+    <sphinxb source="${doc}" builder="html"/>
+  </target>
+
+  <target name="dist" depends="clean,build,doc" description="Make distribution">
+    <echo file="${build}/sources-here.txt">
+    Put/link your javascript source files in this directory
+    or define another directory in build.properties with:
+
+    js.src.dir=path/to/sources
+    </echo>
+    <zip destfile="${dist}/${ant.project.name}-${version}.zip">
+      <zipfileset dir="${templates}/rst" prefix="templates/rst"/>
+      <zipfileset dir="${dist}/doc/html" prefix="doc"/>
+      <zipfileset dir="${build}" includes="sources-here.txt" fullpath="src/sources-here.txt"/>
+      <zipfileset dir="." includes="build.xml" fullpath="build.xml"/>
+      <zipfileset dir="." includes="release.properties" fullpath="build.properties"/>
+    </zip>
+  </target>
+
+  <target name="clean" description="Clean up">
+    <!-- Delete the ${build} and ${dist} directory trees -->
+    <delete dir="${build}"/>
+    <delete dir="${dist}"/>
+    <delete dir="${basedir}/doc/api"/>
+  </target>
+
+</project>
