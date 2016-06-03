@@ -20,8 +20,9 @@ Development Roadmap
 
 Building Documentation
 ======================
-To build this documentation use the `generate_docs.sh` script.  Before using it 
-you will need to have some extra tools:
+To build this documentation use the `generate_docs.sh` script.  
+The generated website will be output to `_build/html`.  Before 
+using it you will need to have some extra tools:
 
 `sphinx` and `sphinx-api-any`
 -----------------------------
