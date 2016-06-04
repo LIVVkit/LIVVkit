@@ -270,7 +270,7 @@ def generate_timing_breakdown_plot(timing_stats, scaling_var, title, description
             else: 
                 bar_num = 1
 
-            var_datum = var_data.keys()
+            var_datum = sorted(var_data.keys(), reverse=True)
             
             cmap_stride = int(len(cmap_data)/(len(var_datum)+1))
             colors = [cmap_data[i*cmap_stride] for i in range(len(var_datum))]
