@@ -61,7 +61,7 @@ def parse(args):
     parser.add_argument('--verification',
             nargs=2,
             default=None,
-            help='Specify the locations of the test bundle to verify.')
+            help='Specify the locations of the test and bench bundle to compare (respectively).')
 
     parser.add_argument('--validation',
             action='store', 
