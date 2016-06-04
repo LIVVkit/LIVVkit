@@ -44,6 +44,10 @@ from livvkit.util import colormaps
 from livvkit.util.datastructures import LIVVDict
 from livvkit.util.datastructures import ElementHelper
 
+def sort_scale(s_string):
+    s_num = int(s_string[1:])
+    return s_num
+
 def _run_suite(case, config, summary):
     """ Run the full suite of performance tests """
     config["name"] = case
@@ -82,7 +86,7 @@ def _run_suite(case, config, summary):
     timing_plots = timing_plots + [generate_timing_breakdown_plot(timing_data[s], config['scaling_var'],
             "Timing Breakdown for " + case.capitalize()+" "+s, "",
             os.path.join(plot_dir, case+"_"+s+"_timing_breakdown.png")
-        ) for s in timing_data.keys()]
+        ) for s in sorted(timing_data.keys(), key=sort_scale)]
   
     el = [
             ElementHelper.gallery("Performance Plots", timing_plots)
