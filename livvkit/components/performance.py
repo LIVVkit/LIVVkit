@@ -44,6 +44,10 @@ from livvkit.util import colormaps
 from livvkit.util.datastructures import LIVVDict
 from livvkit.util.datastructures import ElementHelper
 
+def sort_scale(s_string):
+    s_num = int(s_string[1:])
+    return s_num
+
 def _run_suite(case, config, summary):
     """ Run the full suite of performance tests """
     config["name"] = case
@@ -82,7 +86,7 @@ def _run_suite(case, config, summary):
     timing_plots = timing_plots + [generate_timing_breakdown_plot(timing_data[s], config['scaling_var'],
             "Timing Breakdown for " + case.capitalize()+" "+s, "",
             os.path.join(plot_dir, case+"_"+s+"_timing_breakdown.png")
-        ) for s in timing_data.keys()]
+        ) for s in sorted(timing_data.keys(), key=sort_scale)]
   
     el = [
             ElementHelper.gallery("Performance Plots", timing_plots)
@@ -227,8 +231,14 @@ def generate_scaling_plot(timing_data, title, description, plot_file):
             plt.plot(proc_counts, means, 'o-', color=case_color, label=case)
 
         plt.legend(loc='best')
-        plt.savefig(plot_file) 
+        plt.savefig(plot_file)
+        plt.close()
     return ElementHelper.image_element(title, description, os.path.basename(plot_file))
+
+
+def sort_processor_counts(p_string):
+    p_num = int(p_string[1:])
+    return p_num
 
 
 def generate_timing_breakdown_plot(timing_stats, scaling_var, title, description, plot_file):
@@ -249,9 +259,8 @@ def generate_timing_breakdown_plot(timing_stats, scaling_var, title, description
     n_subplots = len(timing_stats.keys())
     left_bounds = [i+1 for i in range(n_subplots)]
     fig, ax = plt.subplots(1, n_subplots+1, figsize=(3*(n_subplots+2), 5))
-    for plot_num, case_data in enumerate(timing_stats.items()):
-        p_count = case_data[0]
-        case_data = case_data[1]
+    for plot_num, p_count in enumerate(sorted(timing_stats.keys(), key=sort_processor_counts)):
+        case_data = timing_stats[p_count]
         sub_ax = plt.subplot(1, n_subplots+1, plot_num+1)
         sub_ax.set_title(p_count)
         sub_ax.set_ylabel('Runtime (s)') 
@@ -261,7 +270,7 @@ def generate_timing_breakdown_plot(timing_stats, scaling_var, title, description
             else: 
                 bar_num = 1
 
-            var_datum = var_data.keys()
+            var_datum = sorted(var_data.keys(), reverse=True)
             
             cmap_stride = int(len(cmap_data)/(len(var_datum)+1))
             colors = [cmap_data[i*cmap_stride] for i in range(len(var_datum))]
@@ -292,6 +301,7 @@ def generate_timing_breakdown_plot(timing_stats, scaling_var, title, description
     sub_ax.set_visible(False)
     
     plt.savefig(plot_file)
+    plt.close()
     return ElementHelper.image_element(title, description, os.path.basename(plot_file))
 
 
