@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 
 # Generates documentation for LIVVkit
 #   run with ./generate_docs.sh
