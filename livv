@@ -32,6 +32,9 @@ Management of the tests to be run is handled by the scheduler
 
 @authors: arbennett, jhkennedy
 """
+import matplotlib
+matplotlib.use('agg')
+
 import sys
 from livvkit.util import variables, options
 
