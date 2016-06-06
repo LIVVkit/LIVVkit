@@ -27,8 +27,6 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 Helper functions for dealing with netcdf datasets
-
-@author: arbennett, jhkennedy
 """
 
 def has_time(dataset):

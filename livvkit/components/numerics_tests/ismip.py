@@ -27,8 +27,6 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 Utilities to provide numerical verification for the ISMIP test cases
-
-@author: arbennett
 """
 def ismip(model_path, bench_path, config):
     """ 

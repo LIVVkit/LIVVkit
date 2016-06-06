@@ -28,8 +28,6 @@
 
 """
 Test management module for LIVV
-
-@author: arbennett
 """
 
 import os

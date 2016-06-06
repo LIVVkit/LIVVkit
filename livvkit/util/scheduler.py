@@ -27,8 +27,6 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 Provides functions for scheduling the runs of tests.
-
-@author: arbennett
 """
 import os
 import json

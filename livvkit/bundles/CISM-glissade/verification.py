@@ -27,8 +27,6 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 Provides CISM-Glissade specific verification tools
-
-@author: arbennett
 """
 import os
 import numpy as np

@@ -27,8 +27,6 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 Module to hold LIVV specific data structures
-
-@author: arbennett
 """
 class LIVVDict(dict):
     """

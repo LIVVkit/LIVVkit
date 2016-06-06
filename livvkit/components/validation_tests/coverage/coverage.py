@@ -28,8 +28,6 @@
 """
 Analyze the ice sheet coverage.  For more information check documentation for 
 the run() function.
-
-@author: arbennett
 """
 import os
 import numpy as np

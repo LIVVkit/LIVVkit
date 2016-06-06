@@ -27,8 +27,6 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 Verification Test Base Module
-
-@author: arbennett
 """
 import os
 import numpy as np

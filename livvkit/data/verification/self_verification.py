@@ -29,10 +29,6 @@
 Provides a way to check internal consistency of LIVV's capabilities.
 Runs the basic verification tests for a small set of known data that
 can be compared with known outputs.
-
-Created on Dec 8, 2014
-
-@author: arbennett
 '''
 
 import os

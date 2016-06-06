@@ -27,8 +27,6 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 Module to hold LIVV specific functions 
-
-@author: arbennett
 """
 import os
 import json

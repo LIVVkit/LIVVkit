@@ -28,8 +28,6 @@
 
 """
 Storage for global variables.  These are set upon startup in the options module
-
-@authors: arbennett, jhkennedy
 """
 import os
 import time
