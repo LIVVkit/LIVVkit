@@ -1,0 +1,74 @@
+{!
+var data = g.data;
+var classType = g.classType;
+var docType = g.docType;
+!}
+
+{!
+if (data.isPrivate) output += "<private> ";
+if (data.isInner) output += "<inner> ";
+!}
+
+{+toRst(data.desc)+}
+
+
+<if test="data.params.length">
+<for each="item" in="data.params">
+:param {+item.type+} {+item.name+}:
+  <if test="item.isOptional">*(optional<if test="item.defaultValue">, default: {+item.defaultValue+}</if>)*</if>
+
+  {+ item.desc.toRst().reIndent(2) +}
+</for>
+</if>
+
+<if test="data.author">:author: {+data.author+}</if>
+
+<if test="data.deprecated">
+:deprecated: {+resolveLinks(data.deprecated)+}
+</if>
+
+<if test="data.since">
+:since: {+ data.since +}
+</if>
+
+<if test="data.exceptions.length">
+:throws:
+  <for each="item" in="data.exceptions">
+    - {+((item.type)?"{"+(new Link().toSymbol(item.type))+"}" : "")+} **{+item.name+}**
+
+      {+ resolveLinks(item.desc).reIndent(6, false) +}
+  </for>
+</if>
+
+<if test="data.returns.length">
+:returns:
+  <for each="item" in="data.returns">
+    {+ item.desc.reIndent(4) +}
+
+  {+ (item.type? ":rtype: " + item.type : "").reIndent(0, false) +}
+  </for>
+</if>
+
+<if test="data.requires.length">
+:requires:
+  <for each="item" in="data.requires">
+    {+ resolveLinks(item) +}
+  </for>
+</if>
+
+<if test="data.example.length">
+<for each="example" in="data.example">
+
+.. code-block:: javascript
+
+   {+ reIndent(example, 3, false) +}
+
+</for>
+</if>
+
+<if test="data.see.length">
+:see:
+  <for each="item" in="data.see">
+    {+ item +}
+  </for>
+</if>

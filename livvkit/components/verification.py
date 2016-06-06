@@ -300,5 +300,6 @@ def plot_bit_for_bit(case, var_name, model_data, bench_data, diff_data):
     pyplot.tight_layout()
     
     pyplot.savefig(os.sep.join([plot_path, case+".png"]))
+    pyplot.close()
     return os.path.join(os.path.relpath(plot_path, os.path.join(variables.output_dir, "verification")), case+".png")
 

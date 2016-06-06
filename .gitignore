@@ -5,6 +5,10 @@ www/
 www_*/
 vv_*/
 deps/
+docs/_static
+docs/_build
+docs/source
+
 
 ####=== NCL ===####
 plot_details.out

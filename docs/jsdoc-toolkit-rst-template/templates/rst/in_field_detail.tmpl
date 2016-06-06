@@ -1,0 +1,54 @@
+{!
+var ownProperties = g.ownProperties;
+var data = g.data;
+var member = g.member;
+var type = '';
+
+if (member.isPrivate) type = "private";
+if (member.isInner) type = "inner";
+if (member.isStatic) type = "static";
+if (member.isConstant) type = "constant";
+!}
+
+.. js:attribute:: {+ data.name +}.{+ member.name +}
+
+  <if test="member.author">:author: {+member.author+}.</if>
+  <if test="member.type">:type: {+ member.type +} <if test="type">(``{+type+}``)</if></if>
+
+  <if test="member.isStatic && member.memberOf != '_global_'">{+member.memberOf+}</if>
+
+  {+ member.desc.reJoin().reIndent(2, false) +}
+
+  <if test="member.example.length">
+  <for each="example" in="member.example">
+
+  .. code-block:: javascript
+
+     {+reIndent(example, 5, false)+}
+
+
+  </for>
+  </if>
+
+
+  <if test="member.deprecated">
+  Deprecated:
+    {+ resolveLinks(member.deprecated) +}
+  </if>
+
+  <if test="member.since">
+  Since:
+    {+ member.since +}
+  </if>
+
+  <if test="member.see.length">
+  See:
+  <for each="item" in="member.see">
+    {+ new Link().toSymbol(item) +}
+  </for>
+  </if>
+
+  <if test="member.defaultValue">
+  Default Value:
+    {+resolveLinks(member.defaultValue)+}
+  </if>

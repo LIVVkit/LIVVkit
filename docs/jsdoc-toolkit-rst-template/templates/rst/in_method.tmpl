@@ -1,0 +1,81 @@
+{!
+var data = g.data;
+var member = g.member;
+var parent = data.alias != "_global_" ? data.alias + "." : "";
+!}
+
+.. js:function:: {+parent+}{+member.name+}{+makeSignature(member.params)+}
+
+    <if test="member.author">
+    .. container:: meta
+
+       :author: {+member.author+}
+    </if>
+
+    <if test="member.params.length">
+    <for each="item" in="member.params">
+    :param {+ item.type +} {+item.name+}:
+
+      {+ item.desc.toRst().reIndent(6, false) +}
+
+      <if test="item.isOptional">*Optional<if test="item.defaultValue">, Default: {+item.defaultValue+}</if>*</if>
+    </for>
+    </if>
+
+    {+ member.desc.toRst().reIndent(4, false) +}
+
+    <if test="member.example.length">
+    <for each="example" in="member.example">
+
+    .. code-block:: javascript
+
+       {+ reIndent(example, 7, false) +}
+
+    </for>
+    </if>
+
+
+  <if test="member.deprecated">
+    Deprecated:
+      {+ resolveLinks(member.deprecated) +}
+  </if>
+
+  <if test="member.since">
+
+    Since:
+      {+ member.since +}
+    </dl>
+  </if>
+
+  <if test="member.exceptions.length">
+    :throws:
+    <for each="item" in="member.exceptions">
+      * {+ ((item.type) ? "``" + (new Link().toSymbol(item.type)) + "``" : "")+} **{+ item.name +}**
+
+        {+resolveLinks(item.desc)+}
+    </for>
+    </dl>
+  </if>
+
+  <if test="member.returns.length">
+    <for each="item" in="member.returns">
+    :returns:
+      {+ item.desc.reIndent(6, false) +}
+
+    {+ ((item.type)? ":rtype: " + item.type : "") +}
+    </for>
+  </if>
+
+  <if test="member.requires.length">
+    :requires:
+    <for each="item" in="member.requires">
+      - {+ resolveLinks(item) +}
+    </for>
+  </if>
+
+  <if test="member.see.length">
+    :see:
+    <for each="item" in="member.see">
+      {+ new Link().toSymbol(item) +}
+    </for>
+  </if>

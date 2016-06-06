@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# This combination of modules worked as of:
+#     June 5 2016
+# You may need to adjust these as systems change.
+
+module unload PrgEnv-pgi PrgEnv-gnu
+module load PrgEnv-gnu
+
+module load cray-netcdf-hdf5parallel
+
+module load python_anaconda3
+
+# The python anaconda package doesn't come python python-netCDF4 by default, so
+# we need to install it ouselves. Fortunately, it does install easy_install for
+# us, so we can use that.
+easy_install --user netCDF4
+
+module list

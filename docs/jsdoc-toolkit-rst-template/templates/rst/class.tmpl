@@ -1,0 +1,59 @@
+{!
+  var domain = "js:";
+  var classType = "";
+  var docType = "";
+  
+  if (data.isBuiltin()) {
+    classType += "Built-In";
+    docType = "data";
+  }
+  
+  if (data.isNamespace) {
+    if (data.is('FUNCTION')) {
+      classType += "Function";
+      docType = "function";
+    }
+    else {
+      classType += "Namespace";
+      docType = "data";
+    }
+  }
+  else {
+    classType += "Class";
+    docType = "class";
+  }
+
+
+  // Constructor 
+  contructor = "";
+  if (!data.isBuiltin() && (data.isNamespace || data.is('CONSTRUCTOR'))) {
+    visibility = "";
+    contructor = data.alias;
+    
+    if (data.isPrivate) visbility = "private";
+    if (data.isInner) visibility += "inner";
+  }
+!}
+
+===============================================
+{+data.alias+} ({+docType+})
+===============================================
+{+reJoin(toRst(data.classDesc))+}
+
+.. contents::
+   :local:
+
+{!
+if (docType == 'function' || docType == 'class') {
+  output += ".. " + domain + docType + ":: " + data.alias + " " + makeSignature(data.params);
+} else {
+  output += ".. " + domain + docType + ":: " + data.alias;
+}
+!}
+
+   {+ includeTemplate('in_class.tmpl', {data:data, docType:docType, domain:domain, classType:classType}).reIndent(3) +}
+
+{+includeTemplate("footer.tmpl")+}
+
+
+.. vim: set ft=rst :

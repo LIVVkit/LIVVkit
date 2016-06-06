@@ -1,0 +1,74 @@
+{!
+docType = g.docType;
+data = g.data;
+classType = g.classType;
+domain = g.domain;
+ownProperties = g.ownProperties;
+!}
+
+.. ============================== constructor details ====================
+
+
+
+<if test="!data.isBuiltin() && (data.isNamespace || data.is('CONSTRUCTOR'))">
+{+includeTemplate('in_constructor.tmpl', {data:data, classType:classType, docType:docType})+}
+</if>
+
+
+<if test="data.events.length">
+{! var ownEvents = data.events.filter(function($){return $.memberOf == data.alias  && !$.isNamespace}).sort(makeSortby("name")); !}
+{!
+  var tmpout = includeTemplate('in_event_summary.tmpl', {data:data, ownEvents:ownEvents});
+  output += tmpout.reIndent(4);
+!}
+</if>
+
+.. ============================== properties summary =====================
+
+<if test="data.properties.length">
+{! var ownProperties = data.properties.filter(function($){return $.memberOf == data.alias && !$.isNamespace}).sort(makeSortby("name")); !}
+{+includeTemplate('in_pro_summary.tmpl', {data:data, ownProperties:ownProperties})+}
+</if>
+
+.. ============================== events summary ========================
+
+
+<if test="data.events.length">
+{! var ownEvents = data.events.filter(function($){return $.memberOf == data.alias  && !$.isNamespace}).sort(makeSortby("name")); !}
+{+includeTemplate('in_event_summary.tmpl', {data:data, ownEvents:ownEvents})+}
+</if>
+
+
+.. ============================== field details ==========================
+
+<if test="defined(ownProperties) && ownProperties.length">
+<for each="member" in="ownProperties">
+  {!
+    var counter = typeof counter == 'undefined' ? 1 : counter;
+    member.last = (counter === ownProperties.length);
+    counter++;
+  !}
+  {+includeTemplate('in_field_detail.tmpl', {data:data, ownProperties:ownProperties, member:member})+}
+</for>
+</if>
+
+.. ============================== method details =========================
+
+<if test="defined(data.methods) && data.methods.length">
+<for each="member" in="data.methods">
+{!
+  var counter = typeof counter == 'undefined' ? 1 : counter;
+  member.last = (counter === data.methods.length);
+  counter++;
+!}
+{+includeTemplate('in_method.tmpl', {member:member, data:data})+}
+</for>
+</if>
+
+.. ============================== event details =========================
+
+<if test="defined(ownEvents) && ownEvents.length">
+  <for each="member" in="ownEvents">
+    {+includeTemplate('in_event_detail.tmpl', {member:member})+}
+  </for>
+</if>

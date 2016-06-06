@@ -1,0 +1,19 @@
+.. ============================== class summary ==========================
+
+{!
+var data = g.data;
+!}
+
+  <if test="data.version">:version: {+ data.version +}</if>
+
+<if test="data.augments.length">:extends:
+{+
+  data.augments.sort().map(
+    function($) { return ':doc:`' + $ + '`'; }
+  ).join(", ")
++}
+</if>
+
+  {+ resolveLinks(data.classDesc).toRst().reJoin() +}
+
+  {+ data.classDesc.toRst().reJoin() +}
