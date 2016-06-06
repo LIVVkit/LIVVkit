@@ -1,11 +1,11 @@
 ![](https://raw.githubusercontent.com/wiki/LIVVkit/LIVVkit/imgs/livvkit.png)
 
 ===============================================================================
-  Land Ice Verification and Validation Toolkit
+  The land ice verification and validation toolkit
 ===============================================================================
 
-LIVVkit is a python-based toolkit for verification and validation of Ice Sheet
-Models. It aims to provide the following capabilities:
+LIVVkit is a python-based toolkit for verification and validation of ice sheet
+models. It aims to provide the following capabilities:
 
 **[Model V&V](https://github.com/LIVVkit/LIVVkit/wiki/VV)**
 * Numerical verification -- "Are we solving the equations correctly?"
