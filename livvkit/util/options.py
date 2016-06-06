@@ -52,7 +52,7 @@ def parse(args):
         fromfile_prefix_chars='@')
 
     parser.add_argument('-o', '--out-dir', 
-            default=os.path.join(os.getcwd(), "vv_" + time.strftime("%m-%d-%Y")),
+            default=os.path.join(os.getcwd(), "vv_" + time.strftime("%Y-%m-%d")),
             help='Location to output the LIVV webpages.')
     
     parser.add_argument('--run-tests', action='store_true', 

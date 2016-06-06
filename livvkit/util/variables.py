@@ -38,7 +38,7 @@ import socket
 comment        = ""
 cwd            = os.getcwd()
 config_dir     = os.path.join(cwd, "configurations")
-timestamp      = time.strftime("%m-%d-%Y %H:%M:%S")
+timestamp      = time.strftime("%Y-%m-%d %H:%M:%S")
 user           = getpass.getuser()
 machine        = socket.gethostname()
 os_type        = platform.system() + " " + platform.release()
