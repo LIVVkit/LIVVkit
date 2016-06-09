@@ -96,7 +96,7 @@ def _run_suite(case, config, summary):
                 "Elements" : el
              }
     summary[case] = _summarize_result(timing_data, config)
-    _print_result(case, summary) #TODO
+    _print_result(case, summary) 
     functions.create_page_from_template("performance.html",
             os.path.join(variables.index_dir, "performance", case+".html"))
     functions.write_json(result, os.path.join(variables.output_dir, "performance"), case+".json")
@@ -189,7 +189,8 @@ def generate_timing_stats(file_list, var_list):
     for var in var_list:
         var_time = []
         for f, data in timing_result.items():
-            if var in data: var_time.append(data[var])
+            if var in data: 
+                var_time.append(data[var])
         if len(var_time):
             var_mean = np.mean(var_time)
             var_max  = np.max(var_time)

@@ -1,23 +1,26 @@
 {
     "ismip-hom-a" : 
         {
+            "description": "todo",
             "data_dir" : "ismip-hom",
             "output_ext" : ".out.nc",
-            "bench_dir" : "data/numerics/ismip-hom",
-            "bench_ext" : ".lmla.txt"
+            "interp_vars": ["uvel_extend", "vvel_extend"],
+            "plot_vars": ["velnorm_extend"]
         },
     "ismip-hom-c" : 
         {
+            "description": "todo",
             "data_dir" : "ismip-hom",
             "output_ext" : ".out.nc",
-            "bench_dir" : "data/numerics/ismip-hom",
-            "bench_ext" : ".lmla.txt"
+            "interp_vars": ["uvel_extend", "vvel_extend"],
+            "plot_vars": ["velnorm_extend"]
         },
     "ismip-hom-f" : 
         {
+            "description": "todo",
             "data_dir" : "ismip-hom",
             "output_ext" : ".out.nc",
-            "bench_dir" : "data/numerics/ismip-hom",
-            "bench_ext" : ".lmla.txt"
+            "interp_vars": ["usurf","uvel","vvel","wvel_ho"],
+            "plot_vars": ["usurf","velnorm_extend"]
         }
 }

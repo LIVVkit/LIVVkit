@@ -25,10 +25,36 @@
 # CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
 """
 Utilities to provide numerical verification for the ISMIP test cases
 """
-def ismip(model_path, bench_path, config):
+
+import os
+import json
+import glob
+import numpy
+import scipy
+
+import matplotlib.pyplot as plt
+
+from livvkit.util import variables
+from livvkit.util.datastructures import ElementHelper
+
+with open(__file__.replace('.py','.json'), 'r') as f:
+    setup = json.load(f)
+
+case_color = {'bench': '#d7191c',
+              'test':  '#fc8d59' }
+
+line_style = {'bench': 'o-',
+              'test':  '-'  }
+
+def get_case_length(case):
+        return str(int(case.split('-')[-1][1:])).zfill(3)
+
+def hom(config, analysis_data):
+    #FIXME:
     """ 
     Verify ISMIP-HOM model data against ISMIP's datasets 
     
@@ -40,49 +66,65 @@ def ismip(model_path, bench_path, config):
     Returns:
         A result of the differences between the model and benchmark
     """
-    result = LIVVDict()
-    # Python2 equivalent call: np.loadtxt -> np.loadfromtxt
-    x, y, vx_u, vx_std, vx_min, vx_max, vy_u, vy_std, vy_min, vy_max = (
-        np.loadtxt(bench_path, unpack=True, delimiter=',',
-        skiprows=1, usecols=(0,1,2,3,4,5,6,7,8,9)))
+   
+    exp = config['name'].split('-')[-1]
+    if exp in ['a', 'c']:
+        coord = 'x_hat'
+    else:
+        coord = 'y_hat'
+
+    lengths = list(set(
+        [ get_case_length(case) for case in analysis_data.keys() ]
+        ))
+
+    plot_list = []
+    for p, pattern in enumerate(sorted(setup[exp]['pattern'])):
+        fig_label = pattern.split('_')[1]
+        description = ''
+
+        for l in sorted(lengths):
+            title = fig_label[0:-1]+'. '+fig_label[-1]+': '+str(int(l))+' km'
+            recreate_file = os.path.join(
+                    variables.cwd, setup[exp]["data_dir"], pattern
+                    ).replace('???', l)
+
+            axis, fs_amin, fs_amax, fs_mean, ho_amin, ho_amax, ho_mean = \
+                numpy.genfromtxt(recreate_file, delimiter=',', missing_values='nan', unpack=True)
+            
+            plt.figure(figsize=(10,8), dpi=150)
+            plt.rc('text', usetex=True)
+            plt.title(str(int(l))+' km')
+            plt.xlabel(setup[exp]['xlabel'][p])
+            plt.ylabel(setup[exp]['ylabel'][p])
+            
+            plt.fill_between(axis, ho_amin, ho_amax, facecolor='green', alpha=0.5)
+            plt.fill_between(axis, fs_amin, fs_amax, facecolor='blue', alpha=0.5)
+            
+            plt.plot(axis, fs_mean, 'b-', linewidth=2, label='Full stokes')
+            plt.plot(axis, ho_mean, 'g-', linewidth=2, label='Higher order')
+
+            
+            analysis = {}
+            for a in analysis_data.keys():
+                if int(l) == int(a.split('-')[-1][1:]):
+                    analysis[a] = analysis_data[a]
+
+            for a in analysis.keys():
+                for model in sorted(analysis[a].keys()):
+                    plt.plot(analysis[a][model][coord], analysis[a][model]['velnorm_extend'], 
+                                line_style[model], color=case_color[model], linewidth=2, label=a+'-'+model)
+
+            plt.legend(loc='best')
+            
+            plot_file = os.path.join( config["plot_dir"], config['name']+'_'+fig_label+'_'+l+'.png' )
+            plt.savefig(plot_file)
+            plt.close()
+
+            plot_list.append( ElementHelper.image_element(title, description, os.path.basename(plot_file)) )
+
     
-    n_pts = int(np.sqrt(len(x)))
-    vnorm_mean =  np.reshape(np.sqrt(np.add(np.power(vx_u,2), np.power(vy_u,2))),\
-                             (n_pts,n_pts))
-    vnorm_stdev = np.reshape(np.sqrt(np.add(np.power(vx_std,2), np.power(vy_std,2))),\
-                             (n_pts,n_pts))
-    vnorm_plus =  np.reshape(np.add(vnorm_mean, vnorm_stdev), (n_pts,n_pts))
-    vnorm_minus = np.reshape(np.subtract(vnorm_mean, vnorm_stdev), (n_pts,n_pts))
-    vnorm_max = np.reshape(np.sqrt(np.add(np.power(vx_max,2), np.power(vy_max,2))),\
-                           (n_pts,n_pts))
-    vnorm_min = np.reshape(np.sqrt(np.add(np.power(vx_min,2), np.power(vy_min,2))),\
-                           (n_pts,n_pts))
- 
-    # Grab the model data
-    dataset = Dataset(model_path,'r')
-    uvel  = dataset.variables['uvel'][0,0,:,:]
-    vvel  = dataset.variables['vvel'][0,0,:,:]
-    shape = np.shape(uvel)
-    vnorm = np.sqrt(np.add(np.power(uvel,2), np.power(vvel,2)))
-    floor = np.subtract(vnorm_min[1:-1,1:-1],   vnorm)
-    ciel  = np.subtract(vnorm_max[1:-1,1:-1],   vnorm)
-    under = np.subtract(vnorm_minus[1:-1,1:-1], vnorm)
-    over  = np.subtract(vnorm_plus[1:-1,1:-1],  vnorm)
-    bad_data = np.zeros(shape)
-    for i in range(shape[0]):
-        for j in range(shape[0]):
-            if floor[i,j]>0:
-                bad_data[i,j] = -2 # CISM < MIN_ISMIP
-            elif ciel[i,j]<0:
-                bad_data[i,j] = 2  # CISM > MAX_ISMIP
-            elif under[i,j]>0:
-                bad_data[i,j] = -1 # CISM < MU - SIGMA 
-            elif over[i,j]<0:
-                bad_data[i,j] = 1  # CISM > MU + SIGMA
-    mean_diff = 100.0*np.divide(np.subtract(vnorm_mean[1:-1,1:-1], vnorm),\
-                                            vnorm_mean[1:-1,1:-1])
-    result["Mean % Difference"] = np.nanmean(mean_diff)
-    return result
+    return plot_list
+
 
 
 def populate_metadata():

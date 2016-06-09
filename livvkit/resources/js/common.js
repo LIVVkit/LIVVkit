@@ -139,8 +139,21 @@ function drawPerformance() {
  * Generates the numerics content page
  */
 function drawNumerics() {
-    html = "";
-    return html;
+    var verType = window.location.href.substr(
+            window.location.href.lastIndexOf("/")+1).split("#")[0].replace(".html", "");
+    var data = loadJSON('./' + verType + ".json");
+     
+    html = "<div id=" + data["Title"] + ">";
+    html += "<h2>" + data["Title"] + "</h2>";
+    html += "<p>" + data["Description"];
+    html += "</div>";
+    $("#content").append(html); 
+    
+    // Add the content
+    for (var idx in data["Elements"]) {
+        elem = data["Elements"][idx];
+        elementMap[elem["Type"]](elem, "#"+data["Title"]);
+    }
 }
 
 

@@ -26,6 +26,7 @@ setup(name='livvkit',
       include_package_data=True,
       scripts=['livv'],
       install_requires=[
+                        'scipy',
                         'netCDF4',
                         'matplotlib'
                        ],

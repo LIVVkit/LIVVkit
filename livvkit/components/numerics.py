@@ -39,6 +39,7 @@ from livvkit.util import functions
 from livvkit.util import variables
 from livvkit.util.datastructures import LIVVDict
 from livvkit.util.datastructures import ElementHelper
+
 import livvkit.components.numerics_tests.ismip as ismip
 
 def _run_suite(case, config, summary):
@@ -46,49 +47,75 @@ def _run_suite(case, config, summary):
     config["name"] = case
     result = LIVVDict()
     result[case] = LIVVDict()
+    analysis_data = {} 
+
+    bundle = variables.numerics_model_module
+    
     model_dir = os.path.join(variables.model_dir, config['data_dir'], case)
-    bench_dir = os.path.join(variables.cwd, config['bench_dir'], case)
+    bench_dir = os.path.join(variables.bench_dir, config['data_dir'], case)
+    
+    plot_dir = os.path.join(variables.output_dir, "numerics", "imgs")
+    config["plot_dir"] = plot_dir
+    functions.mkdir_p(plot_dir)
+
     model_cases = functions.collect_cases(model_dir) 
     bench_cases = functions.collect_cases(bench_dir)
     
-    for mcase in sorted(model_cases):
-        # Strip last part since benchmarks don't have processor counts
-        bench_path = (os.path.join(bench_dir, os.sep.join(mcase[0:-1]))
-                if mcase[0:-1] in bench_cases else None)
-        model_path = os.path.join(model_dir, os.sep.join(mcase))
-        result[case].nested_assign(mcase, _analyze_case(mcase, model_path, bench_path, config))
+    for mscale in sorted(model_cases):
+        bscale = bench_cases[mscale] if mscale in bench_cases else []
+
+        for mproc in model_cases[mscale]:
+            config["case"] = '-'.join([mscale,mproc])
+            bpath = (os.path.join(bench_dir, mscale, mproc.replace("-", os.sep)) 
+                            if mproc in bscale else None)
+            mpath = os.path.join(model_dir, mscale, mproc.replace("-", os.sep))
+           
+            analysis_data[config["case"]] = _analyze_case(bundle, mpath, bpath, config)
+
+
+    analysis_plots = ismip.hom(config, analysis_data)
+
+    result = {
+              "Title": case, 
+              "Description": config["description"],
+              "Elements": [ ElementHelper.gallery("Numerics Plots", analysis_plots) ]
+             }
+
+    summary[case] = _summarize_result(analysis_data, config)
     _print_result(case,result) #TODO
+
     functions.create_page_from_template("numerics.html",
             os.path.join(variables.index_dir, "numerics", case+".html"))
     functions.write_json(result, os.path.join(variables.output_dir,"numerics"), case+".json")
-    _summarize_result(result, summary)
 
 
-def _analyze_case(case, model_dir, bench_dir, config):
-    """ Run all of the numerics checks on a particular case """
-    result = LIVVDict()
-    str_to_case = {
-                "ismip-hom" : ismip
-            }
-    model_files = list(set([os.path.basename(f) for f in 
-                    glob.glob(os.path.join(model_dir, "*" + config["output_ext"]))]))
-    if bench_dir is not None:
-        bench_files = list(set([os.path.basename(f) for f in glob.glob(
-            os.path.join(variables.cwd , bench_dir, "*" + config["bench_ext"]))]))
-    if len(model_files) > 0 and len(bench_files) > 0:
-        result[model_files[0]] = ismip(os.path.join(model_dir,model_files[0]), 
-                                        os.path.join(bench_dir,bench_files[0]),
-                                        config)
-    return result
+def _analyze_case(bundle, model_dir, bench_dir, config):
+    """ Run all of the numerics tests on a particular case """
+   
+    model_files = list(set(glob.glob(os.path.join(model_dir, "*" +
+                            config["output_ext"]))))
+    bench_files = list(set(glob.glob(os.path.join(bench_dir, "*" + 
+                            config["output_ext"]))))
+    
+    which_experiment = config['name'].split('-')[-1]
+    
+    plot_data = bundle.get_plot_data(ismip.setup[which_experiment], model_files[0], bench_files[0], config)
+
+    return plot_data
 
 
 def _print_result(case,result):
     pass
 
 
-def _summarize_result(result, summary):
+def _summarize_result(result, config):
     """ Trim out some data to return for the index page """
-    pass
+    summary = LIVVDict()
+    for case in result.keys():
+        summary[case] = "test"
+        
+
+    return summary
 
 
 def _populate_metadata():
