@@ -58,6 +58,7 @@ class DataGrid:
         self.y_hat = (self.y[:] + self.y[0])/self.Ly
         self.x_hat = (self.x[:] + self.x[0])/self.Lx
    
+   
     def make_grids(self):
         self.y_hat_grid, self.x_hat_grid = \
                 scipy.meshgrid(self.y_hat[:], self.x_hat[:], indexing='ij')
@@ -66,6 +67,8 @@ class DataGrid:
 def get_plot_data(setup, test_file, bench_file, config):
     test_plot_data = {}
     bench_plot_data = {}
+
+    exp = config['name'].split('-')[-1]
 
     test_data = Dataset(os.path.join(variables.cwd,test_file), 'r')
     bench_data = Dataset(os.path.join(variables.cwd,bench_file), 'r')
@@ -80,31 +83,61 @@ def get_plot_data(setup, test_file, bench_file, config):
     test_plot_data['x_hat'] = x_coord
     bench_plot_data['y_hat'] = y_coord
     bench_plot_data['x_hat'] = x_coord
-
+    
     for var in config['interp_vars']:
-        # regular 2d linear interp. but faster. 
-        test2plot = interpolate.RectBivariateSpline( test.y_hat, test.x_hat, 
-                        test_data.variables[var][-1,0,:,:], kx=1, ky=1, s=0 ) 
+        if var == 'usurf':
+            # regular 2d linear interp. but faster. 
+            test2plot = interpolate.RectBivariateSpline( test.y_hat, test.x_hat, 
+                            test_data.variables[var][-1,:,:], kx=1, ky=1, s=0 ) 
+            
+            # regular 2d linear interp. but faster. 
+            bench2plot = interpolate.RectBivariateSpline( bench.y_hat, bench.x_hat, 
+                            bench_data.variables[var][-1,:,:], kx=1, ky=1, s=0 ) 
         
-        # regular 2d linear interp. but faster. 
-        bench2plot = interpolate.RectBivariateSpline( bench.y_hat, bench.x_hat, 
-                        bench_data.variables[var][-1,0,:,:], kx=1, ky=1, s=0 ) 
-        
+        else:
+            # regular 2d linear interp. but faster. 
+            test2plot = interpolate.RectBivariateSpline( test.y_hat, test.x_hat, 
+                            test_data.variables[var][-1,0,:,:], kx=1, ky=1, s=0 ) 
+            
+            # regular 2d linear interp. but faster. 
+            bench2plot = interpolate.RectBivariateSpline( bench.y_hat, bench.x_hat, 
+                            bench_data.variables[var][-1,0,:,:], kx=1, ky=1, s=0 ) 
+            
+            
         test_plot_data[var] = test2plot(y_coord, x_coord, grid=False)
         bench_plot_data[var] = bench2plot(y_coord, x_coord, grid=False)
+        
 
-   
-    test_plot_data['velnorm_extend'] = \
-        numpy.linalg.norm(
-            numpy.array([test_plot_data['uvel_extend'],
-                         test_plot_data['vvel_extend'] ]),
+    if exp in ['a','c']:
+        test_plot_data['velnorm_extend'] = \
+            numpy.linalg.norm(
+                numpy.array([test_plot_data['uvel_extend'],
+                             test_plot_data['vvel_extend'] ]),
+                axis=0)
+
+        bench_plot_data['velnorm_extend'] = \
+            numpy.linalg.norm(
+                numpy.array([bench_plot_data['uvel_extend'],
+                             bench_plot_data['vvel_extend'] ]),
             axis=0)
 
-    bench_plot_data['velnorm_extend'] = \
-        numpy.linalg.norm(
-            numpy.array([bench_plot_data['uvel_extend'],
-                         bench_plot_data['vvel_extend'] ]),
+    else: # f
+        test_plot_data['velnorm_extend'] = \
+            numpy.linalg.norm(
+                numpy.array([test_plot_data['uvel_extend'],
+                             test_plot_data['vvel_extend'],
+                             test_plot_data['wvel_ho'] ]),
+                axis=0)
+
+        bench_plot_data['velnorm_extend'] = \
+            numpy.linalg.norm(
+                numpy.array([bench_plot_data['uvel_extend'],
+                             bench_plot_data['vvel_extend'],
+                             bench_plot_data['wvel_ho'] ]),
             axis=0)
+
+        test_plot_data['usurfnorm'] = test_plot_data['usurf'] - test_plot_data['usurf'][0]
+        bench_plot_data['usurfnorm'] = bench_plot_data['usurf'] - bench_plot_data['usurf'][0]
 
     return {'test': test_plot_data, 'bench': bench_plot_data}
         

@@ -20,7 +20,7 @@
             "description": "todo",
             "data_dir" : "ismip-hom",
             "output_ext" : ".out.nc",
-            "interp_vars": ["usurf","uvel","vvel","wvel_ho"],
-            "plot_vars": ["usurf","velnorm_extend"]
+            "interp_vars": ["usurf","uvel_extend","vvel_extend","wvel_ho"],
+            "plot_vars": ["usurfnorm","velnorm_extend"]
         }
 }

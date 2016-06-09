@@ -83,19 +83,29 @@ def hom(config, analysis_data):
         description = ''
 
         for l in sorted(lengths):
-            title = fig_label[0:-1]+'. '+fig_label[-1]+': '+str(int(l))+' km'
-            recreate_file = os.path.join(
-                    variables.cwd, setup[exp]["data_dir"], pattern
-                    ).replace('???', l)
+            plt.figure(figsize=(10,8), dpi=150)
+            plt.rc('text', usetex=True)
+            plt.xlabel(setup[exp]['xlabel'][p])
+            plt.ylabel(setup[exp]['ylabel'][p])
+            
+            if exp in ['a','c']:
+                plt.title(str(int(l))+' km')
+                plot_file = os.path.join( config["plot_dir"], config['name']+'_'+fig_label+'_'+l+'.png' )
+                title = fig_label[0:-1]+'. '+fig_label[-1]+': '+str(int(l))+' km'
+                recreate_file = os.path.join(
+                        variables.cwd, setup[exp]["data_dir"], pattern
+                        ).replace('???', l)
+            else:
+                plt.title('No-Slip Bed')
+                plot_file = os.path.join( config["plot_dir"], config['name']+'_'+fig_label+'_000.png' )
+                title = fig_label[0:-2]+'. '+fig_label[-2:]+': No-Slip Bed'
+                recreate_file = os.path.join(
+                        variables.cwd, setup[exp]["data_dir"], pattern
+                        ).replace('???', '000')
+
 
             axis, fs_amin, fs_amax, fs_mean, ho_amin, ho_amax, ho_mean = \
                 numpy.genfromtxt(recreate_file, delimiter=',', missing_values='nan', unpack=True)
-            
-            plt.figure(figsize=(10,8), dpi=150)
-            plt.rc('text', usetex=True)
-            plt.title(str(int(l))+' km')
-            plt.xlabel(setup[exp]['xlabel'][p])
-            plt.ylabel(setup[exp]['ylabel'][p])
             
             plt.fill_between(axis, ho_amin, ho_amax, facecolor='green', alpha=0.5)
             plt.fill_between(axis, fs_amin, fs_amax, facecolor='blue', alpha=0.5)
@@ -111,12 +121,11 @@ def hom(config, analysis_data):
 
             for a in analysis.keys():
                 for model in sorted(analysis[a].keys()):
-                    plt.plot(analysis[a][model][coord], analysis[a][model]['velnorm_extend'], 
+                    plt.plot(analysis[a][model][coord], analysis[a][model][config['plot_vars'][p]], 
                                 line_style[model], color=case_color[model], linewidth=2, label=a+'-'+model)
 
             plt.legend(loc='best')
             
-            plot_file = os.path.join( config["plot_dir"], config['name']+'_'+fig_label+'_'+l+'.png' )
             plt.savefig(plot_file)
             plt.close()
 
