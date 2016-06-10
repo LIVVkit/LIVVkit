@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # This combination of modules worked as of:
 #     July 7 2015

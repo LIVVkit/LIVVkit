@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Copyright (c) 2015, UT-BATTELLE, LLC
 # All rights reserved.
 # 
