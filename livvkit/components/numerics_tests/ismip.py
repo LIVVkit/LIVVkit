@@ -84,7 +84,6 @@ def hom(config, analysis_data):
 
         for l in sorted(lengths):
             plt.figure(figsize=(10,8), dpi=150)
-            plt.rc('text', usetex=True)
             plt.xlabel(setup[exp]['xlabel'][p])
             plt.ylabel(setup[exp]['ylabel'][p])
             
