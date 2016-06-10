@@ -39,6 +39,7 @@ from livvkit.util import variables
 from livvkit.util import colormaps
 from livvkit.util.datastructures import LIVVDict
 from livvkit.util.datastructures import ElementHelper
+from livvkit.util.functions import sort_processor_counts
 
 def _run_suite(case, config, summary):
     """ Run the full suite of verification tests """
@@ -52,7 +53,7 @@ def _run_suite(case, config, summary):
     for subcase in sorted(model_cases.keys()):
         bench_subcases = bench_cases[subcase] if subcase in bench_cases else [] 
         result[subcase] = []
-        for mcase in model_cases[subcase]:
+        for mcase in sorted(model_cases[subcase], key=sort_processor_counts):
             bpath = (os.path.join(bench_dir, subcase, mcase.replace("-", os.sep)) 
                       if mcase in bench_subcases else "")
             mpath = os.path.join(model_dir, subcase, mcase.replace("-", os.sep))

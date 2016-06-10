@@ -41,10 +41,8 @@ from livvkit.util import variables
 from livvkit.util import colormaps
 from livvkit.util.datastructures import LIVVDict
 from livvkit.util.datastructures import ElementHelper
-
-def sort_scale(s_string):
-    s_num = int(s_string[1:])
-    return s_num
+from livvkit.util.functions import sort_processor_counts
+from livvkit.util.functions import sort_scale
 
 def _run_suite(case, config, summary):
     """ Run the full suite of performance tests """
@@ -233,11 +231,6 @@ def generate_scaling_plot(timing_data, title, description, plot_file):
         plt.savefig(plot_file)
         plt.close()
     return ElementHelper.image_element(title, description, os.path.basename(plot_file))
-
-
-def sort_processor_counts(p_string):
-    p_num = int(p_string[1:])
-    return p_num
 
 
 def generate_timing_breakdown_plot(timing_stats, scaling_var, title, description, plot_file):

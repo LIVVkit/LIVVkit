@@ -59,6 +59,16 @@ def find_file(search_dir, file_pattern):
     return "" 
 
 
+def sort_processor_counts(p_string):
+    p_num = int(p_string.split('-')[0][1:])
+    return p_num
+
+
+def sort_scale(s_string):
+    s_num = int(s_string[1:])
+    return s_num
+
+
 def create_page_from_template(template_file, output_path):
     """ Copy the correct html template file to the output directory """
     mkdir_p(os.path.dirname(output_path))
