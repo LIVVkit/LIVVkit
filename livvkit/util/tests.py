@@ -66,7 +66,7 @@ def check_dependencies():
             print("  !           cd ..")
             print("  !           python3 livv.py...")
             print("  !------------------------------------------------------")
-            exit(1)
+            sys.exit(1)
 
     # Check if imports work, and if not build a copy 
     print("    Checking for external libraries....")
@@ -106,7 +106,7 @@ def check_dependencies():
         print("  Run LIVV again to continue.  ")
         print("------------------------------------------------------------------------------")
         print("")
-        exit(0)
+        sys.exit(0)
     # Show all of the dependency errors that were found
     if len(error_list) > 0:
         print("Uh oh!")
@@ -116,7 +116,7 @@ def check_dependencies():
         for err in error_list: print(err)
         print("------------------------------------------------------------------------------")
         print("")
-        exit(len(error_list))
+        sys.exit(len(error_list))
     else:
         print("Okay!" + os.linesep + "Setting up environment....")
 

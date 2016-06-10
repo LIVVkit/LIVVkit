@@ -27,6 +27,7 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import os
+import sys
 import time
 import socket
 import getpass
@@ -109,7 +110,7 @@ def init(options):
             print("    Your comparison directory does not exist; please check")
             print("    the path:")
             print("\n"+variables.model_dir+"\n\n")
-            exit()
+            sys.exit(1)
         
         if not os.path.isdir(variables.bench_dir):
             print("")
@@ -119,7 +120,7 @@ def init(options):
             print("    Your benchmark directory does not exist; please check")
             print("    the path:")
             print("\n"+variables.bench_dir+"\n\n")
-            exit()
+            sys.exit(1)
             
         
         variables.model_bundle = variables.model_dir.split(os.sep)[-1]
@@ -161,5 +162,5 @@ def init(options):
         print("    or check https://github.com/LIVVkit/LIVVkit/wiki")
         print("----------------------------------------------------------")
         print("")
-        exit()
+        sys.exit(1)
 

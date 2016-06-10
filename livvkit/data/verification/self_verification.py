@@ -32,6 +32,7 @@ can be compared with known outputs.
 '''
 
 import os
+import sys
 import shutil
 import subprocess
 import sys
@@ -95,7 +96,7 @@ def check():
         print("    https://github.com/LIVVkit/LIVVkit/issues")
         print("")
         print("---------------------- ERROR --------------------------")
-        exit()
-    else:
+        sys.exit(1)
+    else:n
         print(" Okay!")
         print("")
