@@ -68,7 +68,6 @@ def run(run_type, module, config_path):
 def launch_processes(tests, run_module, **config):
     """ Helper method to launch processes and synch output """
     variables.manager = multiprocessing.Manager()
-    summary = {}
     test_data = variables.manager.dict()
     summary = run_module._populate_metadata()
     process_handles = [multiprocessing.Process(target=run_module._run_suite, 

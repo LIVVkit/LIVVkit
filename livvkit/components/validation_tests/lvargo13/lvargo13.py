@@ -34,69 +34,49 @@ import numpy as np
 import subprocess
 from netCDF4 import Dataset
 
-import util.variables
-import util.datastructures
+from livvkit.util import functions
+from livvkit.util import variables
+from livvkit.util.datastructures import ElementHelper 
 
-def run(name, *args, **kwargs):
+def run(name, config):
     """
     Runs the analysis of the coverage of the ice sheet over the land mass.
     Produces both an overall coverage percentage metric and a coverage plot.
-
-    Required args:
-        plot_script:  full path to the ncl script used to plot the data
-        model_data: full path to the output from the model data
-        bench_data: full path to the output from the benchmark data
-    """
-    description = kwargs.get('description')
-   
-    pd = plotData()
-
-    # Get the data out of the config file
-    pd.plot_script  = kwargs.get('plot_script')
-    pd.gl_data      = kwargs.get('gl_data')
-    pd.vel_data     = kwargs.get('vel_data')
-    pd.model_dir    = kwargs.get('model_dir')
-    pd.model_prefix = kwargs.get('model_prefix')
-    pd.model_suffix = kwargs.get('model_suffix')
-    pd.model_start  = kwargs.get('model_start')
-    pd.model_end    = kwargs.get('model_end')
     
-
-    if not (os.path.exists(pd.gl_data) and os.path.exists(pd.model_dir)):
+    Args:
+        name: The name of the test
+        config: A dictionary representation of the configuration file
+    Returns:
+        A list of elements to 
+    """
+    description = config['description']
+    greenland_data = os.path.join(variables.cwd, config['data_dir'], config['gl_data']) 
+    velocity_data = os.path.join(variables.cwd, config['data_dir'], config['vel_data'])
+    print(greenland_data)
+   
+    if not (os.path.exists(greenland_data) and os.path.exists(velocity_data)):
         # Add more handling here -- what do we want to return for failed tests
-        print("ERROR: Could not find necessary data to run the lvargo13 validation!")
-        print(pd.gl_data)
-        print(pd.model_dir)
-        print("")
-        return
+        return ElementHelper.error("lvargo13", "Could not find necessary data for validation!")
+
 
     # Generate the script
-    pd.output_file_base = os.path.join(util.variables.index_dir, 
-                           'validation', self.name, 'imgs', 'lvargo13')
-    util.datastructures.mkdir_p(pd.output_file_base)
-    plot_lvargo13(pd)
-
-
-def plot_lvargo13(pd):
-    """ 
-    Calls the ncl script to generate the plots for percent ice sheet 
-    coverage.
-
-    Args:
-         pd: A plotData class instance that holds all the needed plot data.
-    """
-    ncl_command = 'ncl \'gl_data = addfile("'+ pd.gl_data +'", "r")\' '  \
-                  + '\'vel_data = addfile("'+ pd.vel_data +'", "r")\' '  \
+    output_file_base = os.path.join(variables.index_dir, 
+                           'validation', name, 'imgs', 'lvargo13')
+    functions.mkdir_p(output_file_base)
+   
+    ncl_command = 'ncl \'gl_data = addfile("'+ config['gl_data'] +'", "r")\' '  \
+                  + '\'vel_data = addfile("'+ config['vel_data'] +'", "r")\' '  \
                   + '\'model_prefix = "' \
-                  + os.path.join(pd.model_dir, pd.model_prefix) +'"\' '  \
-                  + '\'model_suffix = "'+ pd.model_suffix +'"\' '  \
-                  + '\'model_start = '+ pd.model_start +'\' '  \
-                  + '\'model_end = '+ pd.model_end +'\' '  \
-                  + '\'plot_file_base = "'+ pd.output_file_base +'"\' '  \
-                  + pd.plot_script
+                  + os.path.join(config['model_dir'], config['model_prefix']) +'"\' '  \
+                  + '\'model_suffix = "'+ config['model_suffix'] +'"\' '  \
+                  + '\'model_start = '+ config['model_start'] +'\' '  \
+                  + '\'model_end = '+ config['model_end'] +'\' '  \
+                  + '\'plot_file_base = "'+ output_file_base +'"\' ' \
+                  + os.path.join(variables.cwd, config['plot_script'])
 
     # Be cautious about running subprocesses
     call = subprocess.Popen(ncl_command, shell=True, 
                             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     stdOut, stdErr = call.stdout.read(), call.stderr.read()
+
 

@@ -25,11 +25,9 @@
 # CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
 """
 CISM-glissade module for numerics analysis
 """
-
 import os
 import numpy
 import scipy
@@ -39,9 +37,10 @@ from scipy import interpolate
 
 from livvkit.util import variables
 
-print(variables.cwd)
-
 class DataGrid:
+    """
+    #TODO: 
+    """
     def __init__(self, data):
         self.y = data.variables['y1']
         self.ny = self.y[:].shape[0]
@@ -67,15 +66,11 @@ class DataGrid:
 def get_plot_data(setup, test_file, bench_file, config):
     test_plot_data = {}
     bench_plot_data = {}
-
     exp = config['name'].split('-')[-1]
-
     test_data = Dataset(os.path.join(variables.cwd,test_file), 'r')
     bench_data = Dataset(os.path.join(variables.cwd,bench_file), 'r')
-
     test = DataGrid(test_data)
     bench = DataGrid(bench_data)
-
     y_coord = numpy.linspace(setup['y'][0], setup['y'][1], test.ny)
     x_coord = numpy.linspace(setup['x'][0], setup['x'][1], test.nx)
 
@@ -89,24 +84,18 @@ def get_plot_data(setup, test_file, bench_file, config):
             # regular 2d linear interp. but faster. 
             test2plot = interpolate.RectBivariateSpline( test.y_hat, test.x_hat, 
                             test_data.variables[var][-1,:,:], kx=1, ky=1, s=0 ) 
-            
             # regular 2d linear interp. but faster. 
             bench2plot = interpolate.RectBivariateSpline( bench.y_hat, bench.x_hat, 
                             bench_data.variables[var][-1,:,:], kx=1, ky=1, s=0 ) 
-        
         else:
             # regular 2d linear interp. but faster. 
             test2plot = interpolate.RectBivariateSpline( test.y_hat, test.x_hat, 
                             test_data.variables[var][-1,0,:,:], kx=1, ky=1, s=0 ) 
-            
             # regular 2d linear interp. but faster. 
             bench2plot = interpolate.RectBivariateSpline( bench.y_hat, bench.x_hat, 
                             bench_data.variables[var][-1,0,:,:], kx=1, ky=1, s=0 ) 
-            
-            
         test_plot_data[var] = test2plot(y_coord, x_coord, grid=False)
         bench_plot_data[var] = bench2plot(y_coord, x_coord, grid=False)
-        
 
     if exp in ['a','c']:
         test_plot_data['velnorm_extend'] = \
@@ -114,13 +103,11 @@ def get_plot_data(setup, test_file, bench_file, config):
                 numpy.array([test_plot_data['uvel_extend'],
                              test_plot_data['vvel_extend'] ]),
                 axis=0)
-
         bench_plot_data['velnorm_extend'] = \
             numpy.linalg.norm(
                 numpy.array([bench_plot_data['uvel_extend'],
                              bench_plot_data['vvel_extend'] ]),
-            axis=0)
-
+                axis=0)
     else: # f
         test_plot_data['velnorm_extend'] = \
             numpy.linalg.norm(
@@ -128,17 +115,14 @@ def get_plot_data(setup, test_file, bench_file, config):
                              test_plot_data['vvel_extend'],
                              test_plot_data['wvel_ho'] ]),
                 axis=0)
-
         bench_plot_data['velnorm_extend'] = \
             numpy.linalg.norm(
                 numpy.array([bench_plot_data['uvel_extend'],
                              bench_plot_data['vvel_extend'],
                              bench_plot_data['wvel_ho'] ]),
-            axis=0)
-
+                axis=0)
         test_plot_data['usurfnorm'] = test_plot_data['usurf'] - test_plot_data['usurf'][0]
         bench_plot_data['usurfnorm'] = bench_plot_data['usurf'] - bench_plot_data['usurf'][0]
-
     return {'test': test_plot_data, 'bench': bench_plot_data}
         
 

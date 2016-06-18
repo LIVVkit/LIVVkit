@@ -32,7 +32,8 @@ import os
 import glob
 import importlib
 
-import livvkit.util.variables
+from livvkit.util import variables
+from livvkit.util import functions
 from livvkit.util.datastructures import LIVVDict
 
 def _run_suite(case, config, summary):
@@ -40,20 +41,44 @@ def _run_suite(case, config, summary):
     result = LIVVDict()
     result[case] = LIVVDict()
     m = importlib.import_module(config['module'])
-    result[case] = m.run(case, **config)
-    _print_result()
-    _write_result()
-    _summarize_result()
+    result[case] = m.run(case, config)
+    summary[case] = _summarize_result(m, result)
+    _print_summary(m, case, summary[case])
+    functions.write_json(result, os.path.join(variables.output_dir, "validation"), case + ".json")
 
-def _print_result():
-    pass
 
-def _write_result():
-    pass
+def _print_summary(module, case, summary):
+    """
+    Tries to run the given module's print_result method, and if it is not 
+    implemented, prints some standard information.
+    """
+    try:
+        module.print_summary()
+    except:
+        print("    Ran " + case + "!")
+        print("")
 
-def _summarize_result():
-    pass
+
+def _summarize_result(module, result):
+    """
+    """
+    summary = {}
+    try:
+        summary = module.summarize_result(result, summary)
+    except:
+        summary = {}
+    return summary
+        
 
 def _populate_metadata():
-    pass
+    """ Provide some top level information for the summary """
+    metadata = {}
+    try:
+        metadata= module.populate_metadata()
+    except:
+        metadata = {"Type" : "Summary",
+                    "Title" : "Validation",
+                    "Headers" : ["Test Name", "Outcome"]}
+    return metadata
+
 

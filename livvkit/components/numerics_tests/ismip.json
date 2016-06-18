@@ -17,7 +17,6 @@
             "xlabel": ["Normalized x"],
             "ylabel": ["Veliocity (m/a)"],
             "data_dir": "livvkit/data/numerics/ismip-hom"
-
         },
     "f": 
         {
@@ -25,7 +24,7 @@
             "y": [0.0, 1.0], 
             "pattern": ["ExpF_Fig12_???.txt",        "ExpF_Fig13_???.txt"],
             "xlabel": ["Distance from center (km)",  "Distance from center (km)"],
-            "ylabel": ["Surface (m)",                "Veliocity (m/a)"],
+            "ylabel": ["Surface (m)",                "Velocity (m/a)"],
             "data_dir": "livvkit/data/numerics/ismip-hom"
 
         } 

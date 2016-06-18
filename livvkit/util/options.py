@@ -144,10 +144,7 @@ def init(options):
             variables.verify = False
 
     if options.validation is not None:
-        variables.validation_model_config = os.sep.join(
-             [variables.cwd, "bundles", variables.model_bundle, "validation.json"])
-        variables.validation_model_module = importlib.import_module(
-             ".".join(["bundles", variables.model_bundle, "validation"]))
+        variables.validation_model_configs = options.validation 
 
     if not (variables.verify or variables.validate):
         print("")

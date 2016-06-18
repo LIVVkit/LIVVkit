@@ -4,6 +4,7 @@
             "description": "todo",
             "data_dir" : "ismip-hom",
             "output_ext" : ".out.nc",
+            "test_module" : "ismip",
             "interp_vars": ["uvel_extend", "vvel_extend"],
             "plot_vars": ["velnorm_extend"]
         },
@@ -12,6 +13,7 @@
             "description": "todo",
             "data_dir" : "ismip-hom",
             "output_ext" : ".out.nc",
+            "test_module" : "ismip",
             "interp_vars": ["uvel_extend", "vvel_extend"],
             "plot_vars": ["velnorm_extend"]
         },
@@ -20,6 +22,7 @@
             "description": "todo",
             "data_dir" : "ismip-hom",
             "output_ext" : ".out.nc",
+            "test_module" : "ismip",
             "interp_vars": ["usurf","uvel_extend","vvel_extend","wvel_ho"],
             "plot_vars": ["usurfnorm","velnorm_extend"]
         }

@@ -48,33 +48,25 @@ def _run_suite(case, config, summary):
     result = LIVVDict()
     result[case] = LIVVDict()
     analysis_data = {} 
-
     bundle = variables.numerics_model_module
-    
     model_dir = os.path.join(variables.model_dir, config['data_dir'], case)
     bench_dir = os.path.join(variables.bench_dir, config['data_dir'], case)
-    
     plot_dir = os.path.join(variables.output_dir, "numerics", "imgs")
     config["plot_dir"] = plot_dir
     functions.mkdir_p(plot_dir)
-
     model_cases = functions.collect_cases(model_dir) 
     bench_cases = functions.collect_cases(bench_dir)
     
     for mscale in sorted(model_cases):
         bscale = bench_cases[mscale] if mscale in bench_cases else []
-
         for mproc in model_cases[mscale]:
             config["case"] = '-'.join([mscale,mproc])
             bpath = (os.path.join(bench_dir, mscale, mproc.replace("-", os.sep)) 
                             if mproc in bscale else None)
             mpath = os.path.join(model_dir, mscale, mproc.replace("-", os.sep))
-           
             analysis_data[config["case"]] = _analyze_case(bundle, mpath, bpath, config)
 
-
     analysis_plots = ismip.hom(config, analysis_data)
-
     result = {
               "Title": case, 
               "Description": config["description"],
@@ -91,14 +83,12 @@ def _run_suite(case, config, summary):
 
 def _analyze_case(bundle, model_dir, bench_dir, config):
     """ Run all of the numerics tests on a particular case """
-   
     model_files = list(set(glob.glob(os.path.join(model_dir, "*" +
                             config["output_ext"]))))
     bench_files = list(set(glob.glob(os.path.join(bench_dir, "*" + 
                             config["output_ext"]))))
     
     which_experiment = config['name'].split('-')[-1]
-    
     plot_data = bundle.get_plot_data(ismip.setup[which_experiment], model_files[0], bench_files[0], config)
 
     return plot_data

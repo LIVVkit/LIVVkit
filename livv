@@ -67,7 +67,9 @@ def main():
         l.append(scheduler.run("verification", components.verification, variables.verification_model_config))
         l.append(scheduler.run("performance", components.performance, variables.performance_model_config))
     if variables.validate:
-        l.append(scheduler.run("validation", components.validation, variables.validation_model_config))
+        [l.append(scheduler.run("validation", components.validation, conf)) for 
+                conf in variables.validation_model_configs]
+    
     functions.write_json({"Elements":l}, variables.output_dir, "index.json")
     print("-------------------------------------------------------------------")
     print(" Done!  Results can be seen in a web browser at:")
