@@ -75,12 +75,16 @@ class ElementHelper:
     directory.
     """
     @staticmethod
-    def section(title, elementList):
+    def section(title, description, elementList):
         """ Returns a dictionary representing a new section to display elements"""
         sect = {}
         sect["Type"] = "Section"
         sect["Title"] = title
-        sect["Elements"] = elementList
+        sect["Description"] = description
+        if type(elementList) == list:
+            sect["Elements"] = elementList
+        else:
+            sect["Elements"] = [elementList]
         return sect
 
     @staticmethod

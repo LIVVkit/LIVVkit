@@ -41,9 +41,11 @@ def _run_suite(case, config, summary):
     result = LIVVDict()
     result[case] = LIVVDict()
     m = importlib.import_module(config['module'])
-    result[case] = m.run(case, config)
+    result = m.run(case, config)
     summary[case] = _summarize_result(m, result)
     _print_summary(m, case, summary[case])
+    functions.create_page_from_template("validation.html",
+            os.path.join(variables.index_dir, "validation", case + ".html"))
     functions.write_json(result, os.path.join(variables.output_dir, "validation"), case + ".json")
 
 
@@ -62,7 +64,6 @@ def _print_summary(module, case, summary):
 def _summarize_result(module, result):
     """
     """
-    summary = {}
     try:
         summary = module.summarize_result(result, summary)
     except:
@@ -72,7 +73,6 @@ def _summarize_result(module, result):
 
 def _populate_metadata():
     """ Provide some top level information for the summary """
-    metadata = {}
     try:
         metadata= module.populate_metadata()
     except:

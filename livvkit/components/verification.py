@@ -58,7 +58,7 @@ def _run_suite(case, config, summary):
                       if mcase in bench_subcases else "")
             mpath = os.path.join(model_dir, subcase, mcase.replace("-", os.sep))
             case_result = _analyze_case(mpath, bpath, config)
-            result[subcase].append(ElementHelper.section(mcase, case_result))
+            result[subcase].append(ElementHelper.section(mcase, "", case_result))
             case_summary[subcase] = _summarize_result(case_result, 
                     case_summary[subcase])
             

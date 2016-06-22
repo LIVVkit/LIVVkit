@@ -30,6 +30,7 @@ Analyze the ice sheet coverage.  For more information check documentation for
 the run() function.
 """
 import os
+import glob
 import numpy as np
 import subprocess
 from netCDF4 import Dataset
@@ -49,25 +50,22 @@ def run(name, config):
     Returns:
         A list of elements to 
     """
-    description = config['description']
     greenland_data = os.path.join(variables.cwd, config['data_dir'], config['gl_data']) 
     velocity_data = os.path.join(variables.cwd, config['data_dir'], config['vel_data'])
-    print(greenland_data)
    
     if not (os.path.exists(greenland_data) and os.path.exists(velocity_data)):
         # Add more handling here -- what do we want to return for failed tests
         return ElementHelper.error("lvargo13", "Could not find necessary data for validation!")
 
-
     # Generate the script
-    output_file_base = os.path.join(variables.index_dir, 
-                           'validation', name, 'imgs', 'lvargo13')
-    functions.mkdir_p(output_file_base)
-   
-    ncl_command = 'ncl \'gl_data = addfile("'+ config['gl_data'] +'", "r")\' '  \
-                  + '\'vel_data = addfile("'+ config['vel_data'] +'", "r")\' '  \
+    output_dir = os.path.join(variables.index_dir, 'validation', 'imgs')
+    output_file_base = os.path.join(output_dir, 'lvargo13')
+    functions.mkdir_p(output_dir)
+
+    ncl_command = 'ncl \'gl_data = addfile("'+ config['data_dir'] + '/' + config['gl_data'] +'", "r")\' '  \
+                  + '\'vel_data = addfile("'+ config['data_dir'] + '/' + config['vel_data'] +'", "r")\' '  \
                   + '\'model_prefix = "' \
-                  + os.path.join(config['model_dir'], config['model_prefix']) +'"\' '  \
+                  + os.path.join(config['data_dir'], config['model_prefix']) +'"\' '  \
                   + '\'model_suffix = "'+ config['model_suffix'] +'"\' '  \
                   + '\'model_start = '+ config['model_start'] +'\' '  \
                   + '\'model_end = '+ config['model_end'] +'\' '  \
@@ -78,5 +76,13 @@ def run(name, config):
     call = subprocess.Popen(ncl_command, shell=True, 
                             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     stdOut, stdErr = call.stdout.read(), call.stderr.read()
+    
+    #TODO: Put some error checking here
+
+    output_plots = [os.path.basename(p) for p in glob.glob(output_file_base + "*.png")]
+    plot_list = []
+    for plot in output_plots:
+        plot_list.append(ElementHelper.image_element(plot, "", plot)) 
+    return ElementHelper.section("lvargo13", config['description'], ElementHelper.gallery("Plots", plot_list))
 
 

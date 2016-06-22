@@ -34,7 +34,7 @@ function drawNav() {
     html = "";
     getUrl = window.location.href.substr(0,window.location.href.lastIndexOf('/')+1);
     data = loadJSON(getUrl + indexPath + '/index.json');
-    console.log(data);
+    console.log(getUrl + indexPath + '/index.json');
     for (var cat in data["Elements"]) {
         if (data["Elements"][cat] != null && Object.keys(data["Elements"][cat]["Data"]).length > 0) {
             html += "<h3>" + data["Elements"][cat]["Title"] + "</h3>\n";
@@ -108,8 +108,21 @@ function drawVerification() {
  * Generates the validation content page
  */
 function drawValidation() {
-    html = "";
-    return html;
+    var verType = window.location.href.substr(
+            window.location.href.lastIndexOf("/")+1).split("#")[0].replace(".html", "");
+    var data = loadJSON('./' + verType + ".json");
+     
+    html = "<div id=" + data["Title"] + ">";
+    html += "<h2>" + data["Title"] + "</h2>";
+    html += "<p>" + data["Description"];
+    html += "</div>";
+    $("#content").append(html); 
+    
+    // Add the content
+    for (var idx in data["Elements"]) {
+        elem = data["Elements"][idx];
+        elementMap[elem["Type"]](elem, "#"+data["Title"]);
+    }
 }
 
 

@@ -88,11 +88,7 @@ def _run_suite(case, config, summary):
             ElementHelper.gallery("Performance Plots", timing_plots)
          ]
 
-    result = {
-                "Title" : case,
-                "Description" : config["description"],
-                "Elements" : el
-             }
+    result = ElementHelper.section(case, config["description"], el)
     summary[case] = _summarize_result(timing_data, config)
     _print_result(case, summary) 
     functions.create_page_from_template("performance.html",
