@@ -38,8 +38,6 @@ from livvkit.util.datastructures import LIVVDict
 
 def _run_suite(case, config, summary):
     """ Run the full suite of validation tests """
-    result = LIVVDict()
-    result[case] = LIVVDict()
     m = importlib.import_module(config['module'])
     result = m.run(case, config)
     summary[case] = _summarize_result(m, result)
@@ -67,8 +65,11 @@ def _summarize_result(module, result):
     try:
         summary = module.summarize_result(result, summary)
     except:
-        summary = {}
-    return summary
+        status = "Success"
+        for e in result.get("Elements"):
+            if e.get("Type") == "Error":
+                status = "Failure"
+    return {"" : {"Outcome" : status}}
         
 
 def _populate_metadata():
@@ -78,7 +79,7 @@ def _populate_metadata():
     except:
         metadata = {"Type" : "Summary",
                     "Title" : "Validation",
-                    "Headers" : ["Test Name", "Outcome"]}
+                    "Headers" : ["Outcome"]}
     return metadata
 
 

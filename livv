@@ -33,6 +33,7 @@ Management of the tests to be run is handled by the scheduler
 import matplotlib
 matplotlib.use('agg')
 
+import os
 import sys
 from livvkit.util import variables, options
 
@@ -63,12 +64,19 @@ def main():
     functions.setup_output()
     l = []
     if variables.verify:
-        l.append(scheduler.run("numerics", components.numerics, variables.numerics_model_config))
-        l.append(scheduler.run("verification", components.verification, variables.verification_model_config))
-        l.append(scheduler.run("performance", components.performance, variables.performance_model_config))
+        l.append(scheduler.run("numerics", components.numerics, 
+            functions.read_json(variables.numerics_model_config)))
+        l.append(scheduler.run("verification", components.verification, 
+            functions.read_json(variables.verification_model_config)))
+        l.append(scheduler.run("performance", components.performance, 
+            functions.read_json(variables.performance_model_config)))
     if variables.validate:
-        [l.append(scheduler.run("validation", components.validation, conf)) for 
-                conf in variables.validation_model_configs]
+        validation_config = {}
+        for conf in variables.validation_model_configs:
+            validation_config = functions.merge_dicts(validation_config, 
+                    functions.read_json(conf))
+        l.append(scheduler.run("validation", components.validation, 
+            validation_config))
     
     functions.write_json({"Elements":l}, variables.output_dir, "index.json")
     print("-------------------------------------------------------------------")

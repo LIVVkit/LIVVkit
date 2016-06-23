@@ -81,11 +81,6 @@ def init(options):
     variables.index_dir      = variables.output_dir
     variables.verify = True if options.verification is not None else False
     variables.validate = True if options.validation is not None else False
-    # TODO: This is a workaround to handle the case when no --verification or 
-    #       --validation options are given.  Need to also fix the way that 
-    #       the validation/performance handling is done in the if 
-    #       options.validation != [] block.  Things currently seem to work but 
-    #       this can definitely be made cleaner -- arbennett 2/21/16 
     variables.model_dir = ""
     variables.model_config = ""
     variables.bench_dir = ""
@@ -97,9 +92,11 @@ def init(options):
     variables.validation_model_config = ""
     variables.validation_model_module = ""
 
+    # Get a list of bundles that provide model specific implementations
     available_bundles = [mod for imp, mod, ispkg in pkgutil.iter_modules(bundles.__path__)]
-    # rstrip accounts for trailing path separators
+    
     if options.verification is not None:
+        # rstrip accounts for trailing path separators
         variables.model_dir = options.verification[0].rstrip(os.sep)
         variables.bench_dir = options.verification[1].rstrip(os.sep)
         if not os.path.isdir(variables.model_dir): 

@@ -36,7 +36,6 @@ import fnmatch
 from datetime import datetime 
 
 from livvkit.util import variables
-from livvkit.util.datastructures import LIVVDict
 
 def mkdir_p(path):
     """
@@ -50,8 +49,26 @@ def mkdir_p(path):
         else: raise
 
 
+def merge_dicts(dict1, dict2):
+    """ Merge two dictionaries and return the result """
+    tmp = dict1.copy()
+    tmp.update(dict2)
+    return tmp
+
+
 def find_file(search_dir, file_pattern):
-    """ Search for a file in a directory, and return the first match """
+    """ 
+    Search for a file in a directory, and return the first match.
+    If the file is not found return an empty string
+   
+    Args:
+        search_dir: The root directory to search in
+        file_pattern: A unix-style wildcard pattern representing 
+            the file to find
+    
+    Returns: 
+        The path to the file if it was found, otherwise an empty string
+    """
     for root, dirnames, fnames in os.walk(search_dir):
             for fname in fnames:
                 if fnmatch.fnmatch(fname, file_pattern):
@@ -60,19 +77,30 @@ def find_file(search_dir, file_pattern):
 
 
 def sort_processor_counts(p_string):
-    p_num = int(p_string.split('-')[0][1:])
-    return p_num
+    """ Simple wrapper to help sort processor counts """
+    return int(p_string.split('-')[0][1:])
 
 
 def sort_scale(s_string):
-    s_num = int(s_string[1:])
-    return s_num
+    """ Simple wrapper to help sort scale sizes """
+    return int(s_string[1:])
 
 
 def create_page_from_template(template_file, output_path):
     """ Copy the correct html template file to the output directory """
     mkdir_p(os.path.dirname(output_path))
     shutil.copy(os.path.join(variables.resource_dir, template_file), output_path)
+
+
+def read_json(file_path):
+    """ Read in a json file and return a dictionary representation """
+    config = {}
+    try:
+        with open(file_path, 'r') as f:
+            config = json.load(f)
+    except:
+        pass
+    return config
 
 
 def write_json(data, path, file_name):
@@ -94,7 +122,7 @@ def write_json(data, path, file_name):
 
 def collect_cases(data_dir):
     """ Find all cases and subcases of a particular run type """
-    cases = LIVVDict()
+    cases = {} 
     for root, dirs, files in os.walk(data_dir):
         if not dirs:
             split_case = os.path.relpath(root,data_dir).split(os.sep)
@@ -104,7 +132,10 @@ def collect_cases(data_dir):
 
 
 def setup_output():
-    """ Copies old run data into a timestamped directory and sets up the new directory """
+    """ 
+    Set up the directory structure for the output.  Copies old run 
+    data into a timestamped directory and sets up the new directory 
+    """
     # Check if we need to back up an old run
     if os.path.isdir(variables.index_dir):
         print("-------------------------------------------------------------------")

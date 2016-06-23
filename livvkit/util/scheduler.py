@@ -38,7 +38,7 @@ import livvkit.components.performance
 import livvkit.components.validation 
 from livvkit.util import variables
 
-def run(run_type, module, config_path):
+def run(run_type, module, config):
     """
     Collects the analyses cases to be run and launches processes for each of 
     them.
@@ -46,12 +46,8 @@ def run(run_type, module, config_path):
     Args:
         run_type: A string representation of the run type (eg. verification)
         module: The module corresponding to the run.  Must have a run_suite function
-        config_path: The path to the configuration file for the bundle
+        config_path: The configuration for the module 
     """
-    if not os.path.isfile(config_path):
-        return
-    with open(config_path, 'r') as f:
-        config = json.load(f)
     tests = [t for t in config.keys() if isinstance(config[t], dict)]
     print(" -----------------------------------------------------------------")
     print("   Beginning " + run_type.lower() + " test suite ")

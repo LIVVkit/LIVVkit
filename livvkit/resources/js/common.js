@@ -174,7 +174,7 @@ function drawNumerics() {
  * Build a table
  */
 function drawSummary(data, div) {
-    var html = "<table>\n";
+    var html = "<table class=\"summary\">\n";
     // Add the headers
     html += "<th></th>\n";
     for (var header in data["Headers"]) {

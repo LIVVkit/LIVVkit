@@ -95,7 +95,7 @@ a {
 
 #wrapper {
     margin: auto;
-    width: 90%;
+    width: 80%;
     min-width: 800px;
 }
 
@@ -193,4 +193,8 @@ td {
 
 .gallery img {
     border: 1px solid #66c2ff;
+}
+
+.summary {
+    width: 70%;
 }

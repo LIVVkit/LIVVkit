@@ -39,7 +39,6 @@ from livvkit.util import variables
 from livvkit.util import colormaps
 from livvkit.util.datastructures import LIVVDict
 from livvkit.util.datastructures import ElementHelper
-from livvkit.util.functions import sort_processor_counts
 
 def _run_suite(case, config, summary):
     """ Run the full suite of verification tests """
@@ -53,7 +52,7 @@ def _run_suite(case, config, summary):
     for subcase in sorted(model_cases.keys()):
         bench_subcases = bench_cases[subcase] if subcase in bench_cases else [] 
         result[subcase] = []
-        for mcase in sorted(model_cases[subcase], key=sort_processor_counts):
+        for mcase in sorted(model_cases[subcase], key=functions.sort_processor_counts):
             bpath = (os.path.join(bench_dir, subcase, mcase.replace("-", os.sep)) 
                       if mcase in bench_subcases else "")
             mpath = os.path.join(model_dir, subcase, mcase.replace("-", os.sep))
@@ -244,7 +243,7 @@ def diff_configurations(model_config, bench_config, model_bundle, bench_bundle):
             bench_val = bench_data[s][v] if s in bench_sections and v in bench_vars else 'NA'
             same = True if model_val == bench_val and model_val != 'NA' else False
             diff_dict[s][v] = (same, model_val, bench_val)
-    return ElementHelper.diff("Configuration Comparison", diff_dict)
+    return ElementHelper.file_diff("Configuration Comparison", diff_dict)
 
 
 def plot_bit_for_bit(case, var_name, model_data, bench_data, diff_data):

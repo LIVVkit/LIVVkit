@@ -35,14 +35,11 @@ import pprint
 import numpy as np
 import matplotlib.pyplot as plt
 
-
 from livvkit.util import functions
 from livvkit.util import variables
 from livvkit.util import colormaps
 from livvkit.util.datastructures import LIVVDict
 from livvkit.util.datastructures import ElementHelper
-from livvkit.util.functions import sort_processor_counts
-from livvkit.util.functions import sort_scale
 
 def _run_suite(case, config, summary):
     """ Run the full suite of performance tests """
@@ -82,7 +79,7 @@ def _run_suite(case, config, summary):
     timing_plots = timing_plots + [generate_timing_breakdown_plot(timing_data[s], config['scaling_var'],
             "Timing Breakdown for " + case.capitalize()+" "+s, "",
             os.path.join(plot_dir, case+"_"+s+"_timing_breakdown.png")
-        ) for s in sorted(timing_data.keys(), key=sort_scale)]
+        ) for s in sorted(timing_data.keys(), key=functions.sort_scale)]
   
     el = [
             ElementHelper.gallery("Performance Plots", timing_plots)
@@ -247,7 +244,8 @@ def generate_timing_breakdown_plot(timing_stats, scaling_var, title, description
     n_subplots = len(timing_stats.keys())
     left_bounds = [i+1 for i in range(n_subplots)]
     fig, ax = plt.subplots(1, n_subplots+1, figsize=(3*(n_subplots+2), 5))
-    for plot_num, p_count in enumerate(sorted(timing_stats.keys(), key=sort_processor_counts)):
+    for plot_num, p_count in enumerate(
+            sorted(timing_stats.keys(), key=functions.sort_processor_counts)):
         case_data = timing_stats[p_count]
         sub_ax = plt.subplot(1, n_subplots+1, plot_num+1)
         sub_ax.set_title(p_count)

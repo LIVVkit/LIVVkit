@@ -11,7 +11,7 @@
 #
 # You should have received a copy of the CC0 legalcode along with this
 # work.  If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.
-
+""" Provides some colormaps not included in matplotlib version < 2.0 """
 __all__ = ['magma', 'inferno', 'plasma', 'viridis']
 
 _magma_data = [[0.001462, 0.000466, 0.013866],
