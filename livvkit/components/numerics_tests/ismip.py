@@ -38,7 +38,7 @@ import scipy
 
 import matplotlib.pyplot as plt
 
-from livvkit.util import variables
+import livvkit
 from livvkit.util.datastructures import ElementHelper
 
 with open(__file__.replace('.py','.json'), 'r') as f:
@@ -92,14 +92,14 @@ def hom(config, analysis_data):
                 plot_file = os.path.join( config["plot_dir"], config['name']+'_'+fig_label+'_'+l+'.png' )
                 title = fig_label[0:-1]+'. '+fig_label[-1]+': '+str(int(l))+' km'
                 recreate_file = os.path.join(
-                        variables.cwd, setup[exp]["data_dir"], pattern
+                        livvkit.cwd, setup[exp]["data_dir"], pattern
                         ).replace('???', l)
             else:
                 plt.title('No-Slip Bed')
                 plot_file = os.path.join( config["plot_dir"], config['name']+'_'+fig_label+'_000.png' )
                 title = fig_label[0:-2]+'. '+fig_label[-2:]+': No-Slip Bed'
                 recreate_file = os.path.join(
-                        variables.cwd, setup[exp]["data_dir"], pattern
+                        livvkit.cwd, setup[exp]["data_dir"], pattern
                         ).replace('???', '000')
 
 

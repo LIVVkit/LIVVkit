@@ -32,7 +32,6 @@ CISM-glissade module for performance analysis
 import os
 import matplotlib
 import numpy as np
-import pprint
 
 from livvkit.util.datastructures import LIVVDict
 from livvkit.util.datastructures import ElementHelper

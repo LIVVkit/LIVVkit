@@ -36,7 +36,7 @@ import platform
 import argparse
 import importlib
 
-from livvkit.util import variables
+import livvkit
 from livvkit.util import datastructures
 from livvkit import bundles
 from livvkit import resources
@@ -75,75 +75,75 @@ def parse(args):
 
 def init(options):
     """ Initialize some defaults """
-    variables.resource_dir   = os.sep.join(resources.__path__) 
-    variables.output_dir     = os.path.abspath(options.out_dir)
-    variables.img_dir        = variables.output_dir + "/imgs"
-    variables.index_dir      = variables.output_dir
-    variables.verify = True if options.verification is not None else False
-    variables.validate = True if options.validation is not None else False
-    variables.model_dir = ""
-    variables.model_config = ""
-    variables.bench_dir = ""
-    variables.bench_config = ""
-    variables.numerics_model_config = ""
-    variables.verification_model_config = ""
-    variables.performance_model_config = ""
-    variables.performance_model_module = ""
-    variables.validation_model_config = ""
-    variables.validation_model_module = ""
+    livvkit.resource_dir   = os.sep.join(resources.__path__) 
+    livvkit.output_dir     = os.path.abspath(options.out_dir)
+    livvkit.img_dir        = livvkit.output_dir + "/imgs"
+    livvkit.index_dir      = livvkit.output_dir
+    livvkit.verify = True if options.verification is not None else False
+    livvkit.validate = True if options.validation is not None else False
+    livvkit.model_dir = ""
+    livvkit.model_config = ""
+    livvkit.bench_dir = ""
+    livvkit.bench_config = ""
+    livvkit.numerics_model_config = ""
+    livvkit.verification_model_config = ""
+    livvkit.performance_model_config = ""
+    livvkit.performance_model_module = ""
+    livvkit.validation_model_config = ""
+    livvkit.validation_model_module = ""
 
     # Get a list of bundles that provide model specific implementations
     available_bundles = [mod for imp, mod, ispkg in pkgutil.iter_modules(bundles.__path__)]
     
     if options.verification is not None:
         # rstrip accounts for trailing path separators
-        variables.model_dir = options.verification[0].rstrip(os.sep)
-        variables.bench_dir = options.verification[1].rstrip(os.sep)
-        if not os.path.isdir(variables.model_dir): 
+        livvkit.model_dir = options.verification[0].rstrip(os.sep)
+        livvkit.bench_dir = options.verification[1].rstrip(os.sep)
+        if not os.path.isdir(livvkit.model_dir): 
             print("")
             print("----------------------------------------------------------")
             print("                       UH OH!")
             print("----------------------------------------------------------")
             print("    Your comparison directory does not exist; please check")
             print("    the path:")
-            print("\n"+variables.model_dir+"\n\n")
+            print("\n"+livvkit.model_dir+"\n\n")
             sys.exit(1)
         
-        if not os.path.isdir(variables.bench_dir):
+        if not os.path.isdir(livvkit.bench_dir):
             print("")
             print("----------------------------------------------------------")
             print("                       UH OH!")
             print("----------------------------------------------------------")
             print("    Your benchmark directory does not exist; please check")
             print("    the path:")
-            print("\n"+variables.bench_dir+"\n\n")
+            print("\n"+livvkit.bench_dir+"\n\n")
             sys.exit(1)
             
         
-        variables.model_bundle = variables.model_dir.split(os.sep)[-1]
-        variables.bench_bundle = variables.bench_dir.split(os.sep)[-1]
+        livvkit.model_bundle = livvkit.model_dir.split(os.sep)[-1]
+        livvkit.bench_bundle = livvkit.bench_dir.split(os.sep)[-1]
 
-        if variables.model_bundle in available_bundles:
-            variables.numerics_model_config = os.sep.join(
-                bundles.__path__ + [variables.model_bundle, "numerics.json"])
-            variables.numerics_model_module = importlib.import_module(
-                ".".join(["livvkit.bundles", variables.model_bundle, "numerics"]))
-            variables.verification_model_config = os.sep.join(
-                 bundles.__path__ + [variables.model_bundle, "verification.json"])
-            variables.verification_model_module = importlib.import_module(
-                 ".".join(["livvkit.bundles", variables.model_bundle, "verification"]))
-            variables.performance_model_config = os.sep.join(
-                 bundles.__path__ + [variables.model_bundle, "performance.json"])
-            variables.performance_model_module = importlib.import_module(
-                 ".".join(["livvkit.bundles", variables.model_bundle, "performance"]))
+        if livvkit.model_bundle in available_bundles:
+            livvkit.numerics_model_config = os.sep.join(
+                bundles.__path__ + [livvkit.model_bundle, "numerics.json"])
+            livvkit.numerics_model_module = importlib.import_module(
+                ".".join(["livvkit.bundles", livvkit.model_bundle, "numerics"]))
+            livvkit.verification_model_config = os.sep.join(
+                 bundles.__path__ + [livvkit.model_bundle, "verification.json"])
+            livvkit.verification_model_module = importlib.import_module(
+                 ".".join(["livvkit.bundles", livvkit.model_bundle, "verification"]))
+            livvkit.performance_model_config = os.sep.join(
+                 bundles.__path__ + [livvkit.model_bundle, "performance.json"])
+            livvkit.performance_model_module = importlib.import_module(
+                 ".".join(["livvkit.bundles", livvkit.model_bundle, "performance"]))
         else:
             #TODO: Should implement some error checking here...
-            variables.verify = False
+            livvkit.verify = False
 
     if options.validation is not None:
-        variables.validation_model_configs = options.validation 
+        livvkit.validation_model_configs = options.validation 
 
-    if not (variables.verify or variables.validate):
+    if not (livvkit.verify or livvkit.validate):
         print("")
         print("----------------------------------------------------------")
         print("                       UH OH!")

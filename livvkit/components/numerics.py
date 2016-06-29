@@ -35,8 +35,8 @@ import pprint
 import numpy as np
 from netCDF4 import Dataset
 
+import livvkit
 from livvkit.util import functions
-from livvkit.util import variables
 from livvkit.util.datastructures import LIVVDict
 from livvkit.util.datastructures import ElementHelper
 
@@ -48,10 +48,10 @@ def _run_suite(case, config, summary):
     result = LIVVDict()
     result[case] = LIVVDict()
     analysis_data = {} 
-    bundle = variables.numerics_model_module
-    model_dir = os.path.join(variables.model_dir, config['data_dir'], case)
-    bench_dir = os.path.join(variables.bench_dir, config['data_dir'], case)
-    plot_dir = os.path.join(variables.output_dir, "numerics", "imgs")
+    bundle = livvkit.numerics_model_module
+    model_dir = os.path.join(livvkit.model_dir, config['data_dir'], case)
+    bench_dir = os.path.join(livvkit.bench_dir, config['data_dir'], case)
+    plot_dir = os.path.join(livvkit.output_dir, "numerics", "imgs")
     config["plot_dir"] = plot_dir
     functions.mkdir_p(plot_dir)
     model_cases = functions.collect_cases(model_dir) 
@@ -77,8 +77,8 @@ def _run_suite(case, config, summary):
     _print_result(case,result) #TODO
 
     functions.create_page_from_template("numerics.html",
-            os.path.join(variables.index_dir, "numerics", case+".html"))
-    functions.write_json(result, os.path.join(variables.output_dir,"numerics"), case+".json")
+            os.path.join(livvkit.index_dir, "numerics", case+".html"))
+    functions.write_json(result, os.path.join(livvkit.output_dir,"numerics"), case+".json")
 
 
 def _analyze_case(bundle, model_dir, bench_dir, config):

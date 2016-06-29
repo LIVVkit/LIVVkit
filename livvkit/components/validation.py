@@ -32,7 +32,7 @@ import os
 import glob
 import importlib
 
-from livvkit.util import variables
+import livvkit
 from livvkit.util import functions
 from livvkit.util.datastructures import LIVVDict
 
@@ -43,8 +43,8 @@ def _run_suite(case, config, summary):
     summary[case] = _summarize_result(m, result)
     _print_summary(m, case, summary[case])
     functions.create_page_from_template("validation.html",
-            os.path.join(variables.index_dir, "validation", case + ".html"))
-    functions.write_json(result, os.path.join(variables.output_dir, "validation"), case + ".json")
+            os.path.join(livvkit.index_dir, "validation", case + ".html"))
+    functions.write_json(result, os.path.join(livvkit.output_dir, "validation"), case + ".json")
 
 
 def _print_summary(module, case, summary):

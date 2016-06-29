@@ -35,7 +35,7 @@ import scipy
 from netCDF4 import Dataset
 from scipy import interpolate 
 
-from livvkit.util import variables
+import livvkit
 
 class DataGrid:
     """
@@ -67,8 +67,8 @@ def get_plot_data(setup, test_file, bench_file, config):
     test_plot_data = {}
     bench_plot_data = {}
     exp = config['name'].split('-')[-1]
-    test_data = Dataset(os.path.join(variables.cwd,test_file), 'r')
-    bench_data = Dataset(os.path.join(variables.cwd,bench_file), 'r')
+    test_data = Dataset(os.path.join(livvkit.cwd,test_file), 'r')
+    bench_data = Dataset(os.path.join(livvkit.cwd,bench_file), 'r')
     test = DataGrid(test_data)
     bench = DataGrid(bench_data)
     y_coord = numpy.linspace(setup['y'][0], setup['y'][1], test.ny)

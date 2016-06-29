@@ -35,7 +35,7 @@ import shutil
 import fnmatch
 from datetime import datetime 
 
-from livvkit.util import variables
+import livvkit
 
 def mkdir_p(path):
     """
@@ -89,7 +89,7 @@ def sort_scale(s_string):
 def create_page_from_template(template_file, output_path):
     """ Copy the correct html template file to the output directory """
     mkdir_p(os.path.dirname(output_path))
-    shutil.copy(os.path.join(variables.resource_dir, template_file), output_path)
+    shutil.copy(os.path.join(livvkit.resource_dir, template_file), output_path)
 
 
 def read_json(file_path):
@@ -137,11 +137,11 @@ def setup_output():
     data into a timestamped directory and sets up the new directory 
     """
     # Check if we need to back up an old run
-    if os.path.isdir(variables.index_dir):
+    if os.path.isdir(livvkit.index_dir):
         print("-------------------------------------------------------------------")
         print('Previous output data found in output directory!')
         try:
-            f = open(variables.index_dir + os.sep + "data.txt", "r")
+            f = open(livvkit.index_dir + os.sep + "data.txt", "r")
             prev_time = f.readline().replace(":","").replace("-","").replace(" ","_").rstrip()
             prev_comment = f.readline().rstrip()
             f.close()
@@ -149,21 +149,21 @@ def setup_output():
             prev_time = "bkd_"+datetime.now().strftime("%Y%m%d_%H%M%S")
             prev_comment = "Warning: could not find previous runtime and comment."
         print('   Backing up data to:')
-        print('   ' + variables.index_dir + "_" + prev_time)
+        print('   ' + livvkit.index_dir + "_" + prev_time)
         print("-------------------------------------------------------------------")
-        shutil.move(variables.index_dir, variables.index_dir + "_" + prev_time)
+        shutil.move(livvkit.index_dir, livvkit.index_dir + "_" + prev_time)
     else:
         print("-------------------------------------------------------------------")
 
     # Copy over js, css, & imgs directories from source
-    mkdir_p(variables.website_dir)
-    shutil.copytree(os.path.join(variables.resource_dir,"css"), os.path.join(variables.index_dir,"css"))
-    shutil.copytree(os.path.join(variables.resource_dir,"js"), os.path.join(variables.index_dir,"js"))
-    shutil.copytree(os.path.join(variables.resource_dir,"imgs"), os.path.join(variables.index_dir,"imgs"))
-    shutil.copy(os.path.join(variables.resource_dir, "index.html"), 
-                os.path.join(variables.index_dir, "index.html"))
+    mkdir_p(livvkit.website_dir)
+    shutil.copytree(os.path.join(livvkit.resource_dir,"css"), os.path.join(livvkit.index_dir,"css"))
+    shutil.copytree(os.path.join(livvkit.resource_dir,"js"), os.path.join(livvkit.index_dir,"js"))
+    shutil.copytree(os.path.join(livvkit.resource_dir,"imgs"), os.path.join(livvkit.index_dir,"imgs"))
+    shutil.copy(os.path.join(livvkit.resource_dir, "index.html"), 
+                os.path.join(livvkit.index_dir, "index.html"))
     # Record when this data was recorded so we can make nice backups
-    with open(variables.index_dir + os.sep + "data.txt", "w") as f:
-        f.write(variables.timestamp + "\n")
-        f.write(variables.comment)
+    with open(livvkit.index_dir + os.sep + "data.txt", "w") as f:
+        f.write(livvkit.timestamp + "\n")
+        f.write(livvkit.comment)
 

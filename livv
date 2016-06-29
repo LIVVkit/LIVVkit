@@ -35,7 +35,9 @@ matplotlib.use('agg')
 
 import os
 import sys
-from livvkit.util import variables, options
+
+import livvkit
+from livvkit.util import options
 
 def main():
     """ Direct execution. """
@@ -50,11 +52,11 @@ def main():
     print("  Load modules: python, ncl, nco, python_matplotlib, hdf5, netcdf,")
     print("                python_numpy, and python_netcdf4 for best results.")
     print("")
-    print("  Current run: " + variables.timestamp)
-    print("  User: "        + variables.user)
-    print("  OS Type: "     + variables.os_type)
-    print("  Machine: "     + variables.machine)
-    print("  "              + variables.comment)
+    print("  Current run: " + livvkit.timestamp)
+    print("  User: "        + livvkit.user)
+    print("  OS Type: "     + livvkit.os_type)
+    print("  Machine: "     + livvkit.machine)
+    print("  "              + livvkit.comment)
    
     options.init(options.parse(sys.argv[1:]))
 
@@ -63,25 +65,25 @@ def main():
     from livvkit.util.datastructures import LIVVDict
     functions.setup_output()
     l = []
-    if variables.verify:
+    if livvkit.verify:
         l.append(scheduler.run("numerics", components.numerics, 
-            functions.read_json(variables.numerics_model_config)))
+            functions.read_json(livvkit.numerics_model_config)))
         l.append(scheduler.run("verification", components.verification, 
-            functions.read_json(variables.verification_model_config)))
+            functions.read_json(livvkit.verification_model_config)))
         l.append(scheduler.run("performance", components.performance, 
-            functions.read_json(variables.performance_model_config)))
-    if variables.validate:
+            functions.read_json(livvkit.performance_model_config)))
+    if livvkit.validate:
         validation_config = {}
-        for conf in variables.validation_model_configs:
+        for conf in livvkit.validation_model_configs:
             validation_config = functions.merge_dicts(validation_config, 
                     functions.read_json(conf))
         l.append(scheduler.run("validation", components.validation, 
             validation_config))
     
-    functions.write_json({"Elements":l}, variables.output_dir, "index.json")
+    functions.write_json({"Elements":l}, livvkit.output_dir, "index.json")
     print("-------------------------------------------------------------------")
     print(" Done!  Results can be seen in a web browser at:")
-    print("        " +  variables.output_dir )
+    print("        " +  livvkit.output_dir )
     print("-------------------------------------------------------------------")
 
 # If called from the command line directly, go to the main method (above)

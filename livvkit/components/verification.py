@@ -33,9 +33,9 @@ import numpy as np
 from netCDF4 import Dataset
 from matplotlib import pyplot
 
+import livvkit
 from livvkit.util import netcdf
 from livvkit.util import functions
-from livvkit.util import variables
 from livvkit.util import colormaps
 from livvkit.util.datastructures import LIVVDict
 from livvkit.util.datastructures import ElementHelper
@@ -43,8 +43,8 @@ from livvkit.util.datastructures import ElementHelper
 def _run_suite(case, config, summary):
     """ Run the full suite of verification tests """
     config["name"] = case
-    model_dir = os.path.join(variables.model_dir, config['data_dir'], case)
-    bench_dir = os.path.join(variables.bench_dir, config['data_dir'], case)
+    model_dir = os.path.join(livvkit.model_dir, config['data_dir'], case)
+    bench_dir = os.path.join(livvkit.bench_dir, config['data_dir'], case)
     result = LIVVDict()
     case_summary = LIVVDict()
     model_cases = functions.collect_cases(model_dir)
@@ -64,13 +64,13 @@ def _run_suite(case, config, summary):
     summary[case] = case_summary
     _print_summary(case, summary[case])
     functions.create_page_from_template("verification.html", 
-            os.path.join(variables.index_dir, "verification", case + ".html"))
-    functions.write_json(result, os.path.join(variables.output_dir, "verification"), case+".json")
+            os.path.join(livvkit.index_dir, "verification", case + ".html"))
+    functions.write_json(result, os.path.join(livvkit.output_dir, "verification"), case+".json")
 
 
 def _analyze_case(model_dir, bench_dir, config, plot=True):
     """ Runs all of the verification checks on a particular case """
-    bundle = variables.verification_model_module
+    bundle = livvkit.verification_model_module
     model_out = functions.find_file(model_dir, "*"+config["output_ext"])
     bench_out = functions.find_file(bench_dir, "*"+config["output_ext"])
     model_config = functions.find_file(model_dir, "*"+config["config_ext"])
@@ -248,7 +248,7 @@ def diff_configurations(model_config, bench_config, model_bundle, bench_bundle):
 
 def plot_bit_for_bit(case, var_name, model_data, bench_data, diff_data):
     """ Create a bit for bit plot """
-    plot_path = os.path.join(os.path.join(variables.output_dir, "verification", "imgs"))
+    plot_path = os.path.join(os.path.join(livvkit.output_dir, "verification", "imgs"))
     functions.mkdir_p(plot_path)
     m_ndim = np.ndim(model_data)
     b_ndim = np.ndim(bench_data)
@@ -299,5 +299,5 @@ def plot_bit_for_bit(case, var_name, model_data, bench_data, diff_data):
     
     pyplot.savefig(os.sep.join([plot_path, case+".png"]))
     pyplot.close()
-    return os.path.join(os.path.relpath(plot_path, os.path.join(variables.output_dir, "verification")), case+".png")
+    return os.path.join(os.path.relpath(plot_path, os.path.join(livvkit.output_dir, "verification")), case+".png")
 

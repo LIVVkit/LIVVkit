@@ -1,3 +1,8 @@
+.. image:: ./imgs/livvkit.png
+    :width: 400px
+    :align: center
+    :alt: LIVVkit
+
 Philosophy
 ==========
 
@@ -54,30 +59,6 @@ both (numerical) model V&V and software V&V. These two types of V&V
 techniques should be viewed as a complimentary process, as the numerical
 and software code are intrinsically linked and live within the same
 code-base.
-
-V&V with LIVVkit
-----------------
-
-LIVVkit is a python based V&V toolkit for computational ice sheet
-models. It is being developed to provide both model V&V and software V&V
-tools.
-
-Within LIVVkit, these capabilities are broken into four components:
-
--  `Numerics <LIVVkit-numerics>`__, which will provide numerical
-   verification tools (under development)
--  `Validation <LIVVkit-validation>`__ which will provide physical
-   validation tools (under development)
-
--  `Verification <LIVVkit-verification>`__ which provides code
-   verification tools
--  `Performance <LIVVkit-performance>`__ which provides performance
-   validation tools
-
-Currently, LIVVkit is being developed and used in conjunction with the
-Community Ice Sheet Model
-(`CISM <http://oceans11.lanl.gov/cism/documentation.html>`__), but is
-designed to be extensible to other models.
 
 References
 ----------

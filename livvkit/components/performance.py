@@ -35,8 +35,8 @@ import pprint
 import numpy as np
 import matplotlib.pyplot as plt
 
+import livvkit
 from livvkit.util import functions
-from livvkit.util import variables
 from livvkit.util import colormaps
 from livvkit.util.datastructures import LIVVDict
 from livvkit.util.datastructures import ElementHelper
@@ -46,10 +46,10 @@ def _run_suite(case, config, summary):
     config["name"] = case
     result = LIVVDict() 
     timing_data = dict()
-    bundle = variables.performance_model_module
-    model_dir = os.path.join(variables.model_dir, config['data_dir'], case)
-    bench_dir = os.path.join(variables.bench_dir, config['data_dir'], case)
-    plot_dir = os.path.join(variables.output_dir, "performance", "imgs")
+    bundle = livvkit.performance_model_module
+    model_dir = os.path.join(livvkit.model_dir, config['data_dir'], case)
+    bench_dir = os.path.join(livvkit.bench_dir, config['data_dir'], case)
+    plot_dir = os.path.join(livvkit.output_dir, "performance", "imgs")
     plot_relpath = os.path.relpath(plot_dir, os.path.dirname(plot_dir))
     model_cases = functions.collect_cases(model_dir)
     bench_cases = functions.collect_cases(bench_dir)
@@ -89,8 +89,8 @@ def _run_suite(case, config, summary):
     summary[case] = _summarize_result(timing_data, config)
     _print_result(case, summary) 
     functions.create_page_from_template("performance.html",
-            os.path.join(variables.index_dir, "performance", case+".html"))
-    functions.write_json(result, os.path.join(variables.output_dir, "performance"), case+".json")
+            os.path.join(livvkit.index_dir, "performance", case+".html"))
+    functions.write_json(result, os.path.join(livvkit.output_dir, "performance"), case+".json")
 
 
 def _analyze_case(model_dir, bench_dir, config):
@@ -120,7 +120,7 @@ def _print_result(case, summary):
 
 def _write_result(case,result):
     """ Take the result and write out a JSON file """
-    outpath = os.path.join(variables.output_dir, "Performance", case)
+    outpath = os.path.join(livvkit.output_dir, "Performance", case)
     util.functions.mkdir_p(outpath)
     with open(os.path.join(outpath, case+".json"), 'w') as f:
         json.dump(result, f, indent=4)
@@ -300,7 +300,7 @@ def parse_gptl(file_path, var_list):
         var_list: a list of strings to look for in the file
 
     Returns:
-        A LIVVDict containing key-value pairs of the variables
+        A LIVVDict containing key-value pairs of the livvkit
         and the times associated with them
     """
     timing_result = LIVVDict()

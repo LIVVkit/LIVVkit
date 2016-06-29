@@ -32,11 +32,11 @@ import os
 import json
 import multiprocessing
 
+import livvkit
 import livvkit.components.numerics 
 import livvkit.components.verification 
 import livvkit.components.performance 
 import livvkit.components.validation 
-from livvkit.util import variables
 
 def run(run_type, module, config):
     """
@@ -63,8 +63,8 @@ def run(run_type, module, config):
 
 def launch_processes(tests, run_module, **config):
     """ Helper method to launch processes and synch output """
-    variables.manager = multiprocessing.Manager()
-    test_data = variables.manager.dict()
+    livvkit.manager = multiprocessing.Manager()
+    test_data = livvkit.manager.dict()
     summary = run_module._populate_metadata()
     process_handles = [multiprocessing.Process(target=run_module._run_suite, 
                        args=(test, config[test], test_data)) for test in tests]
@@ -78,7 +78,7 @@ def launch_processes(tests, run_module, **config):
 
 def summarize(summary):
     """ Write the summary to a JSON file """
-    util.datastructures.mkdir_p(variables.output_dir)
-    with open(os.path.join(variables.output_dir, "index.json"), 'w') as f:
+    util.datastructures.mkdir_p(livvkit.output_dir)
+    with open(os.path.join(livvkit.output_dir, "index.json"), 'w') as f:
             json.dump(summary, f, indent=4)
 

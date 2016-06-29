@@ -35,7 +35,8 @@ User's Guide
     :maxdepth: 2
 
     Basics
-    Background
+    Philosophy
+    Design
     Usage
     Development
     Tutorials

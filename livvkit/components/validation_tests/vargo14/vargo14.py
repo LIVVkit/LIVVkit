@@ -35,8 +35,8 @@ import numpy as np
 import subprocess
 from netCDF4 import Dataset
 
-import livvkit
 from livvkit.util import functions
+from livvkit.util import variables
 from livvkit.util.datastructures import ElementHelper 
 
 def run(name, config):
@@ -50,15 +50,15 @@ def run(name, config):
     Returns:
         A list of elements to 
     """
-    greenland_data = os.path.join(livvkit.cwd, config['data_dir'], config['gl_data']) 
-    velocity_data = os.path.join(livvkit.cwd, config['data_dir'], config['vel_data'])
+    greenland_data = os.path.join(variables.cwd, config['data_dir'], config['gl_data']) 
+    velocity_data = os.path.join(variables.cwd, config['data_dir'], config['vel_data'])
    
     if not (os.path.exists(greenland_data) and os.path.exists(velocity_data)):
         # Add more handling here -- what do we want to return for failed tests
         return ElementHelper.error("lvargo13", "Could not find necessary data for validation!")
 
     # Generate the script
-    output_dir = os.path.join(livvkit.index_dir, 'validation', 'imgs')
+    output_dir = os.path.join(variables.index_dir, 'validation', 'imgs')
     output_file_base = os.path.join(output_dir, 'lvargo13')
     functions.mkdir_p(output_dir)
 
@@ -70,7 +70,7 @@ def run(name, config):
                   + '\'model_start = '+ config['model_start'] +'\' '  \
                   + '\'model_end = '+ config['model_end'] +'\' '  \
                   + '\'plot_file_base = "'+ output_file_base +'"\' ' \
-                  + os.path.join(livvkit.cwd, config['plot_script'])
+                  + os.path.join(variables.cwd, config['plot_script'])
 
     # Be cautious about running subprocesses
     call = subprocess.Popen(ncl_command, shell=True, 
