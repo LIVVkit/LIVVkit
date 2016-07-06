@@ -4,26 +4,18 @@
 $(document).ready(function() {
     // Used to draw the correct element type
     elementMap = {
-        "Error" : drawError,
-        "Summary" : drawSummary,
-        "Table" : drawTable,
+        "Error"       : drawError,
+        "Summary"     : drawSummary,
+        "Table"       : drawTable,
         "Bit for Bit" : drawBitForBit,
-        "Diff" : drawDiff,
-        "Gallery" : drawGallery
+        "Diff"        : drawDiff,
+        "Gallery"     : drawGallery
     };
 
-    // Used to draw the correct page
-    contentMap = {
-        "index" : drawIndex,
-        "verification" : drawVerification,
-        "validation" : drawValidation,
-        "performance" : drawPerformance,
-        "numerics" : drawNumerics
-    };
 
     // Append the generated content
     drawNav();
-    contentMap[vvType]();
+    drawContent();
 });
 
 
@@ -31,16 +23,17 @@ $(document).ready(function() {
  * Draw the navigation sidebar
  */
 function drawNav() {
-    html = "";
+    var html = "";
     getUrl = window.location.href.substr(0,window.location.href.lastIndexOf('/')+1);
     data = loadJSON(getUrl + indexPath + '/index.json');
-    console.log(getUrl + indexPath + '/index.json');
-    for (var cat in data["Elements"]) {
-        if (data["Elements"][cat] != null && Object.keys(data["Elements"][cat]["Data"]).length > 0) {
-            html += "<h3>" + data["Elements"][cat]["Title"] + "</h3>\n";
-            testList = Object.keys(data["Elements"][cat]["Data"]).sort();
+    for (var cat in data["Data"]["Elements"]) {
+        if (data["Data"]["Elements"][cat] != null && 
+                Object.keys(data["Data"]["Elements"][cat]["Data"]).length > 0) {
+            html += "<h3>" + data["Data"]["Elements"][cat]["Title"] + "</h3>\n";
+            testList = Object.keys(data["Data"]["Elements"][cat]["Data"]).sort();
             for (idx in testList) {
-                html += "<a href=" + indexPath + "/" + data["Elements"][cat]["Title"].toLowerCase() + "/" + testList[idx] + ".html>" + testList[idx] + "</a></br>";
+                html += "<a href=" + indexPath + "/" + data["Data"]["Elements"][cat]["Title"].toLowerCase() + 
+                        "/" + testList[idx] + ".html>" + testList[idx] + "</a></br>";
             }
         }
     }
@@ -49,123 +42,80 @@ function drawNav() {
 
 
 /**
- * Generatees the summary content page
+ * Draw content to the page
  */
-function drawIndex() {
-    var data = loadJSON(indexPath + '/index.json');
-    for (var cat in data["Elements"]) {
-        console.log(data["Elements"][cat]);
-        if (data["Elements"][cat] != null && Object.keys(data["Elements"][cat]["Data"]).length > 0) {
-            $("#content").append("<h1>" + data["Elements"][cat]["Title"] + "</h1>");
-            elemType = data["Elements"][cat]["Type"];
-            elementMap[elemType](data["Elements"][cat], "#content");
-        }
-    }
-}
-
-
-/**
- * Generates the verification content page
- */
-function drawVerification() {
+function drawContent() {
     var verType = window.location.href.substr(
             window.location.href.lastIndexOf("/")+1).split("#")[0].replace(".html", "");
     var data = loadJSON('./' + verType + ".json");
-    var testCases = Object.keys(data).sort();
-    
-    // Add the tabs
-    html = "<div id=\"tabs\">\n";
-    html += "<ul>\n";
-    for (var idx in testCases) {
-        html += "<li><a href=\"#" + testCases[idx] + "\">" + testCases[idx] + "</a></li>\n";
-    }
-    html += "</ul>\n";
-    for (var idx in testCases) {
-        html += "<div id=\"" + testCases[idx] + "\"></div>";
-    }
+    var html = "<div id=" + data["Title"] + ">";
+    html += "<h2>" + data["Title"] + "</h2>";
+    html += "<p>" + data["Description"];
     html += "</div>";
     $("#content").append(html);
-
-    // Add the content
-    for (var idx in testCases) {
-        testName = testCases[idx];
-        for (var subcase in data[testCases[idx]]) {
-            section = data[testName][subcase];
-            sectionName = testName + "_" + subcase;
-            $("#"+testName).append("<div id=\"" + sectionName + "\"></div>");
-            $("#"+sectionName).append("<h1>" + section["Title"] + "</h1>");
-            for (var idx2 in data[testCases[idx]][subcase]["Elements"]) {
-                elem = section["Elements"][idx2];
-                elementMap[elem["Type"]](elem, "#"+sectionName);
-            }
+   
+    var content = data["Data"];
+    if ("Elements" in content) {
+        // Add the content
+        for (var idx in content["Elements"]) {
+            elem = content["Elements"][idx];
+            elementMap[elem["Type"]](elem, "#"+data["Title"]);
         }
     }
-    $("#tabs").tabs();
-}
-
-
-/**
- * Generates the validation content page
- */
-function drawValidation() {
-    var verType = window.location.href.substr(
-            window.location.href.lastIndexOf("/")+1).split("#")[0].replace(".html", "");
-    var data = loadJSON('./' + verType + ".json");
-     
-    html = "<div id=" + data["Title"] + ">";
-    html += "<h2>" + data["Title"] + "</h2>";
-    html += "<p>" + data["Description"];
-    html += "</div>";
-    $("#content").append(html); 
     
-    // Add the content
-    for (var idx in data["Elements"]) {
-        elem = data["Elements"][idx];
-        elementMap[elem["Type"]](elem, "#"+data["Title"]);
-    }
-}
+    if ("Tabs" in content) {
+        // Add the tabs
+        var tabs = content["Tabs"];
+        tabs = tabs.sort();
+        console.log(tabs);
 
+        var html = "<div id=\"tabs\">\n";
+        html += "<ul>\n";
+        for (var idx in tabs) {
+            console.log(idx);
+            var tab = tabs[idx];
+            html += "<li><a href=\"#" + tab["Title"] + "\">" + 
+                    tab["Title"] + "</a></li>\n";
+        }
+        html += "</ul>\n";
 
-/**
- * Generates the performance content page
- */
-function drawPerformance() {
-    var verType = window.location.href.substr(
-            window.location.href.lastIndexOf("/")+1).split("#")[0].replace(".html", "");
-    var data = loadJSON('./' + verType + ".json");
-     
-    html = "<div id=" + data["Title"] + ">";
-    html += "<h2>" + data["Title"] + "</h2>";
-    html += "<p>" + data["Description"];
-    html += "</div>";
-    $("#content").append(html); 
-    
-    // Add the content
-    for (var idx in data["Elements"]) {
-        elem = data["Elements"][idx];
-        elementMap[elem["Type"]](elem, "#"+data["Title"]);
-    }
-}
+        console.log(tabs);
+        for (var idx in tabs) {
+            console.log(idx);
+            var tab = tabs[idx];
+            html += "<div id=\"" + tabs[idx]["Title"] + "\"></div>";
+        }
+        html += "</div>";
+        $("#content").append(html);
 
-
-/**
- * Generates the numerics content page
- */
-function drawNumerics() {
-    var verType = window.location.href.substr(
-            window.location.href.lastIndexOf("/")+1).split("#")[0].replace(".html", "");
-    var data = loadJSON('./' + verType + ".json");
-     
-    html = "<div id=" + data["Title"] + ">";
-    html += "<h2>" + data["Title"] + "</h2>";
-    html += "<p>" + data["Description"];
-    html += "</div>";
-    $("#content").append(html); 
-    
-    // Add the content
-    for (var idx in data["Elements"]) {
-        elem = data["Elements"][idx];
-        elementMap[elem["Type"]](elem, "#"+data["Title"]);
+        // Add the content
+        for (var idx in tabs) {
+            var tab = tabs[idx];
+            if ("Elements" in tab) {
+                var elements = tab["Elements"];
+                for (var elem_idx in elements) {
+                   elem = elements[elem_idx];
+                   elementMap[elem["Type"]](elem, "#"+tab["Title"]);
+                }
+            }
+            if ("Sections" in tab) {
+                var sections = tab["Sections"];
+                for (var tab_idx in sections) {
+                    var section  = sections[tab_idx];
+                    // Draw header
+                    var html = "<h2>" + section["Title"] + "</h3>";
+                    $("#"+tab["Title"]).append(html);
+                    if ("Elements" in section) {
+                        var elements = section["Elements"];
+                        for (var elem_idx in elements) {
+                            elem = elements[elem_idx];
+                            elementMap[elem["Type"]](elem, "#"+tab["Title"]);
+                        }
+                    }          
+                }
+            }
+        }
+        $("#tabs").tabs();
     }
 }
 
@@ -194,7 +144,6 @@ function drawSummary(data, div) {
                 html_tmp2 += "<td>"; 
                 value = data["Data"][testName][testCase][header];
                 dtype = typeof value;
-                console.log(dtype);
                 if (dtype == 'number' || dtype == 'string') {
                     html_tmp2 += value;
                 } else if (dtype == 'object') {
@@ -220,7 +169,7 @@ function drawSummary(data, div) {
  * Build an error message
  */
 function drawError(data, div) {
-    html = "<h3>" + data["Title"] + "</h3>\n";
+    var html = "<h3>" + data["Title"] + "</h3>\n";
     html += "<div class=\"error\">";
     html += "<p>ERROR: " + data["Message"] + "</p>\n";
     html += "</div>";
@@ -234,7 +183,7 @@ function drawError(data, div) {
 function drawDiff(data, div) {
     controller = div.replace("#","") + "_controller";
     // TODO: What's up with this button!?
-    html = "<h3>" + data["Title"] +"</h3>";//+"  <button id=\"" + controller + "\">Hide/Show</button></h3>";
+    var html = "<h3>" + data["Title"] +"</h3>";//+"  <button id=\"" + controller + "\">Hide/Show</button></h3>";
     html += "<div class=\"diff\" id=\""+div+"\">";
     for (var section in data["Data"]) {
         html += "<b>[" + section + "]</b>";
@@ -260,7 +209,7 @@ function drawDiff(data, div) {
  * Build a bit for bit table
  */
 function drawBitForBit(data, div) {
-    html = "<h3>" + data["Title"] + "</h3>\n";
+    var html = "<h3>" + data["Title"] + "</h3>\n";
     html += "<div class=\"bitForBit\">";
     html += "<table>\n";
     html += "<th>Variable</th>\n";
@@ -293,7 +242,7 @@ function drawBitForBit(data, div) {
  * Build a table
  */
 function drawTable(data, div) {
-    html = "<h3>" + data["Title"] + "</h3>\n";
+    var html = "<h3>" + data["Title"] + "</h3>\n";
     html += "<div class=\"table\">";
     html += "<table>\n";
     for (var idx in data["Headers"]) {
@@ -336,7 +285,7 @@ function drawImage(img_elem, div) {
 
 
 function drawThumbnail(path, size) {
-    html = "<a target=\"_blank\" href=\"" + path + "\">";
+    var html = "<a target=\"_blank\" href=\"" + path + "\">";
     html += "<img src=\"" + path + "\" style=\"height: " + size + "px; overflow: hidden; position: relative\">";
     html += "</a>";
     return html;

@@ -39,5 +39,4 @@ User's Guide
     Design
     Usage
     Development
-    Tutorials
 

@@ -75,30 +75,99 @@ class ElementHelper:
     directory.
     """
     @staticmethod
-    def section(title, description, elementList):
+    def page(title, description, element_list=None, tab_list=None):
         """ 
-        Returns a dictionary representing a new section to display elements.
+        Returns a dictionary representing a new page to display elements.
         This can be thought of as a simple container for displaying multiple
-        types of information.
+        types of information. The ``section`` method can be used to create
+        separate tabs.
 
         Args:
             title: The title to display 
             description: A description of the section
-            elementList: The list of elements to display. If a single element is
-                         given it will be wrapped in a list.
+            element_list: The list of elements to display. If a single element is
+                          given it will be wrapped in a list.
+            tab_list: A list of tabs to display.  
 
         Returns:
             A dictionary with metadata specifying that it is to be rendered
-            as a section containing multiple elements.
+            as a page containing multiple elements and/or tabs.
+        """
+        page = {}
+        page["Type"] = "Page"
+        page["Title"] = title
+        page["Description"] = description
+        page["Data"] = {}
+        if element_list is not None:
+            if isinstance(element_list, list): 
+                page["Data"]["Elements"] = element_list
+            else:
+                page["Data"]["Elements"] = [element_list]
+        if tab_list is not None:
+            if isinstance(tab_list, list):
+                page["Data"]["Tabs"] = tab_list
+            else:
+                page["Data"]["Tabs"] = [tab_list]
+        return page 
+
+    @staticmethod
+    def tab(tab_name, element_list=None, section_list=None):
+        """ 
+        Returns a dictionary representing a new tab to display elements.
+        This can be thought of as a simple container for displaying multiple
+        types of information. 
+
+        Args:
+            tab_name: The title to display 
+            description: A description of the section
+            element_list: The list of elements to display. If a single element is
+                          given it will be wrapped in a list.
+            section_list: A list of sections to display.  
+
+        Returns:
+            A dictionary with metadata specifying that it is to be rendered
+            as a page containing multiple elements and/or tab.
+        """
+        tab = {}
+        tab["Type"] = "Tab"
+        tab["Title"] = tab_name 
+        if element_list is not None:
+            if isinstance(element_list, list): 
+                tab["Elements"] = element_list
+            else:
+                tab["Elements"] = [element_list]
+        if section_list is not None:
+            if isinstance(section_list, list):
+                tab["Sections"] = section_list
+            else:
+                if ("Elements" not in sect): 
+                    tab["Elements"] = element_list
+                else:
+                    tab["Elements"].append(element_list)
+        return tab 
+
+    @staticmethod
+    def section(title, element_list):
+        """
+        Returns a dictionary representing a new section.  Sections
+        contain a list of elements that are displayed seperately from 
+        the global elements on the page.
+
+        Args:
+            tab_name: The title of the section to be displayed
+            element_list: The list of elements to display within the section
+    
+        Returns:
+            A dictionary with metadata specifying that it is to be rendered as 
+            a section containing multiple elements
         """
         sect = {}
         sect["Type"] = "Section"
-        sect["Title"] = title
-        sect["Description"] = description
-        if type(elementList) == list:
-            sect["Elements"] = elementList
+        sect["Title"] = title 
+        if isinstance(element_list, list):
+            sect["Elements"] = element_list
         else:
-            sect["Elements"] = [elementList]
+            sect["Elements"] = [element_list]
         return sect
 
     @staticmethod
@@ -114,7 +183,7 @@ class ElementHelper:
         Args:
             title: The title to display
             headers: The columns to put into the table
-            data_node: A dictionary with the form:
+            data_node: A dictionary with the form::
                 {"case" : {"subcase" : { "header" : "data" } } }
 
         Returns:

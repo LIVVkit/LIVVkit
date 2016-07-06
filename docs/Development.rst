@@ -10,14 +10,6 @@ Code Guidelines
 ===============
 .. include:: Code-Guidelines.rst
 
-Data Specifications
-===================
-.. include:: Data-Specifications.rst
-
-Development Roadmap
-===================
-.. include:: Development-Roadmap.rst
-
 Building Documentation
 ======================
 To build this documentation use the `generate_docs.sh` script.  

@@ -3,18 +3,6 @@
     :align: center
     :alt: LIVVkit
 
-Advanced Usage
-##############
-
-Command Line 
-============
-
-Scripting
-=========
-
-Writing new Validation Tests
-============================
-
 API Documentation
 #################
 

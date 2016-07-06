@@ -45,22 +45,25 @@ def _run_suite(case, config, summary):
     config["name"] = case
     model_dir = os.path.join(livvkit.model_dir, config['data_dir'], case)
     bench_dir = os.path.join(livvkit.bench_dir, config['data_dir'], case)
-    result = LIVVDict()
-    case_summary = LIVVDict()
+    tabs = [] 
+    case_summary = LIVVDict() 
     model_cases = functions.collect_cases(model_dir)
     bench_cases = functions.collect_cases(bench_dir)
+    
     for subcase in sorted(model_cases.keys()):
         bench_subcases = bench_cases[subcase] if subcase in bench_cases else [] 
-        result[subcase] = []
+        case_sections= [] 
         for mcase in sorted(model_cases[subcase], key=functions.sort_processor_counts):
             bpath = (os.path.join(bench_dir, subcase, mcase.replace("-", os.sep)) 
                       if mcase in bench_subcases else "")
             mpath = os.path.join(model_dir, subcase, mcase.replace("-", os.sep))
             case_result = _analyze_case(mpath, bpath, config)
-            result[subcase].append(ElementHelper.section(mcase, "", case_result))
+            case_sections.append(ElementHelper.section(mcase, case_result))
             case_summary[subcase] = _summarize_result(case_result, 
                     case_summary[subcase])
-            
+        tabs.append(ElementHelper.tab(subcase, section_list=case_sections))
+   
+    result = ElementHelper.page(case, config["description"], tab_list=tabs) 
     summary[case] = case_summary
     _print_summary(case, summary[case])
     functions.create_page_from_template("verification.html", 

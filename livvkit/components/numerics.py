@@ -30,8 +30,6 @@ Numerics Test Base Module.
 """
 import os
 import glob
-import json
-import pprint
 import numpy as np
 from netCDF4 import Dataset
 
@@ -45,8 +43,6 @@ import livvkit.components.numerics_tests.ismip as ismip
 def _run_suite(case, config, summary):
     """ Run the full suite of numerics tests """
     config["name"] = case
-    result = LIVVDict()
-    result[case] = LIVVDict()
     analysis_data = {} 
     bundle = livvkit.numerics_model_module
     model_dir = os.path.join(livvkit.model_dir, config['data_dir'], case)
@@ -67,11 +63,10 @@ def _run_suite(case, config, summary):
             analysis_data[config["case"]] = _analyze_case(bundle, mpath, bpath, config)
 
     analysis_plots = ismip.hom(config, analysis_data)
-    result = {
-              "Title": case, 
-              "Description": config["description"],
-              "Elements": [ ElementHelper.gallery("Numerics Plots", analysis_plots) ]
-             }
+    el = [
+            ElementHelper.gallery("Numerics Plots", analysis_plots)
+         ]
+    result = ElementHelper.page(case, config["description"], element_list=el) 
 
     summary[case] = _summarize_result(analysis_data, config)
     _print_result(case,result) #TODO
