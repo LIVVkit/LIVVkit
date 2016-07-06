@@ -75,6 +75,11 @@ def parse(args):
 
 def init(options):
     """ Initialize some defaults """
+    
+    #Set matlplotlib's backend so LIVVkit can plot to files. 
+    import matplotlib
+    matplotlib.use('agg')
+    
     livvkit.resource_dir   = os.sep.join(resources.__path__) 
     livvkit.output_dir     = os.path.abspath(options.out_dir)
     livvkit.img_dir        = livvkit.output_dir + "/imgs"

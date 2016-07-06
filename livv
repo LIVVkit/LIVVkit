@@ -30,9 +30,6 @@
 Executable script to start a verification and validation test suite. 
 Management of the tests to be run is handled by the scheduler
 """
-import matplotlib
-matplotlib.use('agg')
-
 import os
 import sys
 
