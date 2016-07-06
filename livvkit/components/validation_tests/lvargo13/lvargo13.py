@@ -83,6 +83,6 @@ def run(name, config):
     plot_list = []
     for plot in output_plots:
         plot_list.append(ElementHelper.image_element(plot, "", plot)) 
-    return ElementHelper.section("lvargo13", config['description'], ElementHelper.gallery("Plots", plot_list))
+    return ElementHelper.page("lvargo13", config['description'], ElementHelper.gallery("Plots", plot_list))
 
 

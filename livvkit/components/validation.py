@@ -66,7 +66,7 @@ def _summarize_result(module, result):
         summary = module.summarize_result(result, summary)
     except:
         status = "Success"
-        for e in result.get("Elements"):
+        for e in result.get("Data").get("Elements"):
             if e.get("Type") == "Error":
                 status = "Failure"
     return {"" : {"Outcome" : status}}
