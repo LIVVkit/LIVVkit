@@ -89,19 +89,15 @@ def hom(config, analysis_data):
             
             if exp in ['a','c']:
                 plt.title(str(int(l))+' km')
-                plot_file = os.path.join( config["plot_dir"], config['name']+'_'+fig_label+'_'+l+'.png' )
                 title = fig_label[0:-1]+'. '+fig_label[-1]+': '+str(int(l))+' km'
-                recreate_file = os.path.join(
-                        livvkit.cwd, setup[exp]["data_dir"], pattern
-                        ).replace('???', l)
             else:
                 plt.title('No-Slip Bed')
-                plot_file = os.path.join( config["plot_dir"], config['name']+'_'+fig_label+'_000.png' )
                 title = fig_label[0:-2]+'. '+fig_label[-2:]+': No-Slip Bed'
-                recreate_file = os.path.join(
-                        livvkit.cwd, setup[exp]["data_dir"], pattern
-                        ).replace('???', '000')
 
+            plot_file = os.path.join( config["plot_dir"], config['name']+'_'+fig_label+'_'+l+'.png' )
+            recreate_file = os.path.join(
+                    livvkit.cwd, setup[exp]["data_dir"], pattern
+                    ).replace('???', l)
 
             axis, fs_amin, fs_amax, fs_mean, ho_amin, ho_amax, ho_mean = \
                 numpy.genfromtxt(recreate_file, delimiter=',', missing_values='nan', unpack=True)
