@@ -29,6 +29,7 @@
 CISM-glissade module for numerics analysis
 """
 import os
+import math
 import numpy
 import scipy
 
@@ -63,14 +64,48 @@ class DataGrid:
                 scipy.meshgrid(self.y_hat[:], self.x_hat[:], indexing='ij')
 
 
+class RotatedGrid:
+    """
+    #TODO:
+    """
+    def __init__(self, alpha, data):
+        self.alpha = alpha
+        
+        self.y0 = data.variables['y0'][:]
+        self.x0 = data.variables['x0'][:]
+        
+        self.usurf_ustag = data.variables['usurf'][-1,:,:]
+        self.usurf_stag = (self.usurf_ustag[1:,1:] + self.usurf_ustag[1:,:-1] 
+                           + self.usurf_ustag[:-1,:-1] + self.usurf_ustag[:-1, :-1]) / 4.0
+
+        self.usurf = -(self.x0-625.0)*math.sin(alpha) + (self.usurf_stag-7000.0)*math.cos(alpha)
+        #FIXME: I'm not exactly sure why the -625 (dx/4) is needed here, but this now agrees with
+        #       the `plotISMIP-HOM.py` in the CISM code base. 
+
+        self.uvel_stag = data.variables['uvel'][-1,0,:,:]
+        self.vvel_stag = data.variables['uvel'][-1,0,:,:]
+
+        self.wvel_ustag = data.variables['wvel_ho'][-1,0,:,:]
+        self.wvel_stag = (self.wvel_ustag[1:,1:] + self.wvel_ustag[1:,:-1] 
+                          + self.wvel_ustag[:-1,:-1] + self.wvel_ustag[:-1, :-1]) / 4.0
+
+        self.uvel =  self.uvel_stag*math.cos(alpha) + self.wvel_stag*math.sin(alpha)
+        self.vvel = -self.uvel_stag*math.sin(alpha) + self.wvel_stag*math.cos(alpha)
+
+        self.x = (self.x0*math.cos(alpha) + (self.usurf_stag[20,:]-7000.0)*math.sin(alpha))/1000.0 - 50.0
+        self.y = self.y0/1000.0 - 50.0 
+
+
 def get_plot_data(setup, test_file, bench_file, config):
     test_plot_data = {}
     bench_plot_data = {}
     exp = config['name'].split('-')[-1]
     test_data = Dataset(os.path.join(livvkit.cwd,test_file), 'r')
     bench_data = Dataset(os.path.join(livvkit.cwd,bench_file), 'r')
+    
     test = DataGrid(test_data)
     bench = DataGrid(bench_data)
+    
     y_coord = numpy.linspace(setup['y'][0], setup['y'][1], test.ny)
     x_coord = numpy.linspace(setup['x'][0], setup['x'][1], test.nx)
 
@@ -78,26 +113,25 @@ def get_plot_data(setup, test_file, bench_file, config):
     test_plot_data['x_hat'] = x_coord
     bench_plot_data['y_hat'] = y_coord
     bench_plot_data['x_hat'] = x_coord
-    
-    for var in config['interp_vars']:
-        if var == 'usurf':
-            # regular 2d linear interp. but faster. 
-            test2plot = interpolate.RectBivariateSpline( test.y_hat, test.x_hat, 
-                            test_data.variables[var][-1,:,:], kx=1, ky=1, s=0 ) 
-            # regular 2d linear interp. but faster. 
-            bench2plot = interpolate.RectBivariateSpline( bench.y_hat, bench.x_hat, 
-                            bench_data.variables[var][-1,:,:], kx=1, ky=1, s=0 ) 
-        else:
-            # regular 2d linear interp. but faster. 
-            test2plot = interpolate.RectBivariateSpline( test.y_hat, test.x_hat, 
-                            test_data.variables[var][-1,0,:,:], kx=1, ky=1, s=0 ) 
-            # regular 2d linear interp. but faster. 
-            bench2plot = interpolate.RectBivariateSpline( bench.y_hat, bench.x_hat, 
-                            bench_data.variables[var][-1,0,:,:], kx=1, ky=1, s=0 ) 
-        test_plot_data[var] = test2plot(y_coord, x_coord, grid=False)
-        bench_plot_data[var] = bench2plot(y_coord, x_coord, grid=False)
-
+   
     if exp in ['a','c']:
+        for var in config['interp_vars']:
+            if var == 'usurf':
+                # regular 2d linear interp. but faster. 
+                test2plot = interpolate.RectBivariateSpline( test.y_hat, test.x_hat, 
+                                test_data.variables[var][-1,:,:], kx=1, ky=1, s=0 ) 
+                bench2plot = interpolate.RectBivariateSpline( bench.y_hat, bench.x_hat, 
+                                bench_data.variables[var][-1,:,:], kx=1, ky=1, s=0 ) 
+            else:
+                # regular 2d linear interp. but faster. 
+                test2plot = interpolate.RectBivariateSpline( test.y_hat, test.x_hat, 
+                                test_data.variables[var][-1,0,:,:], kx=1, ky=1, s=0 ) 
+                bench2plot = interpolate.RectBivariateSpline( bench.y_hat, bench.x_hat, 
+                                bench_data.variables[var][-1,0,:,:], kx=1, ky=1, s=0 ) 
+            
+            test_plot_data[var] = test2plot(y_coord, x_coord, grid=False)
+            bench_plot_data[var] = bench2plot(y_coord, x_coord, grid=False)
+
         test_plot_data['velnorm_extend'] = \
             numpy.linalg.norm(
                 numpy.array([test_plot_data['uvel_extend'],
@@ -109,20 +143,34 @@ def get_plot_data(setup, test_file, bench_file, config):
                              bench_plot_data['vvel_extend'] ]),
                 axis=0)
     else: # f
-        test_plot_data['velnorm_extend'] = \
+        alpha = math.radians(-3.0)
+
+        test_rotated = RotatedGrid(alpha, test_data)       
+        bench_rotated = RotatedGrid(alpha, bench_data)       
+
+        for var in config['interp_vars']:
+            # regular 2d linear interp. but faster. 
+            test2plot = interpolate.RectBivariateSpline( test_rotated.x, test_rotated.y, 
+                                getattr(test_rotated, var), kx=1, ky=1, s=0 ) 
+            bench2plot = interpolate.RectBivariateSpline( bench_rotated.x, bench_rotated.y, 
+                                getattr(bench_rotated, var), kx=1, ky=1, s=0 ) 
+            
+            test_plot_data[var] = test2plot(y_coord, x_coord, grid=False)
+            bench_plot_data[var] = bench2plot(y_coord, x_coord, grid=False)
+
+
+        test_plot_data['velnorm'] = \
             numpy.linalg.norm(
-                numpy.array([test_plot_data['uvel_extend'],
-                             test_plot_data['vvel_extend'],
-                             test_plot_data['wvel_ho'] ]),
+                numpy.array([test_plot_data['uvel'],
+                             test_plot_data['vvel'] ]),
                 axis=0)
-        bench_plot_data['velnorm_extend'] = \
+        bench_plot_data['velnorm'] = \
             numpy.linalg.norm(
-                numpy.array([bench_plot_data['uvel_extend'],
-                             bench_plot_data['vvel_extend'],
-                             bench_plot_data['wvel_ho'] ]),
+                numpy.array([bench_plot_data['uvel'],
+                             bench_plot_data['vvel'] ]),
                 axis=0)
-        test_plot_data['usurfnorm'] = test_plot_data['usurf'] - test_plot_data['usurf'][0]
-        bench_plot_data['usurfnorm'] = bench_plot_data['usurf'] - bench_plot_data['usurf'][0]
+    
+    
     return {'test': test_plot_data, 'bench': bench_plot_data}
         
 

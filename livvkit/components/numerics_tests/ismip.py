@@ -54,7 +54,6 @@ def get_case_length(case):
         return str(int(case.split('-')[-1][1:])).zfill(3)
 
 def hom(config, analysis_data):
-    #FIXME:
     """ 
     Verify ISMIP-HOM model data against ISMIP's datasets 
     
@@ -68,7 +67,7 @@ def hom(config, analysis_data):
     """
    
     exp = config['name'].split('-')[-1]
-    if exp in ['a', 'c']:
+    if exp in ['a', 'c','f']:
         coord = 'x_hat'
     else:
         coord = 'y_hat'
@@ -101,7 +100,10 @@ def hom(config, analysis_data):
 
             axis, fs_amin, fs_amax, fs_mean, ho_amin, ho_amax, ho_mean = \
                 numpy.genfromtxt(recreate_file, delimiter=',', missing_values='nan', unpack=True)
-            
+           
+            if exp in ['f']:
+                axis = axis*100.0 - 50.0
+
             plt.fill_between(axis, ho_amin, ho_amax, facecolor='green', alpha=0.5)
             plt.fill_between(axis, fs_amin, fs_amax, facecolor='blue', alpha=0.5)
             
