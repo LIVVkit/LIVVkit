@@ -95,12 +95,28 @@
 	    {% if validation_summary == {} %}
 	  	<p style="margin-left: 20px;">No validation tests run</p>	    
 	    {% else %}
-		{% for test, summary in validation_summary.iteritems() %} <a
-			href="{{index_dir}}/validtion/{{test}}.html">{{test}}</a> <br> {%
-		for case, details in summary.iteritems() %} <b>{{case}}</b>
-		<p>{{details}}</p>
-		{% endfor %} 
-		{% endfor %}
+        <table class="summary">
+          {% for test, summary in validation_summary.iteritems() %}
+          <tr>
+            <td><a class="table_link" href="{{index_dir}}/validation/{{test}}/{{test}}.html">{{test.capitalize()}}</a></td>
+          </tr>
+          {% endfor %}
+        </table>
+		{% endif %}
+	</div>
+
+	<div class="numerics">
+	  <h2 style="padding-left: 15px;">Numerics Summary</h2>
+	    {% if numerics_summary == {} %}
+	  	<p style="margin-left: 20px;">No numerics tests run</p>	    
+	    {% else %}
+        <table class="summary">
+          {% for test, summary in numerics_summary.iteritems() %}
+          <tr>
+            <td><a class="table_link" href="{{index_dir}}/numerics/{{test}}.html">{{test.capitalize()}}</a></td>
+          </tr>
+          {% endfor %}
+        </table>
 		{% endif %}
 	</div>
 

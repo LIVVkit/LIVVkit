@@ -61,16 +61,17 @@ class Test(AbstractTest):
         self.name = "Dome"
         self.model_dir = util.variables.input_dir + os.sep + "dome"
         self.bench_dir = util.variables.benchmark_dir + os.sep + "dome"
-        self.description = "3-D paraboloid dome of ice with a circular, 60 km" + \
-                      " diameter base sitting on a flat bed. The horizontal" + \
-                      " spatial resolution studies are 2 km, 1 km, 0.5 km" + \
-                      " and 0.25 km, and there are 10 vertical levels. For this" + \
-                      " set of experiments a quasi no-slip basal condition in" + \
-                      " imposed by setting. A zero-flux boundary condition is" + \
+        self.description = "This test case describes a 3-D paraboloid dome of" + \
+                      " ice with a circular, 60 km diameter base sitting on a" + \
+                      " flat bed. The horizontal spatial resolution studies are" + \
+                      " 2 km, 1 km, 0.5 km and 0.25 km, and there are 10 vertical" + \
+                      " levels. For this set of experiments a quasi no-slip basal" + \
+                      " condition in imposed by setting a very large basal" + \
+                      " sliding coefficient. A zero-flux boundary condition is" + \
                       " applied to the dome margins. "
 
 
-    def run(self):
+    def run(self, perf_summary, output):
         """
         Runs the performance specific test cases.
         
@@ -92,13 +93,16 @@ class Test(AbstractTest):
         resolutions = sorted( resolutions )
         
         for resolution in resolutions:
-            self.run_dome(resolution, self.model_dir, self.bench_dir)
+            self.run_dome(resolution, self.model_dir, self.bench_dir, output)
             self.tests_run.append("Dome " + resolution)
-        self.run_scaling('Dome ', resolutions)
+        self.run_scaling('Dome ', resolutions, output)
         self.tests_run.append('Scaling')
+        self.generate()
+        perf_summary[self.name.lower()] = self.summary
+        output.put("")
 
 
-    def run_dome(self, resolution, model_dir, bench_dir):
+    def run_dome(self, resolution, model_dir, bench_dir, output):
         """
         Run an instance of dome performance testing
         
@@ -107,7 +111,7 @@ class Test(AbstractTest):
             model_dir: the location of the performance data
             bench_dir: the location of the benchmark performance data
         """
-        print("  Dome " + resolution + " performance testing in progress....")
+        output.put("  Dome " + resolution + " performance testing in progress....")
 
         # Process the configure files
         dome_parser = Parser()

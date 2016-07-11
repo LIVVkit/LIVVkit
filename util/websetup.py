@@ -53,7 +53,7 @@ def mkdir_p(path):
         else: raise
 
 
-def setup(tests_run):
+def setup():
     """
     Creates the directory structure that will have the web pages
     written to.
@@ -83,27 +83,18 @@ def setup(tests_run):
         shutil.move(util.variables.index_dir, util.variables.index_dir + "_" + prev_time)
         mkdir_p(util.variables.index_dir)
 
-    # Create directory structure
-    test_dirs = [util.variables.index_dir + os.sep + "validation", 
-                util.variables.index_dir + os.sep + "verification", 
-                util.variables.index_dir + os.sep + "performance"]
-    for site_dir in test_dirs:
-        mkdir_p(site_dir);
-
     # Copy over css & imgs directories from source
     shutil.copytree(util.variables.website_dir + os.sep + "css", util.variables.index_dir + os.sep + "css")
     shutil.copytree(util.variables.website_dir + os.sep + "imgs", util.variables.index_dir + os.sep + "imgs")
 
-    # Set up imgs directory to have sub-directories for each test
-    for test in tests_run:
-        mkdir_p(util.variables.img_dir + os.sep + test.get_name().capitalize() + os.sep + "bit4bit")
+    # Record when this data was recorded so we can make nice backups
     f = open(util.variables.index_dir + os.sep + "data.txt", "w")
     f.write(util.variables.timestamp + "\n")
     f.write(util.variables.comment)
     f.close()
 
 
-def generate(verification_summary, performance_summary, validation_summary):
+def generate(numerics_summary, verification_summary, performance_summary, validation_summary):
     """
     Build the index
     
@@ -117,6 +108,7 @@ def generate(verification_summary, performance_summary, validation_summary):
     template_file = os.sep + "index.html"
     template = template_env.get_template(template_file)
     template_vars = {"index_dir" : ".",
+                    "numerics_summary" : numerics_summary,
                     "verification_summary" : verification_summary,
                     "performance_summary" : performance_summary,
                     "validation_summary" : validation_summary,

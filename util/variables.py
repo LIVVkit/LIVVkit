@@ -46,9 +46,13 @@ user           = ''
 website_dir     = ''
 template_dir    = ''
 index_dir       = ''
+numerics       = ''
 verification   = ''
+verifications  = []
 performance    = ''
+performances  = []
 validation     = ''
+validations   = []
 
 # Modules that need to be loaded on big machines
 modules = []

@@ -27,7 +27,8 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 """
-Performance Testing Base Module.  Defines the Abstract_test that will be inherited by all performance test classes.
+Performance Testing Base Module.  Defines the AbstractTest class is 
+inherited by all performance test classes.
 
 Created on Apr 21, 2015
 
@@ -39,8 +40,6 @@ import jinja2
 from abc import ABCMeta, abstractmethod
 from collections import Counter
 
-import matplotlib
-matplotlib.use('Agg')
 import matplotlib.pyplot as pyplot
 
 import util.variables
@@ -69,7 +68,7 @@ class AbstractTest(object):
 
 
     @abstractmethod
-    def run(self, test):
+    def run(self, summary, output):
         """
         Definition for the general test run
         
@@ -79,7 +78,7 @@ class AbstractTest(object):
         pass
 
 
-    def run_scaling(self, test_type, resolutions):
+    def run_scaling(self, test_type, resolutions, output):
         """
         Generates scaling plots for each variable and dycore combination of a given
         test_type.
@@ -89,7 +88,7 @@ class AbstractTest(object):
             resolutions: a list of the resolutions the model was run at
         """
         self.images_generated = []
-        print(os.linesep + "  Generating scaling plots for " + test_type + "....")
+        output.put(os.linesep + "  Generating scaling plots for " + test_type + "....")
 
         self.weak_scaling(test_type, resolutions)
         self.strong_scaling(test_type, resolutions)
@@ -148,11 +147,10 @@ class AbstractTest(object):
         pyplot.xticks()
         pyplot.yticks()
         ax.plot(resolutions, times, 'bo-', label='Model')
-        ax.plot(resolutions, mins, 'b--')
-        ax.plot(resolutions, maxs, 'b--')
+        ax.fill_between(resolutions, maxs, mins, facecolor='#99ccff', alpha=0.5, interpolate=True)
         #print("Saving plot to " + util.variables.img_dir + os.sep + self.name.capitalize() + os.sep + test_type +  "_scaling_weak.png")
-        pyplot.savefig(util.variables.img_dir + os.sep + self.name.capitalize() + os.sep + test_type +  "_scaling_weak.png")
-        self.images_generated.append( [test_type + "_scaling_weak.png", "Weak scaling for " + test_type])
+        pyplot.savefig(util.variables.index_dir + os.sep + "performance" + os.sep + self.name + os.sep + "imgs" + os.sep + test_type.strip() +  "_scaling_weak.png")
+        self.images_generated.append( [test_type.strip() + "_scaling_weak.png", "Weak scaling for " + test_type])
 
 
     def strong_scaling(self, test_type, resolutions):
@@ -185,9 +183,7 @@ class AbstractTest(object):
                     maxs.append(time[2])
 
                 ax.plot(x, y, 'bo-', label='Model')
-                ax.plot(x,mins, 'b--')
-                ax.plot(x,maxs, 'b--')
-                
+                ax.fill_between(map(int,x),mins,maxs, facecolor='#99ccff', alpha=0.5)        
                 # Add benchmark data if it's there
                 if self.bench_timing_data[test] != {}:
                     bench_data = self.bench_timing_data[test]
@@ -199,12 +195,11 @@ class AbstractTest(object):
                         mins.append(time[1])
                         maxs.append(time[2])
                     ax.plot(x, y, 'r^-', label='Benchmark')
-                    ax.plot(x,mins, 'r--')
-                    ax.plot(x,maxs, 'r--')
+                    ax.fill_between(map(int,x), maxs, mins, facecolor='#ff9999', alpha=0.5, interpolate=True)
                     pyplot.legend()
 
-                pyplot.savefig(util.variables.img_dir + os.sep + self.name.capitalize() + os.sep + test_type + "_" + res +  "_scaling" + ".png")
-                self.images_generated.append( [test_type + "_" + res + "_scaling" + ".png", "Strong scaling for " + test_type + res])
+                pyplot.savefig(util.variables.index_dir + os.sep + "performance" + os.sep + self.name + os.sep + "imgs" + os.sep + test_type.strip() + "_" + res +  "_scaling" + ".png")
+                self.images_generated.append( [test_type.strip() + "_" + res + "_scaling" + ".png", "Strong scaling for " + test_type + res])
 
 
     def generate(self):
@@ -229,9 +224,9 @@ class AbstractTest(object):
         index_dir = ".."
         css_dir = index_dir + "/css"
         img_dir = index_dir + "/imgs"
+        test_imgDir = index_dir + "/performance/" + self.name.capitalize() + "/imgs" 
 
         # Grab all of our images
-        test_imgDir = util.variables.img_dir + os.sep + self.name
         test_images = [os.path.basename(img) for img in glob.glob(test_imgDir + os.sep + "*.png")]
         test_images.append([os.path.basename(img) for img in glob.glob(test_imgDir + os.sep +"*.jpg")])
         test_images.append([os.path.basename(img) for img in glob.glob(test_imgDir + os.sep +"*.svg")])
@@ -244,6 +239,7 @@ class AbstractTest(object):
                         "index_dir" : index_dir,
                         "css_dir" : css_dir,
                         "img_dir" : img_dir,
+                        "test_imgDir" : test_imgDir,
                         "test_description" : self.description,
                         "tests_run" : self.tests_run,
                         "test_header" : util.variables.parser_vars,

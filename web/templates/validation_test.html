@@ -28,4 +28,18 @@
  - OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  -->
 
+{% include 'components/header.html' %}
 
+  <!--   Start the pace specific content -->
+  <div id="content">
+    <h2 style="padding-left: 15px;">{{test_name}}</h2>
+    <div class="description">
+      <p>{{test_description}}</p>
+    </div>
+    <br style="clear: both" />
+    {% include 'components/val_plots_section.html' %}
+  </div>
+  <br>
+
+<!-- Include the footer -->
+{% include 'components/footer.html' %}

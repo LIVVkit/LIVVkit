@@ -184,7 +184,6 @@ class Parser(object):
             print("    Could not find model data in" + model_dir)
         files = filter(re.compile(regex).search, files)
         outdata = dict()
-
         for file_name in files:
             # Initialize a new set of data
             number_procs = 0
@@ -254,10 +253,10 @@ class Parser(object):
                 self.std_out_data['Number of timesteps'] = 1
                 self.std_out_data['Average iterations to converge'] = iter_number
 
-            if not self.std_out_data.has_key('Dycore Type') or self.std_out_data['Dycore Type'] == None: 
+            if not self.std_out_data.has_key('Dycore Type') or self.std_out_data['Dycore Type'] is None: 
                 self.std_out_data['Dycore Type'] = 'Unavailable'
             for key in self.std_out_data.keys():
-                if self.std_out_data[key] == None:
+                if self.std_out_data[key] is None:
                     self.std_out_data[key] = 'N/A'
 
             outdata[file_name] = self.std_out_data
