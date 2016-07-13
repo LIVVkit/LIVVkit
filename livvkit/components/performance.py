@@ -222,8 +222,15 @@ def generate_scaling_plot(timing_data, title, description, plot_file):
             plt.plot(proc_counts, means, 'o-', color=case_color, label=case)
 
         plt.legend(loc='best')
-        plt.savefig(plot_file)
-        plt.close()
+    else:
+        plt.figure(figsize=(5,3))
+        plt.axis('off')
+        plt.text(0.4,0.8, "ERROR:")
+        plt.text(0,0.6,"Not enough data points to draw scaling plot")
+        plt.text(0,0.44,"To generate this data rerun BATS with the")
+        plt.text(0,0.36, "performance option enabled.")
+    plt.savefig(plot_file)
+    plt.close()   
     return ElementHelper.image_element(title, description, os.path.basename(plot_file))
 
 

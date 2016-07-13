@@ -36,7 +36,6 @@ import numpy as np
 from livvkit.util.datastructures import LIVVDict
 from livvkit.util.datastructures import ElementHelper
 
-
 def weak_scaling(timing_stats, scaling_var, data_points):
     """ 
     Generate data for plotting weak scaling.  The data points keep 
