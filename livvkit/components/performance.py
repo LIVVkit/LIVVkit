@@ -64,17 +64,17 @@ def _run_suite(case, config, summary):
                             if mcase in bench_subcases else None)
             mpath = os.path.join(model_dir, subcase, mcase.replace("-", os.sep))
             timing_data[subcase][mcase] = _analyze_case(mpath, bpath, config)
-   
+    
     timing_plots = []
     timing_plots.append(generate_scaling_plot(
-            bundle.weak_scaling(timing_data, config['scaling_var']),
+            bundle.weak_scaling(timing_data, config['scaling_var'], config['weak_scaling_points']),
             "Weak Scaling for " + case.capitalize(), "", 
             os.path.join(plot_dir, case + "_weak_scaling.png")
         ))
     timing_plots.append(generate_scaling_plot(
-                bundle.strong_scaling(timing_data, config['scaling_var']),
-                "Strong Scaling for " + case.capitalize(), "",
-                os.path.join(plot_dir, case + "_strong_scaling.png")
+            bundle.strong_scaling(timing_data, config['scaling_var'], config['strong_scaling_points']),
+            "Strong Scaling for " + case.capitalize(), "",
+            os.path.join(plot_dir, case + "_strong_scaling.png")
         ))
     timing_plots = timing_plots + [generate_timing_breakdown_plot(timing_data[s], config['scaling_var'],
             "Timing Breakdown for " + case.capitalize()+" "+s, "",
@@ -101,7 +101,7 @@ def _analyze_case(model_dir, bench_dir, config):
     else:
         bench_timings = set()
     if not len(model_timings):
-        return LIVVDict(model=LIVVDict(), bench=LIVVDict()) 
+        return dict() 
     model_stats = generate_timing_stats(model_timings, config['timing_vars'])
     bench_stats = generate_timing_stats(bench_timings, config['timing_vars'])
     return dict(model=model_stats, bench=bench_stats) 
@@ -216,7 +216,8 @@ def generate_scaling_plot(timing_data, title, description, plot_file):
             means = case_data['means']
             mins = case_data['mins']
             maxs = case_data['maxs']
-
+            print(proc_counts)
+            print(means)
             plt.fill_between(proc_counts, mins, maxs, facecolor=case_color, alpha=0.5)
             plt.plot(proc_counts, means, 'o-', color=case_color, label=case)
 

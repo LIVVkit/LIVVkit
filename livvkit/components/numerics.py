@@ -58,13 +58,17 @@ def _run_suite(case, config, summary):
         for mproc in model_cases[mscale]:
             config["case"] = '-'.join([mscale,mproc])
             bpath = (os.path.join(bench_dir, mscale, mproc.replace("-", os.sep)) 
-                            if mproc in bscale else None)
+                            if mproc in bscale else "")
             mpath = os.path.join(model_dir, mscale, mproc.replace("-", os.sep))
             analysis_data[config["case"]] = _analyze_case(bundle, mpath, bpath, config)
 
-    analysis_plots = ismip.hom(config, analysis_data)
-    el = [
-            ElementHelper.gallery("Numerics Plots", analysis_plots)
+    try:
+        analysis_plots = ElementHelper.gallery("Numerics Plots", ismip.hom(config, analysis_data))
+    except KeyError:
+        analysis_plots = ElementHelper.error("Numerics Plots", "Missing data")
+    
+    el = [ 
+            analysis_plots
          ]
     result = ElementHelper.page(case, config["description"], element_list=el) 
 
@@ -82,6 +86,9 @@ def _analyze_case(bundle, model_dir, bench_dir, config):
                             config["output_ext"]))))
     bench_files = list(set(glob.glob(os.path.join(bench_dir, "*" + 
                             config["output_ext"]))))
+   
+    if model_files == [] or bench_files == []:
+        return {'test' : {}, 'bench' : {}} 
     
     which_experiment = config['name'].split('-')[-1]
     plot_data = bundle.get_plot_data(ismip.setup[which_experiment], model_files[0], bench_files[0], config)

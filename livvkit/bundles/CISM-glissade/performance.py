@@ -37,7 +37,7 @@ from livvkit.util.datastructures import LIVVDict
 from livvkit.util.datastructures import ElementHelper
 
 
-def weak_scaling(timing_stats, scaling_var):
+def weak_scaling(timing_stats, scaling_var, data_points):
     """ 
     Generate data for plotting weak scaling.  The data points keep 
     a constant amount of work per processor for each data point.
@@ -47,13 +47,13 @@ def weak_scaling(timing_stats, scaling_var):
                       generate_timing_stats function
         scaling_var: the variable to select from the timing_stats dictionary
                      (can be provided in configurations via the 'scaling_var' key)
+        data_points: the list of size and processor counts to use as data
 
     Returns:
         TODO : Currently returns a dict with model, 
                  bench, and proc data containing lists
     """
     timing_data = LIVVDict()
-    data_points = [['s0','p1'],['s1','p4'],['s2','p16'],['s3','p64'],['s4','p256'],['s5','p1024']]
     proc_counts = []
     bench_means = []
     bench_mins = []
@@ -68,7 +68,7 @@ def weak_scaling(timing_stats, scaling_var):
             model_data = timing_stats[size][proc]['model'][scaling_var]
             bench_data = timing_stats[size][proc]['bench'][scaling_var]
         except KeyError:
-           continue 
+            return timing_data 
         proc_counts.append(proc)
         model_means.append(model_data['mean'])
         model_mins.append(model_data['min'])
@@ -82,7 +82,7 @@ def weak_scaling(timing_stats, scaling_var):
     return timing_data 
 
 
-def strong_scaling(timing_stats, scaling_var):
+def strong_scaling(timing_stats, scaling_var, data_points):
     """
     Generate data for plotting strong scaling.  The data points keep
     the problem size the same and varies the number of processors
@@ -93,12 +93,12 @@ def strong_scaling(timing_stats, scaling_var):
                       generate_timing_stats function
         scaling_var: the variable to select from the timing_stats dictionary
                      (can be provided in configurations via the 'scaling_var' key)
+        data_points: the list of size and processor counts to use as data
 
     Returns:
         TODO: A LIVVDict() of the form...
     """
     timing_data = LIVVDict()
-    data_points = [['s0', 'p1'],['s0','p2'],['s0','p4'],['s0','p8'],['s0','p16'],['s0','p64']]
     proc_counts = []
     bench_means = []
     bench_mins = []
@@ -125,3 +125,4 @@ def strong_scaling(timing_stats, scaling_var):
     timing_data['model'] = dict(mins=model_mins, means=model_means, maxs=model_maxs)
     timing_data['proc_counts'] = [int(pc[1:]) for pc in proc_counts]
     return timing_data 
+
