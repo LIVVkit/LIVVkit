@@ -230,21 +230,21 @@ begin
     vy = vel_data->vy(nt,:,:)
     
     velnorm := ((vx^2) + (vy^2))^0.5
-    
-    xi = ispan(1,1501,1)
-    yi = ispan(1,2801,1)
-    klon = ispan(1,300,1)
-    klat = ispan(1,560,1)
+   
+    do e = 0,1500
+        do f = 0,2800
+            if ( velnorm(f,e) .gt. 1e10 )
+                velnorm(f,e) = 0.0
+            end if
+        end do
+    end do
+
+    xi = vel_data->x1(:)
+    yi = vel_data->y1(:)
+    klon = model->x0(:) 
+    klat = model->y0(:) 
     velnorm_data = linint2 (xi,yi,velnorm,False,klon,klat,0)
      
-    do r = 0,559
-        do c = 0,299
-			if ( velnorm_data(r,c) .gt. 20000 )
-				velnorm_data(r,c) = 20000
-			end if
-		end do 
-	end do 	
-    
     ;NOTE: velocity data is sufficiently different such that we'll have to manually make the plot.
     ;make_a_plot(velnorm_data, vel, range_mod, plot_file_base+"_velnorm.png", "Present day "+gl_data->usrf@long_name)
     bench_data = velnorm_data
