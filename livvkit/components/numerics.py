@@ -63,17 +63,18 @@ def _run_suite(case, config, summary):
             analysis_data[config["case"]] = _analyze_case(bundle, mpath, bpath, config)
 
     try:
-        analysis_plots = ElementHelper.gallery("Numerics Plots", ismip.hom(config, analysis_data))
+        ismip_plots, ismip_summary = ismip.hom(config, analysis_data)
+        analysis_plots = ElementHelper.gallery("Numerics Plots", ismip_plots)
+        summary[case] = ismip_summary
     except KeyError:
-        analysis_plots = ElementHelper.error("Numerics Plots", "Missing data")
+        analysis_plots, analysis_summary = (ElementHelper.error("Numerics Plots", "Missing data"), "Missing data")
     
     el = [ 
             analysis_plots
          ]
     result = ElementHelper.page(case, config["description"], element_list=el) 
 
-    summary[case] = _summarize_result(analysis_data, config)
-    _print_result(case,result) #TODO
+    _print_result(case, ismip_summary)
 
     functions.create_page_from_template("numerics.html",
             os.path.join(livvkit.index_dir, "numerics", case+".html"))
@@ -96,23 +97,27 @@ def _analyze_case(bundle, model_dir, bench_dir, config):
     return plot_data
 
 
-def _print_result(case,result):
-    pass
+def _print_result(case, summary):
+    """ Show some statistics from the run """
+    for subcase in summary.keys():
+        message = case + " " + subcase
+        print("    " + message)
+        print("    " + "-"*len(message))
+        for key, val in summary[subcase].items():
+            print(" "*8 + key.ljust(25) +":" + val.rjust(7))
+        print("")
 
 
-def _summarize_result(result, config):
+
+def _summarize_result(analysis_summary, config):
     """ Trim out some data to return for the index page """
-    summary = LIVVDict()
-    for case in result.keys():
-        summary[case] = "test"
-        
-
-    return summary
-
+    #NOTE: data is already formatted correctly in ISMIP-HOM; this will be needed 
+    #      if other tests are added.
+    pass
 
 def _populate_metadata():
     """ Provide some top level information """
     return {"Type" : "Summary",
             "Title" : "Numerics",
-            "Headers" : ["Max Error", "RMSE"]}
+            "Headers" : ["Bench mean % error", "Test mean % error", "Coefficient of variation"]}
 
