@@ -64,13 +64,12 @@ def _run_suite(case, config, summary):
 
     try:
         ismip_plots, ismip_summary = ismip.hom(config, analysis_data)
-        analysis_plots = ElementHelper.gallery("Numerics Plots", ismip_plots)
         summary[case] = ismip_summary
     except KeyError:
-        analysis_plots, analysis_summary = (ElementHelper.error("Numerics Plots", "Missing data"), "Missing data")
+        ismip_plots, ismip_summary = (ElementHelper.error("Numerics Plots", "Missing data"), "Missing data")
     
     el = [ 
-            analysis_plots
+            ElementHelper.gallery("Numerics Plots", ismip_plots)
          ]
     result = ElementHelper.page(case, config["description"], element_list=el) 
 
