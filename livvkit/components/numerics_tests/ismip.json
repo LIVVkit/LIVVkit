@@ -6,7 +6,7 @@
             "y": [0.25,0.25],
             "pattern": ["ExpA_Fig5_???.txt"],
             "xlabel": ["Normalized x"],
-            "ylabel": ["Veliocity (m/a)"],
+            "ylabel": ["Velocity (m/a)"],
             "data_dir": "livvkit/data/numerics/ismip-hom"
         },
     "ismip-hom-c": 
@@ -15,7 +15,7 @@
             "y": [0.25,0.25],
             "pattern": ["ExpC_Fig8_???.txt"],
             "xlabel": ["Normalized x"],
-            "ylabel": ["Veliocity (m/a)"],
+            "ylabel": ["Velocity (m/a)"],
             "data_dir": "livvkit/data/numerics/ismip-hom"
         },
     "ismip-hom-f": 

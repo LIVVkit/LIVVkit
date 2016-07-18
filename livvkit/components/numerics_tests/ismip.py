@@ -45,7 +45,17 @@ from livvkit.util.datastructures import ElementHelper
 
 with open(__file__.replace('.py','.json'), 'r') as f:
     setup = json.load(f)
- 
+
+for exp, size in [('ismip-hom-a','005'), ('ismip-hom-c','005'), ('ismip-hom-f','000')]:
+    recreate_file = os.path.join(livvkit.cwd, setup[exp]["data_dir"], 
+                            setup[exp]['pattern'][0].replace('???', size))
+    setup[exp]['interp_points'] = \
+        numpy.genfromtxt(recreate_file, delimiter=',', missing_values='nan', 
+                            usecols=(0), unpack=True)
+    if exp == 'ismip-hom-f':
+        setup[exp]['interp_points'] = setup[exp]['interp_points']*100 - 50 
+
+
 case_color = {'bench': '#d7191c',
               'test':  '#fc8d59' }
 

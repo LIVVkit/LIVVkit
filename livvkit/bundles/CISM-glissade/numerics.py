@@ -91,8 +91,8 @@ def get_plot_data(test_file, bench_file, setup, config):
     test = DataGrid(test_data)
     bench = DataGrid(bench_data)
     
-    y_coord = numpy.linspace(setup['y'][0], setup['y'][1], test.ny)
-    x_coord = numpy.linspace(setup['x'][0], setup['x'][1], test.nx)
+    x_coord = setup['interp_points'] 
+    y_coord = numpy.linspace(setup['y'][0], setup['y'][1], len(x_coord))
 
     test_plot_data['y_hat'] = y_coord
     test_plot_data['x_hat'] = x_coord
