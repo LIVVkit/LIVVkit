@@ -29,90 +29,49 @@
 Numerics Test Base Module.  
 """
 import os
-import glob
-import numpy as np
-from netCDF4 import Dataset
+import importlib
 
 import livvkit
 from livvkit.util import functions
 from livvkit.util.datastructures import LIVVDict
-from livvkit.util.datastructures import ElementHelper
-
-import livvkit.components.numerics_tests.ismip as ismip
 
 def _run_suite(case, config, summary):
     """ Run the full suite of numerics tests """
-    config["name"] = case
-    analysis_data = {} 
-    bundle = livvkit.numerics_model_module
-    model_dir = os.path.join(livvkit.model_dir, config['data_dir'], case)
-    bench_dir = os.path.join(livvkit.bench_dir, config['data_dir'], case)
-    plot_dir = os.path.join(livvkit.output_dir, "numerics", "imgs")
-    config["plot_dir"] = plot_dir
-    functions.mkdir_p(plot_dir)
-    model_cases = functions.collect_cases(model_dir) 
-    bench_cases = functions.collect_cases(bench_dir)
-    
-    for mscale in sorted(model_cases):
-        bscale = bench_cases[mscale] if mscale in bench_cases else []
-        for mproc in model_cases[mscale]:
-            config["case"] = '-'.join([mscale,mproc])
-            bpath = (os.path.join(bench_dir, mscale, mproc.replace("-", os.sep)) 
-                            if mproc in bscale else "")
-            mpath = os.path.join(model_dir, mscale, mproc.replace("-", os.sep))
-            analysis_data[config["case"]] = _analyze_case(bundle, mpath, bpath, config)
-
-    try:
-        analysis_plots = ElementHelper.gallery("Numerics Plots", ismip.hom(config, analysis_data))
-    except KeyError:
-        analysis_plots = ElementHelper.error("Numerics Plots", "Missing data")
-    
-    el = [ 
-            analysis_plots
-         ]
-    result = ElementHelper.page(case, config["description"], element_list=el) 
-
-    summary[case] = _summarize_result(analysis_data, config)
-    _print_result(case,result) #TODO
-
+    m = importlib.import_module(config['module'])
+    result = m.run(case, config)
+    summary[case] = _summarize_result(m, result)
+    _print_summary(m, case, summary[case])
     functions.create_page_from_template("numerics.html",
-            os.path.join(livvkit.index_dir, "numerics", case+".html"))
-    functions.write_json(result, os.path.join(livvkit.output_dir,"numerics"), case+".json")
+            os.path.join(livvkit.index_dir, "numerics", case + ".html"))
+    functions.write_json(result, os.path.join(livvkit.output_dir, "numerics"), case + ".json")
 
 
-def _analyze_case(bundle, model_dir, bench_dir, config):
-    """ Run all of the numerics tests on a particular case """
-    model_files = list(set(glob.glob(os.path.join(model_dir, "*" +
-                            config["output_ext"]))))
-    bench_files = list(set(glob.glob(os.path.join(bench_dir, "*" + 
-                            config["output_ext"]))))
-   
-    if model_files == [] or bench_files == []:
-        return {'test' : {}, 'bench' : {}} 
-    
-    which_experiment = config['name'].split('-')[-1]
-    plot_data = bundle.get_plot_data(ismip.setup[which_experiment], model_files[0], bench_files[0], config)
-
-    return plot_data
+def _print_summary(module, case, summary):
+    try:
+        module.print_summary()
+    except:
+        print("    Ran " + case + "!")
+        print("")
 
 
-def _print_result(case,result):
-    pass
-
-
-def _summarize_result(result, config):
-    """ Trim out some data to return for the index page """
-    summary = LIVVDict()
-    for case in result.keys():
-        summary[case] = "test"
-        
-
+def _summarize_result(module, result):
+    try:
+        summary = module.summarize_result(result, summary)
+    except:
+        status = "Success"
+        for e in result.get("Data").get("Elements"):
+            if e.get("Type") == "Error":
+                status = "Failure"
+        summary = {"" : {"Outcome" : status}}
     return summary
 
 
 def _populate_metadata():
-    """ Provide some top level information """
-    return {"Type" : "Summary",
-            "Title" : "Numerics",
-            "Headers" : ["Max Error", "RMSE"]}
+    try:
+        metadata = module._populate_metadata()
+    except:
+        metadata = {"Type" : "Summary",
+                    "Title" : "Numerics",
+                    "Headers" : ["Outcome"]}
+    return metadata
 

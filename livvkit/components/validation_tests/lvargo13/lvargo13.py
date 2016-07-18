@@ -48,7 +48,7 @@ def run(name, config):
         name: The name of the test
         config: A dictionary representation of the configuration file
     Returns:
-        A list of elements to 
+        The result of ElementHelper.page with the list of elements to display
     """
     greenland_data = os.path.join(livvkit.cwd, config['data_dir'], config['gl_data']) 
     velocity_data = os.path.join(livvkit.cwd, config['data_dir'], config['vel_data'])

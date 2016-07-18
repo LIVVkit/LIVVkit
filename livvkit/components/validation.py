@@ -29,7 +29,6 @@
 Validation Test Base Module
 """
 import os
-import glob
 import importlib
 
 import livvkit
@@ -48,10 +47,6 @@ def _run_suite(case, config, summary):
 
 
 def _print_summary(module, case, summary):
-    """
-    Tries to run the given module's print_result method, and if it is not 
-    implemented, prints some standard information.
-    """
     try:
         module.print_summary()
     except:
@@ -60,8 +55,6 @@ def _print_summary(module, case, summary):
 
 
 def _summarize_result(module, result):
-    """
-    """
     try:
         summary = module.summarize_result(result, summary)
     except:
@@ -69,11 +62,11 @@ def _summarize_result(module, result):
         for e in result.get("Data").get("Elements"):
             if e.get("Type") == "Error":
                 status = "Failure"
-    return {"" : {"Outcome" : status}}
+        summary = {"" : {"Outcome" : status}} 
+    return summary 
         
 
 def _populate_metadata():
-    """ Provide some top level information for the summary """
     try:
         metadata= module.populate_metadata()
     except:
@@ -81,5 +74,4 @@ def _populate_metadata():
                     "Title" : "Validation",
                     "Headers" : ["Outcome"]}
     return metadata
-
 

@@ -53,21 +53,38 @@ line_style = {'bench': 'o-',
 def get_case_length(case):
         return str(int(case.split('-')[-1][1:])).zfill(3)
 
-def hom(config, analysis_data):
+
+def analyze_hom_a(config):
+    plot_list = []
+    return ElementHelper.gallery("Numerics Plots", plot_list) 
+
+
+def analyze_hom_c(config):
+    plot_list = []
+    return ElementHelper.gallery("Numerics Plots", plot_list) 
+
+
+def analyze_hom_f(config):
+    plot_list = []
+    return ElementHelper.gallery("Numerics Plots", plot_list) 
+
+
+def run(case, config):
     """ 
     Verify ISMIP-HOM model data against ISMIP's datasets 
-    
-    Args:
-        model_path: Absolute path to the model data set
-        bench_path: Absolute path to the benchmark data set
-        config: A dictionary containing configuration options
-
-    Returns:
-        A result of the differences between the model and benchmark
     """
+    case_map = {
+            "ismip-hom-a" : analyze_hom_a,
+            "ismip-hom-c" : analyze_hom_c,
+            "ismip-hom-f" : analyze_hom_f
+           }
+    el = case_map[case](config)
+    return ElementHelper.page(case, config["description"], el)
+    
    
-    exp = config['name'].split('-')[-1]
-    if exp in ['a', 'c','f']:
+def unused(case, config):
+    exp = "a"
+    if exp in ['ismip-hom-a', 'ismip-hom-c','ismip-hom-f']:
         coord = 'x_hat'
     else:
         coord = 'y_hat'
