@@ -166,6 +166,13 @@ def summarize_result(data, config):
                     summary[label]['Coefficient of variation'] = '{:3.2%}'.format(numpy.nanmean(coefficient))
     return summary
 
-def print_summary():
-    raise IOError
+def print_summary(case, summary):
+    """ Show some statistics from the run """
+    for subcase in summary.keys():
+        message = case + " " + subcase
+        print("    " + message)
+        print("    " + "-"*len(message))
+        for key, val in summary[subcase].items():
+            print(" "*8 + key.ljust(25) +":" + val.rjust(7))
+        print("")
 

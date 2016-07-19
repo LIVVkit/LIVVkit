@@ -75,7 +75,7 @@ def _run_suite(case, config, summary):
 
 def _print_summary(module, case, summary):
     try:
-        module.print_summary()
+        module.print_summary(case, summary)
     except:
         print("    Ran " + case + "!")
         print("")
