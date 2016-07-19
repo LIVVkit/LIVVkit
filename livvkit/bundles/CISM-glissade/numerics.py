@@ -40,15 +40,22 @@ import livvkit
 
 
 class DataGrid:
+    """ 
+    Class to handle the CISM-glissade grids, which are cell-centered grids. 
+    """
     def __init__(self, data):
         self.y = data.variables['y1']
         self.ny = self.y[:].shape[0]
         self.dy = self.y[1] - self.y[0]
+        
+        #NOTE: cell centered grids, hence the dy.
         self.Ly = self.y[-1] - self.y[0] + self.dy
 
         self.x = data.variables['x1']
         self.nx = self.x[:].shape[0]
         self.dx = self.x[1] - self.x[0]
+        
+        #NOTE: cell centered grids, hence the dx.
         self.Lx = self.x[-1] - self.x[0] + self.dx
 
         self.y_hat = (self.y[:] + self.y[0])/self.Ly
@@ -56,23 +63,66 @@ class DataGrid:
    
    
 class RotatedGrid:
+    """ 
+    For the ISMIP-HOM f tests, CISM computes the flow of a glacier down an
+    inclined plane:
+
+    z
+    ^
+    |
+    * .
+    .    .
+    .        .
+    *           .
+    | .             .
+    |    .     ICE      .
+    |        .              .
+    |            .             .
+    |  BED           .            .
+    |                    .           *
+    |                       .        .
+    |                          .     .
+    |                             .  .
+    |                                *
+    |                                |
+    |                                |
+    |                                |
+    0------------------------------------->x
+    
+    
+    The origin is at point 0 in the above figure, and the topmost point of the
+    glacier is at x=0, z=7 (in km). The slope is 3 degrees. The ice is 1000 m
+    tall and flows down the inclined plane. 
+    
+
+    ISMIP-HOM, however, defines the coordinate system with the origin located at
+    the topmost point of the glacier (0,7) with the x' axis pointing down slope
+    and z' pointing perpendicular to the slope. So the coordinate system is
+    shifted, and rotated by a=3 degrees from the CISM glissade grid.
+   
+    An additional complication is that the surface is computed in CISM on the
+    standard grid, but velocities are computed on a staggered, grid.
+
+    This class converts the CISM-glissade coordinate system to the ISMIP-HOM
+    coordinate system. 
+    """
     def __init__(self, alpha, data):
         self.alpha = alpha
         self.y0 = data.variables['y0'][:]
         self.x0 = data.variables['x0'][:]
         
         self.usurf_ustag = data.variables['usurf'][-1,:,:]
-        self.usurf_stag = (self.usurf_ustag[1:,1:] + self.usurf_ustag[1:,:-1] 
-                           + self.usurf_ustag[:-1,:-1] + self.usurf_ustag[:-1, :-1]) / 4.0
+        self.usurf_stag = (self.usurf_ustag[1: ,1: ] + self.usurf_ustag[1: ,:-1] 
+                         + self.usurf_ustag[:-1,:-1] + self.usurf_ustag[:-1,1: ]) / 4.0
 
-        self.usurf = -(self.x0-625.0)*math.sin(alpha) + (self.usurf_stag-7000.0)*math.cos(alpha)
+        self.usurf = -(self.x0)*math.sin(alpha) + (self.usurf_stag-7000.0)*math.cos(alpha)
 
         self.uvel_stag = data.variables['uvel'][-1,0,:,:]
         self.vvel_stag = data.variables['uvel'][-1,0,:,:]
 
         self.wvel_ustag = data.variables['wvel_ho'][-1,0,:,:]
-        self.wvel_stag = (self.wvel_ustag[1:,1:] + self.wvel_ustag[1:,:-1] 
-                          + self.wvel_ustag[:-1,:-1] + self.wvel_ustag[:-1, :-1]) / 4.0
+        self.wvel_stag = (self.wvel_ustag[1: ,1: ] + self.wvel_ustag[1: ,:-1] 
+                        + self.wvel_ustag[:-1,:-1] + self.wvel_ustag[:-1,1: ]) / 4.0
 
         self.uvel =  self.uvel_stag*math.cos(alpha) + self.wvel_stag*math.sin(alpha)
         self.vvel = -self.uvel_stag*math.sin(alpha) + self.wvel_stag*math.cos(alpha)
