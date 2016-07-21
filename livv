@@ -28,16 +28,16 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 Executable script to start a verification and validation test suite. 
-Management of the tests to be run is handled by the scheduler
+Management of the tests to be run is handled by the scheduler in livvkit.util
 """
 import os
 import sys
 
-import livvkit
-from livvkit.util import options
-
 def main():
     """ Direct execution. """
+    import livvkit
+    from livvkit.util import options
+
     print("-------------------------------------------------------------------")
     print("                      __   _____   ___   ____    _ __     ") 
     print("                     / /  /  _/ | / / | / / /__ (_) /_    ") 

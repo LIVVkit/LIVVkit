@@ -55,6 +55,7 @@ def _run_suite(case, config, summary):
     bench_cases = functions.collect_cases(bench_dir)
     functions.mkdir_p(plot_dir)
 
+    # Generate all of the timing data
     for subcase in sorted(model_cases):
         bench_subcases = bench_cases[subcase] if subcase in bench_cases else []
         timing_data[subcase] = dict()
@@ -64,15 +65,16 @@ def _run_suite(case, config, summary):
                             if mcase in bench_subcases else None)
             mpath = os.path.join(model_dir, subcase, mcase.replace("-", os.sep))
             timing_data[subcase][mcase] = _analyze_case(mpath, bpath, config)
-    
+   
+    # Create scaling and timing breakdown plots
     timing_plots = []
     timing_plots.append(generate_scaling_plot(
-            bundle.weak_scaling(timing_data, config['scaling_var'], config['weak_scaling_points']),
+            weak_scaling(timing_data, config['scaling_var'], config['weak_scaling_points']),
             "Weak Scaling for " + case.capitalize(), "", 
             os.path.join(plot_dir, case + "_weak_scaling.png")
         ))
     timing_plots.append(generate_scaling_plot(
-            bundle.strong_scaling(timing_data, config['scaling_var'], config['strong_scaling_points']),
+            strong_scaling(timing_data, config['scaling_var'], config['strong_scaling_points']),
             "Strong Scaling for " + case.capitalize(), "",
             os.path.join(plot_dir, case + "_strong_scaling.png")
         ))
@@ -80,11 +82,11 @@ def _run_suite(case, config, summary):
             "Timing Breakdown for " + case.capitalize()+" "+s, "",
             os.path.join(plot_dir, case+"_"+s+"_timing_breakdown.png")
         ) for s in sorted(timing_data.keys(), key=functions.sort_scale)]
-  
+ 
+    # Build an image gallery and write the results
     el = [
             ElementHelper.gallery("Performance Plots", timing_plots)
          ]
-
     result = ElementHelper.page(case, config["description"], element_list=el)
     summary[case] = _summarize_result(timing_data, config)
     _print_result(case, summary) 
@@ -94,7 +96,7 @@ def _run_suite(case, config, summary):
 
 
 def _analyze_case(model_dir, bench_dir, config):
-    """ Run all of the performance checks on a particular case """
+    """ Generates statistics from the timing summaries """
     model_timings = set(glob.glob(os.path.join(model_dir, "*" + config["timing_ext"])))
     if bench_dir is not None:
         bench_timings = set(glob.glob(os.path.join(bench_dir, "*" + config["timing_ext"])))
@@ -116,14 +118,6 @@ def _print_result(case, summary):
             for header, val in data.items():
                 print("    " + header + " : " + str(val))
             print("")
-
-
-def _write_result(case,result):
-    """ Take the result and write out a JSON file """
-    outpath = os.path.join(livvkit.output_dir, "Performance", case)
-    util.functions.mkdir_p(outpath)
-    with open(os.path.join(outpath, case+".json"), 'w') as f:
-        json.dump(result, f, indent=4)
 
 
 def _summarize_result(result, config):
@@ -176,12 +170,14 @@ def generate_timing_stats(file_list, var_list):
     timing_result = LIVVDict()
     timing_summary = dict()
     for file in file_list:
-        timing_result[file] = parse_gptl(file, var_list)
+        timing_result[file] = functions.parse_gptl(file, var_list)
     for var in var_list:
         var_time = []
         for f, data in timing_result.items():
-            if var in data: 
-                var_time.append(data[var])
+            try:    
+                var_time.append(data.get(var))
+            except:
+                continue
         if len(var_time):
             var_mean = np.mean(var_time)
             var_max  = np.max(var_time)
@@ -191,12 +187,107 @@ def generate_timing_stats(file_list, var_list):
     return timing_summary
 
 
+def weak_scaling(timing_stats, scaling_var, data_points):
+    """ 
+    Generate data for plotting weak scaling.  The data points keep 
+    a constant amount of work per processor for each data point.
+
+    Args:
+        timing_stats: the result of the generate_timing_stats function
+        scaling_var: the variable to select from the timing_stats dictionary
+                     (can be provided in configurations via the 'scaling_var' key)
+        data_points: the list of size and processor counts to use as data
+                     (can be provided in configurations via the 'weak_scaling_points' key)
+
+    Returns:
+         A LIVVDict of the form:
+            {'bench' : {'mins' : [], 'means' : [], 'maxs' : []},
+             'model' : {'mins' : [], 'means' : [], 'maxs' : []},
+             'proc_counts' : []}
+    """
+    timing_data = LIVVDict()
+    proc_counts = []
+    bench_means = []
+    bench_mins = []
+    bench_maxs = []
+    model_means = []
+    model_mins = []
+    model_maxs = []
+    for point in data_points:
+        size = point[0]
+        proc = point[1]
+        try:
+            model_data = timing_stats[size][proc]['model'][scaling_var]
+            bench_data = timing_stats[size][proc]['bench'][scaling_var]
+        except KeyError:
+            continue 
+        proc_counts.append(proc)
+        model_means.append(model_data['mean'])
+        model_mins.append(model_data['min'])
+        model_maxs.append(model_data['max'])
+        bench_means.append(bench_data['mean'])
+        bench_mins.append(bench_data['min'])
+        bench_maxs.append(bench_data['max'])
+    timing_data['bench'] = dict(mins=bench_mins, means=bench_means, maxs=bench_maxs)
+    timing_data['model'] = dict(mins=model_mins, means=model_means, maxs=model_maxs)
+    timing_data['proc_counts'] = [int(pc[1:]) for pc in proc_counts]
+    return timing_data 
+
+
+def strong_scaling(timing_stats, scaling_var, data_points):
+    """
+    Generate data for plotting strong scaling.  The data points keep
+    the problem size the same and varies the number of processors
+    used to complete the job.
+
+    Args:
+        timing_stats: the result of the generate_timing_stats function
+        scaling_var: the variable to select from the timing_stats dictionary
+                     (can be provided in configurations via the 'scaling_var' key)
+        data_points: the list of size and processor counts to use as data
+                     (can be provided in configurations via the 'strong_scaling_points' key)
+
+    Returns:
+        A LIVVDict of the form:
+            {'bench' : {'mins' : [], 'means' : [], 'maxs' : []},
+             'model' : {'mins' : [], 'means' : [], 'maxs' : []},
+             'proc_counts' : []}
+    """
+    timing_data = LIVVDict()
+    proc_counts = []
+    bench_means = []
+    bench_mins = []
+    bench_maxs = []
+    model_means = []
+    model_mins = []
+    model_maxs = []
+    for point in data_points:
+        size = point[0]
+        proc = point[1]
+        try:
+            model_data = timing_stats[size][proc]['model'][scaling_var]
+            bench_data = timing_stats[size][proc]['bench'][scaling_var]
+        except KeyError:
+            continue
+        proc_counts.append(proc)
+        model_means.append(model_data['mean'])
+        model_mins.append(model_data['min'])
+        model_maxs.append(model_data['max'])
+        bench_means.append(bench_data['mean'])
+        bench_mins.append(bench_data['min'])
+        bench_maxs.append(bench_data['max'])
+    timing_data['bench'] = dict(mins=bench_mins, means=bench_means, maxs=bench_maxs)
+    timing_data['model'] = dict(mins=model_mins, means=model_means, maxs=model_maxs)
+    timing_data['proc_counts'] = [int(pc[1:]) for pc in proc_counts]
+    return timing_data 
+
+
 def generate_scaling_plot(timing_data, title, description, plot_file):
     """ 
     Generate a scaling plot.  
 
     Args:
-        timing_data: data returned from a bundle's *_scaling method
+        timing_data: data returned from a *_scaling method
         tite: the title of the plot
         description: a description of the plot
         plot_file: the file to write out to
@@ -238,7 +329,7 @@ def generate_timing_breakdown_plot(timing_stats, scaling_var, title, description
 
     Args:
         timing_stats: a dictionary of the form 
-            {proc_count : {model/bench : { var : { stat : val }}}}
+            {proc_count : {model||bench : { var : { stat : val }}}}
         scaling_var: the variable that accounts for the total runtime
         title: the title of the plot
         description: the description of the plot
@@ -295,27 +386,4 @@ def generate_timing_breakdown_plot(timing_stats, scaling_var, title, description
     plt.savefig(plot_file)
     plt.close()
     return ElementHelper.image_element(title, description, os.path.basename(plot_file))
-
-
-def parse_gptl(file_path, var_list):
-    """
-    Read a GPTL timing file and extract some data.
-
-    Args:
-        file_path: the path to the GPTL timing file
-        var_list: a list of strings to look for in the file
-
-    Returns:
-        A LIVVDict containing key-value pairs of the livvkit
-        and the times associated with them
-    """
-    timing_result = LIVVDict()
-    if os.path.isfile(file_path):
-        with open(file_path, 'r') as f:
-            for var in var_list:
-                for line in f:
-                    if var in line:
-                        timing_result[var] = float(line.split()[4])/int(line.split()[2])
-                        break
-    return timing_result
 
