@@ -161,7 +161,6 @@ def _populate_metadata():
             "Headers" : ["Bit for Bit", "Configurations", "Std. Out Files"]}
 
 
-
 def bit_for_bit(model_path, bench_path, config, plot=True):
     """
     Checks whether the given files have bit for bit solution matches
@@ -234,9 +233,11 @@ def diff_configurations(model_config, bench_config, model_bundle, bench_bundle):
     if model_data == {} and bench_data == {}:
         return ElementHelper.error("Configuration Comparison", 
                 "Could not open file: " + model_config.split(os.sep)[-1])
+    
     model_sections = set(model_data.keys())
     bench_sections = set(bench_data.keys())
     all_sections = set(model_sections.union(bench_sections))
+    
     for s in all_sections:
         model_vars = set(model_data[s].keys()) if s in model_sections else set()
         bench_vars = set(bench_data[s].keys()) if s in bench_sections else set()
@@ -289,7 +290,7 @@ def plot_bit_for_bit(case, var_name, model_data, bench_data, diff_data):
     pyplot.yticks([])
     pyplot.imshow(bench_data, vmin=min, vmax=max, interpolation='nearest', cmap=colormaps.viridis)
     pyplot.colorbar()
-    pyplot.tight_layout()(test_data)
+    pyplot.tight_layout()
 
     # Plot the difference
     pyplot.subplot(1,3,3)
@@ -302,5 +303,6 @@ def plot_bit_for_bit(case, var_name, model_data, bench_data, diff_data):
     
     pyplot.savefig(os.sep.join([plot_path, case+".png"]))
     pyplot.close()
-    return os.path.join(os.path.relpath(plot_path, os.path.join(livvkit.output_dir, "verification")), case+".png")
+    return os.path.join(os.path.relpath(plot_path, os.path.join(livvkit.output_dir, "verification")), 
+                        case+".png")
 

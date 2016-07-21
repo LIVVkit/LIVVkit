@@ -67,7 +67,7 @@ def weak_scaling(timing_stats, scaling_var, data_points):
             model_data = timing_stats[size][proc]['model'][scaling_var]
             bench_data = timing_stats[size][proc]['bench'][scaling_var]
         except KeyError:
-            return timing_data 
+            continue 
         proc_counts.append(proc)
         model_means.append(model_data['mean'])
         model_mins.append(model_data['min'])

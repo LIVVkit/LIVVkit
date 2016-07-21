@@ -76,21 +76,42 @@ a {
     text-decoration: none;
 }
 
-#header-content {
-	position: absolute;
+#header-icon {
+    float: left; 
+    padding: 10px; 
+    padding-left: 15px;
+    width: 40px; 
+}
+
+#header-home {
+	float: left;
     color: #66c2ff;
     height: 1.25em;
    	line-height: 1.25em;
    	margin-top: 15px;
+    text-align: left;
+    width: 15%;
 }
 
-#wiki-content {
-	float: right;
-	height: 1.25em;
+#header-title {
+	float: left;
     color: #66c2ff;
+	height: 1.25em;
+	line-height: 1.25em;
+	margin-top: 15px;
+    text-align: center;
+    width: 50%;
+}
+
+#header-docs {
+	float: left;
+    color: #66c2ff;
+	height: 1.25em;
 	line-height: 1.25em;
 	margin-top: 15px;
     padding-right: 15px;
+    text-align: right;
+    width: 25%;
 }
 
 #wrapper {

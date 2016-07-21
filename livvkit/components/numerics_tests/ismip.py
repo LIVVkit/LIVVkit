@@ -39,10 +39,22 @@ import scipy
 import matplotlib.pyplot as plt
 
 import livvkit
+from livvkit.util import functions
+from livvkit.util.datastructures import LIVVDict
 from livvkit.util.datastructures import ElementHelper
 
 with open(__file__.replace('.py','.json'), 'r') as f:
     setup = json.load(f)
+
+for exp, size in [('ismip-hom-a','005'), ('ismip-hom-c','005'), ('ismip-hom-f','000')]:
+    recreate_file = os.path.join(livvkit.cwd, setup[exp]["data_dir"], 
+                            setup[exp]['pattern'][0].replace('???', size))
+    setup[exp]['interp_points'] = \
+        numpy.genfromtxt(recreate_file, delimiter=',', missing_values='nan', 
+                            usecols=(0), unpack=True)
+    if exp == 'ismip-hom-f':
+        setup[exp]['interp_points'] = setup[exp]['interp_points']*100 - 50 
+
 
 case_color = {'bench': '#d7191c',
               'test':  '#fc8d59' }
@@ -51,23 +63,12 @@ line_style = {'bench': 'o-',
               'test':  '-'  }
 
 def get_case_length(case):
-        return str(int(case.split('-')[-1][1:])).zfill(3)
+    return str(int(case.split('-')[-1][1:])).zfill(3)
 
-def hom(config, analysis_data):
-    """ 
-    Verify ISMIP-HOM model data against ISMIP's datasets 
-    
-    Args:
-        model_path: Absolute path to the model data set
-        bench_path: Absolute path to the benchmark data set
-        config: A dictionary containing configuration options
 
-    Returns:
-        A result of the differences between the model and benchmark
-    """
-   
-    exp = config['name'].split('-')[-1]
-    if exp in ['a', 'c','f']:
+def run(config, analysis_data):
+    case = config['name']
+    if case in ['ismip-hom-a', 'ismip-hom-c','ismip-hom-f']:
         coord = 'x_hat'
     else:
         coord = 'y_hat'
@@ -77,16 +78,16 @@ def hom(config, analysis_data):
         ))
 
     plot_list = []
-    for p, pattern in enumerate(sorted(setup[exp]['pattern'])):
+    for p, pattern in enumerate(sorted(setup[case]['pattern'])):
         fig_label = pattern.split('_')[1]
         description = ''
 
         for l in sorted(lengths):
             plt.figure(figsize=(10,8), dpi=150)
-            plt.xlabel(setup[exp]['xlabel'][p])
-            plt.ylabel(setup[exp]['ylabel'][p])
+            plt.xlabel(setup[case]['xlabel'][p])
+            plt.ylabel(setup[case]['ylabel'][p])
             
-            if exp in ['a','c']:
+            if case in ['ismip-hom-a','ismip-hom-c']:
                 plt.title(str(int(l))+' km')
                 title = fig_label[0:-1]+'. '+fig_label[-1]+': '+str(int(l))+' km'
             else:
@@ -95,22 +96,19 @@ def hom(config, analysis_data):
 
             plot_file = os.path.join( config["plot_dir"], config['name']+'_'+fig_label+'_'+l+'.png' )
             recreate_file = os.path.join(
-                    livvkit.cwd, setup[exp]["data_dir"], pattern
+                    livvkit.cwd, setup[case]["data_dir"], pattern
                     ).replace('???', l)
-
-            axis, fs_amin, fs_amax, fs_mean, ho_amin, ho_amax, ho_mean = \
+            axis, fs_amin, fs_amax, fs_mean, fs_std, ho_amin, ho_amax, ho_mean, ho_std = \
                 numpy.genfromtxt(recreate_file, delimiter=',', missing_values='nan', unpack=True)
            
-            if exp in ['f']:
+            if case in ['ismip-hom-f']:
                 axis = axis*100.0 - 50.0
 
             plt.fill_between(axis, ho_amin, ho_amax, facecolor='green', alpha=0.5)
             plt.fill_between(axis, fs_amin, fs_amax, facecolor='blue', alpha=0.5)
-            
             plt.plot(axis, fs_mean, 'b-', linewidth=2, label='Full stokes')
             plt.plot(axis, ho_mean, 'g-', linewidth=2, label='Higher order')
 
-            
             analysis = {}
             for a in analysis_data.keys():
                 if int(l) == int(a.split('-')[-1][1:]):
@@ -122,22 +120,59 @@ def hom(config, analysis_data):
                                 line_style[model], color=case_color[model], linewidth=2, label=a+'-'+model)
 
             plt.legend(loc='best')
-            
             plt.savefig(plot_file)
             plt.close()
-
             plot_list.append( ElementHelper.image_element(title, description, os.path.basename(plot_file)) )
-
     
-    return plot_list
+    return ElementHelper.gallery("Numerics Plots", plot_list)
 
 
+def summarize_result(data, config):
+    case = config['name']
+    summary = LIVVDict() 
+    lengths = list(set([get_case_length(case) for case in data.keys()]))
+    for p, pattern in enumerate(sorted(setup[case]['pattern'])):
+        for l in sorted(lengths):
+            
+            recreate_file = os.path.join(
+                    livvkit.cwd, setup[case]["data_dir"], pattern
+                    ).replace('???', l)
 
-def populate_metadata():
-    """ Provide some top level information for the summary """
-    metadata = {}
-    metadata["Type"] = "Summary"
-    metadata["Title"] = "Numerics"
-    metadata["Headers"] = ["Test1", "Test2"]
-    return metadata
+            axis, fs_amin, fs_amax, fs_mean, fs_std, ho_amin, ho_amax, ho_mean, ho_std = \
+                numpy.genfromtxt(recreate_file, delimiter=',', missing_values='nan', unpack=True)
+            
+
+            analysis = {}
+            for a in data.keys():
+                if int(l) == int(a.split('-')[-1][1:]):
+                    analysis[a] = data[a]
+            
+            for a in analysis.keys():
+                for model in sorted(analysis[a].keys()):
+                    if setup[case]['ylabel'][p].split(" ")[0].lower() == 'surface':
+                        percent_errors = numpy.divide(analysis[a][model][config['plot_vars'][p]] - 
+                                                        ho_mean, ho_mean+1000) 
+                        coefficient = numpy.divide(ho_std, ho_mean+1000)
+                    else:
+                        percent_errors = numpy.divide(analysis[a][model][config['plot_vars'][p]] - 
+                                                        ho_mean, ho_mean)
+                        coefficient = numpy.divide(ho_std, ho_mean)
+
+                    label = a+' '+setup[case]['ylabel'][p].split(" ")[0]
+                    if model.lower() == 'bench':
+                        summary[label]['Bench mean % error'] = '{:3.2%}'.format(numpy.nanmean(percent_errors))
+                    else:
+                        summary[label]['Test mean % error'] = '{:3.2%}'.format(numpy.nanmean(percent_errors))
+                    summary[label]['Coefficient of variation'] = '{:3.2%}'.format(numpy.nanmean(coefficient))
+    return summary
+
+def print_summary(case, summary):
+    """ Show some statistics from the run """
+    for subcase in summary.keys():
+        message = case + " " + subcase
+        print("    " + message)
+        print("    " + "-"*len(message))
+        for key, val in summary[subcase].items():
+            print(" "*8 + key.ljust(25) +":" + val.rjust(7))
+        print("")
 

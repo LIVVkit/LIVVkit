@@ -216,8 +216,6 @@ def generate_scaling_plot(timing_data, title, description, plot_file):
             means = case_data['means']
             mins = case_data['mins']
             maxs = case_data['maxs']
-            print(proc_counts)
-            print(means)
             plt.fill_between(proc_counts, mins, maxs, facecolor=case_color, alpha=0.5)
             plt.plot(proc_counts, means, 'o-', color=case_color, label=case)
 

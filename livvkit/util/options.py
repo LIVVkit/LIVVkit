@@ -158,7 +158,7 @@ def init(options):
         print("    Use either one or both of the --verification and")
         print("    --validation options to run tests.  For more ")
         print("    information use the --help option, view the README")
-        print("    or check https://github.com/LIVVkit/LIVVkit/wiki")
+        print("    or check https://livvkit.github.io/Docs/")
         print("----------------------------------------------------------")
         print("")
         sys.exit(1)
