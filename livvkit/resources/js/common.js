@@ -12,7 +12,6 @@ $(document).ready(function() {
         "Gallery"     : drawGallery
     };
 
-
     // Append the generated content
     drawNav();
     drawContent();
@@ -20,17 +19,22 @@ $(document).ready(function() {
 
 
 /**
- * Draw the navigation sidebar
+ * Draws the navigation sidebar by looking at the index.json data and appends the 
+ * list of resultant pages to the nav div.
  */
 function drawNav() {
+    // Get the dataset, to do so the html page must have the `indexPath` variable defined
     var html = "";
     getUrl = window.location.href.substr(0,window.location.href.lastIndexOf('/')+1);
     data = loadJSON(getUrl + indexPath + '/index.json');
+    
+    // Go through each category: numerics, verification, performance, and validation
     for (var cat in data["Data"]["Elements"]) {
         if (data["Data"]["Elements"][cat] != null && 
                 Object.keys(data["Data"]["Elements"][cat]["Data"]).length > 0) {
             html += "<h3>" + data["Data"]["Elements"][cat]["Title"] + "</h3>\n";
             testList = Object.keys(data["Data"]["Elements"][cat]["Data"]).sort();
+            // Add the tests for each category
             for (idx in testList) {
                 html += "<a href=" + indexPath + "/" + data["Data"]["Elements"][cat]["Title"].toLowerCase() + 
                         "/" + testList[idx] + ".html>" + testList[idx] + "</a></br>";
@@ -42,9 +46,11 @@ function drawNav() {
 
 
 /**
- * Draw content to the page
+ * Draws content to the page by looking at the name of the page and loading the 
+ * appropriate dataset.
  */
 function drawContent() {
+    // Load the data and add header information
     var verType = window.location.href.substr(
             window.location.href.lastIndexOf("/")+1).split("#")[0].replace(".html", "");
     var data = loadJSON('./' + verType + ".json");
@@ -53,7 +59,8 @@ function drawContent() {
     html += "<p>" + data["Description"];
     html += "</div>";
     $("#content").append(html);
-   
+  
+    // If there are plain data elements in the dataset draw and add them to the div
     var content = data["Data"];
     if ("Elements" in content) {
         // Add the content
@@ -62,7 +69,8 @@ function drawContent() {
             elementMap[elem["Type"]](elem, "#"+data["Title"]);
         }
     }
-    
+   
+    // If there are tabbed data elements in the dataset draw and add them to the div
     if ("Tabs" in content) {
         // Add the tabs
         var tabs = content["Tabs"];
@@ -79,7 +87,6 @@ function drawContent() {
         }
         html += "</ul>\n";
 
-        console.log(tabs);
         for (var idx in tabs) {
             console.log(idx);
             var tab = tabs[idx];
@@ -121,7 +128,11 @@ function drawContent() {
 
 
 /**
- * Build a table
+ * Build a summary and adds it to the div.
+ *
+ * @param {Object} data - The data representing the summary.  Determined by data["Type"] = "Summary"
+ * @param {string} div - The name of the div to draw to.  Should be referenced as a string that 
+ *                       determines whether it is a class or id (ie include # or .)
  */
 function drawSummary(data, div) {
     var html = "<table class=\"summary\">\n";
@@ -164,9 +175,12 @@ function drawSummary(data, div) {
     $(div).append(html);
 }
 
-
 /**
- * Build an error message
+ * Build an error message and appends it to the div.
+ *
+ * @param {Object} data - The error element data.  Determined by having data["Type"] = "Error"
+ * @param {string} div - The name of the div to draw to.  Should be referenced as a string that
+ *                       determines whether it is a class or id (ie include # or .)
  */
 function drawError(data, div) {
     var html = "<h3>" + data["Title"] + "</h3>\n";
@@ -178,7 +192,11 @@ function drawError(data, div) {
 
 
 /**
- * Build a diff
+ * Build a file diff
+ *
+ * @param {Object} data - The data representing the table.  Determined by data["Type"] = "Diff"
+ * @param {string} div - The name of the div to draw to.  Should be referenced as a string that 
+ *                       determines whether it is a class or id (ie include # or .)
  */
 function drawDiff(data, div) {
     controller = div.replace("#","") + "_controller";
@@ -189,6 +207,7 @@ function drawDiff(data, div) {
         html += "<b>[" + section + "]</b>";
         for (var varName in data["Data"][section]) {
             arr = data["Data"][section][varName];
+            // First element determines if the elements matched, otherwise draw what the change was
             if (arr[0]) {
                 html += "<p>   " + varName + " = " + arr[1] + "</p>";
             } else {
@@ -207,21 +226,29 @@ function drawDiff(data, div) {
 
 /**
  * Build a bit for bit table
+ * 
+ * @param {Object} data - The data representing the table.  Determined by 
+ *                        data["Type"] = "Bit for Bit"
+ * @param {string} div - The name of the div to draw to.  Should be referenced as a string that 
+ *                       determines whether it is a class or id (ie include # or .)
  */
 function drawBitForBit(data, div) {
     var html = "<h3>" + data["Title"] + "</h3>\n";
     html += "<div class=\"bitForBit\">";
     html += "<table>\n";
     html += "<th>Variable</th>\n";
+    // Draw the headers
     for (var idx in data["Headers"]) {
         html += "<th>" + data["Headers"][idx] + "</th>\n";
     }
+    // Draw the cells
     for (var varName in data["Data"]) {
         html += "<tr>\n";
         html += "<td>" + varName + "</td>\n";
         for (var j in data["Headers"]) {
             var header = data["Headers"][j];
             var hData = data["Data"][varName][header];
+            // Handle the different data types to draw (image vs string/numeric data)
             if (header == "Plot" && (hData !== "N/A" || hData.indexOf("ERROR:")!==-1)) {
                 html += "<td>" + drawThumbnail(hData, 50) + "</td>\n";
             } else {
@@ -240,42 +267,59 @@ function drawBitForBit(data, div) {
 
 /**
  * Build a table
+ *
+ * @param {Object} data - The data representing the table.  Determined by data["Type"] = "Table"
+ * @param {string} div - The name of the div to draw to.  Should be referenced as a string that 
+ *                       determines whether it is a class or id (ie include # or .)
  */
 function drawTable(data, div) {
     var html = "<h3>" + data["Title"] + "</h3>\n";
     html += "<div class=\"table\">";
     html += "<table>\n";
+    // Draw the headers
     for (var idx in data["Headers"]) {
         html += "<th>" + data["Headers"][idx] + "</th>\n";
     }
 
+    // Draw the cells
     html += "<tr>\n";
     for (var idx in data["Headers"]) {
         html += "<td>" + data["Data"][data["Headers"][idx]] + "</td>\n";
     }
-    html += "</tr>\n";
-    html += "</table>\n";
-    html += "</div>";
+    html += "</tr>\n </table>\n </div>";
     $(div).append(html);
 }
 
 
 /**
  * Build a gallery
+ *
+ * @param {Object} data - The data representing the table.  Determined by data["Type"] = "Gallery"
+ * @param {string} div - The name of the div to draw to.  Should be referenced as a string that 
+ *                       determines whether it is a class or id (ie include # or .)
  */
 function drawGallery(data, div) {
     var html = "<div class=\"gallery\">";
     html += "<h3>" + data["Title"] + "</h3>";
     html += "</div>";
+
+    // Create the gallery div to put all the images into
     $(div).append(html);
     for (var idx in data["Data"]) {
         img_elem = data["Data"][idx];
         $(".gallery").append("<div id=img_"+idx+"></div>")
+        // Draw an image 
         drawImage(img_elem, $("#img_"+idx));
     }
 }
 
-
+/**
+ * Draw an image
+ *
+ * @param {Object} data - The data representing the table.  Determined by data["Type"] = "Image"
+ * @param {string} div - The name of the div to draw to.  Should be referenced as a string that 
+ *                       determines whether it is a class or id (ie include # or .)
+ */
 function drawImage(img_elem, div) {
     img_dir = window.location.href.substr(0,window.location.href.lastIndexOf('/')+1) + "imgs/";
     var html = "<p>" + img_elem["Title"] + "</p>";
@@ -283,7 +327,14 @@ function drawImage(img_elem, div) {
     $(div).append(html);
 }
 
-
+/**
+ * Draw an image thumbnail with a link to open in a new tab 
+ *
+ * @param {string} path - The location of the image to thumbnail-ize 
+ * @param {number} size - The desired height to draw
+ *
+ * @return the html to embed into another element
+ */
 function drawThumbnail(path, size) {
     var html = "<a target=\"_blank\" href=\"" + path + "\">";
     html += "<img src=\"" + path + "\" style=\"height: " + size + "px; overflow: hidden; position: relative\">";
@@ -306,18 +357,5 @@ function loadJSON(path) {
         }
     });
     return data;
-}
-
-/**
- * Recursively go through json data and search for the "Elements" list
- */
-function getElements(json) {
-    if (json.hasOwnProperty("Elements")) {
-        return json["Elements"];
-    } else { 
-        for (section in json) {
-            return getElements(json[section]);
-        }
-    }
 }
 
