@@ -1,4 +1,3 @@
-#!/usr/bin/env bash
 # Copyright (c) 2015, UT-BATTELLE, LLC
 # All rights reserved.
 # 
@@ -26,19 +25,15 @@
 # CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+"""
+CISM-glissade module for performance analysis
+"""
+import os
+import matplotlib
+import numpy as np
 
-LIVV="../"
-CURRENT="Copyright (c)"
+from livvkit.util.datastructures import LIVVDict
+from livvkit.util.datastructures import ElementHelper
 
-########################################################
-# Display all files that are missing the license header.
-########################################################
-find $LIVV -type f -not -path "*.git*" \
-    -not -path "*configurations/*" \
-    -not -path "*util/data_*" \
-    -not -path "*verification/ver_utils/data_*" \
-    -not -iname "*.png" \
-    -not -iname "*.jpg" \
-    -not -iname "*.svg" \
-    -not -iname "*.md" \
-    | xargs grep -L "$CURRENT"
+# CISM-Glissade specific performance analysis code can go here
+

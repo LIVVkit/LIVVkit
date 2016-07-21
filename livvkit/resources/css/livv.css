@@ -1,0 +1,221 @@
+/*
+/ Copyright (c) 2015, UT-BATTELLE, LLC
+/ All rights reserved.
+/ 
+/ Redistribution and use in source and binary forms, with or without
+/ modification, are permitted provided that the following conditions are met:
+/ 
+/ 1. Redistributions of source code must retain the above copyright notice, this
+/ list of conditions and the following disclaimer.
+/ 
+/ 2. Redistributions in binary form must reproduce the above copyright notice,
+/ this list of conditions and the following disclaimer in the documentation
+/ and/or other materials provided with the distribution.
+/ 
+/ 3. Neither the name of the copyright holder nor the names of its contributors
+/ may be used to endorse or promote products derived from this software without
+/ specific prior written permission.
+/ 
+/ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+/ ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+/ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+/ DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+/ FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+/ DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+/ SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+/ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+/ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+/ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+/ */
+
+
+/******************************************************************************
+  Basic Styling Overrides
+******************************************************************************/
+html {
+	font-family: 'Lato', helvetica, sans-serif;
+	height: 100%;
+}
+
+body {
+	height: 100%;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+	margin-left: 0px;
+}
+
+h1, h2, h3, h4 {
+	font-family: 'Lato', helvetica, sans-serif;
+}
+
+hr {
+    color: #222222;
+}
+
+a {
+    text-decoration: none;
+    color: #007acc;
+}
+
+/******************************************************************************
+  Header/Footer Styling
+******************************************************************************/
+#header {
+    min-width: 800px;
+    height: 60px;
+	background-color: #222222;
+    border-bottom: 1px solid #222222;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 1.5em;
+    font-weight: 500;
+}
+
+#header a{
+    text-decoration: none;
+}
+
+#header-icon {
+    float: left; 
+    padding: 10px; 
+    padding-left: 15px;
+    width: 40px; 
+}
+
+#header-home {
+	float: left;
+    color: #66c2ff;
+    height: 1.25em;
+   	line-height: 1.25em;
+   	margin-top: 15px;
+    text-align: left;
+    width: 15%;
+}
+
+#header-title {
+	float: left;
+    color: #66c2ff;
+	height: 1.25em;
+	line-height: 1.25em;
+	margin-top: 15px;
+    text-align: center;
+    width: 50%;
+}
+
+#header-docs {
+	float: left;
+    color: #66c2ff;
+	height: 1.25em;
+	line-height: 1.25em;
+	margin-top: 15px;
+    padding-right: 15px;
+    text-align: right;
+    width: 25%;
+}
+
+#wrapper {
+    margin: auto;
+    width: 80%;
+    min-width: 800px;
+}
+
+#nav {
+    width: 10%;
+    float: left;
+    padding: 20px;
+}
+
+#content {
+    padding: 10px;
+    width: 80%;
+    float: left;
+}
+
+#content div {
+    background-color: white;
+}
+
+/******************************************************************************
+  TableStyling
+******************************************************************************/
+table {
+    width: 100%;
+    border: 2px solid #66c2ff;
+    border-spacing: 0;
+}
+
+th {
+   background-color: #66c2ff;
+   color: #ffffff;
+   padding: 10px;
+}
+
+td {
+    padding: 2px;
+    text-align: center;
+}
+
+.testName td {
+    font-weight: 600;
+    text-align: left;
+}
+
+.testCase {
+    text-align: right;
+}
+
+/******************************************************************************
+  Element Styling 
+******************************************************************************/
+.error {}
+
+.error p {
+    color: red;
+}
+
+.diff {
+    border: 2px solid #66c2ff;
+    padding: 4px;
+}
+
+.diff p {
+    line-height: 1.05em;
+    margin: 0px;
+    padding-left:10%;
+    font-family: monospace;
+}
+
+.diff p.old {
+    background-color: #ffcccc;
+}
+
+.diff p.new {
+    background-color: #ccffcc;
+}
+
+.bitForBit {}
+
+.table {}
+
+.gallery {}
+
+.gallery p {
+    text-align: center;
+    padding: none;
+    margin: none;
+}
+
+.gallery div {
+    float: left;
+    margin: 10px;
+    display: inline;
+}
+
+.gallery img {
+    border: 1px solid #66c2ff;
+}
+
+.summary {
+    width: 70%;
+}

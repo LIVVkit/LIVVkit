@@ -1,0 +1,72 @@
+{
+    "dome" : 
+      { 
+        "description" : 
+            "3-D paraboloid dome of ice with a circular, 60 km diameter base sitting on a flat bed. For this set of experiments a quasi no-slip basal condition in imposed by setting. A zero-flux boundary condition is applied to the dome margins.",
+        "data_dir" : "dome",
+        "output_ext" : ".out.nc",
+        "logfile_ext" : ".config.oe",
+        "config_ext"  : ".config",
+        "bit_for_bit_vars" : ["velnorm", "thk"]
+      },
+    "ismip-hom-a" : 
+      { 
+        "description" : 
+            "The Ice Sheet Model Intercomparison Project for Higher-Order Models (ISMIP-HOM) prescribes a set of experiments meant to test the implementation of higher-order physics. For more information, see http://homepages.ulb.ac.be/~fpattyn/ismip/ Simulates steady ice flow over a surface with periodic boundary conditions",
+        "data_dir" : "ismip-hom",
+        "output_ext": ".out.nc",
+        "logfile_ext" : ".config.oe",
+        "config_ext"  : ".config",
+        "bit_for_bit_vars" : ["velnorm", "thk"]
+      },
+    "ismip-hom-c" : 
+      { 
+        "description" : 
+            "The Ice Sheet Model Intercomparison Project for Higher-Order Models (ISMIP-HOM) prescribes a set of experiments meant to test the implementation of higher-order physics. For more information, see http://homepages.ulb.ac.be/~fpattyn/ismip/ Simulates steady ice flow over a surface with periodic boundary conditions",
+        "data_dir" : "ismip-hom",
+        "output_ext": ".out.nc",
+        "logfile_ext" : ".config.oe",
+        "config_ext"  : ".config",
+        "bit_for_bit_vars" : ["velnorm", "thk"]
+      },
+    "ismip-hom-f" : 
+      { 
+        "description" : 
+            "The Ice Sheet Model Intercomparison Project for Higher-Order Models (ISMIP-HOM) prescribes a set of experiments meant to test the implementation of higher-order physics. For more information, see http://homepages.ulb.ac.be/~fpattyn/ismip/ Simulates steady ice flow over a surface with periodic boundary conditions",
+        "data_dir" : "ismip-hom",
+        "output_ext": ".out.nc",
+        "logfile_ext" : ".config.oe",
+        "config_ext"  : ".config",
+        "bit_for_bit_vars" : ["velnorm", "thk"]
+      },
+    "shelf-circular" : 
+      { 
+        "description" : 
+            "An idealized 1000 meter thick circular shelf grounded at the center.",
+        "data_dir" : "shelf",
+        "output_ext" : ".out.nc",
+        "logfile_ext" : ".config.oe",
+        "config_ext"  : ".config",
+        "bit_for_bit_vars" : ["velnorm", "thk"]
+      },
+    "shelf-confined" : 
+      { 
+        "description" : 
+            "An idealized 500m ice shelf in a confined, rectangular embayment.",
+        "data_dir" : "shelf",
+        "output_ext" : ".out.nc",
+        "logfile_ext" : ".config.oe",
+        "config_ext"  : ".config",
+        "bit_for_bit_vars" : ["velnorm", "thk"]
+      },
+    "stream" : 
+      { 
+        "description" : 
+            "The stream test case simulates flow over an idealized ice stream underlain by a subglacial till with a known and specified yield stress distribution.",
+        "data_dir" : "stream",
+        "output_ext" : ".out.nc",
+        "logfile_ext" : ".config.oe",
+        "config_ext"  : ".config",
+        "bit_for_bit_vars" : ["velnorm", "thk"]
+      }
+}

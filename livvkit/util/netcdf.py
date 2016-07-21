@@ -1,4 +1,3 @@
-#!/usr/bin/env bash
 # Copyright (c) 2015, UT-BATTELLE, LLC
 # All rights reserved.
 # 
@@ -26,19 +25,22 @@
 # CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+"""
+Helper functions for dealing with netcdf datasets
+"""
 
-LIVV="../"
-CURRENT="Copyright (c)"
+def has_time(dataset):
+    """
+    Check netCDF files time dimension for emptyness. This likely
+    indicates the run did not complete.
 
-########################################################
-# Display all files that are missing the license header.
-########################################################
-find $LIVV -type f -not -path "*.git*" \
-    -not -path "*configurations/*" \
-    -not -path "*util/data_*" \
-    -not -path "*verification/ver_utils/data_*" \
-    -not -iname "*.png" \
-    -not -iname "*.jpg" \
-    -not -iname "*.svg" \
-    -not -iname "*.md" \
-    | xargs grep -L "$CURRENT"
+    Args:
+        dataset: An open, readable netcdf file
+
+    Returns:
+        a boolean indicating if the time dimension is set correctly
+    """
+    try:
+        return len(dataset.dimensions['time']) > 0
+    except:
+        return False

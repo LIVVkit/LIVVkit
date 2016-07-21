@@ -1,0 +1,15 @@
+{
+    "dome" :
+        {
+            "description" :
+                "3-D paraboloid dome of ice with a circular, 60 km diameter base sitting on a flat bed. For this set of experiments a quasi no-slip basal condition in imposed by setting. A zero-flux boundary condition is applied to the dome margins.",
+            "data_dir" : "dome",
+            "timing_ext" : ".cism_timing_stats",
+            "timing_vars" : ["cism", "initial_diag_var_solve", "glissade_assemble_3d"],
+            "scaling_var" : "cism",
+            "weak_scaling_points" : 
+                [["s0","p1"],["s1","p4"],["s2","p16"],["s3","p64"],["s4","p256"],["s5","p1024"]],
+            "strong_scaling_points" : 
+                [["s0", "p1"],["s0","p2"],["s0","p4"],["s0","p8"],["s0","p16"],["s0","p64"]]
+        }
+}

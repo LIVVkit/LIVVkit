@@ -1,4 +1,3 @@
-#!/usr/bin/env bash
 # Copyright (c) 2015, UT-BATTELLE, LLC
 # All rights reserved.
 # 
@@ -27,18 +26,27 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-LIVV="../"
-CURRENT="Copyright (c)"
+"""
+Storage for global variables.  These are set upon startup in the options module
+"""
+import os
+import time
+import getpass
+import platform
+import socket
 
-########################################################
-# Display all files that are missing the license header.
-########################################################
-find $LIVV -type f -not -path "*.git*" \
-    -not -path "*configurations/*" \
-    -not -path "*util/data_*" \
-    -not -path "*verification/ver_utils/data_*" \
-    -not -iname "*.png" \
-    -not -iname "*.jpg" \
-    -not -iname "*.svg" \
-    -not -iname "*.md" \
-    | xargs grep -L "$CURRENT"
+comment        = ""
+cwd            = os.getcwd()
+config_dir     = os.path.join(cwd, "configurations")
+timestamp      = time.strftime("%Y-%m-%d %H:%M:%S")
+user           = getpass.getuser()
+machine        = socket.gethostname()
+os_type        = platform.system() + " " + platform.release()
+website_dir    = os.path.join(cwd, "resources")
+template_dir   = os.path.join(website_dir, "templates")
+
+def print_vars():
+    """ Print out the variables that are contained in this module """
+    for k,v in globals().items():
+        if not str(k).startswith('__'):
+            print(str(k) + " = " + str(v))

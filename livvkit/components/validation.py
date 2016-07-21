@@ -1,4 +1,3 @@
-#!/usr/bin/env bash
 # Copyright (c) 2015, UT-BATTELLE, LLC
 # All rights reserved.
 # 
@@ -26,19 +25,53 @@
 # CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+"""
+Validation Test Base Module
+"""
+import os
+import importlib
 
-LIVV="../"
-CURRENT="Copyright (c)"
+import livvkit
+from livvkit.util import functions
+from livvkit.util.datastructures import LIVVDict
 
-########################################################
-# Display all files that are missing the license header.
-########################################################
-find $LIVV -type f -not -path "*.git*" \
-    -not -path "*configurations/*" \
-    -not -path "*util/data_*" \
-    -not -path "*verification/ver_utils/data_*" \
-    -not -iname "*.png" \
-    -not -iname "*.jpg" \
-    -not -iname "*.svg" \
-    -not -iname "*.md" \
-    | xargs grep -L "$CURRENT"
+def _run_suite(case, config, summary):
+    """ Run the full suite of validation tests """
+    m = importlib.import_module(config['module'])
+    result = m.run(case, config)
+    summary[case] = _summarize_result(m, result)
+    _print_summary(m, case, summary[case])
+    functions.create_page_from_template("validation.html",
+            os.path.join(livvkit.index_dir, "validation", case + ".html"))
+    functions.write_json(result, os.path.join(livvkit.output_dir, "validation"), case + ".json")
+
+
+def _print_summary(module, case, summary):
+    try:
+        module.print_summary()
+    except:
+        print("    Ran " + case + "!")
+        print("")
+
+
+def _summarize_result(module, result):
+    try:
+        summary = module.summarize_result(result, summary)
+    except:
+        status = "Success"
+        for e in result.get("Data").get("Elements"):
+            if e.get("Type") == "Error":
+                status = "Failure"
+        summary = {"" : {"Outcome" : status}} 
+    return summary 
+        
+
+def _populate_metadata():
+    try:
+        metadata= module.populate_metadata()
+    except:
+        metadata = {"Type" : "Summary",
+                    "Title" : "Validation",
+                    "Headers" : ["Outcome"]}
+    return metadata
+

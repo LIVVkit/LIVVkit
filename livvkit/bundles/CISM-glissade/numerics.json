@@ -1,0 +1,44 @@
+{
+    "ismip-hom-a" : 
+        {
+            "description" : 
+                "The Ice Sheet Model Intercomparison Project for Higher-Order Models (ISMIP-HOM) prescribes a set of experiments meant to test the implementation of higher-order physics. For more information, see http://homepages.ulb.ac.be/~fpattyn/ismip/ Simulates steady ice flow over a surface with periodic boundary conditions",
+            "module" : "livvkit.components.numerics_tests.ismip",
+            "data_dir"    : "ismip-hom",
+            "output_ext"  : ".out.nc",
+            "test_module" : "ismip",
+            "surf_var"    : "usurf",
+            "x_vel_var"   : "uvel",
+            "y_vel_var"   : "vvel",
+            "interp_vars" : ["uvel_extend", "vvel_extend"],
+            "plot_vars"   : ["velnorm_extend"]
+        },
+    "ismip-hom-c" : 
+        {
+            "description" : 
+                "The Ice Sheet Model Intercomparison Project for Higher-Order Models (ISMIP-HOM) prescribes a set of experiments meant to test the implementation of higher-order physics. For more information, see http://homepages.ulb.ac.be/~fpattyn/ismip/ Simulates steady ice flow over a surface with periodic boundary conditions",
+            "module" : "livvkit.components.numerics_tests.ismip",
+            "data_dir"    : "ismip-hom",
+            "output_ext"  : ".out.nc",
+            "test_module" : "ismip",
+            "surf_var"    : "usurf",
+            "x_vel_var"   : "uvel",
+            "y_vel_var"   : "vvel",
+            "interp_vars" : ["uvel_extend", "vvel_extend"],
+            "plot_vars"   : ["velnorm_extend"]
+        },
+    "ismip-hom-f" : 
+        {
+            "description" : 
+                "The Ice Sheet Model Intercomparison Project for Higher-Order Models (ISMIP-HOM) prescribes a set of experiments meant to test the implementation of higher-order physics. For more information, see http://homepages.ulb.ac.be/~fpattyn/ismip/ Simulates steady ice flow over a surface with periodic boundary conditions",
+            "module" : "livvkit.components.numerics_tests.ismip",
+            "data_dir"    : "ismip-hom",
+            "output_ext"  : ".out.nc",
+            "test_module" : "ismip",
+            "surf_var"    : "usurf",
+            "x_vel_var"   : "uvel",
+            "y_vel_var"   : "vvel",
+            "interp_vars" : ["usurf","uvel","vvel"],
+            "plot_vars"   : ["usurf","velnorm"]
+        }
+}
