@@ -290,7 +290,7 @@ def plot_bit_for_bit(case, var_name, model_data, bench_data, diff_data):
     pyplot.yticks([])
     pyplot.imshow(bench_data, vmin=min, vmax=max, interpolation='nearest', cmap=colormaps.viridis)
     pyplot.colorbar()
-    pyplot.tight_layout()(test_data)
+    pyplot.tight_layout()
 
     # Plot the difference
     pyplot.subplot(1,3,3)
