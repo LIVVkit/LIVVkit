@@ -44,7 +44,6 @@ from livvkit.util.datastructures import ElementHelper
 def _run_suite(case, config, summary):
     """ Run the full suite of performance tests """
     config["name"] = case
-    result = LIVVDict() 
     timing_data = dict()
     bundle = livvkit.performance_model_module
     model_dir = os.path.join(livvkit.model_dir, config['data_dir'], case)
@@ -164,10 +163,10 @@ def generate_timing_stats(file_list, var_list):
         config: A dictionary containing option specifications
 
     Returns:
-        A LIVVDict containing values that have the form: 
+        A dict containing values that have the form: 
             [mean, min, max, mean, diff. from bench mean]
     """
-    timing_result = LIVVDict()
+    timing_result = dict()
     timing_summary = dict()
     for file in file_list:
         timing_result[file] = functions.parse_gptl(file, var_list)
@@ -175,7 +174,7 @@ def generate_timing_stats(file_list, var_list):
         var_time = []
         for f, data in timing_result.items():
             try:    
-                var_time.append(data.get(var))
+                var_time.append(data[var])
             except:
                 continue
         if len(var_time):
@@ -200,12 +199,12 @@ def weak_scaling(timing_stats, scaling_var, data_points):
                      (can be provided in configurations via the 'weak_scaling_points' key)
 
     Returns:
-         A LIVVDict of the form:
+         A dict of the form:
             {'bench' : {'mins' : [], 'means' : [], 'maxs' : []},
              'model' : {'mins' : [], 'means' : [], 'maxs' : []},
              'proc_counts' : []}
     """
-    timing_data = LIVVDict()
+    timing_data = dict()
     proc_counts = []
     bench_means = []
     bench_mins = []
@@ -248,12 +247,12 @@ def strong_scaling(timing_stats, scaling_var, data_points):
                      (can be provided in configurations via the 'strong_scaling_points' key)
 
     Returns:
-        A LIVVDict of the form:
+        A dict of the form:
             {'bench' : {'mins' : [], 'means' : [], 'maxs' : []},
              'model' : {'mins' : [], 'means' : [], 'maxs' : []},
              'proc_counts' : []}
     """
-    timing_data = LIVVDict()
+    timing_data = dict()
     proc_counts = []
     bench_means = []
     bench_mins = []

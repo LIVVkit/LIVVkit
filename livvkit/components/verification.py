@@ -112,7 +112,8 @@ def _summarize_result(result, summary):
         summary["Std. Out Files"] = 0
 
     # Get the number of bit for bit failures
-    total_count = failure_count = 0
+    total_count = 0
+    failure_count = 0
     summary_data = None
     for elem in result:
         if elem["Type"] == "Bit for Bit" and "Data" in elem:
@@ -129,7 +130,8 @@ def _summarize_result(result, summary):
 
     # Get the number of config matches
     summary_data = None
-    total_count = failure_count = 0
+    total_count = 0
+    failure_count = 0
     for elem in result:
         if elem["Title"] == "Configuration Comparison" and elem["Type"] == "Diff":
             elem_data = elem["Data"]

@@ -80,7 +80,7 @@ def parse_gptl(file_path, var_list):
         A LIVVDict containing key-value pairs of the livvkit
         and the times associated with them
     """
-    timing_result = LIVVDict()
+    timing_result = dict()
     if os.path.isfile(file_path):
         with open(file_path, 'r') as f:
             for var in var_list:
