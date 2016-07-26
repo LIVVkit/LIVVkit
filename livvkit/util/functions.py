@@ -202,3 +202,8 @@ def setup_output():
         f.write(livvkit.timestamp + "\n")
         f.write(livvkit.comment)
 
+
+def Optional(func):
+    def func_wrapper():
+        return 
+    return func_wrapper
