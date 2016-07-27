@@ -254,6 +254,7 @@ def diff_configurations(model_config, bench_config, model_bundle, bench_bundle):
 
 def plot_bit_for_bit(case, var_name, model_data, bench_data, diff_data):
     """ Create a bit for bit plot """
+    plot_name = case + "_" + var_name + ".png"
     plot_path = os.path.join(os.path.join(livvkit.output_dir, "verification", "imgs"))
     functions.mkdir_p(plot_path)
     m_ndim = np.ndim(model_data)
@@ -302,9 +303,9 @@ def plot_bit_for_bit(case, var_name, model_data, bench_data, diff_data):
     pyplot.imshow(diff_data, interpolation='nearest', cmap=colormaps.viridis)
     pyplot.colorbar()
     pyplot.tight_layout()
-    
-    pyplot.savefig(os.sep.join([plot_path, case+".png"]))
+   
+    pyplot.savefig(os.sep.join([plot_path, plot_name]))
     pyplot.close()
     return os.path.join(os.path.relpath(plot_path, os.path.join(livvkit.output_dir, "verification")), 
-                        case+".png")
+                        plot_name)
 
