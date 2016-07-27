@@ -202,7 +202,7 @@ def bit_for_bit(model_path, bench_path, config, plot=True):
             b_vardata = bench_data.variables[var][:]
             diff_data = m_vardata - b_vardata
             if diff_data.any():
-                stats[var]["Max Error"] = np.amax(np.absolute(diff_data))
+                stats[var]["Max Error"] = np.absolute(np.amax(diff_data))
                 stats[var]["RMS Error"] = np.sqrt(np.sum(np.square(diff_data).flatten())/
                                                   diff_data.size)
                 pf = plot_bit_for_bit(fname, var, m_vardata, b_vardata, diff_data)
