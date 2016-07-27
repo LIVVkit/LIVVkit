@@ -49,24 +49,6 @@ def mkdir_p(path):
         else: raise
 
 
-def merge_dicts(dict1, dict2):
-    """ Merge two dictionaries and return the result """
-    tmp = dict1.copy()
-    tmp.update(dict2)
-    return tmp
-
-
-def get_leaves(d):
-    """ Get the leaves of a nested dictionary """
-    leaves = []
-    for key, val in d.items():
-        if issubclass(type(val), dict):
-            leaves.append(get_leaves(val))
-        else:
-            return val
-    return leaves
-
-
 def parse_gptl(file_path, var_list):
     """
     Read a GPTL timing file and extract some data.
