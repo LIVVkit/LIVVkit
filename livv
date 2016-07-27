@@ -58,7 +58,8 @@ def main():
     options.init(options.parse(sys.argv[1:]))
 
     from livvkit import components
-    from livvkit.util import scheduler, functions
+    from livvkit import scheduler
+    from livvkit.util import functions
     from livvkit.util.datastructures import ElementHelper
     functions.setup_output()
     l = []

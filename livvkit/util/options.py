@@ -56,9 +56,6 @@ def parse(args):
             default=os.path.join(os.getcwd(), "vv_" + time.strftime("%Y-%m-%d")),
             help='Location to output the LIVV webpages.')
     
-    parser.add_argument('--run-tests', action='store_true', 
-            help="Run unit tests.")
-
     parser.add_argument('--verification',
             nargs=2,
             default=None,

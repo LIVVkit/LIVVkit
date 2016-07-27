@@ -36,7 +36,6 @@ import fnmatch
 from datetime import datetime 
 
 import livvkit
-from livvkit.util.datastructures import LIVVDict
 
 def mkdir_p(path):
     """
@@ -77,7 +76,7 @@ def parse_gptl(file_path, var_list):
         var_list: a list of strings to look for in the file
 
     Returns:
-        A LIVVDict containing key-value pairs of the livvkit
+        A dict containing key-value pairs of the livvkit
         and the times associated with them
     """
     timing_result = dict()
