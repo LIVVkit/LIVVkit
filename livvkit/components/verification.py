@@ -194,7 +194,7 @@ def bit_for_bit(model_path, bench_path, config, plot=True):
                 "File named " + fname + " could not be read!")
 
     # Begin bit for bit analysis
-    headers = ["Max Error", "RMS Error", "Plot"]
+    headers = ["Max Error", "Index of Max Error", "RMS Error", "Plot"]
     stats = LIVVDict()
     for i, var in enumerate(config["bit_for_bit_vars"]):
         if (var in model_data.variables and var in bench_data.variables):
@@ -202,13 +202,15 @@ def bit_for_bit(model_path, bench_path, config, plot=True):
             b_vardata = bench_data.variables[var][:]
             diff_data = m_vardata - b_vardata
             if diff_data.any():
-                stats[var]["Max Error"] = np.absolute(np.amax(diff_data))
+                stats[var]["Max Error"] = np.amax(np.absolute(diff_data))
+                stats[var]["Index of Max Error"] = str(
+                        np.unravel_index(np.absolute(diff_data).argmax(), diff_data.shape))
                 stats[var]["RMS Error"] = np.sqrt(np.sum(np.square(diff_data).flatten())/
                                                   diff_data.size)
                 pf = plot_bit_for_bit(fname, var, m_vardata, b_vardata, diff_data)
             else:
                 stats[var]["Max Error"] = stats[var]["RMS Error"] = 0
-                pf = "N/A"
+                pf = stats[var]["Index of Max Error"] = "N/A" 
             stats[var]["Plot"] = pf
         else:
             stats[var] = {"Max Error": "No Match", "RMS Error": "N/A", "Plot": "N/A"}
@@ -265,13 +267,15 @@ def plot_bit_for_bit(case, var_name, model_data, bench_data, diff_data):
         model_data = model_data[-1]
         bench_data = bench_data[-1]
         diff_data = diff_data[-1]
+        plot_title = "Showing "+var_name+"[-1,:,:]"
     elif m_ndim == 4:
         model_data = model_data[-1][0]
         bench_data = bench_data[-1][0]
         diff_data = diff_data[-1][0]
+        plot_title = "Showing "+var_name+"[-1,0,:,:]"
     pyplot.figure(figsize=(12,3), dpi=80)
     pyplot.clf()
-
+    
     # Calculate min and max to scale the colorbars
     max = np.amax([np.amax(model_data), np.amax(bench_data)])
     min = np.amin([np.amin(model_data), np.amin(bench_data)])
@@ -284,7 +288,6 @@ def plot_bit_for_bit(case, var_name, model_data, bench_data, diff_data):
     pyplot.yticks([])
     pyplot.imshow(model_data, vmin=min, vmax=max, interpolation='nearest', cmap=colormaps.viridis)
     pyplot.colorbar()
-    pyplot.tight_layout()
   
     # Plot the benchmark data
     pyplot.subplot(1,3,2)
@@ -293,7 +296,6 @@ def plot_bit_for_bit(case, var_name, model_data, bench_data, diff_data):
     pyplot.yticks([])
     pyplot.imshow(bench_data, vmin=min, vmax=max, interpolation='nearest', cmap=colormaps.viridis)
     pyplot.colorbar()
-    pyplot.tight_layout()
 
     # Plot the difference
     pyplot.subplot(1,3,3)
@@ -302,7 +304,9 @@ def plot_bit_for_bit(case, var_name, model_data, bench_data, diff_data):
     pyplot.yticks([])
     pyplot.imshow(diff_data, interpolation='nearest', cmap=colormaps.viridis)
     pyplot.colorbar()
-    pyplot.tight_layout()
+   
+    pyplot.tight_layout(rect=(0,0,0.95,0.9))
+    pyplot.suptitle(plot_title)
    
     pyplot.savefig(os.sep.join([plot_path, plot_name]))
     pyplot.close()
