@@ -55,7 +55,9 @@ function drawContent() {
             window.location.href.lastIndexOf("/")+1).split("#")[0].replace(".html", "");
     var data = loadJSON('./' + verType + ".json");
     var html = "<div id=" + data["Title"] + ">";
-    html += "<h2>" + data["Title"] + "</h2>";
+    if (data["Title"] != "Summary") {
+        html += "<h2>" + data["Title"] + "</h2>";
+    }
     html += "<p>" + data["Description"];
     html += "</div>";
     $("#content").append(html);
@@ -135,7 +137,8 @@ function drawContent() {
  *                       determines whether it is a class or id (ie include # or .)
  */
 function drawSummary(data, div) {
-    var html = "<table class=\"summary\">\n";
+    var html = "<h3>" + data["Title"] + "</h3>";
+    html += "<table class=\"summary\">\n";
     // Add the headers
     html += "<th></th>\n";
     for (var header in data["Headers"]) {

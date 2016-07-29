@@ -35,6 +35,7 @@
 html {
 	font-family: 'Lato', helvetica, sans-serif;
 	height: 100%;
+    font-size: 1.5em;
 }
 
 body {
@@ -43,6 +44,7 @@ body {
 	margin-right: 0px;
 	margin-bottom: 0px;
 	margin-left: 0px;
+    min-width: 1125px;
 }
 
 h1, h2, h3, h4 {
@@ -63,13 +65,19 @@ a {
 ******************************************************************************/
 #header {
     min-width: 800px;
-    height: 60px;
 	background-color: #222222;
     border-bottom: 1px solid #222222;
-    margin-left: auto;
-    margin-right: auto;
     font-size: 1.5em;
     font-weight: 500;
+}
+
+#header:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+#header-spacer {
 }
 
 #header a{
@@ -117,18 +125,18 @@ a {
 #wrapper {
     margin: auto;
     width: 80%;
-    min-width: 800px;
+    background: url("../imgs/temp.jpg") no-repeat center center fixed;
 }
 
 #nav {
-    width: 10%;
+    width: 19%;
     float: left;
     padding: 20px;
 }
 
 #content {
     padding: 10px;
-    width: 80%;
+    width: 71%;
     float: left;
 }
 
@@ -174,6 +182,10 @@ td {
     color: red;
 }
 
+.tabs {
+    background: transparent;
+}
+
 .diff {
     border: 2px solid #66c2ff;
     padding: 4px;
@@ -216,6 +228,4 @@ td {
     border: 1px solid #66c2ff;
 }
 
-.summary {
-    width: 70%;
-}
+.summary {}
