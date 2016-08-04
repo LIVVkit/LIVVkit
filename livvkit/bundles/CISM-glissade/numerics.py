@@ -38,7 +38,6 @@ from scipy import interpolate
 
 import livvkit
 
-
 class DataGrid:
     """ 
     Class to handle the CISM-glissade grids, which are cell-centered grids. 

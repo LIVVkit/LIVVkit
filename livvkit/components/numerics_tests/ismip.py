@@ -40,8 +40,8 @@ import matplotlib.pyplot as plt
 
 import livvkit
 from livvkit.util import functions
-from livvkit.util.datastructures import LIVVDict
-from livvkit.util.datastructures import ElementHelper
+from livvkit.util.LIVVDict import LIVVDict
+from livvkit.util import elements
 
 with open(__file__.replace('.py','.json'), 'r') as f:
     setup = json.load(f)
@@ -122,9 +122,9 @@ def run(config, analysis_data):
             plt.legend(loc='best')
             plt.savefig(plot_file)
             plt.close()
-            plot_list.append( ElementHelper.image_element(title, description, os.path.basename(plot_file)) )
+            plot_list.append( elements.image_element(title, description, os.path.basename(plot_file)) )
     
-    return ElementHelper.gallery("Numerics Plots", plot_list)
+    return elements.gallery("Numerics Plots", plot_list)
 
 
 def summarize_result(data, config):

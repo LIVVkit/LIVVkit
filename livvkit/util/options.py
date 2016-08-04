@@ -37,7 +37,6 @@ import argparse
 import importlib
 
 import livvkit
-from livvkit.util import datastructures
 from livvkit import bundles
 from livvkit import resources
 

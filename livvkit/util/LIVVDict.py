@@ -25,53 +25,39 @@
 # CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-"""
-Validation Test Base Module
-"""
-import os
-import importlib
 
-import livvkit
-from livvkit.util import functions
-from livvkit.util.LIVVDict import LIVVDict
+class LIVVDict(dict):
+    """
+    Extension of the dictionary datastructure to allow for auto nesting.
+    """
+    def __getitem__(self, item):
+        """ 
+        Tries to get the item, and if it's not found creates it 
+        Credit to: http://tiny.cc/qerr7x 
+        """
+        try: 
+            return dict.__getitem__(self, item)
+        except KeyError:
+            tmp = type(self)()
+            self[item] = tmp
+            return tmp
 
-def _run_suite(case, config, summary):
-    """ Run the full suite of validation tests """
-    m = importlib.import_module(config['module'])
-    result = m.run(case, config)
-    summary[case] = _summarize_result(m, result)
-    _print_summary(m, case, summary[case])
-    functions.create_page_from_template("validation.html",
-            os.path.join(livvkit.index_dir, "validation", case + ".html"))
-    functions.write_json(result, os.path.join(livvkit.output_dir, "validation"), case + ".json")
+    def nested_insert(self, item_list):
+        """ Create a series of nested LIVVDicts given a list """
+        if len(item_list) == 1:
+            self[item_list[0]] = LIVVDict()
+        elif len(item_list) > 1:
+            if item_list[0] not in self:
+                self[item_list[0]] = LIVVDict()
+            self[item_list[0]].nested_insert(item_list[1:])
 
+    def nested_assign(self, key_list, value):
+        """ Set the value of nested LIVVDicts given a list """
+        if len(key_list) == 1:
+            self[key_list[0]] = value
+        elif len(key_list) > 1:
+            if key_list[0] not in self:
+                self[key_list[0]] = LIVVDict() 
+            self[key_list[0]].nested_assign(key_list[1:], value)
 
-def _print_summary(module, case, summary):
-    try:
-        module.print_summary()
-    except:
-        print("    Ran " + case + "!")
-        print("")
-
-
-def _summarize_result(module, result):
-    try:
-        summary = module.summarize_result(result, summary)
-    except:
-        status = "Success"
-        for e in result.get("Data").get("Elements"):
-            if e.get("Type") == "Error":
-                status = "Failure"
-        summary = {"" : {"Outcome" : status}} 
-    return summary 
-        
-
-def _populate_metadata():
-    try:
-        metadata= module.populate_metadata()
-    except:
-        metadata = {"Type" : "Summary",
-                    "Title" : "Validation",
-                    "Headers" : ["Outcome"]}
-    return metadata
 

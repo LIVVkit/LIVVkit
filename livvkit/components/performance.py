@@ -38,8 +38,8 @@ import matplotlib.pyplot as plt
 import livvkit
 from livvkit.util import functions
 from livvkit.util import colormaps
-from livvkit.util.datastructures import LIVVDict
-from livvkit.util.datastructures import ElementHelper
+from livvkit.util.LIVVDict import LIVVDict
+from livvkit.util import elements
 
 def _run_suite(case, config, summary):
     """ Run the full suite of performance tests """
@@ -84,9 +84,9 @@ def _run_suite(case, config, summary):
  
     # Build an image gallery and write the results
     el = [
-            ElementHelper.gallery("Performance Plots", timing_plots)
+            elements.gallery("Performance Plots", timing_plots)
          ]
-    result = ElementHelper.page(case, config["description"], element_list=el)
+    result = elements.page(case, config["description"], element_list=el)
     summary[case] = _summarize_result(timing_data, config)
     _print_result(case, summary) 
     functions.create_page_from_template("performance.html",
@@ -319,7 +319,7 @@ def generate_scaling_plot(timing_data, title, description, plot_file):
         plt.text(0,0.36, "performance option enabled.")
     plt.savefig(plot_file)
     plt.close()   
-    return ElementHelper.image_element(title, description, os.path.basename(plot_file))
+    return elements.image_element(title, description, os.path.basename(plot_file))
 
 
 def generate_timing_breakdown_plot(timing_stats, scaling_var, title, description, plot_file):
@@ -384,5 +384,5 @@ def generate_timing_breakdown_plot(timing_stats, scaling_var, title, description
     
     plt.savefig(plot_file)
     plt.close()
-    return ElementHelper.image_element(title, description, os.path.basename(plot_file))
+    return elements.image_element(title, description, os.path.basename(plot_file))
 

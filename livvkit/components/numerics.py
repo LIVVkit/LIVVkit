@@ -33,8 +33,8 @@ import importlib
 
 import livvkit
 from livvkit.util import functions
-from livvkit.util.datastructures import LIVVDict
-from livvkit.util.datastructures import ElementHelper
+from livvkit.util.LIVVDict import LIVVDict
+from livvkit.util import elements
 
 def _run_suite(case, config, summary):
     """ Run the full suite of numerics tests """
@@ -64,8 +64,8 @@ def _run_suite(case, config, summary):
     try:
         el = m.run(config, analysis_data)
     except KeyError:
-        el = ElementHelper.error("Numerics Plots", "Missing data")
-    result = ElementHelper.page(case, config['description'], element_list=el)
+        el = elements.error("Numerics Plots", "Missing data")
+    result = elements.page(case, config['description'], element_list=el)
     summary[case] = _summarize_result(m, analysis_data, config)
     _print_summary(m, case, summary[case])
     functions.create_page_from_template("numerics.html",

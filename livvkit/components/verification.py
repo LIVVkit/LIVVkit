@@ -37,8 +37,8 @@ import livvkit
 from livvkit.util import netcdf
 from livvkit.util import functions
 from livvkit.util import colormaps
-from livvkit.util.datastructures import LIVVDict
-from livvkit.util.datastructures import ElementHelper
+from livvkit.util.LIVVDict import LIVVDict
+from livvkit.util import elements
 
 def _run_suite(case, config, summary):
     """ Run the full suite of verification tests """
@@ -58,12 +58,12 @@ def _run_suite(case, config, summary):
                       if mcase in bench_subcases else "")
             mpath = os.path.join(model_dir, subcase, mcase.replace("-", os.sep))
             case_result = _analyze_case(mpath, bpath, config)
-            case_sections.append(ElementHelper.section(mcase, case_result))
+            case_sections.append(elements.section(mcase, case_result))
             case_summary[subcase] = _summarize_result(case_result, 
                     case_summary[subcase])
-        tabs.append(ElementHelper.tab(subcase, section_list=case_sections))
+        tabs.append(elements.tab(subcase, section_list=case_sections))
    
-    result = ElementHelper.page(case, config["description"], tab_list=tabs) 
+    result = elements.page(case, config["description"], tab_list=tabs) 
     summary[case] = case_summary
     _print_summary(case, summary[case])
     functions.create_page_from_template("verification.html", 
@@ -175,22 +175,22 @@ def bit_for_bit(model_path, bench_path, config, plot=True):
         plot: a boolean of whether or not to generate plots
     
     Returns:
-        A dictionary created by the ElementHelper object corresponding to
+        A dictionary created by the elements object corresponding to
         the results of the bit for bit testing
     """
     fname = model_path.split(os.sep)[-1]
     # Error handling
     if not (os.path.isfile(bench_path) and os.path.isfile(model_path)):
-        return ElementHelper.error("Bit for Bit", 
+        return elements.error("Bit for Bit", 
                 "File named " + fname + " has no suitable match!")
     try:
         model_data = Dataset(model_path, 'r')
         bench_data = Dataset(bench_path, 'r')
     except:
-        return ElementHelper.error("Bit for Bit", 
+        return elements.error("Bit for Bit", 
                 "File named " + fname + " could not be read!")
     if not (netcdf.has_time(model_data) and netcdf.has_time(bench_data)):
-        return ElementHelper.error("Bit for Bit", 
+        return elements.error("Bit for Bit", 
                 "File named " + fname + " could not be read!")
 
     # Begin bit for bit analysis
@@ -216,7 +216,7 @@ def bit_for_bit(model_path, bench_path, config, plot=True):
             stats[var] = {"Max Error": "No Match", "RMS Error": "N/A", "Plot": "N/A"}
     model_data.close()
     bench_data.close()
-    return ElementHelper.bit_for_bit("Bit for Bit", headers, stats) 
+    return elements.bit_for_bit("Bit for Bit", headers, stats) 
 
 
 def diff_configurations(model_config, bench_config, model_bundle, bench_bundle):
@@ -228,14 +228,14 @@ def diff_configurations(model_config, bench_config, model_bundle, bench_bundle):
         bench_config: a dictionary with the benchmark configuration data
 
     Returns:
-        A dictionary created by the ElementHelper object corresponding to
+        A dictionary created by the elements object corresponding to
         the results of the bit for bit testing
     """
     diff_dict = LIVVDict()
     model_data = model_bundle.parse_config(model_config)
     bench_data = bench_bundle.parse_config(bench_config)
     if model_data == {} and bench_data == {}:
-        return ElementHelper.error("Configuration Comparison", 
+        return elements.error("Configuration Comparison", 
                 "Could not open file: " + model_config.split(os.sep)[-1])
     
     model_sections = set(model_data.keys())
@@ -251,7 +251,7 @@ def diff_configurations(model_config, bench_config, model_bundle, bench_bundle):
             bench_val = bench_data[s][v] if s in bench_sections and v in bench_vars else 'NA'
             same = True if model_val == bench_val and model_val != 'NA' else False
             diff_dict[s][v] = (same, model_val, bench_val)
-    return ElementHelper.file_diff("Configuration Comparison", diff_dict)
+    return elements.file_diff("Configuration Comparison", diff_dict)
 
 
 def plot_bit_for_bit(case, var_name, model_data, bench_data, diff_data):

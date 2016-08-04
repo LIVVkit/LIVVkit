@@ -32,7 +32,7 @@ import os
 import numpy as np
 from configparser import ConfigParser
 
-from livvkit.util.datastructures import ElementHelper
+from livvkit.util import elements
 
 def parse_log(file_path):
     """
@@ -42,11 +42,11 @@ def parse_log(file_path):
         file_path: absolute path to the log file
 
     Return:
-        A dictionary created by the ElementHelper object corresponding to
+        A dictionary created by the elements object corresponding to
         the results of the bit for bit testing
     """
     if not os.path.isfile(file_path):
-        return ElementHelper.error("Output Log", "Could not open file: " + file_path.split(os.sep)[-1])
+        return elements.error("Output Log", "Could not open file: " + file_path.split(os.sep)[-1])
     headers = ["Converged Iterations", "Avg. Iterations to Converge", "Processor Count", "Dycore Type"]
     with open(file_path, 'r') as f:
         dycore_types = {"0":"Glide", "1":"Glam", "2":"Glissade", "3":"Albany_felix", "4":"BISICLES"}
@@ -85,7 +85,7 @@ def parse_log(file_path):
         "Converged Iterations" : len(converged_iters),
         "Avg. Iterations to Converge": np.mean(iters_to_converge)
     }
-    return ElementHelper.table("Output Log", headers, data)
+    return elements.table("Output Log", headers, data)
 
 
 def parse_config(file_path):

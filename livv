@@ -60,7 +60,7 @@ def main():
     from livvkit import components
     from livvkit import scheduler
     from livvkit.util import functions
-    from livvkit.util.datastructures import ElementHelper
+    from livvkit.util import elements
     functions.setup_output()
     l = []
     if livvkit.verify:
@@ -78,7 +78,7 @@ def main():
         l.append(scheduler.run("validation", components.validation, 
             validation_config))
    
-    result = ElementHelper.page("Summary", "", element_list=l)
+    result = elements.page("Summary", "", element_list=l)
     functions.write_json(result, livvkit.output_dir, "index.json")
     print("-------------------------------------------------------------------")
     print(" Done!  Results can be seen in a web browser at:")

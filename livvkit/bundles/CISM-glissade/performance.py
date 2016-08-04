@@ -32,8 +32,8 @@ import os
 import matplotlib
 import numpy as np
 
-from livvkit.util.datastructures import LIVVDict
-from livvkit.util.datastructures import ElementHelper
+from livvkit.util.LIVVDict import LIVVDict
+from livvkit.util import elements 
 
 # CISM-Glissade specific performance analysis code can go here
 
