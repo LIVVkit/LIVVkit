@@ -15,7 +15,8 @@ def write_tex():
     """
     datadir = livvkit.index_dir 
     outdir = os.path.join(datadir, "tex")
-    functions.mkdir_p(outdir)
+    print(outdir)
+    #functions.mkdir_p(outdir)
     
     data_files = glob.glob(datadir + "/**/*.json", recursive=True)
     
@@ -48,10 +49,8 @@ r'''
     content = data["Data"]
     for tag_name in ["Elements", "Tabs"]:
         for tag in content.get(tag_name, []):
-            try:
+                print("Translating " + tag["Type"])
                 tex_str += translate_map[tag["Type"]](tag)
-            except:
-                continue
  
     tex_str += (
 r'''
@@ -62,20 +61,34 @@ r'''
 
 
 def translate_section(data):
-    raise NotImplementedError
+    sect_str = ""
+    elements = data.get("Elements", [])
+    for elem in elements:
+            print("    Translating " + elem["Type"])
+            sect_str += translate_map[elem["Type"]](elem)
+    return sect_str
 
 
 def translate_tab(data):
-    pass
+    tab_str = ""
+    sections = data.get("Sections", [])
+    for section in sections:
+            print("  Translating " + section["Type"])
+            tab_str += translate_map[section["Type"]](section)
+    return tab_str
 
 
 def translate_summary(data):
-    summary = '\\FloatBarrier \n \\section{$NAME} \n'.replace('$NAME', data.get("Title", "Summary"))
-    summary += '\\begin{table} \n \\begin{center} \n \\begin{tabular}{lccc} \n'
+    headers = sorted(data.get("Headers", []))
+    summary = '\\FloatBarrier \n \\section{$NAME} \n'.replace('$NAME', data.get("Title", "table"))
+    summary += '\\begin{table} \n \\begin{center}'
     
-    headers = data.get("Headers", [])
+    # Set the number of columns
     n_cols = len(headers)
+    col_str = "l" + "c"*(n_cols)
+    summary += '\n \\begin{tabular}{$NCOLS} \n'.replace("$NCOLS", col_str)
     spacer =  ' &' * n_cols + r'\\[.5em]'
+    
     for header in headers:
         summary += '& $HEADER '.replace('$HEADER', header).replace('%', '\%')
     summary += ' \\\\ \hline \n'
@@ -104,27 +117,66 @@ def translate_summary(data):
 
 
 def translate_table(data):
-    pass
+    headers = sorted(data.get("Headers", []))
+    table = '\\FloatBarrier \n \\section{$NAME} \n'.replace('$NAME', data.get("Title", "table"))
+    table += '\\begin{table} \n \\begin{center}'
+    
+    # Set the number of columns
+    n_cols = "c"*(len(headers)+1)
+    table += '\n \\begin{tabular}{$NCOLS} \n'.replace("$NCOLS", n_cols)
+     
+    # Put in the headers
+    for header in headers:
+        table += ' $HEADER &'.replace('$HEADER', header).replace('%', '\%')
+    table = table[:-1] + ' \\\\ \n \hline \n'
+
+    # Put in the data
+    for header in headers:
+        table += ' $VAL &'.replace("$VAL", str(data["Data"][header])) 
+    table = table[:-1] + ' \\\\ \n \hline'
+    table += '\n \end{tabular} \n \end{center} \n \end{table}\n'
+    return table
 
 
 def translate_bit_for_bit(data):
-    pass
+    headers = sorted(data.get("Headers", []))
+    table = '\\FloatBarrier \n \\section{$NAME} \n'.replace('$NAME', data.get("Title", "table"))
+    table += '\\begin{table} \n \\begin{center}'
+    # Set the number of columns
+    n_cols = "c"*(len(headers)+1)
+    table += '\n \\begin{tabular}{$NCOLS} \n'.replace("$NCOLS", n_cols)
+   
+    # Put in the headers
+    table += " Variable &"
+    for header in headers:
+        table += ' $HEADER &'.replace('$HEADER', header).replace('%', '\%')
+    table = table[:-1] + ' \\\\ \n \hline \n'
+
+    # Put in the data
+    for k, v in data.get("Data", []).items():
+        table += "\n \\textbf{$VAR} & ".replace("$VAR", k)
+        for header in headers:
+            table += ' $VAL &'.replace("$VAL", str(v[header])) 
+        table = table[:-1] + ' \\\\'
+    table += '\n \hline \n \end{tabular} \n \end{center} \n \end{table}\n'
+    return table
 
 
 def translate_gallery(data):
-    pass
+    return ""
 
 
 def translate_image(data):
-    pass
+    return ""
 
 
 def translate_file_diff(data):
-    pass
+    return ""
 
 
 def translate_error(data):
-    pass
+    return ""
+
 
 # Map element types to translations
 translate_map = {
@@ -135,8 +187,14 @@ translate_map = {
            "Bit for Bit" : translate_bit_for_bit,
            "Gallery"     : translate_gallery,
            "Image"       : translate_image,
-           "File Diff"   : translate_file_diff,
+           "Diff"        : translate_file_diff,
            "Error"       : translate_error
        }   
 
+
+def main():
+   write_tex() 
+
+if __name__ == "__main__":
+    main()
 

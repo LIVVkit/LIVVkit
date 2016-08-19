@@ -1,18 +1,21 @@
 #!/usr/bin/env python3
 
 import os
+import sys
 import glob
 
 import livvkit
 from livvkit.util import TexHelper as th
 from livvkit.util import functions
 
-# TODO: Replace this with the right thing
-datadir = "vv_2016-07-30"
+datadir = sys.argv[1] 
+outdir = sys.argv[2]
 functions.mkdir_p(outdir)
 
 data_files = glob.glob(datadir + "/**/*.json", recursive=True)
-data_files = [datadir + '/index.json']
+data_files = [datadir + '/verification/dome.json']
+#data_files = [datadir + '/index.json']
+
 
 for each in data_files:
     data = functions.read_json(each)
