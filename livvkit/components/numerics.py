@@ -39,6 +39,7 @@ from livvkit.util import elements
 def _run_suite(case, config, summary):
     """ Run the full suite of numerics tests """
     m = importlib.import_module(config['module'])
+    m.set_up()
     config["name"] = case
     analysis_data = {}
     bundle = livvkit.numerics_model_module
