@@ -7,7 +7,7 @@ Philosophy
 ==========
 
 Verification and validation (V&V) is a set of techniques that are used
-to quantify confidence and build credibility in *something*. That
+to build and quantify confidence in *something*. That
 something can be a *numerical model* or a piece of *software*, and
 validating and verifying each of these requires the use of a different
 set of techniques.
@@ -22,12 +22,12 @@ about the physical world. V&V of a numerical model consists of:
    *approximate numerical* prediction against an *analytical*
    prediction, or in the case of a sufficiently complex problem, against
    highly accurate *community benchmark* solutions. This is inherently a
-   **math** problem `1,2 <VV#references>`__ that is represented by the
+   **math** problem\ :sup:`1,2 <VV#references>`__ that is represented by the
    question, "Are we solving the equations correctly?"
 
 -  **Physical validation** -- the process of comparing the *numerical*
    predictions against *natural* phenomena. This is inherently a
-   **physics** problem `1,2 <VV#references>`__ that is represented by
+   **physics** problem\ :sup:`1,2 <VV#references>`__ that is represented by
    the question, "Are we using the right physics?"
 
 Software V&V
@@ -40,12 +40,12 @@ piece of software consists of:
 -  **Code verification** -- the process of determining the software's
    implementation, and it's associated data, accurately represent the
    developers' specifications. This is inherently an **engineering**
-   problem `2 <VV#references>`__ that is represented by the question,
+   problem\ :sup:`2 <VV#references>`__ that is represented by the question,
    "did we build what *we* wanted?"
 
 -  **Performance validation** -- the process of determining how *well*
    the software is able to be used for its intended task. This is
-   inherently an **design** problem `2 <VV#references>`__ that is
+   inherently an **design** problem\ :sup:`2 <VV#references>`__ that is
    represented by the question, "did we build what the *users* wanted?"
 
 Scientific model V&V

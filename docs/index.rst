@@ -13,13 +13,13 @@ provide the following capabilities:
 
 **Model V&V**
 
-* Numerical verification 
-* Physical validation
+* Numerical verification -- "Are we solving the equations correctly?"
+* Physical validation -- "Are we using the right physics?"
 
 **Software V&V**
 
-* Code verification
-* Performance validation
+* Code verification  -- "did we build what *we* wanted?"
+* Performance validation -- "did we build what the *users* wanted?"
 
 Currently, LIVVkit is being developed and used in conjunction with the
 Community Ice Sheet Model

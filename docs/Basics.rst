@@ -59,15 +59,15 @@ after installing or
 
 .. code:: sh
 
-    python /path/to/LIVVkit/livv -h
+    python3 /path/to/LIVVkit/livv -h
 
-if you are running from a cloned repo.
+if you are running from within a cloned repo.
 
 To run the verification suite use:
 
 .. code:: sh
     
-    livv --verification path/to/model/data   path/to/benchmark/data
+    livv --verification path/to/model/data path/to/benchmark/data
 
 To run a validation suite use:
 
