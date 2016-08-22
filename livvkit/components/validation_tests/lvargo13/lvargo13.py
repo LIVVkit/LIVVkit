@@ -82,7 +82,7 @@ def run(name, config):
     output_plots = [os.path.basename(p) for p in glob.glob(output_file_base + "*.png")]
     plot_list = []
     for plot in output_plots:
-        plot_list.append(elements.image_element(plot, "", plot)) 
+        plot_list.append(elements.image(plot, "", plot)) 
     
     the_page = elements.page("lvargo13", config['description'], elements.gallery("Plots", plot_list))
 

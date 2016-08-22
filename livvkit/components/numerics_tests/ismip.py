@@ -122,7 +122,7 @@ def run(config, analysis_data):
             plt.legend(loc='best')
             plt.savefig(plot_file)
             plt.close()
-            plot_list.append( elements.image_element(title, description, os.path.basename(plot_file)) )
+            plot_list.append( elements.image(title, description, os.path.basename(plot_file)) )
     
     return elements.gallery("Numerics Plots", plot_list)
 

@@ -319,7 +319,7 @@ def generate_scaling_plot(timing_data, title, description, plot_file):
         plt.text(0,0.36, "performance option enabled.")
     plt.savefig(plot_file)
     plt.close()   
-    return elements.image_element(title, description, os.path.basename(plot_file))
+    return elements.image(title, description, os.path.basename(plot_file))
 
 
 def generate_timing_breakdown_plot(timing_stats, scaling_var, title, description, plot_file):
@@ -384,5 +384,5 @@ def generate_timing_breakdown_plot(timing_stats, scaling_var, title, description
     
     plt.savefig(plot_file)
     plt.close()
-    return elements.image_element(title, description, os.path.basename(plot_file))
+    return elements.image(title, description, os.path.basename(plot_file))
 

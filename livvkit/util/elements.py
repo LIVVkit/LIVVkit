@@ -204,7 +204,7 @@ def gallery(title, image_elem_list):
     return gal
 
 
-def image_element(title, desc, image_name):
+def image(title, desc, image_name):
     """ 
     Builds an image element.  Image elements are primarily created
     and then wrapped into an image gallery element.  This is not required

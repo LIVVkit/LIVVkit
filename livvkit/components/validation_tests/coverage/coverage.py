@@ -70,7 +70,7 @@ def run(name, config):
     
     plot_coverage(config['plot_script'], model_data, bench_data, output_path)
 
-    plot_list = [elements.image_element(plot_name," ",plot_name)]
+    plot_list = [elements.image(plot_name," ",plot_name)]
     the_page = elements.page('coverage', config['description'], elements.gallery("Plots", plot_list))
 
     return the_page
