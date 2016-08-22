@@ -37,7 +37,7 @@ from netCDF4 import Dataset
 
 import livvkit
 from livvkit.util import functions
-from livvkit.util.datastructures import ElementHelper 
+from livvkit.util import elements
 
 def run(name, config):
     """
@@ -48,14 +48,14 @@ def run(name, config):
         name: The name of the test
         config: A dictionary representation of the configuration file
     Returns:
-        The result of ElementHelper.page with the list of elements to display
+        The result of elements.page with the list of elements to display
     """
     greenland_data = os.path.join(livvkit.cwd, config['data_dir'], config['gl_data']) 
     velocity_data = os.path.join(livvkit.cwd, config['data_dir'], config['vel_data'])
-   
+  
     if not (os.path.exists(greenland_data) and os.path.exists(velocity_data)):
         # Add more handling here -- what do we want to return for failed tests
-        return ElementHelper.error("lvargo13", "Could not find necessary data for validation!")
+        return elements.error("lvargo13", "Could not find necessary data for validation!")
 
     # Generate the script
     output_dir = os.path.join(livvkit.index_dir, 'validation', 'imgs')
@@ -82,7 +82,10 @@ def run(name, config):
     output_plots = [os.path.basename(p) for p in glob.glob(output_file_base + "*.png")]
     plot_list = []
     for plot in output_plots:
-        plot_list.append(ElementHelper.image_element(plot, "", plot)) 
-    return ElementHelper.page("lvargo13", config['description'], ElementHelper.gallery("Plots", plot_list))
+        plot_list.append(elements.image_element(plot, "", plot)) 
+    
+    the_page = elements.page("lvargo13", config['description'], elements.gallery("Plots", plot_list))
+
+    return the_page
 
 
