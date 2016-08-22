@@ -30,27 +30,29 @@ Analyze the ice sheet coverage.  For more information check documentation for
 the run() function.
 """
 import os
+import glob
 import numpy as np
 import subprocess
 from netCDF4 import Dataset
 
-import util.variables
-import util.datastructures
+import livvkit
+from livvkit.util import functions
+from livvkit.util import elements
 
-def run(name, *args, **kwargs):
+
+def run(name, config):
     """
     Runs the analysis of the coverage of the ice sheet over the land mass.
     Produces both an overall coverage percentage metric and a coverage plot.
 
-    Required args:
-        plot_file:  full path to the ncl script used to plot the data
-        model_data: full path to the output from the model data
-        bench_data: full path to the output from the benchmark data
+    Args:
+        name: The name of the test
+        config: A dictionary representation of the configuration file
+    Returns:
+        An elements.page with the list of elements to display
     """
-    description = kwargs.get('description')
-    plot_file = kwargs.get('plot_file')
-    bench_data = kwargs.get('bench_data')
-    model_data = kwargs.get('model_data')
+    bench_data = os.path.join(livvkit.cwd, config['data_dir'], config['bench_data'])
+    model_data = os.path.join(livvkit.cwd, config['data_dir'], config['model_data'])
 
     if not (os.path.exists(model_data) and os.path.exists(bench_data)):
         # Add more handling here -- what do we want to return for failed tests
@@ -58,14 +60,20 @@ def run(name, *args, **kwargs):
         print(model_data)
         print(bench_data)
         print("")
-        return
+        return elements.error("coverage", "Could not find necessary data to run the coverage validation!")
 
     # Generate the script
-    output_dir = os.path.join(util.variables.index_dir, 
-                              'Validation', name, 'imgs')
-    output_path = os.path.join(output_dir, "coverage.png")
-    util.datastructures.mkdir_p(output_dir)
-    plot_coverage(plot_file, model_data, bench_data, output_path)
+    plot_name = "coverage.png"
+    output_dir = os.path.join(livvkit.index_dir, 'validation', 'imgs')
+    output_path = os.path.join(output_dir, plot_name)
+    functions.mkdir_p(output_dir)
+    
+    plot_coverage(config['plot_script'], model_data, bench_data, output_path)
+
+    plot_list = [elements.image_element(plot_name," ",plot_name)]
+    the_page = elements.page('coverage', config['description'], elements.gallery("Plots", plot_list))
+
+    return the_page
 
 
 def plot_coverage(plot_file, model_data, bench_data, output_file):
@@ -80,7 +88,7 @@ def plot_coverage(plot_file, model_data, bench_data, output_file):
         output_file: The full path of where to write the plot to
 
     Returns:
-        TBD
+        N/A
     """
     ncl_command = ('ncl \'bench = addfile("'+ bench_data +
                    '", "r")\' \'model = addfile("'+ model_data +
@@ -91,4 +99,5 @@ def plot_coverage(plot_file, model_data, bench_data, output_file):
                             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     stdOut, stdErr = call.stdout.read(), call.stderr.read()
 
+    #TODO: Put some error checking here
 
