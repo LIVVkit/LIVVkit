@@ -55,12 +55,12 @@ def parse(args):
             default=os.path.join(os.getcwd(), "vv_" + time.strftime("%Y-%m-%d")),
             help='Location to output the LIVV webpages.')
     
-    parser.add_argument('--verification',
+    parser.add_argument('-v','--verify',
             nargs=2,
             default=None,
             help='Specify the locations of the test and bench bundle to compare (respectively).')
 
-    parser.add_argument('--validation',
+    parser.add_argument('-V','--validate',
             action='store', 
             nargs='+',            
             default=None,
@@ -80,8 +80,8 @@ def init(options):
     livvkit.output_dir     = os.path.abspath(options.out_dir)
     livvkit.img_dir        = livvkit.output_dir + "/imgs"
     livvkit.index_dir      = livvkit.output_dir
-    livvkit.verify = True if options.verification is not None else False
-    livvkit.validate = True if options.validation is not None else False
+    livvkit.verify = True if options.verify is not None else False
+    livvkit.validate = True if options.validate is not None else False
     livvkit.model_dir = ""
     livvkit.model_config = ""
     livvkit.bench_dir = ""
@@ -96,10 +96,10 @@ def init(options):
     # Get a list of bundles that provide model specific implementations
     available_bundles = [mod for imp, mod, ispkg in pkgutil.iter_modules(bundles.__path__)]
     
-    if options.verification is not None:
+    if options.verify is not None:
         # rstrip accounts for trailing path separators
-        livvkit.model_dir = options.verification[0].rstrip(os.sep)
-        livvkit.bench_dir = options.verification[1].rstrip(os.sep)
+        livvkit.model_dir = options.verify[0].rstrip(os.sep)
+        livvkit.bench_dir = options.verify[1].rstrip(os.sep)
         if not os.path.isdir(livvkit.model_dir): 
             print("")
             print("----------------------------------------------------------")
@@ -141,8 +141,8 @@ def init(options):
             #TODO: Should implement some error checking here...
             livvkit.verify = False
 
-    if options.validation is not None:
-        livvkit.validation_model_configs = options.validation 
+    if options.validate is not None:
+        livvkit.validation_model_configs = options.validate 
 
     if not (livvkit.verify or livvkit.validate):
         print("")
@@ -151,8 +151,8 @@ def init(options):
         print("----------------------------------------------------------")
         print("    No verification or validation tests found/submitted!")
         print("")
-        print("    Use either one or both of the --verification and")
-        print("    --validation options to run tests.  For more ")
+        print("    Use either one or both of the --verify and")
+        print("    --validate options to run tests.  For more ")
         print("    information use the --help option, view the README")
         print("    or check https://livvkit.github.io/Docs/")
         print("----------------------------------------------------------")
