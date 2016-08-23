@@ -1,0 +1,37 @@
+<html>
+ <head>
+  <title>JsUnit Test Page for RST Template</title>
+  <script language="javascript" src="jsunit/app/jsUnitCore.js"></script>
+  <script language="javascript" src="../src/templates/rst/publish.js"></script>
+ </head>
+ <body>
+  <script language="javascript">
+    function testReIndent() {
+      assertEquals("basic", "test", reIndent("test", 4));
+      assertEquals("indent first", "    test", reIndent("test", 4, true));
+      assertEquals("default value", "test\n    test", reIndent("test\ntest"));
+      assertNotEquals("wrong indent", "  test", reIndent("test", 4));
+      assertEquals("multiple lines", "line1\n    line2", reIndent("line1\nline2", 4));
+      assertEquals("multiple lines with first", "    line1\n    line2", reIndent("line1\nline2", 4, true));
+    }
+    function testRestify() {
+      assertEquals("attr", "**value**", toRst("<b class='font-weight: bold;'>value</b>"));
+      assertEquals("basic", "*test*", toRst("<i>test</i>"));
+      assertEquals("strong", "**test**", toRst("<strong>test</strong>"));
+      assertEquals("attr", "**test**", toRst("<b class='font-weight: bold;'>test</b>"));
+      assertEquals("break", "one\n\ntwo\n\nthree", toRst("one<br>two<br />three"));
+    }
+    function testReJoin() {
+      assertEquals("single", "single line", reJoin("single line"));
+      assertEquals("trail", "single line ", reJoin("single line\n"));
+      assertEquals("two", "two lines", reJoin("two\nlines"));
+      assertEquals("two", "two  lines", reJoin("two\n lines"));
+      // keep paragraph tests
+      assertEquals("keep", "two\n\nlines", reJoin("two\n\nlines"));
+      assertEquals("joinnkeep", "one two\n\nthree", reJoin("one\ntwo\n\nthree"));
+      assertEquals("joinkeepspace", "one two\n\nthree", reJoin("one\ntwo\n   \nthree"));
+    }
+  </script>
+ </body>
+</html>
+

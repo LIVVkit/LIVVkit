@@ -1,0 +1,31 @@
+{
+    
+    "ismip-hom-a": 
+        {
+            "x": [0.0, 1.0], 
+            "y": [0.25,0.25],
+            "pattern": ["ExpA_Fig5_???.txt"],
+            "xlabel": ["Normalized x"],
+            "ylabel": ["Velocity (m/a)"],
+            "data_dir": "livvkit/data/numerics/ismip-hom"
+        },
+    "ismip-hom-c": 
+        {
+            "x": [0.0, 1.0], 
+            "y": [0.25,0.25],
+            "pattern": ["ExpC_Fig8_???.txt"],
+            "xlabel": ["Normalized x"],
+            "ylabel": ["Velocity (m/a)"],
+            "data_dir": "livvkit/data/numerics/ismip-hom"
+        },
+    "ismip-hom-f": 
+        {
+            "x": [-50.0, 50.0], 
+            "y": [0.0, 0.0], 
+            "pattern": ["ExpF_Fig12_???.txt",        "ExpF_Fig13_???.txt"],
+            "xlabel": ["Distance from center (km)",  "Distance from center (km)"],
+            "ylabel": ["Surface (m)",                "Velocity (m/a)"],
+            "data_dir": "livvkit/data/numerics/ismip-hom"
+
+        } 
+}

@@ -1,0 +1,44 @@
+{
+    "ismip-hom-a" : 
+        {
+            "description" : 
+                "The Ice Sheet Model Intercomparison Project for Higher-Order Models (ISMIP-HOM) prescribes a set of experiments meant to test the implementation of higher-order physics. The results of this benchmark experiment was published in The Cryosphere and can be found <a target=_blank href=\"http://dx.doi.org/10.5194/tc-2-95-2008\">here.<\/a> <br> <br>Experiment A (shown here), simulates a parallel-sided slab of ice lying on a sloped bed that has a series of sinusoidal oscillations. The experimental domain is a square of side length L, with periodic boundary conditions applied in the horizontal. The ice thickness is 1000 m, the slope is 0.5 &deg; (maximum in x, zero in y), the amplitude of the bed oscillations is 500 m, and the frequency of the oscillations is &#969; = 2 &#960;\/L.",
+            "module" : "livvkit.components.numerics_tests.ismip",
+            "data_dir"    : "ismip-hom",
+            "output_ext"  : ".out.nc",
+            "test_module" : "ismip",
+            "surf_var"    : "usurf",
+            "x_vel_var"   : "uvel",
+            "y_vel_var"   : "vvel",
+            "interp_vars" : ["uvel_extend", "vvel_extend"],
+            "plot_vars"   : ["velnorm_extend"]
+        },
+    "ismip-hom-c" : 
+        {
+            "description" : 
+                "The Ice Sheet Model Intercomparison Project for Higher-Order Models (ISMIP-HOM) prescribes a set of experiments meant to test the implementation of higher-order physics. The results of this benchmark experiment was published in The Cryosphere and can be found <a target=_blank href=\"http://dx.doi.org/10.5194/tc-2-95-2008\">here.<\/a> <br> <br>Experiment C (shown here), simulates a parallel-sided slab of ice lying on a sloped bed that has a sinusoidally oscillating basal friction coefficient. The experimental domain is a square of side length L, with periodic boundary conditions applied in the horizontal. The ice thickness is 1000 m, the slope is 0.1 &deg; (maximum in x, zero in y), the basal friction coefficient is perscribed by &#946;(x,y)= 1000 + 1000 sin(&#969;x)*sin(&#969;y), and the frequency of the oscillations is &#969; = 2 &#960;\/L.",
+            "module" : "livvkit.components.numerics_tests.ismip",
+            "data_dir"    : "ismip-hom",
+            "output_ext"  : ".out.nc",
+            "test_module" : "ismip",
+            "surf_var"    : "usurf",
+            "x_vel_var"   : "uvel",
+            "y_vel_var"   : "vvel",
+            "interp_vars" : ["uvel_extend", "vvel_extend"],
+            "plot_vars"   : ["velnorm_extend"]
+        },
+    "ismip-hom-f" : 
+        {
+            "description" : 
+                "The Ice Sheet Model Intercomparison Project for Higher-Order Models (ISMIP-HOM) prescribes a set of experiments meant to test the implementation of higher-order physics. The results of this benchmark experiment was published in The Cryosphere and can be found <a target=_blank href=\"http://dx.doi.org/10.5194/tc-2-95-2008\">here.<\/a> <br> <br>Experiment F (shown here), is a prognostic experiment for which the free surface is allowed to relax until a steady state is reached (for zero surface mass balance). For this experiment, A slab of ice with mean thickness H = 1000 m is resting on a sloping bed with a mean slope of  &#945; = 3.0 &deg; (maximum in x, zero in y). The bedrock plane is parallel to the surface plane and is perturbed by a Gaussian bump, where &#963; = 10 H, the perturbation has a maximum height of H\/10, and the domain size L is taken to be 100 H in x and y. Periodic boundary conditions are applied in the horizontal. Experiments shown below are carried out for a beds with no slip.",
+            "module" : "livvkit.components.numerics_tests.ismip",
+            "data_dir"    : "ismip-hom",
+            "output_ext"  : ".out.nc",
+            "test_module" : "ismip",
+            "surf_var"    : "usurf",
+            "x_vel_var"   : "uvel",
+            "y_vel_var"   : "vvel",
+            "interp_vars" : ["usurf","uvel","vvel"],
+            "plot_vars"   : ["usurf","velnorm"]
+        }
+}

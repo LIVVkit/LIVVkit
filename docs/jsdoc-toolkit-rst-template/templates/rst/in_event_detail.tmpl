@@ -1,0 +1,92 @@
+{!
+member = g.member;
+!}
+.. :js:function:: {+member.name+} {+makeSignature(member.params)+}
+
+{!
+if (member.isPrivate) output += "<private> ";
+if (member.isInner) output += "<inner> ";
+if (member.isStatic) output += "<static> ";
+!}
+
+<if test="member.type">{{+new Link().toSymbol(member.type)+}}</if>
+<if test="member.isStatic && member.memberOf != '_global_'">{+member.memberOf+}.</if>
+
+{+ resolveLinks(member.desc).reIndent(2) +}
+
+<if test="member.author">:author: {+member.author+}.</if>
+
+
+<if test="member.example.length">
+  <for each="example" in="member.example">
+
+  .. code-block:: javascript
+
+  {+ reIndent(example, 6) +}
+
+
+  </for>
+</if>
+
+
+<if test="member.params.length">
+  <for each="item" in="member.params">
+  :param {+item.name+}: {+ resolveLinks(item.desc) +}
+  </for>
+</if>
+
+<if test="member.deprecated">
+  <dl class="detailList">
+  <dt class="heading">Deprecated:</dt>
+  <dt>
+    {+ resolveLinks(member.deprecated) +}
+  </dt>
+  </dl>
+</if>
+
+<if test="member.since">
+  <dl class="detailList">
+  <dt class="heading">Since:</dt>
+    <dd>{+ member.since +}</dd>
+  </dl>
+  </dl>
+</if>
+
+<if test="member.exceptions.length">
+  <dl class="detailList">
+  <dt class="heading">Throws:</dt>
+  <for each="item" in="member.exceptions">
+    <dt>
+      {+((item.type)?"<span class=\"light fixedFont\">{"+(new Link().toSymbol(item.type))+"}</span> " : "")+} <b>{+item.name+}</b>
+    </dt>
+    <dd>{+ resolveLinks(item.desc) +}</dd>
+  </for>
+  </dl>
+</if>
+
+<if test="member.returns.length">
+  <dl class="detailList">
+  <dt class="heading">Returns:</dt>
+  <for each="item" in="member.returns">
+    <dd>{+((item.type)?"<span class=\"light fixedFont\">{"+(new Link().toSymbol(item.type))+"}</span> " : "")+}{+resolveLinks(item.desc)+}</dd>
+  </for>
+  </dl>
+</if>
+
+<if test="member.requires.length">
+  <dl class="detailList">
+  <dt class="heading">Requires:</dt>
+  <for each="item" in="member.requires">
+    <dd>{+ resolveLinks(item) +}</dd>
+  </for>
+  </dl>
+</if>
+
+<if test="member.see.length">
+  <dl class="detailList">
+  <dt class="heading">See:</dt>
+  <for each="item" in="member.see">
+    <dd>{+ new Link().toSymbol(item) +}</dd>
+  </for>
+  </dl>
+</if>

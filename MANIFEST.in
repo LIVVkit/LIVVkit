@@ -1,0 +1,3 @@
+recursive-include livvkit/bundles *.json
+recursive-include livvkit/data *
+recursive-include livvkit/resources *

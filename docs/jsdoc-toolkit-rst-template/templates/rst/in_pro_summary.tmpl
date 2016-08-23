@@ -1,0 +1,29 @@
+{!
+var ownProperties = g.ownProperties;
+var data = g.data;
+!}
+
+<if test="data.inheritsFrom.length">
+      {!
+        var borrowedMembers = data.properties.filter(function($) {return $.memberOf != data.alias});
+        var contributers = [];
+        borrowedMembers.map(function($) {if (contributers.indexOf($.memberOf) < 0) contributers.push($.memberOf)});
+        for (var i = 0, l = contributers.length; i < l; i++) {
+          output +=
+            "<dt>Fields borrowed from class "+new Link().toSymbol(contributers[i])+": </dt>"
+            +
+            "<dd>" +
+            borrowedMembers
+            .filter(
+              function($) { return $.memberOf == contributers[i] }
+            )
+            .sort(makeSortby("name"))
+            .map(
+              function($) { return new Link().toSymbol($.alias).withText($.name) }
+            )
+            .join(", ")
+            +
+            "</dd>";
+        }
+      !}
+</if>

@@ -1,0 +1,7 @@
+{
+    "template" : {
+        "module" : "livvkit.components.validation_tests.template.template",
+        "description" : "A template validation test.",
+        "directions" : "Put any declarations you need here."
+    }
+}

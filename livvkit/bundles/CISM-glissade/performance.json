@@ -1,0 +1,15 @@
+{
+    "dome" :
+        {
+            "description" :
+            "The time evolution of a 3-D paraboloid dome of ice sitting on a flat bed. This is a very basic ice-sheet like test case that is simple and relatively fast to run. It confirms that the basic higher-order model physics are working, but it does not strenuously test the physics and boundary conditions.",
+            "data_dir" : "dome",
+            "timing_ext" : ".cism_timing_stats",
+            "timing_vars" : ["cism", "initial_diag_var_solve", "glissade_assemble_3d"],
+            "scaling_var" : "cism",
+            "weak_scaling_points" : 
+                [["s0","p1"],["s1","p4"],["s2","p16"],["s3","p64"],["s4","p256"],["s5","p1024"]],
+            "strong_scaling_points" : 
+                [["s0", "p1"],["s0","p2"],["s0","p4"],["s0","p8"],["s0","p16"],["s0","p64"]]
+        }
+}

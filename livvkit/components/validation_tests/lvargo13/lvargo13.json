@@ -1,0 +1,14 @@
+{
+    "lvargo13": {
+        "module" : "livvkit.components.validation_tests.lvargo13.lvargo13",
+        "description" : "An analysis of CESM.",
+        "plot_script" : "livvkit/components/validation_tests/lvargo13/lvargo13.ncl",
+        "gl_data" : "Greenland_5km_v1.1_SacksRev_c110629.nc",
+        "vel_data" : "greenland_1km_2015_06_03.mcb.nc",
+        "data_dir" : "livvkit/data/validation/lvargo13-ncl",
+        "model_prefix" : "BG_CISM1_parallel_updating.cism.h.",
+        "model_suffix" : "-01-01-00000.nc",
+        "model_start" : "208",
+        "model_end" : "210"
+    }
+}

@@ -1,0 +1,72 @@
+{
+    "dome" : 
+      { 
+        "description" : 
+            "The time evolution of a 3-D paraboloid dome of ice sitting on a flat bed. This is a very basic ice-sheet like test case that is simple and relatively fast to run. It confirms that the basic higher-order model physics are working, but it does not strenuously test the physics and boundary conditions.",
+        "data_dir" : "dome",
+        "output_ext" : ".out.nc",
+        "logfile_ext" : ".config.oe",
+        "config_ext"  : ".config",
+        "bit_for_bit_vars" : ["velnorm", "thk"]
+      },
+    "ismip-hom-a" : 
+      { 
+        "description" : 
+                "The Ice Sheet Model Intercomparison Project for Higher-Order Models (ISMIP-HOM) prescribes a set of experiments meant to test the implementation of higher-order physics. The results of this benchmark experiment was published in The Cryosphere and can be found <a target=_blank href=\"http://dx.doi.org/10.5194/tc-2-95-2008\">here.<\/a> <br> <br>Experiment A (shown here), simulates a parallel-sided slab of ice lying on a sloped bed that has a series of sinusoidal oscillations. The experimental domain is a square of side length L, with periodic boundary conditions applied in the horizontal. The ice thickness is 1000 m, the slope is 0.5 &deg; (maximum in x, zero in y), the amplitude of the bed oscillations is 500 m, and the frequency of the oscillations is &#969; = 2 &#960;\/L.",
+        "data_dir" : "ismip-hom",
+        "output_ext": ".out.nc",
+        "logfile_ext" : ".config.oe",
+        "config_ext"  : ".config",
+        "bit_for_bit_vars" : ["velnorm", "thk"]
+      },
+    "ismip-hom-c" : 
+      { 
+        "description" : 
+                "The Ice Sheet Model Intercomparison Project for Higher-Order Models (ISMIP-HOM) prescribes a set of experiments meant to test the implementation of higher-order physics. The results of this benchmark experiment was published in The Cryosphere and can be found <a target=_blank href=\"http://dx.doi.org/10.5194/tc-2-95-2008\">here.<\/a> <br> <br>Experiment C (shown here), simulates a parallel-sided slab of ice lying on a sloped bed that has a sinusoidally oscillating basal friction coefficient. The experimental domain is a square of side length L, with periodic boundary conditions applied in the horizontal. The ice thickness is 1000 m, the slope is 0.1 &deg; (maximum in x, zero in y), the basal friction coefficient is perscribed by &#946;(x,y)= 1000 + 1000 sin(&#969;x)*sin(&#969;y), and the frequency of the oscillations is &#969; = 2 &#960;\/L.",
+        "data_dir" : "ismip-hom",
+        "output_ext": ".out.nc",
+        "logfile_ext" : ".config.oe",
+        "config_ext"  : ".config",
+        "bit_for_bit_vars" : ["velnorm", "thk"]
+      },
+    "ismip-hom-f" : 
+      { 
+        "description" : 
+                "The Ice Sheet Model Intercomparison Project for Higher-Order Models (ISMIP-HOM) prescribes a set of experiments meant to test the implementation of higher-order physics. The results of this benchmark experiment was published in The Cryosphere and can be found <a target=_blank href=\"http://dx.doi.org/10.5194/tc-2-95-2008\">here.<\/a> <br> <br>Experiment F (shown here), is a prognostic experiment for which the free surface is allowed to relax until a steady state is reached (for zero surface mass balance). For this experiment, A slab of ice with mean thickness H = 1000 m is resting on a sloping bed with a mean slope of  &#945; = 3.0 &deg; (maximum in x, zero in y). The bedrock plane is parallel to the surface plane and is perturbed by a Gaussian bump, where &#963; = 10 H, the perturbation has a maximum height of H\/10, and the domain size L is taken to be 100 H in x and y. Periodic boundary conditions are applied in the horizontal. Experiments shown below are carried out for a beds with no slip.",
+        "data_dir" : "ismip-hom",
+        "output_ext": ".out.nc",
+        "logfile_ext" : ".config.oe",
+        "config_ext"  : ".config",
+        "bit_for_bit_vars" : ["velnorm", "thk"]
+      },
+    "shelf-circular" : 
+      { 
+        "description" : 
+            "An idealized 1000 meter circular ice shelf, grounded at a single grid point in its center. This test case confirms a working \"floating ice\" boundary condition in 2D (i.e., in map-plane view) and also confirms radial symmetry.",
+        "data_dir" : "shelf",
+        "output_ext" : ".out.nc",
+        "logfile_ext" : ".config.oe",
+        "config_ext"  : ".config",
+        "bit_for_bit_vars" : ["velnorm", "thk"]
+      },
+    "shelf-confined" : 
+      { 
+        "description" : 
+            "An idealized 500 m ice shelf in a confined, rectangular embayment. Grounded ice is not explicitly modeled, but is included in the model setup as Dirichlet boundary conditions for velocity along the ice shelf edges.",
+        "data_dir" : "shelf",
+        "output_ext" : ".out.nc",
+        "logfile_ext" : ".config.oe",
+        "config_ext"  : ".config",
+        "bit_for_bit_vars" : ["velnorm", "thk"]
+      },
+    "stream" : 
+      { 
+        "description" : 
+            "The stream test case simulates flow over an idealized ice stream underlain by a subglacial till with a known and specified yield stress distribution. The basal properties vary in the across flow direction only and are symmetric about the ice steam centerline.",
+        "data_dir" : "stream",
+        "output_ext" : ".out.nc",
+        "logfile_ext" : ".config.oe",
+        "config_ext"  : ".config",
+        "bit_for_bit_vars" : ["velnorm", "thk"]
+      }
+}
