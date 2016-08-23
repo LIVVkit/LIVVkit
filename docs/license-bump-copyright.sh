@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # Copyright (c) 2015,2016, UT-BATTELLE, LLC
 # All rights reserved.
 # 
@@ -26,4 +27,53 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+LIVV=".."
+OLD="Copyright (c) 2015,2016, UT"
+NEW="Copyright (c) 2015,2016, UT"
+
+ALWAYS_IGNORE=(-not -path "*.git*" -not -path "*docs/*")
+FILE_IGNORE=(-not -iname "*.md" -not -iname "*.json" -not -iname "*.txt" \
+             -not -iname "*.png" -not -iname "*.jpg" -not -iname "*.svg" )
+
+echo "--------------------------------------------------------------------------------"
+echo "    THESE FILES HAVE AN OUTDATED LICENSE HEADER:"
+echo "--------------------------------------------------------------------------------"
+find $LIVV -type f "${ALWAYS_IGNORE[@]}" \
+    "${FILE_IGNORE[@]}" \
+    | xargs grep -l "$OLD" \
+    | sort 
+
+find ${LIVV}/docs -type f \
+    -not -path "*_build*" \
+    -not -path "*source*" \
+    "${FILE_IGNORE[@]}" \
+    | xargs grep -l "$OLD" \
+    | sort
+
+
+echo "--------------------------------------------------------------------------------"
+echo "    UPDATING THE LICENSE HEADERS:"
+echo "--------------------------------------------------------------------------------"
+find $LIVV -type f "${ALWAYS_IGNORE[@]}" \
+    "${FILE_IGNORE[@]}" \
+    | xargs grep -l "$OLD" \
+    | sort \
+    | while read SRC 
+do
+    echo "Bumping $SRC"
+    sed -i "s/$OLD/$NEW/g" $SRC
+done
+
+
+find ${LIVV}/docs -type f \
+    -not -path "*_build*" \
+    -not -path "*source*" \
+    "${FILE_IGNORE[@]}" \
+    | xargs grep -l "$OLD" \
+    | sort \
+    | while read SRC 
+do
+    echo "Bumping $SRC"
+    sed -i "s/$OLD/$NEW/g" $SRC
+done
 
