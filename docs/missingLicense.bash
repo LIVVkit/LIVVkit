@@ -30,15 +30,22 @@
 LIVV="../"
 CURRENT="Copyright (c)"
 
-########################################################
-# Display all files that are missing the license header.
-########################################################
-find $LIVV -type f -not -path "*.git*" \
-    -not -path "*configurations/*" \
-    -not -path "*util/data_*" \
-    -not -path "*verification/ver_utils/data_*" \
+ALWAYS_IGNORE=(-not -path "*.git*" -not -path "*docs/*" -not -iname "setup_*" -not -iname "MANIFEST.in")
+PYTHON_IGNORE=(-not -iname "__init__.py" -not -iname "colormaps.py") 
+CSS_IGNORE=(-not -iname "jquery-ui.min.css")
+
+echo "--------------------------------------------------------------------------------"
+echo "    THESE FILES ARE MISSING A CURRENT LICENSE HEADER:"
+echo "--------------------------------------------------------------------------------"
+find $LIVV -type f "${ALWAYS_IGNORE[@]}" \
+    -not -iname "*.md" \
+    -not -iname "*.json" \
+    -not -iname "*.txt" \
     -not -iname "*.png" \
     -not -iname "*.jpg" \
     -not -iname "*.svg" \
-    -not -iname "*.md" \
-    | xargs grep -L "$CURRENT"
+    "${PYTHON_IGNORE[@]}" \
+    "${CSS_IGNORE[@]}" \
+    | xargs grep -L "$CURRENT" \
+    | sort
+
