@@ -75,6 +75,6 @@ To run a validation suite use:
 
     livv --validation path/to/configuration/file
 
-You can then view the output by opening the `index.html` file in the output 
+You can then view the output by opening the ``index.html`` file in the output 
 directory with a web browser of your choosing.
 

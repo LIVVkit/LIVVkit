@@ -8,7 +8,7 @@
 Introduction
 -----
 LIVVkit (the land ice verification & validation toolkit) is a python based
-:doc:`V&V <VV>` toolkit for computational ice sheet models. It aims to
+V&V toolkit for computational ice sheet models. It aims to
 provide the following capabilities:
 
 **Model V&V**

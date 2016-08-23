@@ -1,5 +1,3 @@
------
-
 Numerics
 ========
 .. automodule:: livvkit.components.numerics
@@ -22,12 +20,10 @@ Validation
 
 Utilities
 =========
-.. currentmodule:: livvkit.util.datastructures
-
-.. autoclass:: LIVVDict
+.. automodule:: livvkit.util.elements
     :members:
 
-.. autoclass:: ElementHelper
+.. automodule:: livvkit.util.LIVVDict
     :members:
 
 Web Frontend

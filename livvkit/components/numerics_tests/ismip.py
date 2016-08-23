@@ -72,8 +72,6 @@ def get_case_length(case):
 
 
 def run(config, analysis_data):
-    set_up()
-    
     case = config['name']
     if case in ['ismip-hom-a', 'ismip-hom-c','ismip-hom-f']:
         coord = 'x_hat'

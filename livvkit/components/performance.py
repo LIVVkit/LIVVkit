@@ -286,7 +286,7 @@ def generate_scaling_plot(timing_data, title, description, plot_file):
     Generate a scaling plot.  
 
     Args:
-        timing_data: data returned from a *_scaling method
+        timing_data: data returned from a `*_scaling` method
         tite: the title of the plot
         description: a description of the plot
         plot_file: the file to write out to

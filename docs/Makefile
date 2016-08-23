@@ -21,6 +21,15 @@ I18NSPHINXOPTS  = $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) .
 
 .PHONY: help
 help:
+# Internal variables.
+PAPEROPT_a4     = -D latex_paper_size=a4
+PAPEROPT_letter = -D latex_paper_size=letter
+ALLSPHINXOPTS   = -d $(BUILDDIR)/doctrees $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) .
+# the i18n builder cannot share the environment and doctrees with the others
+I18NSPHINXOPTS  = $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) .
+
+.PHONY: help
+help:
 	@echo "Please use \`make <target>' where <target> is one of"
 	@echo "  html       to make standalone HTML files"
 	@echo "  dirhtml    to make HTML files named index.html in directories"
@@ -96,9 +105,9 @@ qthelp:
 	@echo
 	@echo "Build finished; now you can run "qcollectiongenerator" with the" \
 	      ".qhcp project file in $(BUILDDIR)/qthelp, like this:"
-	@echo "# qcollectiongenerator $(BUILDDIR)/qthelp/LIVVKit.qhcp"
+	@echo "# qcollectiongenerator $(BUILDDIR)/qthelp/LIVVkit.qhcp"
 	@echo "To view the help file:"
-	@echo "# assistant -collectionFile $(BUILDDIR)/qthelp/LIVVKit.qhc"
+	@echo "# assistant -collectionFile $(BUILDDIR)/qthelp/LIVVkit.qhc"
 
 .PHONY: applehelp
 applehelp:
@@ -115,8 +124,8 @@ devhelp:
 	@echo
 	@echo "Build finished."
 	@echo "To view the help file:"
-	@echo "# mkdir -p $$HOME/.local/share/devhelp/LIVVKit"
-	@echo "# ln -s $(BUILDDIR)/devhelp $$HOME/.local/share/devhelp/LIVVKit"
+	@echo "# mkdir -p $$HOME/.local/share/devhelp/LIVVkit"
+	@echo "# ln -s $(BUILDDIR)/devhelp $$HOME/.local/share/devhelp/LIVVkit"
 	@echo "# devhelp"
 
 .PHONY: epub

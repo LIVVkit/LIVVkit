@@ -42,12 +42,12 @@ layout of the model output should be as follows:
                │    │   │   ├── ... 
                ...
 
-where [] indicates an optional directory, BUNDLE indicate the specific ice-sheet model used
-(including variant names; e.g., CISM-glissade), METADATA indicats any directories that contain
-information inaddition to the testing data, TEST indicates a particular type of test (e.g., shelf,
-dome, ismip-hom), VARIANT indicates any variant of that test (e.g., ismip-hom-a), sRESO indicates
-the grid resolution, pPROC indicate the number of processors used to run the test, and zSIZE
-indicates the domain size used in the test. *Note: The percise meaning of any \*ed directory name
+where ``[]`` indicates an optional directory, ``BUNDLE`` indicate the specific ice-sheet model used
+(including variant names; e.g., ``CISM-glissade``), ``METADATA`` indicats any directories that contain
+information inaddition to the testing data, ``TEST`` indicates a particular type of test (e.g., ``shelf``,
+``dome``, ``ismip-hom``), ``VARIANT`` indicates any variant of that test (e.g., ``ismip-hom-a``), ``sRESO`` indicates
+the grid resolution, ``pPROC`` indicate the number of processors used to run the test, and ``zSIZE``
+indicates the domain size used in the test. *Note: The percise meaning of any* ``*`` *-ed directory name
 may be variable from test to test, but will generally follow the definition given here.* 
 
 Extending Components
@@ -58,7 +58,7 @@ Including New Models
 Adding new models requires a new implementation in the ``bundles`` directory.  Within the
 ``bundles`` directory there is a ``template`` directory that can be copied when adding compatibility
 for a new model -- the name of the new directory should indicat the model being added (e.g.,
-CISM-Albany, MPAS-LI).  The template directory provides sample modules with function stubs that can
+``CISM-Albany``, ``MPAS-LI``).  The template directory provides sample modules with function stubs that can
 be filled in to provide a drop in way to use each component (verification, performance, numerics,
 and validation).  These functions primarily are used to accomodate for model-specific
 implementations of things such as parsing log files, assimilating timing data, and arranging data
@@ -71,8 +71,9 @@ schemes, and data locations.
 When the new bundle has been implemented and placed in the ``bundles`` directory it will 
 automatically be registered by LIVVkit at runtime. It is important to note that in order to use 
 LIVVkit on a new model it will also have to conform to the standards described in the 
-**Model Output/LIVVkit Input Hierarchy** section (above).  *It is critial that the ``MODEL-Variant`` 
-directory name is the same as the directory name that you have implemented in ``bundles``.*
+`Model Output/LIVVkit Input Hierarchy`_ section (above).  
+*Note: It is critial that the* ``MODEL-Variant`` 
+*directory name is the same as the directory name that you have implemented in* ``bundles``.
 
 
 Adding Tests to Numerics or Validation
