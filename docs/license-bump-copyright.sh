@@ -28,7 +28,7 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 LIVV=".."
-OLD="Copyright (c) 2015,2016, UT"
+OLD="Copyright (c) 2015, UT"
 NEW="Copyright (c) 2015,2016, UT"
 
 ALWAYS_IGNORE=(-not -path "*.git*" -not -path "*docs/*")

@@ -31,6 +31,8 @@ LIVV="../"
 CURRENT="Copyright (c)"
 
 ALWAYS_IGNORE=(-not -path "*.git*" -not -path "*docs/*" -not -iname "setup_*" -not -iname "MANIFEST.in")
+FILE_IGNORE=(-not -iname "*.md" -not -iname "*.json" -not -iname "*.txt" \
+             -not -iname "*.png" -not -iname "*.jpg" -not -iname "*.svg" )
 PYTHON_IGNORE=(-not -iname "__init__.py" -not -iname "colormaps.py") 
 CSS_IGNORE=(-not -iname "jquery-ui.min.css")
 
@@ -38,12 +40,7 @@ echo "--------------------------------------------------------------------------
 echo "    PREPENDING A LICENSE HEADER ONTO THESE FILES:"
 echo "--------------------------------------------------------------------------------"
 find $LIVV -type f "${ALWAYS_IGNORE[@]}" \
-    -not -iname "*.md" \
-    -not -iname "*.json" \
-    -not -iname "*.txt" \
-    -not -iname "*.png" \
-    -not -iname "*.jpg" \
-    -not -iname "*.svg" \
+    "${FILE_IGNORE[@]}" \
     "${PYTHON_IGNORE[@]}" \
     "${CSS_IGNORE[@]}" \
     | xargs grep -L "$CURRENT" \
