@@ -66,19 +66,40 @@ def _run_suite(case, config, summary):
             timing_data[subcase][mcase] = _analyze_case(mpath, bpath, config)
    
     # Create scaling and timing breakdown plots
+    weak_data = weak_scaling(timing_data, config['scaling_var'], config['weak_scaling_points'])
+    strong_data = strong_scaling(timing_data, config['scaling_var'], config['strong_scaling_points'])
+
     timing_plots = []
-    timing_plots.append(generate_scaling_plot(
-            weak_scaling(timing_data, config['scaling_var'], config['weak_scaling_points']),
-            "Weak Scaling for " + case.capitalize(), "", 
+    timing_plots.append(
+        generate_scaling_plot( weak_data,
+            "Weak scaling for " + case.capitalize(), 
+            "runtime (s)", "", 
             os.path.join(plot_dir, case + "_weak_scaling.png")
         ))
-    timing_plots.append(generate_scaling_plot(
-            strong_scaling(timing_data, config['scaling_var'], config['strong_scaling_points']),
-            "Strong Scaling for " + case.capitalize(), "",
+
+    timing_plots.append(
+        weak_scaling_efficiency_plot( weak_data,
+            "Weak scaling efficiency for " + case.capitalize(), 
+            "Parallel efficiency (% of linear)", "", 
+            os.path.join(plot_dir, case + "_weak_scaling_efficiency.png")
+        ))
+
+    timing_plots.append(
+        generate_scaling_plot( strong_data,
+            "Strong scaling for " + case.capitalize(), 
+            "Runtime (s)", "",
             os.path.join(plot_dir, case + "_strong_scaling.png")
         ))
+
+    timing_plots.append(
+        strong_scaling_efficiency_plot( strong_data,
+            "Strong scaling efficiency for " + case.capitalize(), 
+            "Parallel efficiency (% of linear)", "",
+            os.path.join(plot_dir, case + "_strong_scaling_efficiency.png")
+        ))
+
     timing_plots = timing_plots + [generate_timing_breakdown_plot(timing_data[s], config['scaling_var'],
-            "Timing Breakdown for " + case.capitalize()+" "+s, "",
+            "Timing breakdown for " + case.capitalize()+" "+s, "",
             os.path.join(plot_dir, case+"_"+s+"_timing_breakdown.png")
         ) for s in sorted(timing_data.keys(), key=functions.sort_scale)]
  
@@ -281,7 +302,7 @@ def strong_scaling(timing_stats, scaling_var, data_points):
     return timing_data 
 
 
-def generate_scaling_plot(timing_data, title, description, plot_file):
+def generate_scaling_plot(timing_data, title, ylabel, description, plot_file):
     """ 
     Generate a scaling plot.  
 
@@ -299,7 +320,7 @@ def generate_scaling_plot(timing_data, title, description, plot_file):
         plt.figure(figsize=(10,8), dpi=150)
         plt.title(title)
         plt.xlabel("Number of processors")
-        plt.ylabel("Runtime (s)")
+        plt.ylabel(ylabel)
         
         for case, case_color in zip(['bench','model'], ['#91bfdb','#fc8d59']):
             case_data = timing_data[case]
@@ -320,6 +341,37 @@ def generate_scaling_plot(timing_data, title, description, plot_file):
     plt.savefig(plot_file)
     plt.close()   
     return elements.image(title, description, os.path.basename(plot_file))
+
+def weak_scaling_efficiency_plot(timing_data, title, ylabel, description, plot_file):
+    for case in ['bench','model']:
+        case_data = timing_data[case]
+        means = np.array(case_data['means'])
+        mins  = np.array(case_data['mins'])
+        maxs  = np.array(case_data['maxs'])
+
+        case_data['means'] = (means[0] / means) * 100
+        case_data['mins'] = (mins[0] / mins) * 100
+        case_data['maxs'] = (maxs[0] / maxs) * 100
+
+        timing_data[case] = case_data
+    
+    return generate_scaling_plot(timing_data, title, ylabel, description, plot_file)
+
+
+def strong_scaling_efficiency_plot(timing_data, title, ylabel, description, plot_file):
+    for case in ['bench','model']:
+        case_data = timing_data[case]
+        means = np.array(case_data['means'])
+        mins  = np.array(case_data['mins'])
+        maxs  = np.array(case_data['maxs'])
+
+        case_data['means'] = (means[0] / (np.arange(1,len(means)+1) * means)) * 100
+        case_data['mins'] = (mins[0] / (np.arange(1,len(mins)+1) * mins)) * 100
+        case_data['maxs'] = (maxs[0] / (np.arange(1,len(maxs)+1) * maxs)) * 100
+
+        timing_data[case] = case_data
+    
+    return generate_scaling_plot(timing_data, title, ylabel, description, plot_file)
 
 
 def generate_timing_breakdown_plot(timing_stats, scaling_var, title, description, plot_file):
