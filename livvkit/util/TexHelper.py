@@ -1,17 +1,19 @@
 """
-TODO
+The TexHelper module provides capabilities to convert LIVVkits output
+from JSON to tex files.  It does not convert the tex files to any finished
+output.   For example, if you want a PDF you will still have to pass the 
+tex files through pdflatex.
 """
 import os
 import glob
 import pprint
 
 import livvkit
-from livvkit.util import TexHelper as th
 from livvkit.util import functions
 
 def write_tex():
     """
-    TODO
+    Finds all of the output data files, and writes them out to .tex 
     """
     datadir = livvkit.index_dir 
     outdir = os.path.join(datadir, "tex")
@@ -30,7 +32,9 @@ def write_tex():
 
 def translate_page(data):
     """
-    TODO
+    Translates data elements with data['Type'] = 'page'.  This is the
+    top level of translation that occurs, and delegates the translation
+    of other element types contained on a page to their proper functions.
     """
     if "Page" != data["Type"]:
         return ""
@@ -171,7 +175,21 @@ def translate_image(data):
 
 
 def translate_file_diff(data):
-    return ""
+    diff = '\\FloatBarrier \section{Configuration}'
+    sections = data.get('Data')
+    for title, config in sections.items():
+        title = title.replace('_', '\_')
+        diff += ' \n \\subsection{$NAME}'.replace('$NAME', title)
+        for opt, vals in config.items():
+            opt = opt.replace('_', '\_')
+            diff += '\n\n \\texttt{$NAME} : '.replace('$NAME', opt)
+            if vals[0]:
+                diff += '$NAME'.replace('$NAME', vals[-1])
+            else:
+                diff += ('$NAME1 \\textit{$NAME2}'.replace('$NAME1', vals[1])
+                                                      .repace('$NAME2',  vals[-1]))
+    diff += '\n\n'
+    return diff
 
 
 def translate_error(data):
