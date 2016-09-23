@@ -26,7 +26,6 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-
 """
 The TexHelper module provides capabilities to convert LIVVkits output
 from JSON to tex files.  It does not convert the tex files to any finished
@@ -74,6 +73,7 @@ r'''
 \usepackage{placeins}
 \title{LIVVkit}
 \author{$USER}
+\usepackage[parfill]{parskip}
 \begin{document}
 \maketitle
 '''.replace('$USER', livvkit.user)
@@ -94,6 +94,7 @@ r'''
 
 
 def translate_section(data):
+    ''' Translates data where data["Type"]=="Section" '''
     sect_str = ""
     elements = data.get("Elements", [])
     for elem in elements:
@@ -103,6 +104,7 @@ def translate_section(data):
 
 
 def translate_tab(data):
+    ''' Translates data where data["Type"]=="Tab" '''
     tab_str = ""
     sections = data.get("Sections", [])
     for section in sections:
@@ -112,9 +114,10 @@ def translate_tab(data):
 
 
 def translate_summary(data):
+    ''' Translates data where data["Type"]=="Summary" '''
     headers = sorted(data.get("Headers", []))
     summary = '\\FloatBarrier \n \\section{$NAME} \n'.replace('$NAME', data.get("Title", "table"))
-    summary += '\\begin{table} \n \\begin{center}'
+    summary += ' \\begin{table}[!ht] \n \\begin{center}'
     
     # Set the number of columns
     n_cols = len(headers)
@@ -150,9 +153,10 @@ def translate_summary(data):
 
 
 def translate_table(data):
+    ''' Translates data where data["Type"]=="Table" '''
     headers = sorted(data.get("Headers", []))
     table = '\\FloatBarrier \n \\section{$NAME} \n'.replace('$NAME', data.get("Title", "table"))
-    table += '\\begin{table} \n \\begin{center}'
+    table += '\\begin{table}[!ht] \n \\begin{center}'
     
     # Set the number of columns
     n_cols = "c"*(len(headers)+1)
@@ -172,9 +176,10 @@ def translate_table(data):
 
 
 def translate_bit_for_bit(data):
+    ''' Translates data where data["Type"]=="Bit for Bit" '''
     headers = sorted(data.get("Headers", []))
     table = '\\FloatBarrier \n \\section{$NAME} \n'.replace('$NAME', data.get("Title", "table"))
-    table += '\\begin{table} \n \\begin{center}'
+    table += '\\begin{table}[!ht] \n \\begin{center}'
     # Set the number of columns
     n_cols = "c"*(len(headers)+1)
     table += '\n \\begin{tabular}{$NCOLS} \n'.replace("$NCOLS", n_cols)
@@ -196,14 +201,17 @@ def translate_bit_for_bit(data):
 
 
 def translate_gallery(data):
+    ''' Translates data where data["Type"]=="Gallery" '''
     return ""
 
 
 def translate_image(data):
+    ''' Translates data where data["Type"]=="Image" '''
     return ""
 
 
 def translate_file_diff(data):
+    ''' Translates data where data["Type"]=="Diff" '''
     diff = '\\FloatBarrier \section{Configuration}'
     sections = data.get('Data')
     for title, config in sections.items():
@@ -222,6 +230,7 @@ def translate_file_diff(data):
 
 
 def translate_error(data):
+    ''' Translates data where data["Type"]=="Error" '''
     return ""
 
 
