@@ -48,7 +48,8 @@ _global_ (data)
    
        
    
-       Draw the navigation sidebar
+       Draws the navigation sidebar by looking at the index.json data and appends the
+       list of resultant pages to the nav div.
    
        
    
@@ -68,117 +69,14 @@ _global_ (data)
    
    
    
-   .. js:function:: drawIndex()
+   .. js:function:: drawContent()
    
        
    
        
    
-       Generatees the summary content page
-   
-       
-   
-   
-     
-   
-     
-   
-     
-   
-     
-   
-     
-   
-     
-   
-   
-   
-   
-   .. js:function:: drawVerification()
-   
-       
-   
-       
-   
-       Generates the verification content page
-   
-       
-   
-   
-     
-   
-     
-   
-     
-   
-     
-   
-     
-   
-     
-   
-   
-   
-   
-   .. js:function:: drawValidation()
-   
-       
-   
-       
-   
-       Generates the validation content page
-   
-       
-   
-   
-     
-   
-     
-   
-     
-   
-     
-   
-     
-   
-     
-   
-   
-   
-   
-   .. js:function:: drawPerformance()
-   
-       
-   
-       
-   
-       Generates the performance content page
-   
-       
-   
-   
-     
-   
-     
-   
-     
-   
-     
-   
-     
-   
-     
-   
-   
-   
-   
-   .. js:function:: drawNumerics()
-   
-       
-   
-       
-   
-       Generates the numerics content page
+       Draws content to the page by looking at the name of the page and loading the
+       appropriate dataset.
    
        
    
@@ -204,21 +102,22 @@ _global_ (data)
    
        
        
-       :param  data:
+       :param Object data:
    
-         
-   
-         
-       
-       :param  div:
-   
-         
+         - The data representing the summary.  Determined by data["Type"] = "Summary"
    
          
        
+       :param string div:
+   
+         - The name of the div to draw to.  Should be referenced as a string that
+         determines whether it is a class or id (ie include # or .)
+   
+         
+       
        
    
-       Build a table
+       Build a summary and adds it to the div.
    
        
    
@@ -244,21 +143,22 @@ _global_ (data)
    
        
        
-       :param  data:
+       :param Object data:
    
-         
-   
-         
-       
-       :param  div:
-   
-         
+         - The error element data.  Determined by having data["Type"] = "Error"
    
          
        
+       :param string div:
+   
+         - The name of the div to draw to.  Should be referenced as a string that
+         determines whether it is a class or id (ie include # or .)
+   
+         
+       
        
    
-       Build an error message
+       Build an error message and appends it to the div.
    
        
    
@@ -284,21 +184,22 @@ _global_ (data)
    
        
        
-       :param  data:
+       :param Object data:
    
-         
-   
-         
-       
-       :param  div:
-   
-         
+         - The data representing the table.  Determined by data["Type"] = "Diff"
    
          
        
+       :param string div:
+   
+         - The name of the div to draw to.  Should be referenced as a string that
+         determines whether it is a class or id (ie include # or .)
+   
+         
+       
        
    
-       Build a diff
+       Build a file diff
    
        
    
@@ -324,15 +225,17 @@ _global_ (data)
    
        
        
-       :param  data:
+       :param Object data:
    
-         
+         - The data representing the table.  Determined by
+         data["Type"] = "Bit for Bit"
    
          
        
-       :param  div:
+       :param string div:
    
-         
+         - The name of the div to draw to.  Should be referenced as a string that
+         determines whether it is a class or id (ie include # or .)
    
          
        
@@ -364,15 +267,16 @@ _global_ (data)
    
        
        
-       :param  data:
+       :param Object data:
    
-         
+         - The data representing the table.  Determined by data["Type"] = "Table"
    
          
        
-       :param  div:
+       :param string div:
    
-         
+         - The name of the div to draw to.  Should be referenced as a string that
+         determines whether it is a class or id (ie include # or .)
    
          
        
@@ -404,15 +308,16 @@ _global_ (data)
    
        
        
-       :param  data:
+       :param Object data:
    
-         
+         - The data representing the table.  Determined by data["Type"] = "Gallery"
    
          
        
-       :param  div:
+       :param string div:
    
-         
+         - The name of the div to draw to.  Should be referenced as a string that
+         determines whether it is a class or id (ie include # or .)
    
          
        
@@ -438,6 +343,94 @@ _global_ (data)
    
    
    
+   .. js:function:: drawImage(data, div)
+   
+       
+   
+       
+       
+       :param Object data:
+   
+         - The data representing the table.  Determined by data["Type"] = "Image"
+   
+         
+       
+       :param string div:
+   
+         - The name of the div to draw to.  Should be referenced as a string that
+         determines whether it is a class or id (ie include # or .)
+   
+         
+       
+       
+   
+       Draw an image
+   
+       
+   
+   
+     
+   
+     
+   
+     
+   
+     
+   
+     
+   
+     
+   
+   
+   
+   
+   .. js:function:: drawThumbnail(path, size)
+   
+       
+   
+       
+       
+       :param string path:
+   
+         - The location of the image to thumbnail-ize
+   
+         
+       
+       :param number size:
+   
+         - The desired height to draw
+   
+         
+       
+       
+   
+       Draw an image thumbnail with a link to open in a new tab
+   
+       
+   
+   
+     
+   
+     
+   
+     
+   
+     
+       
+       :returns:
+         the html to embed into another element
+   
+       
+       
+     
+   
+     
+   
+     
+   
+   
+   
+   
    .. js:function:: loadJSON(path)
    
        
@@ -453,40 +446,6 @@ _global_ (data)
        
    
        Load a json file into a variable
-   
-       
-   
-   
-     
-   
-     
-   
-     
-   
-     
-   
-     
-   
-     
-   
-   
-   
-   
-   .. js:function:: getElements(json)
-   
-       
-   
-       
-       
-       :param  json:
-   
-         
-   
-         
-       
-       
-   
-       Recursively go through json data and search for the "Elements" list
    
        
    

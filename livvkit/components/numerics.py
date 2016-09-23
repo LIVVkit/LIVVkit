@@ -1,4 +1,4 @@
-# Copyright (c) 2015, UT-BATTELLE, LLC
+# Copyright (c) 2015,2016, UT-BATTELLE, LLC
 # All rights reserved.
 # 
 # Redistribution and use in source and binary forms, with or without
@@ -39,6 +39,7 @@ from livvkit.util import elements
 def _run_suite(case, config, summary):
     """ Run the full suite of numerics tests """
     m = importlib.import_module(config['module'])
+    m.set_up()
     config["name"] = case
     analysis_data = {}
     bundle = livvkit.numerics_model_module

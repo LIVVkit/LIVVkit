@@ -18,16 +18,16 @@ Model V&V
 Numerical models are typically used by scientists to make predictions
 about the physical world. V&V of a numerical model consists of:
 
--  **Numerical verification** -- the process of comparing the
+-  **Numerical verification** the process of comparing the
    *approximate numerical* prediction against an *analytical*
    prediction, or in the case of a sufficiently complex problem, against
    highly accurate *community benchmark* solutions. This is inherently a
-   **math** problem\ :sup:`1,2 <VV#references>`__ that is represented by the
+   **math** problem [#Roache1998]_ [#Oberkampf2010]_ that is represented by the
    question, "Are we solving the equations correctly?"
 
 -  **Physical validation** -- the process of comparing the *numerical*
    predictions against *natural* phenomena. This is inherently a
-   **physics** problem\ :sup:`1,2 <VV#references>`__ that is represented by
+   **physics** problem [#Roache1998]_ [#Oberkampf2010]_ that is represented by
    the question, "Are we using the right physics?"
 
 Software V&V
@@ -40,12 +40,12 @@ piece of software consists of:
 -  **Code verification** -- the process of determining the software's
    implementation, and it's associated data, accurately represent the
    developers' specifications. This is inherently an **engineering**
-   problem\ :sup:`2 <VV#references>`__ that is represented by the question,
+   problem [#Oberkampf2010]_ that is represented by the question,
    "did we build what *we* wanted?"
 
 -  **Performance validation** -- the process of determining how *well*
    the software is able to be used for its intended task. This is
-   inherently an **design** problem\ :sup:`2 <VV#references>`__ that is
+   inherently an **design** problem [#Oberkampf2010]_ that is
    represented by the question, "did we build what the *users* wanted?"
 
 Scientific model V&V
@@ -63,8 +63,8 @@ code-base.
 References
 ----------
 
-[1] Roache., P.J. (1998). Verification and Validation in Computational
-Science and Engineering. Hermosa Publishers, Albuquerque, New Mexico.
+.. [#Roache1998] Roache., P.J. (1998). Verification and Validation in Computational \
+   Science and Engineering. Hermosa Publishers, Albuquerque, New Mexico.
 
-[2] Oberkampf, W. L., & Roy, C. J. (2010). Verification and Validation
-in Scientific Computing. Cambridge University Press.
+.. [#Oberkampf2010] Oberkampf, W. L., & Roy, C. J. (2010). Verification and Validation
+   in Scientific Computing. Cambridge University Press.

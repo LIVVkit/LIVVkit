@@ -1,5 +1,5 @@
-#!/usr/bin/env bash
-# Copyright (c) 2015, UT-BATTELLE, LLC
+#!/usr/bin/env python3
+# Copyright (c) 2015,2016, UT-BATTELLE, LLC
 # All rights reserved.
 # 
 # Redistribution and use in source and binary forms, with or without
@@ -27,18 +27,29 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-LIVV="../"
-CURRENT="Copyright (c)"
 
-########################################################
-# Display all files that are missing the license header.
-########################################################
-find $LIVV -type f -not -path "*.git*" \
-    -not -path "*configurations/*" \
-    -not -path "*util/data_*" \
-    -not -path "*verification/ver_utils/data_*" \
-    -not -iname "*.png" \
-    -not -iname "*.jpg" \
-    -not -iname "*.svg" \
-    -not -iname "*.md" \
-    | xargs grep -L "$CURRENT"
+
+import os
+import sys
+import glob
+
+import livvkit
+from livvkit.util import TexHelper as th
+from livvkit.util import functions
+
+datadir = sys.argv[1] 
+outdir = sys.argv[2]
+functions.mkdir_p(outdir)
+
+data_files = glob.glob(datadir + "/**/*.json", recursive=True)
+data_files = [datadir + '/verification/dome.json']
+#data_files = [datadir + '/index.json']
+
+
+for each in data_files:
+    data = functions.read_json(each)
+    tex = th.translate_page(data)
+    outfile = os.path.join(outdir, os.path.basename(each).replace('json', 'tex'))
+    with open(outfile, 'w') as f:
+        f.write(tex)
+

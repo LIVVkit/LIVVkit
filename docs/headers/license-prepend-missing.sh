@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Copyright (c) 2015, UT-BATTELLE, LLC
+# Copyright (c) 2015,2016, UT-BATTELLE, LLC
 # All rights reserved.
 # 
 # Redistribution and use in source and binary forms, with or without
@@ -27,14 +27,38 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-LIVV="../"
+LIVV="../.."
 CURRENT="Copyright (c)"
 
-############################################################
-# Prepend license header to python files without a shebang. 
-# Will ignore files with a current liscense header. 
-############################################################
-for SRC in $(find $LIVV -iname '*.py' | xargs grep -L "#!" | xargs grep -L "$CURRENT")
+ALWAYS_IGNORE=(-not -path "*.git*" -not -path "*docs/*" -not -iname "setup_*" -not -iname "MANIFEST.in")
+FILE_IGNORE=(-not -iname "*.md" -not -iname "*.json" -not -iname "*.txt" \
+             -not -iname "*.png" -not -iname "*.jpg" -not -iname "*.svg" )
+PYTHON_IGNORE=(-not -iname "__init__.py" -not -iname "colormaps.py") 
+CSS_IGNORE=(-not -iname "jquery-ui.min.css")
+
+echo "--------------------------------------------------------------------------------"
+echo "    PREPENDING A LICENSE HEADER ONTO THESE FILES:"
+echo "--------------------------------------------------------------------------------"
+find $LIVV -type f "${ALWAYS_IGNORE[@]}" \
+    "${FILE_IGNORE[@]}" \
+    "${PYTHON_IGNORE[@]}" \
+    "${CSS_IGNORE[@]}" \
+    | xargs grep -L "$CURRENT" \
+    | sort
+
+echo "--------------------------------------------------------------------------------"
+echo "    BEGIN PREPENDING:"
+echo "--------------------------------------------------------------------------------"
+#############################################################
+## Prepend license header to python files without a shebang. 
+## Will ignore files with a current license header. 
+#############################################################
+GET=( -iname "*.py" )
+
+find $LIVV -type f \( "${GET[@]}" \) "${ALWAYS_IGNORE[@]}" "${PYTHON_IGNORE[@]}" \
+    | xargs grep -L "#!" \
+    | xargs grep -L "$CURRENT" \
+    | while read SRC 
 do
     BN=`basename ${SRC}`
     echo HEADING ${SRC}
@@ -45,9 +69,14 @@ done
 
 #######################################################################
 # Prepend license header to python, bash, and sh files with a shebang. 
-# Will ignore files with a current liscense header. 
+# Will ignore files with a current license header. 
 #######################################################################
-for SRC in $(find $LIVV -iname '*.py' -or -iname '*.sh' -or -iname '*.bash' | xargs grep -l "#!" | xargs grep -L "$CURRENT")
+GET=( -iname "*.py" -or -iname "*.sh" -or -iname "*.bash" )
+
+find $LIVV -type f \( "${GET[@]}" \) "${ALWAYS_IGNORE[@]}" "${PYTHON_IGNORE[@]}" \
+    | xargs grep -l "#!" \
+    | xargs grep -L "$CURRENT" \
+    | while read SRC 
 do
     BN=`basename ${SRC}`
     echo HEADING ${SRC}
@@ -60,9 +89,13 @@ done
 
 ####################################################
 # Prepend license header to html files. 
-# Will ignore files with a current liscense header. 
+# Will ignore files with a current license header. 
 ####################################################
-for SRC in $(find $LIVV -name '*.html' | xargs grep -L "$CURRENT")
+GET=( -iname "*.html")
+
+find $LIVV -type f \( "${GET[@]}" \) "${ALWAYS_IGNORE[@]}" \
+    | xargs grep -L "$CURRENT" \
+    | while read SRC 
 do
     BN=`basename ${SRC}`
     echo HEADING ${SRC}
@@ -72,10 +105,14 @@ do
 done
 
 ####################################################
-# Prepend license header to css files. 
-# Will ignore files with a current liscense header. 
+# Prepend license header to css and js files. 
+# Will ignore files with a current license header. 
 ####################################################
-for SRC in $(find $LIVV -name '*.css' | xargs grep -L "$CURRENT")
+GET=( -iname "*.css" -or -iname "*.js" )
+
+find $LIVV -type f \( "${GET[@]}" \) "${ALWAYS_IGNORE[@]}" "${CSS_IGNORE[@]}" \
+    | xargs grep -L "$CURRENT" \
+    | while read SRC 
 do
     BN=`basename ${SRC}`
     echo HEADING ${SRC}
@@ -86,9 +123,13 @@ done
 
 ####################################################
 # Prepend license header to css files. 
-# Will ignore files with a current liscense header. 
+# Will ignore files with a current license header. 
 ####################################################
-for SRC in $(find $LIVV -name '*.ncl' | xargs grep -L "$CURRENT")
+GET=( -iname "*.ncl" )
+
+find $LIVV -type f \( "${GET[@]}" \) "${ALWAYS_IGNORE[@]}" \
+    | xargs grep -L "$CURRENT" \
+    | while read SRC 
 do
     BN=`basename ${SRC}`
     echo HEADING ${SRC}
@@ -96,4 +137,9 @@ do
     cat ${SRC} >> /tmp/licHead
     mv /tmp/licHead ${SRC}
 done
+
+
+echo "--------------------------------------------------------------------------------"
+echo "    DONE PREPENDING!"
+echo "--------------------------------------------------------------------------------"
 
