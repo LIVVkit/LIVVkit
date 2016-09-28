@@ -61,6 +61,7 @@ def main():
     from livvkit import scheduler
     from livvkit.util import functions
     from livvkit.util import elements
+    from livvkit.util.TexHelper import TexHelper
     functions.setup_output()
     l = []
     if livvkit.verify:
@@ -80,6 +81,8 @@ def main():
    
     result = elements.page("Summary", "", element_list=l)
     functions.write_json(result, livvkit.output_dir, "index.json")
+    if livvkit.make_tex:
+        TexHelper().write_tex()
     print("-------------------------------------------------------------------")
     print(" Done!  Results can be seen in a web browser at:")
     print("        " +  livvkit.output_dir )

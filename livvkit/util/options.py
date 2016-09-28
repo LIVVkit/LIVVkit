@@ -65,7 +65,11 @@ def parse(args):
             nargs='+',            
             default=None,
             help='Specify the location of the configuration files for validation tests.')
-   
+
+    parser.add_argument('-t', '--make-tex',
+            action='store_true',
+            help='Generate Latex output alongside web output.')
+
     return parser.parse_args()
 
 
@@ -80,6 +84,7 @@ def init(options):
     livvkit.output_dir     = os.path.abspath(options.out_dir)
     livvkit.img_dir        = livvkit.output_dir + "/imgs"
     livvkit.index_dir      = livvkit.output_dir
+    livvkit.make_tex       = options.make_tex
     livvkit.verify = True if options.verify is not None else False
     livvkit.validate = True if options.validate is not None else False
     livvkit.model_dir = ""
