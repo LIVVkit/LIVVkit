@@ -40,7 +40,7 @@ import livvkit
 from livvkit import bundles
 from livvkit import resources
 
-def parse(args):
+def parse_args(args=None):
     """
     Handles the parsing of options for LIVV's command line interface
     
