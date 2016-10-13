@@ -119,7 +119,10 @@ class RotatedGrid:
         self.uvel_stag = data.variables['uvel'][-1,0,:,:]
         self.vvel_stag = data.variables['uvel'][-1,0,:,:]
 
-        self.wvel_ustag = data.variables['wvel_ho'][-1,0,:,:]
+        try:
+            self.wvel_ustag = data.variables['wvel_ho'][-1,0,:,:]
+        except:
+            self.wvel_ustag = data.variables['wvel'][-1,0,:,:]
         self.wvel_stag = (self.wvel_ustag[1: ,1: ] + self.wvel_ustag[1: ,:-1] 
                         + self.wvel_ustag[:-1,:-1] + self.wvel_ustag[:-1,1: ]) / 4.0
 
