@@ -1,5 +1,5 @@
 /*
-/ Copyright (c) 2015, UT-BATTELLE, LLC
+/ Copyright (c) 2015,2016, UT-BATTELLE, LLC
 / All rights reserved.
 / 
 / Redistribution and use in source and binary forms, with or without
@@ -35,12 +35,7 @@
 html {
 	font-family: 'Lato', helvetica, sans-serif;
 	height: 100%;
-    background: url(../imgs/temp.jpg) no-repeat center center fixed;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-    background-color: #5983AC;
+    font-size: 1.5em;
 }
 
 body {
@@ -49,193 +44,188 @@ body {
 	margin-right: 0px;
 	margin-bottom: 0px;
 	margin-left: 0px;
+    min-width: 1125px;
 }
 
 h1, h2, h3, h4 {
 	font-family: 'Lato', helvetica, sans-serif;
 }
 
-table, ul {
-	margin-top: 10px;
-	border-bottom: 1px solid #47A3FF;
-    border-collapse: collapse;
-    width: 100%;
-}
-
-img { 
-	max-width: 100%;
-	height: auto;
-	width: auto\9;
-}
-
-th, td {
-    text-align: center;
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-bottom: 5px;
-}
-
-th {
-    font-family: helvetica, sans-serif;	
-	color: #FFFFFF;
-	background-color: #47A3FF;
-	padding-top: 5px;
-}
-
 hr {
-	width: 98%;
-	border:0;
-	margin-top: 0px;
-	color: #EEEEEE;
-	background-color: #EEEEEE;
-	height:1px;
+    color: #222222;
 }
 
-
-/******************************************************************************
-  LIVV Global Styling
-******************************************************************************/
-#page {
-    background-color: rgba(255,255,255,1);
-    margin-left: auto;
-    margin-right: auto;
-    width: 70%;
-    min-width: 800px;
-	margin-top: 0;
-	padding-bottom: 15px;
-    border-top: 3px;
-    border-left: 0;
-    border-right: 0;
-    border-bottom: 0;
-    border-style: solid;
-    border-color: #47A3FF;
+a {
+    text-decoration: none;
+    color: #007acc;
 }
-
-#page:after {
-	content: "";
-	display: block;
-}
-
-#fancy {
-    font-size: medium;
-    text-align: center;
-}
-
-.tabbed {
-    margin-left: 50px;
-}
-
-.SUCCESS {
-    color: green;
-    font-weight: 600;
-}
-
-.FAILURE {
-    color: red;
-    font-weight: 600;
-}
-
-.SKIPPED {
-    color: orange;
-    font-weight: 600;
-}
-
-.label-header {
-    font-family: helvetica, sans-serif;
-    background-color: #696969; 
-    color: #fff;
-    display:inline-block; 
-    padding:5px 20px;
-    margin-bottom: 0px;
-}
-
-.separator {
-    border-top:solid 2px #696969; 
-    padding: 15px;
-}
-
-.description {
-	margin-left: 30px;
-	width: 80%;
-}
-
 
 /******************************************************************************
   Header/Footer Styling
 ******************************************************************************/
 #header {
-    height: 40px;
-	background-color: #111111;
-	color: white;
-    width: 70%;
     min-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
+	background-color: #222222;
+    border-bottom: 1px solid #222222;
+    font-size: 1.5em;
+    font-weight: 500;
+}
+
+#header:after {
+  content: "";
+  display: table;
+  clear: both;
 }
 
 #header-spacer {
-	width: 96%;
-	min-width: 800px;
-	margin-left: auto;
-	margin-right: auto;
 }
 
-#header-content {
-	color: white;
-	position: absolute;
-    height: 0.85em;
-   	line-height: 0.85em;
+#header a{
+    text-decoration: none;
+}
+
+#header-icon {
+    float: left; 
+    padding: 10px; 
+    padding-left: 15px;
+    width: 40px; 
+}
+
+#header-home {
+	float: left;
+    color: #66c2ff;
+    height: 1.25em;
+   	line-height: 1.25em;
    	margin-top: 15px;
+    text-align: left;
+    width: 15%;
 }
 
-#wiki-content {
-	color: white;
-	float: right;
-	height: 0.85em;
-	line-height: 0.85em;
+#header-title {
+	float: left;
+    color: #66c2ff;
+	height: 1.25em;
+	line-height: 1.25em;
 	margin-top: 15px;
-    padding-right: 10px;
-}
-
-#info {
-	padding-left: 10px;
-}
-
-#content {
-
-}
-
-#footer {
-    width: 70%;
-    min-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
-    height: auto;
-    border-top: 3px;
-    border-left: 0;
-    border-right: 0;
-    border-bottom: 0;
-    border-style: solid;
-    border-color: #47A3FF;
-    color: #FFFFFF;
-    background-color: #111111;
-    padding-bottom: 15px;
-}
-
-#footer h2 {
-	color: white;
-    margin: 0;
     text-align: center;
+    width: 50%;
 }
 
-#footer a {
-	color: white;
+#header-docs {
+	float: left;
+    color: #66c2ff;
+	height: 1.25em;
+	line-height: 1.25em;
+	margin-top: 15px;
+    padding-right: 15px;
+    text-align: right;
+    width: 25%;
+}
+
+#wrapper {
+    margin: auto;
+    width: 80%;
+    background: url("../imgs/temp.jpg") no-repeat center center fixed;
 }
 
 #nav {
-    width: calc(100% + 10px);
-    height: 3em;
+    width: 19%;
     float: left;
-    transform: translate(-5px,-5px);
-    background-color: #47A3FF;
+    padding: 20px;
 }
+
+#content {
+    padding: 10px;
+    width: 71%;
+    float: left;
+}
+
+#content div {
+    background-color: white;
+}
+
+/******************************************************************************
+  TableStyling
+******************************************************************************/
+table {
+    width: 100%;
+    border: 2px solid #66c2ff;
+    border-spacing: 0;
+}
+
+th {
+   background-color: #66c2ff;
+   color: #ffffff;
+   padding: 10px;
+}
+
+td {
+    padding: 2px;
+    text-align: center;
+}
+
+.testName td {
+    font-weight: 600;
+    text-align: left;
+}
+
+.testCase {
+    text-align: right;
+}
+
+/******************************************************************************
+  Element Styling 
+******************************************************************************/
+.error {}
+
+.error p {
+    color: red;
+}
+
+.tabs {
+    background: transparent;
+}
+
+.diff {
+    border: 2px solid #66c2ff;
+    padding: 4px;
+}
+
+.diff p {
+    line-height: 1.05em;
+    margin: 0px;
+    padding-left:10%;
+    font-family: monospace;
+}
+
+.diff p.old {
+    background-color: #ffcccc;
+}
+
+.diff p.new {
+    background-color: #ccffcc;
+}
+
+.bitForBit {}
+
+.table {}
+
+.gallery {}
+
+.gallery p {
+    text-align: center;
+    padding: none;
+    margin: none;
+}
+
+.gallery div {
+    float: left;
+    margin: 10px;
+    display: inline;
+}
+
+.gallery img {
+    border: 1px solid #66c2ff;
+}
+
+.summary {}

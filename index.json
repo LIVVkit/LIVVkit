@@ -1,0 +1,234 @@
+{
+    "Data": {
+        "Elements": [
+            {
+                "Data": {
+                    "ismip-hom-c": {
+                        "s0-p1-z80 Velocity": {
+                            "Bench mean % error": "9.10%",
+                            "Test mean % error": "9.10%",
+                            "Coefficient of variation": "6.54%"
+                        },
+                        "s0-p1-z20 Velocity": {
+                            "Bench mean % error": "3.03%",
+                            "Test mean % error": "3.03%",
+                            "Coefficient of variation": "5.71%"
+                        }
+                    },
+                    "ismip-hom-a": {
+                        "s0-p1-z80 Velocity": {
+                            "Bench mean % error": "4.15%",
+                            "Test mean % error": "4.15%",
+                            "Coefficient of variation": "4.39%"
+                        },
+                        "s0-p1-z20 Velocity": {
+                            "Bench mean % error": "-0.23%",
+                            "Test mean % error": "-0.23%",
+                            "Coefficient of variation": "6.23%"
+                        }
+                    },
+                    "ismip-hom-f": {
+                        "s0-p1-z0 Velocity": {
+                            "Bench mean % error": "-0.42%",
+                            "Test mean % error": "-0.42%",
+                            "Coefficient of variation": "2.64%"
+                        },
+                        "s0-p1-z0 Surface": {
+                            "Bench mean % error": "-0.06%",
+                            "Test mean % error": "-0.06%",
+                            "Coefficient of variation": "0.17%"
+                        }
+                    }
+                },
+                "Type": "Summary",
+                "Headers": [
+                    "Bench mean % error",
+                    "Test mean % error",
+                    "Coefficient of variation"
+                ],
+                "Title": "Numerics"
+            },
+            {
+                "Data": {
+                    "ismip-hom-c": {
+                        "s0": {
+                            "Std. Out Files": 2,
+                            "Configurations": [
+                                2,
+                                2
+                            ],
+                            "Bit for Bit": [
+                                0,
+                                2
+                            ]
+                        }
+                    },
+                    "ismip-hom-a": {
+                        "s0": {
+                            "Std. Out Files": 2,
+                            "Configurations": [
+                                2,
+                                2
+                            ],
+                            "Bit for Bit": [
+                                0,
+                                2
+                            ]
+                        }
+                    },
+                    "shelf-circular": {
+                        "s0": {
+                            "Std. Out Files": 1,
+                            "Configurations": [
+                                1,
+                                1
+                            ],
+                            "Bit for Bit": [
+                                1,
+                                1
+                            ]
+                        }
+                    },
+                    "shelf-confined": {
+                        "s0": {
+                            "Std. Out Files": 1,
+                            "Configurations": [
+                                1,
+                                1
+                            ],
+                            "Bit for Bit": [
+                                1,
+                                1
+                            ]
+                        }
+                    },
+                    "dome": {
+                        "s2": {
+                            "Std. Out Files": 3,
+                            "Configurations": [
+                                3,
+                                3
+                            ],
+                            "Bit for Bit": [
+                                0,
+                                3
+                            ]
+                        },
+                        "s0": {
+                            "Std. Out Files": 4,
+                            "Configurations": [
+                                4,
+                                4
+                            ],
+                            "Bit for Bit": [
+                                0,
+                                4
+                            ]
+                        },
+                        "s1": {
+                            "Std. Out Files": 2,
+                            "Configurations": [
+                                2,
+                                2
+                            ],
+                            "Bit for Bit": [
+                                0,
+                                2
+                            ]
+                        },
+                        "s3": {
+                            "Std. Out Files": 2,
+                            "Configurations": [
+                                2,
+                                2
+                            ],
+                            "Bit for Bit": [
+                                0,
+                                2
+                            ]
+                        },
+                        "s4": {
+                            "Std. Out Files": 1,
+                            "Configurations": [
+                                1,
+                                1
+                            ],
+                            "Bit for Bit": [
+                                0,
+                                1
+                            ]
+                        }
+                    },
+                    "stream": {
+                        "s0": {
+                            "Std. Out Files": 1,
+                            "Configurations": [
+                                1,
+                                1
+                            ],
+                            "Bit for Bit": [
+                                0,
+                                1
+                            ]
+                        }
+                    },
+                    "ismip-hom-f": {
+                        "s0": {
+                            "Std. Out Files": 1,
+                            "Configurations": [
+                                1,
+                                1
+                            ],
+                            "Bit for Bit": [
+                                0,
+                                1
+                            ]
+                        }
+                    }
+                },
+                "Type": "Summary",
+                "Headers": [
+                    "Bit for Bit",
+                    "Configurations",
+                    "Std. Out Files"
+                ],
+                "Title": "Verification"
+            },
+            {
+                "Data": {
+                    "dome": {
+                        "s1": {
+                            "Mean Time Diff (% of benchmark)": 1.0284273808380955,
+                            "Proc. Counts": "1, 4"
+                        },
+                        "s0": {
+                            "Mean Time Diff (% of benchmark)": 1.0309685603814234,
+                            "Proc. Counts": "1, 2, 4, 8"
+                        },
+                        "s2": {
+                            "Mean Time Diff (% of benchmark)": 1.0092366631027283,
+                            "Proc. Counts": "1, 16, 256"
+                        },
+                        "s3": {
+                            "Mean Time Diff (% of benchmark)": 1.0107292049253125,
+                            "Proc. Counts": "64, 256"
+                        },
+                        "s4": {
+                            "Mean Time Diff (% of benchmark)": 1.0076891276264142,
+                            "Proc. Counts": "256"
+                        }
+                    }
+                },
+                "Type": "Summary",
+                "Headers": [
+                    "Proc. Counts",
+                    "Mean Time Diff (% of benchmark)"
+                ],
+                "Title": "Performance"
+            }
+        ]
+    },
+    "Type": "Page",
+    "Description": "",
+    "Title": "Summary"
+}

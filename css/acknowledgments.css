@@ -1,5 +1,5 @@
 /*
-/ Copyright (c) 2015, UT-BATTELLE, LLC
+/ Copyright (c) 2015,2016, UT-BATTELLE, LLC
 / All rights reserved.
 / 
 / Redistribution and use in source and binary forms, with or without
@@ -30,22 +30,16 @@
 
 
 #acknowledgments {
-    width: 70%;
+    clear: both;
+    width: 90%;
     min-width: 800px;
     padding: 1em 0px 0.5em 0px;
-    border-top: 3px;
-    border-left: 0;
-    border-right: 0;
-    border-bottom: 0;
-    border-bottom-right-radius: 5px;
-    border-bottom-left-radius: 5px;
+    border: 0px solid white; 
     margin-left: auto;
     margin-right: auto;
     margin-bottom: 15px;
     text-align: justify;
     border-style: solid;
-    border-color: #47A3FF;
-    background-color: #FFFFFF;
     color: #111111;
 }
 
@@ -53,11 +47,6 @@
 	color: #3385FF;
     text-decoration: none;
 }
-
-.tableLink:hover {
-	color: #47A3FF;
-}
-
 
 #acklogo {
     width: 98%;
@@ -80,8 +69,6 @@
 #acklogo a {
     vertical-align: top;
     display: inline-block;
-    *display: inline;
-    zoom: 1;
 }
     
 #logoORNL {

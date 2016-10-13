@@ -1,0 +1,228 @@
+{
+    "Data": {
+        "Tabs": [
+            {
+                "Type": "Tab",
+                "Sections": [
+                    {
+                        "Elements": [
+                            {
+                                "Data": {
+                                    "thk": {
+                                        "Plot": "imgs/ismip-hom-f.0000.p001.out.nc_thk.png",
+                                        "Max Error": 1.7053025658242404e-12,
+                                        "RMS Error": 3.15992662589235e-13,
+                                        "Index of Max Error": "(10, 19, 3)"
+                                    },
+                                    "velnorm": {
+                                        "Plot": "imgs/ismip-hom-f.0000.p001.out.nc_velnorm.png",
+                                        "Max Error": 1.4637180356658064e-12,
+                                        "RMS Error": 2.0720800667918622e-13,
+                                        "Index of Max Error": "(9, 0, 29, 3)"
+                                    }
+                                },
+                                "Type": "Bit for Bit",
+                                "Headers": [
+                                    "Max Error",
+                                    "Index of Max Error",
+                                    "RMS Error",
+                                    "Plot"
+                                ],
+                                "Title": "Bit for Bit"
+                            },
+                            {
+                                "Data": {
+                                    "options": {
+                                        "evolution": [
+                                            true,
+                                            "3",
+                                            "3"
+                                        ],
+                                        "flow_law": [
+                                            true,
+                                            "0",
+                                            "0"
+                                        ],
+                                        "temperature": [
+                                            true,
+                                            "0",
+                                            "0"
+                                        ],
+                                        "dycore": [
+                                            true,
+                                            "2",
+                                            "2"
+                                        ]
+                                    },
+                                    "CF input": {
+                                        "time": [
+                                            true,
+                                            "1",
+                                            "1"
+                                        ],
+                                        "name": [
+                                            true,
+                                            "ismip-hom-f.0000.p001.nc",
+                                            "ismip-hom-f.0000.p001.nc"
+                                        ]
+                                    },
+                                    "parameters": {
+                                        "periodic_offset_ew": [
+                                            true,
+                                            "5240.7779283",
+                                            "5240.7779283"
+                                        ]
+                                    },
+                                    "ho_options": {
+                                        "which_ho_assemble_beta": [
+                                            true,
+                                            "1",
+                                            "1"
+                                        ],
+                                        "which_ho_nonlinear": [
+                                            true,
+                                            "0",
+                                            "0"
+                                        ],
+                                        "which_ho_efvs": [
+                                            true,
+                                            "0",
+                                            "0"
+                                        ],
+                                        "which_ho_babc": [
+                                            true,
+                                            "4",
+                                            "4"
+                                        ],
+                                        "which_ho_sparse": [
+                                            true,
+                                            "3",
+                                            "3"
+                                        ]
+                                    },
+                                    "CF default": {
+                                        "title": [
+                                            true,
+                                            "ISMIP-HOM Experiment F",
+                                            "ISMIP-HOM Experiment F"
+                                        ],
+                                        "comment": [
+                                            true,
+                                            "generated by runISMIPHOM.py",
+                                            "generated by runISMIPHOM.py"
+                                        ]
+                                    },
+                                    "CF output": {
+                                        "variables": [
+                                            true,
+                                            "uvel vvel uvel_extend vvel_extend uvel_icegrid vvel_icegrid topg thk usurf wvel_ho velnorm efvs adv_cfl_dt diff_cfl_dt",
+                                            "uvel vvel uvel_extend vvel_extend uvel_icegrid vvel_icegrid topg thk usurf wvel_ho velnorm efvs adv_cfl_dt diff_cfl_dt"
+                                        ],
+                                        "frequency": [
+                                            true,
+                                            "25.0",
+                                            "25.0"
+                                        ],
+                                        "xtype": [
+                                            true,
+                                            "double",
+                                            "double"
+                                        ],
+                                        "name": [
+                                            true,
+                                            "ismip-hom-f.0000.p001.out.nc",
+                                            "ismip-hom-f.0000.p001.out.nc"
+                                        ]
+                                    },
+                                    "grid": {
+                                        "upn": [
+                                            true,
+                                            "11",
+                                            "11"
+                                        ],
+                                        "dew": [
+                                            true,
+                                            "2500.0",
+                                            "2500.0"
+                                        ],
+                                        "nsn": [
+                                            true,
+                                            "40",
+                                            "40"
+                                        ],
+                                        "ewn": [
+                                            true,
+                                            "40",
+                                            "40"
+                                        ],
+                                        "dns": [
+                                            true,
+                                            "2500.0",
+                                            "2500.0"
+                                        ]
+                                    },
+                                    "time": {
+                                        "dt_diag": [
+                                            true,
+                                            "1.",
+                                            "1."
+                                        ],
+                                        "dt": [
+                                            true,
+                                            "2.2",
+                                            "2.2"
+                                        ],
+                                        "tend": [
+                                            true,
+                                            "400.0",
+                                            "400.0"
+                                        ],
+                                        "idiag": [
+                                            true,
+                                            "10",
+                                            "10"
+                                        ],
+                                        "tstart": [
+                                            true,
+                                            "0.",
+                                            "0."
+                                        ],
+                                        "jdiag": [
+                                            true,
+                                            "10",
+                                            "10"
+                                        ]
+                                    }
+                                },
+                                "Type": "Diff",
+                                "Title": "Configuration Comparison"
+                            },
+                            {
+                                "Data": {
+                                    "Avg. Iterations to Converge": 2.2857142857142856,
+                                    "Converged Iterations": 183,
+                                    "Dycore Type": "Glissade",
+                                    "Processor Count": 1
+                                },
+                                "Type": "Table",
+                                "Headers": [
+                                    "Converged Iterations",
+                                    "Avg. Iterations to Converge",
+                                    "Processor Count",
+                                    "Dycore Type"
+                                ],
+                                "Title": "Output Log"
+                            }
+                        ],
+                        "Type": "Section",
+                        "Title": "p1-z0"
+                    }
+                ],
+                "Title": "s0"
+            }
+        ]
+    },
+    "Type": "Page",
+    "Description": "The Ice Sheet Model Intercomparison Project for Higher-Order Models (ISMIP-HOM) prescribes a set of experiments meant to test the implementation of higher-order physics. The results of this benchmark experiment was published in The Cryosphere and can be found <a target=_blank href=\"http://dx.doi.org/10.5194/tc-2-95-2008\">here.</a> <br> <br>Experiment F (shown here), is a prognostic experiment for which the free surface is allowed to relax until a steady state is reached (for zero surface mass balance). For this experiment, A slab of ice with mean thickness H = 1000 m is resting on a sloping bed with a mean slope of  &#945; = 3.0 &deg; (maximum in x, zero in y). The bedrock plane is parallel to the surface plane and is perturbed by a Gaussian bump, where &#963; = 10 H, the perturbation has a maximum height of H/10, and the domain size L is taken to be 100 H in x and y. Periodic boundary conditions are applied in the horizontal. Experiments shown below are carried out for a beds with no slip.",
+    "Title": "ismip-hom-f"
+}

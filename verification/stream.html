@@ -1,627 +1,95 @@
 <!--
- - Copyright (c) 2015, UT-BATTELLE, LLC
- - All rights reserved.
- - 
- - Redistribution and use in source and binary forms, with or without
- - modification, are permitted provided that the following conditions are met:
- - 
- - 1. Redistributions of source code must retain the above copyright notice, this
- - list of conditions and the following disclaimer.
- - 
- - 2. Redistributions in binary form must reproduce the above copyright notice,
- - this list of conditions and the following disclaimer in the documentation
- - and/or other materials provided with the distribution.
- - 
- - 3. Neither the name of the copyright holder nor the names of its contributors
- - may be used to endorse or promote products derived from this software without
- - specific prior written permission.
- - 
- - THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- - ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- - WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- - DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
- - FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- - DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- - SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- - CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
- - OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- - OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- -->
+  - Copyright (c) 2015,2016, UT-BATTELLE, LLC
+  - All rights reserved.
+  - 
+  - Redistribution and use in source and binary forms, with or without
+  - modification, are permitted provided that the following conditions are met:
+  - 
+  - 1. Redistributions of source code must retain the above copyright notice, this
+  - list of conditions and the following disclaimer.
+  - 
+  - 2. Redistributions in binary form must reproduce the above copyright notice,
+  - this list of conditions and the following disclaimer in the documentation
+  - and/or other materials provided with the distribution.
+  - 
+  - 3. Neither the name of the copyright holder nor the names of its contributors
+  - may be used to endorse or promote products derived from this software without
+  - specific prior written permission.
+  - 
+  - THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+  - ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+  - WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+  - DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+  - FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+  - DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+  - SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+  - CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+  - OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+  - OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  -->
 
 
-<!-- 
-  Template for generating test specific pages.
--->
-
-<!-- Include the header and some links -->
-<!--
- - Copyright (c) 2015, UT-BATTELLE, LLC
- - All rights reserved.
- - 
- - Redistribution and use in source and binary forms, with or without
- - modification, are permitted provided that the following conditions are met:
- - 
- - 1. Redistributions of source code must retain the above copyright notice, this
- - list of conditions and the following disclaimer.
- - 
- - 2. Redistributions in binary form must reproduce the above copyright notice,
- - this list of conditions and the following disclaimer in the documentation
- - and/or other materials provided with the distribution.
- - 
- - 3. Neither the name of the copyright holder nor the names of its contributors
- - may be used to endorse or promote products derived from this software without
- - specific prior written permission.
- - 
- - THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- - ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- - WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- - DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
- - FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- - DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- - SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- - CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
- - OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- - OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- -->
-
-
-<!DOCTYPE html>
+<!doctype html>
 <html>
+    <head>
+        <meta charset="utf-8">
+        <title>LIVV</title>
+        <link href="../css/livv.css" type="text/css" rel="stylesheet">
+        <link href="../css/acknowledgments.css" type="text/css" rel="stylesheet">
+        <link href="../css/jquery-ui.min.css" type="text/css" rel="stylesheet">
+        <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+        <link href="css/jquery-ui.min.css" rel="stylesheet" type="text/css">
+        <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+        <script
+			  src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"
+			  integrity="sha256-xNjb53/rY+WmG+4L6tTl9m6PpqknWZvRt0rO1SRnJzw="
+			  crossorigin="anonymous">
+        </script>
+        <script>    
+            var vvType = "verification";
+            var indexPath = "..";
+        </script>
+        <script src="../js/common.js"></script>
+    </head>
 
-<head>
-<link rel="stylesheet" type="text/css" href="../css/livv.css">
-<link rel="stylesheet" type="text/css" href="../css/interactive.css">
-<link rel="stylesheet" type="text/css" href="../css/popups.css">
-<link rel="stylesheet" type="text/css" href="../css/acknowledgments.css">
-<link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
-</head>
-
-<body>	
-
-
-<div id="header">
-	<div id="header-spacer">
-		<img src="../imgs/gicon.svg" style="width: 30px; float: left; padding: 5px;"/>
-		<a id="header-content" href="../index.html">
-			LIVV: Land Ice Verification & Validation
-		</a>
-		<a id="wiki-content" target="_blank" href="https://github.com/LIVVkit/LIVVkit/wiki">
-		    Documentation
-		</a>
-	</div>		
-</div>
-
-<div id="page">
-  
-  <!--   Start the pace specific content -->
-  <div id="content">
-  <h2 style="padding-left: 15px;">Stream</h2>
-  <div class="description">
-    <p>The stream test case simulates flow over an idealized ice stream underlain by a subglacial till with a known and specified yield stress distribution. </p>
-  </div>
-  <br style="clear: both" />
-  
-  <!--   Some CSS for determining which tab is selected -->
-  <STYLE type="text/css">
-  #select :checked +  label { background-color:#47A3FF;border-color:#47A3FF;color:#fff;}
-  #select :checked +  * +  div {display: block;}
-  </STYLE>
-  
-  <!-- Generate the tab section -->
-  <div id="select" class="tabs">
-    <!-- The part that is hidden from the user -->
-    
-    <input id="tab-Stream 0025" name="tabs" style="-webkit-appearance:none;" type="radio" checked />
-      
-    <!-- The part you can click on -->
-    
-    <label for="tab-Stream 0025">Stream 0025</label>  
-      
-      
-    <!-- Go through each of the test cases that fall under this specific subcategory -->
-    
-    <div class="case">
-      <!--
- - Copyright (c) 2015, UT-BATTELLE, LLC
- - All rights reserved.
- - 
- - Redistribution and use in source and binary forms, with or without
- - modification, are permitted provided that the following conditions are met:
- - 
- - 1. Redistributions of source code must retain the above copyright notice, this
- - list of conditions and the following disclaimer.
- - 
- - 2. Redistributions in binary form must reproduce the above copyright notice,
- - this list of conditions and the following disclaimer in the documentation
- - and/or other materials provided with the distribution.
- - 
- - 3. Neither the name of the copyright holder nor the names of its contributors
- - may be used to endorse or promote products derived from this software without
- - specific prior written permission.
- - 
- - THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- - ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- - WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- - DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
- - FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- - DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- - SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- - CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
- - OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- - OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- -->
-
-
-
-
-      <!-- BEGIN BIT FOR BIT SECTION -->
-      <b class="label-header">
-        Bit for Bit 
-      </b>
-      <div class="separator">
-      <hr style="opacity: 0; height: 5px;">
-
-      
-        
-          <b>stream.0025.p001.out.nc</b>
-          
-            <table class="bit_for_bit">
-              <tr>
-                <th>Variable</th>
-                <th>Max |Error|</th>
-                <th>RMSE</th>
-                <th>Plot (Click to enlarge)</th>
-              </tr>
-              
-                <tr>
-                  <td><a target="_blank" href="../imgs/Stream/bit4bit/stream.0025.p001.out.nc.velnorm.png"><b>velnorm</b></a></td>
-                  <td>2.10502548725e-09</td>
-                  <td>3.17862999766e-10</td>
-                  <td>
-                    <a target="_blank" href="../imgs/Stream/bit4bit/stream.0025.p001.out.nc.velnorm.png">
-                      <div class="bitforbit">
-                        <img src="../imgs/Stream/bit4bit/stream.0025.p001.out.nc.velnorm.png" class="bitforbit">
-                      </div>
-                    </a>
-                  </td>                  
-                </tr>
-              
-            </table>
-          
-        
-      
-      </div>
-      <br height="30px" />
-      <!-- END BIT FOR BIT SECTION -->
-      
-      
-      <!--
- - Copyright (c) 2015, UT-BATTELLE, LLC
- - All rights reserved.
- - 
- - Redistribution and use in source and binary forms, with or without
- - modification, are permitted provided that the following conditions are met:
- - 
- - 1. Redistributions of source code must retain the above copyright notice, this
- - list of conditions and the following disclaimer.
- - 
- - 2. Redistributions in binary form must reproduce the above copyright notice,
- - this list of conditions and the following disclaimer in the documentation
- - and/or other materials provided with the distribution.
- - 
- - 3. Neither the name of the copyright holder nor the names of its contributors
- - may be used to endorse or promote products derived from this software without
- - specific prior written permission.
- - 
- - THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- - ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- - WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- - DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
- - FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- - DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- - SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- - CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
- - OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- - OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- -->
-
-
-      
-
-      <!-- BEGIN CONFIGURATION SECTION -->
-      <b class="label-header"> Configuration Files </b>
-      <div class="separator">
-      <hr style="opacity: 0; height: 5px;">
-          
-            
-                <div class="Configuration">
-                  <!-- Hide and show buttons to allow the user view data more easily -->
-                  <a href="#hideStream 00251" class="hide" id="hideStream 00251">+</a>
-                  <a href="#showStream 00251" class="show" id="showStream 00251">-</a>
-                  <h4 class="top">stream.0025.p001.config</h4>
-                  <div class="sections">
-                    <div style="clear:both;"></div>
-                    <!-- The changed variable keeps track of whether the files match -->
-                    
-                    
-                          <b>[STREAM-TEST ]</b>
-                          <div class="variable">
-                          
-                          </div>
-                    
-                          <b>[grid]</b>
-                          <div class="variable">
-                          
-                            
-                              
-                                  upn = 2<br>
-                              
-                            
-                          
-                            
-                              
-                                  ewn = 15<br>
-                              
-                            
-                          
-                            
-                              
-                                  nsn = 31<br>
-                              
-                            
-                          
-                            
-                              
-                                  dew = 2000.0<br>
-                              
-                            
-                          
-                            
-                              
-                                  dns = 2000.0<br>
-                              
-                            
-                          
-                          </div>
-                    
-                          <b>[time]</b>
-                          <div class="variable">
-                          
-                            
-                              
-                                  tstart = 0.0<br>
-                              
-                            
-                          
-                            
-                              
-                                  tend = 0.0<br>
-                              
-                            
-                          
-                            
-                              
-                                  dt = 1.0<br>
-                              
-                            
-                          
-                          </div>
-                    
-                          <b>[options]</b>
-                          <div class="variable">
-                          
-                            
-                              
-                                  dycore = 2                  <br>
-                              
-                            
-                          
-                            
-                              
-                                  flow_law = 0                <br>
-                              
-                            
-                          
-                            
-                              
-                                  evolution = 3               <br>
-                              
-                            
-                          
-                          </div>
-                    
-                          <b>[ho_options]</b>
-                          <div class="variable">
-                          
-                            
-                              
-                                  which_ho_babc = 2           <br>
-                              
-                            
-                          
-                            
-                              
-                                  which_ho_efvs = 2           <br>
-                              
-                            
-                          
-                            
-                              
-                                  which_ho_sparse = 3         <br>
-                              
-                            
-                          
-                            
-                              
-                                  which_ho_nonlinear = 0      <br>
-                              
-                            
-                          
-                            
-                              
-                                  which_ho_approx = 2         <br>
-                              
-                            
-                          
-                            
-                              
-                                  which_ho_precond = 1        <br>
-                              
-                            
-                          
-                            
-                              
-                                  which_ho_assemble_beta = 1  <br>
-                              
-                            
-                          
-                            
-                              
-                                  glissade_maxiter = 300      <br>
-                              
-                            
-                          
-                          </div>
-                    
-                          <b>[parameters]</b>
-                          <div class="variable">
-                          
-                            
-                              
-                                  periodic_offset_ew = 30.0<br>
-                              
-                            
-                          
-                          </div>
-                    
-                          <b>[CF default]</b>
-                          <div class="variable">
-                          
-                            
-                              
-                                  comment = none<br>
-                              
-                            
-                          
-                            
-                              
-                                  title = simple ice stream - yield stress set for analytical solution<br>
-                              
-                            
-                          
-                          </div>
-                    
-                          <b>[CF input]</b>
-                          <div class="variable">
-                          
-                            
-                              
-                                  name = stream.0025.p001.nc<br>
-                              
-                            
-                          
-                            
-                              
-                                  time = 1<br>
-                              
-                            
-                          
-                          </div>
-                    
-                          <b>[CF output]</b>
-                          <div class="variable">
-                          
-                            
-                              
-                                  variables = usrf topg thk flwa uvel vvel velnorm tauf<br>
-                              
-                            
-                          
-                            
-                              
-                                  frequency = 1<br>
-                              
-                            
-                          
-                            
-                              
-                                  name = stream.0025.p001.out.nc<br>
-                              
-                            
-                          
-                            
-                              
-                                  xtype = double<br>
-                              
-                            
-                          
-                          </div>
-                    
-                  </div>
-                  <div class="status">
-                    
-                      <p style="float: left; color: green;">Files match</p>
-                    
-                  </div>
-                </div>
-                <div style="clear:both;"></div>
-                <hr>
-            
-        
-        </div>
-        <hr style="opacity: 0; height: 5px;">
-        <br style="clear: both" />
-        <!-- END CONFIGURATION SECTION -->
-        
-        
-      <!--
- - Copyright (c) 2015, UT-BATTELLE, LLC
- - All rights reserved.
- - 
- - Redistribution and use in source and binary forms, with or without
- - modification, are permitted provided that the following conditions are met:
- - 
- - 1. Redistributions of source code must retain the above copyright notice, this
- - list of conditions and the following disclaimer.
- - 
- - 2. Redistributions in binary form must reproduce the above copyright notice,
- - this list of conditions and the following disclaimer in the documentation
- - and/or other materials provided with the distribution.
- - 
- - 3. Neither the name of the copyright holder nor the names of its contributors
- - may be used to endorse or promote products derived from this software without
- - specific prior written permission.
- - 
- - THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- - ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- - WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- - DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
- - FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- - DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- - SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- - CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
- - OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- - OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- -->
-
-        <!-- BEGIN OUTPUT ANALYSIS SECTION -->
-        <b class="label-header">Output Analysis</b>
-        <div class="separator">
-        
-        <p>
-			Statistics pulled from the test output of Stream runs are shown below.  If any differences 
-			were found from the benchmarks, the benchmark values will be shown in parentheses.  
-        </p>
-        <table>
-            <tr style="background-color: #47A3FF;">
-                <th>Output File</th>
-                
-                    <th>Dycore Type</th>
-                
-                    <th>Number of processors</th>
-                
-                    <th>Number of timesteps</th>
-                
-                    <th>Avg iterations to converge</th>
-                
-            </tr>
-            
-            <tr>
-                <td style="text-align: left">stream.0025.p001.config.oe</td>
-                
-                <td>
-                  Glissade
-                    
-                </td>
-                
-                <td>
-                  1
-                    
-                </td>
-                
-                <td>
-                  1
-                    
-                </td>
-                
-                <td>
-                  49
-                    
-                </td>
-                
-            </tr>
-            
-        </table>
-        
-        </div>
-        <!-- END OUTPUT ANALYSIS SECTION -->
-    </div>
-    
-  </div>
-  <br>
-
-<!-- Include the footer -->
-<!--
- - Copyright (c) 2015, UT-BATTELLE, LLC
- - All rights reserved.
- - 
- - Redistribution and use in source and binary forms, with or without
- - modification, are permitted provided that the following conditions are met:
- - 
- - 1. Redistributions of source code must retain the above copyright notice, this
- - list of conditions and the following disclaimer.
- - 
- - 2. Redistributions in binary form must reproduce the above copyright notice,
- - this list of conditions and the following disclaimer in the documentation
- - and/or other materials provided with the distribution.
- - 
- - 3. Neither the name of the copyright holder nor the names of its contributors
- - may be used to endorse or promote products derived from this software without
- - specific prior written permission.
- - 
- - THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- - ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- - WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- - DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
- - FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- - DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- - SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- - CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
- - OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- - OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- -->
-
-
-	</div>
-</div>
-
-<div id="footer">
-	<p id="info">
-		V&V Performed by kennedy at 07-13-2015 09:18:09 <br>
-        <br>
-		Example comparison of two CISM commits. Test data was generated wtih BATs on titan using the gnu compiler. <br>
-	</p>
- 
-</div>
-
-<div id="acknowledgments">
-    <div id=acklogo>
-        <a><img id="logoORNL" src="../imgs/ORNL_Stacked_color.png" alt="ORNL"></img></a>
-        <a><img id="logoDOESC" src="../imgs/RGB_Color-Seal_Green-Mark_SC_Horizontal.png" alt="DOE Office of Science" style="align: middle;"></img></a>
-        <a><img id="logoLANL" src="../imgs/los-alamos-lab-logo-color.png" alt="LANL" style="float: right;"></img></a>
-        <span style="width: 100%; display: inline-block; line-height: 0;"></span>
+    <div id="header">
+        <div id="header-spacer">
+            <img id="header-icon" src="../imgs/gicon.svg">
+            <a id="header-home" href="../index.html">
+                Home
+            </a>
+            <a id="header-title" target="_blank" href="https://github.com/LIVVkit">
+                LIVVkit: The land ice verification &amp; validation toolkit
+            </a>
+            <a id="header-docs" target="_blank" href="https://livvkit.github.io/Docs/">
+                Documentation
+            </a>
+        </div> 
     </div>
 
-    <p id="piscees">
-    LIVVkit was developed under <a href="http://www.scidac.gov/PISCEES/" target=_blank>PISCEES</a>, a BER/ASCR SciDAC Earth System Modeling project.
-    </p>
 
+    <div id="wrapper">
+        <div id="nav">
+        </div>
+
+        <div id="content">
+        </div>
+    </div>
+
+    
+    <div id="acknowledgments">
     <hr>
-
-    <h3 style="text-align: center;"> <a href="https://github.com/LIVVkit/LIVVkit/issues" target=_blank>Contact us on github</a> </h3>
-</div>
-
-
-</body>
+        <div id=acklogo>
+            <a><img id="logoORNL" src="../imgs/ORNL_Stacked_color.png" alt="ORNL"></img></a>
+            <a><img id="logoDOESC" src="../imgs/RGB_Color-Seal_Green-Mark_SC_Horizontal.png" alt="DOE Office of Science" style="align: middle;"></img></a>
+            <a><img id="logoLANL" src="../imgs/los-alamos-lab-logo-color.png" alt="LANL" style="float: right;"></img></a>
+            <span style="width: 100%; display: inline-block; line-height: 0;"></span>
+        </div>
+        <p id="piscees">
+            LIVVkit was developed under <a href="http://www.scidac.gov/PISCEES/" target=_blank>PISCEES</a>, a BER/ASCR SciDAC Earth System Modeling project.
+        </p>
+        <h3 style="text-align: center;"> <a href="https://github.com/LIVVkit/LIVVkit/issues" target=_blank>Contact us on github</a> </h3>
+    <hr>
+    </div>
 
 </html>

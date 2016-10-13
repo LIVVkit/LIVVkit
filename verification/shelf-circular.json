@@ -1,0 +1,238 @@
+{
+    "Data": {
+        "Tabs": [
+            {
+                "Type": "Tab",
+                "Sections": [
+                    {
+                        "Elements": [
+                            {
+                                "Data": {
+                                    "thk": {
+                                        "Plot": "N/A",
+                                        "Max Error": 0,
+                                        "RMS Error": 0,
+                                        "Index of Max Error": "N/A"
+                                    },
+                                    "velnorm": {
+                                        "Plot": "N/A",
+                                        "Max Error": 0,
+                                        "RMS Error": 0,
+                                        "Index of Max Error": "N/A"
+                                    }
+                                },
+                                "Type": "Bit for Bit",
+                                "Headers": [
+                                    "Max Error",
+                                    "Index of Max Error",
+                                    "RMS Error",
+                                    "Plot"
+                                ],
+                                "Title": "Bit for Bit"
+                            },
+                            {
+                                "Data": {
+                                    "options": {
+                                        "flow_law": [
+                                            true,
+                                            "0",
+                                            "0"
+                                        ],
+                                        "evolution": [
+                                            true,
+                                            "3",
+                                            "3"
+                                        ],
+                                        "marine_margin": [
+                                            true,
+                                            "0",
+                                            "0"
+                                        ],
+                                        "temperature": [
+                                            true,
+                                            "0",
+                                            "0"
+                                        ],
+                                        "dycore": [
+                                            true,
+                                            "2",
+                                            "2"
+                                        ]
+                                    },
+                                    "CF input": {
+                                        "time": [
+                                            true,
+                                            "1",
+                                            "1"
+                                        ],
+                                        "name": [
+                                            true,
+                                            "shelf-circular.0041.p001.nc",
+                                            "shelf-circular.0041.p001.nc"
+                                        ]
+                                    },
+                                    "parameters": {
+                                        "default_flwa": [
+                                            true,
+                                            "5.7e-18",
+                                            "5.7e-18"
+                                        ]
+                                    },
+                                    "ho_options": {
+                                        "which_ho_nonlinear": [
+                                            true,
+                                            "0",
+                                            "0"
+                                        ],
+                                        "which_ho_babc": [
+                                            true,
+                                            "5",
+                                            "5"
+                                        ],
+                                        "which_ho_precond": [
+                                            true,
+                                            "2",
+                                            "2"
+                                        ],
+                                        "which_ho_efvs": [
+                                            true,
+                                            "2",
+                                            "2"
+                                        ],
+                                        "which_ho_approx": [
+                                            true,
+                                            "2",
+                                            "2"
+                                        ],
+                                        "which_ho_sparse": [
+                                            true,
+                                            "3",
+                                            "3"
+                                        ]
+                                    },
+                                    "CF default": {
+                                        "title": [
+                                            true,
+                                            "Circular Shelf Experiment (first-order dynamics)",
+                                            "Circular Shelf Experiment (first-order dynamics)"
+                                        ],
+                                        "comment": [
+                                            true,
+                                            "created by runShelfCircular.py",
+                                            "created by runShelfCircular.py"
+                                        ]
+                                    },
+                                    "CF output": {
+                                        "variables": [
+                                            true,
+                                            "thk uvel vvel velnorm flwa topg lsurf",
+                                            "thk uvel vvel velnorm flwa topg lsurf"
+                                        ],
+                                        "frequency": [
+                                            true,
+                                            "1",
+                                            "1"
+                                        ],
+                                        "xtype": [
+                                            true,
+                                            "double",
+                                            "double"
+                                        ],
+                                        "name": [
+                                            true,
+                                            "shelf-circular.0041.p001.out.nc",
+                                            "shelf-circular.0041.p001.out.nc"
+                                        ]
+                                    },
+                                    "grid": {
+                                        "upn": [
+                                            true,
+                                            "5",
+                                            "5"
+                                        ],
+                                        "dew": [
+                                            true,
+                                            "1250.0",
+                                            "1250.0"
+                                        ],
+                                        "nsn": [
+                                            true,
+                                            "41",
+                                            "41"
+                                        ],
+                                        "ewn": [
+                                            true,
+                                            "41",
+                                            "41"
+                                        ],
+                                        "dns": [
+                                            true,
+                                            "1250.0",
+                                            "1250.0"
+                                        ]
+                                    },
+                                    "time": {
+                                        "dt_diag": [
+                                            true,
+                                            "1.0",
+                                            "1.0"
+                                        ],
+                                        "dt": [
+                                            true,
+                                            "1.0",
+                                            "1.0"
+                                        ],
+                                        "tend": [
+                                            true,
+                                            "0.",
+                                            "0."
+                                        ],
+                                        "idiag": [
+                                            true,
+                                            "10",
+                                            "10"
+                                        ],
+                                        "tstart": [
+                                            true,
+                                            "0.",
+                                            "0."
+                                        ],
+                                        "jdiag": [
+                                            true,
+                                            "10",
+                                            "10"
+                                        ]
+                                    }
+                                },
+                                "Type": "Diff",
+                                "Title": "Configuration Comparison"
+                            },
+                            {
+                                "Data": {
+                                    "Avg. Iterations to Converge": 48.0,
+                                    "Converged Iterations": 1,
+                                    "Dycore Type": "Glissade",
+                                    "Processor Count": 1
+                                },
+                                "Type": "Table",
+                                "Headers": [
+                                    "Converged Iterations",
+                                    "Avg. Iterations to Converge",
+                                    "Processor Count",
+                                    "Dycore Type"
+                                ],
+                                "Title": "Output Log"
+                            }
+                        ],
+                        "Type": "Section",
+                        "Title": "p1"
+                    }
+                ],
+                "Title": "s0"
+            }
+        ]
+    },
+    "Type": "Page",
+    "Description": "An idealized 1000 meter circular ice shelf, grounded at a single grid point in its center. This test case confirms a working \"floating ice\" boundary condition in 2D (i.e., in map-plane view) and also confirms radial symmetry.",
+    "Title": "shelf-circular"
+}
