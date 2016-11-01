@@ -31,16 +31,17 @@
 
 #acknowledgments {
     clear: both;
-    width: 90%;
+    width: 80%;
     min-width: 800px;
     padding: 1em 0px 0.5em 0px;
     border: 0px solid white; 
     margin-left: auto;
     margin-right: auto;
-    margin-bottom: 15px;
+    margin-bottom: 120px;
     text-align: justify;
     border-style: solid;
     color: #111111;
+    background-color: white;
 }
 
 #acknowledgments a {
