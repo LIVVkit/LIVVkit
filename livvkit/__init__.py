@@ -42,8 +42,6 @@ timestamp      = time.strftime("%Y-%m-%d %H:%M:%S")
 user           = getpass.getuser()
 machine        = socket.gethostname()
 os_type        = platform.system() + " " + platform.release()
-website_dir    = os.path.join(cwd, "resources")
-template_dir   = os.path.join(website_dir, "templates")
 
 def print_vars():
     """ Print out the variables that are contained in this module """

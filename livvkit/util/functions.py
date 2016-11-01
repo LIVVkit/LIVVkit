@@ -190,7 +190,6 @@ def setup_output():
         print("-------------------------------------------------------------------")
 
     # Copy over js, css, & imgs directories from source
-    mkdir_p(livvkit.website_dir)
     shutil.copytree(os.path.join(livvkit.resource_dir,"css"), os.path.join(livvkit.index_dir,"css"))
     shutil.copytree(os.path.join(livvkit.resource_dir,"js"), os.path.join(livvkit.index_dir,"js"))
     shutil.copytree(os.path.join(livvkit.resource_dir,"imgs"), os.path.join(livvkit.index_dir,"imgs"))
