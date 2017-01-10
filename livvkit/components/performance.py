@@ -394,7 +394,13 @@ def generate_timing_breakdown_plot(timing_stats, scaling_var, title, description
     fig, ax = plt.subplots(1, n_subplots+1, figsize=(3*(n_subplots+2), 5))
     for plot_num, p_count in enumerate(
             sorted(timing_stats.keys(), key=functions.sort_processor_counts)):
+        
         case_data = timing_stats[p_count]
+        all_timers = set(case_data['model'].keys()) | set(case_data['bench'].keys())
+        all_timers = sorted(list(all_timers), reverse=True)
+        cmap_stride = int(len(cmap_data)/(len(all_timers)+1))
+        colors = {all_timers[i]:cmap_data[i*cmap_stride] for i in range(len(all_timers))}
+
         sub_ax = plt.subplot(1, n_subplots+1, plot_num+1)
         sub_ax.set_title(p_count)
         sub_ax.set_ylabel('Runtime (s)') 
@@ -404,23 +410,16 @@ def generate_timing_breakdown_plot(timing_stats, scaling_var, title, description
             else: 
                 bar_num = 1
 
-            var_datum = sorted(var_data.keys(), reverse=True)
-            
-            cmap_stride = int(len(cmap_data)/(len(var_datum)+1))
-            colors = [cmap_data[i*cmap_stride] for i in range(len(var_datum))]
-            
             offset = 0
             if var_data != {}:
-                for idx, var in enumerate(var_datum):
+                for var in sorted(var_data.keys(), reverse=True):
                     if var != scaling_var:
                         plt.bar(bar_num, var_data[var]['mean'], 0.8, bottom=offset, 
-                                color=colors[idx], label=(var if bar_num == 1 else '_none') )
+                                color=colors[var], label=(var if bar_num == 1 else '_none') )
                         offset+=var_data[var]['mean']
-                    else: 
-                        s_idx = idx
                 
                 plt.bar(bar_num, var_data[scaling_var]['mean']-offset, 0.8, bottom=offset, 
-                        color=colors[s_idx], label=(scaling_var if bar_num == 1 else '_none') )
+                        color=colors[scaling_var], label=(scaling_var if bar_num == 1 else '_none') )
                 
                 sub_ax.set_xticks([1.4, 2.4])
                 sub_ax.set_xticklabels(('test', 'bench'))
