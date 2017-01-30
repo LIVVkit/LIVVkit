@@ -28,6 +28,9 @@
 """
 Performance Test Base Module.  
 """
+from __future__ import absolute_import, division, print_function, unicode_literals
+import six
+
 import os
 import glob
 import json
@@ -101,7 +104,7 @@ def _run_suite(case, config, summary):
     timing_plots = timing_plots + [generate_timing_breakdown_plot(timing_data[s], config['scaling_var'],
             "Timing breakdown for " + case.capitalize()+" "+s, "",
             os.path.join(plot_dir, case+"_"+s+"_timing_breakdown.png")
-        ) for s in sorted(timing_data.keys(), key=functions.sort_scale)]
+        ) for s in sorted(six.iterkeys(timing_data), key=functions.sort_scale)]
  
     # Build an image gallery and write the results
     el = [
@@ -389,14 +392,14 @@ def generate_timing_breakdown_plot(timing_stats, scaling_var, title, description
         an image element containing the plot file and metadata
     """
     cmap_data = colormaps._viridis_data
-    n_subplots = len(timing_stats.keys())
+    n_subplots = len(six.viewkeys(timing_stats))
     left_bounds = [i+1 for i in range(n_subplots)]
     fig, ax = plt.subplots(1, n_subplots+1, figsize=(3*(n_subplots+2), 5))
     for plot_num, p_count in enumerate(
-            sorted(timing_stats.keys(), key=functions.sort_processor_counts)):
+            sorted(six.iterkeys(timing_stats), key=functions.sort_processor_counts)):
         
         case_data = timing_stats[p_count]
-        all_timers = set(case_data['model'].keys()) | set(case_data['bench'].keys())
+        all_timers = set(six.iterkeys(case_data['model'])) | set(six.iterkeys(case_data['bench']))
         all_timers = sorted(list(all_timers), reverse=True)
         cmap_stride = int(len(cmap_data)/(len(all_timers)+1))
         colors = {all_timers[i]:cmap_data[i*cmap_stride] for i in range(len(all_timers))}
@@ -412,7 +415,7 @@ def generate_timing_breakdown_plot(timing_stats, scaling_var, title, description
 
             offset = 0
             if var_data != {}:
-                for var in sorted(var_data.keys(), reverse=True):
+                for var in sorted(six.iterkeys(var_data), reverse=True):
                     if var != scaling_var:
                         plt.bar(bar_num, var_data[var]['mean'], 0.8, bottom=offset, 
                                 color=colors[var], label=(var if bar_num == 1 else '_none') )

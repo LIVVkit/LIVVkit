@@ -32,6 +32,9 @@
 This is a template validation test that can be used by developers to create new 
 validation tests.
 """
+from __future__ import absolute_import, division, print_function, unicode_literals
+import six
+
 import os
 import numpy as np
 from netCDF4 import Dataset

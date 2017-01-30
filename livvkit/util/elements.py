@@ -25,6 +25,10 @@
 # CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+from __future__ import absolute_import, division, print_function, unicode_literals
+import six
+
 """
 Module to help building new display elements in the output
 files easier and less error prone.  
@@ -33,6 +37,7 @@ Implementing new elements is possible simply by adding new functions
 They will be written out to the JSON files as sub-objects, which must 
 be interpreted by the Javascript found in the resources directory.
 """
+
 def page(title, description, element_list=None, tab_list=None):
     """ 
     Returns a dictionary representing a new page to display elements.

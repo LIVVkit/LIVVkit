@@ -28,6 +28,9 @@
 """
 Provides functions for scheduling the runs of tests.
 """
+from __future__ import absolute_import, division, print_function, unicode_literals
+import six
+
 import os
 import json
 import multiprocessing
@@ -48,7 +51,7 @@ def run(run_type, module, config):
         module: The module corresponding to the run.  Must have a run_suite function
         config_path: The configuration for the module 
     """
-    tests = [t for t in config.keys() if isinstance(config[t], dict)]
+    tests = [t for t in six.iterkeys(config) if isinstance(config[t], dict)]
     print(" -----------------------------------------------------------------")
     print("   Beginning " + run_type.lower() + " test suite ")
     print(" -----------------------------------------------------------------")
@@ -66,6 +69,7 @@ def launch_processes(tests, run_module, **config):
     livvkit.manager = multiprocessing.Manager()
     test_data = livvkit.manager.dict()
     summary = run_module._populate_metadata()
+    print(tests[0])
     process_handles = [multiprocessing.Process(target=run_module._run_suite, 
                        args=(test, config[test], test_data)) for test in tests]
     for p in process_handles:
