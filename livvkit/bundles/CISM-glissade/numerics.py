@@ -140,8 +140,8 @@ def get_plot_data(test_file, bench_file, setup, config):
     test_plot_data = {}
     bench_plot_data = {}
     exp = config['name'].split('-')[-1]
-    test_data = Dataset(os.path.join(livvkit.cwd,test_file), 'r')
-    bench_data = Dataset(os.path.join(livvkit.cwd,bench_file), 'r')
+    test_data = Dataset(test_file, 'r')
+    bench_data = Dataset(bench_file, 'r')
     
     test = DataGrid(test_data)
     bench = DataGrid(bench_data)

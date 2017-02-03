@@ -68,8 +68,9 @@ def parse_args(args=None):
             nargs='+',            
             default=None,
             help='Specify the location of the configuration files for validation tests.')
-   
-    return parser.parse_args()
+  
+
+    return init(parser.parse_args())
 
 
 def init(options):
@@ -81,20 +82,9 @@ def init(options):
     
     livvkit.resource_dir   = os.sep.join(resources.__path__) 
     livvkit.output_dir     = os.path.abspath(options.out_dir)
-    livvkit.img_dir        = livvkit.output_dir + "/imgs"
     livvkit.index_dir      = livvkit.output_dir
     livvkit.verify = True if options.verify is not None else False
     livvkit.validate = True if options.validate is not None else False
-    livvkit.model_dir = ""
-    livvkit.model_config = ""
-    livvkit.bench_dir = ""
-    livvkit.bench_config = ""
-    livvkit.numerics_model_config = ""
-    livvkit.verification_model_config = ""
-    livvkit.performance_model_config = ""
-    livvkit.performance_model_module = ""
-    livvkit.validation_model_config = ""
-    livvkit.validation_model_module = ""
 
     # Get a list of bundles that provide model specific implementations
     available_bundles = [mod for imp, mod, ispkg in pkgutil.iter_modules(bundles.__path__)]
@@ -132,10 +122,12 @@ def init(options):
                 bundles.__path__ + [livvkit.model_bundle, "numerics.json"])
             livvkit.numerics_model_module = importlib.import_module(
                 ".".join(["livvkit.bundles", livvkit.model_bundle, "numerics"]))
+            
             livvkit.verification_model_config = os.sep.join(
                  bundles.__path__ + [livvkit.model_bundle, "verification.json"])
             livvkit.verification_model_module = importlib.import_module(
                  ".".join(["livvkit.bundles", livvkit.model_bundle, "verification"]))
+            
             livvkit.performance_model_config = os.sep.join(
                  bundles.__path__ + [livvkit.model_bundle, "performance.json"])
             livvkit.performance_model_module = importlib.import_module(
@@ -162,3 +154,4 @@ def init(options):
         print("")
         sys.exit(1)
 
+    return options

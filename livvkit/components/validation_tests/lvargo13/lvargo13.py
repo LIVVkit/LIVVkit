@@ -53,8 +53,8 @@ def run(name, config):
     Returns:
         An elements.page with the list of elements to display
     """
-    greenland_data = os.path.join(livvkit.cwd, config['data_dir'], config['gl_data']) 
-    velocity_data = os.path.join(livvkit.cwd, config['data_dir'], config['vel_data'])
+    greenland_data = os.path.join(livvkit.__path__[0], config['data_dir'], config['gl_data']) 
+    velocity_data = os.path.join(livvkit.__path__[0], config['data_dir'], config['vel_data'])
   
     if not (os.path.exists(greenland_data) and os.path.exists(velocity_data)):
         # Add more handling here -- what do we want to return for failed tests
@@ -73,10 +73,10 @@ def run(name, config):
                   + '\'model_start = '+ config['model_start'] +'\' '  \
                   + '\'model_end = '+ config['model_end'] +'\' '  \
                   + '\'plot_file_base = "'+ output_file_base +'"\' ' \
-                  + os.path.join(livvkit.cwd, config['plot_script'])
+                  + os.path.join(livvkit.__path__[0], config['plot_script'])
 
     # Be cautious about running subprocesses
-    call = subprocess.Popen(ncl_command, shell=True, 
+    call = subprocess.Popen(ncl_command, shell=True, cwd=livvkit.__path__[0],
                             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     stdOut, stdErr = call.stdout.read(), call.stderr.read()
     

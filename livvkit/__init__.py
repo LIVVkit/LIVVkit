@@ -35,13 +35,13 @@ import getpass
 import platform
 import socket
 
-comment        = ""
 cwd            = os.getcwd()
-config_dir     = os.path.join(cwd, "configurations")
 timestamp      = time.strftime("%Y-%m-%d %H:%M:%S")
 user           = getpass.getuser()
 machine        = socket.gethostname()
 os_type        = platform.system() + " " + platform.release()
+
+comment        = ""
 
 def print_vars():
     """ Print out the variables that are contained in this module """

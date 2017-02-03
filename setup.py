@@ -48,11 +48,11 @@ except ImportError:
     print("")
 
 setup(name='livvkit',
-      version='1.0',
+      version='2.0.1',
       description='V&V library and toolkit for ice sheet models.',
       url='http://github.com/LIVVkit/LIVVkit',
       author='Oak Ridge National Laboratory',
-      author_email='evanskj@ornl.gov',
+      author_email='kennedyjh@ornl.gov',
       license='BSD',
       include_package_data=True,
       scripts=['livv'],

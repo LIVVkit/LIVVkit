@@ -54,8 +54,8 @@ def run(name, config):
     Returns:
         An elements.page with the list of elements to display
     """
-    bench_data = os.path.join(livvkit.cwd, config['data_dir'], config['bench_data'])
-    model_data = os.path.join(livvkit.cwd, config['data_dir'], config['model_data'])
+    bench_data = os.path.join(livvkit.__path__[0], config['data_dir'], config['bench_data'])
+    model_data = os.path.join(livvkit.__path__[0], config['data_dir'], config['model_data'])
 
     if not (os.path.exists(model_data) and os.path.exists(bench_data)):
         # Add more handling here -- what do we want to return for failed tests
@@ -98,7 +98,7 @@ def plot_coverage(plot_file, model_data, bench_data, output_file):
                    '", "r")\' \'plotFile = "'+ output_file +'"\' ' + plot_file)
 
     # Be cautious about running subprocesses
-    call = subprocess.Popen(ncl_command, shell=True, 
+    call = subprocess.Popen(ncl_command, shell=True, cwd=livvkit.__path__[0], 
                             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     stdOut, stdErr = call.stdout.read(), call.stderr.read()
 

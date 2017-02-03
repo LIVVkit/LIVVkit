@@ -61,7 +61,7 @@ def set_up():
         setup = json.load(f)
 
     for exp, size in [('ismip-hom-a','005'), ('ismip-hom-c','005'), ('ismip-hom-f','000')]:
-        recreate_file = os.path.join(livvkit.cwd, setup[exp]["data_dir"], 
+        recreate_file = os.path.join(livvkit.__path__[0], setup[exp]["data_dir"], 
                                 setup[exp]['pattern'][0].replace('???', size))
         setup[exp]['interp_points'] = \
             numpy.genfromtxt(recreate_file, delimiter=',', missing_values='nan', 
@@ -104,7 +104,7 @@ def run(config, analysis_data):
 
             plot_file = os.path.join( config["plot_dir"], config['name']+'_'+fig_label+'_'+l+'.png' )
             recreate_file = os.path.join(
-                    livvkit.cwd, setup[case]["data_dir"], pattern
+                    livvkit.__path__[0], setup[case]["data_dir"], pattern
                     ).replace('???', l)
             axis, fs_amin, fs_amax, fs_mean, fs_std, ho_amin, ho_amax, ho_mean, ho_std = \
                 numpy.genfromtxt(recreate_file, delimiter=',', missing_values='nan', unpack=True)
@@ -144,7 +144,7 @@ def summarize_result(data, config):
         for l in sorted(lengths):
             
             recreate_file = os.path.join(
-                    livvkit.cwd, setup[case]["data_dir"], pattern
+                    livvkit.__path__[0], setup[case]["data_dir"], pattern
                     ).replace('???', l)
 
             axis, fs_amin, fs_amax, fs_mean, fs_std, ho_amin, ho_amax, ho_mean, ho_std = \
