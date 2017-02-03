@@ -29,6 +29,9 @@
 Helper functions for dealing with netcdf datasets
 """
 
+from __future__ import absolute_import, division, print_function, unicode_literals
+import six
+
 def has_time(dataset):
     """
     Check netCDF files time dimension for emptyness. This likely

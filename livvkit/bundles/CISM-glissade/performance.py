@@ -28,6 +28,9 @@
 """
 CISM-glissade module for performance analysis
 """
+from __future__ import absolute_import, division, print_function, unicode_literals
+import six
+
 import os
 import matplotlib
 import numpy as np

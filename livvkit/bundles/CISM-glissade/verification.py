@@ -28,9 +28,13 @@
 """
 Provides CISM-Glissade specific verification tools
 """
+from __future__ import absolute_import, division, print_function, unicode_literals
+import six
+
 import os
 import numpy as np
-from configparser import ConfigParser
+
+from six.moves.configparser import ConfigParser
 
 from livvkit.util import elements
 
@@ -104,7 +108,7 @@ def parse_config(file_path):
     parser.read(file_path)
     # Strip out inline comments
     for s in parser._sections:
-        for v in parser._sections[s].keys():
+        for v in six.iterkeys(parser._sections[s]):
             parser._sections[s][v] = parser._sections[s][v].split("#")[0].strip()
     return parser._sections
 

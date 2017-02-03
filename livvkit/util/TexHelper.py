@@ -32,6 +32,9 @@ from JSON to tex files.  It does not convert the tex files to any finished
 output.   For example, if you want a PDF you will still have to pass the 
 tex files through pdflatex.
 """
+from __future__ import absolute_import, division, print_function, unicode_literals
+import six
+
 import os
 import glob
 import pprint
@@ -129,7 +132,7 @@ def translate_summary(data):
         summary += '& $HEADER '.replace('$HEADER', header).replace('%', '\%')
     summary += ' \\\\ \hline \n'
     
-    names = sorted(data.get("Data", []).keys())
+    names = sorted(six.iterkeys(data.get("Data", [])))
     for name in names:
         summary += '\n\n \\textbf{$NAME} $SPACER \n'.replace('$NAME', name).replace('$SPACER', spacer)
         cases = data.get("Data", []).get(name, {})

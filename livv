@@ -30,6 +30,9 @@
 Executable script to start a verification and validation test suite. 
 Management of the tests to be run is handled by the scheduler in livvkit.util
 """
+from __future__ import absolute_import, division, print_function, unicode_literals
+import six
+
 import os
 import sys
 import livvkit

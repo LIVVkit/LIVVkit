@@ -28,6 +28,9 @@
 """
 Verification Test Base Module
 """
+from __future__ import absolute_import, division, print_function, unicode_literals
+import six
+
 import os
 import numpy as np
 from netCDF4 import Dataset
@@ -50,7 +53,7 @@ def _run_suite(case, config, summary):
     model_cases = functions.collect_cases(model_dir)
     bench_cases = functions.collect_cases(bench_dir)
     
-    for subcase in sorted(model_cases.keys()):
+    for subcase in sorted(six.iterkeys(model_cases)):
         bench_subcases = bench_cases[subcase] if subcase in bench_cases else [] 
         case_sections= [] 
         for mcase in sorted(model_cases[subcase], key=functions.sort_processor_counts):
@@ -120,7 +123,7 @@ def _summarize_result(result, summary):
             elem_data = elem["Data"]
             summary_data = summary["Bit for Bit"]
             total_count += 1
-            for var in elem_data.keys():
+            for var in six.iterkeys(elem_data):
                 if elem_data[var]["Max Error"] != 0:
                     failure_count += 1
                     break
@@ -238,13 +241,13 @@ def diff_configurations(model_config, bench_config, model_bundle, bench_bundle):
         return elements.error("Configuration Comparison", 
                 "Could not open file: " + model_config.split(os.sep)[-1])
     
-    model_sections = set(model_data.keys())
-    bench_sections = set(bench_data.keys())
+    model_sections = set(six.iterkeys(model_data))
+    bench_sections = set(six.iterkeys(bench_data))
     all_sections = set(model_sections.union(bench_sections))
     
     for s in all_sections:
-        model_vars = set(model_data[s].keys()) if s in model_sections else set()
-        bench_vars = set(bench_data[s].keys()) if s in bench_sections else set()
+        model_vars = set(six.iterkeys(model_data[s])) if s in model_sections else set()
+        bench_vars = set(six.iterkeys(bench_data[s])) if s in bench_sections else set()
         all_vars = set(model_vars.union(bench_vars))
         for v in all_vars:
             model_val = model_data[s][v] if s in model_sections and v in model_vars else 'NA'
