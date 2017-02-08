@@ -38,9 +38,37 @@ import livvkit
 from livvkit.util import functions
 from livvkit.util.LIVVDict import LIVVDict
 
+        
 def _run_suite(case, config, summary):
     """ Run the full suite of validation tests """
-    m = importlib.import_module(config['module'])
+    
+    try:
+        m = importlib.import_module(config['module'])
+    except ImportError as ie:
+        config_path = os.path.abspath(config['module'])
+        try:
+            if six.PY2:
+                import imp
+                m = imp.load_source('validation.'+case, config_path)
+            elif six.PY3:
+                spec = importlib.util.spec_from_file_location('validation.'+case, config_path)
+                m = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(m)
+            else:
+                raise
+        except:
+            print("    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+            print("                           UH OH!"                             )
+            print("    ----------------------------------------------------------")
+            print("    Could not find the module for test case: "                 )
+            print("        "+case                                                 )
+            print("    The module must be specified as an import statement of a"  )
+            print("    module that can be found on your python, or a valid path"  )
+            print("    to a python module file (specified either relative to your")
+            print("    current working directory or absolutely)."                 )
+            print("    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+            raise
+
     result = m.run(case, config)
     summary[case] = _summarize_result(m, result)
     _print_summary(m, case, summary[case])

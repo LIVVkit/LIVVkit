@@ -70,7 +70,7 @@ def parse_args(args=None):
             help='Specify the location of the configuration files for validation tests.')
   
 
-    return init(parser.parse_args())
+    return init(parser.parse_args(args))
 
 
 def init(options):
@@ -95,9 +95,9 @@ def init(options):
         livvkit.bench_dir = options.verify[1].rstrip(os.sep)
         if not os.path.isdir(livvkit.model_dir): 
             print("")
-            print("----------------------------------------------------------")
+            print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
             print("                       UH OH!")
-            print("----------------------------------------------------------")
+            print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
             print("    Your comparison directory does not exist; please check")
             print("    the path:")
             print("\n"+livvkit.model_dir+"\n\n")
@@ -105,9 +105,9 @@ def init(options):
         
         if not os.path.isdir(livvkit.bench_dir):
             print("")
-            print("----------------------------------------------------------")
+            print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
             print("                       UH OH!")
-            print("----------------------------------------------------------")
+            print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
             print("    Your benchmark directory does not exist; please check")
             print("    the path:")
             print("\n"+livvkit.bench_dir+"\n\n")
@@ -141,7 +141,7 @@ def init(options):
 
     if not (livvkit.verify or livvkit.validate):
         print("")
-        print("----------------------------------------------------------")
+        print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
         print("                       UH OH!")
         print("----------------------------------------------------------")
         print("    No verification or validation tests found/submitted!")
@@ -150,7 +150,7 @@ def init(options):
         print("    --validate options to run tests.  For more ")
         print("    information use the --help option, view the README")
         print("    or check https://livvkit.github.io/Docs/")
-        print("----------------------------------------------------------")
+        print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
         print("")
         sys.exit(1)
 
