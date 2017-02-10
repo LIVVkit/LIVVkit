@@ -80,9 +80,3 @@ def launch_processes(tests, run_module, **config):
     return summary 
 
 
-def summarize(summary):
-    """ Write the summary to a JSON file """
-    util.datastructures.mkdir_p(livvkit.output_dir)
-    with open(os.path.join(livvkit.output_dir, "index.json"), 'w') as f:
-            json.dump(summary, f, indent=4)
-
