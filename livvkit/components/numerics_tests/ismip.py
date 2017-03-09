@@ -128,6 +128,8 @@ def run(config, analysis_data):
                                 line_style[model], color=case_color[model], linewidth=2, label=a+'-'+model)
 
             plt.legend(loc='best')
+            if livvkit.publish:
+                plt.savefig( os.path.splitext(plot_file)[0]+'.eps', dpi=600 )
             plt.savefig(plot_file)
             plt.close()
             plot_list.append( elements.image(title, description, os.path.basename(plot_file)) )

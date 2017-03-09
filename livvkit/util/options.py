@@ -68,7 +68,11 @@ def parse_args(args=None):
             nargs='+',            
             default=None,
             help='Specify the location of the configuration files for validation tests.')
-   
+
+    parser.add_argument('-p','--publish',
+            action='store_true',
+            help='Also produce a publication quality copy of the figure in the output directory (eps, 600d pi).')
+
     return parser.parse_args()
 
 
@@ -85,6 +89,7 @@ def init(options):
     livvkit.index_dir      = livvkit.output_dir
     livvkit.verify = True if options.verify is not None else False
     livvkit.validate = True if options.validate is not None else False
+    livvkit.publish = options.publish
     livvkit.model_dir = ""
     livvkit.model_config = ""
     livvkit.bench_dir = ""

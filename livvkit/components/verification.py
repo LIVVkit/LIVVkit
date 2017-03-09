@@ -311,7 +311,10 @@ def plot_bit_for_bit(case, var_name, model_data, bench_data, diff_data):
     pyplot.tight_layout(rect=(0,0,0.95,0.9))
     pyplot.suptitle(plot_title)
    
-    pyplot.savefig(os.sep.join([plot_path, plot_name]))
+    plot_file = os.sep.join([plot_path, plot_name])
+    if livvkit.publish:
+        pyplot.savefig( os.path.splitext(plot_file)[0]+'.eps', dpi=600 )
+    pyplot.savefig(plot_file)
     pyplot.close()
     return os.path.join(os.path.relpath(plot_path, os.path.join(livvkit.output_dir, "verification")), 
                         plot_name)

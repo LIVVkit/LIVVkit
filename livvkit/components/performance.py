@@ -44,6 +44,8 @@ from livvkit.util import colormaps
 from livvkit.util.LIVVDict import LIVVDict
 from livvkit.util import elements
 
+SEC_PER_DAY = 86400.0
+
 def _run_suite(case, config, summary):
     """ Run the full suite of performance tests """
     config["name"] = case
@@ -76,7 +78,7 @@ def _run_suite(case, config, summary):
     timing_plots.append(
         generate_scaling_plot( weak_data,
             "Weak scaling for " + case.capitalize(), 
-            "runtime (s)", "", 
+            "Runtime (s)", "", 
             os.path.join(plot_dir, case + "_weak_scaling.png")
         ))
 
@@ -341,10 +343,29 @@ def generate_scaling_plot(timing_data, title, ylabel, description, plot_file):
         plt.text(0,0.6,"Not enough data points to draw scaling plot")
         plt.text(0,0.44,"To generate this data rerun BATS with the")
         plt.text(0,0.36, "performance option enabled.")
+    if livvkit.publish:
+        plt.savefig( os.path.splitext(plot_file)[0]+'.eps', dpi=600 )
     plt.savefig(plot_file)
     plt.close()   
     return elements.image(title, description, os.path.basename(plot_file))
 
+    
+def scaling_sypd_plot(timing_data, title, ylabel, description, plot_file):
+    for case in ['bench','model']:
+        case_data = timing_data[case]
+        means = np.array(case_data['means'])
+        mins  = np.array(case_data['mins'])
+        maxs  = np.array(case_data['maxs'])
+        
+        case_data['means'] =  10.0/means * SEC_PER_DAY
+        case_data['mins'] = 10.0/mins * SEC_PER_DAY
+        case_data['maxs'] = 10.0/maxs * SEC_PER_DAY
+
+        timing_data[case] = case_data
+    
+    return generate_scaling_plot(timing_data, title, ylabel, description, plot_file)
+
+    
 def weak_scaling_efficiency_plot(timing_data, title, ylabel, description, plot_file):
     for case in ['bench','model']:
         case_data = timing_data[case]
@@ -436,6 +457,8 @@ def generate_timing_breakdown_plot(timing_stats, scaling_var, title, description
             group.set_visible(False)
     sub_ax.set_visible(False)
     
+    if livvkit.publish:
+        plt.savefig( os.path.splitext(plot_file)[0]+'.eps', dpi=600 )
     plt.savefig(plot_file)
     plt.close()
     return elements.image(title, description, os.path.basename(plot_file))
