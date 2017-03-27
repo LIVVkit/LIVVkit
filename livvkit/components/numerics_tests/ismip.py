@@ -36,9 +36,8 @@ import six
 import os
 import json
 import glob
-import numpy
-import scipy
 
+import numpy as np
 import matplotlib.pyplot as plt
 
 import livvkit
@@ -64,7 +63,7 @@ def set_up():
         recreate_file = os.path.join(livvkit.__path__[0], setup[exp]["data_dir"], 
                                 setup[exp]['pattern'][0].replace('???', size))
         setup[exp]['interp_points'] = \
-            numpy.genfromtxt(recreate_file, delimiter=',', missing_values='nan', 
+            np.genfromtxt(recreate_file, delimiter=',', missing_values='nan', 
                                 usecols=(0), unpack=True)
         if exp == 'ismip-hom-f':
             setup[exp]['interp_points'] = setup[exp]['interp_points']*100 - 50 
@@ -107,7 +106,7 @@ def run(config, analysis_data):
                     livvkit.__path__[0], setup[case]["data_dir"], pattern
                     ).replace('???', l)
             axis, fs_amin, fs_amax, fs_mean, fs_std, ho_amin, ho_amax, ho_mean, ho_std = \
-                numpy.genfromtxt(recreate_file, delimiter=',', missing_values='nan', unpack=True)
+                np.genfromtxt(recreate_file, delimiter=',', missing_values='nan', unpack=True)
            
             if case in ['ismip-hom-f']:
                 axis = axis*100.0 - 50.0
@@ -148,7 +147,7 @@ def summarize_result(data, config):
                     ).replace('???', l)
 
             axis, fs_amin, fs_amax, fs_mean, fs_std, ho_amin, ho_amax, ho_mean, ho_std = \
-                numpy.genfromtxt(recreate_file, delimiter=',', missing_values='nan', unpack=True)
+                np.genfromtxt(recreate_file, delimiter=',', missing_values='nan', unpack=True)
             
 
             analysis = {}
@@ -159,20 +158,20 @@ def summarize_result(data, config):
             for a in six.iterkeys(analysis):
                 for model in sorted(six.iterkeys(analysis[a])):
                     if setup[case]['ylabel'][p].split(" ")[0].lower() == 'surface':
-                        percent_errors = numpy.divide(analysis[a][model][config['plot_vars'][p]] - 
+                        percent_errors = np.divide(analysis[a][model][config['plot_vars'][p]] - 
                                                         ho_mean, ho_mean+1000) 
-                        coefficient = numpy.divide(ho_std, ho_mean+1000)
+                        coefficient = np.divide(ho_std, ho_mean+1000)
                     else:
-                        percent_errors = numpy.divide(analysis[a][model][config['plot_vars'][p]] - 
+                        percent_errors = np.divide(analysis[a][model][config['plot_vars'][p]] - 
                                                         ho_mean, ho_mean)
-                        coefficient = numpy.divide(ho_std, ho_mean)
+                        coefficient = np.divide(ho_std, ho_mean)
 
                     label = a+' '+setup[case]['ylabel'][p].split(" ")[0]
                     if model.lower() == 'bench':
-                        summary[label]['Bench mean % error'] = '{:3.2%}'.format(numpy.nanmean(percent_errors))
+                        summary[label]['Bench mean % error'] = '{:3.2%}'.format(np.nanmean(percent_errors))
                     else:
-                        summary[label]['Test mean % error'] = '{:3.2%}'.format(numpy.nanmean(percent_errors))
-                    summary[label]['Coefficient of variation'] = '{:3.2%}'.format(numpy.nanmean(coefficient))
+                        summary[label]['Test mean % error'] = '{:3.2%}'.format(np.nanmean(percent_errors))
+                    summary[label]['Coefficient of variation'] = '{:3.2%}'.format(np.nanmean(coefficient))
     return summary
 
 def print_summary(case, summary):

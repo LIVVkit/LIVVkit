@@ -33,8 +33,8 @@ import six
 
 import os
 import math
-import numpy
-import scipy
+
+import numpy as np
 
 from netCDF4 import Dataset
 from scipy import interpolate 
@@ -147,7 +147,7 @@ def get_plot_data(test_file, bench_file, setup, config):
     bench = DataGrid(bench_data)
     
     x_coord = setup['interp_points'] 
-    y_coord = numpy.linspace(setup['y'][0], setup['y'][1], len(x_coord))
+    y_coord = np.linspace(setup['y'][0], setup['y'][1], len(x_coord))
 
     test_plot_data['y_hat'] = y_coord
     test_plot_data['x_hat'] = x_coord
@@ -173,13 +173,13 @@ def get_plot_data(test_file, bench_file, setup, config):
             bench_plot_data[var] = bench2plot(y_coord, x_coord, grid=False)
 
         test_plot_data['velnorm_extend'] = \
-            numpy.linalg.norm(
-                numpy.array([test_plot_data['uvel_extend'],
+            np.linalg.norm(
+                np.array([test_plot_data['uvel_extend'],
                              test_plot_data['vvel_extend'] ]),
                 axis=0)
         bench_plot_data['velnorm_extend'] = \
-            numpy.linalg.norm(
-                numpy.array([bench_plot_data['uvel_extend'],
+            np.linalg.norm(
+                np.array([bench_plot_data['uvel_extend'],
                              bench_plot_data['vvel_extend'] ]),
                 axis=0)
     else: # f
@@ -200,13 +200,13 @@ def get_plot_data(test_file, bench_file, setup, config):
 
 
         test_plot_data['velnorm'] = \
-            numpy.linalg.norm(
-                numpy.array([test_plot_data['uvel'],
+            np.linalg.norm(
+                np.array([test_plot_data['uvel'],
                              test_plot_data['vvel'] ]),
                 axis=0)
         bench_plot_data['velnorm'] = \
-            numpy.linalg.norm(
-                numpy.array([bench_plot_data['uvel'],
+            np.linalg.norm(
+                np.array([bench_plot_data['uvel'],
                              bench_plot_data['vvel'] ]),
                 axis=0)
     

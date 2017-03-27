@@ -34,7 +34,7 @@ import six
 import os
 import numpy as np
 from netCDF4 import Dataset
-from matplotlib import pyplot
+import matplotlib.pyplot as plt
 
 import livvkit
 from livvkit.util import netcdf
@@ -276,43 +276,43 @@ def plot_bit_for_bit(case, var_name, model_data, bench_data, diff_data):
         bench_data = bench_data[-1][0]
         diff_data = diff_data[-1][0]
         plot_title = "Showing "+var_name+"[-1,0,:,:]"
-    pyplot.figure(figsize=(12,3), dpi=80)
-    pyplot.clf()
+    plt.figure(figsize=(12,3), dpi=80)
+    plt.clf()
     
     # Calculate min and max to scale the colorbars
     max = np.amax([np.amax(model_data), np.amax(bench_data)])
     min = np.amin([np.amin(model_data), np.amin(bench_data)])
     
     # Plot the model output
-    pyplot.subplot(1,3,1)
-    pyplot.xlabel("Model Data")
-    pyplot.ylabel(var_name)
-    pyplot.xticks([])
-    pyplot.yticks([])
-    pyplot.imshow(model_data, vmin=min, vmax=max, interpolation='nearest', cmap=colormaps.viridis)
-    pyplot.colorbar()
+    plt.subplot(1,3,1)
+    plt.xlabel("Model Data")
+    plt.ylabel(var_name)
+    plt.xticks([])
+    plt.yticks([])
+    plt.imshow(model_data, vmin=min, vmax=max, interpolation='nearest', cmap=colormaps.viridis)
+    plt.colorbar()
   
     # Plot the benchmark data
-    pyplot.subplot(1,3,2)
-    pyplot.xlabel("Benchmark Data")
-    pyplot.xticks([])
-    pyplot.yticks([])
-    pyplot.imshow(bench_data, vmin=min, vmax=max, interpolation='nearest', cmap=colormaps.viridis)
-    pyplot.colorbar()
+    plt.subplot(1,3,2)
+    plt.xlabel("Benchmark Data")
+    plt.xticks([])
+    plt.yticks([])
+    plt.imshow(bench_data, vmin=min, vmax=max, interpolation='nearest', cmap=colormaps.viridis)
+    plt.colorbar()
 
     # Plot the difference
-    pyplot.subplot(1,3,3)
-    pyplot.xlabel("Difference")
-    pyplot.xticks([])
-    pyplot.yticks([])
-    pyplot.imshow(diff_data, interpolation='nearest', cmap=colormaps.viridis)
-    pyplot.colorbar()
+    plt.subplot(1,3,3)
+    plt.xlabel("Difference")
+    plt.xticks([])
+    plt.yticks([])
+    plt.imshow(diff_data, interpolation='nearest', cmap=colormaps.viridis)
+    plt.colorbar()
    
-    pyplot.tight_layout(rect=(0,0,0.95,0.9))
-    pyplot.suptitle(plot_title)
+    plt.tight_layout(rect=(0,0,0.95,0.9))
+    plt.suptitle(plot_title)
    
-    pyplot.savefig(os.sep.join([plot_path, plot_name]))
-    pyplot.close()
+    plt.savefig(os.sep.join([plot_path, plot_name]))
+    plt.close()
     return os.path.join(os.path.relpath(plot_path, os.path.join(livvkit.output_dir, "verification")), 
                         plot_name)
 
