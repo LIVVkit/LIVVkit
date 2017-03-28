@@ -68,7 +68,6 @@ def launch_processes(tests, run_module, **config):
     livvkit.manager = multiprocessing.Manager()
     test_data = livvkit.manager.dict()
     summary = run_module._populate_metadata()
-    print(tests[0])
     process_handles = [multiprocessing.Process(target=run_module._run_suite,
                        args=(test, config[test], test_data)) for test in tests]
     for p in process_handles:
