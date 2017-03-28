@@ -1,20 +1,20 @@
 # Copyright (c) 2015,2016, UT-BATTELLE, LLC
 # All rights reserved.
-# 
+#
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
-# 
+#
 # 1. Redistributions of source code must retain the above copyright notice, this
 # list of conditions and the following disclaimer.
-# 
+#
 # 2. Redistributions in binary form must reproduce the above copyright notice,
 # this list of conditions and the following disclaimer in the documentation
 # and/or other materials provided with the distribution.
-# 
+#
 # 3. Neither the name of the copyright holder nor the names of its contributors
 # may be used to endorse or promote products derived from this software without
 # specific prior written permission.
-# 
+#
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 # ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 # WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -38,6 +38,7 @@ from six.moves.configparser import ConfigParser
 
 from livvkit.util import elements
 
+
 def parse_log(file_path):
     """
     Parse a CISM output log and extract some information.
@@ -51,20 +52,28 @@ def parse_log(file_path):
     """
     if not os.path.isfile(file_path):
         return elements.error("Output Log", "Could not open file: " + file_path.split(os.sep)[-1])
-    headers = ["Converged Iterations", "Avg. Iterations to Converge", "Processor Count", "Dycore Type"]
+
+    headers = ["Converged Iterations",
+               "Avg. Iterations to Converge",
+               "Processor Count",
+               "Dycore Type"]
+
     with open(file_path, 'r') as f:
-        dycore_types = {"0":"Glide", "1":"Glam", "2":"Glissade", "3":"Albany_felix", "4":"BISICLES"}
+        dycore_types = {"0": "Glide",
+                        "1": "Glam",
+                        "2": "Glissade",
+                        "3": "Albany_felix",
+                        "4": "BISICLES"}
         curr_step = 0
         proc_count = 0
-        iter_count = 0
-        avg_iters_to_converge = 0
+        iter_number = 0
         converged_iters = []
         iters_to_converge = []
         for line in f:
             split = line.split()
             if ('CISM dycore type' in line):
                 if line.split()[-1] == '=':
-                    dycore_type = dycore_types[next(logfile).strip()]
+                    dycore_type = dycore_types[next(f).strip()]
                 else:
                     dycore_type = dycore_types[line.split()[-1]]
             elif ('total procs' in line):
@@ -81,12 +90,12 @@ def parse_log(file_path):
                 iters_to_converge.append(int(iter_number))
             elif len(split) > 0 and split[0].isdigit():
                 iter_number = split[0]
-        if iters_to_converge == []: 
+        if iters_to_converge == []:
             iters_to_converge.append(int(iter_number))
-    data = { 
-        "Dycore Type" : dycore_type,
-        "Processor Count" : proc_count,
-        "Converged Iterations" : len(converged_iters),
+    data = {
+        "Dycore Type": dycore_type,
+        "Processor Count": proc_count,
+        "Converged Iterations": len(converged_iters),
         "Avg. Iterations to Converge": np.mean(iters_to_converge)
     }
     return elements.table("Output Log", headers, data)
@@ -111,4 +120,3 @@ def parse_config(file_path):
         for v in six.iterkeys(parser._sections[s]):
             parser._sections[s][v] = parser._sections[s][v].split("#")[0].strip()
     return parser._sections
-
