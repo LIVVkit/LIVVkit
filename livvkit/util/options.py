@@ -125,10 +125,11 @@ def init(options):
 
             livvkit.performance_model_config = os.sep.join(
                  bundles.__path__ + [livvkit.model_bundle, "performance.json"])
-            livvkit.performance_model_module = importlib.import_module(
-                 ".".join(["livvkit.bundles", livvkit.model_bundle, "performance"]))
+            # NOTE: This isn't used right now...
+            # livvkit.performance_model_module = importlib.import_module(
+            #      ".".join(["livvkit.bundles", livvkit.model_bundle, "performance"]))
         else:
-            #TODO: Should implement some error checking here...
+            # TODO: Should implement some error checking here...
             livvkit.verify = False
 
     if options.validate is not None:
