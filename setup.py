@@ -28,39 +28,65 @@
 
 from __future__ import absolute_import, print_function, unicode_literals
 
-
 from setuptools import setup
+from os import path
 
+long_file = path.join(path.abspath(path.dirname(__file__)), 'README.md')
+with open(long_file, 'r') as f:
+    long_desc = f.read()
+
+# NOTE: Numpy really wants to build from source unless it's already installed,
+# which is slow and prone to failure This significanlty make the build more
+# robused and much faster.
 try:
     import numpy
+    print('Found numpy.')
 except ImportError:
-    from setuptools.command import easy_install
-    easy_install.main(["--user", 'numpy'])
-    print("")
-    print("--------------------------------------------------------------------")
-    print("|                       *** ATTENTION! ***                         |")
-    print("|                                                                  |")
-    print("|    Numpy has been installed, but the build process must be       |")
-    print("|    restarted in order to complete successfully.  Please run      |")
-    print("|    the setup command again to proceed.                           |")
-    print("|                                                                  |")
-    print("--------------------------------------------------------------------")
-    print("")
+    import pip
+    pip.main(['install', 'numpy'])
+    import numpy
+    print('Installed numpy via pip.')
 
-setup(name='livvkit',
+setup(
+      name='livvkit',
       version='2.0.1',
-      description='V&V library and toolkit for ice sheet models.',
+
+      description='The land ice verification and validation toolkit.',
+      long_description=long_desc,
+
       url='http://github.com/LIVVkit/LIVVkit',
-      author='Oak Ridge National Laboratory',
+
+      author='Joseph H. Kennedy et al.',
       author_email='kennedyjh@ornl.gov',
+
       license='BSD',
       include_package_data=True,
-      scripts=['livv'],
+
+      classifiers=[
+                   'Development Status :: 5 - Production/Stable',
+
+                   'Intended Audience :: Science/Research',
+                   'Topic :: Scientific/Engineering',
+                   'Topic :: Software Development :: Testing',
+
+                   'License :: OSI Approved :: BSD License',
+
+                   'Programming Language :: Python :: 2',
+                   'Programming Language :: Python :: 2.7',
+                   'Programming Language :: Python :: 3',
+                   'Programming Language :: Python :: 3.5',
+                   'Programming Language :: Python :: 3.6',
+                  ],
+
+      setup_requires=['numpy'],
       install_requires=[
+                       'numpy',
                        'scipy',
                        'netCDF4',
                        'matplotlib'
                        ],
+
+      scripts=['livv'],
       packages=[
                'livvkit',
                'livvkit.bundles',
