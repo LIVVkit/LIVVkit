@@ -1,6 +1,5 @@
 ![](https://raw.githubusercontent.com/wiki/LIVVkit/LIVVkit/imgs/livvkit.png)
 
-===============================================================================
   The land ice verification and validation toolkit
 ===============================================================================
 
