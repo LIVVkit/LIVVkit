@@ -95,7 +95,8 @@ setup(
                'livvkit.components',
                'livvkit.components.numerics_tests',
                'livvkit.components.validation_tests',
+               'livvkit.components.validation_tests.template',
+               'livvkit.data',
                'livvkit.util',
-               'livvkit.data'
                ]
       )
