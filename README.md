@@ -71,9 +71,9 @@ livv -h
 In verification mode, LIVVkit analyzes and compares a regression testing dataset to a reference
 dataset, both of which are produced by CISM's built and test structure (BATS). For example, LIVVkit
 may analyze the dataset produced from a proposed CISM 2.0.6 release 
-(~400MB; download [here](jhkennedy.org/LIVVkit/cism-2.0.6-tests.20160728.tgz)) 
+(~400MB; download [here](http://jhkennedy.org/LIVVkit/cism-2.0.6-tests.20160728.tgz)) 
 and compare it to the dataset produced from the CISM 2.0.0 release 
-(~400MB; download [here](jhkennedy.org/LIVVkit/cism-2.0.0-tests.20160728.tgz)):
+(~400MB; download [here](http://jhkennedy.org/LIVVkit/cism-2.0.0-tests.20160728.tgz)):
 
 ```sh
 export TEST=cism-2.0.6-tests/titan-gnu/CISM-glissade/
