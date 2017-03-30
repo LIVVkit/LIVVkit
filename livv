@@ -32,6 +32,8 @@ Management of the tests to be run is handled by the scheduler in livvkit.util
 """
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+import os
+
 import livvkit
 from livvkit.util import options
 
@@ -47,8 +49,6 @@ def main(args):
     print("")
     print("                   Land Ice Verification & Validation     ")
     print("-------------------------------------------------------------------")
-    print("  Load modules: python, ncl, nco, python_matplotlib, hdf5, netcdf,")
-    print("                python_numpy, and python_netcdf4 for best results.")
     print("")
     print("  Current run: " + livvkit.timestamp)
     print("  User: " + livvkit.user)
@@ -81,7 +81,7 @@ def main(args):
     functions.write_json(result, livvkit.output_dir, "index.json")
     print("-------------------------------------------------------------------")
     print(" Done!  Results can be seen in a web browser at:")
-    print("        " + livvkit.output_dir)
+    print("        " + os.path.join(livvkit.output_dir, 'index.html'))
     print("-------------------------------------------------------------------")
 
 
