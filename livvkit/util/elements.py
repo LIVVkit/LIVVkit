@@ -1,20 +1,20 @@
 # Copyright (c) 2015,2016, UT-BATTELLE, LLC
 # All rights reserved.
-# 
+#
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
-# 
+#
 # 1. Redistributions of source code must retain the above copyright notice, this
 # list of conditions and the following disclaimer.
-# 
+#
 # 2. Redistributions in binary form must reproduce the above copyright notice,
 # this list of conditions and the following disclaimer in the documentation
 # and/or other materials provided with the distribution.
-# 
+#
 # 3. Neither the name of the copyright holder nor the names of its contributors
 # may be used to endorse or promote products derived from this software without
 # specific prior written permission.
-# 
+#
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 # ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 # WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -25,27 +25,32 @@
 # CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+from __future__ import absolute_import, division, print_function, unicode_literals
+
 """
 Module to help building new display elements in the output
-files easier and less error prone.  
+files easier and less error prone.
 
 Implementing new elements is possible simply by adding new functions
-They will be written out to the JSON files as sub-objects, which must 
+They will be written out to the JSON files as sub-objects, which must
 be interpreted by the Javascript found in the resources directory.
 """
+
+
 def page(title, description, element_list=None, tab_list=None):
-    """ 
+    """
     Returns a dictionary representing a new page to display elements.
     This can be thought of as a simple container for displaying multiple
     types of information. The ``section`` method can be used to create
     separate tabs.
 
     Args:
-        title: The title to display 
+        title: The title to display
         description: A description of the section
         element_list: The list of elements to display. If a single element is
                       given it will be wrapped in a list.
-        tab_list: A list of tabs to display.  
+        tab_list: A list of tabs to display.
 
     Returns:
         A dictionary with metadata specifying that it is to be rendered
@@ -57,7 +62,7 @@ def page(title, description, element_list=None, tab_list=None):
     page["Description"] = description
     page["Data"] = {}
     if element_list is not None:
-        if isinstance(element_list, list): 
+        if isinstance(element_list, list):
             page["Data"]["Elements"] = element_list
         else:
             page["Data"]["Elements"] = [element_list]
@@ -66,21 +71,21 @@ def page(title, description, element_list=None, tab_list=None):
             page["Data"]["Tabs"] = tab_list
         else:
             page["Data"]["Tabs"] = [tab_list]
-    return page 
+    return page
 
 
 def tab(tab_name, element_list=None, section_list=None):
-    """ 
+    """
     Returns a dictionary representing a new tab to display elements.
     This can be thought of as a simple container for displaying multiple
-    types of information. 
+    types of information.
 
     Args:
-        tab_name: The title to display 
+        tab_name: The title to display
         description: A description of the section
         element_list: The list of elements to display. If a single element is
                       given it will be wrapped in a list.
-        section_list: A list of sections to display.  
+        section_list: A list of sections to display.
 
     Returns:
         A dictionary with metadata specifying that it is to be rendered
@@ -88,9 +93,9 @@ def tab(tab_name, element_list=None, section_list=None):
     """
     tab = {}
     tab["Type"] = "Tab"
-    tab["Title"] = tab_name 
+    tab["Title"] = tab_name
     if element_list is not None:
-        if isinstance(element_list, list): 
+        if isinstance(element_list, list):
             tab["Elements"] = element_list
         else:
             tab["Elements"] = [element_list]
@@ -98,17 +103,17 @@ def tab(tab_name, element_list=None, section_list=None):
         if isinstance(section_list, list):
             tab["Sections"] = section_list
         else:
-            if ("Elements" not in sect): 
+            if ("Elements" not in section_list):
                 tab["Elements"] = element_list
             else:
                 tab["Elements"].append(element_list)
-    return tab 
+    return tab
 
 
 def section(title, element_list):
     """
     Returns a dictionary representing a new section.  Sections
-    contain a list of elements that are displayed seperately from 
+    contain a list of elements that are displayed seperately from
     the global elements on the page.
 
     Args:
@@ -116,12 +121,12 @@ def section(title, element_list):
         element_list: The list of elements to display within the section
 
     Returns:
-        A dictionary with metadata specifying that it is to be rendered as 
+        A dictionary with metadata specifying that it is to be rendered as
         a section containing multiple elements
     """
     sect = {}
     sect["Type"] = "Section"
-    sect["Title"] = title 
+    sect["Title"] = title
     if isinstance(element_list, list):
         sect["Elements"] = element_list
     else:
@@ -132,8 +137,8 @@ def section(title, element_list):
 def table(title, headers, data_node):
     """
     Returns a dictionary representing a new table element.  Tables
-    are specified with two main pieces of information, the headers 
-    and the data to put into the table.  Rendering of the table is 
+    are specified with two main pieces of information, the headers
+    and the data to put into the table.  Rendering of the table is
     the responsibility of the Javascript in the resources directory.
     When the data does not line up with the headers given this should
     be handled within the Javascript itself, not here.
@@ -157,11 +162,11 @@ def table(title, headers, data_node):
 
 
 def bit_for_bit(title, headers, data_node):
-    """ 
+    """
     Returns a dictionary representing a new bit for bit table element.
     Bit for bit elements can be thought of as tables, but require the
-    special addition that a diff plot may need to be embedded within 
-    the table.  
+    special addition that a diff plot may need to be embedded within
+    the table.
 
     Args:
         title: The title to display
@@ -182,8 +187,8 @@ def bit_for_bit(title, headers, data_node):
 
 
 def gallery(title, image_elem_list):
-    """ 
-    Builds an image gallery out of a list of image elements. The 
+    """
+    Builds an image gallery out of a list of image elements. The
     gallery element is provided as a way of grouping images under
     a single heading and conserving space on the output page.
 
@@ -205,15 +210,15 @@ def gallery(title, image_elem_list):
 
 
 def image(title, desc, image_name):
-    """ 
+    """
     Builds an image element.  Image elements are primarily created
     and then wrapped into an image gallery element.  This is not required
     behavior, however and it's independent usage should be allowed depending
-    on the behavior required.  
-    
-    The Javascript will search for the `image_name` in the component's 
-    `imgs` directory when rendering.  For example, all verification images 
-    are output to `vv_xxxx-xx-xx/verification/imgs` and then the verification 
+    on the behavior required.
+
+    The Javascript will search for the `image_name` in the component's
+    `imgs` directory when rendering.  For example, all verification images
+    are output to `vv_xxxx-xx-xx/verification/imgs` and then the verification
     case's output page will search for `image_name` within that directory.
 
     Args:
@@ -234,8 +239,8 @@ def image(title, desc, image_name):
 
 
 def file_diff(title, diff_data):
-    """ 
-    Builds a file diff element.  This element can be used to check whether 
+    """
+    Builds a file diff element.  This element can be used to check whether
     configuration files have changed or other similar checks.  Differences
     will be highlighted when rendered via Javascript.
 
@@ -245,7 +250,7 @@ def file_diff(title, diff_data):
             { "section_name" : { "variale_name" : [diff, val_1, val_2] } }
 
     Returns:
-        A dictionary with the metadata specifying that it is to be 
+        A dictionary with the metadata specifying that it is to be
         rendered as a file diff element
     """
     fd = {}
@@ -256,8 +261,8 @@ def file_diff(title, diff_data):
 
 
 def error(title, error_msg):
-    """ 
-    Builds an error element.  Provides a way to show errors or other 
+    """
+    Builds an error element.  Provides a way to show errors or other
     anomalous behavior in the web output.
 
     Args:
@@ -273,5 +278,3 @@ def error(title, error_msg):
     err["Title"] = title
     err["Message"] = error_msg
     return err
-
-

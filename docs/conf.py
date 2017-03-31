@@ -21,12 +21,12 @@ import sys
 sys.path.insert(0, os.path.abspath('..'))
 
 # If you're using Anaconda, sphinx autodocs may not pick up conda environment
-# paths. Use the following code to add the conda environment. 
+# paths. Use the following code to add the conda environment.
 # usr_home = os.path.expanduser('~')
 # conda_ver = 'anaconda3'
 # conda_env = 'LIVVkit'
 # conda_py = 'python3.5'
-# conda_path = os.path.join(usr_home, conda_ver, 'envs', conda_env, 'lib', 
+# conda_path = os.path.join(usr_home, conda_ver, 'envs', conda_env, 'lib',
 #                 conda_py, 'site-packages')
 # sys.path.insert(0, conda_path)
 

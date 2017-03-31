@@ -67,13 +67,13 @@ To run the verification suite use:
 
 .. code:: sh
     
-    livv --verification path/to/model/data path/to/benchmark/data
+    livv --verify path/to/model/data path/to/benchmark/data
 
 To run a validation suite use:
 
 .. code:: sh
 
-    livv --validation path/to/configuration/file
+    livv --validate path/to/configuration/file
 
 You can then view the output by opening the ``index.html`` file in the output 
 directory with a web browser of your choosing.

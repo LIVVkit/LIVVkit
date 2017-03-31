@@ -49,10 +49,10 @@ find $LIVV -type f "${ALWAYS_IGNORE[@]}" \
 echo "--------------------------------------------------------------------------------"
 echo "    BEGIN PREPENDING:"
 echo "--------------------------------------------------------------------------------"
-#############################################################
-## Prepend license header to python files without a shebang. 
-## Will ignore files with a current license header. 
-#############################################################
+############################################################
+# Prepend license header to python files without a shebang. 
+# Will ignore files with a current license header. 
+############################################################
 GET=( -iname "*.py" )
 
 find $LIVV -type f \( "${GET[@]}" \) "${ALWAYS_IGNORE[@]}" "${PYTHON_IGNORE[@]}" \
@@ -74,7 +74,7 @@ done
 GET=( -iname "*.py" -or -iname "*.sh" -or -iname "*.bash" )
 
 find $LIVV -type f \( "${GET[@]}" \) "${ALWAYS_IGNORE[@]}" "${PYTHON_IGNORE[@]}" \
-    | xargs grep -l "#!" \
+    | xargs grep -l --max-count=1 "#!" \
     | xargs grep -L "$CURRENT" \
     | while read SRC 
 do

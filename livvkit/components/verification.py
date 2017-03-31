@@ -1,20 +1,20 @@
 # Copyright (c) 2015,2016, UT-BATTELLE, LLC
 # All rights reserved.
-# 
+#
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
-# 
+#
 # 1. Redistributions of source code must retain the above copyright notice, this
 # list of conditions and the following disclaimer.
-# 
+#
 # 2. Redistributions in binary form must reproduce the above copyright notice,
 # this list of conditions and the following disclaimer in the documentation
 # and/or other materials provided with the distribution.
-# 
+#
 # 3. Neither the name of the copyright holder nor the names of its contributors
 # may be used to endorse or promote products derived from this software without
 # specific prior written permission.
-# 
+#
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 # ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 # WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -28,10 +28,15 @@
 """
 Verification Test Base Module
 """
+from __future__ import absolute_import, division, print_function, unicode_literals
+import six
+
 import os
+
 import numpy as np
+import matplotlib.pyplot as plt
+
 from netCDF4 import Dataset
-from matplotlib import pyplot
 
 import livvkit
 from livvkit.util import netcdf
@@ -40,34 +45,38 @@ from livvkit.util import colormaps
 from livvkit.util.LIVVDict import LIVVDict
 from livvkit.util import elements
 
+
 def _run_suite(case, config, summary):
     """ Run the full suite of verification tests """
     config["name"] = case
     model_dir = os.path.join(livvkit.model_dir, config['data_dir'], case)
     bench_dir = os.path.join(livvkit.bench_dir, config['data_dir'], case)
-    tabs = [] 
-    case_summary = LIVVDict() 
+    tabs = []
+    case_summary = LIVVDict()
     model_cases = functions.collect_cases(model_dir)
     bench_cases = functions.collect_cases(bench_dir)
-    
-    for subcase in sorted(model_cases.keys()):
-        bench_subcases = bench_cases[subcase] if subcase in bench_cases else [] 
-        case_sections= [] 
+
+    for subcase in sorted(six.iterkeys(model_cases)):
+        bench_subcases = bench_cases[subcase] if subcase in bench_cases else []
+        case_sections = []
         for mcase in sorted(model_cases[subcase], key=functions.sort_processor_counts):
-            bpath = (os.path.join(bench_dir, subcase, mcase.replace("-", os.sep)) 
-                      if mcase in bench_subcases else "")
+            bpath = (os.path.join(bench_dir, subcase, mcase.replace("-", os.sep))
+                     if mcase in bench_subcases else "")
             mpath = os.path.join(model_dir, subcase, mcase.replace("-", os.sep))
             case_result = _analyze_case(mpath, bpath, config)
             case_sections.append(elements.section(mcase, case_result))
-            case_summary[subcase] = _summarize_result(case_result, 
-                    case_summary[subcase])
+            case_summary[subcase] = _summarize_result(case_result,
+                                                      case_summary[subcase])
         tabs.append(elements.tab(subcase, section_list=case_sections))
-   
-    result = elements.page(case, config["description"], tab_list=tabs) 
+
+    result = elements.page(case, config["description"], tab_list=tabs)
     summary[case] = case_summary
     _print_summary(case, summary[case])
-    functions.create_page_from_template("verification.html", 
-            os.path.join(livvkit.index_dir, "verification", case + ".html"))
+    functions.create_page_from_template("verification.html",
+                                        os.path.join(livvkit.index_dir,
+                                                     "verification",
+                                                     case + ".html")
+                                        )
     functions.write_json(result, os.path.join(livvkit.output_dir, "verification"), case+".json")
 
 
@@ -79,7 +88,6 @@ def _analyze_case(model_dir, bench_dir, config, plot=True):
     model_config = functions.find_file(model_dir, "*"+config["config_ext"])
     bench_config = functions.find_file(bench_dir, "*"+config["config_ext"])
     model_log = functions.find_file(model_dir, "*"+config["logfile_ext"])
-    bench_log = functions.find_file(bench_dir, "*"+config["logfile_ext"])
     el = [
             bit_for_bit(model_out, bench_out, config, plot),
             diff_configurations(model_config, bench_config, bundle, bundle),
@@ -97,7 +105,7 @@ def _print_summary(case, summary):
         print("    " + case + " " + str(dof))
         print("    --------------------")
         print("     Bit for bit matches   : " + str(b4b[0]) + " of " + str(b4b[1]))
-        print("     Configuration matches : " + str(conf[0])+ " of " + str(conf[1]))
+        print("     Configuration matches : " + str(conf[0]) + " of " + str(conf[1]))
         print("     Std. Out files parsed : " + str(stdout))
         print("")
 
@@ -105,9 +113,9 @@ def _print_summary(case, summary):
 def _summarize_result(result, summary):
     """ Trim out some data to return for the index page """
     if "Bit for Bit" not in summary:
-        summary["Bit for Bit"] = [0,0]
+        summary["Bit for Bit"] = [0, 0]
     if "Configurations" not in summary:
-        summary["Configurations"] = [0,0]
+        summary["Configurations"] = [0, 0]
     if "Std. Out Files" not in summary:
         summary["Std. Out Files"] = 0
 
@@ -120,12 +128,12 @@ def _summarize_result(result, summary):
             elem_data = elem["Data"]
             summary_data = summary["Bit for Bit"]
             total_count += 1
-            for var in elem_data.keys():
+            for var in six.iterkeys(elem_data):
                 if elem_data[var]["Max Error"] != 0:
                     failure_count += 1
                     break
     if summary_data is not None:
-        summary_data = np.add(summary_data, [total_count-failure_count, total_count]).tolist() 
+        summary_data = np.add(summary_data, [total_count-failure_count, total_count]).tolist()
         summary["Bit for Bit"] = summary_data
 
     # Get the number of config matches
@@ -142,7 +150,8 @@ def _summarize_result(result, summary):
                 for var, val in varlist.items():
                     if not val[0]:
                         failed = True
-            if failed: failure_count += 1
+            if failed:
+                failure_count += 1
     if summary_data is not None:
         success_count = total_count - failure_count
         summary_data = np.add(summary_data, [success_count, total_count]).tolist()
@@ -158,9 +167,9 @@ def _summarize_result(result, summary):
 
 def _populate_metadata():
     """ Provide some top level information for the summary """
-    return {"Type" : "Summary",
-            "Title" : "Verification",
-            "Headers" : ["Bit for Bit", "Configurations", "Std. Out Files"]}
+    return {"Type": "Summary",
+            "Title": "Verification",
+            "Headers": ["Bit for Bit", "Configurations", "Std. Out Files"]}
 
 
 def bit_for_bit(model_path, bench_path, config, plot=True):
@@ -173,7 +182,7 @@ def bit_for_bit(model_path, bench_path, config, plot=True):
         bench_path: absolute path to the benchmark dataset
         config: the configuration of the set of analyses
         plot: a boolean of whether or not to generate plots
-    
+
     Returns:
         A dictionary created by the elements object corresponding to
         the results of the bit for bit testing
@@ -181,17 +190,17 @@ def bit_for_bit(model_path, bench_path, config, plot=True):
     fname = model_path.split(os.sep)[-1]
     # Error handling
     if not (os.path.isfile(bench_path) and os.path.isfile(model_path)):
-        return elements.error("Bit for Bit", 
-                "File named " + fname + " has no suitable match!")
+        return elements.error("Bit for Bit",
+                              "File named " + fname + " has no suitable match!")
     try:
         model_data = Dataset(model_path, 'r')
         bench_data = Dataset(bench_path, 'r')
     except:
-        return elements.error("Bit for Bit", 
-                "File named " + fname + " could not be read!")
+        return elements.error("Bit for Bit",
+                              "File named " + fname + " could not be read!")
     if not (netcdf.has_time(model_data) and netcdf.has_time(bench_data)):
-        return elements.error("Bit for Bit", 
-                "File named " + fname + " could not be read!")
+        return elements.error("Bit for Bit",
+                              "File named " + fname + " could not be read!")
 
     # Begin bit for bit analysis
     headers = ["Max Error", "Index of Max Error", "RMS Error", "Plot"]
@@ -205,18 +214,18 @@ def bit_for_bit(model_path, bench_path, config, plot=True):
                 stats[var]["Max Error"] = np.amax(np.absolute(diff_data))
                 stats[var]["Index of Max Error"] = str(
                         np.unravel_index(np.absolute(diff_data).argmax(), diff_data.shape))
-                stats[var]["RMS Error"] = np.sqrt(np.sum(np.square(diff_data).flatten())/
+                stats[var]["RMS Error"] = np.sqrt(np.sum(np.square(diff_data).flatten()) /
                                                   diff_data.size)
                 pf = plot_bit_for_bit(fname, var, m_vardata, b_vardata, diff_data)
             else:
                 stats[var]["Max Error"] = stats[var]["RMS Error"] = 0
-                pf = stats[var]["Index of Max Error"] = "N/A" 
+                pf = stats[var]["Index of Max Error"] = "N/A"
             stats[var]["Plot"] = pf
         else:
             stats[var] = {"Max Error": "No Match", "RMS Error": "N/A", "Plot": "N/A"}
     model_data.close()
     bench_data.close()
-    return elements.bit_for_bit("Bit for Bit", headers, stats) 
+    return elements.bit_for_bit("Bit for Bit", headers, stats)
 
 
 def diff_configurations(model_config, bench_config, model_bundle, bench_bundle):
@@ -235,16 +244,16 @@ def diff_configurations(model_config, bench_config, model_bundle, bench_bundle):
     model_data = model_bundle.parse_config(model_config)
     bench_data = bench_bundle.parse_config(bench_config)
     if model_data == {} and bench_data == {}:
-        return elements.error("Configuration Comparison", 
-                "Could not open file: " + model_config.split(os.sep)[-1])
-    
-    model_sections = set(model_data.keys())
-    bench_sections = set(bench_data.keys())
+        return elements.error("Configuration Comparison",
+                              "Could not open file: " + model_config.split(os.sep)[-1])
+
+    model_sections = set(six.iterkeys(model_data))
+    bench_sections = set(six.iterkeys(bench_data))
     all_sections = set(model_sections.union(bench_sections))
-    
+
     for s in all_sections:
-        model_vars = set(model_data[s].keys()) if s in model_sections else set()
-        bench_vars = set(bench_data[s].keys()) if s in bench_sections else set()
+        model_vars = set(six.iterkeys(model_data[s])) if s in model_sections else set()
+        bench_vars = set(six.iterkeys(bench_data[s])) if s in bench_sections else set()
         all_vars = set(model_vars.union(bench_vars))
         for v in all_vars:
             model_val = model_data[s][v] if s in model_sections and v in model_vars else 'NA'
@@ -273,43 +282,46 @@ def plot_bit_for_bit(case, var_name, model_data, bench_data, diff_data):
         bench_data = bench_data[-1][0]
         diff_data = diff_data[-1][0]
         plot_title = "Showing "+var_name+"[-1,0,:,:]"
-    pyplot.figure(figsize=(12,3), dpi=80)
-    pyplot.clf()
-    
+    plt.figure(figsize=(12, 3), dpi=80)
+    plt.clf()
+
     # Calculate min and max to scale the colorbars
     max = np.amax([np.amax(model_data), np.amax(bench_data)])
     min = np.amin([np.amin(model_data), np.amin(bench_data)])
-    
+
     # Plot the model output
-    pyplot.subplot(1,3,1)
-    pyplot.xlabel("Model Data")
-    pyplot.ylabel(var_name)
-    pyplot.xticks([])
-    pyplot.yticks([])
-    pyplot.imshow(model_data, vmin=min, vmax=max, interpolation='nearest', cmap=colormaps.viridis)
-    pyplot.colorbar()
-  
+    plt.subplot(1, 3, 1)
+    plt.xlabel("Model Data")
+    plt.ylabel(var_name)
+    plt.xticks([])
+    plt.yticks([])
+    plt.imshow(model_data, vmin=min, vmax=max, interpolation='nearest', cmap=colormaps.viridis)
+    plt.colorbar()
+
     # Plot the benchmark data
-    pyplot.subplot(1,3,2)
-    pyplot.xlabel("Benchmark Data")
-    pyplot.xticks([])
-    pyplot.yticks([])
-    pyplot.imshow(bench_data, vmin=min, vmax=max, interpolation='nearest', cmap=colormaps.viridis)
-    pyplot.colorbar()
+    plt.subplot(1, 3, 2)
+    plt.xlabel("Benchmark Data")
+    plt.xticks([])
+    plt.yticks([])
+    plt.imshow(bench_data, vmin=min, vmax=max, interpolation='nearest', cmap=colormaps.viridis)
+    plt.colorbar()
 
     # Plot the difference
-    pyplot.subplot(1,3,3)
-    pyplot.xlabel("Difference")
-    pyplot.xticks([])
-    pyplot.yticks([])
-    pyplot.imshow(diff_data, interpolation='nearest', cmap=colormaps.viridis)
-    pyplot.colorbar()
-   
-    pyplot.tight_layout(rect=(0,0,0.95,0.9))
-    pyplot.suptitle(plot_title)
-   
-    pyplot.savefig(os.sep.join([plot_path, plot_name]))
-    pyplot.close()
-    return os.path.join(os.path.relpath(plot_path, os.path.join(livvkit.output_dir, "verification")), 
-                        plot_name)
+    plt.subplot(1, 3, 3)
+    plt.xlabel("Difference")
+    plt.xticks([])
+    plt.yticks([])
+    plt.imshow(diff_data, interpolation='nearest', cmap=colormaps.viridis)
+    plt.colorbar()
 
+    plt.tight_layout(rect=(0, 0, 0.95, 0.9))
+    plt.suptitle(plot_title)
+
+    plot_file = os.sep.join([plot_path, plot_name])
+    if livvkit.publish:
+        plt.savefig(os.path.splitext(plot_file)[0]+'.eps', dpi=600)
+    plt.savefig(plot_file)
+    plt.close()
+    return os.path.join(os.path.relpath(plot_path,
+                                        os.path.join(livvkit.output_dir, "verification")),
+                        plot_name)
