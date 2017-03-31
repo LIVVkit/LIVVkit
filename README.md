@@ -85,6 +85,10 @@ livv -v $TEST $REF -o cism206v200
 This will produce a portable website in the `cism206v200` directory, which can be viewed by pointing
 your preferred browser to `cism206v200/index.html`. 
 
+*Note: recently we've been getting reports that Chrome will not display the javascript elements of
+our output website when viewed on the local file system. If you're not seeing any elements on the
+`cism206v200/index.html` page, try viewing with another browser (Firefox and Safari appear to be
+working; IE untested).*
 
  Validation
 ------------
@@ -115,6 +119,11 @@ livv -V $LIVVKIT/components/validation_tests/template/template.json -o val_test
 This will produce a portable website in the `val_test` directory, which can be viewed by pointing
 your preferred browser to `val_test/index.html`. 
 
+*Note: recently we've been getting reports that Chrome will not display the javascript elements of
+our output website when viewed on the local file system. If you're not seeing any elements on the
+`cism206v200/index.html` page, try viewing with another browser (Firefox and Safari appear to be
+working; IE untested).*
+ 
  More
 ------
 
