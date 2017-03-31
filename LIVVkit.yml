@@ -1,0 +1,30 @@
+name: LIVVkit
+channels:
+- defaults
+dependencies:
+- python=3
+- flake8
+- ipython
+- six
+- numpy
+- scipy
+- hdf5
+- netcdf4
+- matplotlib
+- basemap
+- geos
+- pyproj
+- pip
+- pip:
+  - alabaster
+  - babel
+  - docutils
+  - imagesize
+  - ipython-genutils
+  - jinja2
+  - markupsafe
+  - prompt-toolkit
+  - snowballstemmer
+  - sphinx
+  - sphinx-api-any
+
