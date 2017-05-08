@@ -35,12 +35,13 @@
 $(document).ready(function() {
     // Used to draw the correct element type
     elementMap = {
-        "Error"       : drawError,
-        "Summary"     : drawSummary,
-        "Table"       : drawTable,
-        "Bit for Bit" : drawBitForBit,
-        "Diff"        : drawDiff,
-        "Gallery"     : drawGallery
+        "Error"          : drawError,
+        "Summary"        : drawSummary,
+        "Vertical Table" : drawVTable,
+        "Table"          : drawTable,
+        "Bit for Bit"    : drawBitForBit,
+        "Diff"           : drawDiff,
+        "Gallery"        : drawGallery
     };
 
     // Append the generated content
@@ -321,6 +322,29 @@ function drawTable(data, div) {
         html += "<td>" + data["Data"][data["Headers"][idx]] + "</td>\n";
     }
     html += "</tr>\n </table>\n </div>";
+    $(div).append(html);
+}
+
+/**
+ * Build a vertical table
+ *
+ * @param {Object} data - The data representing the table.  Determined by data["Type"] = "Vertical Table"
+ * @param {string} div - The name of the div to draw to.  Should be referenced as a string that 
+ *                       determines whether it is a class or id (ie include # or .)
+ */
+function drawVTable(data, div) {
+    var html = "<h3>" + data["Title"] + "</h3>\n";
+    html += "<div class=\"table\">";
+    html += "<table>\n";
+    for (var idx in data["Headers"]) {
+        html += "<tr>\n";
+        // Draw the headers
+        html += "<th>" + data["Headers"][idx] + "</th>\n";
+        // Draw the cells
+        html += "<td>" + data["Data"][data["Headers"][idx]] + "</td>\n";
+        html += "</tr>\n";
+    }
+    html += "</table>\n </div>";
     $(div).append(html);
 }
 

@@ -161,6 +161,33 @@ def table(title, headers, data_node):
     return tb
 
 
+def vtable(title, headers, data_node):
+    """
+    Returns a dictionary representing a new table element.  Tables
+    are specified with two main pieces of information, the headers
+    and the data to put into the table.  Rendering of the table is
+    the responsibility of the Javascript in the resources directory.
+    When the data does not line up with the headers given this should
+    be handled within the Javascript itself, not here.
+
+    Args:
+        title: The title to display
+        headers: The columns to put into the table
+        data_node: A dictionary with the form::
+            {"case" : {"subcase" : { "header" : "data" } } }
+
+    Returns:
+        A dictionary with the metadata specifying that it is to be
+        rendered as a table.
+    """
+    tb = {}
+    tb["Type"] = "Vertical Table"
+    tb["Title"] = title
+    tb["Headers"] = headers
+    tb["Data"] = data_node
+    return tb
+
+
 def bit_for_bit(title, headers, data_node):
     """
     Returns a dictionary representing a new bit for bit table element.
