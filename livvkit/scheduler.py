@@ -50,12 +50,11 @@ def run(run_type, module, config):
         module: The module corresponding to the run.  Must have a run_suite function
         config_path: The configuration for the module
     """
-    tests = [t for t in six.iterkeys(config) if isinstance(config[t], dict)]
     print(" -----------------------------------------------------------------")
     print("   Beginning " + run_type.lower() + " test suite ")
     print(" -----------------------------------------------------------------")
     print("")
-    summary = launch_processes(tests, module, **config)
+    summary = run_quiet(module, config)
     print(" -----------------------------------------------------------------")
     print("   " + run_type.capitalize() + " test suite complete ")
     print(" -----------------------------------------------------------------")
@@ -63,16 +62,27 @@ def run(run_type, module, config):
     return summary
 
 
+def run_quiet(module, config):
+    tests = [t for t in six.iterkeys(config) if isinstance(config[t], dict)]
+    summary = launch_processes(tests, module, **config)
+    return summary
+
+
 def launch_processes(tests, run_module, **config):
     """ Helper method to launch processes and synch output """
     livvkit.manager = multiprocessing.Manager()
-    test_data = livvkit.manager.dict()
-    summary = run_module._populate_metadata()
+    test_summaries = livvkit.manager.dict()
     process_handles = [multiprocessing.Process(target=run_module._run_suite,
-                       args=(test, config[test], test_data)) for test in tests]
+                       args=(test, config[test], test_summaries)) for test in tests]
     for p in process_handles:
         p.start()
     for p in process_handles:
         p.join()
-    summary["Data"] = dict(test_data)
+
+    summary = {}
+    for test in tests:
+        summary = run_module._populate_metadata(test, config[test])
+
+    summary["Data"] = dict(test_summaries)
+
     return summary

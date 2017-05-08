@@ -38,9 +38,7 @@ import livvkit
 from livvkit.util import functions
 
 
-def _run_suite(case, config, summary):
-    """ Run the full suite of validation tests """
-
+def _load_case_module(case, config):
     try:
         m = importlib.import_module(config['module'])
     except ImportError as ie:
@@ -67,21 +65,28 @@ def _run_suite(case, config, summary):
             print("    current working directory or absolutely)."                 )
             print("    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
             raise
+    return m
+
+
+def _run_suite(case, config, summary):
+    """ Run the full suite of validation tests """
+    m = _load_case_module(case, config)
 
     result = m.run(case, config)
     summary[case] = _summarize_result(m, result)
-    _print_summary(m, case)
+    _print_summary(m, case, summary)
     functions.create_page_from_template("validation.html",
                                         os.path.join(livvkit.index_dir,
                                                      "validation",
                                                      case + ".html")
                                         )
+
     functions.write_json(result, os.path.join(livvkit.output_dir, "validation"), case + ".json")
 
 
-def _print_summary(module, case):
+def _print_summary(module, case, summary):
     try:
-        module.print_summary()
+        module.print_summary(summary[case])
     except:
         print("    Ran " + case + "!")
         print("")
@@ -98,8 +103,18 @@ def _summarize_result(module, result):
     return summary
 
 
-def _populate_metadata():
+def _populate_metadata(case, config):
     metadata = {"Type": "Summary",
                 "Title": "Validation",
                 "Headers": ["Outcome"]}
+
+    m = _load_case_module(case, config)
+    try:
+        md = m.populate_metadata()
+    except:
+        pass
+
+    if md:
+        metadata = md
+
     return metadata

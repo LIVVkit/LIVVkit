@@ -177,7 +177,7 @@ def _summarize_result(result, config):
     return summary
 
 
-def _populate_metadata():
+def _populate_metadata(case, config):
     """ Provide some top level information for the summary """
     return {"Type": "Summary",
             "Title": "Performance",

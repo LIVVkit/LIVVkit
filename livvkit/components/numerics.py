@@ -98,7 +98,7 @@ def _summarize_result(module, data, config):
     return summary
 
 
-def _populate_metadata():
+def _populate_metadata(case, config):
     metadata = {"Type": "Summary",
                 "Title": "Numerics",
                 "Headers": ["Bench mean % error", "Test mean % error", "Coefficient of variation"]}
