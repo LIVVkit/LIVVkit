@@ -37,6 +37,8 @@ import shutil
 import fnmatch
 from datetime import datetime
 
+import json_tricks
+
 import livvkit
 
 
@@ -155,7 +157,7 @@ def write_json(data, path, file_name):
     elif not os.path.exists(path):
         mkdir_p(path)
     with open(os.path.join(path, file_name), 'w') as f:
-        json.dump(data, f, indent=4)
+        json_tricks.np.dump(data, f, indent=4, primitives=True)
 
 
 def collect_cases(data_dir):
