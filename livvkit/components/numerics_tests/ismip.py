@@ -190,5 +190,5 @@ def print_summary(case, summary):
         print("    " + message)
         print("    " + "-"*len(message))
         for key, val in summary[subcase].items():
-            print(" "*8 + key.ljust(25) + ":" + val.rjust(7))
+            print(" "*4 + key.ljust(25) + ":" + val.rjust(7))
         print("")
