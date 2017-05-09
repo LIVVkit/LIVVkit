@@ -104,17 +104,16 @@ def _summarize_result(module, result):
 
 
 def _populate_metadata(case, config):
-    metadata = {"Type": "Summary",
+    metadata = {"Type": "ValSummary",
                 "Title": "Validation",
+                "TableTitle": "Validation",
                 "Headers": ["Outcome"]}
 
     m = _load_case_module(case, config)
     try:
         md = m.populate_metadata()
-    except:
-        pass
-
-    if md:
         metadata = md
+    except (NotImplementedError, AttributeError):
+        pass
 
     return metadata

@@ -37,6 +37,7 @@ $(document).ready(function() {
     elementMap = {
         "Error"          : drawError,
         "Summary"        : drawSummary,
+        "ValSummary"     : drawValSummary,
         "Vertical Table" : drawVTable,
         "Table"          : drawTable,
         "Bit for Bit"    : drawBitForBit,
@@ -63,13 +64,18 @@ function drawNav() {
     // Go through each category: numerics, verification, performance, and validation
     for (var cat in data["Data"]["Elements"]) {
         if (data["Data"]["Elements"][cat] != null && 
-                Object.keys(data["Data"]["Elements"][cat]["Data"]).length > 0) {
-            html += "<h3>" + data["Data"]["Elements"][cat]["Title"] + "</h3>\n";
-            testList = Object.keys(data["Data"]["Elements"][cat]["Data"]).sort();
-            // Add the tests for each category
-            for (idx in testList) {
-                html += "<a href=" + indexPath + "/" + data["Data"]["Elements"][cat]["Title"].toLowerCase() + 
-                        "/" + testList[idx] + ".html>" + testList[idx] + "</a></br>";
+            Object.keys(data["Data"]["Elements"][cat]["Data"]).length > 0) {
+                if (data["Data"]["Elements"][cat]["Title"] === "Validation" && 
+                    data["Data"]["Elements"][cat]["Type"] === "ValSummary") {
+                    html += "<h3>" + data["Data"]["Elements"][cat]["TableTitle"] + "</h3>\n";
+                } else { 
+                    html += "<h3>" + data["Data"]["Elements"][cat]["Title"] + "</h3>\n";
+                }
+                testList = Object.keys(data["Data"]["Elements"][cat]["Data"]).sort();
+                // Add the tests for each category
+                for (idx in testList) {
+                    html += "<a href=" + indexPath + "/" + data["Data"]["Elements"][cat]["Title"].toLowerCase() + 
+                            "/" + testList[idx] + ".html>" + testList[idx] + "</a></br>";
             }
         }
     }
@@ -170,6 +176,55 @@ function drawContent() {
  */
 function drawSummary(data, div) {
     var html = "<h3>" + data["Title"] + "</h3>";
+    html += "<table class=\"summary\">\n";
+    // Add the headers
+    html += "<th></th>\n";
+    for (var header in data["Headers"]) {
+        html += "<th>" + data["Headers"][header] + "</th>\n";
+    }
+    // Add the data
+    var testNames = Object.keys(data["Data"]).sort();
+    for (var idx in testNames) {
+        testName = testNames[idx];
+        html += "<tr class=\"testName\"><td>" + testName + "</td></tr>\n";
+        for (var testCase in data["Data"][testName]) {
+            html_tmp1 = "<tr ";
+            html_tmp2 = ">\n<td class=\"testCase\">" + testCase + "</td>\n";
+            style = "";  
+            for (var headerIdx in data["Headers"]) {
+                header = data["Headers"][headerIdx];
+                html_tmp2 += "<td>"; 
+                value = data["Data"][testName][testCase][header];
+                dtype = typeof value;
+                if (dtype == 'number' || dtype == 'string') {
+                    html_tmp2 += value;
+                } else if (dtype == 'object') {
+                    if (value.length == 2) {
+                        html_tmp2 += value[0] + " of " + value[1];
+                        // Handle failures
+                        if (value[0] != value[1]) {
+                            style = "style=\"color:red\"; ";
+                        }
+                    }
+                }
+                html_tmp2 += "</td>\n";
+            }
+            html += html_tmp1 + style + html_tmp2 + "</tr>\n";
+        }
+    }
+    html += "</table>\n";
+    $(div).append(html);
+}
+
+/**
+ * Build a validation extension summary and adds it to the div.
+ *
+ * @param {Object} data - The data representing the summary.  Determined by data["Type"] = "Summary"
+ * @param {string} div - The name of the div to draw to.  Should be referenced as a string that 
+ *                       determines whether it is a class or id (ie include # or .)
+ */
+function drawValSummary(data, div) {
+    var html = "<h3>" + data["TableTitle"] + "</h3>";
     html += "<table class=\"summary\">\n";
     // Add the headers
     html += "<th></th>\n";

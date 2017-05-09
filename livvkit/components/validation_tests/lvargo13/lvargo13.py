@@ -51,6 +51,7 @@ def run(name, config):
     Returns:
         An elements.page with the list of elements to display
     """
+
     greenland_data = os.path.join(livvkit.__path__[0], config['data_dir'], config['gl_data'])
     velocity_data = os.path.join(livvkit.__path__[0], config['data_dir'], config['vel_data'])
 
@@ -63,10 +64,10 @@ def run(name, config):
     output_file_base = os.path.join(output_dir, 'lvargo13')
     functions.mkdir_p(output_dir)
 
-    ncl_command = 'ncl \'gl_data = addfile("' + config['data_dir'] + '/' + config['gl_data'] + '", "r")\' '  \
-                  + '\'vel_data = addfile("' + config['data_dir'] + '/' + config['vel_data'] + '", "r")\' '  \
+    ncl_command = 'ncl \'gl_data = addfile("' + greenland_data + '", "r")\' '  \
+                  + '\'vel_data = addfile("' + velocity_data + '", "r")\' '  \
                   + '\'model_prefix = "' \
-                  + os.path.join(config['data_dir'], config['model_prefix']) + '"\' '  \
+                  + os.path.join(livvkit.__path__[0], config['data_dir'], config['model_prefix']) + '"\' '  \
                   + '\'model_suffix = "' + config['model_suffix'] + '"\' '  \
                   + '\'model_start = ' + config['model_start'] + '\' '  \
                   + '\'model_end = ' + config['model_end'] + '\' '  \
@@ -74,10 +75,11 @@ def run(name, config):
                   + os.path.join(livvkit.__path__[0], config['plot_script'])
 
     # Be cautious about running subprocesses
-    subprocess.Popen(ncl_command, shell=True, cwd=livvkit.__path__[0],
-                     stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    p = subprocess.Popen(ncl_command, shell=True,
+                         stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    ncl_out, ncl_err = p.communicate()
 
-    #TODO: Put some error checking here
+    # TODO: Put some error checking here
 
     output_plots = [os.path.basename(p) for p in glob.glob(output_file_base + "*.png")]
     plot_list = []

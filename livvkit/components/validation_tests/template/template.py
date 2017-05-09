@@ -71,7 +71,6 @@ def summarize_result():
     raise NotImplementedError
 
 
-@Optional
 def populate_metadata():
     """
     Generates the metadata responsible for telling the summary what
