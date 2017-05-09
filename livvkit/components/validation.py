@@ -55,14 +55,14 @@ def _load_case_module(case, config):
                 raise
         except:
             print("    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-            print("                           UH OH!"                             )
+            print("                           UH OH!")
             print("    ----------------------------------------------------------")
-            print("    Could not find the module for test case: "                 )
-            print("        "+case                                                 )
-            print("    The module must be specified as an import statement of a"  )
-            print("    module that can be found on your python, or a valid path"  )
+            print("    Could not find the module for test case: ")
+            print("        "+case)
+            print("    The module must be specified as an import statement of a")
+            print("    module that can be found on your python, or a valid path")
             print("    to a python module file (specified either relative to your")
-            print("    current working directory or absolutely)."                 )
+            print("    current working directory or absolutely).")
             print("    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
             raise
     return m

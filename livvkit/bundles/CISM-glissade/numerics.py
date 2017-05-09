@@ -47,14 +47,14 @@ class DataGrid:
         self.ny = self.y[:].shape[0]
         self.dy = self.y[1] - self.y[0]
 
-        #NOTE: cell centered grids, hence the dy.
+        # NOTE: cell centered grids, hence the dy.
         self.Ly = self.y[-1] - self.y[0] + self.dy
 
         self.x = data.variables['x1']
         self.nx = self.x[:].shape[0]
         self.dx = self.x[1] - self.x[0]
 
-        #NOTE: cell centered grids, hence the dx.
+        # NOTE: cell centered grids, hence the dx.
         self.Lx = self.x[-1] - self.x[0] + self.dx
 
         self.y_hat = (self.y[:] + self.y[0])/self.Ly
@@ -188,7 +188,7 @@ def get_plot_data(test_file, bench_file, setup, config):
     else:  # f
         alpha = math.radians(-3.0)
 
-        test_rotated = RotatedGrid(alpha, test_data)     
+        test_rotated = RotatedGrid(alpha, test_data)
         bench_rotated = RotatedGrid(alpha, bench_data)
 
         for var in config['interp_vars']:

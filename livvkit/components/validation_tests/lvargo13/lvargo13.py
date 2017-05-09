@@ -67,7 +67,8 @@ def run(name, config):
     ncl_command = 'ncl \'gl_data = addfile("' + greenland_data + '", "r")\' '  \
                   + '\'vel_data = addfile("' + velocity_data + '", "r")\' '  \
                   + '\'model_prefix = "' \
-                  + os.path.join(livvkit.__path__[0], config['data_dir'], config['model_prefix']) + '"\' '  \
+                  + os.path.join(livvkit.__path__[0], config['data_dir'], config['model_prefix']) \
+                  + '"\' '  \
                   + '\'model_suffix = "' + config['model_suffix'] + '"\' '  \
                   + '\'model_start = ' + config['model_start'] + '\' '  \
                   + '\'model_end = ' + config['model_end'] + '\' '  \
@@ -86,6 +87,7 @@ def run(name, config):
     for plot in output_plots:
         plot_list.append(elements.image(plot, "", plot))
 
-    the_page = elements.page("lvargo13", config['description'], elements.gallery("Plots", plot_list))
+    the_page = elements.page("lvargo13", config['description'],
+                             elements.gallery("Plots", plot_list))
 
     return the_page

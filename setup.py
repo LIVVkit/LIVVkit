@@ -40,12 +40,12 @@ with open(long_file, 'r') as f:
 # robused and much faster.
 try:
     import numpy
-    print('Found numpy.')
+    print('Found numpy v{}.'.format(numpy.__version__))
 except ImportError:
     import pip
     pip.main(['install', 'numpy'])
     import numpy
-    print('Installed numpy via pip.')
+    print('Installed numpy v{} via pip.'.format(numpy.__version__))
 
 setup(
       name='livvkit',
