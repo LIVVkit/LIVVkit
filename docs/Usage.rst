@@ -1,4 +1,4 @@
-.. image:: ./imgs/livvkit.png
+.. figure:: ./imgs/livvkit.png
     :width: 400px
     :align: center
     :alt: LIVVkit
