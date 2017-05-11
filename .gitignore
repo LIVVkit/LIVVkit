@@ -8,6 +8,7 @@ deps/
 docs/_static
 docs/_build
 docs/source
+docs/jsdoc-toolkit-rst-template/symbols/_global_.rst
 
 
 ####=== NCL ===####
