@@ -44,10 +44,11 @@ sys.path.insert(0, os.path.abspath('..'))
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
-    'sphinx.ext.todo',
-    'sphinx.ext.coverage',
-    'sphinx.ext.mathjax',
     'sphinx.ext.viewcode',
+    'sphinx.ext.intersphinx',
+    'sphinx.ext.coverage',
+    'sphinx.ext.todo',
+    'sphinx.ext.mathjax',
     'sphinx.ext.githubpages',
     'sphinx.ext.napoleon',
 ]
@@ -163,6 +164,7 @@ html_theme = 'theme'
 html_theme_options = {
         'appendcss': 'div.body code.descclassname { display: none }',
         'githuburl': 'https://github.com/LIVVkit/LIVVkit',
+        'sidebardepth': 3,
 }
 
 # Add any paths that contain custom themes here, relative to this directory.

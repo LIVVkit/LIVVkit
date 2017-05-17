@@ -1,101 +1,113 @@
-.. figure:: ./imgs/livvkit.png
+.. figure:: _static/livvkit.png
     :width: 400px
     :align: center
     :alt: LIVVkit
 
-Design
-######
+Design Overview
+###############
 
-Repository Layout
-=================
-LIVVkit is intended to provide a framework for ice-sheet model V&V and is designed to be as model
-agnostic as possible.  As a result LIVVkit's source code is broken into three conceptual pieces:
+As detailed in [Kennedy2017]_, LIVVkit is intended to be a comprehensive V&V toolkit for regular
+and automated testing -- that is, testing models as they develop. It is designed to be *used* by
+model developers and model users and build their confidence in the mode. Additionally, it is
+expected that the testing output will be *viewed* and examined by a wider audience in order to
+enhance the credibility of the model. 
 
- - **Components**: Provides modules for the four types of analysis (numerical verification, physical
-   validation, code verification, and performance validation).  The numeric verification and physical 
-   validation components contain a test subdirectories for including extended analyses.
+Therefore, LIVVkit strives to meet these core **usage requirements*:
 
- - **Bundles**: Provides any model specific functionality needed in the standard analysis sets. The
-   Bundles also provide the list of analyses that should be run for each specific model.
+**Usable**
+  LIVVkit should be easy to start using with no new technical skills needed (for a typical ice sheet
+  modeler/developer). 
 
- - **Utilities**: Provides extra functionality that falls outside of the V&V paradigm.  This 
-   includes classes and functions for accessing common data types, the rutime infrastructure (known 
-   as the scheduler), and modules that facilitate IO.
+**Portable**
+  LIVVkit should work where the models are developed; from laptops to HPCs. 
 
-In addition to these pieces LIVVkit provides some reference datasets used in the included analyses and 
-resources for rendering analysis output in the web browser.
+**Flexible**
+  LIVVkit should accommodate multiple use cases and integrate into developers' workflow patterns.
 
-Model Output/LIVVkit Input Hierarchy
-====================================
-LIVVkit's analyses are performed by finding files in a somewhat rigid structure.  The directory 
-layout of the model output should be as follows:
+**Extensible**
+  LIVVkit should be able to accommodate new models, tests, and methods of analysis easily to keep
+  pace with future developments.
 
-.. code:: Python
+**Nimble**
+  LIVVkit should be able to perform the desired sets of analyses with minimal overhead and time to
+  results.
 
-       BUNDLE
-           ├── [METADATA]
-           └── TEST
-               ├── VARIANT
-               │    ├── sRESO*
-               │    │   ├── pPROC
-               │    │   │   ├── [zsize*] 
-               │    │   │   ├── ... 
-               ...
+Similarly, LIVVkit strives to meet these core **output requirements**:
 
-where ``[]`` indicates an optional directory, ``BUNDLE`` indicate the specific ice-sheet model used
-(including variant names; e.g., ``CISM-glissade``), ``METADATA`` indicats any directories that contain
-information inaddition to the testing data, ``TEST`` indicates a particular type of test (e.g., ``shelf``,
-``dome``, ``ismip-hom``), ``VARIANT`` indicates any variant of that test (e.g., ``ismip-hom-a``), ``sRESO`` indicates
-the grid resolution, ``pPROC`` indicate the number of processors used to run the test, and ``zSIZE``
-indicates the domain size used in the test. *Note: The percise meaning of any* ``*`` *-ed directory name
-may be variable from test to test, but will generally follow the definition given here.* 
+**Informative**
+  The analysis results should be described in a quantified manner, using appropriate metrics that
+  indicate the degree of certainty, *and* provide the necessary context to make the figures, metrics
+  and other results understandable.
 
-Extending Components
-====================
+**Shareable**
+  The results should be easy to share, publish, and examine using common tools. 
 
-Including New Models
---------------------
-Adding new models requires a new implementation in the ``bundles`` directory.  Within the
-``bundles`` directory there is a ``template`` directory that can be copied when adding compatibility
-for a new model -- the name of the new directory should indicat the model being added (e.g.,
-``CISM-Albany``, ``MPAS-LI``).  The template directory provides sample modules with function stubs that can
-be filled in to provide a drop in way to use each component (verification, performance, numerics,
-and validation).  These functions primarily are used to accomodate for model-specific
-implementations of things such as parsing log files, assimilating timing data, and arranging data
-onto standard grids.
-
-In addition to implementing component specific modules, each bundle must provide component level 
-configuration files to provide information about which test cases are run, file and variable naming 
-schemes, and data locations.
-
-When the new bundle has been implemented and placed in the ``bundles`` directory it will 
-automatically be registered by LIVVkit at runtime. It is important to note that in order to use 
-LIVVkit on a new model it will also have to conform to the standards described in the 
-`Model Output/LIVVkit Input Hierarchy`_ section (above).  
-*Note: It is critial that the* ``MODEL-Variant`` 
-*directory name is the same as the directory name that you have implemented in* ``bundles``.
+If you find LIVVkit isn't working for you, meeting these requirements, or have other suggestions for
+improvement, please let us know by `opening an issue on github
+<https://github.com/livvkit/livvkit/issues>`__.
 
 
-Adding Tests to Numerics or Validation
---------------------------------------
-Inevitably the standard provided test cases provided by LIVVkit will not fit the needs of new 
-scientific questions.  With this in mind, it is possible to add new sets of analyses into LIVVkit.  
-We provide an extensible structure for the numerics and validation components, which are most likely
-to change over time. Exending the software verification component, however, requires modifying the
-component module itself. 
+Architecture
+============
+.. figure:: _static/layout.png
+    :align: center
+    :alt: Schematic of LIVVkit's architecture and program flow.
 
-Like the implementation of new bundles we provide templates for each class of test that can be used
-to extend LIVVkit to your analysis.  A new test consists of a configuration file and a Python module
-that implements the ``run`` method, which takes a string and a dictionary as inputs.  These refer to 
-the name of the test and the data extracted from the configuration file, respectively.  
+    Schematic of LIVVkit’s architecture and program flow [Kennedy2017]_. The light blue computers
+    indicate where the user will interact with LIVVkit, first using the livv interface and then
+    finally viewing the web output. The green boxes indicate core LIVVkit functionality, the black
+    boxes are the different analyses which are executed in parallel, and the blue and purple boxes
+    represent the ice-sheet model description bundles and any extensions analyses that may have been
+    requested, respectively. Programmatically, the livv interface is used to schedule a series of
+    analyses; the scheduler then pulls the requested analysis codes from the required bundles,
+    components, and extensions; and executes the analyses. As each analysis finishes, some
+    high-level summary information will be displayed on the command line through the interface and
+    fully detailed information will be collated into the output website. Once all analyses are
+    finished, the interface will inform the user and the results of all the analyses can be viewed
+    on the output website.
 
-Within the configuration file there is a required entry pointing to the module that contains the 
-``run`` method described above.  It should be entered as you would import it from within Python 
-itself.  In principle you can add the location of your module to your ``PYTHONPATH``, but the 
-reccommended method of including new analyses into LIVVkit is to either put them in the 
-``components/validation_tests`` or ``components/numerics_tests`` or create a symlink to those 
-locations.
 
-When the analysis has been wrapped into these two files it can be run from the command line by 
-providing the ``--validation`` argument followed by the path to the configuration file.
+Components
+----------
+
+The major components of LIVVkit are: 
+
+``livv``
+  The LIVVkit command-line interface where users will primarily interact with LIVVkit, and request
+  the desired V&V analyses. 
+
+:py:mod:`livvkit.scheduler`
+  The scheduler will then launch all of the V&V analyses in parallel and will collate the output
+  when done.
+
+:py:mod:`livvkit.components`
+  A package containing the 
+  :py:mod:`~livvkit.components.numerics`,
+  :py:mod:`~livvkit.components.verification`,
+  :py:mod:`~livvkit.components.performance`, and 
+  :py:mod:`~livvkit.components.validation` components, which control the different types of
+  verification and validation analyses (see the :doc:`vv-intro`). 
+  
+:py:mod:`livvkit.bundles`
+  A package containing any model specific code bundles, which are used to completely encapsulate a
+  particular ice sheet model's unique behavior. At its core, a bundle is simply a set of
+  configuration files and Python modules. The configuration files describe paths, variable names,
+  and the types of analysis available to LIVVkit, and the Python modules provide the methods to
+  handle ice sheet model specific behavior (e.g., parsing input/log files and reshaping data
+  sets).
+
+**Utilities**
+  All the functionality that falls outside the V&V paradigm is contained in:
+
+  - :py:mod:`livvkit.util`: utility classes and functions for dealing with general LIVVkit data
+    manipulations, JSON element skeletons for output data, general I/O, etc. 
+
+  - :py:mod:`livvkit.resources`: HTML, CSS, Javascript, and image resources for generating the
+    output website.
+
+  - :py:mod:`livvkit.data`: static data used by different built in V&V analyses, and allows users to
+    link in directories containing data for custom extensions. 
+  
+
+See :ref:`modindex` for a detailed list of LIVVkit's components.
 

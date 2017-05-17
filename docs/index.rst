@@ -1,4 +1,4 @@
-.. figure:: ./imgs/livvkit.png
+.. figure:: _static/livvkit.png
     :width: 400px
     :align: center
     :alt: LIVVkit
@@ -27,24 +27,44 @@ Currently, LIVVkit is being developed and used in conjunction with the Community
 (`CISM <http://oceans11.lanl.gov/cism/documentation.html>`__), but is designed to be extensible to
 other models.
 
+License and Attribution 
+-----------------------
+
+LIVVkit |version| is an open source project licensed under a BSD 3-clause License. We ask that you
+please acknowledge LIVVkit in any work it's used, or supports, and in any corresponding published work, to please cite [Kennedy2017]_:
+
+    Kennedy, J.H., et al. (2017), LIVVkit: An extensible, python-based, land ice
+    verification and validation toolkit for ice sheet models, J. Adv. Model. Earth Syst., 9,
+    `doi:10.1002/2017MS000916 <http://dx.doi.org/10.1002/2017MS000916>`__.
+
+Users and contributors are welcome! We'll help you out --  `open an issue on github
+<https://github.com/livvkit/livvkit/issues>`__ to contact us for any reason. 
+
 
 User's Guide
 ============
 
 .. toctree::
-    :maxdepth: 2
+    :maxdepth: 3
 
     quickstart
     vv-intro
     design
     install
     usage
-    faq
+    extend
     dev
+    api
+    ref
+    faq
 
-Indices and tables
-==================
+Indices
+=======
 
 * :ref:`genindex`
 * :ref:`modindex`
+
+Search
+======
+
 * :ref:`search`

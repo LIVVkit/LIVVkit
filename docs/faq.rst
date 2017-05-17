@@ -1,3 +1,8 @@
+.. figure:: _static/livvkit.png
+    :width: 400px
+    :align: center
+    :alt: LIVVkit
+
 Frequently Asked Questions
 ==========================
 
@@ -24,6 +29,8 @@ or
     python3 -m http.server
 
 *Note, this will capture your terminal until you're done using the server (use* ``ctrl+c`` *to kill
-it).* Now, open your favorite web browser and navigate to ``http://localhost:8000/index.html``. You
+it).* 
+
+Now, open your favorite web browser and navigate to ``http://localhost:8000/index.html``. You
 should now be able to see the contents of the website. If you're still having problems, `open an
 issue on github <https://github.com/livvkit/livvkit/issues>`__ and we'll help you out! 

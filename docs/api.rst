@@ -1,32 +1,16 @@
-Numerics
-========
-.. automodule:: livvkit.components.numerics
-    :members:
+API
+###
 
-Verification
-============
-.. automodule:: livvkit.components.verification
-    :members:
+.. toctree::
 
-Performance
-===========
-.. automodule:: livvkit.components.performance
-    :members:
+    _source/modules
 
-Validation
-==========
-.. automodule:: livvkit.components.validation
-    :members:
-
-Utilities
-=========
-.. automodule:: livvkit.util.elements
-    :members:
-
-.. automodule:: livvkit.util.LIVVDict
-    :members:
 
 Web Frontend
 ============
 
-.. include:: source/js.rst
+.. include:: jsdoc-toolkit-rst-template/files.rst
+
+------
+
+.. include:: jsdoc-toolkit-rst-template/index.rst
