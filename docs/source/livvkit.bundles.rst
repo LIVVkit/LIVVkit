@@ -6,8 +6,7 @@ Subpackages
 
 .. toctree::
 
-    livvkit.bundles.CISM-albany
-    livvkit.bundles.CISM-glissade
+    livvkit.bundles.CISM_glissade
 
 Module contents
 ---------------

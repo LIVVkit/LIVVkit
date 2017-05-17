@@ -9,8 +9,7 @@ API
 Web Frontend
 ============
 
-.. include:: jsdoc-toolkit-rst-template/files.rst
+.. toctree:: 
 
-------
+    livvkit.resources.js.common module <jsdoc-toolkit-rst-template/symbols/_global_>
 
-.. include:: jsdoc-toolkit-rst-template/index.rst

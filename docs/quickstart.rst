@@ -55,8 +55,8 @@ Then, for ease, export the path to the two dataset directories:
 .. code-block:: bash
 
     cd livvkit2.0.0_example_dataset
-    export REF=$PWD/cism-2.0.0-ref/titan-gnu/CISM-glissade
-    export TEST=$PWD/cism-2.0.6-test/titan-gnu/CISM-glissade
+    export REF=$PWD/cism-2.0.0-ref/titan-gnu/CISM_glissade
+    export TEST=$PWD/cism-2.0.6-test/titan-gnu/CISM_glissade
 
 To run the suite use:
 

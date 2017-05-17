@@ -6,6 +6,5 @@
 sphinx-apidoc -f -o source/ ../livvkit/
 
 ant -buildfile jsdoc-toolkit-rst-template/build.xml build
-cp jsdoc-toolkit-rst-template/symbols/_global_.rst source/js.rst
 
 make html

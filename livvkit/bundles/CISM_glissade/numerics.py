@@ -26,7 +26,7 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
-CISM-glissade module for numerics analysis
+CISM_glissade module for numerics analysis
 """
 from __future__ import absolute_import, division, print_function, unicode_literals
 
@@ -40,7 +40,7 @@ from scipy import interpolate
 
 class DataGrid:
     """
-    Class to handle the CISM-glissade grids, which are cell-centered grids.
+    Class to handle the CISM_glissade grids, which are cell-centered grids.
     """
     def __init__(self, data):
         self.y = data.variables['y1']
@@ -66,33 +66,34 @@ class RotatedGrid:
     For the ISMIP-HOM f tests, CISM computes the flow of a glacier down an
     inclined plane:
 
-    z
-    ^
-    |
-    * .
-    .    .
-    .        .
-    *           .
-    | .             .
-    |    .     ICE      .
-    |        .              .
-    |            .             .
-    |  BED           .            .
-    |                    .           *
-    |                       .        .
-    |                          .     .
-    |                             .  .
-    |                                *
-    |                                |
-    |                                |
-    |                                |
-    0------------------------------------->x
+    ::
+
+        z
+        ^
+        |
+        * .
+        .    .
+        .        .
+        *           .
+        | .             .
+        |    .     ICE      .
+        |        .              .
+        |            .             .
+        |  BED           .            .
+        |                    .           *
+        |                       .        .
+        |                          .     .
+        |                             .  .
+        |                                *
+        |                                |
+        |                                |
+        |                                |
+        0------------------------------------->x
 
 
     The origin is at point 0 in the above figure, and the topmost point of the
     glacier is at x=0, z=7 (in km). The slope is 3 degrees. The ice is 1000 m
     tall and flows down the inclined plane.
-
 
     ISMIP-HOM, however, defines the coordinate system with the origin located at
     the topmost point of the glacier (0,7) with the x' axis pointing down slope
@@ -102,7 +103,7 @@ class RotatedGrid:
     An additional complication is that the surface is computed in CISM on the
     standard grid, but velocities are computed on a staggered, grid.
 
-    This class converts the CISM-glissade coordinate system to the ISMIP-HOM
+    This class converts the CISM_glissade coordinate system to the ISMIP-HOM
     coordinate system.
     """
     def __init__(self, alpha, data):

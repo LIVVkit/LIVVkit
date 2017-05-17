@@ -76,8 +76,8 @@ and compare it to the dataset produced from the CISM 2.0.0 release
 (~400MB; download [here](http://jhkennedy.org/LIVVkit/cism-2.0.0-tests.20160728.tgz)):
 
 ```sh
-export TEST=cism-2.0.6-tests/titan-gnu/CISM-glissade/
-export REF=cism-2.0.0-tests/titan-gnu/CISM-glissade/
+export TEST=cism-2.0.6-tests/titan-gnu/CISM_glissade/
+export REF=cism-2.0.0-tests/titan-gnu/CISM_glissade/
 
 livv -v $TEST $REF -o cism206v200
 ```

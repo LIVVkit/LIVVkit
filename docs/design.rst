@@ -12,7 +12,7 @@ model developers and model users and build their confidence in the mode. Additio
 expected that the testing output will be *viewed* and examined by a wider audience in order to
 enhance the credibility of the model. 
 
-Therefore, LIVVkit strives to meet these core **usage requirements*:
+Therefore, LIVVkit strives to meet these core **usage requirements**:
 
 **Usable**
   LIVVkit should be easy to start using with no new technical skills needed (for a typical ice sheet

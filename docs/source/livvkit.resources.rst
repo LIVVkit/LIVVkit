@@ -1,13 +1,6 @@
 livvkit.resources package
 =========================
 
-Subpackages
------------
-
-.. toctree::
-
-    livvkit.resources.js
-
 Module contents
 ---------------
 

@@ -21,7 +21,7 @@ into the development process like:
     branch (light purple path) and incremental changes are made (f001--f003). These changes
     frequently undergo the standard set of LIVVkit verification tests (dashed cyan circles). Once
     the feature is complete and tested (f003), it is ready to be merged into develop (which includes
-    the new features d125--d126) and a `pull request' will be opened by the developer (dashed
+    the new features d125--d126) and a Pull Request will be opened by the developer (dashed
     arrow).  At this point, the integrators merge the feature into a local copy of the development
     branch and the full set of LIVVkit integration tests are started (filled cyan circle). Once
     passed, the feature is merged into develop (d127) and the pull request is closed. After enough
@@ -39,6 +39,7 @@ leaf-node structure that allows the testing dataset to be more human-friendly th
 files, and still fully describe the tests. This directory structure is, for example, created by
 CISM's Build and Test Structure (BATS).
 
+.. _input-hierarchy:
 
 Model Output/LIVVkit Input Hierarchy
 ------------------------------------
@@ -58,7 +59,7 @@ The directory layout of the model output should be as follows:
                ...
 
 where ``[]`` indicates an optional directory, ``BUNDLE`` indicate the specific ice-sheet model used
-(including variant names; e.g., ``CISM-glissade``), ``METADATA`` indicates any directories that
+(including variant names; e.g., ``CISM_glissade``), ``METADATA`` indicates any directories that
 contain information in addition to the testing data  (e.g., job submission scripts, CMakeCache.txt),
 ``TEST`` indicates a particular type of test (e.g., ``shelf``, ``dome``, ``ismip-hom``), ``VARIANT``
 indicates any variant of that test (e.g., ``ismip-hom-a``), ``sRESO`` indicates the grid resolution,
@@ -91,7 +92,7 @@ datasets to a ``reg_ref`` directory, this would look like:
 
     cd tests/regression/
     ./build_and_test.py -p linux-gnu -o reg_ref
-    export REF=$PWD/reg_ref/linux-gnu/CISM-glissade
+    export REF=$PWD/reg_ref/linux-gnu/CISM_glissade
 
 When a change is made to the model and the developer is ready to test their code, they
 will then generate a test dataset on their development machine.
@@ -105,7 +106,7 @@ datasets to a ``reg_test`` directory, this would look like:
 
     cd $CISM/tests/regression/
     ./build_and_test.py -p linux-gnu -o reg_test
-    export TEST=$PWD/reg_test/linux-gnu/CISM-glissade
+    export TEST=$PWD/reg_test/linux-gnu/CISM_glissade
 
 Then, the testing results can be compared to a reference dataset with LIVVkit: 
 
@@ -156,9 +157,9 @@ like:
 
     cd tests/regression/
     ./build_and_test.py -b ref_build -p titan-gnu --timing -o reg_ref
-    export REF=$PWD/reg_ref/linux-gnu/CISM-glissade
+    export REF=$PWD/reg_ref/linux-gnu/CISM_glissade
 
-    cd reg_ref/titan-gnu/CISM-glissade
+    cd reg_ref/titan-gnu/CISM_glissade
     ./submit-all-jobs.bash
 
 .. note::
@@ -184,9 +185,9 @@ Again, for a CISM integrator working on the supercomputer Titan at `OLCF
 
     cd $CISM/tests/regression
     ./build_and_test.py -b test_build -p titan-gnu --timing -o reg_test
-    export TEST=$PWD/reg_test/linux-gnu/CISM-glissade
+    export TEST=$PWD/reg_test/linux-gnu/CISM_glissade
 
-    cd reg_test/titan-gnu/CISM-glissade
+    cd reg_test/titan-gnu/CISM_glissade
     ./submit-all-jobs.bash
 
 Then once all the jobs were finished, the testing results can be compared to a reference dataset. 

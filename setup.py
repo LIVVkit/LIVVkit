@@ -90,8 +90,7 @@ setup(
       packages=[
                'livvkit',
                'livvkit.bundles',
-               'livvkit.bundles.CISM-glissade',
-               'livvkit.bundles.CISM-albany',
+               'livvkit.bundles.CISM_glissade',
                'livvkit.components',
                'livvkit.components.numerics_tests',
                'livvkit.components.validation_tests',

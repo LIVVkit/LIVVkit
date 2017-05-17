@@ -24,7 +24,7 @@ schemes, and data locations.
 When the new bundle has been implemented and placed in the ``bundles`` directory it will 
 automatically be registered by LIVVkit at runtime. It is important to note that in order to use 
 LIVVkit on a new model it will also have to conform to the standards described in the 
-`Model Output/LIVVkit Input Hierarchy`_ section (above).  
+:ref:`input-hierarchy` section (above).  
 
 .. note:: 
 
