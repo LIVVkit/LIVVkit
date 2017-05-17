@@ -5,11 +5,7 @@ www/
 www_*/
 vv_*/
 deps/
-docs/_static
 docs/_build
-docs/source
-docs/html
-docs/jsdoc-toolkit-rst-template/symbols/_global_.rst
 
 
 ####=== NCL ===####

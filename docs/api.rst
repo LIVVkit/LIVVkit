@@ -3,7 +3,7 @@ API
 
 .. toctree::
 
-    _source/modules
+    source/modules
 
 
 Web Frontend
