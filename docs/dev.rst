@@ -8,6 +8,6 @@ Development
 
 Code Guidelines
 ===============
-.. include:: Code-Guidelines.rst
+.. include:: code-guidelines.rst
 
 .. include:: README.rst

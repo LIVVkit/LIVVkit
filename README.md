@@ -120,9 +120,8 @@ This will produce a portable website in the `val_test` directory, which can be v
 your preferred browser to `val_test/index.html`. 
 
 *Note: recently we've been getting reports that Chrome will not display the javascript elements of
-our output website when viewed on the local file system. If you're not seeing any elements on the
-`cism206v200/index.html` page, try viewing with another browser (Firefox and Safari appear to be
-working; IE untested).*
+our output website when viewed on the local file system. See our
+[FAQ](https://livvkit.github.io/Docs/faq.html) for a work-around.  
  
  More
 ------

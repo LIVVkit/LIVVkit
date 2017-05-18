@@ -6,11 +6,11 @@
 Design Overview
 ###############
 
-As detailed in [Kennedy2017]_, LIVVkit is intended to be a comprehensive V&V toolkit for regular
-and automated testing -- that is, testing models as they develop. It is designed to be *used* by
-model developers and model users and build their confidence in the mode. Additionally, it is
-expected that the testing output will be *viewed* and examined by a wider audience in order to
-enhance the credibility of the model. 
+As detailed in [Kennedy2017]_, LIVVkit is intended to be a comprehensive V&V toolkit for regular and
+automated testing -- that is, testing models as they develop. It is designed to be *used* by model
+developers/users to build their confidence in the model. Additionally, it is expected that the
+testing output will be *viewed* and examined by a wider audience in order to enhance the credibility
+of the model. 
 
 Therefore, LIVVkit strives to meet these core **usage requirements**:
 
@@ -109,5 +109,5 @@ The major components of LIVVkit are:
     link in directories containing data for custom extensions. 
   
 
-See :ref:`modindex` for a detailed list of LIVVkit's components.
+See :doc:`api` and/or :ref:`modindex` for a detailed list and description of LIVVkit's components.
 

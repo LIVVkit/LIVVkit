@@ -17,26 +17,26 @@ into the development process like:
     :alt: Development cycle
 
     Schematic of the public-private development cycle used by many scientfic modeling groups
-    [Kennedy2017]_. A feature branch is created (d124, green path) from the current development
-    branch (light purple path) and incremental changes are made (f001--f003). These changes
+    [Kennedy2017]_. A feature branch is created (``d124``, green path) from the current development
+    branch (light purple path) and incremental changes are made (``f001``--``f003``). These changes
     frequently undergo the standard set of LIVVkit verification tests (dashed cyan circles). Once
-    the feature is complete and tested (f003), it is ready to be merged into develop (which includes
-    the new features d125--d126) and a Pull Request will be opened by the developer (dashed
-    arrow).  At this point, the integrators merge the feature into a local copy of the development
-    branch and the full set of LIVVkit integration tests are started (filled cyan circle). Once
-    passed, the feature is merged into develop (d127) and the pull request is closed. After enough
-    features have been developed, the development branch will be merged into the private master
-    branch (m120, right purple path), given a version tag (v1.2.0), and pushed to the mirrored
-    master branch on the public repository (left purple path).
+    the feature is complete and tested (``f003``), it is ready to be merged into develop (which
+    includes the new features ``d125``--``d126``) and a pull request will be opened by the developer
+    (dashed arrow).  At this point, the integrators merge the feature into a local copy of the
+    development branch and the full set of LIVVkit integration tests are started (filled cyan
+    circle). Once passed, the feature is merged into develop (``d127``) and the pull request is
+    closed. After enough features have been developed, the development branch will be merged into
+    the private master branch (``m120``, right purple path), given a version tag (``v1.2.0``), and
+    pushed to the mirrored master branch on the public repository (left purple path).
 
 
 Standard verification and integration tests
 ===========================================
 
 The standard verification and integration tests are performed by comparing a regression test
-dataset, ``$TEST``, against a  reference dataset, ``$REF``. The dataset follows a somewhat rigid
-leaf-node structure that allows the testing dataset to be more human-friendly than just a bunch of
-files, and still fully describe the tests. This directory structure is, for example, created by
+dataset, ``$TEST``, against a  reference dataset, ``$REF``. The datasets follows a somewhat rigid
+leaf-node structure which allows the testing dataset to be more human-friendly than just a bunch of
+files and still fully describe the tests. This directory structure is, for example, created by
 CISM's Build and Test Structure (BATS).
 
 .. _input-hierarchy:
@@ -131,7 +131,7 @@ browser by by opening ``vv_$YEAR_$MONTH_DAY/index.html``.
     security risk). See our :doc:`faq` for a work around. 
 
 Once the feature is developed, and the developer is happy with the testing results, she/he would
-push the feature branch to the development repository and open a Pull Request, kicking off a
+push the feature branch to the development repository and open a pull request, kicking off a
 integration analysis by the model integrator(s). Additionally, the output directory may
 compressed and uploaded to Github for viewing by the integration team (every output website is
 portable). 
@@ -140,7 +140,7 @@ portable).
 Integration analysis
 --------------------
 
-Upon receiving a Pull Request for a new feature, a model's integration team will typically initiate
+Upon receiving a pull request for a new feature, a model's integration team will typically initiate
 a more substantial test of the new feature, often on the target production machine(s). 
 
 First, the integrator would checkout the code base on the production machine, and generate a
@@ -220,9 +220,11 @@ for creep, or run a series of extended validation analyses.
 Extended validation analyses
 ----------------------------
 
-*A set of standard ice sheet model validation analyses are currently being developed and will be
-released soon (along with the ncessary observational data). Check back soon! Until then, see
-:doc:`extend` for how to develop your own validation analysis.*
+.. note::
+    
+    A set of standard ice sheet model validation analyses are currently being developed and will be
+    released soon (along with the ncessary observational data). Check back soon! Until then, see
+    :doc:`extend` for how to develop your own validation analysis.
 
 
 

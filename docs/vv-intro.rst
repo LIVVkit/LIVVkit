@@ -3,8 +3,8 @@
     :align: center
     :alt: LIVVkit
 
-This page provides a brief introduction to verification and validation (V&V) for scientific models,
-mostly to solidify the terminology we'll be using. We highly recommend reading our open access
+This page provides a brief introduction to verification and validation (V&V) for scientific models
+-- mostly to solidify the terminology we'll be using. We highly recommend reading our open access
 publication in `JAMES
 <http://agupubs.onlinelibrary.wiley.com/hub/journal/10.1002/(ISSN)1942-2466/>`__ for a detailed
 discussion of V&V and its application in LIVVkit [Kennedy2017]_. For a very in depth discussion
@@ -63,8 +63,8 @@ On confidence and credibility
 -----------------------------
 
 Confidence is (or at least should be) needed for *users* and *developers* to trust their modeling
-and simulation (M&S) results, and to transmit them to the wider scientific community, policy and/or
-decision makers, and other stakeholders. 
+and simulation (M&S) results, and to transmit them to the wider scientific community,
+policy/decision makers, and other stakeholders. 
 
 However, for those results to be *used* people outside the core user and development community, the
 model must have an adequate level of credibility -- it much be trusted outside of the core
@@ -73,5 +73,5 @@ that may affect affect the economic and general well-being of citizens.
 
 Importantly, **confidence within the core community is not enough.** Credibility relies on the M&S
 results being *reproducible*, the model being well-described and thoroughly tested, and all the
-information relating to the development and testing of the model *transparent* and easily
+information relating to the development and testing of the model being *transparent* and easily
 *discoverable* [Kennedy2017]_.

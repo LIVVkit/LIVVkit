@@ -11,7 +11,14 @@ Including New Models
 Adding new models requires a new implementation in the ``bundles`` directory.  Within the
 ``bundles`` directory there is a ``template`` directory that can be copied when adding compatibility
 for a new model -- the name of the new directory should indicate the model being added (e.g.,
-``CISM-Albany``, ``MPAS-LI``).  The template directory provides sample modules with function stubs that can
+``cism_albany``, ``mpas_li``).  
+
+.. warning::
+    
+    The bundle's name needs to follow the python naming convention for a python package (see
+    :pep:`8#package-and-module-names`). 
+
+The template directory provides sample modules with function stubs that can
 be filled in to provide a drop in way to use each component (verification, performance, numerics,
 and validation).  These functions primarily are used to accommodate for model-specific
 implementations of things such as parsing log files, assimilating timing data, and arranging data
@@ -28,7 +35,7 @@ LIVVkit on a new model it will also have to conform to the standards described i
 
 .. note:: 
 
-    It is critical that the ``MODEL-Variant`` directory name is the same as the directory name that
+    It is critical that the ``model_variant`` directory name is the same as the directory name that
     you have implemented in ``bundles``.
 
 
