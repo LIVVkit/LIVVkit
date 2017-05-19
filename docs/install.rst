@@ -9,7 +9,7 @@ The latest LIVVkit release can be installed via `Python pip <https://pip.pypa.io
 
 .. code-block:: bash
 
-    pip isntall --user livvkit
+    pip install --user livvkit
 
 Via `Anaconda/Miniconda <https://conda.io/docs/download.html>`__: 
 
