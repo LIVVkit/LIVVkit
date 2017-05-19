@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+# This combination of modules worked as of:
+#     May 19 2017
+# You may need to adjust these as systems change.
+
+module unload PE-pgi PE-gnu PE-intel
+module load PE-gnu
+
+module load netcdf 
+module load hdf5-parallel
+
+module unload gcc
+module load gcc
+
+module load anaconda-cli106/rhea
+
+# make a anaconda environment for LIVVkit
+conda create --name LIVVkit python=3 ipython numpy scipy matplotlib netCDF4 pyproj basemap hdf4
+
+module list
+
