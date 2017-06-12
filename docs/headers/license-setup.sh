@@ -27,17 +27,18 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+SOURCE_DIR="../.."
 
-# Get the source dir and ignore variables
-source license-setup.sh
+CURRENT="Copyright (c)"
 
-echo "--------------------------------------------------------------------------------"
-echo "    THESE FILES ARE MISSING A CURRENT LICENSE HEADER:"
-echo "--------------------------------------------------------------------------------"
-find $SOURCE_DIR -type f "${ALWAYS_IGNORE[@]}" \
-    "${FILE_IGNORE[@]}" \
-    "${PYTHON_IGNORE[@]}" \
-    "${CSS_IGNORE[@]}" \
-    | xargs grep -L "$CURRENT" \
-    | sort
+ALWAYS_IGNORE=(-not -path "*.git*" -not -path "*docs/*" -not -iname "setup_*" \
+               -not -iname "MANIFEST.in")
+
+FILE_IGNORE=(-not -iname "*.md" -not -iname "*.json" -not -iname "*.txt" \
+             -not -iname "*.png" -not -iname "*.jpg" -not -iname "*.svg" )
+
+PYTHON_IGNORE=(-not -iname "__init__.py" -not -iname "colormaps.py"  \
+               -not -path "*dist/*" -not -path "*.egg-info/*") 
+
+CSS_IGNORE=(-not -iname "jquery-ui.min.css")
 
