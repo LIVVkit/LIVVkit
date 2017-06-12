@@ -11,7 +11,7 @@ developers in adding and updating the header files.
   license files need to be appended to the file, or removed from the distribution entirely (LIVVkit
   opted for the latter).*
 
-* `license-bump-copyright.sh` will find out dated copyright date statements, and replace them
+* `license-bump-copyright.sh` will find outdated copyright date statements, and replace them
   (in place) with a current copyright statement. 
 
 ## Usage
@@ -31,9 +31,8 @@ these extensions:
 | `.js`     | `license-css` |
 | `.ncl`    | `license-ncl` |
 
-*Note: Because comment syntax differs between these file types, files mush have one of these
-extensions in order to determine which template file to use. That is, extension-less files, and
-files without the above extensions are ignored.* 
+*Note: Because comment syntax differs between these file types, files mush have one of the above
+extensions --- extension-less files, and files without the above extensions are ignored.* 
 
 This script work by first sourcing `license-setup.sh`, which sets the important search variables:
 
@@ -41,14 +40,14 @@ This script work by first sourcing `license-setup.sh`, which sets the important 
   directory. Currently, this is set as `../..` assuming the scripts will be run from this directory
   (`docs/headers`). 
 
-* `CURRENT` is a string that should be unique to the license header and is used to determine if the
-  header is present within a file. 
+* `CURRENT` is a string that should be unique to the license header (e.g., `Copyright (c)`) and is
+  used to determine if the header is present in a file.
 
 * `ALWAYS_IGNORE` contains a set of regular expressions to match files which should always be
-  ignored by the find command.
+  ignored by the find command (e.g., `*.git/*`).
 
 * `FILE_IGNORE` contains a set of regular expressions to match the types of files that don't need a
-  license header.
+  license header (e.g., `*.png`, `*.md`).
 
 * `PYTHON_IGNORE` contains a set of regular expressions to match python files which don't need a
   license header, or are repackaged and licensed separately. 
@@ -57,12 +56,12 @@ This script work by first sourcing `license-setup.sh`, which sets the important 
   which don't need a license header, or are repackaged and licensed separately. 
 
 The `license-prepend-missing.sh` script then goes through a number of find-and-modify blocks for
-the above extensions, and appends a license header to the files missing one.  
+the above extensions, and appends a license header to the files missing a header.  
 
-**Before** running the `license-prepend-missing.sh` script, it's important to ensure that the script is
-finding the correct files. 
+**Before** running the `license-prepend-missing.sh` script, it's important to ensure that the script
+is finding the correct files. 
 
-First, run the `license-find-missing.sh` script to verify the found files, which will output a list
+**First**, run the `license-find-missing.sh` script to verify the found files, which will output a list
 of files without a license header. 
 
 **Read through this output carefully!**  This find command is generous and not restricted to the
@@ -73,7 +72,7 @@ this file type's comment syntax differs from those found in the available templa
 will need to be created and a new find-and-modify block added to `license-prepend-missing.sh`.* 
 
 Once you're confident the `license-find-missing.sh` script is finding all the appropriate files, and
-any `license-prepend-missing.sh` has all the required find-and-modify blocks, simply run the
+`license-prepend-missing.sh` has all the required find-and-modify blocks, simply run the
 `liscense-prepend-missing.sh` script. You should now see a license header at the top of all your
 "code" files. 
 
@@ -86,7 +85,7 @@ is more restrictive, and replaces it (in place) with the `NEW` string.
 For example, `CURRENT` is typically set as `Copyright (c)`, which will match files with any copyright
 statement, while `OLD` may be set as `Copyright (c) 2015, UT` to match files with the 2015
 copyright statement and `NEW` would set to `Copyright (c) 2015,2016, UT` to add 2016 to the
-copyright statement.
+copyright statement. (`OLD` and `NEW` are found in `license-bump-copyright.sh`.)
 
 *Note: Like `license-find-missing.sh`, this script is not restricted to the above file types that
 `license-prepend-missing.sh` is.*
