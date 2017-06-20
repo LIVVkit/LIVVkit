@@ -38,6 +38,7 @@ $(document).ready(function() {
         "Error"          : drawError,
         "Summary"        : drawSummary,
         "ValSummary"     : drawValSummary,
+        "bookSummary"    : drawValSummary,
         "Vertical Table" : drawVTable,
         "Table"          : drawTable,
         "Bit for Bit"    : drawBitForBit,
@@ -63,19 +64,29 @@ function drawNav() {
     
     // Go through each category: numerics, verification, performance, and validation
     for (var cat in data["Data"]["Elements"]) {
-        if (data["Data"]["Elements"][cat] != null && 
-            Object.keys(data["Data"]["Elements"][cat]["Data"]).length > 0) {
-                if (data["Data"]["Elements"][cat]["Title"] === "Validation" && 
-                    data["Data"]["Elements"][cat]["Type"] === "ValSummary") {
-                    html += "<h3>" + data["Data"]["Elements"][cat]["TableTitle"] + "</h3>\n";
-                } else { 
-                    html += "<h3>" + data["Data"]["Elements"][cat]["Title"] + "</h3>\n";
+        if (data["Data"]["Elements"][cat] != null && Object.keys(data["Data"]["Elements"][cat]["Data"]).length > 0) {
+            if (data["Data"]["Elements"][cat]["Title"] === "Validation" && 
+                data["Data"]["Elements"][cat]["Type"] === "ValSummary") {
+                html += "<h3>" + data["Data"]["Elements"][cat]["TableTitle"] + "</h3>\n";
+            } else if (data["Data"]["Elements"][cat]["Type"] !== "bookSummary") { 
+                html += "<h3>" + data["Data"]["Elements"][cat]["Title"] + "</h3>\n";
+            }
+            // Add the tests for each category
+            if (data["Data"]["Elements"][cat]["Type"] === "bookSummary") {
+                pageList = Object.keys(data["Data"]["Elements"][cat]["Data"]).sort();
+                for (idx in pageList) {
+                html += "<h3>" + pageList[idx] + "</h3>\n";
+                    for (jdx in data["Data"]["Elements"][cat]["Data"][pageList[idx]]) {
+                        html += "<a href=" + indexPath + "/" + data["Data"]["Elements"][cat]["Title"].toLowerCase() + 
+                                "/" + jdx + ".html>" + jdx + "</a></br>";
+                    }
                 }
+            } else {
                 testList = Object.keys(data["Data"]["Elements"][cat]["Data"]).sort();
-                // Add the tests for each category
                 for (idx in testList) {
                     html += "<a href=" + indexPath + "/" + data["Data"]["Elements"][cat]["Title"].toLowerCase() + 
                             "/" + testList[idx] + ".html>" + testList[idx] + "</a></br>";
+                }
             }
         }
     }

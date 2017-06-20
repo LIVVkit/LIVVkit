@@ -37,6 +37,17 @@ They will be written out to the JSON files as sub-objects, which must
 be interpreted by the Javascript found in the resources directory.
 """
 
+def book(title, description, page_dict=None):
+
+    book = {'Type': 'Book',
+            'Title': title,
+            'Description': description,
+            }
+    if page_dict is not None:
+        book['Data'] = page_dict
+
+    return book
+
 
 def page(title, description, element_list=None, tab_list=None):
     """
