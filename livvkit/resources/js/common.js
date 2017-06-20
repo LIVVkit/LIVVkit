@@ -35,12 +35,15 @@
 $(document).ready(function() {
     // Used to draw the correct element type
     elementMap = {
-        "Error"       : drawError,
-        "Summary"     : drawSummary,
-        "Table"       : drawTable,
-        "Bit for Bit" : drawBitForBit,
-        "Diff"        : drawDiff,
-        "Gallery"     : drawGallery
+        "Error"          : drawError,
+        "Summary"        : drawSummary,
+        "ValSummary"     : drawValSummary,
+        "bookSummary"    : drawValSummary,
+        "Vertical Table" : drawVTable,
+        "Table"          : drawTable,
+        "Bit for Bit"    : drawBitForBit,
+        "Diff"           : drawDiff,
+        "Gallery"        : drawGallery
     };
 
     // Append the generated content
@@ -61,14 +64,29 @@ function drawNav() {
     
     // Go through each category: numerics, verification, performance, and validation
     for (var cat in data["Data"]["Elements"]) {
-        if (data["Data"]["Elements"][cat] != null && 
-                Object.keys(data["Data"]["Elements"][cat]["Data"]).length > 0) {
-            html += "<h3>" + data["Data"]["Elements"][cat]["Title"] + "</h3>\n";
-            testList = Object.keys(data["Data"]["Elements"][cat]["Data"]).sort();
+        if (data["Data"]["Elements"][cat] != null && Object.keys(data["Data"]["Elements"][cat]["Data"]).length > 0) {
+            if (data["Data"]["Elements"][cat]["Title"] === "Validation" && 
+                data["Data"]["Elements"][cat]["Type"] === "ValSummary") {
+                html += "<h3>" + data["Data"]["Elements"][cat]["TableTitle"] + "</h3>\n";
+            } else if (data["Data"]["Elements"][cat]["Type"] !== "bookSummary") { 
+                html += "<h3>" + data["Data"]["Elements"][cat]["Title"] + "</h3>\n";
+            }
             // Add the tests for each category
-            for (idx in testList) {
-                html += "<a href=" + indexPath + "/" + data["Data"]["Elements"][cat]["Title"].toLowerCase() + 
-                        "/" + testList[idx] + ".html>" + testList[idx] + "</a></br>";
+            if (data["Data"]["Elements"][cat]["Type"] === "bookSummary") {
+                pageList = Object.keys(data["Data"]["Elements"][cat]["Data"]).sort();
+                for (idx in pageList) {
+                html += "<h3>" + pageList[idx] + "</h3>\n";
+                    for (jdx in data["Data"]["Elements"][cat]["Data"][pageList[idx]]) {
+                        html += "<a href=" + indexPath + "/" + data["Data"]["Elements"][cat]["Title"].toLowerCase() + 
+                                "/" + jdx + ".html>" + jdx + "</a></br>";
+                    }
+                }
+            } else {
+                testList = Object.keys(data["Data"]["Elements"][cat]["Data"]).sort();
+                for (idx in testList) {
+                    html += "<a href=" + indexPath + "/" + data["Data"]["Elements"][cat]["Title"].toLowerCase() + 
+                            "/" + testList[idx] + ".html>" + testList[idx] + "</a></br>";
+                }
             }
         }
     }
@@ -210,6 +228,55 @@ function drawSummary(data, div) {
 }
 
 /**
+ * Build a validation extension summary and adds it to the div.
+ *
+ * @param {Object} data - The data representing the summary.  Determined by data["Type"] = "Summary"
+ * @param {string} div - The name of the div to draw to.  Should be referenced as a string that 
+ *                       determines whether it is a class or id (ie include # or .)
+ */
+function drawValSummary(data, div) {
+    var html = "<h3>" + data["TableTitle"] + "</h3>";
+    html += "<table class=\"summary\">\n";
+    // Add the headers
+    html += "<th></th>\n";
+    for (var header in data["Headers"]) {
+        html += "<th>" + data["Headers"][header] + "</th>\n";
+    }
+    // Add the data
+    var testNames = Object.keys(data["Data"]).sort();
+    for (var idx in testNames) {
+        testName = testNames[idx];
+        html += "<tr class=\"testName\"><td>" + testName + "</td></tr>\n";
+        for (var testCase in data["Data"][testName]) {
+            html_tmp1 = "<tr ";
+            html_tmp2 = ">\n<td class=\"testCase\">" + testCase + "</td>\n";
+            style = "";  
+            for (var headerIdx in data["Headers"]) {
+                header = data["Headers"][headerIdx];
+                html_tmp2 += "<td>"; 
+                value = data["Data"][testName][testCase][header];
+                dtype = typeof value;
+                if (dtype == 'number' || dtype == 'string') {
+                    html_tmp2 += value;
+                } else if (dtype == 'object') {
+                    if (value.length == 2) {
+                        html_tmp2 += value[0] + " of " + value[1];
+                        // Handle failures
+                        if (value[0] != value[1]) {
+                            style = "style=\"color:red\"; ";
+                        }
+                    }
+                }
+                html_tmp2 += "</td>\n";
+            }
+            html += html_tmp1 + style + html_tmp2 + "</tr>\n";
+        }
+    }
+    html += "</table>\n";
+    $(div).append(html);
+}
+
+/**
  * Build an error message and appends it to the div.
  *
  * @param {Object} data - The error element data.  Determined by having data["Type"] = "Error"
@@ -217,8 +284,8 @@ function drawSummary(data, div) {
  *                       determines whether it is a class or id (ie include # or .)
  */
 function drawError(data, div) {
-    var html = "<h3>" + data["Title"] + "</h3>\n";
-    html += "<div class=\"error\">";
+    var html = "<div class=\"error\">";
+    html += "<h3>" + data["Title"] + "</h3>\n";
     html += "<p>ERROR: " + data["Message"] + "</p>\n";
     html += "</div>";
     $(div).append(html);
@@ -324,6 +391,29 @@ function drawTable(data, div) {
     $(div).append(html);
 }
 
+/**
+ * Build a vertical table
+ *
+ * @param {Object} data - The data representing the table.  Determined by data["Type"] = "Vertical Table"
+ * @param {string} div - The name of the div to draw to.  Should be referenced as a string that 
+ *                       determines whether it is a class or id (ie include # or .)
+ */
+function drawVTable(data, div) {
+    var html = "<h3>" + data["Title"] + "</h3>\n";
+    html += "<div class=\"table\">";
+    html += "<table>\n";
+    for (var idx in data["Headers"]) {
+        html += "<tr>\n";
+        // Draw the headers
+        html += "<th>" + data["Headers"][idx] + "</th>\n";
+        // Draw the cells
+        html += "<td>" + data["Data"][data["Headers"][idx]] + "</td>\n";
+        html += "</tr>\n";
+    }
+    html += "</table>\n </div>";
+    $(div).append(html);
+}
+
 
 /**
  * Build a gallery
@@ -339,12 +429,14 @@ function drawGallery(data, div) {
 
     // Create the gallery div to put all the images into
     $(div).append(html);
+    
     for (var idx in data["Data"]) {
         img_elem = data["Data"][idx];
-        $(".gallery").append("<div id=img_"+idx+"></div>")
         // Draw an image 
-        drawImage(img_elem, $("#img_"+idx));
+        drawImage(img_elem, div+" > div.gallery");
     }
+    
+    $(div).append("<div style=\"clear:both\"></div>");
 }
 
 /**
@@ -356,8 +448,10 @@ function drawGallery(data, div) {
  */
 function drawImage(img_elem, div) {
     img_dir = window.location.href.substr(0,window.location.href.lastIndexOf('/')+1) + "imgs/";
-    var html = "<p>" + img_elem["Title"] + "</p>";
+    var html = "<div><p>" + img_elem["Title"] + "</p>";
     html += drawThumbnail(img_dir + img_elem["Plot File"], 200);
+    html += "<p>" + img_elem["Desciption"] + "</p>";
+    html += "</div>"
     $(div).append(html);
 }
 

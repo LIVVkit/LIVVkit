@@ -38,9 +38,7 @@ import livvkit
 from livvkit.util import functions
 
 
-def _run_suite(case, config, summary):
-    """ Run the full suite of validation tests """
-
+def _load_case_module(case, config):
     try:
         m = importlib.import_module(config['module'])
     except ImportError as ie:
@@ -57,32 +55,45 @@ def _run_suite(case, config, summary):
                 raise
         except:
             print("    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-            print("                           UH OH!"                             )
+            print("                           UH OH!")
             print("    ----------------------------------------------------------")
-            print("    Could not find the module for test case: "                 )
-            print("        "+case                                                 )
-            print("    The module must be specified as an import statement of a"  )
-            print("    module that can be found on your python, or a valid path"  )
+            print("    Could not find the module for test case: ")
+            print("        "+case)
+            print("    The module must be specified as an import statement of a")
+            print("    module that can be found on your python, or a valid path")
             print("    to a python module file (specified either relative to your")
-            print("    current working directory or absolutely)."                 )
+            print("    current working directory or absolutely).")
             print("    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
             raise
+    return m
+
+
+def _run_suite(case, config, summary):
+    """ Run the full suite of validation tests """
+    m = _load_case_module(case, config)
 
     result = m.run(case, config)
     summary[case] = _summarize_result(m, result)
-    _print_summary(m, case)
-    functions.create_page_from_template("validation.html",
-                                        os.path.join(livvkit.index_dir,
-                                                     "validation",
-                                                     case + ".html")
-                                        )
-    functions.write_json(result, os.path.join(livvkit.output_dir, "validation"), case + ".json")
+    _print_summary(m, case, summary)
+   
+    if result['Type'] == 'Book':
+        for name, page in six.iteritems(result['Data']):
+            functions.create_page_from_template("validation.html",
+                                                os.path.join(livvkit.index_dir, "validation", name + ".html"))
+            functions.write_json(page, os.path.join(livvkit.output_dir, "validation"), name + ".json")
+    else:
+        functions.create_page_from_template("validation.html",
+                                            os.path.join(livvkit.index_dir, "validation", case + ".html"))
+        functions.write_json(result, os.path.join(livvkit.output_dir, "validation"), case + ".json")
 
 
-def _print_summary(module, case):
+def _print_summary(module, case, summary):
     try:
-        module.print_summary()
-    except:
+        try:
+            module.print_summary(summary[case])
+        except TypeError:
+            module.print_summary(case, summary[case])
+    except (NotImplementedError, AttributeError):
         print("    Ran " + case + "!")
         print("")
 
@@ -90,16 +101,25 @@ def _print_summary(module, case):
 def _summarize_result(module, result):
     try:
         summary = module.summarize_result(result)
-    except:
+    except (NotImplementedError, AttributeError):
         status = "Success"
         if result["Type"] == "Error":
-                status = "Failure"
+            status = "Failure"
         summary = {"": {"Outcome": status}}
     return summary
 
 
-def _populate_metadata():
-    metadata = {"Type": "Summary",
-                "Title": "Validation",
-                "Headers": ["Outcome"]}
+def _populate_metadata(case, config):
+    m = _load_case_module(case, config)
+    try:
+        try:
+            metadata = m.populate_metadata()
+        except TypeError:
+            metadata = m.populate_metadata(case, config)
+    except (NotImplementedError, AttributeError):
+        metadata = {"Type": "ValSummary",
+                    "Title": "Validation",
+                    "TableTitle": "Validation",
+                    "Headers": ["Outcome"]}
+
     return metadata

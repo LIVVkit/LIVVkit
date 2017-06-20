@@ -68,7 +68,9 @@ def parse_args(args=None):
                         action='store',
                         nargs='+',
                         default=None,
-                        help='Specify the location of the configuration files for validation tests.')
+                        help=' '.join(['Specify the location of the configuration files for',
+                                       'validation tests.'])
+                        )
 
     parser.add_argument('-p', '--publish',
                         action='store_true',

@@ -70,12 +70,20 @@ def main(args):
         l.append(scheduler.run("performance", components.performance,
                  functions.read_json(livvkit.performance_model_config)))
     if livvkit.validate:
+        print(" -----------------------------------------------------------------")
+        print("   Beginning the validation test suite ")
+        print(" -----------------------------------------------------------------")
+        print("")
         validation_config = {}
         for conf in livvkit.validation_model_configs:
             validation_config = functions.merge_dicts(validation_config,
                                                       functions.read_json(conf))
-        l.append(scheduler.run("validation", components.validation,
-                               validation_config))
+        l.extend(scheduler.run_quiet(components.validation, validation_config,
+                                     group=False))
+        print(" -----------------------------------------------------------------")
+        print("   Validation test suite complete ")
+        print(" -----------------------------------------------------------------")
+        print("")
 
     result = elements.page("Summary", "", element_list=l)
     functions.write_json(result, livvkit.output_dir, "index.json")

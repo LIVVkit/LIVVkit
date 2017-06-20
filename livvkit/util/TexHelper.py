@@ -127,7 +127,7 @@ def translate_summary(data):
 
     names = sorted(six.iterkeys(data.get("Data", [])))
     for name in names:
-        summary += '\n\n \\textbf{$NAME} $SPACER \n'.replace('$NAME', name).replace('$SPACER', spacer)
+        summary += '\n\n \\textbf{{{}}} {} \n'.format(name, spacer)
         cases = data.get("Data", []).get(name, {})
         for case, c_data in cases.items():
             summary += ' $CASE & '.replace('$CASE', str(case))
@@ -219,7 +219,7 @@ def translate_file_diff(data):
             if vals[0]:
                 diff += '$NAME'.replace('$NAME', vals[-1])
             else:
-                diff += ('$NAME1 \\textit{$NAME2}'.replace('$NAME1', vals[1]).repace('$NAME2',  vals[-1]))
+                diff += ('{} \\textit{{{}}}'.format(vals[1], vals[-1]))
     diff += '\n\n'
     return diff
 

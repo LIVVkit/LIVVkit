@@ -100,4 +100,4 @@ def plot_coverage(plot_file, model_data, bench_data, output_file):
     subprocess.Popen(ncl_command, shell=True, cwd=livvkit.__path__[0],
                      stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-    #TODO: Put some error checking here
+    # TODO: Put some error checking here

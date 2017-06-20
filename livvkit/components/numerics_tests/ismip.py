@@ -45,10 +45,10 @@ from livvkit.util import elements
 
 
 case_color = {'bench': '#d7191c',
-              'test':  '#fc8d59' }
+              'test':  '#fc8d59'}
 
 line_style = {'bench': 'o-',
-              'test':  '-'  }
+              'test': '-'}
 
 setup = None
 
@@ -89,7 +89,7 @@ def run(config, analysis_data):
         description = ''
 
         for l in sorted(lengths):
-            plt.figure(figsize=(10,8), dpi=150)
+            plt.figure(figsize=(10, 8), dpi=150)
             plt.xlabel(setup[case]['xlabel'][p])
             plt.ylabel(setup[case]['ylabel'][p])
 
@@ -131,7 +131,7 @@ def run(config, analysis_data):
 
             plt.legend(loc='best')
             if livvkit.publish:
-                plt.savefig( os.path.splitext(plot_file)[0]+'.eps', dpi=600 )
+                plt.savefig(os.path.splitext(plot_file)[0]+'.eps', dpi=600)
             plt.savefig(plot_file)
             plt.close()
             plot_list.append(elements.image(title, description, os.path.basename(plot_file)))
@@ -180,6 +180,7 @@ def summarize_result(data, config):
 
                     summary[label]['Coefficient of variation'] = \
                             '{:3.2%}'.format(np.nanmean(coefficient))
+
     return summary
 
 
@@ -190,5 +191,5 @@ def print_summary(case, summary):
         print("    " + message)
         print("    " + "-"*len(message))
         for key, val in summary[subcase].items():
-            print(" "*8 + key.ljust(25) + ":" + val.rjust(7))
+            print(" "*4 + key.ljust(25) + ":" + val.rjust(7))
         print("")

@@ -165,7 +165,7 @@ def _summarize_result(result, summary):
     return summary
 
 
-def _populate_metadata():
+def _populate_metadata(case, config):
     """ Provide some top level information for the summary """
     return {"Type": "Summary",
             "Title": "Verification",
