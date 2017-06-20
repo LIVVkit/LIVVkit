@@ -284,8 +284,8 @@ function drawValSummary(data, div) {
  *                       determines whether it is a class or id (ie include # or .)
  */
 function drawError(data, div) {
-    var html = "<h3>" + data["Title"] + "</h3>\n";
-    html += "<div class=\"error\">";
+    var html = "<div class=\"error\">";
+    html += "<h3>" + data["Title"] + "</h3>\n";
     html += "<p>ERROR: " + data["Message"] + "</p>\n";
     html += "</div>";
     $(div).append(html);
@@ -429,12 +429,14 @@ function drawGallery(data, div) {
 
     // Create the gallery div to put all the images into
     $(div).append(html);
+    
     for (var idx in data["Data"]) {
         img_elem = data["Data"][idx];
-        $(".gallery").append("<div id=img_"+idx+"></div>")
         // Draw an image 
-        drawImage(img_elem, $("#img_"+idx));
+        drawImage(img_elem, div+" > div.gallery");
     }
+    
+    $(div).append("<div style=\"clear:both\"></div>");
 }
 
 /**
@@ -446,8 +448,10 @@ function drawGallery(data, div) {
  */
 function drawImage(img_elem, div) {
     img_dir = window.location.href.substr(0,window.location.href.lastIndexOf('/')+1) + "imgs/";
-    var html = "<p>" + img_elem["Title"] + "</p>";
+    var html = "<div><p>" + img_elem["Title"] + "</p>";
     html += drawThumbnail(img_dir + img_elem["Plot File"], 200);
+    html += "<p>" + img_elem["Desciption"] + "</p>";
+    html += "</div>"
     $(div).append(html);
 }
 
