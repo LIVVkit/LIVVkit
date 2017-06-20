@@ -49,7 +49,7 @@ except ImportError:
 
 setup(
       name='livvkit',
-      version='2.0.3',
+      version='2.0.1',
 
       description='The land ice verification and validation toolkit.',
       long_description=long_desc,
