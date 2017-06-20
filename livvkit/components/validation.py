@@ -89,7 +89,10 @@ def _run_suite(case, config, summary):
 
 def _print_summary(module, case, summary):
     try:
-        module.print_summary(summary[case])
+        try:
+            module.print_summary(summary[case])
+        except TypeError:
+            module.print_summary(case, summary[case])
     except (NotImplementedError, AttributeError):
         print("    Ran " + case + "!")
         print("")
@@ -101,7 +104,7 @@ def _summarize_result(module, result):
     except (NotImplementedError, AttributeError):
         status = "Success"
         if result["Type"] == "Error":
-                status = "Failure"
+            status = "Failure"
         summary = {"": {"Outcome": status}}
     return summary
 
@@ -109,8 +112,10 @@ def _summarize_result(module, result):
 def _populate_metadata(case, config):
     m = _load_case_module(case, config)
     try:
-        metadata = m.populate_metadata()
-
+        try:
+            metadata = m.populate_metadata()
+        except TypeError:
+            metadata = m.populate_metadata(case, config)
     except (NotImplementedError, AttributeError):
         metadata = {"Type": "ValSummary",
                     "Title": "Validation",
