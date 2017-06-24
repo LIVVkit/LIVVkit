@@ -31,6 +31,11 @@ or
 *Note, this will capture your terminal until you're done using the server (use* ``ctrl+c`` *to kill
 it).* 
 
-Now, open your favorite web browser and navigate to ``http://localhost:8000/index.html``. You
-should now be able to see the contents of the website. If you're still having problems, `open an
-issue on github <https://github.com/livvkit/livvkit/issues>`__ and we'll help you out! 
+Now, open your favorite web browser and navigate to either ``http://localhost:8000/index.html`` or
+``http://127.0.0.1:8000/index.html``. You should now be able to see the contents of the website.
+When you rerun LIVVkit, you'll want to clear the browser's cache of the output website when you
+reload the page. In most broswers, you can do that by using the ``ctrl+F5`` or ``ctrl+shit+R``
+keyboard commands on Windows/Linux, or ``cmd+F5`` or ``cmd+shit+R`` on Mac.  
+
+If you're still having problems, `open an issue on github
+<https://github.com/livvkit/livvkit/issues>`__ and we'll help you out! 
