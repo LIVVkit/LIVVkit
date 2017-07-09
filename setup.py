@@ -29,11 +29,16 @@
 from __future__ import absolute_import, print_function, unicode_literals
 
 from setuptools import setup
-from os import path
 
-long_file = path.join(path.abspath(path.dirname(__file__)), 'README.md')
-with open(long_file, 'r') as f:
-    long_desc = f.read()
+# A trick to have use a markdown README for the pypi long description which
+# requires reStructuredText. From:
+#    https://stackoverflow.com/questions/10718767
+try:
+    from pypandoc import convert
+    read_md = lambda f: convert(f, 'rst')
+except ImportError:
+    print("warning: pypandoc module not found, could not convert Markdown to RST")
+    read_md = lambda f: open(f, 'r').read()
 
 # NOTE: Numpy really wants to build from source unless it's already installed,
 # which is slow and prone to failure This significanlty make the build more
@@ -52,7 +57,7 @@ setup(
       version='2.0.1',
 
       description='The land ice verification and validation toolkit.',
-      long_description=long_desc,
+      long_description=read_md('README.md'),
 
       url='http://github.com/LIVVkit/LIVVkit',
 
