@@ -85,10 +85,12 @@ setup(
 
       setup_requires=['numpy'],
       install_requires=[
+                       'six',
                        'numpy',
                        'scipy',
                        'netCDF4',
-                       'matplotlib'
+                       'matplotlib',
+                       'json-tricks'
                        ],
 
       scripts=['livv'],
