@@ -1,30 +1,21 @@
 name: LIVVkit
 channels:
 - defaults
+- conda-forge 
+- bioconda
 dependencies:
 - python=3
-- flake8
-- ipython
 - six
 - numpy
 - scipy
-- hdf5
 - netcdf4
 - matplotlib
-- basemap
-- geos
-- pyproj
-- pip
+- pyyaml
+- ant
 - pip:
-  - alabaster
-  - babel
-  - docutils
-  - imagesize
-  - ipython-genutils
-  - jinja2
-  - markupsafe
-  - prompt-toolkit
-  - snowballstemmer
+  - json-tricks 
   - sphinx
-  - sphinx-api-any
-
+  - sphinx-py3doc-enhanced-theme
+- npm:
+  - jsdoc
+  - jsdoc-rst-template
