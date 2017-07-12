@@ -1,19 +1,19 @@
-livvkit.bundles.CISM_glissade package
-=====================================
+livvkit\.bundles\.CISM\_glissade package
+========================================
 
 Submodules
 ----------
 
-livvkit.bundles.CISM_glissade.numerics module
----------------------------------------------
+livvkit\.bundles\.CISM\_glissade\.numerics module
+-------------------------------------------------
 
 .. automodule:: livvkit.bundles.CISM_glissade.numerics
     :members:
     :undoc-members:
     :show-inheritance:
 
-livvkit.bundles.CISM_glissade.verification module
--------------------------------------------------
+livvkit\.bundles\.CISM\_glissade\.verification module
+-----------------------------------------------------
 
 .. automodule:: livvkit.bundles.CISM_glissade.verification
     :members:

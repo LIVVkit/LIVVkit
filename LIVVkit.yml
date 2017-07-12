@@ -11,11 +11,9 @@ dependencies:
 - netcdf4
 - matplotlib
 - pyyaml
-- ant
+- nodejs
 - pip:
   - json-tricks 
   - sphinx
+  - sphinx-js
   - sphinx-py3doc-enhanced-theme
-- npm:
-  - jsdoc
-  - jsdoc-rst-template

@@ -1,11 +1,11 @@
-livvkit.components.validation_tests.template package
-====================================================
+livvkit\.components\.validation\_tests\.template package
+========================================================
 
 Submodules
 ----------
 
-livvkit.components.validation_tests.template.template module
-------------------------------------------------------------
+livvkit\.components\.validation\_tests\.template\.template module
+-----------------------------------------------------------------
 
 .. automodule:: livvkit.components.validation_tests.template.template
     :members:

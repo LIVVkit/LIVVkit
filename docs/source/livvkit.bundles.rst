@@ -1,5 +1,5 @@
-livvkit.bundles package
-=======================
+livvkit\.bundles package
+========================
 
 Subpackages
 -----------

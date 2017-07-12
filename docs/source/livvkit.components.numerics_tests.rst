@@ -1,11 +1,11 @@
-livvkit.components.numerics_tests package
-=========================================
+livvkit\.components\.numerics\_tests package
+============================================
 
 Submodules
 ----------
 
-livvkit.components.numerics_tests.ismip module
-----------------------------------------------
+livvkit\.components\.numerics\_tests\.ismip module
+--------------------------------------------------
 
 .. automodule:: livvkit.components.numerics_tests.ismip
     :members:

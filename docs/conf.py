@@ -16,6 +16,7 @@
 import os
 import sys
 
+import sphinx_js
 import sphinx_py3doc_enhanced_theme
 
 # If extensions (or modules to document with autodoc) are in another directory,
@@ -51,7 +52,11 @@ extensions = [
     'sphinx.ext.mathjax',
     'sphinx.ext.githubpages',
     'sphinx.ext.napoleon',
+    'sphinx_js',
 ]
+
+# Add the js source path for sphinx_js
+js_source_path = '../livvkit/resources/js'
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']

@@ -1,11 +1,11 @@
-livvkit.components.validation_tests.coverage package
-====================================================
+livvkit\.components\.validation\_tests\.coverage package
+========================================================
 
 Submodules
 ----------
 
-livvkit.components.validation_tests.coverage.coverage module
-------------------------------------------------------------
+livvkit\.components\.validation\_tests\.coverage\.coverage module
+-----------------------------------------------------------------
 
 .. automodule:: livvkit.components.validation_tests.coverage.coverage
     :members:
