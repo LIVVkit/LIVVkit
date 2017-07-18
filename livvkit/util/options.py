@@ -42,18 +42,18 @@ from livvkit import resources
 
 def parse_args(args=None):
     """
-    Handles the parsing of options for LIVV's command line interface
+    Handles the parsing of options for LIVVkit's command line interface
 
     Args:
         args: The list of arguments, typically sys.argv[1:]
     """
-    parser = argparse.ArgumentParser(description="Main script to run LIVV.",
+    parser = argparse.ArgumentParser(description="Main script to run LIVVkit.",
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter,
                                      fromfile_prefix_chars='@')
 
     parser.add_argument('-o', '--out-dir',
                         default=os.path.join(os.getcwd(), "vv_" + time.strftime("%Y-%m-%d")),
-                        help='Location to output the LIVV webpages.')
+                        help='Location to output the LIVVkit webpages.')
 
     parser.add_argument('-v', '--verify',
                         nargs=2,
@@ -70,6 +70,16 @@ def parse_args(args=None):
                         default=None,
                         help=' '.join(['Specify the location of the configuration files for',
                                        'validation tests.'])
+                        )
+
+    # FIXME: this just short-circuits to the validation option, and should become its own module
+    parser.add_argument('-e', '--extension',
+                        action='store',
+                        nargs='+',
+                        default=None,
+                        dest='validate',
+                        help=' '.join(['Specify the location of the configuration files for',
+                                       'LIVVkit extensions.'])
                         )
 
     parser.add_argument('-p', '--publish',
