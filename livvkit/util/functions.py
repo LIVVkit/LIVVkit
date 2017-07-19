@@ -163,7 +163,7 @@ def write_json(data, path, file_name):
     elif not os.path.exists(path):
         mkdir_p(path)
     with open(os.path.join(path, file_name), 'w') as f:
-        json_tricks.np.dump(data, f, indent=4, primitives=True)
+        json_tricks.np.dump(data, f, indent=4, primitives=True, allow_nan=True)
 
 
 def collect_cases(data_dir):
