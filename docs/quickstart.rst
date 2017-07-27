@@ -3,13 +3,14 @@
     :align: center
     :alt: LIVVkit
 
-Getting Started
-===============
+Quick Start
+===========
 
 Ready to jump right in? 
 
-Quick Installation
-------------------
+
+Basic Install
+-------------
 
 The latest LIVVkit release can be installed via `Python pip <https://pip.pypa.io/en/stable/>`__:
 
@@ -25,7 +26,7 @@ or `Anaconda/Miniconda <https://conda.io/docs/download.html>`__:
 
 
 LIVVkit was designed to be Python 2 and 3 compatible, so either version will work, but Python 3 is
-recommended. If you're having problems installing LIVVkit, see our detailed :doc:`install` page, or
+recommended. If you're having problems installing LIVVkit, see our :doc:`install` page, or
 `open an issue on github <https://github.com/livvkit/livvkit/issues>`__.
 
 

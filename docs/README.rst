@@ -1,5 +1,5 @@
 Building the documentation
-==========================
+--------------------------
 
 To build this documentation you will need to install some additional tools:
 
