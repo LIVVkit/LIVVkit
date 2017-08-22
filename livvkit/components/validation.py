@@ -32,6 +32,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import six
 
 import os
+import sys
 import importlib
 
 import livvkit
@@ -42,15 +43,17 @@ def _load_case_module(case, config):
     try:
         m = importlib.import_module(config['module'])
     except ImportError as ie:
-        config_path = os.path.abspath(config['module'])
+        mod_path = os.path.abspath(config['module'])
         try:
             if six.PY2:
                 import imp
-                m = imp.load_source('validation.'+case, config_path)
+                m = imp.load_source(case, mod_path)
             elif six.PY3:
-                spec = importlib.util.spec_from_file_location('validation.'+case, config_path)
+                spec = importlib.util.spec_from_file_location(case, mod_path, 
+                                                              submodule_search_locations=os.path.dirname(mod_path))
                 m = importlib.util.module_from_spec(spec)
                 spec.loader.exec_module(m)
+                #sys.modules[case] = m
             else:
                 raise
         except:
