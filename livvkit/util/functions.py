@@ -31,6 +31,7 @@ Module to hold LIVV specific functions
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import os
+import sys
 import json
 import errno
 import shutil
@@ -40,6 +41,17 @@ from datetime import datetime
 import json_tricks
 
 import livvkit
+
+
+class temp_sys_path():
+    def __init__(self, path):
+        self.path = path
+
+    def __enter__(self):
+        sys.path.insert(0, self.path)
+
+    def __exit__(self, *args):
+        sys.path.remove(self.path)
 
 
 def mkdir_p(path):
