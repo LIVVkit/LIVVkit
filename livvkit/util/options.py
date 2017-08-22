@@ -78,6 +78,7 @@ def parse_args(args=None):
                         nargs='+',
                         default=None,
                         dest='validate',
+                        metavar='EXTENSION',
                         help=' '.join(['Specify the location of the configuration files for',
                                        'LIVVkit extensions.'])
                         )
