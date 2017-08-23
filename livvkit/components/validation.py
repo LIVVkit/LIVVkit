@@ -38,6 +38,55 @@ import importlib
 import livvkit
 from livvkit.util import functions
 
+ERR_MISSING_MOD_MSG = """
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                       UH OH!")
+----------------------------------------------------------
+Could not find the module for {}:
+    {}
+
+The module must be specified as an import statement of a
+module that can be found on your python, or a valid path
+to a python module file (specified either relative to your
+current working directory or absolutely).
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+"""
+
+ERR_MISSING_DEP_MSG = """
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                       UH OH!")
+----------------------------------------------------------
+{} depends on {}. 
+
+Please install it before using this extension; `conda` or
+`pip` is recommended. 
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+"""
+
+ERR_MISSING_DEP_CONDA_MSG = """
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                       UH OH!")
+----------------------------------------------------------
+{} depends on {}. 
+
+If you're using `conda` you can update your environment
+with the required packages by issuing this command:
+    conda env update -- name {} -f {}
+
+Otherwise, install the packages listed in the above *.yml
+file. 
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+"""
+
+
+def _case_dep_err(case, mod_path):
+    yml_path = mod_path.replace('.py', '.yml')
+    conda_env = os.environ.get('CONDA_DEFAULT_ENV')
+    if conda_env and os.path.isfile(yml_path):
+        return ERR_MISSING_DEP_CONDA_MSG.format('{}', '{}', conda_env, os.path.relpath(yml_path, os.getcwd()))
+    else:
+        return ERR_MISSING_DEP_MSG
+
 
 def _load_case_module(case, config):
     try:
@@ -56,18 +105,16 @@ def _load_case_module(case, config):
                 #sys.modules[case] = m
             else:
                 raise
-        except:
-            print("    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-            print("                           UH OH!")
-            print("    ----------------------------------------------------------")
-            print("    Could not find the module for test case: ")
-            print("        "+case)
-            print("    The module must be specified as an import statement of a")
-            print("    module that can be found on your python, or a valid path")
-            print("    to a python module file (specified either relative to your")
-            print("    current working directory or absolutely).")
-            print("    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+        except IOError as ioe:
+            # imp.load_source (py2) and spec.loader.exec_module (py3) raises an IOError if module isn't found
+            print(ERR_MISSING_MOD_MSG.format(case, os.path.relpath(mod_path, os.getcwd())))
             raise
+        except ImportError as iie:
+            # If module's internal import statements fail
+            dep = str(iie).split()[-1] if six.PY2 else iie.name 
+            print(_case_dep_err(case, mod_path).format(case, dep))
+            raise
+        
     return m
 
 
