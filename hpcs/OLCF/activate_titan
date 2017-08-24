@@ -11,6 +11,8 @@ module load cray-netcdf-hdf5parallel
 module load gcc
 module load anaconda-cli106/titan
 
+export PYTHONPATH=''
+
 # activate LIVVkit environment
 source activate LIVVkit
 
