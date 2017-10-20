@@ -44,7 +44,8 @@ $(document).ready(function() {
         "Table"          : drawTable,
         "Bit for Bit"    : drawBitForBit,
         "Diff"           : drawDiff,
-        "Gallery"        : drawGallery
+        "Gallery"        : drawGallery,
+        "HTML"           : drawHTML
     };
 
     // Append the generated content
@@ -500,7 +501,7 @@ function drawGallery(data, div) {
 /**
  * Draw an image
  *
- * @param {Object} data - The data representing the table.  Determined by data["Type"] = "Image"
+ * @param {Object} data - The data representing the image.  Determined by data["Type"] = "Image"
  * @param {string} div - The name of the div to draw to.  Should be referenced as a string that 
  *                       determines whether it is a class or id (ie include # or .)
  */
@@ -526,6 +527,20 @@ function drawThumbnail(path, size) {
     html += "<img class=\"thumbnail\" src=\"" + path + "\" style=\"height: " + size + "px; overflow: hidden; position: relative\">";
     html += "</a>";
     return html;
+}
+
+/**
+ * Draw HTML element
+ *
+ * @param {Object} data - The data representing the html element. Determined by data["Type"] = "HTML"
+ * @param {string} div - The name of the div to draw to.  Should be referenced as a string that 
+ *                       determines whether it is a class or id (ie include # or .)
+ */
+function drawHTML (data, div) {
+    var html = "<div>";
+    html += data["Data"];
+    html += "</div>";
+    $(div).append(html);
 }
 
 /**
