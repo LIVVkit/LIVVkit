@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 # Copyright (c) 2015,2016, UT-BATTELLE, LLC
 # All rights reserved.
 #
@@ -33,6 +33,7 @@ Management of the tests to be run is handled by the scheduler in livvkit.util
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import os
+import sys
 
 import livvkit
 from livvkit.util import options
@@ -92,6 +93,31 @@ def main(args):
     print("  " + os.path.join(livvkit.output_dir, 'index.html'))
     print("-------------------------------------------------------------------")
 
+    print(args)
+
+    if args.serve:
+        print("It's happening!")
+        try:
+            # Python 3
+            import http.server
+            import socketserver
+            handler = http.server.SimpleHTTPRequestHandler
+            httpd = socketserver.TCPServer(('', args.serve), handler)
+        except ImportError:
+            # Python 2
+            import SimpleHTTPServer
+            import SocketServer
+            handler = SimpleHTTPServer.SimpleHTTPRequestHandler
+            httpd = SocketServer.TCPServer(('', args.serve), handler)
+        
+        sa = httpd.socket.getsockname()
+        print('\nServing HTTP on {host} port {port} (http://{host}:{port}/)'.format(host=sa[0], port=sa[1]))
+        try:
+            httpd.serve_forever()
+        except KeyboardInterrupt:
+            print('\nKeyboard interrupt recieved, exiting.')
+            sys.exit(0)
+    
 
 if __name__ == "__main__":
     main(options.parse_args())

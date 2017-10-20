@@ -53,7 +53,8 @@ def parse_args(args=None):
 
     parser.add_argument('-o', '--out-dir',
                         default=os.path.join(os.getcwd(), "vv_" + time.strftime("%Y-%m-%d")),
-                        help='Location to output the LIVVkit webpages.')
+                        help='Location to output the LIVVkit webpages.'
+                        )
 
     parser.add_argument('-v', '--verify',
                         nargs=2,
@@ -89,6 +90,11 @@ def parse_args(args=None):
                                        'Also produce a publication quality copy of the figure in',
                                        'the output directory (eps, 600d pi).'
                                        ])
+                        )
+
+    parser.add_argument('-s', '--serve',
+                        nargs='?', type=int, const=8000,
+                        help='Start a simple HTTP server for the output website on port SERVE.'
                         )
 
     return init(parser.parse_args(args))
