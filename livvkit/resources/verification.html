@@ -34,12 +34,15 @@
     <head>
         <meta charset="utf-8">
         <title>LIVVkit</title>
+        <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+        <link href="../css/jquery-ui.min.css" type="text/css" rel="stylesheet">
+        <link href="../css/captionjs.min.css" type="text/css" rel="stylesheet">
+        <link href="../css/lightbox.min.css" type="text/css" rel="stylesheet">
         <link href="../css/livv.css" type="text/css" rel="stylesheet">
         <link href="../css/acknowledgments.css" type="text/css" rel="stylesheet">
-        <link href="../css/jquery-ui.min.css" type="text/css" rel="stylesheet">
-        <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
         <script src="../js/jquery.min.js"></script> 
         <script src="../js/jquery-ui.min.js"></script>
+        <script src="../js/jquery.caption.min.js"></script>
         <script>    
             var vvType = "verification";
             var indexPath = "..";
@@ -47,43 +50,49 @@
         <script src="../js/common.js"></script>
     </head>
 
-    <div id="header">
-        <div id="header-spacer">
-            <img id="header-icon" src="../imgs/icon.svg">
-            <a id="header-home" href="../index.html">
-                Home
-            </a>
-            <a id="header-title" target="_blank" href="https://github.com/LIVVkit">
-                LIVVkit: The land ice verification &amp; validation toolkit
-            </a>
-            <a id="header-docs" target="_blank" href="https://livvkit.github.io/Docs/">
-                Documentation
-            </a>
-        </div> 
-    </div>
-
-
-    <div id="wrapper">
-        <div id="nav">
+    <body>
+        <div id="header">
+            <div id="header-spacer">
+                <img id="header-icon" src="../imgs/icon.svg">
+                <a id="header-home" href="../index.html">
+                    Home
+                </a>
+                <a id="header-title" target="_blank" href="https://github.com/LIVVkit">
+                    LIVVkit: The land ice verification &amp; validation toolkit
+                </a>
+                <a id="header-docs" target="_blank" href="https://livvkit.github.io/Docs/">
+                    Documentation
+                </a>
+            </div> 
         </div>
 
-        <div id="content">
-        </div>
-    </div>
 
-    
-    <div id="acknowledgments">
-    <hr>
-        <div id=acklogo>
-            <a><img id="logoORNL" src="../imgs/ORNL-logo.png" alt="ORNL"></img></a>
-            <a><img id="logoDOESC" src="../imgs/DOE-logo.png" alt="DOE Office of Science" style="align: middle;"></img></a>
-            <a><img id="logoLANL" src="../imgs/LANL-logo.png" alt="LANL" style="float: right;"></img></a>
-            <span style="width: 100%; display: inline-block; line-height: 0;"></span>
-        </div>
-        <p id="piscees">
-            LIVVkit was developed under <a href="http://www.scidac.gov/PISCEES/" target=_blank>PISCEES</a>, a BER/ASCR SciDAC Earth System Modeling project.
-        </p>
-        <h3 style="text-align: center;"> <a href="https://github.com/LIVVkit/LIVVkit/issues" target=_blank>Contact us on github</a> </h3>
-    </div>
+        <div id="wrapper">
+            <div id="nav">
+            </div>
 
+            <div id="content">
+            </div>
+        </div>
+
+        
+        <div id="acknowledgments">
+            <hr>
+            <div id=acklogo>
+                <a><img id="logoORNL" src="../imgs/ORNL-logo.png" alt="ORNL"></img></a>
+                <a><img id="logoDOESC" src="../imgs/DOE-logo.png" alt="DOE Office of Science" style="align: middle;"></img></a>
+                <a><img id="logoLANL" src="../imgs/LANL-logo.png" alt="LANL" style="float: right;"></img></a>
+                <span style="width: 100%; display: inline-block; line-height: 0;"></span>
+            </div>
+            <p id="piscees">
+                LIVVkit was developed under <a href="http://www.scidac.gov/PISCEES/" target=_blank>PISCEES</a>, a
+                BER/ASCR SciDAC Earth System Modeling project.
+            </p>
+            <h3 style="text-align: center;">
+                <a href="https://github.com/LIVVkit/LIVVkit/issues" target=_blank>Contact us on github</a>
+            </h3>
+        </div>
+
+        <script src="../js/lightbox.min.js"></script>
+    </body>
 </html>

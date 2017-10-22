@@ -93,8 +93,6 @@ def main(args):
     print("  " + os.path.join(livvkit.output_dir, 'index.html'))
     print("-------------------------------------------------------------------")
 
-    print(args)
-
     if args.serve:
         print("It's happening!")
         try:

@@ -247,7 +247,7 @@ def gallery(title, image_elem_list):
     return gal
 
 
-def image(title, desc, image_name):
+def image(title, desc, image_name, group=None):
     """
     Builds an image element.  Image elements are primarily created
     and then wrapped into an image gallery element.  This is not required
@@ -263,6 +263,7 @@ def image(title, desc, image_name):
         title: The title to display
         desc: A description of the image or plot
         image_name: The filename of the image
+        group: (optional): Title of lightbox group to join
 
     Returns:
         A dictionary with the metadata specifying that it is to be
@@ -273,6 +274,8 @@ def image(title, desc, image_name):
     ie["Title"] = title
     ie["Desciption"] = desc
     ie["Plot File"] = image_name
+    if group:
+        ie["Group"] = group
     return ie
 
 
