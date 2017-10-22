@@ -514,7 +514,7 @@ function drawGallery(data, div) {
  */
 function drawImage(img_elem, div) {
     var html = "<div>";
-    html += drawLightbox(img_elem, 200);
+    html += drawLightbox(img_elem);
     html += "</div>"
     $(div).append(html);
 }
@@ -527,10 +527,11 @@ function drawImage(img_elem, div) {
  *
  * @return the html to embed into another element
  */
-function drawLightbox(img_elem, size) {
+function drawLightbox(img_elem) {
     var img_dir = window.location.href.substr(0,window.location.href.lastIndexOf('/')+1) + "imgs/";
     var path = img_dir + img_elem["Plot File"];
     var lbox = img_elem["Group"] ? img_elem["Group"]  : img_elem["Title"];
+    var size = img_elem["Height"] ? img_elem["Height"]  : 200;
     var html = "<a href=\"" + path + "\" data-lightbox=\"" + lbox + "\" data-title=\"" + img_elem["Desciption"] + "\">";
     html += "<img class=\"thumbnail caption\" data-caption=\"" + img_elem["Title"]+ "\" alt=\"" + img_elem["Title"] + "\" src=\"" + path + "\" style=\"height: " + size + "px; overflow: hidden; position: relative\">";
     html += "</a>";
