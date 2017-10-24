@@ -322,3 +322,20 @@ def error(title, error_msg):
     err["Title"] = title
     err["Message"] = error_msg
     return err
+
+def html(html_data):
+    """
+    Builds a raw HTML element.  Provides a way to directly display some HTML.
+
+    Args:
+        html_data: The HTML to display 
+
+    Returns:
+        A dictionary with the metadata specifying that it is to be
+        rendered directly as HTML
+    """
+    html_el = {}
+    html_el['Type'] = 'HTML'
+    html_el['Data'] = html_data
+    return html_el
+
