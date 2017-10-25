@@ -39,12 +39,12 @@ $(document).ready(function() {
         "Summary"        : drawSummary,
         "ValSummary"     : drawValSummary,
         "bookSummary"    : drawValSummary,
+        "Diff"           : drawDiff,
+        "Bit for Bit"    : drawBitForBit,
+        "Gallery"        : drawGallery,
+        "Table"          : drawTable,
         "Vertical Table" : drawVTable,
         "V-H Table"      : drawVHTable,
-        "Table"          : drawTable,
-        "Bit for Bit"    : drawBitForBit,
-        "Diff"           : drawDiff,
-        "Gallery"        : drawGallery,
         "HTML"           : drawHTML
     };
 
