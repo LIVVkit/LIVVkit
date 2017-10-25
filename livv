@@ -1,5 +1,5 @@
-#!/usr/bin/env python3
-# Copyright (c) 2015,2016, UT-BATTELLE, LLC
+#!/usr/bin/env python
+# Copyright (c) 2015-2017, UT-BATTELLE, LLC
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -33,6 +33,7 @@ Management of the tests to be run is handled by the scheduler in livvkit.util
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import os
+import sys
 
 import livvkit
 from livvkit.util import options
@@ -70,12 +71,20 @@ def main(args):
         l.append(scheduler.run("performance", components.performance,
                  functions.read_json(livvkit.performance_model_config)))
     if livvkit.validate:
+        print(" -----------------------------------------------------------------")
+        print("   Beginning the validation test suite ")
+        print(" -----------------------------------------------------------------")
+        print("")
         validation_config = {}
         for conf in livvkit.validation_model_configs:
             validation_config = functions.merge_dicts(validation_config,
                                                       functions.read_json(conf))
-        l.append(scheduler.run("validation", components.validation,
-                               validation_config))
+        l.extend(scheduler.run_quiet(components.validation, validation_config,
+                                     group=False))
+        print(" -----------------------------------------------------------------")
+        print("   Validation test suite complete ")
+        print(" -----------------------------------------------------------------")
+        print("")
 
     result = elements.page("Summary", "", element_list=l)
     functions.write_json(result, livvkit.output_dir, "index.json")
@@ -84,6 +93,33 @@ def main(args):
     print("  " + os.path.join(livvkit.output_dir, 'index.html'))
     print("-------------------------------------------------------------------")
 
+    if args.serve:
+        try:
+            # Python 3
+            import http.server
+            import socketserver
+            handler = http.server.SimpleHTTPRequestHandler
+            httpd = socketserver.TCPServer(('', args.serve), handler)
+        except ImportError:
+            # Python 2
+            import SimpleHTTPServer
+            import SocketServer
+            handler = SimpleHTTPServer.SimpleHTTPRequestHandler
+            httpd = SocketServer.TCPServer(('', args.serve), handler)
+        
+        sa = httpd.socket.getsockname()
+        print('\nServing HTTP on {host} port {port} (http://{host}:{port}/)'.format(host=sa[0], port=sa[1]))
+        print('\nView the generated website by navigating to:')
+        print('\n    http://{host}:{port}/{path}/index.html'.format(host=sa[0], port=sa[1], 
+                                                                      path=os.path.relpath(livvkit.output_dir)
+                                                                      ))
+        print('\nExit by pressing `ctrl+c` to send a keyboard interrupt.\n')
+        try:
+            httpd.serve_forever()
+        except KeyboardInterrupt:
+            print('\nKeyboard interrupt received, exiting.\n')
+            sys.exit(0)
+    
 
 if __name__ == "__main__":
     main(options.parse_args())

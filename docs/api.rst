@@ -1,32 +1,28 @@
-Numerics
-========
-.. automodule:: livvkit.components.numerics
-    :members:
+API
+###
 
-Verification
-============
-.. automodule:: livvkit.components.verification
-    :members:
+.. toctree::
 
-Performance
-===========
-.. automodule:: livvkit.components.performance
-    :members:
+    source/modules
 
-Validation
-==========
-.. automodule:: livvkit.components.validation
-    :members:
-
-Utilities
-=========
-.. automodule:: livvkit.util.elements
-    :members:
-
-.. automodule:: livvkit.util.LIVVDict
-    :members:
 
 Web Frontend
 ============
 
-.. include:: source/js.rst
+.. js:autofunction:: drawNav
+.. js:autofunction:: drawContent
+.. js:autofunction:: drawError
+.. js:autofunction:: drawSummary
+.. js:autofunction:: drawValSummary
+.. js:autofunction:: drawDiff
+.. js:autofunction:: drawBitForBit
+.. js:autofunction:: drawGallery
+.. js:autofunction:: drawImage
+.. js:autofunction:: drawLightbox
+.. js:autofunction:: drawThumbnail
+.. js:autofunction:: drawTable
+.. js:autofunction:: drawVTable
+.. js:autofunction:: drawVHTable
+.. js:autofunction:: drawHTML
+.. js:autofunction:: loadJSON
+

@@ -1,4 +1,4 @@
-# Copyright (c) 2015,2016, UT-BATTELLE, LLC
+# Copyright (c) 2015-2017, UT-BATTELLE, LLC
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -36,6 +36,17 @@ Implementing new elements is possible simply by adding new functions
 They will be written out to the JSON files as sub-objects, which must
 be interpreted by the Javascript found in the resources directory.
 """
+
+def book(title, description, page_dict=None):
+
+    book = {'Type': 'Book',
+            'Title': title,
+            'Description': description,
+            }
+    if page_dict is not None:
+        book['Data'] = page_dict
+
+    return book
 
 
 def page(title, description, element_list=None, tab_list=None):
@@ -161,6 +172,33 @@ def table(title, headers, data_node):
     return tb
 
 
+def vtable(title, headers, data_node):
+    """
+    Returns a dictionary representing a new table element.  Tables
+    are specified with two main pieces of information, the headers
+    and the data to put into the table.  Rendering of the table is
+    the responsibility of the Javascript in the resources directory.
+    When the data does not line up with the headers given this should
+    be handled within the Javascript itself, not here.
+
+    Args:
+        title: The title to display
+        headers: The columns to put into the table
+        data_node: A dictionary with the form::
+            {"case" : {"subcase" : { "header" : "data" } } }
+
+    Returns:
+        A dictionary with the metadata specifying that it is to be
+        rendered as a table.
+    """
+    tb = {}
+    tb["Type"] = "Vertical Table"
+    tb["Title"] = title
+    tb["Headers"] = headers
+    tb["Data"] = data_node
+    return tb
+
+
 def bit_for_bit(title, headers, data_node):
     """
     Returns a dictionary representing a new bit for bit table element.
@@ -209,7 +247,7 @@ def gallery(title, image_elem_list):
     return gal
 
 
-def image(title, desc, image_name):
+def image(title, desc, image_name, group=None, height=None):
     """
     Builds an image element.  Image elements are primarily created
     and then wrapped into an image gallery element.  This is not required
@@ -225,6 +263,8 @@ def image(title, desc, image_name):
         title: The title to display
         desc: A description of the image or plot
         image_name: The filename of the image
+        group: (optional) Title of lightbox group to join
+        Height: (optional) Hight of image thumbnail to draw
 
     Returns:
         A dictionary with the metadata specifying that it is to be
@@ -235,6 +275,10 @@ def image(title, desc, image_name):
     ie["Title"] = title
     ie["Desciption"] = desc
     ie["Plot File"] = image_name
+    if group:
+        ie["Group"] = group
+    if height:
+        ie["Height"] = height
     return ie
 
 
@@ -278,3 +322,20 @@ def error(title, error_msg):
     err["Title"] = title
     err["Message"] = error_msg
     return err
+
+def html(html_data):
+    """
+    Builds a raw HTML element.  Provides a way to directly display some HTML.
+
+    Args:
+        html_data: The HTML to display 
+
+    Returns:
+        A dictionary with the metadata specifying that it is to be
+        rendered directly as HTML
+    """
+    html_el = {}
+    html_el['Type'] = 'HTML'
+    html_el['Data'] = html_data
+    return html_el
+

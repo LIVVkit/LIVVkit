@@ -1,0 +1,6 @@
+#%Module
+module-whatis "Anaconda for cli106 on Rhea"
+prereq PE-gnu
+conflict python python_anaconda anaconda-cli106
+set PREFIX /ccs/proj/cli106/conda/rhea
+prepend-path PATH $PREFIX/bin

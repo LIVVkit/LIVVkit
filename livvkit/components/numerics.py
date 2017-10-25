@@ -1,4 +1,4 @@
-# Copyright (c) 2015,2016, UT-BATTELLE, LLC
+# Copyright (c) 2015-2017, UT-BATTELLE, LLC
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -81,7 +81,7 @@ def _run_suite(case, config, summary):
 def _print_summary(module, case, summary):
     try:
         module.print_summary(case, summary)
-    except:
+    except (NotImplementedError, AttributeError):
         print("    Ran " + case + "!")
         print("")
 
@@ -89,8 +89,7 @@ def _print_summary(module, case, summary):
 def _summarize_result(module, data, config):
     try:
         summary = module.summarize_result(data, config)
-    except:
-        raise
+    except (NotImplementedError, AttributeError):
         status = "Could not retrieve summary, open page for statistics"
         summary = {"": {"Test mean % error": status,
                         "Bench mean % error": "",
@@ -98,7 +97,7 @@ def _summarize_result(module, data, config):
     return summary
 
 
-def _populate_metadata():
+def _populate_metadata(case, config):
     metadata = {"Type": "Summary",
                 "Title": "Numerics",
                 "Headers": ["Bench mean % error", "Test mean % error", "Coefficient of variation"]}

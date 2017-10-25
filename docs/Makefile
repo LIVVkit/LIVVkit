@@ -62,6 +62,11 @@ help:
 clean:
 	rm -rf $(BUILDDIR)/*
 
+.PHONY: distclean
+distclean: clean
+	rm -rf source/*
+	rm -rf jsdoc-toolkit-rst-template/symbols/_global_.rst
+
 .PHONY: html
 html:
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html

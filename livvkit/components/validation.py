@@ -1,4 +1,4 @@
-# Copyright (c) 2015,2016, UT-BATTELLE, LLC
+# Copyright (c) 2015-2017, UT-BATTELLE, LLC
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -32,57 +32,118 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import six
 
 import os
+import sys
 import importlib
 
 import livvkit
 from livvkit.util import functions
 
+ERR_MISSING_MOD_MSG = """
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                       UH OH!")
+----------------------------------------------------------
+Could not find the module for {}:
+    {}
 
-def _run_suite(case, config, summary):
-    """ Run the full suite of validation tests """
+The module must be specified as an import statement of a
+module that can be found on your python, or a valid path
+to a python module file (specified either relative to your
+current working directory or absolutely).
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+"""
 
+ERR_MISSING_DEP_MSG = """
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                       UH OH!")
+----------------------------------------------------------
+{} depends on {}. 
+
+Please install it before using this extension; `conda` or
+`pip` is recommended. 
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+"""
+
+ERR_MISSING_DEP_CONDA_MSG = """
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                       UH OH!")
+----------------------------------------------------------
+{} depends on {}. 
+
+If you're using `conda` you can update your environment
+with the required packages by issuing this command:
+    conda env update --name {} -f {}
+
+Otherwise, install the packages listed in the above *.yml
+file. 
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+"""
+
+
+def _case_dep_err(case, mod_path):
+    yml_path = mod_path.replace('.py', '.yml')
+    conda_env = os.environ.get('CONDA_DEFAULT_ENV')
+    if conda_env and os.path.isfile(yml_path):
+        return ERR_MISSING_DEP_CONDA_MSG.format('{}', '{}', conda_env, os.path.relpath(yml_path, os.getcwd()))
+    else:
+        return ERR_MISSING_DEP_MSG
+
+
+def _load_case_module(case, config):
     try:
         m = importlib.import_module(config['module'])
     except ImportError as ie:
-        config_path = os.path.abspath(config['module'])
+        mod_path = os.path.abspath(config['module'])
         try:
             if six.PY2:
                 import imp
-                m = imp.load_source('validation.'+case, config_path)
+                m = imp.load_source(case, mod_path)
             elif six.PY3:
-                spec = importlib.util.spec_from_file_location('validation.'+case, config_path)
+                spec = importlib.util.spec_from_file_location(case, mod_path, 
+                                                              submodule_search_locations=os.path.dirname(mod_path))
                 m = importlib.util.module_from_spec(spec)
                 spec.loader.exec_module(m)
+                #sys.modules[case] = m
             else:
                 raise
-        except:
-            print("    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-            print("                           UH OH!"                             )
-            print("    ----------------------------------------------------------")
-            print("    Could not find the module for test case: "                 )
-            print("        "+case                                                 )
-            print("    The module must be specified as an import statement of a"  )
-            print("    module that can be found on your python, or a valid path"  )
-            print("    to a python module file (specified either relative to your")
-            print("    current working directory or absolutely)."                 )
-            print("    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+        except IOError as ioe:
+            # imp.load_source (py2) and spec.loader.exec_module (py3) raises an IOError if module isn't found
+            print(ERR_MISSING_MOD_MSG.format(case, os.path.relpath(mod_path, os.getcwd())))
             raise
+        except ImportError as iie:
+            # If module's internal import statements fail
+            dep = str(iie).split()[-1] if six.PY2 else iie.name 
+            print(_case_dep_err(case, mod_path).format(case, dep))
+            raise
+        
+    return m
+
+
+def _run_suite(case, config, summary):
+    """ Run the full suite of validation tests """
+    m = _load_case_module(case, config)
 
     result = m.run(case, config)
     summary[case] = _summarize_result(m, result)
-    _print_summary(m, case)
-    functions.create_page_from_template("validation.html",
-                                        os.path.join(livvkit.index_dir,
-                                                     "validation",
-                                                     case + ".html")
-                                        )
-    functions.write_json(result, os.path.join(livvkit.output_dir, "validation"), case + ".json")
+    _print_summary(m, case, summary)
+   
+    if result['Type'] == 'Book':
+        for name, page in six.iteritems(result['Data']):
+            functions.create_page_from_template("validation.html",
+                                                os.path.join(livvkit.index_dir, "validation", name + ".html"))
+            functions.write_json(page, os.path.join(livvkit.output_dir, "validation"), name + ".json")
+    else:
+        functions.create_page_from_template("validation.html",
+                                            os.path.join(livvkit.index_dir, "validation", case + ".html"))
+        functions.write_json(result, os.path.join(livvkit.output_dir, "validation"), case + ".json")
 
 
-def _print_summary(module, case):
+def _print_summary(module, case, summary):
     try:
-        module.print_summary()
-    except:
+        try:
+            module.print_summary(summary[case])
+        except TypeError:
+            module.print_summary(case, summary[case])
+    except (NotImplementedError, AttributeError):
         print("    Ran " + case + "!")
         print("")
 
@@ -90,16 +151,25 @@ def _print_summary(module, case):
 def _summarize_result(module, result):
     try:
         summary = module.summarize_result(result)
-    except:
+    except (NotImplementedError, AttributeError):
         status = "Success"
         if result["Type"] == "Error":
-                status = "Failure"
+            status = "Failure"
         summary = {"": {"Outcome": status}}
     return summary
 
 
-def _populate_metadata():
-    metadata = {"Type": "Summary",
-                "Title": "Validation",
-                "Headers": ["Outcome"]}
+def _populate_metadata(case, config):
+    m = _load_case_module(case, config)
+    try:
+        try:
+            metadata = m.populate_metadata()
+        except TypeError:
+            metadata = m.populate_metadata(case, config)
+    except (NotImplementedError, AttributeError):
+        metadata = {"Type": "ValSummary",
+                    "Title": "Validation",
+                    "TableTitle": "Validation",
+                    "Headers": ["Outcome"]}
+
     return metadata

@@ -1,4 +1,4 @@
-# Copyright (c) 2015,2016, UT-BATTELLE, LLC
+# Copyright (c) 2015-2017, UT-BATTELLE, LLC
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -68,8 +68,10 @@ def _run_suite(case, config, summary):
             timing_data[subcase][mcase] = _analyze_case(mpath, bpath, config)
 
     # Create scaling and timing breakdown plots
-    weak_data = weak_scaling(timing_data, config['scaling_var'], config['weak_scaling_points'])
-    strong_data = strong_scaling(timing_data, config['scaling_var'], config['strong_scaling_points'])
+    weak_data = weak_scaling(timing_data, config['scaling_var'],
+                             config['weak_scaling_points'])
+    strong_data = strong_scaling(timing_data, config['scaling_var'],
+                                 config['strong_scaling_points'])
 
     timing_plots = []
     timing_plots.append(
@@ -100,7 +102,8 @@ def _run_suite(case, config, summary):
         strong_scaling_efficiency_plot(strong_data,
                                        "Strong scaling efficiency for " + case.capitalize(),
                                        "Parallel efficiency (% of linear)", "",
-                                       os.path.join(plot_dir, case + "_strong_scaling_efficiency.png")
+                                       os.path.join(plot_dir,
+                                                    case + "_strong_scaling_efficiency.png")
                                        )
         )
 
@@ -121,8 +124,10 @@ def _run_suite(case, config, summary):
     summary[case] = _summarize_result(timing_data, config)
     _print_result(case, summary)
     functions.create_page_from_template("performance.html",
-                                        os.path.join(livvkit.index_dir, "performance", case+".html"))
-    functions.write_json(result, os.path.join(livvkit.output_dir, "performance"), case+".json")
+                                        os.path.join(livvkit.index_dir, "performance",
+                                                     case + ".html"))
+    functions.write_json(result, os.path.join(livvkit.output_dir, "performance"),
+                         case + ".json")
 
 
 def _analyze_case(model_dir, bench_dir, config):
@@ -177,7 +182,7 @@ def _summarize_result(result, config):
     return summary
 
 
-def _populate_metadata():
+def _populate_metadata(case, config):
     """ Provide some top level information for the summary """
     return {"Type": "Summary",
             "Title": "Performance",
@@ -327,7 +332,7 @@ def generate_scaling_plot(timing_data, title, ylabel, description, plot_file):
     """
     proc_counts = timing_data['proc_counts']
     if len(proc_counts) > 2:
-        plt.figure(figsize=(10,8), dpi=150)
+        plt.figure(figsize=(10, 8), dpi=150)
         plt.title(title)
         plt.xlabel("Number of processors")
         plt.ylabel(ylabel)
@@ -342,7 +347,7 @@ def generate_scaling_plot(timing_data, title, ylabel, description, plot_file):
 
         plt.legend(loc='best')
     else:
-        plt.figure(figsize=(5,3))
+        plt.figure(figsize=(5, 3))
         plt.axis('off')
         plt.text(0.4, 0.8, "ERROR:")
         plt.text(0.0, 0.6, "Not enough data points to draw scaling plot")
@@ -453,7 +458,7 @@ def generate_timing_breakdown_plot(timing_stats, scaling_var, title, description
                 sub_ax.set_xticks([1.4, 2.4])
                 sub_ax.set_xticklabels(('test', 'bench'))
 
-    plt.legend(loc=6, bbox_to_anchor=(1.05,0.5))
+    plt.legend(loc=6, bbox_to_anchor=(1.05, 0.5))
     plt.tight_layout()
 
     sub_ax = plt.subplot(1, n_subplots+1, n_subplots+1)
