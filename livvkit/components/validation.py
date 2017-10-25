@@ -71,7 +71,7 @@ ERR_MISSING_DEP_CONDA_MSG = """
 
 If you're using `conda` you can update your environment
 with the required packages by issuing this command:
-    conda env update -- name {} -f {}
+    conda env update --name {} -f {}
 
 Otherwise, install the packages listed in the above *.yml
 file. 
