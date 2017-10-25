@@ -1,6 +1,3 @@
-Conventions
-~~~~~~~~~~~
-
 A sample code snippet below highlights most of our coding conventions.
 For conventions not covered in the snippet follow `PEP
 guidelines <https://www.python.org/dev/peps/>`__.
@@ -45,7 +42,7 @@ guidelines <https://www.python.org/dev/peps/>`__.
             return bar + baz
 
 Tips
-~~~~
+----
 
 - Each source file containing functions that are called by the main ``livv.py`` script should have
   the license header. (There should be a script to fix when this is forgotten in util).

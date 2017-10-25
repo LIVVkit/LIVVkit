@@ -31,14 +31,18 @@ SOURCE_DIR="../.."
 
 CURRENT="Copyright (c)"
 
-ALWAYS_IGNORE=(-not -path "*.git*" -not -path "*docs/*" -not -iname "setup_*" \
-               -not -iname "MANIFEST.in")
+ALWAYS_IGNORE=(-not -path "*.git*" -not -path "*docs/*" -not -path "*hpcs/*" \
+               -not -iname "setup_*" -not -iname "MANIFEST.in")
 
 FILE_IGNORE=(-not -iname "*.md" -not -iname "*.json" -not -iname "*.txt" \
-             -not -iname "*.png" -not -iname "*.jpg" -not -iname "*.svg" )
+             -not -iname "*.png" -not -iname "*.jpg" -not -iname "*.svg" \
+             -not -iname "*.gif" -not -iname "*.html" -not -iname "*.css"\
+             -not -iname "*.yml")
 
 PYTHON_IGNORE=(-not -iname "__init__.py" -not -iname "colormaps.py"  \
-               -not -path "*dist/*" -not -path "*.egg-info/*") 
+               -not -path "*dist/*" -not -path "*.egg-info/*" \
+               -not -iname "*.pyc") 
 
-CSS_IGNORE=(-not -iname "jquery-ui.min.css")
+JS_IGNORE=(-not -iname "jquery.caption.min.js" -not -iname "jquery.min.js" \
+           -not -iname "jquery-ui.min.js" -not -iname "lightbox.min.js")
 

@@ -37,7 +37,7 @@ echo "--------------------------------------------------------------------------
 find $SOURCE_DIR -type f "${ALWAYS_IGNORE[@]}" \
     "${FILE_IGNORE[@]}" \
     "${PYTHON_IGNORE[@]}" \
-    "${CSS_IGNORE[@]}" \
+    "${JS_IGNORE[@]}" \
     | xargs grep -L "$CURRENT" \
     | sort
 
@@ -83,29 +83,12 @@ done
 
 
 ####################################################
-# Prepend license header to html files. 
+# Prepend license header to js files. 
 # Will ignore files with a current license header. 
 ####################################################
-GET=( -iname "*.html")
+GET=(-iname "*.js" )
 
-find $SOURCE_DIR -type f \( "${GET[@]}" \) "${ALWAYS_IGNORE[@]}" \
-    | xargs grep -L "$CURRENT" \
-    | while read SRC 
-do
-    BN=`basename ${SRC}`
-    echo HEADING ${SRC}
-    cp livvHeader-html /tmp/licHead
-    cat ${SRC} >> /tmp/licHead
-    mv /tmp/licHead ${SRC}
-done
-
-####################################################
-# Prepend license header to css and js files. 
-# Will ignore files with a current license header. 
-####################################################
-GET=( -iname "*.css" -or -iname "*.js" )
-
-find $SOURCE_DIR -type f \( "${GET[@]}" \) "${ALWAYS_IGNORE[@]}" "${CSS_IGNORE[@]}" \
+find $SOURCE_DIR -type f \( "${GET[@]}" \) "${ALWAYS_IGNORE[@]}" "${JS_IGNORE[@]}" \
     | xargs grep -L "$CURRENT" \
     | while read SRC 
 do

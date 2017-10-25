@@ -1,5 +1,5 @@
-livvkit.resources package
-=========================
+livvkit\.resources package
+==========================
 
 Module contents
 ---------------

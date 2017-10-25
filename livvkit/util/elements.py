@@ -247,7 +247,7 @@ def gallery(title, image_elem_list):
     return gal
 
 
-def image(title, desc, image_name):
+def image(title, desc, image_name, group=None, height=None):
     """
     Builds an image element.  Image elements are primarily created
     and then wrapped into an image gallery element.  This is not required
@@ -263,6 +263,8 @@ def image(title, desc, image_name):
         title: The title to display
         desc: A description of the image or plot
         image_name: The filename of the image
+        group: (optional) Title of lightbox group to join
+        Height: (optional) Hight of image thumbnail to draw
 
     Returns:
         A dictionary with the metadata specifying that it is to be
@@ -273,6 +275,10 @@ def image(title, desc, image_name):
     ie["Title"] = title
     ie["Desciption"] = desc
     ie["Plot File"] = image_name
+    if group:
+        ie["Group"] = group
+    if height:
+        ie["Height"] = height
     return ie
 
 
@@ -316,3 +322,20 @@ def error(title, error_msg):
     err["Title"] = title
     err["Message"] = error_msg
     return err
+
+def html(html_data):
+    """
+    Builds a raw HTML element.  Provides a way to directly display some HTML.
+
+    Args:
+        html_data: The HTML to display 
+
+    Returns:
+        A dictionary with the metadata specifying that it is to be
+        rendered directly as HTML
+    """
+    html_el = {}
+    html_el['Type'] = 'HTML'
+    html_el['Data'] = html_data
+    return html_el
+

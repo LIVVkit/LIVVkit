@@ -1,5 +1,5 @@
-livvkit.data package
-====================
+livvkit\.data package
+=====================
 
 Subpackages
 -----------
@@ -7,7 +7,6 @@ Subpackages
 .. toctree::
 
     livvkit.data.numerics
-    livvkit.data.validation
 
 Module contents
 ---------------

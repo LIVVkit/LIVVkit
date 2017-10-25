@@ -34,10 +34,6 @@ source license-setup.sh
 OLD="Copyright (c) 2015,2016, UT"
 NEW="Copyright (c) 2015-2017, UT"
 
-ALWAYS_IGNORE=(-not -path "*.git*" -not -path "*docs/*")
-FILE_IGNORE=(-not -iname "*.md" -not -iname "*.json" -not -iname "*.txt" \
-             -not -iname "*.png" -not -iname "*.jpg" -not -iname "*.svg" )
-
 echo "--------------------------------------------------------------------------------"
 echo "    THESE FILES HAVE AN OUTDATED LICENSE HEADER:"
 echo "--------------------------------------------------------------------------------"

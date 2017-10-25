@@ -1,11 +1,11 @@
-livvkit.components.validation_tests.lvargo13 package
-====================================================
+livvkit\.components\.validation\_tests\.lvargo13 package
+========================================================
 
 Submodules
 ----------
 
-livvkit.components.validation_tests.lvargo13.lvargo13 module
-------------------------------------------------------------
+livvkit\.components\.validation\_tests\.lvargo13\.lvargo13 module
+-----------------------------------------------------------------
 
 .. automodule:: livvkit.components.validation_tests.lvargo13.lvargo13
     :members:

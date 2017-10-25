@@ -1,5 +1,5 @@
-livvkit.components.validation_tests package
-===========================================
+livvkit\.components\.validation\_tests package
+==============================================
 
 Subpackages
 -----------
