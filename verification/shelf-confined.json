@@ -1,39 +1,59 @@
 {
+    "Type": "Page",
+    "Title": "shelf-confined",
+    "Description": "An idealized 500 m ice shelf in a confined, rectangular embayment. Grounded ice is not explicitly modeled, but is included in the model setup as Dirichlet boundary conditions for velocity along the ice shelf edges.",
     "Data": {
         "Tabs": [
             {
                 "Type": "Tab",
+                "Title": "s0",
                 "Sections": [
                     {
+                        "Type": "Section",
+                        "Title": "p1",
                         "Elements": [
                             {
-                                "Data": {
-                                    "thk": {
-                                        "Plot": "N/A",
-                                        "Max Error": 0,
-                                        "RMS Error": 0,
-                                        "Index of Max Error": "N/A"
-                                    },
-                                    "velnorm": {
-                                        "Plot": "N/A",
-                                        "Max Error": 0,
-                                        "RMS Error": 0,
-                                        "Index of Max Error": "N/A"
-                                    }
-                                },
                                 "Type": "Bit for Bit",
+                                "Title": "Bit for Bit",
                                 "Headers": [
                                     "Max Error",
                                     "Index of Max Error",
                                     "RMS Error",
                                     "Plot"
                                 ],
-                                "Title": "Bit for Bit"
+                                "Data": {
+                                    "velnorm": {
+                                        "Max Error": 0,
+                                        "RMS Error": 0,
+                                        "Index of Max Error": "N/A",
+                                        "Plot": "N/A"
+                                    },
+                                    "thk": {
+                                        "Max Error": 0,
+                                        "RMS Error": 0,
+                                        "Index of Max Error": "N/A",
+                                        "Plot": "N/A"
+                                    }
+                                }
                             },
                             {
+                                "Type": "Diff",
+                                "Title": "Configuration Comparison",
                                 "Data": {
+                                    "CF input": {
+                                        "time": [
+                                            true,
+                                            "1",
+                                            "1"
+                                        ],
+                                        "name": [
+                                            true,
+                                            "shelf-confined.0043.p001.nc",
+                                            "shelf-confined.0043.p001.nc"
+                                        ]
+                                    },
                                     "options": {
-                                        "flow_law": [
+                                        "marine_margin": [
                                             true,
                                             "0",
                                             "0"
@@ -43,7 +63,7 @@
                                             "3",
                                             "3"
                                         ],
-                                        "marine_margin": [
+                                        "flow_law": [
                                             true,
                                             "0",
                                             "0"
@@ -59,18 +79,6 @@
                                             "2"
                                         ]
                                     },
-                                    "CF input": {
-                                        "time": [
-                                            true,
-                                            "1",
-                                            "1"
-                                        ],
-                                        "name": [
-                                            true,
-                                            "shelf-confined.0043.p001.nc",
-                                            "shelf-confined.0043.p001.nc"
-                                        ]
-                                    },
                                     "parameters": {
                                         "default_flwa": [
                                             true,
@@ -78,111 +86,18 @@
                                             "5.7e-18"
                                         ]
                                     },
-                                    "ho_options": {
-                                        "which_ho_nonlinear": [
-                                            true,
-                                            "0",
-                                            "0"
-                                        ],
-                                        "which_ho_babc": [
-                                            true,
-                                            "5",
-                                            "5"
-                                        ],
-                                        "which_ho_precond": [
-                                            true,
-                                            "2",
-                                            "2"
-                                        ],
-                                        "which_ho_efvs": [
-                                            true,
-                                            "2",
-                                            "2"
-                                        ],
-                                        "which_ho_approx": [
-                                            true,
-                                            "2",
-                                            "2"
-                                        ],
-                                        "which_ho_sparse": [
-                                            true,
-                                            "3",
-                                            "3"
-                                        ]
-                                    },
-                                    "CF default": {
-                                        "title": [
-                                            true,
-                                            "Confined Shelf Experiment (first-order dynamics)",
-                                            "Confined Shelf Experiment (first-order dynamics)"
-                                        ],
-                                        "comment": [
-                                            true,
-                                            "Same as experiment 3 from EISMINT-shelf",
-                                            "Same as experiment 3 from EISMINT-shelf"
-                                        ]
-                                    },
-                                    "CF output": {
-                                        "variables": [
-                                            true,
-                                            "thk uvel vvel velnorm",
-                                            "thk uvel vvel velnorm"
-                                        ],
-                                        "frequency": [
-                                            true,
-                                            "1",
-                                            "1"
-                                        ],
-                                        "xtype": [
-                                            true,
-                                            "double",
-                                            "double"
-                                        ],
-                                        "name": [
-                                            true,
-                                            "shelf-confined.0043.p001.out.nc",
-                                            "shelf-confined.0043.p001.out.nc"
-                                        ]
-                                    },
-                                    "grid": {
-                                        "upn": [
-                                            true,
-                                            "5",
-                                            "5"
-                                        ],
-                                        "dew": [
-                                            true,
-                                            "5000.0",
-                                            "5000.0"
-                                        ],
-                                        "nsn": [
-                                            true,
-                                            "44",
-                                            "44"
-                                        ],
-                                        "ewn": [
-                                            true,
-                                            "43",
-                                            "43"
-                                        ],
-                                        "dns": [
-                                            true,
-                                            "5000.0",
-                                            "5000.0"
-                                        ]
-                                    },
                                     "time": {
-                                        "dt_diag": [
+                                        "jdiag": [
                                             true,
-                                            "1.",
-                                            "1."
+                                            "10",
+                                            "10"
                                         ],
                                         "dt": [
                                             true,
                                             "1.",
                                             "1."
                                         ],
-                                        "tend": [
+                                        "tstart": [
                                             true,
                                             "0.",
                                             "0."
@@ -192,47 +107,132 @@
                                             "22",
                                             "22"
                                         ],
-                                        "tstart": [
+                                        "tend": [
                                             true,
                                             "0.",
                                             "0."
                                         ],
-                                        "jdiag": [
+                                        "dt_diag": [
                                             true,
-                                            "10",
-                                            "10"
+                                            "1.",
+                                            "1."
+                                        ]
+                                    },
+                                    "grid": {
+                                        "nsn": [
+                                            true,
+                                            "44",
+                                            "44"
+                                        ],
+                                        "dns": [
+                                            true,
+                                            "5000.0",
+                                            "5000.0"
+                                        ],
+                                        "dew": [
+                                            true,
+                                            "5000.0",
+                                            "5000.0"
+                                        ],
+                                        "upn": [
+                                            true,
+                                            "5",
+                                            "5"
+                                        ],
+                                        "ewn": [
+                                            true,
+                                            "43",
+                                            "43"
+                                        ]
+                                    },
+                                    "CF default": {
+                                        "comment": [
+                                            true,
+                                            "Same as experiment 3 from EISMINT-shelf",
+                                            "Same as experiment 3 from EISMINT-shelf"
+                                        ],
+                                        "title": [
+                                            true,
+                                            "Confined Shelf Experiment (first-order dynamics)",
+                                            "Confined Shelf Experiment (first-order dynamics)"
+                                        ]
+                                    },
+                                    "CF output": {
+                                        "frequency": [
+                                            true,
+                                            "1",
+                                            "1"
+                                        ],
+                                        "variables": [
+                                            true,
+                                            "thk uvel vvel velnorm",
+                                            "thk uvel vvel velnorm"
+                                        ],
+                                        "name": [
+                                            true,
+                                            "shelf-confined.0043.p001.out.nc",
+                                            "shelf-confined.0043.p001.out.nc"
+                                        ],
+                                        "xtype": [
+                                            true,
+                                            "double",
+                                            "double"
+                                        ]
+                                    },
+                                    "ho_options": {
+                                        "which_ho_sparse": [
+                                            true,
+                                            "3",
+                                            "3"
+                                        ],
+                                        "which_ho_approx": [
+                                            true,
+                                            "2",
+                                            "2"
+                                        ],
+                                        "which_ho_efvs": [
+                                            true,
+                                            "2",
+                                            "2"
+                                        ],
+                                        "which_ho_babc": [
+                                            true,
+                                            "5",
+                                            "5"
+                                        ],
+                                        "which_ho_nonlinear": [
+                                            true,
+                                            "0",
+                                            "0"
+                                        ],
+                                        "which_ho_precond": [
+                                            true,
+                                            "2",
+                                            "2"
                                         ]
                                     }
-                                },
-                                "Type": "Diff",
-                                "Title": "Configuration Comparison"
+                                }
                             },
                             {
-                                "Data": {
-                                    "Avg. Iterations to Converge": 47.0,
-                                    "Converged Iterations": 1,
-                                    "Dycore Type": "Glissade",
-                                    "Processor Count": 1
-                                },
                                 "Type": "Table",
+                                "Title": "Output Log",
                                 "Headers": [
                                     "Converged Iterations",
                                     "Avg. Iterations to Converge",
                                     "Processor Count",
                                     "Dycore Type"
                                 ],
-                                "Title": "Output Log"
+                                "Data": {
+                                    "Dycore Type": "Glissade",
+                                    "Processor Count": 1,
+                                    "Converged Iterations": 1,
+                                    "Avg. Iterations to Converge": 47.0
+                                }
                             }
-                        ],
-                        "Type": "Section",
-                        "Title": "p1"
+                        ]
                     }
-                ],
-                "Title": "s0"
+                ]
             }
         ]
-    },
-    "Type": "Page",
-    "Description": "An idealized 500 m ice shelf in a confined, rectangular embayment. Grounded ice is not explicitly modeled, but is included in the model setup as Dirichlet boundary conditions for velocity along the ice shelf edges.",
-    "Title": "shelf-confined"
+    }
 }

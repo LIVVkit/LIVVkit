@@ -1,59 +1,45 @@
 {
+    "Type": "Page",
+    "Title": "ismip-hom-a",
+    "Description": "The Ice Sheet Model Intercomparison Project for Higher-Order Models (ISMIP-HOM) prescribes a set of experiments meant to test the implementation of higher-order physics. The results of this benchmark experiment was published in The Cryosphere and can be found <a target=_blank href=\"http://dx.doi.org/10.5194/tc-2-95-2008\">here.</a> <br> <br>Experiment A (shown here), simulates a parallel-sided slab of ice lying on a sloped bed that has a series of sinusoidal oscillations. The experimental domain is a square of side length L, with periodic boundary conditions applied in the horizontal. The ice thickness is 1000 m, the slope is 0.5 &deg; (maximum in x, zero in y), the amplitude of the bed oscillations is 500 m, and the frequency of the oscillations is &#969; = 2 &#960;/L.",
     "Data": {
         "Tabs": [
             {
                 "Type": "Tab",
+                "Title": "s0",
                 "Sections": [
                     {
+                        "Type": "Section",
+                        "Title": "p1-z20",
                         "Elements": [
                             {
-                                "Data": {
-                                    "thk": {
-                                        "Plot": "N/A",
-                                        "Max Error": 0,
-                                        "RMS Error": 0,
-                                        "Index of Max Error": "N/A"
-                                    },
-                                    "velnorm": {
-                                        "Plot": "imgs/ismip-hom-a.0020.p001.out.nc_velnorm.png",
-                                        "Max Error": 5.8193450058752205e-12,
-                                        "RMS Error": 1.2309619710170231e-12,
-                                        "Index of Max Error": "(0, 0, 21, 1)"
-                                    }
-                                },
                                 "Type": "Bit for Bit",
+                                "Title": "Bit for Bit",
                                 "Headers": [
                                     "Max Error",
                                     "Index of Max Error",
                                     "RMS Error",
                                     "Plot"
                                 ],
-                                "Title": "Bit for Bit"
+                                "Data": {
+                                    "velnorm": {
+                                        "Max Error": 5.8193450058752205e-12,
+                                        "Index of Max Error": "(0, 0, 21, 1)",
+                                        "RMS Error": 1.2309619710170231e-12,
+                                        "Plot": "imgs/ismip-hom-a.0020.p001.out.nc_velnorm.png"
+                                    },
+                                    "thk": {
+                                        "Max Error": 0,
+                                        "RMS Error": 0,
+                                        "Index of Max Error": "N/A",
+                                        "Plot": "N/A"
+                                    }
+                                }
                             },
                             {
+                                "Type": "Diff",
+                                "Title": "Configuration Comparison",
                                 "Data": {
-                                    "options": {
-                                        "evolution": [
-                                            true,
-                                            "3",
-                                            "3"
-                                        ],
-                                        "flow_law": [
-                                            true,
-                                            "0",
-                                            "0"
-                                        ],
-                                        "temperature": [
-                                            true,
-                                            "0",
-                                            "0"
-                                        ],
-                                        "dycore": [
-                                            true,
-                                            "2",
-                                            "2"
-                                        ]
-                                    },
                                     "CF input": {
                                         "time": [
                                             true,
@@ -66,191 +52,7 @@
                                             "ismip-hom-a.0020.p001.nc"
                                         ]
                                     },
-                                    "parameters": {
-                                        "periodic_offset_ew": [
-                                            true,
-                                            "174.537355815",
-                                            "174.537355815"
-                                        ]
-                                    },
-                                    "ho_options": {
-                                        "which_ho_assemble_beta": [
-                                            true,
-                                            "1",
-                                            "1"
-                                        ],
-                                        "which_ho_nonlinear": [
-                                            true,
-                                            "0",
-                                            "0"
-                                        ],
-                                        "which_ho_efvs": [
-                                            true,
-                                            "2",
-                                            "2"
-                                        ],
-                                        "which_ho_babc": [
-                                            true,
-                                            "4",
-                                            "4"
-                                        ],
-                                        "which_ho_sparse": [
-                                            true,
-                                            "3",
-                                            "3"
-                                        ]
-                                    },
-                                    "CF default": {
-                                        "title": [
-                                            true,
-                                            "ISMIP-HOM Experiment A",
-                                            "ISMIP-HOM Experiment A"
-                                        ],
-                                        "comment": [
-                                            true,
-                                            "generated by runISMIPHOM.py",
-                                            "generated by runISMIPHOM.py"
-                                        ]
-                                    },
-                                    "CF output": {
-                                        "variables": [
-                                            true,
-                                            "uvel vvel uvel_extend vvel_extend topg thk usurf wvel velnorm",
-                                            "uvel vvel uvel_extend vvel_extend topg thk usurf wvel velnorm"
-                                        ],
-                                        "frequency": [
-                                            true,
-                                            "1",
-                                            "1"
-                                        ],
-                                        "xtype": [
-                                            true,
-                                            "double",
-                                            "double"
-                                        ],
-                                        "name": [
-                                            true,
-                                            "ismip-hom-a.0020.p001.out.nc",
-                                            "ismip-hom-a.0020.p001.out.nc"
-                                        ]
-                                    },
-                                    "grid": {
-                                        "upn": [
-                                            true,
-                                            "11",
-                                            "11"
-                                        ],
-                                        "dew": [
-                                            true,
-                                            "500.0",
-                                            "500.0"
-                                        ],
-                                        "nsn": [
-                                            true,
-                                            "40",
-                                            "40"
-                                        ],
-                                        "ewn": [
-                                            true,
-                                            "40",
-                                            "40"
-                                        ],
-                                        "dns": [
-                                            true,
-                                            "500.0",
-                                            "500.0"
-                                        ]
-                                    },
-                                    "time": {
-                                        "dt_diag": [
-                                            true,
-                                            "1.",
-                                            "1."
-                                        ],
-                                        "dt": [
-                                            true,
-                                            "1.",
-                                            "1."
-                                        ],
-                                        "tend": [
-                                            true,
-                                            "0.",
-                                            "0."
-                                        ],
-                                        "idiag": [
-                                            true,
-                                            "10",
-                                            "10"
-                                        ],
-                                        "tstart": [
-                                            true,
-                                            "0.",
-                                            "0."
-                                        ],
-                                        "jdiag": [
-                                            true,
-                                            "10",
-                                            "10"
-                                        ]
-                                    }
-                                },
-                                "Type": "Diff",
-                                "Title": "Configuration Comparison"
-                            },
-                            {
-                                "Data": {
-                                    "Avg. Iterations to Converge": 45.0,
-                                    "Converged Iterations": 1,
-                                    "Dycore Type": "Glissade",
-                                    "Processor Count": 1
-                                },
-                                "Type": "Table",
-                                "Headers": [
-                                    "Converged Iterations",
-                                    "Avg. Iterations to Converge",
-                                    "Processor Count",
-                                    "Dycore Type"
-                                ],
-                                "Title": "Output Log"
-                            }
-                        ],
-                        "Type": "Section",
-                        "Title": "p1-z20"
-                    },
-                    {
-                        "Elements": [
-                            {
-                                "Data": {
-                                    "thk": {
-                                        "Plot": "N/A",
-                                        "Max Error": 0,
-                                        "RMS Error": 0,
-                                        "Index of Max Error": "N/A"
-                                    },
-                                    "velnorm": {
-                                        "Plot": "imgs/ismip-hom-a.0080.p001.out.nc_velnorm.png",
-                                        "Max Error": 1.5276668818842154e-12,
-                                        "RMS Error": 3.0854695746529103e-13,
-                                        "Index of Max Error": "(0, 4, 5, 31)"
-                                    }
-                                },
-                                "Type": "Bit for Bit",
-                                "Headers": [
-                                    "Max Error",
-                                    "Index of Max Error",
-                                    "RMS Error",
-                                    "Plot"
-                                ],
-                                "Title": "Bit for Bit"
-                            },
-                            {
-                                "Data": {
                                     "options": {
-                                        "evolution": [
-                                            true,
-                                            "3",
-                                            "3"
-                                        ],
                                         "flow_law": [
                                             true,
                                             "0",
@@ -265,8 +67,192 @@
                                             true,
                                             "2",
                                             "2"
+                                        ],
+                                        "evolution": [
+                                            true,
+                                            "3",
+                                            "3"
                                         ]
                                     },
+                                    "parameters": {
+                                        "periodic_offset_ew": [
+                                            true,
+                                            "174.537355815",
+                                            "174.537355815"
+                                        ]
+                                    },
+                                    "time": {
+                                        "jdiag": [
+                                            true,
+                                            "10",
+                                            "10"
+                                        ],
+                                        "dt": [
+                                            true,
+                                            "1.",
+                                            "1."
+                                        ],
+                                        "tstart": [
+                                            true,
+                                            "0.",
+                                            "0."
+                                        ],
+                                        "idiag": [
+                                            true,
+                                            "10",
+                                            "10"
+                                        ],
+                                        "tend": [
+                                            true,
+                                            "0.",
+                                            "0."
+                                        ],
+                                        "dt_diag": [
+                                            true,
+                                            "1.",
+                                            "1."
+                                        ]
+                                    },
+                                    "grid": {
+                                        "nsn": [
+                                            true,
+                                            "40",
+                                            "40"
+                                        ],
+                                        "dns": [
+                                            true,
+                                            "500.0",
+                                            "500.0"
+                                        ],
+                                        "dew": [
+                                            true,
+                                            "500.0",
+                                            "500.0"
+                                        ],
+                                        "upn": [
+                                            true,
+                                            "11",
+                                            "11"
+                                        ],
+                                        "ewn": [
+                                            true,
+                                            "40",
+                                            "40"
+                                        ]
+                                    },
+                                    "CF default": {
+                                        "comment": [
+                                            true,
+                                            "generated by runISMIPHOM.py",
+                                            "generated by runISMIPHOM.py"
+                                        ],
+                                        "title": [
+                                            true,
+                                            "ISMIP-HOM Experiment A",
+                                            "ISMIP-HOM Experiment A"
+                                        ]
+                                    },
+                                    "CF output": {
+                                        "frequency": [
+                                            true,
+                                            "1",
+                                            "1"
+                                        ],
+                                        "variables": [
+                                            true,
+                                            "uvel vvel uvel_extend vvel_extend topg thk usurf wvel velnorm",
+                                            "uvel vvel uvel_extend vvel_extend topg thk usurf wvel velnorm"
+                                        ],
+                                        "name": [
+                                            true,
+                                            "ismip-hom-a.0020.p001.out.nc",
+                                            "ismip-hom-a.0020.p001.out.nc"
+                                        ],
+                                        "xtype": [
+                                            true,
+                                            "double",
+                                            "double"
+                                        ]
+                                    },
+                                    "ho_options": {
+                                        "which_ho_sparse": [
+                                            true,
+                                            "3",
+                                            "3"
+                                        ],
+                                        "which_ho_assemble_beta": [
+                                            true,
+                                            "1",
+                                            "1"
+                                        ],
+                                        "which_ho_efvs": [
+                                            true,
+                                            "2",
+                                            "2"
+                                        ],
+                                        "which_ho_babc": [
+                                            true,
+                                            "4",
+                                            "4"
+                                        ],
+                                        "which_ho_nonlinear": [
+                                            true,
+                                            "0",
+                                            "0"
+                                        ]
+                                    }
+                                }
+                            },
+                            {
+                                "Type": "Table",
+                                "Title": "Output Log",
+                                "Headers": [
+                                    "Converged Iterations",
+                                    "Avg. Iterations to Converge",
+                                    "Processor Count",
+                                    "Dycore Type"
+                                ],
+                                "Data": {
+                                    "Dycore Type": "Glissade",
+                                    "Processor Count": 1,
+                                    "Converged Iterations": 1,
+                                    "Avg. Iterations to Converge": 45.0
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "Type": "Section",
+                        "Title": "p1-z80",
+                        "Elements": [
+                            {
+                                "Type": "Bit for Bit",
+                                "Title": "Bit for Bit",
+                                "Headers": [
+                                    "Max Error",
+                                    "Index of Max Error",
+                                    "RMS Error",
+                                    "Plot"
+                                ],
+                                "Data": {
+                                    "velnorm": {
+                                        "Max Error": 1.5276668818842154e-12,
+                                        "Index of Max Error": "(0, 4, 5, 31)",
+                                        "RMS Error": 3.0854695746529103e-13,
+                                        "Plot": "imgs/ismip-hom-a.0080.p001.out.nc_velnorm.png"
+                                    },
+                                    "thk": {
+                                        "Max Error": 0,
+                                        "RMS Error": 0,
+                                        "Index of Max Error": "N/A",
+                                        "Plot": "N/A"
+                                    }
+                                }
+                            },
+                            {
+                                "Type": "Diff",
+                                "Title": "Configuration Comparison",
+                                "Data": {
                                     "CF input": {
                                         "time": [
                                             true,
@@ -279,6 +265,28 @@
                                             "ismip-hom-a.0080.p001.nc"
                                         ]
                                     },
+                                    "options": {
+                                        "flow_law": [
+                                            true,
+                                            "0",
+                                            "0"
+                                        ],
+                                        "temperature": [
+                                            true,
+                                            "0",
+                                            "0"
+                                        ],
+                                        "dycore": [
+                                            true,
+                                            "2",
+                                            "2"
+                                        ],
+                                        "evolution": [
+                                            true,
+                                            "3",
+                                            "3"
+                                        ]
+                                    },
                                     "parameters": {
                                         "periodic_offset_ew": [
                                             true,
@@ -286,16 +294,109 @@
                                             "698.149423261"
                                         ]
                                     },
-                                    "ho_options": {
-                                        "which_ho_assemble_beta": [
+                                    "time": {
+                                        "jdiag": [
+                                            true,
+                                            "10",
+                                            "10"
+                                        ],
+                                        "dt": [
+                                            true,
+                                            "1.",
+                                            "1."
+                                        ],
+                                        "tstart": [
+                                            true,
+                                            "0.",
+                                            "0."
+                                        ],
+                                        "idiag": [
+                                            true,
+                                            "10",
+                                            "10"
+                                        ],
+                                        "tend": [
+                                            true,
+                                            "0.",
+                                            "0."
+                                        ],
+                                        "dt_diag": [
+                                            true,
+                                            "1.",
+                                            "1."
+                                        ]
+                                    },
+                                    "grid": {
+                                        "nsn": [
+                                            true,
+                                            "40",
+                                            "40"
+                                        ],
+                                        "dns": [
+                                            true,
+                                            "2000.0",
+                                            "2000.0"
+                                        ],
+                                        "dew": [
+                                            true,
+                                            "2000.0",
+                                            "2000.0"
+                                        ],
+                                        "upn": [
+                                            true,
+                                            "11",
+                                            "11"
+                                        ],
+                                        "ewn": [
+                                            true,
+                                            "40",
+                                            "40"
+                                        ]
+                                    },
+                                    "CF default": {
+                                        "comment": [
+                                            true,
+                                            "generated by runISMIPHOM.py",
+                                            "generated by runISMIPHOM.py"
+                                        ],
+                                        "title": [
+                                            true,
+                                            "ISMIP-HOM Experiment A",
+                                            "ISMIP-HOM Experiment A"
+                                        ]
+                                    },
+                                    "CF output": {
+                                        "frequency": [
                                             true,
                                             "1",
                                             "1"
                                         ],
-                                        "which_ho_nonlinear": [
+                                        "variables": [
                                             true,
-                                            "0",
-                                            "0"
+                                            "uvel vvel uvel_extend vvel_extend topg thk usurf wvel velnorm",
+                                            "uvel vvel uvel_extend vvel_extend topg thk usurf wvel velnorm"
+                                        ],
+                                        "name": [
+                                            true,
+                                            "ismip-hom-a.0080.p001.out.nc",
+                                            "ismip-hom-a.0080.p001.out.nc"
+                                        ],
+                                        "xtype": [
+                                            true,
+                                            "double",
+                                            "double"
+                                        ]
+                                    },
+                                    "ho_options": {
+                                        "which_ho_sparse": [
+                                            true,
+                                            "3",
+                                            "3"
+                                        ],
+                                        "which_ho_assemble_beta": [
+                                            true,
+                                            "1",
+                                            "1"
                                         ],
                                         "which_ho_efvs": [
                                             true,
@@ -307,135 +408,34 @@
                                             "4",
                                             "4"
                                         ],
-                                        "which_ho_sparse": [
+                                        "which_ho_nonlinear": [
                                             true,
-                                            "3",
-                                            "3"
-                                        ]
-                                    },
-                                    "CF default": {
-                                        "title": [
-                                            true,
-                                            "ISMIP-HOM Experiment A",
-                                            "ISMIP-HOM Experiment A"
-                                        ],
-                                        "comment": [
-                                            true,
-                                            "generated by runISMIPHOM.py",
-                                            "generated by runISMIPHOM.py"
-                                        ]
-                                    },
-                                    "CF output": {
-                                        "variables": [
-                                            true,
-                                            "uvel vvel uvel_extend vvel_extend topg thk usurf wvel velnorm",
-                                            "uvel vvel uvel_extend vvel_extend topg thk usurf wvel velnorm"
-                                        ],
-                                        "frequency": [
-                                            true,
-                                            "1",
-                                            "1"
-                                        ],
-                                        "xtype": [
-                                            true,
-                                            "double",
-                                            "double"
-                                        ],
-                                        "name": [
-                                            true,
-                                            "ismip-hom-a.0080.p001.out.nc",
-                                            "ismip-hom-a.0080.p001.out.nc"
-                                        ]
-                                    },
-                                    "grid": {
-                                        "upn": [
-                                            true,
-                                            "11",
-                                            "11"
-                                        ],
-                                        "dew": [
-                                            true,
-                                            "2000.0",
-                                            "2000.0"
-                                        ],
-                                        "nsn": [
-                                            true,
-                                            "40",
-                                            "40"
-                                        ],
-                                        "ewn": [
-                                            true,
-                                            "40",
-                                            "40"
-                                        ],
-                                        "dns": [
-                                            true,
-                                            "2000.0",
-                                            "2000.0"
-                                        ]
-                                    },
-                                    "time": {
-                                        "dt_diag": [
-                                            true,
-                                            "1.",
-                                            "1."
-                                        ],
-                                        "dt": [
-                                            true,
-                                            "1.",
-                                            "1."
-                                        ],
-                                        "tend": [
-                                            true,
-                                            "0.",
-                                            "0."
-                                        ],
-                                        "idiag": [
-                                            true,
-                                            "10",
-                                            "10"
-                                        ],
-                                        "tstart": [
-                                            true,
-                                            "0.",
-                                            "0."
-                                        ],
-                                        "jdiag": [
-                                            true,
-                                            "10",
-                                            "10"
+                                            "0",
+                                            "0"
                                         ]
                                     }
-                                },
-                                "Type": "Diff",
-                                "Title": "Configuration Comparison"
+                                }
                             },
                             {
-                                "Data": {
-                                    "Avg. Iterations to Converge": 51.0,
-                                    "Converged Iterations": 1,
-                                    "Dycore Type": "Glissade",
-                                    "Processor Count": 1
-                                },
                                 "Type": "Table",
+                                "Title": "Output Log",
                                 "Headers": [
                                     "Converged Iterations",
                                     "Avg. Iterations to Converge",
                                     "Processor Count",
                                     "Dycore Type"
                                 ],
-                                "Title": "Output Log"
+                                "Data": {
+                                    "Dycore Type": "Glissade",
+                                    "Processor Count": 1,
+                                    "Converged Iterations": 1,
+                                    "Avg. Iterations to Converge": 51.0
+                                }
                             }
-                        ],
-                        "Type": "Section",
-                        "Title": "p1-z80"
+                        ]
                     }
-                ],
-                "Title": "s0"
+                ]
             }
         ]
-    },
-    "Type": "Page",
-    "Description": "The Ice Sheet Model Intercomparison Project for Higher-Order Models (ISMIP-HOM) prescribes a set of experiments meant to test the implementation of higher-order physics. The results of this benchmark experiment was published in The Cryosphere and can be found <a target=_blank href=\"http://dx.doi.org/10.5194/tc-2-95-2008\">here.</a> <br> <br>Experiment A (shown here), simulates a parallel-sided slab of ice lying on a sloped bed that has a series of sinusoidal oscillations. The experimental domain is a square of side length L, with periodic boundary conditions applied in the horizontal. The ice thickness is 1000 m, the slope is 0.5 &deg; (maximum in x, zero in y), the amplitude of the bed oscillations is 500 m, and the frequency of the oscillations is &#969; = 2 &#960;/L.",
-    "Title": "ismip-hom-a"
+    }
 }

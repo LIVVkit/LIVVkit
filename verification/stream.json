@@ -1,54 +1,45 @@
 {
+    "Type": "Page",
+    "Title": "stream",
+    "Description": "The stream test case simulates flow over an idealized ice stream underlain by a subglacial till with a known and specified yield stress distribution. The basal properties vary in the across flow direction only and are symmetric about the ice steam centerline.",
     "Data": {
         "Tabs": [
             {
                 "Type": "Tab",
+                "Title": "s0",
                 "Sections": [
                     {
+                        "Type": "Section",
+                        "Title": "p1",
                         "Elements": [
                             {
-                                "Data": {
-                                    "thk": {
-                                        "Plot": "N/A",
-                                        "Max Error": 0,
-                                        "RMS Error": 0,
-                                        "Index of Max Error": "N/A"
-                                    },
-                                    "velnorm": {
-                                        "Plot": "imgs/stream.0025.p001.out.nc_velnorm.png",
-                                        "Max Error": 1.476564648328349e-09,
-                                        "RMS Error": 2.122817232506334e-10,
-                                        "Index of Max Error": "(0, 0, 14, 0)"
-                                    }
-                                },
                                 "Type": "Bit for Bit",
+                                "Title": "Bit for Bit",
                                 "Headers": [
                                     "Max Error",
                                     "Index of Max Error",
                                     "RMS Error",
                                     "Plot"
                                 ],
-                                "Title": "Bit for Bit"
+                                "Data": {
+                                    "velnorm": {
+                                        "Max Error": 1.476564648328349e-09,
+                                        "Index of Max Error": "(0, 0, 14, 0)",
+                                        "RMS Error": 2.122817232506334e-10,
+                                        "Plot": "imgs/stream.0025.p001.out.nc_velnorm.png"
+                                    },
+                                    "thk": {
+                                        "Max Error": 0,
+                                        "RMS Error": 0,
+                                        "Index of Max Error": "N/A",
+                                        "Plot": "N/A"
+                                    }
+                                }
                             },
                             {
+                                "Type": "Diff",
+                                "Title": "Configuration Comparison",
                                 "Data": {
-                                    "options": {
-                                        "evolution": [
-                                            true,
-                                            "3",
-                                            "3"
-                                        ],
-                                        "flow_law": [
-                                            true,
-                                            "0",
-                                            "0"
-                                        ],
-                                        "dycore": [
-                                            true,
-                                            "2",
-                                            "2"
-                                        ]
-                                    },
                                     "CF input": {
                                         "time": [
                                             true,
@@ -61,6 +52,23 @@
                                             "stream.0025.p001.nc"
                                         ]
                                     },
+                                    "options": {
+                                        "flow_law": [
+                                            true,
+                                            "0",
+                                            "0"
+                                        ],
+                                        "dycore": [
+                                            true,
+                                            "2",
+                                            "2"
+                                        ],
+                                        "evolution": [
+                                            true,
+                                            "3",
+                                            "3"
+                                        ]
+                                    },
                                     "parameters": {
                                         "periodic_offset_ew": [
                                             true,
@@ -68,115 +76,7 @@
                                             "30.0"
                                         ]
                                     },
-                                    "ho_options": {
-                                        "which_ho_nonlinear": [
-                                            true,
-                                            "0",
-                                            "0"
-                                        ],
-                                        "glissade_maxiter": [
-                                            true,
-                                            "300",
-                                            "300"
-                                        ],
-                                        "which_ho_babc": [
-                                            true,
-                                            "2",
-                                            "2"
-                                        ],
-                                        "which_ho_precond": [
-                                            true,
-                                            "1",
-                                            "1"
-                                        ],
-                                        "which_ho_assemble_beta": [
-                                            true,
-                                            "1",
-                                            "1"
-                                        ],
-                                        "which_ho_efvs": [
-                                            true,
-                                            "2",
-                                            "2"
-                                        ],
-                                        "which_ho_approx": [
-                                            true,
-                                            "2",
-                                            "2"
-                                        ],
-                                        "which_ho_sparse": [
-                                            true,
-                                            "3",
-                                            "3"
-                                        ]
-                                    },
-                                    "CF default": {
-                                        "title": [
-                                            true,
-                                            "simple ice stream - yield stress set for analytical solution",
-                                            "simple ice stream - yield stress set for analytical solution"
-                                        ],
-                                        "comment": [
-                                            true,
-                                            "none",
-                                            "none"
-                                        ]
-                                    },
-                                    "CF output": {
-                                        "variables": [
-                                            true,
-                                            "usrf topg thk flwa uvel vvel velnorm tauf",
-                                            "usrf topg thk flwa uvel vvel velnorm tauf"
-                                        ],
-                                        "frequency": [
-                                            true,
-                                            "1",
-                                            "1"
-                                        ],
-                                        "xtype": [
-                                            true,
-                                            "double",
-                                            "double"
-                                        ],
-                                        "name": [
-                                            true,
-                                            "stream.0025.p001.out.nc",
-                                            "stream.0025.p001.out.nc"
-                                        ]
-                                    },
-                                    "grid": {
-                                        "upn": [
-                                            true,
-                                            "2",
-                                            "2"
-                                        ],
-                                        "dew": [
-                                            true,
-                                            "2000.0",
-                                            "2000.0"
-                                        ],
-                                        "nsn": [
-                                            true,
-                                            "31",
-                                            "31"
-                                        ],
-                                        "ewn": [
-                                            true,
-                                            "15",
-                                            "15"
-                                        ],
-                                        "dns": [
-                                            true,
-                                            "2000.0",
-                                            "2000.0"
-                                        ]
-                                    },
                                     "time": {
-                                        "tstart": [
-                                            true,
-                                            "0.0",
-                                            "0.0"
-                                        ],
                                         "dt": [
                                             true,
                                             "1.0",
@@ -186,38 +86,138 @@
                                             true,
                                             "0.0",
                                             "0.0"
+                                        ],
+                                        "tstart": [
+                                            true,
+                                            "0.0",
+                                            "0.0"
+                                        ]
+                                    },
+                                    "grid": {
+                                        "nsn": [
+                                            true,
+                                            "31",
+                                            "31"
+                                        ],
+                                        "dns": [
+                                            true,
+                                            "2000.0",
+                                            "2000.0"
+                                        ],
+                                        "dew": [
+                                            true,
+                                            "2000.0",
+                                            "2000.0"
+                                        ],
+                                        "upn": [
+                                            true,
+                                            "2",
+                                            "2"
+                                        ],
+                                        "ewn": [
+                                            true,
+                                            "15",
+                                            "15"
+                                        ]
+                                    },
+                                    "CF default": {
+                                        "comment": [
+                                            true,
+                                            "none",
+                                            "none"
+                                        ],
+                                        "title": [
+                                            true,
+                                            "simple ice stream - yield stress set for analytical solution",
+                                            "simple ice stream - yield stress set for analytical solution"
+                                        ]
+                                    },
+                                    "CF output": {
+                                        "frequency": [
+                                            true,
+                                            "1",
+                                            "1"
+                                        ],
+                                        "variables": [
+                                            true,
+                                            "usrf topg thk flwa uvel vvel velnorm tauf",
+                                            "usrf topg thk flwa uvel vvel velnorm tauf"
+                                        ],
+                                        "name": [
+                                            true,
+                                            "stream.0025.p001.out.nc",
+                                            "stream.0025.p001.out.nc"
+                                        ],
+                                        "xtype": [
+                                            true,
+                                            "double",
+                                            "double"
+                                        ]
+                                    },
+                                    "ho_options": {
+                                        "which_ho_sparse": [
+                                            true,
+                                            "3",
+                                            "3"
+                                        ],
+                                        "which_ho_approx": [
+                                            true,
+                                            "2",
+                                            "2"
+                                        ],
+                                        "glissade_maxiter": [
+                                            true,
+                                            "300",
+                                            "300"
+                                        ],
+                                        "which_ho_assemble_beta": [
+                                            true,
+                                            "1",
+                                            "1"
+                                        ],
+                                        "which_ho_precond": [
+                                            true,
+                                            "1",
+                                            "1"
+                                        ],
+                                        "which_ho_efvs": [
+                                            true,
+                                            "2",
+                                            "2"
+                                        ],
+                                        "which_ho_babc": [
+                                            true,
+                                            "2",
+                                            "2"
+                                        ],
+                                        "which_ho_nonlinear": [
+                                            true,
+                                            "0",
+                                            "0"
                                         ]
                                     }
-                                },
-                                "Type": "Diff",
-                                "Title": "Configuration Comparison"
+                                }
                             },
                             {
-                                "Data": {
-                                    "Avg. Iterations to Converge": 49.0,
-                                    "Converged Iterations": 1,
-                                    "Dycore Type": "Glissade",
-                                    "Processor Count": 1
-                                },
                                 "Type": "Table",
+                                "Title": "Output Log",
                                 "Headers": [
                                     "Converged Iterations",
                                     "Avg. Iterations to Converge",
                                     "Processor Count",
                                     "Dycore Type"
                                 ],
-                                "Title": "Output Log"
+                                "Data": {
+                                    "Dycore Type": "Glissade",
+                                    "Processor Count": 1,
+                                    "Converged Iterations": 1,
+                                    "Avg. Iterations to Converge": 49.0
+                                }
                             }
-                        ],
-                        "Type": "Section",
-                        "Title": "p1"
+                        ]
                     }
-                ],
-                "Title": "s0"
+                ]
             }
         ]
-    },
-    "Type": "Page",
-    "Description": "The stream test case simulates flow over an idealized ice stream underlain by a subglacial till with a known and specified yield stress distribution. The basal properties vary in the across flow direction only and are symmetric about the ice steam centerline.",
-    "Title": "stream"
+    }
 }

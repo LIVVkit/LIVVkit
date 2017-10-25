@@ -1,27 +1,27 @@
 {
+    "Type": "Page",
+    "Title": "ismip-hom-c",
+    "Description": "The Ice Sheet Model Intercomparison Project for Higher-Order Models (ISMIP-HOM) prescribes a set of experiments meant to test the implementation of higher-order physics. The results of this benchmark experiment was published in The Cryosphere and can be found <a target=_blank href=\"http://dx.doi.org/10.5194/tc-2-95-2008\">here.</a> <br> <br>Experiment C (shown here), simulates a parallel-sided slab of ice lying on a sloped bed that has a sinusoidally oscillating basal friction coefficient. The experimental domain is a square of side length L, with periodic boundary conditions applied in the horizontal. The ice thickness is 1000 m, the slope is 0.1 &deg; (maximum in x, zero in y), the basal friction coefficient is perscribed by &#946;(x,y)= 1000 + 1000 sin(&#969;x)*sin(&#969;y), and the frequency of the oscillations is &#969; = 2 &#960;/L.",
     "Data": {
         "Elements": [
             {
+                "Type": "Gallery",
+                "Title": "Numerics Plots",
                 "Data": [
                     {
-                        "Plot File": "ismip-hom-c_Fig8_020.png",
                         "Type": "Image",
                         "Title": "Fig. 8: 20 km",
-                        "Desciption": ""
+                        "Desciption": "",
+                        "Plot File": "ismip-hom-c_Fig8_020.png"
                     },
                     {
-                        "Plot File": "ismip-hom-c_Fig8_080.png",
                         "Type": "Image",
                         "Title": "Fig. 8: 80 km",
-                        "Desciption": ""
+                        "Desciption": "",
+                        "Plot File": "ismip-hom-c_Fig8_080.png"
                     }
-                ],
-                "Type": "Gallery",
-                "Title": "Numerics Plots"
+                ]
             }
         ]
-    },
-    "Type": "Page",
-    "Description": "The Ice Sheet Model Intercomparison Project for Higher-Order Models (ISMIP-HOM) prescribes a set of experiments meant to test the implementation of higher-order physics. The results of this benchmark experiment was published in The Cryosphere and can be found <a target=_blank href=\"http://dx.doi.org/10.5194/tc-2-95-2008\">here.</a> <br> <br>Experiment C (shown here), simulates a parallel-sided slab of ice lying on a sloped bed that has a sinusoidally oscillating basal friction coefficient. The experimental domain is a square of side length L, with periodic boundary conditions applied in the horizontal. The ice thickness is 1000 m, the slope is 0.1 &deg; (maximum in x, zero in y), the basal friction coefficient is perscribed by &#946;(x,y)= 1000 + 1000 sin(&#969;x)*sin(&#969;y), and the frequency of the oscillations is &#969; = 2 &#960;/L.",
-    "Title": "ismip-hom-c"
+    }
 }
