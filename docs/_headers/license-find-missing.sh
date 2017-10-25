@@ -37,7 +37,7 @@ echo "--------------------------------------------------------------------------
 find $SOURCE_DIR -type f "${ALWAYS_IGNORE[@]}" \
     "${FILE_IGNORE[@]}" \
     "${PYTHON_IGNORE[@]}" \
-    "${CSS_IGNORE[@]}" \
+    "${JS_IGNORE[@]}" \
     | xargs grep -L "$CURRENT" \
     | sort
 
