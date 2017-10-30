@@ -59,6 +59,7 @@ do
     echo HEADING ${SRC}
     cp livvHeader-py /tmp/licHead
     cat ${SRC} >> /tmp/licHead
+    chmod --reference=${SRC} /tmp/licHead
     mv /tmp/licHead ${SRC}
 done
 
@@ -78,6 +79,7 @@ do
     cat ${SRC} | head -1 > /tmp/licHead
     cat livvHeader-py >> /tmp/licHead
     cat ${SRC} | tail -n +2 >> /tmp/licHead
+    chmod --reference=${SRC} /tmp/licHead
     mv /tmp/licHead ${SRC}
 done
 
@@ -96,6 +98,7 @@ do
     echo HEADING ${SRC}
     cp livvHeader-js /tmp/licHead
     cat ${SRC} >> /tmp/licHead
+    chmod --reference=${SRC} /tmp/licHead
     mv /tmp/licHead ${SRC}
 done
 
@@ -113,6 +116,7 @@ do
     echo HEADING ${SRC}
     cp livvHeader-ncl /tmp/licHead
     cat ${SRC} >> /tmp/licHead
+    chmod --reference=${SRC} /tmp/licHead
     mv /tmp/licHead ${SRC}
 done
 
