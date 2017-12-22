@@ -49,7 +49,7 @@ def run(run_type, module, config):
     Args:
         run_type: A string representation of the run type (eg. verification)
         module: The module corresponding to the run.  Must have a run_suite function
-        config_path: The configuration for the module
+        config: The configuration for the module
     """
     print(" -----------------------------------------------------------------")
     print("   Beginning " + run_type.lower() + " test suite ")
