@@ -34,7 +34,6 @@ import six
 
 
 import os
-import json
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -42,6 +41,7 @@ import matplotlib.pyplot as plt
 import livvkit
 from livvkit.util.LIVVDict import LIVVDict
 from livvkit.util import elements
+from livvkit.util import functions
 
 
 case_color = {'bench': '#d7191c',
@@ -54,9 +54,8 @@ setup = None
 
 
 def set_up():
-    with open(os.path.join(os.path.dirname(__file__), 'ismip.json'), 'r') as f:
-        global setup
-        setup = json.load(f)
+    global setup
+    setup = functions.read_json(os.path.join(os.path.dirname(__file__), 'ismip.json'))
 
     for exp, size in [('ismip-hom-a', '005'), ('ismip-hom-c', '005'), ('ismip-hom-f', '000')]:
         recreate_file = os.path.join(livvkit.__path__[0], setup[exp]["data_dir"],

@@ -54,7 +54,7 @@ except ImportError:
 
 setup(
       name='livvkit',
-      version='2.1.0',
+      version='2.1.1',
 
       description='The land ice verification and validation toolkit.',
       long_description=read_md('README.md'),
@@ -90,7 +90,7 @@ setup(
                        'scipy',
                        'netCDF4',
                        'matplotlib',
-                       'json-tricks'
+                       'json-tricks==3.11.0'
                        ],
 
       scripts=['livv'],
