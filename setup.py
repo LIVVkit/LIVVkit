@@ -90,7 +90,7 @@ setup(
                        'scipy',
                        'netCDF4',
                        'matplotlib',
-                       'json-tricks'
+                       'json-tricks==3.11.0'
                        ],
 
       scripts=['livv'],
