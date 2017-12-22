@@ -97,30 +97,28 @@ def main(args):
     if args.serve:
         try:
             # Python 3
-            import http.server
-            import socketserver
-            handler = http.server.SimpleHTTPRequestHandler
-            httpd = socketserver.TCPServer(('', args.serve), handler)
+            import http.server as server
+            import socketserver as socket
         except ImportError:
             # Python 2
-            import SimpleHTTPServer
-            import SocketServer
-            handler = SimpleHTTPServer.SimpleHTTPRequestHandler
-            httpd = SocketServer.TCPServer(('', args.serve), handler)
-        
+            import SimpleHTTPServer as server
+            import SocketServer as socket
+
+        httpd = socket.TCPServer(('', args.serve), server.SimpleHTTPRequestHandler)
+
         sa = httpd.socket.getsockname()
         print('\nServing HTTP on {host} port {port} (http://{host}:{port}/)'.format(host=sa[0], port=sa[1]))
         print('\nView the generated website by navigating to:')
-        print('\n    http://{host}:{port}/{path}/index.html'.format(host=sa[0], port=sa[1], 
-                                                                      path=os.path.relpath(livvkit.output_dir)
-                                                                      ))
+        print('\n    http://{host}:{port}/{path}/index.html'.format(host=sa[0], port=sa[1],
+                                                                    path=os.path.relpath(livvkit.output_dir)
+                                                                    ))
         print('\nExit by pressing `ctrl+c` to send a keyboard interrupt.\n')
         try:
             httpd.serve_forever()
         except KeyboardInterrupt:
             print('\nKeyboard interrupt received, exiting.\n')
             sys.exit(0)
-    
+
 
 if __name__ == "__main__":
     main(options.parse_args())
