@@ -32,7 +32,6 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import os
 import sys
-import json
 import errno
 import shutil
 import fnmatch
@@ -149,7 +148,7 @@ def read_json(file_path):
     config = {}
     try:
         with open(file_path, 'r') as f:
-            config = json.load(f)
+            config = json_tricks.load(f)
     except ValueError:
         print('    '+'!'*58)
         print('    Woops! Looks the JSON syntax is not valid in:')
@@ -175,7 +174,7 @@ def write_json(data, path, file_name):
     elif not os.path.exists(path):
         mkdir_p(path)
     with open(os.path.join(path, file_name), 'w') as f:
-        json_tricks.np.dump(data, f, indent=4, primitives=True, allow_nan=True)
+        json_tricks.dump(data, f, indent=4, primitives=True, allow_nan=True)
 
 
 def collect_cases(data_dir):
