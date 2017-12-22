@@ -12,7 +12,7 @@ dependencies:
 - matplotlib
 - nodejs
 - pip:
-  - json-tricks 
+  - json-tricks==3.11.0
   - sphinx
   - sphinx-js
   - sphinx-py3doc-enhanced-theme
