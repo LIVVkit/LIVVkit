@@ -63,14 +63,14 @@ def main(args):
     from livvkit.util import functions
     from livvkit.util import elements
     functions.setup_output()
-    l = []
+    summary_elements = []
     if livvkit.verify:
-        l.append(scheduler.run("numerics", components.numerics,
-                 functions.read_json(livvkit.numerics_model_config)))
-        l.append(scheduler.run("verification", components.verification,
-                 functions.read_json(livvkit.verification_model_config)))
-        l.append(scheduler.run("performance", components.performance,
-                 functions.read_json(livvkit.performance_model_config)))
+        summary_elements.append(scheduler.run("numerics", components.numerics,
+                                              functions.read_json(livvkit.numerics_model_config)))
+        summary_elements.append(scheduler.run("verification", components.verification,
+                                              functions.read_json(livvkit.verification_model_config)))
+        summary_elements.append(scheduler.run("performance", components.performance,
+                                              functions.read_json(livvkit.performance_model_config)))
     if livvkit.validate:
         print(" -----------------------------------------------------------------")
         print("   Beginning the validation test suite ")
@@ -80,14 +80,14 @@ def main(args):
         for conf in livvkit.validation_model_configs:
             validation_config = functions.merge_dicts(validation_config,
                                                       functions.read_json(conf))
-        l.extend(scheduler.run_quiet(components.validation, validation_config,
-                                     group=False))
+        summary_elements.extend(scheduler.run_quiet(components.validation, validation_config,
+                                                    group=False))
         print(" -----------------------------------------------------------------")
         print("   Validation test suite complete ")
         print(" -----------------------------------------------------------------")
         print("")
 
-    result = elements.page("Summary", "", element_list=l)
+    result = elements.page("Summary", "", element_list=summary_elements)
     functions.write_json(result, livvkit.output_dir, "index.json")
     print("-------------------------------------------------------------------")
     print(" Done!  Results can be seen in a web browser at:")
