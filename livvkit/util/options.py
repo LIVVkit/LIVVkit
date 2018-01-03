@@ -1,3 +1,4 @@
+# coding=utf-8
 # Copyright (c) 2015-2017, UT-BATTELLE, LLC
 # All rights reserved.
 #
@@ -59,8 +60,7 @@ def parse_args(args=None):
     parser.add_argument('-v', '--verify',
                         nargs=2,
                         default=None,
-                        help=' '.join([
-                                       'Specify the locations of the test and bench bundle to',
+                        help=' '.join(['Specify the locations of the test and bench bundle to',
                                        'compare (respectively).'
                                        ])
                         )
@@ -70,7 +70,8 @@ def parse_args(args=None):
                         nargs='+',
                         default=None,
                         help=' '.join(['Specify the location of the configuration files for',
-                                       'validation tests.'])
+                                       'validation tests.'
+                                       ])
                         )
 
     # FIXME: this just short-circuits to the validation option, and should become its own module
@@ -81,20 +82,22 @@ def parse_args(args=None):
                         dest='validate',
                         metavar='EXTENSION',
                         help=' '.join(['Specify the location of the configuration files for',
-                                       'LIVVkit extensions.'])
+                                       'LIVVkit extensions.'
+                                       ])
                         )
 
     parser.add_argument('-p', '--publish',
                         action='store_true',
-                        help=' '.join([
-                                       'Also produce a publication quality copy of the figure in',
+                        help=' '.join(['Also produce a publication quality copy of the figure in',
                                        'the output directory (eps, 600d pi).'
                                        ])
                         )
 
     parser.add_argument('-s', '--serve',
                         nargs='?', type=int, const=8000,
-                        help='Start a simple HTTP server for the output website on port SERVE.'
+                        help=' '.join(['Start a simple HTTP server for the output website specified',
+                                       'by OUT_DIR on port SERVE.'
+                                       ])
                         )
 
     return init(parser.parse_args(args))

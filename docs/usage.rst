@@ -117,7 +117,7 @@ Then, the testing results can be compared to a reference dataset with LIVVkit:
 
 LIVVkit will run the verification suite, report a summary of the results on the command line, and
 produce an output website in the created ``vv_$YEAR_$MONTH_DAY`` directory  (or one specified with
-the ``-o/--output`` option). The output website can be viewed in the developers preferred web
+the ``-o/--out-dir`` option). The output website can be viewed in the developers preferred web
 browser by by opening ``vv_$YEAR_$MONTH_DAY/index.html``. 
 
 .. note:: 
@@ -199,7 +199,7 @@ Then once all the jobs were finished, the testing results can be compared to a r
 
 LIVVkit will run the verification suite, report a summary of the results on the command line, and
 produce an output website in the created ``vv_$YEAR_$MONTH_DAY`` directory  (or one specified with
-the ``-o/--output`` option). Because there is no web browser on Titan, the integrator would then
+the ``-o/--out-dir`` option). Because there is no web browser on Titan, the integrator would then
 copy the output directory (and all contents) to their local machine and view the output website in the integrators
 preferred web browser by by opening ``vv_$YEAR_$MONTH_DAY/index.html``. 
 
