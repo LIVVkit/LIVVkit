@@ -167,7 +167,7 @@ def init(options):
     if options.validate is not None:
         livvkit.validation_model_configs = options.validate
 
-    if not (livvkit.verify or livvkit.validate):
+    if not (livvkit.verify or livvkit.validate) and not options.serve:
         print("")
         print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
         print("                       UH OH!")
