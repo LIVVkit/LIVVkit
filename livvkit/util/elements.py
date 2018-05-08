@@ -1,3 +1,4 @@
+# coding=utf-8
 # Copyright (c) 2015-2017, UT-BATTELLE, LLC
 # All rights reserved.
 #
@@ -26,8 +27,6 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-from __future__ import absolute_import, division, print_function, unicode_literals
-
 """
 Module to help building new display elements in the output
 files easier and less error prone.
@@ -37,16 +36,19 @@ They will be written out to the JSON files as sub-objects, which must
 be interpreted by the Javascript found in the resources directory.
 """
 
+from __future__ import absolute_import, division, print_function, unicode_literals
+
+
 def book(title, description, page_dict=None):
 
-    book = {'Type': 'Book',
-            'Title': title,
-            'Description': description,
-            }
+    _book = {'Type': 'Book',
+             'Title': title,
+             'Description': description,
+             }
     if page_dict is not None:
-        book['Data'] = page_dict
+        _book['Data'] = page_dict
 
-    return book
+    return _book
 
 
 def page(title, description, element_list=None, tab_list=None):
@@ -67,22 +69,24 @@ def page(title, description, element_list=None, tab_list=None):
         A dictionary with metadata specifying that it is to be rendered
         as a page containing multiple elements and/or tabs.
     """
-    page = {}
-    page["Type"] = "Page"
-    page["Title"] = title
-    page["Description"] = description
-    page["Data"] = {}
+    _page = {
+             'Type': 'Page',
+             'Title': title,
+             'Description': description,
+             'Data': {},
+             }
+
     if element_list is not None:
         if isinstance(element_list, list):
-            page["Data"]["Elements"] = element_list
+            _page['Data']['Elements'] = element_list
         else:
-            page["Data"]["Elements"] = [element_list]
+            _page['Data']['Elements'] = [element_list]
     if tab_list is not None:
         if isinstance(tab_list, list):
-            page["Data"]["Tabs"] = tab_list
+            _page['Data']['Tabs'] = tab_list
         else:
-            page["Data"]["Tabs"] = [tab_list]
-    return page
+            _page['Data']['Tabs'] = [tab_list]
+    return _page
 
 
 def tab(tab_name, element_list=None, section_list=None):
@@ -93,7 +97,6 @@ def tab(tab_name, element_list=None, section_list=None):
 
     Args:
         tab_name: The title to display
-        description: A description of the section
         element_list: The list of elements to display. If a single element is
                       given it will be wrapped in a list.
         section_list: A list of sections to display.
@@ -102,46 +105,50 @@ def tab(tab_name, element_list=None, section_list=None):
         A dictionary with metadata specifying that it is to be rendered
         as a page containing multiple elements and/or tab.
     """
-    tab = {}
-    tab["Type"] = "Tab"
-    tab["Title"] = tab_name
+    _tab = {
+            'Type': 'Tab',
+            'Title': tab_name,
+            }
+
     if element_list is not None:
         if isinstance(element_list, list):
-            tab["Elements"] = element_list
+            _tab['Elements'] = element_list
         else:
-            tab["Elements"] = [element_list]
+            _tab['Elements'] = [element_list]
     if section_list is not None:
         if isinstance(section_list, list):
-            tab["Sections"] = section_list
+            _tab['Sections'] = section_list
         else:
-            if ("Elements" not in section_list):
-                tab["Elements"] = element_list
+            if 'Elements' not in section_list:
+                _tab['Elements'] = element_list
             else:
-                tab["Elements"].append(element_list)
-    return tab
+                _tab['Elements'].append(element_list)
+    return _tab
 
 
 def section(title, element_list):
     """
     Returns a dictionary representing a new section.  Sections
-    contain a list of elements that are displayed seperately from
+    contain a list of elements that are displayed separately from
     the global elements on the page.
 
     Args:
-        tab_name: The title of the section to be displayed
+        title: The title of the section to be displayed
         element_list: The list of elements to display within the section
 
     Returns:
         A dictionary with metadata specifying that it is to be rendered as
         a section containing multiple elements
     """
-    sect = {}
-    sect["Type"] = "Section"
-    sect["Title"] = title
+    sect = {
+            'Type': 'Section',
+            'Title': title,
+            }
+
     if isinstance(element_list, list):
-        sect["Elements"] = element_list
+        sect['Elements'] = element_list
     else:
-        sect["Elements"] = [element_list]
+        sect['Elements'] = [element_list]
     return sect
 
 
@@ -158,17 +165,18 @@ def table(title, headers, data_node):
         title: The title to display
         headers: The columns to put into the table
         data_node: A dictionary with the form::
-            {"case" : {"subcase" : { "header" : "data" } } }
+            {'case' : {'subcase' : { 'header' : data } } }
 
     Returns:
         A dictionary with the metadata specifying that it is to be
         rendered as a table.
     """
-    tb = {}
-    tb["Type"] = "Table"
-    tb["Title"] = title
-    tb["Headers"] = headers
-    tb["Data"] = data_node
+    tb = {
+          'Type': 'Table',
+          'Title': title,
+          'Headers': headers,
+          'Data': data_node,
+          }
     return tb
 
 
@@ -185,17 +193,18 @@ def vtable(title, headers, data_node):
         title: The title to display
         headers: The columns to put into the table
         data_node: A dictionary with the form::
-            {"case" : {"subcase" : { "header" : "data" } } }
+            {'case' : {'subcase' : { 'header' : data } } }
 
     Returns:
         A dictionary with the metadata specifying that it is to be
         rendered as a table.
     """
-    tb = {}
-    tb["Type"] = "Vertical Table"
-    tb["Title"] = title
-    tb["Headers"] = headers
-    tb["Data"] = data_node
+    tb = {
+          'Type': 'Vertical Table',
+          'Title': title,
+          'Headers': headers,
+          'Data': data_node,
+          }
     return tb
 
 
@@ -210,17 +219,18 @@ def bit_for_bit(title, headers, data_node):
         title: The title to display
         headers: Columns of the table
         data_node: A dictionary with the form:
-            {"var_name" : {"header : { "data" } } }
+            {'var_name' : {'header : { data } } }
 
     Returns:
         A dictionary with the metadata specifying that it is to be
         rendered as a bit for bit table
     """
-    b4b = {}
-    b4b["Type"] = "Bit for Bit"
-    b4b["Title"] = title
-    b4b["Headers"] = headers
-    b4b["Data"] = data_node
+    b4b = {
+           'Type': 'Bit for Bit',
+           'Title': title,
+           'Headers': headers,
+           'Data': data_node,
+           }
     return b4b
 
 
@@ -240,10 +250,11 @@ def gallery(title, image_elem_list):
         A dictionary with the metadata specifying that it is to be
         rendered as an image gallery
     """
-    gal = {}
-    gal["Type"] = "Gallery"
-    gal["Title"] = title
-    gal["Data"] = image_elem_list
+    gal = {
+           'Type': 'Gallery',
+           'Title': title,
+           'Data': image_elem_list,
+           }
     return gal
 
 
@@ -264,21 +275,22 @@ def image(title, desc, image_name, group=None, height=None):
         desc: A description of the image or plot
         image_name: The filename of the image
         group: (optional) Title of lightbox group to join
-        Height: (optional) Hight of image thumbnail to draw
+        height: (optional) Height of image thumbnail to draw
 
     Returns:
         A dictionary with the metadata specifying that it is to be
         rendered as an image element
     """
-    ie = {}
-    ie["Type"] = "Image"
-    ie["Title"] = title
-    ie["Desciption"] = desc
-    ie["Plot File"] = image_name
+    ie = {
+          'Type': 'Image',
+          'Title': title,
+          'Description': desc,
+          'Plot File': image_name,
+          }
     if group:
-        ie["Group"] = group
+        ie['Group'] = group
     if height:
-        ie["Height"] = height
+        ie['Height'] = height
     return ie
 
 
@@ -291,16 +303,17 @@ def file_diff(title, diff_data):
     Args:
         title: The title to display
         diff_data: A dictionary of the form:
-            { "section_name" : { "variale_name" : [diff, val_1, val_2] } }
+            { 'section_name' : { 'variable_name' : [diff, val_1, val_2] } }
 
     Returns:
         A dictionary with the metadata specifying that it is to be
         rendered as a file diff element
     """
-    fd = {}
-    fd["Type"] = "Diff"
-    fd["Title"] = title
-    fd["Data"] = diff_data
+    fd = {
+          'Type': 'Diff',
+          'Title': title,
+          'Data': diff_data,
+          }
     return fd
 
 
@@ -317,11 +330,13 @@ def error(title, error_msg):
         A dictionary with the metadata specifying that it is to be
         rendered as an error element
     """
-    err = {}
-    err["Type"] = "Error"
-    err["Title"] = title
-    err["Message"] = error_msg
+    err = {
+           'Type': 'Error',
+           'Title': title,
+           'Message': error_msg,
+           }
     return err
+
 
 def html(html_data):
     """
@@ -334,8 +349,8 @@ def html(html_data):
         A dictionary with the metadata specifying that it is to be
         rendered directly as HTML
     """
-    html_el = {}
-    html_el['Type'] = 'HTML'
-    html_el['Data'] = html_data
+    html_el = {
+               'Type': 'HTML',
+               'Data': html_data,
+               }
     return html_el
-

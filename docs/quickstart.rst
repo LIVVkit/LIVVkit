@@ -63,23 +63,24 @@ To run the suite use:
 
 .. code-block:: bash
     
-    livv --verify $TEST $REF
+    livv --verify $TEST $REF --out-dir ver_test --serve
 
 or 
 
 .. code-block:: bash
     
-    livv -v $TEST $REF
+    livv -v $TEST $REF -o ver_test -s
 
-LIVVkit will run the verification suite, report a summary of the results on the command line, and
-produce an output website in the created ``vv_$YEAR_$MONTH_DAY`` directory (you can change the
-output directory with the ``-o/--output`` option). You can view the output website by opening
-``vv_$YEAR_$MONTH_DAY/index.html`` in your favorite web browser. 
+LIVVkit will run the verification suite, report a summary of the results on the command line,
+produce an output website in the created ``ver_test`` directory specified by the ``-o/--out-dir``
+option, and launch a http server (the ``-s/--serve`` option) to easily view the output in your
+favorite web browser.
 
 .. note:: 
 
-    LIVVkit outputs the full path to the index page at the end of each run so it's easy type into
-    your browser's address bar (prefix this path with a ``file://`` on most browsers).
+    LIVVkit will tell you the address to view the website at on the command
+    line, which will typically look like
+    `http://0.0.0.0:8000/ver_test/index.html <http://0.0.0.0:8000/ver_test/index.html>`_.
 
 .. warning:: 
 
@@ -102,24 +103,25 @@ configuration file (a JSON file). Use:
 
 .. code-block:: bash
 
-    livv --validate $LIVV/components/validation_tests/template/template.json 
+    livv --validate $LIVV/components/validation_tests/template/template.json --out-dir val_test --serve
 
 or 
 
 .. code-block:: bash
 
-    livv -V $LIVV/components/validation_tests/template/template.json
+    livv -V $LIVV/components/validation_tests/template/template.json -o val_test -s
 
 
-LIVVkit will run the validation template, report a summary of the results on the command line, and
-produce an output website in the created ``vv_$YEAR_$MONTH_DAY`` directory (you can change the
-output directory with the ``-o/--output`` option). You can view the output website by opening
-``vv_$YEAR_$MONTH_DAY/index.html`` in your favorite web browser.
+LIVVkit will run the validation template, report a summary of the results on the command line,
+produce an output website in the created ``val_test`` directory specified by the ``-o/--out-dir``
+option, and launch a http server (the ``-s/--serve`` option) to easily view the output in your
+favorite web browser.
 
 .. note:: 
 
-    LIVVkit outputs the full path to the index page at the end of each run so it's easy type into
-    your browser's address bar (prefix this path with a ``file://`` on most browsers).
+    LIVVkit will tell you the address to view the website at on the command
+    line, which will typically look like
+    `http://0.0.0.0:8000/val_test/index.html <http://0.0.0.0:8000/val_test/index.html>`_.
 
 .. warning:: 
 

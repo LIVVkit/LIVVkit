@@ -532,7 +532,7 @@ function drawLightbox(img_elem) {
     var path = img_dir + img_elem["Plot File"];
     var lbox = img_elem["Group"] ? img_elem["Group"]  : img_elem["Title"];
     var size = img_elem["Height"] ? img_elem["Height"]  : 200;
-    var html = "<a href=\"" + path + "\" data-lightbox=\"" + lbox + "\" data-title=\"" + img_elem["Desciption"] + "\">";
+    var html = "<a href=\"" + path + "\" data-lightbox=\"" + lbox + "\" data-title=\"" + img_elem["Description"] + "\">";
     html += "<img class=\"thumbnail caption\" data-caption=\"" + img_elem["Title"]+ "\" alt=\"" + img_elem["Title"] + "\" src=\"" + path + "\" style=\"height: " + size + "px; overflow: hidden; position: relative\">";
     html += "</a>";
     return html;

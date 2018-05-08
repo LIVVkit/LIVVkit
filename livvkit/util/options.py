@@ -1,3 +1,4 @@
+# coding=utf-8
 # Copyright (c) 2015-2017, UT-BATTELLE, LLC
 # All rights reserved.
 #
@@ -37,7 +38,6 @@ import importlib
 
 import livvkit
 from livvkit import bundles
-from livvkit import resources
 
 
 def parse_args(args=None):
@@ -59,8 +59,7 @@ def parse_args(args=None):
     parser.add_argument('-v', '--verify',
                         nargs=2,
                         default=None,
-                        help=' '.join([
-                                       'Specify the locations of the test and bench bundle to',
+                        help=' '.join(['Specify the locations of the test and bench bundle to',
                                        'compare (respectively).'
                                        ])
                         )
@@ -70,7 +69,8 @@ def parse_args(args=None):
                         nargs='+',
                         default=None,
                         help=' '.join(['Specify the location of the configuration files for',
-                                       'validation tests.'])
+                                       'validation tests.'
+                                       ])
                         )
 
     # FIXME: this just short-circuits to the validation option, and should become its own module
@@ -81,20 +81,22 @@ def parse_args(args=None):
                         dest='validate',
                         metavar='EXTENSION',
                         help=' '.join(['Specify the location of the configuration files for',
-                                       'LIVVkit extensions.'])
+                                       'LIVVkit extensions.'
+                                       ])
                         )
 
     parser.add_argument('-p', '--publish',
                         action='store_true',
-                        help=' '.join([
-                                       'Also produce a publication quality copy of the figure in',
+                        help=' '.join(['Also produce a publication quality copy of the figure in',
                                        'the output directory (eps, 600d pi).'
                                        ])
                         )
 
     parser.add_argument('-s', '--serve',
                         nargs='?', type=int, const=8000,
-                        help='Start a simple HTTP server for the output website on port SERVE.'
+                        help=' '.join(['Start a simple HTTP server for the output website specified',
+                                       'by OUT_DIR on port SERVE.'
+                                       ])
                         )
 
     return init(parser.parse_args(args))
@@ -107,7 +109,6 @@ def init(options):
     import matplotlib
     matplotlib.use('agg')
 
-    livvkit.resource_dir = os.sep.join(resources.__path__)
     livvkit.output_dir = os.path.abspath(options.out_dir)
     livvkit.index_dir = livvkit.output_dir
     livvkit.verify = True if options.verify is not None else False
@@ -118,9 +119,8 @@ def init(options):
     available_bundles = [mod for imp, mod, ispkg in pkgutil.iter_modules(bundles.__path__)]
 
     if options.verify is not None:
-        # rstrip accounts for trailing path separators
-        livvkit.model_dir = options.verify[0].rstrip(os.sep)
-        livvkit.bench_dir = options.verify[1].rstrip(os.sep)
+        livvkit.model_dir = os.path.normpath(options.verify[0])
+        livvkit.bench_dir = os.path.normpath(options.verify[1])
         if not os.path.isdir(livvkit.model_dir):
             print("")
             print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
@@ -141,22 +141,22 @@ def init(options):
             print("\n"+livvkit.bench_dir+"\n\n")
             sys.exit(1)
 
-        livvkit.model_bundle = livvkit.model_dir.split(os.sep)[-1]
-        livvkit.bench_bundle = livvkit.bench_dir.split(os.sep)[-1]
+        livvkit.model_bundle = os.path.basename(livvkit.model_dir)
+        livvkit.bench_bundle = os.path.basename(livvkit.bench_dir)
 
         if livvkit.model_bundle in available_bundles:
-            livvkit.numerics_model_config = os.sep.join(
-                bundles.__path__ + [livvkit.model_bundle, "numerics.json"])
+            livvkit.numerics_model_config = os.path.join(
+                livvkit.bundle_dir, livvkit.model_bundle, "numerics.json")
             livvkit.numerics_model_module = importlib.import_module(
                 ".".join(["livvkit.bundles", livvkit.model_bundle, "numerics"]))
 
-            livvkit.verification_model_config = os.sep.join(
-                 bundles.__path__ + [livvkit.model_bundle, "verification.json"])
+            livvkit.verification_model_config = os.path.join(
+                 livvkit.bundle_dir, livvkit.model_bundle, "verification.json")
             livvkit.verification_model_module = importlib.import_module(
                  ".".join(["livvkit.bundles", livvkit.model_bundle, "verification"]))
 
-            livvkit.performance_model_config = os.sep.join(
-                 bundles.__path__ + [livvkit.model_bundle, "performance.json"])
+            livvkit.performance_model_config = os.path.join(
+                 livvkit.bundle_dir, livvkit.model_bundle, "performance.json")
             # NOTE: This isn't used right now...
             # livvkit.performance_model_module = importlib.import_module(
             #      ".".join(["livvkit.bundles", livvkit.model_bundle, "performance"]))
@@ -167,7 +167,7 @@ def init(options):
     if options.validate is not None:
         livvkit.validation_model_configs = options.validate
 
-    if not (livvkit.verify or livvkit.validate):
+    if not (livvkit.verify or livvkit.validate) and not options.serve:
         print("")
         print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
         print("                       UH OH!")

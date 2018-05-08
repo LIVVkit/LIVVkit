@@ -1,3 +1,4 @@
+# coding=utf-8
 # Copyright (c) 2015-2017, UT-BATTELLE, LLC
 # All rights reserved.
 #
@@ -62,7 +63,7 @@ def set_up():
                                      setup[exp]['pattern'][0].replace('???', size))
         setup[exp]['interp_points'] = \
             np.genfromtxt(recreate_file, delimiter=',', missing_values='nan',
-                          usecols=(0), unpack=True)
+                          usecols=(0,), unpack=True)
         if exp == 'ismip-hom-f':
             setup[exp]['interp_points'] = setup[exp]['interp_points']*100 - 50
 
@@ -172,13 +173,13 @@ def summarize_result(data, config):
                     label = a+' '+setup[case]['ylabel'][p].split(" ")[0]
                     if model.lower() == 'bench':
                         summary[label]['Bench mean % error'] = \
-                                '{:3.2%}'.format(np.nanmean(percent_errors))
+                            '{:3.2%}'.format(np.nanmean(percent_errors))
                     else:
                         summary[label]['Test mean % error'] = \
-                                '{:3.2%}'.format(np.nanmean(percent_errors))
+                            '{:3.2%}'.format(np.nanmean(percent_errors))
 
                     summary[label]['Coefficient of variation'] = \
-                            '{:3.2%}'.format(np.nanmean(coefficient))
+                        '{:3.2%}'.format(np.nanmean(coefficient))
 
     return summary
 
