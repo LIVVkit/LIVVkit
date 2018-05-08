@@ -33,7 +33,6 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import six
 
 import os
-import sys
 import importlib
 
 import livvkit
@@ -80,7 +79,7 @@ file.
 """
 
 
-def _case_dep_err(case, mod_path):
+def _case_dep_err(mod_path):
     yml_path = mod_path.replace('.py', '.yml')
     conda_env = os.environ.get('CONDA_DEFAULT_ENV')
     if conda_env and os.path.isfile(yml_path):
@@ -92,34 +91,35 @@ def _case_dep_err(case, mod_path):
 def _load_case_module(case, config):
     try:
         m = importlib.import_module(config['module'])
-    except ImportError as ie:
+    except ImportError:
         mod_path = os.path.abspath(config['module'])
         try:
             if six.PY2:
                 import imp
                 m = imp.load_source(case, mod_path)
             elif six.PY3:
-                spec = importlib.util.spec_from_file_location(case, mod_path, 
+                # noinspection PyUnresolvedReferences
+                spec = importlib.util.spec_from_file_location(case, mod_path,
                                                               submodule_search_locations=os.path.dirname(mod_path))
+                # noinspection PyUnresolvedReferences
                 m = importlib.util.module_from_spec(spec)
                 spec.loader.exec_module(m)
-                #sys.modules[case] = m
             else:
                 raise
-        except IOError as ioe:
+        except IOError:
             # imp.load_source (py2) and spec.loader.exec_module (py3) raises an IOError if module isn't found
             print(ERR_MISSING_MOD_MSG.format(case, os.path.relpath(mod_path, os.getcwd())))
             raise
         except ImportError as iie:
             # If module's internal import statements fail
             dep = str(iie).split()[-1] if six.PY2 else iie.name 
-            print(_case_dep_err(case, mod_path).format(case, dep))
+            print(_case_dep_err(mod_path).format(case, dep))
             raise
         
     return m
 
 
-def _run_suite(case, config, summary):
+def run_suite(case, config, summary):
     """ Run the full suite of validation tests """
     m = _load_case_module(case, config)
 
@@ -160,7 +160,7 @@ def _summarize_result(module, result):
     return summary
 
 
-def _populate_metadata(case, config):
+def populate_metadata(case, config):
     m = _load_case_module(case, config)
     try:
         try:

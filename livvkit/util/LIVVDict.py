@@ -32,7 +32,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 class LIVVDict(dict):
     """
-    Extension of the dictionary datastructure to allow for auto nesting.
+    Extension of the dictionary data structure to allow for auto nesting.
     """
     def __getitem__(self, item):
         """

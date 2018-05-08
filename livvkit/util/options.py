@@ -38,7 +38,6 @@ import importlib
 
 import livvkit
 from livvkit import bundles
-from livvkit import resources
 
 
 def parse_args(args=None):
@@ -110,7 +109,6 @@ def init(options):
     import matplotlib
     matplotlib.use('agg')
 
-    livvkit.resource_dir = os.sep.join(resources.__path__)
     livvkit.output_dir = os.path.abspath(options.out_dir)
     livvkit.index_dir = livvkit.output_dir
     livvkit.verify = True if options.verify is not None else False
@@ -121,9 +119,8 @@ def init(options):
     available_bundles = [mod for imp, mod, ispkg in pkgutil.iter_modules(bundles.__path__)]
 
     if options.verify is not None:
-        # rstrip accounts for trailing path separators
-        livvkit.model_dir = options.verify[0].rstrip(os.sep)
-        livvkit.bench_dir = options.verify[1].rstrip(os.sep)
+        livvkit.model_dir = os.path.normpath(options.verify[0])
+        livvkit.bench_dir = os.path.normpath(options.verify[1])
         if not os.path.isdir(livvkit.model_dir):
             print("")
             print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
@@ -144,22 +141,22 @@ def init(options):
             print("\n"+livvkit.bench_dir+"\n\n")
             sys.exit(1)
 
-        livvkit.model_bundle = livvkit.model_dir.split(os.sep)[-1]
-        livvkit.bench_bundle = livvkit.bench_dir.split(os.sep)[-1]
+        livvkit.model_bundle = os.path.basename(livvkit.model_dir)
+        livvkit.bench_bundle = os.path.basename(livvkit.bench_dir)
 
         if livvkit.model_bundle in available_bundles:
-            livvkit.numerics_model_config = os.sep.join(
-                bundles.__path__ + [livvkit.model_bundle, "numerics.json"])
+            livvkit.numerics_model_config = os.path.join(
+                livvkit.bundle_dir, livvkit.model_bundle, "numerics.json")
             livvkit.numerics_model_module = importlib.import_module(
                 ".".join(["livvkit.bundles", livvkit.model_bundle, "numerics"]))
 
-            livvkit.verification_model_config = os.sep.join(
-                 bundles.__path__ + [livvkit.model_bundle, "verification.json"])
+            livvkit.verification_model_config = os.path.join(
+                 livvkit.bundle_dir, livvkit.model_bundle, "verification.json")
             livvkit.verification_model_module = importlib.import_module(
                  ".".join(["livvkit.bundles", livvkit.model_bundle, "verification"]))
 
-            livvkit.performance_model_config = os.sep.join(
-                 bundles.__path__ + [livvkit.model_bundle, "performance.json"])
+            livvkit.performance_model_config = os.path.join(
+                 livvkit.bundle_dir, livvkit.model_bundle, "performance.json")
             # NOTE: This isn't used right now...
             # livvkit.performance_model_module = importlib.import_module(
             #      ".".join(["livvkit.bundles", livvkit.model_bundle, "performance"]))
