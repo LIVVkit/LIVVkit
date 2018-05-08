@@ -1,3 +1,4 @@
+# coding=utf-8
 # Copyright (c) 2015-2017, UT-BATTELLE, LLC
 # All rights reserved.
 #
@@ -28,17 +29,14 @@
 
 from __future__ import absolute_import, print_function, unicode_literals
 
+import os
+
 from setuptools import setup
 
-# A trick to have use a markdown README for the pypi long description which
-# requires reStructuredText. From:
-#    https://stackoverflow.com/questions/10718767
-try:
-    from pypandoc import convert
-    read_md = lambda f: convert(f, 'rst')
-except ImportError:
-    print("warning: pypandoc module not found, could not convert Markdown to RST")
-    read_md = lambda f: open(f, 'r').read()
+
+this_dir = os.path.abspath(os.path.dirname(__file__))
+with open(os.path.join(this_dir, 'README.md'), 'r') as f:
+    long_desc = f.read()
 
 # NOTE: Numpy really wants to build from source unless it's already installed,
 # which is slow and prone to failure This significanlty make the build more
@@ -57,7 +55,8 @@ setup(
       version='2.1.1',
 
       description='The land ice verification and validation toolkit.',
-      long_description=read_md('README.md'),
+      long_description=long_desc,
+      long_description_content_type='text/markdown',
 
       url='http://github.com/LIVVkit/LIVVkit',
 
