@@ -30,6 +30,9 @@
 from __future__ import absolute_import, print_function, unicode_literals
 
 import os
+import sys
+import importlib
+import subprocess
 
 from setuptools import setup
 
@@ -39,15 +42,13 @@ with open(os.path.join(this_dir, 'README.md'), 'r') as f:
     long_desc = f.read()
 
 # NOTE: Numpy really wants to build from source unless it's already installed,
-# which is slow and prone to failure This significanlty make the build more
-# robused and much faster.
+# which is slow and prone to failure This significantly make the build more
+# robust and much faster.
 try:
     import numpy
-    print('Found numpy v{}.'.format(numpy.__version__))
 except ImportError:
-    import pip
-    pip.main(['install', 'numpy'])
-    import numpy
+    subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'numpy'])
+    numpy = importlib.import_module('numpy')
     print('Installed numpy v{} via pip.'.format(numpy.__version__))
 
 setup(
