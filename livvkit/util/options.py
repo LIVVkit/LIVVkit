@@ -99,6 +99,12 @@ def parse_args(args=None):
                                        ])
                         )
 
+    parser.add_argument('--version',
+                        action='version',
+                        version='LIVVkit {}'.format(livvkit.__version__),
+                        help="Show LIVVkit's version number and exit"
+                        )
+
     return init(parser.parse_args(args))
 
 

@@ -30,6 +30,7 @@
 from __future__ import absolute_import, print_function, unicode_literals
 
 import os
+import re
 import sys
 import importlib
 import subprocess
@@ -37,9 +38,11 @@ import subprocess
 from setuptools import setup
 
 
-this_dir = os.path.abspath(os.path.dirname(__file__))
-with open(os.path.join(this_dir, 'README.md'), 'r') as f:
+here = os.path.abspath(os.path.dirname(__file__))
+with open(os.path.join(here, 'README.md'), 'r') as f:
     long_desc = f.read()
+with open(os.path.join(here, 'livvkit', '__init__.py')) as f:
+    init_file = f.read()
 
 # NOTE: Numpy really wants to build from source unless it's already installed,
 # which is slow and prone to failure This significantly make the build more
@@ -53,7 +56,9 @@ except ImportError:
 
 setup(
       name='livvkit',
-      version='2.1.1',
+      version=re.search(r'{}\s*=\s*[(]([^)]*)[)]'.format('__version_info__'),
+                        init_file
+                        ).group(1).replace(', ', '.'),
 
       description='The land ice verification and validation toolkit.',
       long_description=long_desc,
