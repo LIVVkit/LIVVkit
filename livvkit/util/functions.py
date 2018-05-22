@@ -27,7 +27,7 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
-Module to hold LIVV specific functions
+Module to hold LIVVkit specific functions
 """
 from __future__ import absolute_import, division, print_function, unicode_literals
 
