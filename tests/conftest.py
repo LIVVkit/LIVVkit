@@ -1,8 +1,27 @@
 # coding=utf-8
 
+import os
 import pytest
 import requests
 import tarfile
+from hashlib import md5
+
+
+def md5sum(filename):
+    """
+    Get a md5 checksum of a file
+
+    :param filename:
+    :return:
+
+    THis function is adapted from https://stackoverflow.com/a/24847608
+    """
+    _hash = md5()
+    with open(filename, "rb") as f:
+        for chunk in iter(lambda: f.read(128 * _hash.block_size), b""):
+            _hash.update(chunk)
+    return _hash.hexdigest()
+
 
 def download_file_from_google_drive(_id, destination):
     """
@@ -44,10 +63,19 @@ def download_file_from_google_drive(_id, destination):
 
 @pytest.fixture(scope="session")
 def ref_data(tmpdir_factory):
-    ref_dir = tmpdir_factory.mktemp('ref_data')
-    ref_tar = ref_dir.join('ref_data.tgz')
+    tar_name = 'cism-2.0.0-tests.20160728.tgz'
+    drive_id = '1OHgxbnn4PRp5xMS3EqtjwLENEtvMfzNJ'
 
-    download_file_from_google_drive('1OHgxbnn4PRp5xMS3EqtjwLENEtvMfzNJ', ref_tar)
+    data_dir = os.getenv('LIVVKIT_TEST_DATA', '')
+    data_tar = os.path.join(data_dir, tar_name)
+    ref_dir = tmpdir_factory.mktemp('ref_data')
+
+    if os.path.isfile(data_tar):
+        ref_tar = data_tar
+    else:
+        print('Downloading test data...')
+        ref_tar = ref_dir.join(tar_name)
+        download_file_from_google_drive(drive_id, ref_tar)
 
     with tarfile.open(ref_tar) as tar:
         tar.extractall(path=ref_dir)
@@ -57,10 +85,18 @@ def ref_data(tmpdir_factory):
 
 @pytest.fixture(scope="session")
 def test_data(tmpdir_factory):
-    ref_dir = tmpdir_factory.mktemp('test_data')
-    ref_tar = ref_dir.join('test_data.tgz')
+    tar_name = 'cism-2.0.6-tests.20160728.tgz'
+    drive_id = '1mZeDSs4rmdKFX2bgpYkZcNuc1wx18BLq'
 
-    download_file_from_google_drive('1mZeDSs4rmdKFX2bgpYkZcNuc1wx18BLq', ref_tar)
+    data_dir = os.getenv('LIVVKIT_TEST_DATA', '')
+    data_tar = os.path.join(data_dir, tar_name)
+    ref_dir = tmpdir_factory.mktemp('test_data')
+
+    if os.path.isfile(data_tar):
+        ref_tar = data_tar
+    else:
+        ref_tar = ref_dir.join(tar_name)
+        download_file_from_google_drive(drive_id, ref_tar)
 
     with tarfile.open(ref_tar) as tar:
         tar.extractall(path=ref_dir)
