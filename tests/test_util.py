@@ -2,9 +2,9 @@
 
 import pytest
 import numpy as np
-import json_tricks as js
 from collections import OrderedDict
 
+import livvkit
 from livvkit.util import functions
 
 
@@ -100,3 +100,24 @@ def test_fn_read_write_numpy_json(tmpdir):
     test = functions.read_json(j_path)
 
     assert test == truth
+
+
+def test_fn_collect_cases(ref_data):
+    case_dir = ref_data.join('titan-gnu', 'CISM_glissade', 'dome')
+    truth = {'s1-p1', 's1-p4', 's0-p1', 's0-p4', 's0-p2', 's0-p8', 's2-p1',
+             's2-p256', 's2-p16', 's4-p256', 's3-p64', 's3-p256'}
+
+    cases = functions.collect_cases(case_dir)
+    test = set(cases['dome'])
+
+    assert test == truth
+
+
+def test_fn_setup_output(tmpdir):
+    idir = tmpdir.join('setup_output')
+    livvkit.index_dir = str(idir)
+    functions.setup_output()
+
+    test = idir.join('data.txt').read_text('utf8').strip()
+
+    assert test == livvkit.timestamp
