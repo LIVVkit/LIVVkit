@@ -3,20 +3,17 @@ Building the documentation
 
 To build this documentation you will need to install some additional tools:
 
+* `JSDoc <http://usejsdoc.org>`_
 * `sphinx <http://www.sphinx-doc.org>`_
-* `sphinx-api-any <https://pypi.python.org/pypi/sphinx-api-any>`_
+* `sphinx-js <https://pypi.python.org/pypi/sphinx-api-any>`_
 * `sphinx-py3doc-enhanced-theme <https://pypi.python.org/pypi/sphinx_py3doc_enhanced_theme>`_ 
-* `jsdoc-toolkit <https://code.google.com/archive/p/jsdoc-toolkit/>`_
 
 
-Use ``pip`` to install the Sphinx packages (``sphinx`` itself can be installed
-via ``conda`` as well, but the others will still need ``pip``). 
+We recommend you use ``npm``, a `Javascript package manager <https://www.npmjs.com/get-npm>`_, to install
+``JSDoc`` and ``pip`` to install the Sphinx packages (``sphinx`` itself can be installed
+via ``conda`` as well, but the others will still need ``pip``).
 
- For ``jsdoc-toolkit``, download the `source
- <https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/jsdoc-toolkit/jsdoc_toolkit-2.4.0.zip>`_,
- extract it, and put the ``jsdoc-toolkit`` subdirectory into your ``/opt`` directory.
-
-To build the current version of the documentation website, simply:
+To build the current version of the documentation website, simply run:
 
 .. code-block:: bash
 
@@ -43,35 +40,6 @@ Then, auto-generate the documentation of LIVVkit's python source code:
     
    sphinx-apidoc -f -o source/ ../livvkit/     
 
-Because Sphinx only generates documentation for the Python source code, the javascript documentation
-will need to be regenerated as well: 
-
-.. code-block:: bash
-    
-    ant -buildfile jsdoc-toolkit-rst-template/build.xml build
-
-which will generate three files:
-
-- ``jsdoc-toolkit-rst-template/index.rst``
-- ``jsdoc-toolkit-rst-template/files.rst``
-- ``jsdoc-toolkit-rst-template/symbols/_global_.rst``
-
-Only the ``_global_.rst`` file is used in the LIVVkit documentation, and the other two can be
-removed (Sphinx will warn you that they aren't included in the ``toctree``; it's best to remove
-them). 
-
-Now, open the ``_global_.rst`` file, and edit the title from ``_global_ (data)`` to
-``livvkit.resources.js.common module``. 
-
-.. warning:: 
-
-    Unfortunately, the ``jsdoc-toolkit`` doesn't make clean reStructuredText files, and Sphinx will
-    warn you about syntax errors. You will need to manually edit the ``_global_.rst`` file to fix
-    the syntax. Typically, the errors are because multi-line bulletpoints in the document have the
-    continuing text aligned with the bullet, instead of after the bullet and whitespace (see the
-    `docutils quck reference <http://docutils.sourceforge.net/docs/user/rst/quickref.html#bullet-lists>`_). 
-
-
 Now you're ready to make the docs website again:
 
 .. code-block:: bash
@@ -80,5 +48,4 @@ Now you're ready to make the docs website again:
 
 .. note:: 
     
-    You can use the ``generate_docs.sh`` script to perform these steps (other than fixing the
-    ``_global_.rst`` syntax). **Use this script with caution!**
+    You can use the ``generate_docs.sh`` script to perform these steps.

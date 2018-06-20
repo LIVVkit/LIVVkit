@@ -7,7 +7,6 @@ Subpackages
 .. toctree::
 
     livvkit.components.numerics_tests
-    livvkit.components.validation_tests
 
 Submodules
 ----------
