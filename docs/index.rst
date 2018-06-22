@@ -55,7 +55,7 @@ User's Guide
     design
     install
     usage
-    extend
+    lex
     bundles
     contrib
     api

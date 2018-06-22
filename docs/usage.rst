@@ -213,7 +213,7 @@ Extended and/or validation analyses
     of validation analyses developed for E3SM (`Energy Exascale Earth System Model <https://e3sm.org/>`_),
     CESM (`Community Earth System Model <http://www.cesm.ucar.edu/>`_), and CISM
     (`Community Ice Sheet Model <https://cism.github.io/>`_), which are contained in the `LIVVkit
-    Extensions (LEX) repository <https://code.ornl.gov/LIVVkit/lex>`_. See the :doc:`extend` page for how to
+    Extensions (LEX) repository <https://code.ornl.gov/LIVVkit/lex>`_. See the :doc:`lex` page for how to
     get and use LEX as well as how develop your own validation analysis.
 
 
