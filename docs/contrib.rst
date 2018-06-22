@@ -3,8 +3,8 @@
     :align: center
     :alt: LIVVkit
 
-Development
-###########
+Contributing
+############
 
 LIVVkit is publicly developed within the `LIVVkit <https://github.com/LIVVkit>`_ project on GitHub
 and releases are packaged and distributed on `PyPI <https://pypi.python.org/pypi/livvkit>`_ and
