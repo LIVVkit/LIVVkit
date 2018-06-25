@@ -1,5 +1,7 @@
 # coding=utf-8
 
+from __future__ import absolute_import, print_function, unicode_literals
+
 import pytest
 import numpy as np
 from collections import OrderedDict
@@ -10,21 +12,21 @@ from livvkit.util import functions
 
 def test_fn_mkdir_p_new_dir_and_parent(tmpdir):
     testdir = tmpdir.join('mkdir_p', 'test_depth')
-    functions.mkdir_p(testdir)
+    functions.mkdir_p(str(testdir))
 
     assert testdir.check(dir=True) is True
 
 
 def test_fn_mkdir_p_silent_existing(tmpdir):
     testdir = tmpdir.mkdir('mkdir_p')
-    functions.mkdir_p(testdir)
+    functions.mkdir_p(str(testdir))
 
 
 def test_fn_parse_gptl(ref_data):
     timing_file = ref_data.join('titan-gnu', 'CISM_glissade',
                                 'dome', 'dome', 's0', 'p1',
                                 'dome.0031.p001.cism_timing_stats')
-    timing_results = functions.parse_gptl(timing_file, ['cism'])
+    timing_results = functions.parse_gptl(str(timing_file), ['cism'])
 
     assert timing_results['cism'] == pytest.approx(66.73883)
 
@@ -32,7 +34,7 @@ def test_fn_parse_gptl(ref_data):
 def test_fn_find_file(ref_data):
     search_dir = ref_data.join('titan-gnu', 'CISM_glissade',
                                'dome', 'dome', 's0', 'p1')
-    found_file = functions.find_file(search_dir, '*.cism_timing_stats')
+    found_file = functions.find_file(str(search_dir), '*.cism_timing_stats')
 
     assert found_file == search_dir.join('dome.0031.p001.cism_timing_stats')
 
@@ -54,7 +56,7 @@ def test_fn_sort_scale_good():
 
 def test_fn_create_page_from_template(tmpdir):
     create_path = tmpdir.mkdir('template')
-    functions.create_page_from_template('index.html', create_path)
+    functions.create_page_from_template('index.html', str(create_path))
 
     assert create_path.join('index.html').check(file=True) is True
 
@@ -71,7 +73,7 @@ def test_fn_read_write_json(tmpdir):
                                                       ]))])
 
     functions.write_json(truth, j_path.dirname, j_path.basename)
-    test = functions.read_json(j_path)
+    test = functions.read_json(str(j_path))
 
     assert test == truth
 
@@ -96,8 +98,8 @@ def test_fn_read_write_numpy_json(tmpdir):
                                                       ("data_dir", "data/numerics/ismip-hom")
                                                       ]))])
 
-    functions.write_json(np_json, j_path.dirname, j_path.basename)
-    test = functions.read_json(j_path)
+    functions.write_json(np_json, str(j_path.dirname), str(j_path.basename))
+    test = functions.read_json(str(j_path))
 
     assert test == truth
 
@@ -107,7 +109,7 @@ def test_fn_collect_cases(ref_data):
     truth = {'s1-p1', 's1-p4', 's0-p1', 's0-p4', 's0-p2', 's0-p8', 's2-p1',
              's2-p256', 's2-p16', 's4-p256', 's3-p64', 's3-p256'}
 
-    cases = functions.collect_cases(case_dir)
+    cases = functions.collect_cases(str(case_dir))
     test = set(cases['dome'])
 
     assert test == truth

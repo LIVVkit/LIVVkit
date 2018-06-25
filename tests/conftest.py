@@ -1,5 +1,7 @@
 # coding=utf-8
 
+from __future__ import absolute_import, print_function, unicode_literals
+
 import os
 import pytest
 import requests
@@ -17,7 +19,7 @@ def md5sum(filename):
     THis function is adapted from https://stackoverflow.com/a/24847608
     """
     _hash = md5()
-    with open(filename, "rb") as f:
+    with open(str(filename), "rb") as f:
         for chunk in iter(lambda: f.read(128 * _hash.block_size), b""):
             _hash.update(chunk)
     return _hash.hexdigest()
@@ -42,7 +44,7 @@ def download_file_from_google_drive(_id, destination):
     def save_response_content(_response, _destination):
         chunk_size = 32768
 
-        with open(_destination, "wb") as f:
+        with open(str(_destination), "wb") as f:
             for chunk in _response.iter_content(chunk_size):
                 if chunk:  # filter out keep-alive new chunks
                     f.write(chunk)
@@ -77,8 +79,8 @@ def ref_data(tmpdir_factory):
         ref_tar = ref_dir.join(tar_name)
         download_file_from_google_drive(drive_id, ref_tar)
 
-    with tarfile.open(ref_tar) as tar:
-        tar.extractall(path=ref_dir)
+    with tarfile.open(str(ref_tar)) as tar:
+        tar.extractall(path=str(ref_dir))
 
     return ref_dir.join('cism-2.0.0-tests')
 
@@ -96,7 +98,7 @@ def test_data(tmpdir_factory):
         ref_tar = data_tar
     else:
         ref_tar = ref_dir.join(tar_name)
-        download_file_from_google_drive(drive_id, ref_tar)
+        download_file_from_google_drive(drive_id, str(ref_tar))
 
     with tarfile.open(ref_tar) as tar:
         tar.extractall(path=ref_dir)
