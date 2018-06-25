@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Copyright (c) 2015-2017, UT-BATTELLE, LLC
+# Copyright (c) 2015-2018, UT-BATTELLE, LLC
 # All rights reserved.
 # 
 # Redistribution and use in source and binary forms, with or without
@@ -31,8 +31,8 @@
 # Get the source dir and ignore variables
 source license-setup.sh
 
-OLD="Copyright (c) 2015-2017, UT"
-NEW="Copyright (c) 2015-2017, UT"
+OLD="Copyright (c) 2015-2018, UT"
+NEW="Copyright (c) 2015-2018, UT"
 
 echo "--------------------------------------------------------------------------------"
 echo "    THESE FILES HAVE AN OUTDATED LICENSE HEADER:"

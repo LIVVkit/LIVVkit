@@ -1,4 +1,5 @@
-# Copyright (c) 2015-2017, UT-BATTELLE, LLC
+# coding=utf-8
+# Copyright (c) 2015-2018, UT-BATTELLE, LLC
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -28,36 +29,40 @@
 
 from __future__ import absolute_import, print_function, unicode_literals
 
+import os
+import re
+import sys
+import importlib
+import subprocess
+
 from setuptools import setup
 
-# A trick to have use a markdown README for the pypi long description which
-# requires reStructuredText. From:
-#    https://stackoverflow.com/questions/10718767
-try:
-    from pypandoc import convert
-    read_md = lambda f: convert(f, 'rst')
-except ImportError:
-    print("warning: pypandoc module not found, could not convert Markdown to RST")
-    read_md = lambda f: open(f, 'r').read()
+
+here = os.path.abspath(os.path.dirname(__file__))
+with open(os.path.join(here, 'README.md'), 'r') as f:
+    long_desc = f.read()
+with open(os.path.join(here, 'livvkit', '__init__.py')) as f:
+    init_file = f.read()
 
 # NOTE: Numpy really wants to build from source unless it's already installed,
-# which is slow and prone to failure This significanlty make the build more
-# robused and much faster.
+# which is slow and prone to failure This significantly make the build more
+# robust and much faster.
 try:
     import numpy
-    print('Found numpy v{}.'.format(numpy.__version__))
 except ImportError:
-    import pip
-    pip.main(['install', 'numpy'])
-    import numpy
+    subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'numpy'])
+    numpy = importlib.import_module('numpy')
     print('Installed numpy v{} via pip.'.format(numpy.__version__))
 
 setup(
       name='livvkit',
-      version='2.1.1',
+      version=re.search(r'{}\s*=\s*[(]([^)]*)[)]'.format('__version_info__'),
+                        init_file
+                        ).group(1).replace(', ', '.'),
 
       description='The land ice verification and validation toolkit.',
-      long_description=read_md('README.md'),
+      long_description=long_desc,
+      long_description_content_type='text/markdown',
 
       url='http://github.com/LIVVkit/LIVVkit',
 
@@ -100,8 +105,6 @@ setup(
                'livvkit.bundles.CISM_glissade',
                'livvkit.components',
                'livvkit.components.numerics_tests',
-               'livvkit.components.validation_tests',
-               'livvkit.components.validation_tests.template',
                'livvkit.data',
                'livvkit.util',
                ]

@@ -1,4 +1,5 @@
-# Copyright (c) 2015-2017, UT-BATTELLE, LLC
+# coding=utf-8
+# Copyright (c) 2015-2018, UT-BATTELLE, LLC
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -35,17 +36,44 @@ import getpass
 import platform
 import socket
 
-cwd       = os.getcwd()
+from livvkit import bundles
+from livvkit import resources
+
+__version_info__ = (2, 1, 2)
+__version__ = '.'.join(str(vi) for vi in __version_info__)
+
+cwd = os.getcwd()
 timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
-user      = getpass.getuser()
-machine   = socket.gethostname()
-os_type   = platform.system() + " " + platform.release()
+user = getpass.getuser()
+machine = socket.gethostname()
+os_type = platform.system() + " " + platform.release()
 
-comment   = ""
+comment = ""
 
+resource_dir = os.path.dirname(resources.__file__)
+bundle_dir = os.path.dirname(bundles.__file__)
 
-def print_vars():
-    """ Print out the variables that are contained in this module """
-    for k, v in globals().items():
-        if not str(k).startswith('__'):
-            print(str(k) + " = " + str(v))
+# directory vars -- filled in by options
+output_dir = None
+index_dir = None
+model_dir = None
+bench_dir = None
+
+# direct access to some optional imports
+model_bundle = None
+
+numerics_model_config = None
+numerics_model_module = None
+
+verification_model_config = None
+verification_model_module = None
+
+performance_model_config = None
+performance_model_module = None
+
+validation_model_configs = None
+
+# optional flags
+verify = False
+validate = False
+publish = False

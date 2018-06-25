@@ -1,4 +1,5 @@
-# Copyright (c) 2015-2017, UT-BATTELLE, LLC
+# coding=utf-8
+# Copyright (c) 2015-2018, UT-BATTELLE, LLC
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -26,7 +27,7 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
-Module to hold LIVV specific functions
+Module to hold LIVVkit specific functions
 """
 from __future__ import absolute_import, division, print_function, unicode_literals
 
@@ -42,7 +43,7 @@ import json_tricks
 import livvkit
 
 
-class temp_sys_path():
+class temp_sys_path(object):
     def __init__(self, path):
         self.path = path
 
@@ -64,24 +65,6 @@ def mkdir_p(path):
             pass
         else:
             raise
-
-
-def merge_dicts(dict1, dict2):
-    """ Merge two dictionaries and return the result """
-    tmp = dict1.copy()
-    tmp.update(dict2)
-    return tmp
-
-
-def get_leaves(d):
-    """ Get the leaves of a nested dictionary """
-    leaves = []
-    for key, val in d.items():
-        if issubclass(type(val), dict):
-            leaves.append(get_leaves(val))
-        else:
-            return val
-    return leaves
 
 
 def parse_gptl(file_path, var_list):
@@ -145,7 +128,6 @@ def create_page_from_template(template_file, output_path):
 
 def read_json(file_path):
     """ Read in a json file and return a dictionary representation """
-    config = {}
     try:
         with open(file_path, 'r') as f:
             config = json_tricks.load(f)
@@ -182,7 +164,7 @@ def collect_cases(data_dir):
     cases = {}
     for root, dirs, files in os.walk(data_dir):
         if not dirs:
-            split_case = os.path.relpath(root, data_dir).split(os.sep)
+            split_case = os.path.relpath(root, data_dir).split(os.path.sep)
             if split_case[0] not in cases:
                 cases[split_case[0]] = []
             cases[split_case[0]].append("-".join(split_case[1:]))
@@ -199,7 +181,7 @@ def setup_output(cssd=None, jsd=None, imgd=None):
         print("-------------------------------------------------------------------")
         print('  Previous output data found in output directory!')
         try:
-            f = open(livvkit.index_dir + os.sep + "data.txt", "r")
+            f = open(os.path.join(livvkit.index_dir, "data.txt"), "r")
             prev_time = f.readline().replace(":", "").replace("-", "").replace(" ", "_").rstrip()
             f.close()
         except IOError:
@@ -232,8 +214,6 @@ def setup_output(cssd=None, jsd=None, imgd=None):
     shutil.copy(os.path.join(livvkit.resource_dir, "index.html"),
                 os.path.join(livvkit.index_dir, "index.html"))
     # Record when this data was recorded so we can make nice backups
-    with open(livvkit.index_dir + os.sep + "data.txt", "w") as f:
+    with open(os.path.join(livvkit.index_dir, "data.txt"), "w") as f:
         f.write(livvkit.timestamp + "\n")
         f.write(livvkit.comment)
-
-

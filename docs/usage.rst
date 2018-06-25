@@ -8,8 +8,8 @@ Usage
 
 LIVVkit is intended to be integrated into a model's development cycle. A public-private version of
 `GitFlow <https://www.atlassian.com/git/tutorials/comparing-workflows#gitflow-workflow>`__ is a
-common development cycle used by many scientific modeling groups, and LIVVkit would be integrated
-into the development process like:
+common development cycle used by many scientific modeling groups. LIVVkit would be integrated
+into this development process like:
 
 .. figure:: _static/workflow.png
     :width: 400px
@@ -113,22 +113,13 @@ Then, the testing results can be compared to a reference dataset with LIVVkit:
 .. code-block:: bash
     
     cd $LIVV
-    ./livv --verify $TEST $REF
+    ./livv --verify $TEST $REF -o vv_test -s
 
-LIVVkit will run the verification suite, report a summary of the results on the command line, and
-produce an output website in the created ``vv_$YEAR_$MONTH_DAY`` directory  (or one specified with
-the ``-o/--output`` option). The output website can be viewed in the developers preferred web
-browser by by opening ``vv_$YEAR_$MONTH_DAY/index.html``. 
-
-.. note:: 
-
-    LIVVkit outputs the full path to the index page at the end of each run so it's easy type into the
-    browser's address bar (prefix this path with a ``file://`` on most browsers).
-
-.. warning:: 
-
-    **Trouble viewing the output?** Your browser may have disabled javascript for local files (a
-    security risk). See our :doc:`faq` for a work around. 
+LIVVkit will run the verification suite, report a summary of the results on the command line,
+produce an output website in the created ``vv_test`` directory, and launch an HTTP server to easily
+view the output website. LIVVkit will tell you the address to view the website at on the command
+line, which will typically look like
+`http://0.0.0.0:8000/vv_test/index.html <http://0.0.0.0:8000/vv_test/index.html>`_.
 
 Once the feature is developed, and the developer is happy with the testing results, she/he would
 push the feature branch to the development repository and open a pull request, kicking off a
@@ -164,7 +155,7 @@ like:
 
 .. note::
 
-    For CISM, BATS recognizes a set of platforms that requires job sumission scripts,
+    For CISM, BATS recognizes a set of platforms that requires job submission scripts,
     automatically sets up the jobs, and creates a submission script. Also, by specifying the
     ``--timing`` option, a much larger set of tests are run, including repeat runs for performance
     variability. 
@@ -195,18 +186,13 @@ Then once all the jobs were finished, the testing results can be compared to a r
 .. code-block:: bash
     
     cd $LIVV
-    ./livv --verify $TEST $REF
+        ./livv --verify $TEST $REF -o vv_test -s
 
-LIVVkit will run the verification suite, report a summary of the results on the command line, and
-produce an output website in the created ``vv_$YEAR_$MONTH_DAY`` directory  (or one specified with
-the ``-o/--output`` option). Because there is no web browser on Titan, the integrator would then
-copy the output directory (and all contents) to their local machine and view the output website in the integrators
-preferred web browser by by opening ``vv_$YEAR_$MONTH_DAY/index.html``. 
-
-.. warning:: 
-
-    **Trouble viewing the output?** Your browser may have disabled javascript for local files (a
-    security risk). See our :doc:`faq` for a work around.
+LIVVkit will run the verification suite, report a summary of the results on the command line,
+produce an output website in the created ``vv_test`` directory, and launch an HTTP server to easily
+view the output website. LIVVkit will tell you the address to view the website at on the command
+line, which will typically look like
+`http://0.0.0.0:8000/vv_test/index.html <http://0.0.0.0:8000/vv_test/index.html>`_.
 
 Additionally, the output directory may compressed and uploaded to Github for viewing by the rest of
 the integration team and the feature developer (every output website is portable). If test results
@@ -217,14 +203,18 @@ Once testing results are satisfactory, the integration team may do a similar com
 latest release in order to track changes over a longer period of development and analyze the model
 for creep, or run a series of extended validation analyses. 
 
-Extended validation analyses
-----------------------------
+Extended and/or validation analyses
+===================================
 
 .. note::
     
     A set of standard ice sheet model validation analyses are currently being developed and will be
-    released soon (along with the ncessary observational data). Check back soon! Until then, see
-    :doc:`extend` for how to develop your own validation analysis.
+    released soon (along with the necessary observational data). Currently, there is a preliminary set
+    of validation analyses developed for E3SM (`Energy Exascale Earth System Model <https://e3sm.org/>`_),
+    CESM (`Community Earth System Model <http://www.cesm.ucar.edu/>`_), and CISM
+    (`Community Ice Sheet Model <https://cism.github.io/>`_), which are contained in the `LIVVkit
+    Extensions (LEX) repository <https://code.ornl.gov/LIVVkit/lex>`_. See the :doc:`lex` page for how to
+    get and use LEX as well as how develop your own validation analysis.
 
 
 

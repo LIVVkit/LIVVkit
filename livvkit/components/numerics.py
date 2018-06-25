@@ -1,4 +1,5 @@
-# Copyright (c) 2015-2017, UT-BATTELLE, LLC
+# coding=utf-8
+# Copyright (c) 2015-2018, UT-BATTELLE, LLC
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -38,7 +39,7 @@ from livvkit.util import functions
 from livvkit.util import elements
 
 
-def _run_suite(case, config, summary):
+def run_suite(case, config, summary):
     """ Run the full suite of numerics tests """
     m = importlib.import_module(config['module'])
     m.set_up()
@@ -57,9 +58,9 @@ def _run_suite(case, config, summary):
         bscale = bench_cases[mscale] if mscale in bench_cases else []
         for mproc in model_cases[mscale]:
             full_name = '-'.join([mscale, mproc])
-            bpath = (os.path.join(bench_dir, mscale, mproc.replace("-", os.sep))
+            bpath = (os.path.join(bench_dir, mscale, mproc.replace("-", os.path.sep))
                      if mproc in bscale else "")
-            mpath = os.path.join(model_dir, mscale, mproc.replace("-", os.sep))
+            mpath = os.path.join(model_dir, mscale, mproc.replace("-", os.path.sep))
             model_data = functions.find_file(mpath, "*" + config["output_ext"])
             bench_data = functions.find_file(bpath, "*" + config["output_ext"])
             analysis_data[full_name] = bundle.get_plot_data(model_data,
@@ -97,7 +98,8 @@ def _summarize_result(module, data, config):
     return summary
 
 
-def _populate_metadata(case, config):
+# noinspection PyUnusedLocal
+def populate_metadata(case, config):
     metadata = {"Type": "Summary",
                 "Title": "Numerics",
                 "Headers": ["Bench mean % error", "Test mean % error", "Coefficient of variation"]}

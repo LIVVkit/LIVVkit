@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Copyright (c) 2015-2017, UT-BATTELLE, LLC
+# Copyright (c) 2015-2018, UT-BATTELLE, LLC
 # All rights reserved.
 # 
 # Redistribution and use in source and binary forms, with or without
@@ -32,7 +32,9 @@ SOURCE_DIR="../.."
 CURRENT="Copyright (c)"
 
 ALWAYS_IGNORE=(-not -path "*.git*" -not -path "*docs/*" -not -path "*hpcs/*" \
-               -not -iname "setup_*" -not -iname "MANIFEST.in")
+               -not -path "*.idea*" -not -iname "setup_*"  -not -path "*tests/*" \
+               -not -iname "MANIFEST.in" -not -iname "pytest.ini" \
+               -not -iname "tox.ini")
 
 FILE_IGNORE=(-not -iname "*.md" -not -iname "*.json" -not -iname "*.txt" \
              -not -iname "*.png" -not -iname "*.jpg" -not -iname "*.svg" \

@@ -1,4 +1,5 @@
-# Copyright (c) 2015-2017, UT-BATTELLE, LLC
+# coding=utf-8
+# Copyright (c) 2015-2018, UT-BATTELLE, LLC
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -34,7 +35,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 def has_time(dataset):
     """
-    Check netCDF files time dimension for emptyness. This likely
+    Check netCDF files time dimension for emptiness. This likely
     indicates the run did not complete.
 
     Args:
@@ -45,5 +46,5 @@ def has_time(dataset):
     """
     try:
         return len(dataset.dimensions['time']) > 0
-    except:
+    except KeyError:
         return False

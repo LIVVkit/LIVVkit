@@ -1,4 +1,5 @@
-# Copyright (c) 2015-2017, UT-BATTELLE, LLC
+# coding=utf-8
+# Copyright (c) 2015-2018, UT-BATTELLE, LLC
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -45,7 +46,7 @@ from livvkit.util import elements
 SEC_PER_DAY = 86400.0
 
 
-def _run_suite(case, config, summary):
+def run_suite(case, config, summary):
     """ Run the full suite of performance tests """
     config["name"] = case
     timing_data = dict()
@@ -62,9 +63,9 @@ def _run_suite(case, config, summary):
         timing_data[subcase] = dict()
         for mcase in model_cases[subcase]:
             config["case"] = "-".join([subcase, mcase])
-            bpath = (os.path.join(bench_dir, subcase, mcase.replace("-", os.sep))
+            bpath = (os.path.join(bench_dir, subcase, mcase.replace("-", os.path.sep))
                      if mcase in bench_subcases else None)
-            mpath = os.path.join(model_dir, subcase, mcase.replace("-", os.sep))
+            mpath = os.path.join(model_dir, subcase, mcase.replace("-", os.path.sep))
             timing_data[subcase][mcase] = _analyze_case(mpath, bpath, config)
 
     # Create scaling and timing breakdown plots
@@ -73,39 +74,29 @@ def _run_suite(case, config, summary):
     strong_data = strong_scaling(timing_data, config['scaling_var'],
                                  config['strong_scaling_points'])
 
-    timing_plots = []
-    timing_plots.append(
+    timing_plots = [
         generate_scaling_plot(weak_data,
                               "Weak scaling for " + case.capitalize(),
                               "runtime (s)", "",
                               os.path.join(plot_dir, case + "_weak_scaling.png")
-                              )
-        )
-
-    timing_plots.append(
+                              ),
         weak_scaling_efficiency_plot(weak_data,
                                      "Weak scaling efficiency for " + case.capitalize(),
                                      "Parallel efficiency (% of linear)", "",
                                      os.path.join(plot_dir, case + "_weak_scaling_efficiency.png")
-                                     )
-        )
-
-    timing_plots.append(
+                                     ),
         generate_scaling_plot(strong_data,
                               "Strong scaling for " + case.capitalize(),
                               "Runtime (s)", "",
                               os.path.join(plot_dir, case + "_strong_scaling.png")
-                              )
-        )
-
-    timing_plots.append(
+                              ),
         strong_scaling_efficiency_plot(strong_data,
                                        "Strong scaling efficiency for " + case.capitalize(),
                                        "Parallel efficiency (% of linear)", "",
                                        os.path.join(plot_dir,
                                                     case + "_strong_scaling_efficiency.png")
-                                       )
-        )
+                                       ),
+        ]
 
     timing_plots = timing_plots + \
         [generate_timing_breakdown_plot(timing_data[s],
@@ -144,6 +135,7 @@ def _analyze_case(model_dir, bench_dir, config):
     return dict(model=model_stats, bench=bench_stats)
 
 
+# noinspection PyUnusedLocal
 def _print_result(case, summary):
     """ Show some statistics from the run """
     for case, case_data in summary.items():
@@ -182,7 +174,8 @@ def _summarize_result(result, config):
     return summary
 
 
-def _populate_metadata(case, config):
+# noinspection PyUnusedLocal
+def populate_metadata(case, config):
     """ Provide some top level information for the summary """
     return {"Type": "Summary",
             "Title": "Performance",
@@ -195,13 +188,12 @@ def generate_timing_stats(file_list, var_list):
     about the run.
 
     Args:
-        model_dir: Path to the model output
-        bench_dir: Path to the benchmark data
-        config: A dictionary containing option specifications
+        file_list: A list of timing files to parse
+        var_list: A list of variables to look for in the timing file
 
     Returns:
         A dict containing values that have the form:
-            [mean, min, max, mean, diff. from bench mean]
+            [mean, min, max, mean, standard deviation]
     """
     timing_result = dict()
     timing_summary = dict()
@@ -323,7 +315,8 @@ def generate_scaling_plot(timing_data, title, ylabel, description, plot_file):
 
     Args:
         timing_data: data returned from a `*_scaling` method
-        tite: the title of the plot
+        title: the title of the plot
+        ylabel: the y-axis label of the plot
         description: a description of the plot
         plot_file: the file to write out to
 
@@ -423,6 +416,7 @@ def generate_timing_breakdown_plot(timing_stats, scaling_var, title, description
     Returns:
         an image element containing the plot file and metadata
     """
+    # noinspection PyProtectedMember
     cmap_data = colormaps._viridis_data
     n_subplots = len(six.viewkeys(timing_stats))
     fig, ax = plt.subplots(1, n_subplots+1, figsize=(3*(n_subplots+2), 5))
