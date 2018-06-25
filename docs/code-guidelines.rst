@@ -1,45 +1,15 @@
-A sample code snippet below highlights most of our coding conventions.
-For conventions not covered in the snippet follow `PEP
-guidelines <https://www.python.org/dev/peps/>`__.
+Until `LIVVkit 3.0 <https://github.com/LIVVkit/LIVVkit/milestone/3>`__
+is released, all code should be written as python 2 and 3 compatible
+code -- see http://python-future.org/compatible_idioms.html.  Additionally, We
+generally follow `PEP 8 guidelines <https://www.python.org/dev/peps/pep-0008/>`__
+as presented at `pep8.org <http://pep8.org/>`__, with the exception of line lengths:
+lines have a soft limit of 100 characters and a hard limit of 120 characters when
+extra length improves readability.  See of a very nice presentation of the PEP 8
+style guide.  A sample code snippet below highlights most of our
+coding conventions.
 
-.. code:: python
-
-    # LICENSE #
-    # HEADER #
-    """
-    Description of file
-    """
-    import pymodule
-    import pymodule2
-
-    import livvmodule
-
-    class ClassName(Object):
-        """
-        Class descriptions
-        """
-
-        def __init__(self):
-            """ Constructor """
-            self.var          = "value"
-            self.auto         = "nalue"
-            self.bagger       = "salue"
-            self.autocrummify = "dalue"
-
-
-        @functionAnnotation
-        def foo(bar, baz):
-            """
-            A description of foo.
-
-            Args:
-                bar: What is this.
-                baz: What is this.
-            Returns:
-                a combo of bar and baz
-            """
-            # Some extra logic
-            return bar + baz
+.. literalinclude:: style.py
+    :language: python
 
 Tips
 ----

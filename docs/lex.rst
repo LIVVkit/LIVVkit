@@ -101,15 +101,105 @@ into the directory ``lex``, you can reproduce all the figures and tables in
 Developing a custom extension
 -----------------------------
 
-See the `LIVVkit documentation <https://livvkit.github.io/Docs/extend.html>`_ for
-details on how to develop an extension. Briefly, a absolute minimum working example
-is provided by the ``examples/`` extension, which should be copied to provide the
-basis for your new extension. All extensions are required to contain a minimal working
-example set of data such that they can be run an executed on any machine.
+.. note::
+
+    If you're thinking of developing a LIVVkit extension, open an issue on the
+    `LIVVkit issue tracker <https://github.com/LIVVkit/LIVVkit/issues>`_ and
+    we'll help you through the process.
+
+A template extension is provided as an absolute minimum working example
+in the ``examples/`` directory. To start developing a new extension, copy the
+``examples/template.*`` files to a (possibly new) relevant directory, and change
+these file names to a descriptive name. These files will provide the basis for your
+new extension.
+
+template.py:
+^^^^^^^^^^^^
+
+This is the primary extension python module. In order to work with LIVVkit, the
+extension needs to provide a ``run(name, config)`` function which accepts two arguments:
+``name``, the name of the extension which will be displayed on the extensions output
+webpage; and ``config`` which will contain the information in ``template.json``. This
+function will then need to return a LIVVkit page element (:func:`livvkit.util.elements.page`)
+which will contain a summary description of the extension (typically the extensions docstring),
+and all the page elements to display (see :mod:`livvkit.util.elements`).
+
+.. warning::
+
+    a little about elements... Additionally the top-level docstring should be used
+    for the extensions summary description.
+
+template.json:
+^^^^^^^^^^^^^^
+
+This file contains a JSON dictionary of the required input data for the extension. It
+should minimally look like:
+
+.. code:: json
+
+    {
+        "template" : {
+            "module" : "examples/template.py",
+            "references" : "examples/template.bib",
+        }
+    }
+
+Where the path to the extension's module and extension's references are given.
+When the paths are given as relative paths they will be taken as relative from the
+top-level LEX directory, otherwise they should be given as absolute paths.
+
+.. note::
+
+    When developing an extension for *others*, at least data for a minimal working
+    example should be contained in LEX and paths should be relative. If you're making
+    an extension for *yourself* these can just be absolute paths to where the data
+    lives on your machine.
+
+
+Any other input data needed (e.g., parameters, flags, data file paths) for your
+extension should be added here and not hard-coded ``template.py``.
+
+template.bib:
+^^^^^^^^^^^^^
+
+The references that are relevant to this extension, and should be cited by anyone
+using the extension to support any work that will be published. These references
+will be displayed a the bottom of the extension's output webpage, and the reference
+list should minimally include [Kennedy2017]_ and [Evans2018]_.
+
+
+template.yml:
+^^^^^^^^^^^^^
+
+If you use any python packages/modules beyond the required LIVVkit python dependencies
+(see LIVVkit's ``setup.py``), you should list them in this `Anaconda style environment
+YAML file <https://conda.io/docs/user-guide/tasks/manage-environments.html?highlight=yml#create-env-file-manually>`__.
+By doing so, when LIVVkit runs an extension in an environment without the required
+dependencies, it will quit gracefully and suggest the Anaconda command which can
+be used to install the dependencies.
+
+
+
+Incorporating your extension into LEX
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In order for an extension to be accepted into LEX, the extension *must*:
+
+#. Provide a summary description which describes the purpose of the extension,
+   the data used, and any information needed for a clear contextual understanding
+   of the analyses being presented.
+#. Include a minimum working example dataset so that the extension can be tested,
+   run, and understood immediately on any machine.
+#. Include a ``.bib`` file and bibliography section that includes all relevant
+   citations for the analyses being presented. *Please include a DOI where possible.*
 
 For extensions that require data for which re-host permission cannot be granted,
 they must include documentation on how to acquire and use the data as well as either
 a small set of processed data or a set of "fake" example data.
+
+Once you're extension is ready to add to LEX, please open an issue on the
+`LIVVkit issue tracker <https://github.com/LIVVkit/LIVVkit/issues>`__ and we'll
+help you get it integrated.
 
 
 Issues, questions, comments, etc.?
