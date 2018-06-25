@@ -1,3 +1,8 @@
+.. figure:: _static/livvkit.png
+    :width: 400px
+    :align: center
+    :alt: LIVVkit
+
 Installation
 ============
 

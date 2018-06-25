@@ -23,12 +23,13 @@ By integrating LIVVkit into a model's development workflow, LIVVkit will help us
 build confidence in their model results, and easily transmit testing data to the wider scientific
 community, reviews, and decision/policy makers. 
 
-Currently, LIVVkit is being developed and used in conjunction with the Community Ice Sheet Model
-(`CISM <http://oceans11.lanl.gov/cism/documentation.html>`__), but is designed to be extensible to
+Currently, LIVVkit is being used and developed in conjunction with E3SM
+(`Energy Exascale Earth System Model <https://e3sm.org>`_) and CISM
+(`Community Ice Sheet Model <https://cism.github.io/>`_), but is designed to be extensible to
 other models.
 
 **Users and contributors are welcome!** We'll help you out --  `open an issue on github
-<https://github.com/livvkit/livvkit/issues>`__ to contact us for any reason. 
+<https://github.com/livvkit/livvkit/issues>`_ to contact us for any reason.
 
 
 License and Attribution 
@@ -40,7 +41,7 @@ work, please cite [Kennedy2017]_:
 
     Kennedy, J.H., et al. (2017), LIVVkit: An extensible, python-based, land ice
     verification and validation toolkit for ice sheet models, J. Adv. Model. Earth Syst., 9,
-    `doi:10.1002/2017MS000916 <http://dx.doi.org/10.1002/2017MS000916>`__.
+    `doi:10.1002/2017MS000916 <http://dx.doi.org/10.1002/2017MS000916>`_.
 
 
 User's Guide
@@ -54,8 +55,9 @@ User's Guide
     design
     install
     usage
-    extend
-    dev
+    lex
+    bundles
+    contrib
     api
     ref
     faq
