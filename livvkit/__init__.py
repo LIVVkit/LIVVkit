@@ -39,6 +39,8 @@ import socket
 from livvkit import bundles
 from livvkit import resources
 
+__version_info__ = (2, 1, 1)
+__version__ = '.'.join(str(vi) for vi in __version_info__)
 
 cwd = os.getcwd()
 timestamp = time.strftime("%Y-%m-%d %H:%M:%S")

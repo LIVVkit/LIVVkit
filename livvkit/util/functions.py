@@ -27,7 +27,7 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
-Module to hold LIVV specific functions
+Module to hold LIVVkit specific functions
 """
 from __future__ import absolute_import, division, print_function, unicode_literals
 
@@ -65,24 +65,6 @@ def mkdir_p(path):
             pass
         else:
             raise
-
-
-def merge_dicts(dict1, dict2):
-    """ Merge two dictionaries and return the result """
-    tmp = dict1.copy()
-    tmp.update(dict2)
-    return tmp
-
-
-def get_leaves(d):
-    """ Get the leaves of a nested dictionary """
-    leaves = []
-    for key, val in d.items():
-        if issubclass(type(val), dict):
-            leaves.append(get_leaves(val))
-        else:
-            return val
-    return leaves
 
 
 def parse_gptl(file_path, var_list):

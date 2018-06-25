@@ -11,6 +11,9 @@ dependencies:
 - netcdf4
 - matplotlib
 - nodejs
+- pytest
+- tox
+- requests
 - pip:
   - json-tricks==3.11.0
   - sphinx
