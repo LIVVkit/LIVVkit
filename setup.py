@@ -44,16 +44,6 @@ with open(os.path.join(here, 'README.md'), 'r') as f:
 with open(os.path.join(here, 'livvkit', '__init__.py')) as f:
     init_file = f.read()
 
-# NOTE: Numpy really wants to build from source unless it's already installed,
-# which is slow and prone to failure This significantly make the build more
-# robust and much faster.
-try:
-    import numpy
-except ImportError:
-    subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'numpy'])
-    numpy = importlib.import_module('numpy')
-    print('Installed numpy v{} via pip.'.format(numpy.__version__))
-
 setup(
       name='livvkit',
       version=re.search(r'{}\s*=\s*[(]([^)]*)[)]'.format('__version_info__'),
@@ -64,7 +54,7 @@ setup(
       long_description=long_desc,
       long_description_content_type='text/markdown',
 
-      url='http://github.com/LIVVkit/LIVVkit',
+      url='https://github.com/LIVVkit/LIVVkit',
 
       author='Joseph H. Kennedy et al.',
       author_email='kennedyjh@ornl.gov',
