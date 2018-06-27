@@ -110,8 +110,14 @@ Developing a custom extension
 A template extension is provided as an absolute minimum working example
 in the ``examples/`` directory. To start developing a new extension, copy the
 ``examples/template.*`` files to a (possibly new) relevant directory, and change
-these file names to a descriptive name. These files will provide the basis for your
+these files' name to a descriptive name. These files will provide the basis for your
 new extension.
+
+.. note::
+
+    Importantly, the only things *required* for a new extension to run in LIVVkit
+    is a ``run()`` method in a ``py`` file and an ``json`` config file as described
+    below.
 
 template.py:
 ^^^^^^^^^^^^
@@ -124,10 +130,6 @@ function will then need to return a LIVVkit page element (:func:`livvkit.util.el
 which will contain a summary description of the extension (typically the extensions docstring),
 and all the page elements to display (see :mod:`livvkit.util.elements`).
 
-.. warning::
-
-    a little about elements... Additionally the top-level docstring should be used
-    for the extensions summary description.
 
 template.json:
 ^^^^^^^^^^^^^^
