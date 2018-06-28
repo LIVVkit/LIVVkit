@@ -81,3 +81,8 @@ target/
 /reg_bench/
 /reg_backup/
 
+# Pytest cache
+.pytest_cache/
+
+# Tox cache
+.tox/
