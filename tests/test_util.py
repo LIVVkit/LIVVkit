@@ -22,6 +22,16 @@ def test_fn_mkdir_p_silent_existing(tmpdir):
     functions.mkdir_p(str(testdir))
 
 
+def test_fn_merge_dicts():
+    d1 = {'a': 0, 'b': 1, 'c': {'c0': 0, 'c1': 1, 'c2': 2}}
+    d2 = {'d': 'dee', 'e': 'ee', 'f': {'f0': 'eff', 'f1': 'eeff', 'f2': 2}}
+    truth = {'a': 0, 'b': 1, 'c': {'c0': 0, 'c1': 1, 'c2': 2},
+             'd': 'dee', 'e': 'ee', 'f': {'f0': 'eff', 'f1': 'eeff', 'f2': 2}}
+    test = functions.merge_dicts(d1, d2)
+
+    assert test == truth
+
+
 def test_fn_parse_gptl(ref_data):
     timing_file = ref_data.join('titan-gnu', 'CISM_glissade',
                                 'dome', 'dome', 's0', 'p1',

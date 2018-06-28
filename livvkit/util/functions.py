@@ -67,6 +67,13 @@ def mkdir_p(path):
             raise
 
 
+def merge_dicts(dict1, dict2):
+    """ Merge two dictionaries and return the result """
+    tmp = dict1.copy()
+    tmp.update(dict2)
+    return tmp
+
+
 def parse_gptl(file_path, var_list):
     """
     Read a GPTL timing file and extract some data.
