@@ -62,8 +62,7 @@ setup(
       license='BSD',
       include_package_data=True,
 
-      classifiers=[
-                   'Development Status :: 5 - Production/Stable',
+      classifiers=['Development Status :: 5 - Production/Stable',
 
                    'Intended Audience :: Science/Research',
                    'Topic :: Scientific/Engineering',
@@ -79,23 +78,23 @@ setup(
                   ],
 
       setup_requires=['numpy'],
-      install_requires=[
-                       'six',
-                       'numpy',
-                       'scipy',
-                       'netCDF4',
-                       'matplotlib',
-                       'json-tricks==3.11.0'
-                       ],
 
-      scripts=['livv'],
-      packages=[
-               'livvkit',
-               'livvkit.bundles',
-               'livvkit.bundles.CISM_glissade',
-               'livvkit.components',
-               'livvkit.components.numerics_tests',
-               'livvkit.data',
-               'livvkit.util',
-               ]
+      install_requires=['six',
+                        'numpy',
+                        'scipy',
+                        'netCDF4',
+                        'matplotlib',
+                        'json_tricks==3.11.0'
+                        ],
+
+      packages=['livvkit',
+                'livvkit.bundles',
+                'livvkit.bundles.CISM_glissade',
+                'livvkit.components',
+                'livvkit.components.numerics_tests',
+                'livvkit.data',
+                'livvkit.util',
+                ],
+
+      entry_points={'console_scripts': ['livv = livv:main']},
       )

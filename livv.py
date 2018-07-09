@@ -40,8 +40,12 @@ import livvkit
 from livvkit.util import options
 
 
-def main(args):
+def main(cl_args=None):
     """ Direct execution. """
+
+    if len(sys.argv) > 1:
+        cl_args = sys.argv[1:]
+    args = options.parse_args(cl_args)
 
     print("-------------------------------------------------------------------")
     print("                      __   _____   ___   ____    _ __     ")
@@ -131,4 +135,4 @@ def main(args):
 
 
 if __name__ == "__main__":
-    main(options.parse_args())
+    main()

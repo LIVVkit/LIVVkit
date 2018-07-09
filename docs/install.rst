@@ -20,7 +20,7 @@ or `Anaconda/Miniconda <https://conda.io/docs/download.html>`__:
 
 .. code-block:: bash
 
-    conda install -c jhkennedy livvkit
+    conda install -c conda-forge livvkit
 
 
 LIVVkit was designed to be Python 2 and 3 compatible, so either version will work, but Python 3 is
