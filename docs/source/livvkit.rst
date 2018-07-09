@@ -15,8 +15,8 @@ Subpackages
 Submodules
 ----------
 
-livvkit\.scheduler module
--------------------------
+livvkit.scheduler module
+------------------------
 
 .. automodule:: livvkit.scheduler
     :members:

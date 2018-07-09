@@ -1,5 +1,5 @@
-livvkit\.data\.numerics package
-===============================
+livvkit.data.numerics package
+=============================
 
 Module contents
 ---------------

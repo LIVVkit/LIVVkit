@@ -1,5 +1,5 @@
-livvkit\.data package
-=====================
+livvkit.data package
+====================
 
 Subpackages
 -----------
