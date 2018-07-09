@@ -31,9 +31,6 @@ from __future__ import absolute_import, print_function, unicode_literals
 
 import os
 import re
-import sys
-import importlib
-import subprocess
 
 from setuptools import setup
 
@@ -75,7 +72,7 @@ setup(
                    'Programming Language :: Python :: 3',
                    'Programming Language :: Python :: 3.5',
                    'Programming Language :: Python :: 3.6',
-                  ],
+                   ],
 
       setup_requires=['numpy'],
 
