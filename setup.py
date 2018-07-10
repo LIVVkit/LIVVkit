@@ -93,5 +93,5 @@ setup(
                 'livvkit.util',
                 ],
 
-      entry_points={'console_scripts': ['livv = livv:main']},
+      entry_points={'console_scripts': ['livv = livvkit.__main__:main']},
       )
