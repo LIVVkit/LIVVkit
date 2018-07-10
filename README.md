@@ -64,7 +64,7 @@ livv -h
  Verification
 --------------
 
-n verification mode, LIVVkit analyzes and compares a regression testing
+In verification mode, LIVVkit analyzes and compares a regression testing
 dataset to a reference dataset. For example, LIVVkit may analyze the dataset
 produced from a proposed CISM 2.0.6 release (~400MB; download
 [here](http://jhkennedy.org/LIVVkit/cism-2.0.6-tests.20160728.tgz)) and

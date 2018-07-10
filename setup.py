@@ -31,9 +31,6 @@ from __future__ import absolute_import, print_function, unicode_literals
 
 import os
 import re
-import sys
-import importlib
-import subprocess
 
 from setuptools import setup
 
@@ -62,8 +59,7 @@ setup(
       license='BSD',
       include_package_data=True,
 
-      classifiers=[
-                   'Development Status :: 5 - Production/Stable',
+      classifiers=['Development Status :: 5 - Production/Stable',
 
                    'Intended Audience :: Science/Research',
                    'Topic :: Scientific/Engineering',
@@ -76,26 +72,26 @@ setup(
                    'Programming Language :: Python :: 3',
                    'Programming Language :: Python :: 3.5',
                    'Programming Language :: Python :: 3.6',
-                  ],
+                   ],
 
       setup_requires=['numpy'],
-      install_requires=[
-                       'six',
-                       'numpy',
-                       'scipy',
-                       'netCDF4',
-                       'matplotlib',
-                       'json-tricks==3.11.0'
-                       ],
 
-      scripts=['livv'],
-      packages=[
-               'livvkit',
-               'livvkit.bundles',
-               'livvkit.bundles.CISM_glissade',
-               'livvkit.components',
-               'livvkit.components.numerics_tests',
-               'livvkit.data',
-               'livvkit.util',
-               ]
+      install_requires=['six',
+                        'numpy',
+                        'scipy',
+                        'netCDF4',
+                        'matplotlib',
+                        'json_tricks==3.11.0'
+                        ],
+
+      packages=['livvkit',
+                'livvkit.bundles',
+                'livvkit.bundles.CISM_glissade',
+                'livvkit.components',
+                'livvkit.components.numerics_tests',
+                'livvkit.data',
+                'livvkit.util',
+                ],
+
+      entry_points={'console_scripts': ['livv = livv:main']},
       )

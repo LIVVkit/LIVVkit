@@ -96,7 +96,12 @@ into the directory ``lex``, you can reproduce all the figures and tables in
                     dynamics/dynamics_cisma.json \
                     -o vv_evans2018 -s
 
-
+All the *model* data used for these analyses, and provided as an example, required some
+postprocessing to generate the required input data for analysis with LIVVkit. A set of task-parallel
+postprocessing scripts are provided in the ``postproc`` directory. While these scripts are
+currently model specific, a new model can be adapted from current scripts using the directions in
+the `postprocessing README <https://code.ornl.gov/LIVVkit/lex/blob/master/postproc/README.md>`__.
+Note: A more generalized method of postprocessing model data is currently under development.
 
 Developing a custom extension
 -----------------------------
