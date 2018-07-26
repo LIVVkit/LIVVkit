@@ -426,7 +426,7 @@ function drawVTable(data, div) {
 /**
  * Build a table with horizontal and vertical headers and add it to the div.
  *
- * @param {Object} data - The data representing the summary.  Determined by data["Type"] = "HVTable"
+ * @param {Object} data - The data representing the summary.  Determined by data["Type"] = "V-H Table"
  * @param {string} div - The name of the div to draw to.  Should be referenced as a string that 
  *                       determines whether it is a class or id (ie include # or .)
  */
