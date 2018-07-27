@@ -43,7 +43,7 @@ from livvkit.util import options
 def main(cl_args=None):
     """ Direct execution. """
 
-    if len(sys.argv) > 1:
+    if cl_args is None and len(sys.argv) > 1:
         cl_args = sys.argv[1:]
     args = options.parse_args(cl_args)
 

@@ -47,7 +47,7 @@ setup(
                         init_file
                         ).group(1).replace(', ', '.'),
 
-      description='The land ice verification and validation toolkit.',
+      description='The land ice verification and validation toolkit',
       long_description=long_desc,
       long_description_content_type='text/markdown',
 
@@ -73,8 +73,6 @@ setup(
                    'Programming Language :: Python :: 3.5',
                    'Programming Language :: Python :: 3.6',
                    ],
-
-      setup_requires=['numpy'],
 
       install_requires=['six',
                         'numpy',
