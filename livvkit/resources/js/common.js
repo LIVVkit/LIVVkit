@@ -106,9 +106,13 @@ function drawNav() {
  */
 function drawContent() {
     // Load the data and add header information
-    var verType = window.location.href.substr(
+    var html_file = window.location.href.substr(
             window.location.href.lastIndexOf("/")+1).split("#")[0].replace(".html", "");
-    var data = loadJSON('./' + verType + ".json");
+    // Assume index.html if empty page name
+    if (html_file == "") {
+        html_file = "index";
+    }
+    var data = loadJSON('./' + html_file + ".json");
     var html = "<div id=" + data["Title"] + ">";
     if (data["Title"] != "Summary") {
         html += "<h2>" + data["Title"] + "</h2>";
