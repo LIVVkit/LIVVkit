@@ -40,6 +40,11 @@ import livvkit
 from livvkit.util import options
 
 
+if not sys.warnoptions:
+    import warnings
+    warnings.simplefilter("ignore")
+
+
 def main(cl_args=None):
     """ Direct execution. """
 
