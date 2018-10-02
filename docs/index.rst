@@ -57,7 +57,7 @@ User's Guide
     usage
     lex
     bundles
-    contrib
+    CONTRIBUTING
     api
     ref
     faq
