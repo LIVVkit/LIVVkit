@@ -222,8 +222,15 @@ def setup_output(cssd=None, jsd=None, imgd=None):
                 os.path.join(livvkit.index_dir, "index.html"))
     # Record when this data was recorded so we can make nice backups
     with open(os.path.join(livvkit.index_dir, "data.txt"), "w") as f:
-        f.write(livvkit.timestamp + "\n")
-        f.write(livvkit.comment)
+        f.write(livvkit.timestamp + '\n')
+        f.write('Call: livv ')
+        for arg in sys.argv[1:]:
+            f.write(arg)
+            f.write(' ')
+        f.write('\n')
+        f.write("User: " + livvkit.user + '\n')
+        f.write("OS Type: " + livvkit.os_type + '\n')
+        f.write("Machine: " + livvkit.machine + '\n')
 
     # Make a directory to keep log files
     mkdir_p(os.path.join(livvkit.index_dir, 'logs'))

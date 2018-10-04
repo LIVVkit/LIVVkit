@@ -65,7 +65,6 @@ def main(cl_args=None):
     print("  User: " + livvkit.user)
     print("  OS Type: " + livvkit.os_type)
     print("  Machine: " + livvkit.machine)
-    print("  " + livvkit.comment)
 
     from livvkit.components import numerics
     from livvkit.components import verification
