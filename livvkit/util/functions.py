@@ -228,6 +228,7 @@ def setup_output(cssd=None, jsd=None, imgd=None):
             f.write(arg)
             f.write(' ')
         f.write('\n')
+        f.write('Version: ' + livvkit.__version__ + '\n')
         f.write("User: " + livvkit.user + '\n')
         f.write("OS Type: " + livvkit.os_type + '\n')
         f.write("Machine: " + livvkit.machine + '\n')
