@@ -40,6 +40,11 @@ import livvkit
 from livvkit.util import options
 
 
+if not sys.warnoptions:
+    import warnings
+    warnings.simplefilter("ignore")
+
+
 def main(cl_args=None):
     """ Direct execution. """
 
@@ -60,7 +65,6 @@ def main(cl_args=None):
     print("  User: " + livvkit.user)
     print("  OS Type: " + livvkit.os_type)
     print("  Machine: " + livvkit.machine)
-    print("  " + livvkit.comment)
 
     from livvkit.components import numerics
     from livvkit.components import verification

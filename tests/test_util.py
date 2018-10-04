@@ -130,6 +130,6 @@ def test_fn_setup_output(tmpdir):
     livvkit.index_dir = str(idir)
     functions.setup_output()
 
-    test = idir.join('data.txt').read_text('utf8').strip()
+    test = idir.join('data.txt').readlines()[0].strip()
 
     assert test == livvkit.timestamp
