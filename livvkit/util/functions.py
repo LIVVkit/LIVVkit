@@ -224,3 +224,6 @@ def setup_output(cssd=None, jsd=None, imgd=None):
     with open(os.path.join(livvkit.index_dir, "data.txt"), "w") as f:
         f.write(livvkit.timestamp + "\n")
         f.write(livvkit.comment)
+
+    # Make a directory to keep log files
+    mkdir_p(os.path.join(livvkit.index_dir, 'logs'))
