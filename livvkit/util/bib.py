@@ -116,7 +116,13 @@ def _bib2html_list(bib, style=None, backend=None):
     bibliography = pybtex.database.BibliographyData()
     for bib_file in bib:
         temp_bib = pybtex.database.parse_file(bib_file)
-        bibliography.add_entries(temp_bib.entries.items())
+        for key, entry in temp_bib.entries.items():
+            try:
+                bibliography.add_entry(key, entry)
+            except pybtex.database.BibliographyDataError:
+                # FIXME: should log this...
+                # Skip duplicate entries
+                continue
 
     formatted_bib = style.format_bibliography(bibliography)
 

@@ -77,3 +77,8 @@ def test_bib2html_bibliographydata():
     assert html == KENNEDY2017_HTML
 
 
+def test_bib2html_duplicate_elements():
+    html = bib.bib2html([
+        os.path.join(DATA_DIR, 'Kennedy2017.bib'), os.path.join(DATA_DIR, 'Kennedy2017.bib')
+    ])
+    assert html == KENNEDY2017_HTML
