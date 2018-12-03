@@ -27,6 +27,9 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+from __future__ import absolute_import, print_function, unicode_literals
+import six
+
 import pybtex.database
 import pybtex.io
 
@@ -77,7 +80,7 @@ class HTMLBackend(BaseBackend):
 # def bib2html(bib, style=None, backend=None):
 #     raise NotImplementedError('I do not now how to convert a {} type to a bibliography'.format(type(bib)))
 def bib2html(bib, style=None, backend=None):
-    if isinstance(bib, str):
+    if isinstance(bib, six.string_types):
         return _bib2html_string(bib, style=style, backend=backend)
     if isinstance(bib, (list, set, tuple)):
         return _bib2html_list(bib, style=style, backend=backend)
