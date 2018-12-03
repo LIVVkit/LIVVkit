@@ -72,6 +72,7 @@ setup(
                    'Programming Language :: Python :: 3',
                    'Programming Language :: Python :: 3.5',
                    'Programming Language :: Python :: 3.6',
+                   'Programming Language :: Python :: 3.7',
                    ],
 
       install_requires=['six',
@@ -79,7 +80,8 @@ setup(
                         'scipy',
                         'netCDF4',
                         'matplotlib',
-                        'json_tricks==3.11.0'
+                        'json_tricks==3.11.0',
+                        'pybtex==0.21',
                         ],
 
       packages=['livvkit',
