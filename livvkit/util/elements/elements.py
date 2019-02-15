@@ -38,9 +38,76 @@ be interpreted by the Javascript found in the resources directory.
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+import six
+
+import os
+import abc
+import jinja2
+import json_tricks
+
+
+_HERE = os.path.dirname(__file__)
+
+html_env = jinja2.Environment(
+        loader=jinja2.FileSystemLoader(os.path.join(_HERE, 'templates')))
+
+latex_env = jinja2.Environment(
+        block_start_string=r'\BLOCK{',
+        block_end_string=r'}',
+        variable_start_string=r'\VAR{',
+        variable_end_string=r'}',
+        comment_start_string=r'\#{',
+        comment_end_string=r'}',
+        line_statement_prefix=r'%%',
+        line_comment_prefix=r'%#',
+        trim_blocks=True,
+        loader=jinja2.FileSystemLoader(os.path.join(_HERE, 'templates')))
+
+
+class BaseElement(abc.ABC):
+    # Alright, we want _html_template (_latex_template) to be required and act like:
+    #    >>> self._html_template
+    #    'template.html'
+    # Which could be satisfied be a simple class attribute or a more complex property,
+    # but NOT a method, which would have to be called like:
+    #    >>> self._html_template()
+    #    'template.html'
+    # Unfortunately, the chained @property and @abc.abstractmethod doesn't enforce
+    # an attribute/property like action and can be satisfied by defining a method,
+    def __init__(self):
+        if not isinstance(type(self)._html_template, property) and callable(self._html_template):
+            raise TypeError('You must define an _html_template property or attribute for this class')
+        if not isinstance(type(self)._latex_template, property) and callable(self._latex_template):
+            raise TypeError('You must define an _latex_template property or attribute for this class')
+
+
+    @property
+    @abc.abstractmethod
+    def _html_template(self):
+        raise NotImplementedError
+
+
+    @property
+    @abc.abstractmethod
+    def _latex_template(self):
+        raise NotImplementedError
+
+
+    def _repr_json(self):
+        return json_tricks.dumps(self.__dict__, indent=4, primitives=True, allow_nan=True)
+
+
+    def _repr_html(self):
+        template = html_env.get_template(self._html_template)
+        return template.render(data=self.__dict__)
+
+
+    def _repr_latex(self):
+        template = latex_env.get_template(self._latex_template)
+        return template.render(data=self.__dict__)
+
 
 def book(title, description, page_dict=None):
-
     _book = {'Type': 'Book',
              'Title': title,
              'Description': description,
@@ -70,11 +137,11 @@ def page(title, description, element_list=None, tab_list=None):
         as a page containing multiple elements and/or tabs.
     """
     _page = {
-             'Type': 'Page',
-             'Title': title,
-             'Description': description,
-             'Data': {},
-             }
+        'Type': 'Page',
+        'Title': title,
+        'Description': description,
+        'Data': {},
+    }
 
     if element_list is not None:
         if isinstance(element_list, list):
@@ -106,9 +173,9 @@ def tab(tab_name, element_list=None, section_list=None):
         as a page containing multiple elements and/or tab.
     """
     _tab = {
-            'Type': 'Tab',
-            'Title': tab_name,
-            }
+        'Type': 'Tab',
+        'Title': tab_name,
+    }
 
     if element_list is not None:
         if isinstance(element_list, list):
@@ -141,9 +208,9 @@ def section(title, element_list):
         a section containing multiple elements
     """
     sect = {
-            'Type': 'Section',
-            'Title': title,
-            }
+        'Type': 'Section',
+        'Title': title,
+    }
 
     if isinstance(element_list, list):
         sect['Elements'] = element_list
@@ -172,11 +239,11 @@ def table(title, headers, data_node):
         rendered as a table.
     """
     tb = {
-          'Type': 'Table',
-          'Title': title,
-          'Headers': headers,
-          'Data': data_node,
-          }
+        'Type': 'Table',
+        'Title': title,
+        'Headers': headers,
+        'Data': data_node,
+    }
     return tb
 
 
@@ -200,11 +267,11 @@ def vtable(title, headers, data_node):
         rendered as a table.
     """
     tb = {
-          'Type': 'Vertical Table',
-          'Title': title,
-          'Headers': headers,
-          'Data': data_node,
-          }
+        'Type': 'Vertical Table',
+        'Title': title,
+        'Headers': headers,
+        'Data': data_node,
+    }
     return tb
 
 
@@ -226,11 +293,11 @@ def bit_for_bit(title, headers, data_node):
         rendered as a bit for bit table
     """
     b4b = {
-           'Type': 'Bit for Bit',
-           'Title': title,
-           'Headers': headers,
-           'Data': data_node,
-           }
+        'Type': 'Bit for Bit',
+        'Title': title,
+        'Headers': headers,
+        'Data': data_node,
+    }
     return b4b
 
 
@@ -251,10 +318,10 @@ def gallery(title, image_elem_list):
         rendered as an image gallery
     """
     gal = {
-           'Type': 'Gallery',
-           'Title': title,
-           'Data': image_elem_list,
-           }
+        'Type': 'Gallery',
+        'Title': title,
+        'Data': image_elem_list,
+    }
     return gal
 
 
@@ -282,11 +349,11 @@ def image(title, desc, image_name, group=None, height=None):
         rendered as an image element
     """
     ie = {
-          'Type': 'Image',
-          'Title': title,
-          'Description': desc,
-          'Plot File': image_name,
-          }
+        'Type': 'Image',
+        'Title': title,
+        'Description': desc,
+        'Plot File': image_name,
+    }
     if group:
         ie['Group'] = group
     if height:
@@ -310,10 +377,10 @@ def file_diff(title, diff_data):
         rendered as a file diff element
     """
     fd = {
-          'Type': 'Diff',
-          'Title': title,
-          'Data': diff_data,
-          }
+        'Type': 'Diff',
+        'Title': title,
+        'Data': diff_data,
+    }
     return fd
 
 
@@ -331,14 +398,14 @@ def error(title, error_msg):
         rendered as an error element
     """
     err = {
-           'Type': 'Error',
-           'Title': title,
-           'Message': error_msg,
-           }
+        'Type': 'Error',
+        'Title': title,
+        'Message': error_msg,
+    }
     return err
 
 
-def html(html_data):
+def raw_html(html_data):
     """
     Builds a raw HTML element.  Provides a way to directly display some HTML.
 
@@ -350,7 +417,7 @@ def html(html_data):
         rendered directly as HTML
     """
     html_el = {
-               'Type': 'HTML',
-               'Data': html_data,
-               }
+        'Type': 'HTML',
+        'Data': html_data,
+    }
     return html_el
