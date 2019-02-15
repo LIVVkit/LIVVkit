@@ -351,7 +351,10 @@ def generate_scaling_plot(timing_data, title, ylabel, description, plot_file):
         plt.savefig(os.path.splitext(plot_file)[0]+'.eps', dpi=600)
     plt.savefig(plot_file)
     plt.close()
-    return elements.image(title, description, os.path.basename(plot_file))
+
+    image = elements.Image(title, description, plot_file)
+
+    return image.__dict__
 
 
 def scaling_sypd_plot(timing_data, title, ylabel, description, plot_file):
@@ -465,4 +468,8 @@ def generate_timing_breakdown_plot(timing_stats, scaling_var, title, description
         plt.savefig(os.path.splitext(plot_file)[0]+'.eps', dpi=600)
     plt.savefig(plot_file)
     plt.close()
-    return elements.image(title, description, os.path.basename(plot_file))
+
+    image = elements.Image(title, description, plot_file)
+
+    return image.__dict__
+

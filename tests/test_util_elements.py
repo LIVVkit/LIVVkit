@@ -193,11 +193,54 @@ def test_el_gallery_html():
 
 
 def test_el_image_json():
-    assert False
+    truth = '{\n' \
+            '    "Image": {\n' \
+            '        "title": "title",\n' \
+            '        "desc": "description",\n' \
+            '        "path": "path",\n' \
+            '        "name": "name.png",\n' \
+            '        "group": "group",\n        "height": 300,\n' \
+            '        "__module__": "livvkit.util.elements.elements",\n' \
+            '        "_html_template": "image.html",\n' \
+            '        "_latex_template": "image.tex"\n' \
+            '    }\n' \
+            '}'
+
+    image = el.Image('title', 'description', 'path/name.png', group='group', height=300)
+
+    assert truth == image._repr_json()
 
 
 def test_el_image_html():
-    assert False
+    truth = '<div>\n' \
+            '    <a href="path/name.png"\n' \
+            '       data-lightbox="group"\n' \
+            '       data-title="description"\n' \
+            '    >\n' \
+            '        <img class="thumbnail caption"\n' \
+            '             data-caption="title"\n' \
+            '             alt="title"\n' \
+            '             src="path/name.png"\n' \
+            '             style="height: 300px; overflow: hidden; position: relative;"\n' \
+            '        >\n' \
+            '    </a>\n' \
+            '</div>'
+
+    image = el.Image('title', 'description', 'path/name.png', group='group', height=300)
+
+    assert truth == image._repr_html()
+
+
+def test_el_image_latex():
+    truth = "\\begin{figure}[h]\n" \
+            "    \\centering\n" \
+            "    \\includegraphics[height=300px]{path/name.png}\n" \
+            "    \\caption[title]{description}\n" \
+            "\\end{figure}"
+
+    image = el.Image('title', 'description', 'path/name.png', group='group', height=300)
+
+    assert truth == image._repr_latex()
 
 
 def test_el_file_diff_json():

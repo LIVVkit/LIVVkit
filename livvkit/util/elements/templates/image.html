@@ -1,0 +1,13 @@
+<div>
+    <a href="{{ data['path'] ~ '/' ~ data['name'] }}"
+       data-lightbox="{{ data['group'] if data['group'] else data['title'] }}"
+       data-title="{{ data['desc'] }}"
+    >
+        <img class="thumbnail caption"
+             data-caption="{{ data['title'] }}"
+             alt="{{ data['title'] }}"
+             src="{{ data['path'] ~ '/' ~ data['name'] }}"
+             style="height: {{ data['height'] if data['height'] else 200 }}px; overflow: hidden; position: relative;"
+        >
+    </a>
+</div>

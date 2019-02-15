@@ -362,8 +362,8 @@ function drawBitForBit(data, div) {
             // Handle the different data types to draw (image vs string/numeric data)
             if (header == "Plot" && (hData !== "N/A" || hData.indexOf("ERROR:")!==-1)) {
                 var img_dict = {};
-                img_dict["Plot File"] = data["Data"][varName][header];
-                img_dict["Title"] = varName + "Bit-for-bit compairson";
+                img_dict["name"] = data["Data"][varName][header];
+                img_dict["title"] = varName + "Bit-for-bit compairson";
                 html += "<td>" + drawThumbnail(img_dict, 50) + "</td>\n";
             } else {
                 if (typeof hData == 'number') {
@@ -533,11 +533,11 @@ function drawImage(img_elem, div) {
  */
 function drawLightbox(img_elem) {
     var img_dir = window.location.href.substr(0,window.location.href.lastIndexOf('/')+1) + "imgs/";
-    var path = img_dir + img_elem["Plot File"];
-    var lbox = img_elem["Group"] ? img_elem["Group"]  : img_elem["Title"];
-    var size = img_elem["Height"] ? img_elem["Height"]  : 200;
-    var html = "<a href=\"" + path + "\" data-lightbox=\"" + lbox + "\" data-title=\"" + img_elem["Description"] + "\">";
-    html += "<img class=\"thumbnail caption\" data-caption=\"" + img_elem["Title"]+ "\" alt=\"" + img_elem["Title"] + "\" src=\"" + path + "\" style=\"height: " + size + "px; overflow: hidden; position: relative\">";
+    var path = img_dir + img_elem["name"];
+    var lbox = img_elem["group"] ? img_elem["group"]  : img_elem["title"];
+    var size = img_elem["height"] ? img_elem["height"]  : 200;
+    var html = "<a href=\"" + path + "\" data-lightbox=\"" + lbox + "\" data-title=\"" + img_elem["desc"] + "\">";
+    html += "<img class=\"thumbnail caption\" data-caption=\"" + img_elem["title"]+ "\" alt=\"" + img_elem["title"] + "\" src=\"" + path + "\" style=\"height: " + size + "px; overflow: hidden; position: relative\">";
     html += "</a>";
     return html;
 }
@@ -552,9 +552,9 @@ function drawLightbox(img_elem) {
  */
 function drawThumbnail(img_elem, size) {
     var img_dir = window.location.href.substr(0,window.location.href.lastIndexOf('/')+1) + "imgs/";
-    var path = img_elem["Plot File"];
+    var path = img_elem["name"];
     var html = "<a target=\"_blank\" href=\"" + path + "\">";
-    html += "<img class=\"thumbnail\" alt=\"" + img_elem["Title"] + "\" src=\"" + path + "\" style=\"height: " + size + "px; overflow: hidden; position: relative\">";
+    html += "<img class=\"thumbnail\" alt=\"" + img_elem["title"] + "\" src=\"" + path + "\" style=\"height: " + size + "px; overflow: hidden; position: relative\">";
     html += "</a>";
     return html;
 }

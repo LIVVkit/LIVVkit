@@ -134,7 +134,9 @@ def run(config, analysis_data):
                 plt.savefig(os.path.splitext(plot_file)[0]+'.eps', dpi=600)
             plt.savefig(plot_file)
             plt.close()
-            plot_list.append(elements.image(title, description, os.path.basename(plot_file)))
+
+            image = elements.Image(title, description, plot_file)
+            plot_list.append(image.__dict__)
 
     return elements.gallery("Numerics Plots", plot_list)
 

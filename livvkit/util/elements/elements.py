@@ -94,7 +94,11 @@ class BaseElement(abc.ABC):
 
 
     def _repr_json(self):
-        return json_tricks.dumps(self.__dict__, indent=4, primitives=True, allow_nan=True)
+        jsn = {type(self).__name__: self.__dict__}
+        jsn[type(self).__name__].update({'__module__': type(self).__module__,
+                                         '_html_template': self._html_template,
+                                         '_latex_template': self._latex_template})
+        return json_tricks.dumps(jsn, indent=4, primitives=True, allow_nan=True)
 
 
     def _repr_html(self):
@@ -325,40 +329,17 @@ def gallery(title, image_elem_list):
     return gal
 
 
-def image(title, desc, image_name, group=None, height=None):
-    """
-    Builds an image element.  Image elements are primarily created
-    and then wrapped into an image gallery element.  This is not required
-    behavior, however and it's independent usage should be allowed depending
-    on the behavior required.
+class Image(BaseElement):
+    _html_template = 'image.html'
+    _latex_template = 'image.tex'
 
-    The Javascript will search for the `image_name` in the component's
-    `imgs` directory when rendering.  For example, all verification images
-    are output to `vv_xxxx-xx-xx/verification/imgs` and then the verification
-    case's output page will search for `image_name` within that directory.
-
-    Args:
-        title: The title to display
-        desc: A description of the image or plot
-        image_name: The filename of the image
-        group: (optional) Title of lightbox group to join
-        height: (optional) Height of image thumbnail to draw
-
-    Returns:
-        A dictionary with the metadata specifying that it is to be
-        rendered as an image element
-    """
-    ie = {
-        'Type': 'Image',
-        'Title': title,
-        'Description': desc,
-        'Plot File': image_name,
-    }
-    if group:
-        ie['Group'] = group
-    if height:
-        ie['Height'] = height
-    return ie
+    def __init__(self, title, desc, image_file, group=None, height=None):
+        super(Image, self).__init__()
+        self.title = title
+        self.desc = desc
+        self.path, self.name = os.path.split(image_file)
+        self.group = group
+        self.height = height
 
 
 def file_diff(title, diff_data):
