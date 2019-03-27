@@ -6,6 +6,7 @@ recursive-include livvkit *.json
 
 graft livvkit/data
 graft livvkit/resources
+graft livvkit/util/elements/templates
 
 global-exclude *.py[co]
 
