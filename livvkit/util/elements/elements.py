@@ -38,8 +38,6 @@ be interpreted by the Javascript found in the resources directory.
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-import six
-
 import os
 import abc
 import jinja2
@@ -65,6 +63,7 @@ latex_env = jinja2.Environment(
 
 
 class BaseElement(abc.ABC):
+    # FIXME:
     # Alright, we want _html_template (_latex_template) to be required and act like:
     #    >>> self._html_template
     #    'template.html'
@@ -384,6 +383,14 @@ def error(title, error_msg):
         'Message': error_msg,
     }
     return err
+
+class RawHTML(BaseElement):
+    _html_template = 'raw.html'
+    _latex_template = 'raw.tex'
+
+    def __init__(self, html):
+        super(RawHTML, self).__init__()
+        self.html = html
 
 
 def raw_html(html_data):

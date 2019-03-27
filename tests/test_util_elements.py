@@ -260,8 +260,31 @@ def test_el_error_html():
 
 
 def test_el_raw_html_json():
-    assert False
+    truth = '{\n' \
+            '    "RawHTML": {\n' \
+            '        "html": "<div>Hi</div>",\n' \
+            '        "__module__": "livvkit.util.elements.elements",\n' \
+            '        "_html_template": "raw.html",\n' \
+            '        "_latex_template": "raw.tex"\n' \
+            '    }\n' \
+            '}'
+
+    html = el.RawHTML('<div>Hi</div>')
+
+    assert truth == html._repr_json()
 
 
 def test_el_raw_html_html():
-    assert False
+    truth = '<div>\n    <div>Hi</div>\n</div>'
+
+    html = el.RawHTML('<div>Hi</div>')
+
+    assert truth == html._repr_html()
+
+
+def test_el_raw_html_latex():
+    truth = '\\begin{minted}{html}\n    <div>Hi</div>\n\\end{minted}'
+
+    html = el.RawHTML('<div>Hi</div>')
+
+    assert truth == html._repr_latex()

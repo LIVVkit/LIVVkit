@@ -568,7 +568,7 @@ function drawThumbnail(img_elem, size) {
  */
 function drawHTML (data, div) {
     var html = "<div>";
-    html += data["Data"];
+    html += data["html"];
     html += "</div>";
     $(div).append(html);
 }
