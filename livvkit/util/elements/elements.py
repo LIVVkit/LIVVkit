@@ -384,6 +384,7 @@ def error(title, error_msg):
     }
     return err
 
+
 class RawHTML(BaseElement):
     _html_template = 'raw.html'
     _latex_template = 'raw.tex'
@@ -391,21 +392,3 @@ class RawHTML(BaseElement):
     def __init__(self, html):
         super(RawHTML, self).__init__()
         self.html = html
-
-
-def raw_html(html_data):
-    """
-    Builds a raw HTML element.  Provides a way to directly display some HTML.
-
-    Args:
-        html_data: The HTML to display 
-
-    Returns:
-        A dictionary with the metadata specifying that it is to be
-        rendered directly as HTML
-    """
-    html_el = {
-        'Type': 'HTML',
-        'Data': html_data,
-    }
-    return html_el
