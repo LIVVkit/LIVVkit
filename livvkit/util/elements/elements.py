@@ -46,10 +46,10 @@ import json_tricks
 
 _HERE = os.path.dirname(__file__)
 
-html_env = jinja2.Environment(
+_html_env = jinja2.Environment(
         loader=jinja2.FileSystemLoader(os.path.join(_HERE, 'templates')))
 
-latex_env = jinja2.Environment(
+_latex_env = jinja2.Environment(
         block_start_string=r'\BLOCK{',
         block_end_string=r'}',
         variable_start_string=r'\VAR{',
@@ -101,12 +101,12 @@ class BaseElement(abc.ABC):
 
 
     def _repr_html(self):
-        template = html_env.get_template(self._html_template)
+        template = _html_env.get_template(self._html_template)
         return template.render(data=self.__dict__)
 
 
     def _repr_latex(self):
-        template = latex_env.get_template(self._latex_template)
+        template = _latex_env.get_template(self._latex_template)
         return template.render(data=self.__dict__)
 
 
