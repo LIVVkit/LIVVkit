@@ -7,7 +7,7 @@ python:
   - "3.7"
 install:
   - pip install tox-travis
-  - pip install coverage
+  - pip install pytest-cov
 script:
   - tox
 
@@ -16,6 +16,6 @@ jobs:
     - stage: coverage
       python: "3.7"
       script:
-      - coverage xml
-      - curl https://deepsource.io/cli | sh
-      - ./bin/deepsource report --analyzer test-coverage --key python --value-file ./coverage.xml
+        - pytest --cov=livvkit --cov-config=.coveragerc --cov-report xml
+        - curl https://deepsource.io/cli | sh
+        - ./bin/deepsource report --analyzer test-coverage --key python --value-file ./coverage.xml
