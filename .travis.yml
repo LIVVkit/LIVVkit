@@ -1,10 +1,10 @@
 language: python
 dist: xenial
 python:
+  # Only legacy python versions here; latest included below
   - "2.7"
   - "3.5"
   - "3.6"
-  - "3.7"
 install:
   - pip install tox-travis
 script:
@@ -12,7 +12,7 @@ script:
 
 jobs:
   include:
-    - stage: coverage
+    - stage: test
       python: "3.7"
       before_script:
         - npm install -g jsdoc
