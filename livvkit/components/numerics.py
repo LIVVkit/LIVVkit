@@ -70,7 +70,8 @@ def run_suite(case, config, summary):
     try:
         el = m.run(config, analysis_data)
     except KeyError:
-        el = elements.error("Numerics Plots", "Missing data")
+        el = elements.Error("Numerics Plots", "Missing data").__dict__
+
     result = elements.page(case, config['description'], element_list=el)
     summary[case] = _summarize_result(m, analysis_data, config)
     _print_summary(m, case, summary[case])

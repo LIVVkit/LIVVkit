@@ -52,7 +52,7 @@ def parse_log(file_path):
         the results of the bit for bit testing
     """
     if not os.path.isfile(file_path):
-        return elements.error("Output Log", "Could not open file: " + file_path.split(os.sep)[-1])
+        return elements.Error("Output Log", "Could not open file: " + file_path.split(os.sep)[-1]).__dict__
 
     headers = ["Converged Iterations",
                "Avg. Iterations to Converge",

@@ -191,17 +191,17 @@ def bit_for_bit(model_path, bench_path, config):
     fname = model_path.split(os.path.sep)[-1]
     # Error handling
     if not (os.path.isfile(bench_path) and os.path.isfile(model_path)):
-        return elements.error("Bit for Bit",
-                              "File named " + fname + " has no suitable match!")
+        return elements.Error("Bit for Bit",
+                              "File named " + fname + " has no suitable match!").__dict__
     try:
         model_data = Dataset(model_path)
         bench_data = Dataset(bench_path)
     except (FileNotFoundError, PermissionError):
-        return elements.error("Bit for Bit",
-                              "File named " + fname + " could not be read!")
+        return elements.Error("Bit for Bit",
+                              "File named " + fname + " could not be read!").__dict__
     if not (netcdf.has_time(model_data) and netcdf.has_time(bench_data)):
-        return elements.error("Bit for Bit",
-                              "File named " + fname + " could not be read!")
+        return elements.Error("Bit for Bit",
+                              "File named " + fname + " could not be read!").__dict__
 
     # Begin bit for bit analysis
     headers = ["Max Error", "Index of Max Error", "RMS Error", "Plot"]
@@ -247,8 +247,8 @@ def diff_configurations(model_config, bench_config, model_bundle, bench_bundle):
     model_data = model_bundle.parse_config(model_config)
     bench_data = bench_bundle.parse_config(bench_config)
     if model_data == {} and bench_data == {}:
-        return elements.error("Configuration Comparison",
-                              "Could not open file: " + model_config.split(os.path.sep)[-1])
+        return elements.Error("Configuration Comparison",
+                              "Could not open file: " + model_config.split(os.path.sep)[-1]).__dict__
 
     model_sections = set(six.iterkeys(model_data))
     bench_sections = set(six.iterkeys(bench_data))

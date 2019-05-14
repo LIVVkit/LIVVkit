@@ -295,8 +295,8 @@ function drawValSummary(data, div) {
  */
 function drawError(data, div) {
     var html = "<div class=\"error\">";
-    html += "<h3>" + data["Title"] + "</h3>\n";
-    html += "<p>ERROR: " + data["Message"] + "</p>\n";
+    html += "<h3>" + data["title"] + "</h3>\n";
+    html += "<p>ERROR: " + data["message"] + "</p>\n";
     html += "</div>";
     $(div).append(html);
 }

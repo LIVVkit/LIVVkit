@@ -252,16 +252,46 @@ def test_el_file_diff_html():
 
 
 def test_el_error_json():
-    assert False
+    truth = '{\n' \
+            '    "Error": {\n' \
+            '        "Type": "Error",\n' \
+            '        "title": "WOOPS",\n' \
+            '        "message": "Mistakes were made.",\n' \
+            '        "__module__": "livvkit.util.elements.elements",\n' \
+            '        "_html_template": "err.html",\n' \
+            '        "_latex_template": "err.tex"\n' \
+            '    }\n' \
+            '}'
+
+    err = el.Error('WOOPS', 'Mistakes were made.')
+
+    assert truth == err._repr_json()
 
 
 def test_el_error_html():
-    assert False
+    truth = '<div class="error">\n' \
+            '    <h3>WOOPS</h3>\n' \
+            '    <p>Mistakes were made.</p>\n' \
+            '</div>'
+
+    err = el.Error('WOOPS', 'Mistakes were made.')
+
+    assert truth == err._repr_html()
+
+
+def test_el_error_latex():
+    truth = '\\colorbox{red}{\\parbox{\\textwidth}{\n' \
+            '    \\textbf{WOOPS}: Mistakes were made.\n' \
+            '}}'
+    err = el.Error('WOOPS', 'Mistakes were made.')
+
+    assert truth == err._repr_latex()
 
 
 def test_el_raw_html_json():
     truth = '{\n' \
             '    "RawHTML": {\n' \
+            '        "Type": "HTML",\n' \
             '        "html": "<div>Hi</div>",\n' \
             '        "__module__": "livvkit.util.elements.elements",\n' \
             '        "_html_template": "raw.html",\n' \

@@ -363,26 +363,16 @@ def file_diff(title, diff_data):
     }
     return fd
 
+class Error(BaseElement):
+    _html_template = 'err.html'
+    _latex_template = 'err.tex'
 
-def error(title, error_msg):
-    """
-    Builds an error element.  Provides a way to show errors or other
-    anomalous behavior in the web output.
-
-    Args:
-        title: The title to display
-        error_msg: A description of the error or other helpful message
-
-    Returns:
-        A dictionary with the metadata specifying that it is to be
-        rendered as an error element
-    """
-    err = {
-        'Type': 'Error',
-        'Title': title,
-        'Message': error_msg,
-    }
-    return err
+    def __init__(self, title, message):
+        super(Error, self).__init__()
+        # FIXME: Remove once common.js is obsolete
+        self.Type = 'Error'
+        self.title = title
+        self.message = message
 
 
 class RawHTML(BaseElement):
@@ -391,4 +381,6 @@ class RawHTML(BaseElement):
 
     def __init__(self, html):
         super(RawHTML, self).__init__()
+        # FIXME: Remove once common.js is obsolete
+        self.Type = 'HTML'
         self.html = html
