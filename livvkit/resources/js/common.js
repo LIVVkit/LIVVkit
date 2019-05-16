@@ -209,23 +209,26 @@ function drawSummary(data, div) {
         testName = testNames[idx];
         html += "<tr class=\"testName\"><td>" + testName + "</td></tr>\n";
         for (var testCase in data["Data"][testName]) {
-            html_tmp1 = "<tr ";
-            html_tmp2 = ">\n<td class=\"testCase\">" + testCase + "</td>\n";
-            style = "";  
+            html_tmp1 = "<tr>";
+            html_tmp2 = "\n<td class=\"testCase\">" + testCase + "</td>\n";
+
             for (var headerIdx in data["Headers"]) {
                 header = data["Headers"][headerIdx];
-                html_tmp2 += "<td>"; 
+                html_tmp2 += "<td";
+                // reset style for each td
+                style = "";
                 value = data["Data"][testName][testCase][header];
                 dtype = typeof value;
                 if (dtype == 'number' || dtype == 'string') {
-                    html_tmp2 += value;
+                    html_tmp2 += ">" + value;
                 } else if (dtype == 'object') {
                     if (value.length == 2) {
-                        html_tmp2 += value[0] + " of " + value[1];
                         // Handle failures
                         if (value[0] != value[1]) {
-                            style = "style=\"color:red\"; ";
+                            style = " style=\"color:red\"";
                         }
+                        html_tmp2 += style + ">";
+                        html_tmp2 += value[0] + " of " + value[1];
                     }
                 }
                 html_tmp2 += "</td>\n";
