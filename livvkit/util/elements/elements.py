@@ -41,9 +41,11 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import os
 import abc
 import difflib
+
 import jinja2
 import json_tricks
 
+import livvkit
 
 _HERE = os.path.dirname(__file__)
 
@@ -304,28 +306,34 @@ def bit_for_bit(title, headers, data_node):
     return b4b
 
 
-def gallery(title, image_elem_list):
-    """
-    Builds an image gallery out of a list of image elements. The
-    gallery element is provided as a way of grouping images under
-    a single heading and conserving space on the output page.
+class Gallery(BaseElement):
+    _html_template = 'gallery.html'
+    _latex_template = 'gallery.tex'
 
-    Args:
-        title: The title to display
-        image_elem_list: The image elements to display.  If a single
-            image element is given it will automatically be wrapped into
-            a list.
+    def __init__(self, title, elements):
+        super(Gallery, self).__init__()
+        self.title = title
+        self.elements = elements
+        # FIXME: Remove once common.js is obsolete
+        self.Type = 'Diff'
+        self.Title = title
+        self.Data = self._repr_html()
 
-    Returns:
-        A dictionary with the metadata specifying that it is to be
-        rendered as an image gallery
-    """
-    gal = {
-        'Type': 'Gallery',
-        'Title': title,
-        'Data': image_elem_list,
-    }
-    return gal
+    def _repr_html(self):
+        template = _html_env.get_template(self._html_template)
+        elem_html = []
+        for elem in self.elements:
+            elem_html.append(elem._repr_html())
+
+        return template.render(data=self.__dict__, elements=elem_html)
+
+    def _repr_latex(self):
+        template = _latex_env.get_template(self._latex_template)
+        elem_tex = []
+        for elem in self.elements:
+            elem_tex.append(elem._repr_latex())
+
+        return template.render(data=self.__dict__, elements=elem_tex)
 
 
 class Image(BaseElement):
@@ -337,8 +345,21 @@ class Image(BaseElement):
         self.title = title
         self.desc = desc
         self.path, self.name = os.path.split(image_file)
+        if not livvkit.index_dir:
+            relative = os.getcwd()
+            # TODO: Log a warning
+        else:
+            relative = os.path.dirname(livvkit.index_dir)
+        self.path = os.path.sep + os.path.relpath(self.path, relative)
         self.group = group
         self.height = height
+
+    def _repr_latex(self):
+        template = _latex_env.get_template(self._latex_template)
+        data = self.__dict__
+        data['path'] = self.path.lstrip('/')
+        return template.render(data=data)
+
 
 
 class FileDiff(BaseElement):

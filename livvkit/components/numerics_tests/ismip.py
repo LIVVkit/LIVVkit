@@ -136,9 +136,9 @@ def run(config, analysis_data):
             plt.close()
 
             image = elements.Image(title, description, plot_file)
-            plot_list.append(image.__dict__)
+            plot_list.append(image)
 
-    return elements.gallery("Numerics Plots", plot_list)
+    return elements.Gallery("Numerics Plots", plot_list).__dict__
 
 
 def summarize_result(data, config):

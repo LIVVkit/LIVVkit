@@ -98,7 +98,7 @@ def run_suite(case, config, summary):
                                        ),
         ]
 
-    timing_plots = timing_plots + \
+    timing_plots += \
         [generate_timing_breakdown_plot(timing_data[s],
                                         config['scaling_var'],
                                         "Timing breakdown for " + case.capitalize()+" "+s,
@@ -109,7 +109,7 @@ def run_suite(case, config, summary):
 
     # Build an image gallery and write the results
     el = [
-            elements.gallery("Performance Plots", timing_plots)
+            elements.Gallery("Performance Plots", timing_plots).__dict__
          ]
     result = elements.page(case, config["description"], element_list=el)
     summary[case] = _summarize_result(timing_data, config)
@@ -354,7 +354,7 @@ def generate_scaling_plot(timing_data, title, ylabel, description, plot_file):
 
     image = elements.Image(title, description, plot_file)
 
-    return image.__dict__
+    return image
 
 
 def scaling_sypd_plot(timing_data, title, ylabel, description, plot_file):
@@ -471,5 +471,5 @@ def generate_timing_breakdown_plot(timing_stats, scaling_var, title, description
 
     image = elements.Image(title, description, plot_file)
 
-    return image.__dict__
+    return image
 

@@ -475,20 +475,9 @@ function drawVHTable(data, div) {
  *                       determines whether it is a class or id (ie include # or .)
  */
 function drawGallery(data, div) {
-    var html = "<div class=\"gallery\">";
-    html += "<h3>" + data["Title"] + "</h3>";
+    var html = data['Data'];
     html += "</div>";
-
-    // Create the gallery div to put all the images into
     $(div).append(html);
-    
-    for (var idx in data["Data"]) {
-        img_elem = data["Data"][idx];
-        // Draw an image 
-        drawImage(img_elem, div+" > div.gallery");
-    }
-    
-    $(div).append("<div style=\"clear:both\"></div>");
 }
 
 /**
