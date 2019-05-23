@@ -4,6 +4,8 @@
 
 from __future__ import absolute_import, print_function, unicode_literals
 
+import json
+
 import pytest
 
 from livvkit.util import elements as el
@@ -243,12 +245,77 @@ def test_el_image_latex():
     assert truth == image._repr_latex()
 
 
-def test_el_file_diff_json():
-    assert False
+def test_el_file_diff_json(diff_data):
+    from_file, to_file = diff_data
+
+    with open(from_file) as from_:
+        fromlines = from_.read().splitlines()
+
+    diff_diff = el.FileDiff('Test JSON', from_file=from_file, to_file=to_file)
+    diff_same = el.FileDiff('Test JSON', from_file=from_file, to_file=from_file)
+    errors = []
+
+    if diff_diff.diff_status is not True or diff_diff.diff == fromlines:
+        errors.append('Error: there was no difference between the files.')
+    if diff_same.diff_status is True or diff_same.diff != fromlines:
+        errors.append('Error: Self difference showed a difference.')
+
+    try:
+        _ = json.loads(diff_diff._repr_json())
+    except json.JSONDecodeError:
+        errors.append('Diff_diff element did not produce valid JSON.')
+
+    try:
+        _ = json.loads(diff_same._repr_json())
+    except json.JSONDecodeError:
+        errors.append('Diff_same element did not produce valid JSON.')
+
+    assert not errors, 'Errors occurred:\n{}'.format('\n'.join(errors))
 
 
-def test_el_file_diff_html():
-    assert False
+def test_el_file_diff_html(diff_data):
+    truth = '<h3>Test HTML</h3>\n' \
+            '<div class="diff">\n' \
+            '    <p class="old">--- </p>\n' \
+            '    <p class="new">+++ </p>\n' \
+            '    <p class="range">@@ -4,7 +4,7 @@</p>\n' \
+            '    <p> upn = 10</p>\n' \
+            '    <p> ewn = 31</p>\n' \
+            '    <p> nsn = 31</p>\n' \
+            '    <p class="old">-dew = 2000.0</p>\n' \
+            '    <p class="new">+dew = 200.0</p>\n' \
+            '    <p> dns = 2000.0</p>\n' \
+            '    <p> </p>\n' \
+            '    <p> [time]</p>\n' \
+            '</div>'
+
+    from_file, to_file = diff_data
+
+    diff = el.FileDiff('Test HTML', from_file=from_file, to_file=to_file)
+
+    assert diff._repr_html() == truth
+
+
+def test_el_file_diff_latex(diff_data):
+    truth = '\\begin{minted}{diff}\n' \
+            '--- \n' \
+            '+++ \n' \
+            '@@ -4,7 +4,7 @@\n' \
+            ' upn = 10\n' \
+            ' ewn = 31\n' \
+            ' nsn = 31\n' \
+            '-dew = 2000.0\n' \
+            '+dew = 200.0\n' \
+            ' dns = 2000.0\n' \
+            ' \n' \
+            ' [time]\n' \
+            '\\end{minted}'
+
+    from_file, to_file = diff_data
+
+    diff = el.FileDiff('Test HTML', from_file=from_file, to_file=to_file)
+
+    assert diff._repr_latex() == truth
 
 
 def test_el_error_json():

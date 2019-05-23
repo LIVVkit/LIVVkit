@@ -81,17 +81,18 @@ def run_suite(case, config, summary):
     functions.write_json(result, os.path.join(livvkit.output_dir, "verification"), case+".json")
 
 
-def _analyze_case(model_dir, bench_dir, config):
+def _analyze_case(test_dir, ref_dir, config):
     """ Runs all of the verification checks on a particular case """
     bundle = livvkit.verification_model_module
-    model_out = functions.find_file(model_dir, "*"+config["output_ext"])
-    bench_out = functions.find_file(bench_dir, "*"+config["output_ext"])
-    model_config = functions.find_file(model_dir, "*"+config["config_ext"])
-    bench_config = functions.find_file(bench_dir, "*"+config["config_ext"])
-    model_log = functions.find_file(model_dir, "*"+config["logfile_ext"])
+    test_out = functions.find_file(test_dir, "*"+config["output_ext"])
+    ref_out = functions.find_file(ref_dir, "*"+config["output_ext"])
+    test_config = functions.find_file(test_dir, "*"+config["config_ext"])
+    ref_config = functions.find_file(ref_dir, "*"+config["config_ext"])
+    model_log = functions.find_file(test_dir, "*"+config["logfile_ext"])
     el = [
-            bit_for_bit(model_out, bench_out, config),
-            diff_configurations(model_config, bench_config, bundle, bundle),
+            bit_for_bit(test_out, ref_out, config),
+            elements.FileDiff("Configuration Comparison",
+                              ref_config, test_config).__dict__,
             bundle.parse_log(model_log)
          ]
     return el
@@ -143,16 +144,12 @@ def _summarize_result(result, summary):
     failure_count = 0
     for elem in result:
         if elem["Title"] == "Configuration Comparison" and elem["Type"] == "Diff":
-            elem_data = elem["Data"]
             summary_data = summary["Configurations"]
             total_count += 1
-            failed = False
-            for section_name, varlist in elem_data.items():
-                for var, val in varlist.items():
-                    if not val[0]:
-                        failed = True
-            if failed:
+            if elem['diff_status']:
                 failure_count += 1
+            else:
+                continue
     if summary_data is not None:
         success_count = total_count - failure_count
         summary_data = np.add(summary_data, [success_count, total_count]).tolist()
@@ -227,43 +224,6 @@ def bit_for_bit(model_path, bench_path, config):
     model_data.close()
     bench_data.close()
     return elements.bit_for_bit("Bit for Bit", headers, stats)
-
-
-def diff_configurations(model_config, bench_config, model_bundle, bench_bundle):
-    """
-    Description
-
-    Args:
-        model_config: a dictionary with the model configuration data
-        bench_config: a dictionary with the benchmark configuration data
-        model_bundle: a LIVVkit model bundle object
-        bench_bundle: a LIVVkit model bundle object
-
-    Returns:
-        A dictionary created by the elements object corresponding to
-        the results of the bit for bit testing
-    """
-    diff_dict = LIVVDict()
-    model_data = model_bundle.parse_config(model_config)
-    bench_data = bench_bundle.parse_config(bench_config)
-    if model_data == {} and bench_data == {}:
-        return elements.Error("Configuration Comparison",
-                              "Could not open file: " + model_config.split(os.path.sep)[-1]).__dict__
-
-    model_sections = set(six.iterkeys(model_data))
-    bench_sections = set(six.iterkeys(bench_data))
-    all_sections = set(model_sections.union(bench_sections))
-
-    for s in all_sections:
-        model_vars = set(six.iterkeys(model_data[s])) if s in model_sections else set()
-        bench_vars = set(six.iterkeys(bench_data[s])) if s in bench_sections else set()
-        all_vars = set(model_vars.union(bench_vars))
-        for v in all_vars:
-            model_val = model_data[s][v] if s in model_sections and v in model_vars else 'NA'
-            bench_val = bench_data[s][v] if s in bench_sections and v in bench_vars else 'NA'
-            same = True if model_val == bench_val and model_val != 'NA' else False
-            diff_dict[s][v] = (same, model_val, bench_val)
-    return elements.file_diff("Configuration Comparison", diff_dict)
 
 
 def plot_bit_for_bit(case, var_name, model_data, bench_data, diff_data):

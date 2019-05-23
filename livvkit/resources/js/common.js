@@ -313,30 +313,9 @@ function drawError(data, div) {
  *                       determines whether it is a class or id (ie include # or .)
  */
 function drawDiff(data, div) {
-    controller = div.replace("#","") + "_controller";
-    // TODO: What's up with this button!?
-    var html = "<h3>" + data["Title"] +"</h3>";//+"  <button id=\"" + controller + "\">Hide/Show</button></h3>";
-    html += "<div class=\"diff\" id=\""+div+"\">";
-    for (var section in data["Data"]) {
-        html += "<b>[" + section + "]</b>";
-        for (var varName in data["Data"][section]) {
-            arr = data["Data"][section][varName];
-            // First element determines if the elements matched, otherwise draw what the change was
-            if (arr[0]) {
-                html += "<p>   " + varName + " = " + arr[1] + "</p>";
-            } else {
-                html += "<p class=\"new\"> + " + varName + " = " + arr[1] + "</p>";
-                html += "<p class=\"old\"> - " + varName + " = " + arr[2] + "</p>";
-            }
-        }
-    }
-    html += "</div>";
+    var html =  data['Data'];
     $(div).append(html);
-    $("."+controller).click(function() {
-        $(div).toggle();
-    });
 }
-
 
 /**
  * Build a bit for bit table

@@ -40,6 +40,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import os
 import abc
+import difflib
 import jinja2
 import json_tricks
 
@@ -50,29 +51,28 @@ _html_env = jinja2.Environment(
         loader=jinja2.FileSystemLoader(os.path.join(_HERE, 'templates')))
 
 _latex_env = jinja2.Environment(
-        block_start_string=r'\BLOCK{',
-        block_end_string=r'}',
-        variable_start_string=r'\VAR{',
-        variable_end_string=r'}',
-        comment_start_string=r'\#{',
-        comment_end_string=r'}',
-        line_statement_prefix=r'%%',
-        line_comment_prefix=r'%#',
+        block_start_string=r'\BLOCK{',    # default: {%
+        block_end_string=r'}',            # default: %}
+        variable_start_string=r'\VAR{',   # default: {{
+        variable_end_string=r'}',         # default: }}
+        comment_start_string=r'\#{',      # default: {#
+        comment_end_string=r'}',          # default: #}
         trim_blocks=True,
         loader=jinja2.FileSystemLoader(os.path.join(_HERE, 'templates')))
 
 
 class BaseElement(abc.ABC):
-    # FIXME:
-    # Alright, we want _html_template (_latex_template) to be required and act like:
-    #    >>> self._html_template
-    #    'template.html'
-    # Which could be satisfied be a simple class attribute or a more complex property,
-    # but NOT a method, which would have to be called like:
-    #    >>> self._html_template()
-    #    'template.html'
-    # Unfortunately, the chained @property and @abc.abstractmethod doesn't enforce
-    # an attribute/property like action and can be satisfied by defining a method,
+    # FIXME: There's got to be a better way.
+    #  We want _html_template (_latex_template) to be required and act like:
+    #     >>> self._html_template
+    #     'template.html'
+    #  This could be satisfied be a simple class attribute or a more complex property,
+    #  but NOT a method, which would have to be called like:
+    #     >>> self._html_template()
+    #     'template.html'
+    #  Unfortunately, the chained @property and @abc.abstractmethod doesn't enforce
+    #  an attribute/property like action and can be satisfied by defining a method,
+    #  so we make sure that if it's not a property, it's also not callable (a method)
     def __init__(self):
         if not isinstance(type(self)._html_template, property) and callable(self._html_template):
             raise TypeError('You must define an _html_template property or attribute for this class')
@@ -341,27 +341,37 @@ class Image(BaseElement):
         self.height = height
 
 
-def file_diff(title, diff_data):
-    """
-    Builds a file diff element.  This element can be used to check whether
-    configuration files have changed or other similar checks.  Differences
-    will be highlighted when rendered via Javascript.
+class FileDiff(BaseElement):
+    _html_template = 'diff.html'
+    _latex_template = 'diff.tex'
 
-    Args:
-        title: The title to display
-        diff_data: A dictionary of the form:
-            { 'section_name' : { 'variable_name' : [diff, val_1, val_2] } }
+    def __init__(self, title, from_file, to_file, context=3):
+        super(FileDiff, self).__init__()
+        self.title = title
+        self.from_file = from_file
+        self.to_file = to_file
+        self.diff, self.diff_status = self.diff_files(context=context)
+        # FIXME: Remove once common.js is obsolete
+        self.Type = 'Diff'
+        self.Title = title
+        self.Data = self._repr_html()
 
-    Returns:
-        A dictionary with the metadata specifying that it is to be
-        rendered as a file diff element
-    """
-    fd = {
-        'Type': 'Diff',
-        'Title': title,
-        'Data': diff_data,
-    }
-    return fd
+    def diff_files(self, context=3):
+        with open(self.from_file) as from_, open(self.to_file) as to_:
+            fromlines = from_.read().splitlines()
+            tolines = to_.read().splitlines()
+
+            if context is None:
+                context = max(len(fromlines), len(tolines))
+
+            diff = list(difflib.unified_diff(fromlines, tolines,
+                                             n=context,  lineterm=''))
+            diff_status = True
+            if not diff:
+                diff_status = False
+                diff = fromlines
+            return diff, diff_status
+
 
 class Error(BaseElement):
     _html_template = 'err.html'
@@ -369,10 +379,10 @@ class Error(BaseElement):
 
     def __init__(self, title, message):
         super(Error, self).__init__()
-        # FIXME: Remove once common.js is obsolete
-        self.Type = 'Error'
         self.title = title
         self.message = message
+        # FIXME: Remove once common.js is obsolete
+        self.Type = 'Error'
 
 
 class RawHTML(BaseElement):
@@ -381,6 +391,6 @@ class RawHTML(BaseElement):
 
     def __init__(self, html):
         super(RawHTML, self).__init__()
+        self.html = html
         # FIXME: Remove once common.js is obsolete
         self.Type = 'HTML'
-        self.html = html

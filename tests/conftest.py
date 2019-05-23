@@ -104,3 +104,32 @@ def test_data(tmpdir_factory):
         tar.extractall(path=ref_dir)
 
     return ref_dir.join('cism-2.0.6-tests')
+
+
+@pytest.fixture(scope='session')
+def diff_data(tmpdir_factory):
+    content_template = '[DOME-TEST]\n\n' \
+                       '[grid]\n' \
+                       'upn = 10\n' \
+                       'ewn = 31\n' \
+                       'nsn = 31\n' \
+                       'dew = {}\n' \
+                       'dns = 2000.0\n\n' \
+                       '[time]\n' \
+                       'tstart = 0.\n' \
+                       'tend = 10.\n' \
+                       'dt = 1.\n' \
+                       'dt_diag = 1.\n' \
+                       'idiag = 10\n' \
+                       'jdiag = 10\n'
+
+
+    diff_dir = tmpdir_factory.mktemp('diff')
+    from_file = diff_dir.join('from.cfg')
+    to_file = diff_dir.join('to.cfg')
+
+    with open(from_file, 'w') as from_, open(to_file, 'w') as to_:
+        from_.write(content_template.format(2000.0))
+        to_.write(content_template.format(200.0))
+
+    return from_file, to_file

@@ -169,11 +169,17 @@ td {
 }
 
 .diff p.old {
-    background-color: #ffcccc;
+    background-color: #ffeef0;
+    color: #b31d28;
 }
 
 .diff p.new {
-    background-color: #ccffcc;
+    background-color: #f0fff4;
+    color: #22863a;
+}
+
+.diff p.range {
+    color: #6f42c1;
 }
 
 .bitForBit {}
