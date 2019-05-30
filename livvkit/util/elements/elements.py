@@ -77,9 +77,9 @@ class BaseElement(abc.ABC):
     #  so we make sure that if it's not a property, it's also not callable (a method)
     def __init__(self):
         if not isinstance(type(self)._html_template, property) and callable(self._html_template):
-            raise TypeError('You must define an _html_template property or attribute for this class')
+            raise TypeError('You must define _html_template as a property or attribute for this class')
         if not isinstance(type(self)._latex_template, property) and callable(self._latex_template):
-            raise TypeError('You must define an _latex_template property or attribute for this class')
+            raise TypeError('You must define _latex_template as a property or attribute for this class')
 
 
     @property
