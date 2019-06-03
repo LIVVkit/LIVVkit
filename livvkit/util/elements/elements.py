@@ -90,7 +90,6 @@ class BaseElement(abc.ABC):
         if not isinstance(type(self)._latex_template, property) and callable(self._latex_template):
             raise TypeError('You must define _latex_template as a property or attribute for this class')
 
-
     @property
     @abc.abstractmethod
     def _html_template(self):
@@ -104,7 +103,6 @@ class BaseElement(abc.ABC):
         """
         raise NotImplementedError
 
-
     @property
     @abc.abstractmethod
     def _latex_template(self):
@@ -117,7 +115,6 @@ class BaseElement(abc.ABC):
             str: The jinja2 LaTeX template
         """
         raise NotImplementedError
-
 
     def _repr_json(self):
         """Represent this element as JSON
@@ -134,7 +131,6 @@ class BaseElement(abc.ABC):
                                          '_latex_template': self._latex_template})
         return json_tricks.dumps(jsn, indent=4, primitives=True, allow_nan=True)
 
-
     def _repr_html(self):
         """Represent this element as HTML
 
@@ -146,7 +142,6 @@ class BaseElement(abc.ABC):
         """
         template = _html_env.get_template(self._html_template)
         return template.render(data=self.__dict__)
-
 
     def _repr_latex(self):
         """Represent this element as LaTeX
@@ -408,7 +403,6 @@ class Image(BaseElement):
         data = self.__dict__
         data['path'] = self.path.lstrip('/')
         return template.render(data=data)
-
 
 
 class FileDiff(BaseElement):
