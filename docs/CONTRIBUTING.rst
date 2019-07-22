@@ -58,7 +58,9 @@ code -- see http://python-future.org/compatible_idioms.html.  Additionally, We
 generally follow `PEP 8 guidelines <https://www.python.org/dev/peps/pep-0008/>`__
 as presented at `pep8.org <http://pep8.org/>`__, with the exception of line lengths:
 lines have a soft limit of 100 characters and a hard limit of 120 characters when
-extra length improves readability. A sample code snippet below highlights most of our
+extra length improves readability. We use the
+`Google Style <https://github.com/google/styleguide/blob/gh-pages/pyguide.md#38-comments-and-docstrings>`__
+for our Docstrings. A sample code snippet below highlights most of our
 coding conventions.
 
 .. code-block:: python

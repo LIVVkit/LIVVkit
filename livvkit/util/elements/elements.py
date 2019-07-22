@@ -64,6 +64,13 @@ _latex_env = jinja2.Environment(
 
 
 class BaseElement(abc.ABC):
+    """An abstract base LIVVkit Element
+
+    An abstract base LIVVkit element providing the basic element interface
+    expected by LIVVkit. All LIVVkit elements should either derive from this
+    class or implement the same interface.
+    """
+
     # FIXME: There's got to be a better way.
     #  We want _html_template (_latex_template) to be required and act like:
     #     >>> self._html_template
@@ -76,6 +83,8 @@ class BaseElement(abc.ABC):
     #  an attribute/property like action and can be satisfied by defining a method,
     #  so we make sure that if it's not a property, it's also not callable (a method)
     def __init__(self):
+        """Initialize a LIVVkit element
+        """
         if not isinstance(type(self)._html_template, property) and callable(self._html_template):
             raise TypeError('You must define _html_template as a property or attribute for this class')
         if not isinstance(type(self)._latex_template, property) and callable(self._latex_template):
@@ -85,16 +94,40 @@ class BaseElement(abc.ABC):
     @property
     @abc.abstractmethod
     def _html_template(self):
+        """The jinja2 HTML template
+
+        An attribute or property which holds the jinja2 template used to
+        represent the element as HTML.
+
+        Returns:
+            str: The jinja2 HTML template
+        """
         raise NotImplementedError
 
 
     @property
     @abc.abstractmethod
     def _latex_template(self):
+        """The jinja2 LaTeX template
+
+        An attribute or property which holds the jinja2 template used to
+        represent the element as LaTeX.
+
+        Returns:
+            str: The jinja2 LaTeX template
+        """
         raise NotImplementedError
 
 
     def _repr_json(self):
+        """Represent this element as JSON
+
+        Using the internal dictionary representation of this element, return a
+        JSON representation of this element
+
+        Returns:
+            str: The JSON representation of this element
+        """
         jsn = {type(self).__name__: self.__dict__}
         jsn[type(self).__name__].update({'__module__': type(self).__module__,
                                          '_html_template': self._html_template,
@@ -103,11 +136,27 @@ class BaseElement(abc.ABC):
 
 
     def _repr_html(self):
+        """Represent this element as HTML
+
+        Using the jinja2 template defined by ``self._html_template``, return an
+        HTML representation of this element
+
+        Returns:
+            str: The HTML representation of this element
+        """
         template = _html_env.get_template(self._html_template)
         return template.render(data=self.__dict__)
 
 
     def _repr_latex(self):
+        """Represent this element as LaTeX
+
+        Using the jinja2 template defined by ``self._latex_template``, return an
+        LaTeX representation of this element
+
+        Returns:
+            str: The LaTeX representation of this element
+        """
         template = _latex_env.get_template(self._latex_template)
         return template.render(data=self.__dict__)
 
