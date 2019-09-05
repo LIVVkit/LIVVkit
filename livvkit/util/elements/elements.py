@@ -41,6 +41,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import os
 import abc
 import difflib
+import collections
 
 import jinja2
 import json_tricks
@@ -276,14 +277,29 @@ class Table(BaseElement):
 
     # FIXME: Typehinting and docstring for data, which should look like
     #        {header1:[val1, val2...],... }
-    def __init__(self, title, data):
+    # FIXME: Index = True --> use pandas index or simply number the rows
+    #        Index = False --> No index
+    #        Index = iterable (list) --> override index with iterable
+    def __init__(self, title, data, index=False):
         super(Table, self).__init__()
         self.title = title
+
         if isinstance(data, pd.DataFrame):
             self.data = data.to_dict(orient='list')
+            self.index = data.index.to_list()
         else:
             self.data = data
+            self.index = None
+
         self.rows = len(next(iter(self.data.values())))
+
+        if index is True and self.index is None:
+            self.index = range(self.rows)
+        elif isinstance(index, collections.Collection):
+            if len(index) != self.rows:
+                raise IndexError('Table index must be the same length as the table. '
+                                 'Table rows: {}, index length: {}.'.format(self.rows, len(index)))
+            self.index = index
 
         # FIXME: Remove once common.js is obsolete
         self.Type = 'Table'
@@ -301,7 +317,7 @@ class Table(BaseElement):
             str: The HTML representation of this element
         """
         template = _html_env.get_template(self._html_template)
-        return template.render(data=self.__dict__, rows=self.rows)
+        return template.render(data=self.__dict__, rows=self.rows, index=self.index)
 
     def _repr_latex(self):
         """Represent this element as LaTeX
@@ -313,8 +329,7 @@ class Table(BaseElement):
             str: The LaTeX representation of this element
         """
         template = _latex_env.get_template(self._latex_template)
-        return template.render(data=self.__dict__, rows=self.rows)
-
+        return template.render(data=self.__dict__, rows=self.rows, index=self.index)
 
 
 def vtable(title, headers, data_node):

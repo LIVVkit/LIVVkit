@@ -168,6 +168,7 @@ def test_el_table_json():
             '                "v4"\n' \
             '            ]\n' \
             '        },\n' \
+            '        "index": null,\n' \
             '        "rows": 2,\n' \
             '        "Type": "Table",\n' \
             '        "Title": "title",\n' \
@@ -239,19 +240,105 @@ def test_el_table_latex():
     assert truth == table._repr_latex()
 
 
-def test_el_vtable_json():
+def test_el_table_w_index_html():
+    truth = '<div class="table">\n' \
+            '    <h3>title</h3>\n' \
+            '    <table>\n' \
+            '        <tr>\n' \
+            '            <th>&nbsp;</th>\n' \
+            '            <th>h1</th>\n' \
+            '            <th>h2</th>\n' \
+            '        </tr>\n' \
+            '        <tr>\n' \
+            '            <th>0</th>\n' \
+            '            <td>v1</td>\n' \
+            '            <td>v3</td>\n' \
+            '        </tr>\n' \
+            '        <tr>\n' \
+            '            <th>1</th>\n' \
+            '            <td>v2</td>\n' \
+            '            <td>v4</td>\n' \
+            '        </tr>\n' \
+            '    </table>\n' \
+            '</div>'
+
+    table = el.Table('title', {'h1': ['v1', 'v2'], 'h2': ['v3', 'v4']}, index=True)
+
+    assert table._repr_html() == truth
+
+
+def test_el_table_w_index_latex():
+    truth = '\\begin{table}[h!]\n' \
+            '    \\centering\n' \
+            '    \\begin{tabular}{ r | cc}\n' \
+            '         & h1 & h2 \\\\\n' \
+            '        \\hline\n' \
+            '        0 & v1 & v3  \\\\\n' \
+            '        1 & v2 & v4  \\\\\n' \
+            '        \\end{tabular}\n' \
+            '\\end{table}'
+
+    table = el.Table('title', {'h1': ['v1', 'v2'], 'h2': ['v3', 'v4']}, index=True)
+
+    assert truth == table._repr_latex()
+
+
+def test_el_table_w_custom_index_html():
+    truth = '<div class="table">\n' \
+            '    <h3>title</h3>\n' \
+            '    <table>\n' \
+            '        <tr>\n' \
+            '            <th>&nbsp;</th>\n' \
+            '            <th>h1</th>\n' \
+            '            <th>h2</th>\n' \
+            '        </tr>\n' \
+            '        <tr>\n' \
+            '            <th>i0</th>\n' \
+            '            <td>v1</td>\n' \
+            '            <td>v3</td>\n' \
+            '        </tr>\n' \
+            '        <tr>\n' \
+            '            <th>i1</th>\n' \
+            '            <td>v2</td>\n' \
+            '            <td>v4</td>\n' \
+            '        </tr>\n' \
+            '    </table>\n' \
+            '</div>'
+
+    table = el.Table('title', {'h1': ['v1', 'v2'], 'h2': ['v3', 'v4']}, index=['i0', 'i1'])
+
+    assert table._repr_html() == truth
+
+
+def test_el_table_w_custom_index_latex():
+    truth = '\\begin{table}[h!]\n' \
+            '    \\centering\n' \
+            '    \\begin{tabular}{ r | cc}\n' \
+            '         & h1 & h2 \\\\\n' \
+            '        \\hline\n' \
+            '        i0 & v1 & v3  \\\\\n' \
+            '        i1 & v2 & v4  \\\\\n' \
+            '        \\end{tabular}\n' \
+            '\\end{table}'
+
+    table = el.Table('title', {'h1': ['v1', 'v2'], 'h2': ['v3', 'v4']}, index=['i0', 'i1'])
+
+    assert truth == table._repr_latex()
+
+
+def test_el_table_transposed_html():
     assert False
 
 
-def test_el_vtable_html():
+def test_el_table_transposed_latex():
     assert False
 
 
-def test_el_vhtable_json():
+def test_el_table_w_index_transposed_html():
     assert False
 
 
-def test_el_vhtable_html():
+def test_el_table_w_index_transposed_latex():
     assert False
 
 

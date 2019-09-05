@@ -2,12 +2,18 @@
     <h3>{{ data['title'] }}</h3>
     <table>
         <tr>
+            {%- if index is not none %}
+            <th>&nbsp;</th>
+            {%- endif %}
             {%- for column in data['data'].keys() %}
             <th>{{ column }}</th>
             {%- endfor %}
         </tr>
         {%- for row in range(rows) %}
         <tr>
+            {%- if index is not none %}
+            <th>{{index[row]}}</th>
+            {%- endif %}
             {%- for column in data['data'].keys() %}
             <td>{{ data['Data'][column][row] }}</td>
             {%- endfor %}
