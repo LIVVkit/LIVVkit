@@ -44,6 +44,7 @@ import difflib
 
 import jinja2
 import json_tricks
+import pandas as pd
 
 import livvkit
 
@@ -129,6 +130,7 @@ class BaseElement(abc.ABC):
         jsn[type(self).__name__].update({'__module__': type(self).__module__,
                                          '_html_template': self._html_template,
                                          '_latex_template': self._latex_template})
+        print(jsn)
         return json_tricks.dumps(jsn, indent=4, primitives=True, allow_nan=True)
 
     def _repr_html(self):
@@ -268,32 +270,51 @@ def section(title, element_list):
     return sect
 
 
-def table(title, headers, data_node):
-    """
-    Returns a dictionary representing a new table element.  Tables
-    are specified with two main pieces of information, the headers
-    and the data to put into the table.  Rendering of the table is
-    the responsibility of the Javascript in the resources directory.
-    When the data does not line up with the headers given this should
-    be handled within the Javascript itself, not here.
+class Table(BaseElement):
+    _html_template = 'table.html'
+    _latex_template = 'table.tex'
 
-    Args:
-        title: The title to display
-        headers: The columns to put into the table
-        data_node: A dictionary with the form::
-            {'case' : {'subcase' : { 'header' : data } } }
+    # FIXME: Typehinting and docstring for data, which should look like
+    #        {header1:[val1, val2...],... }
+    def __init__(self, title, data):
+        super(Table, self).__init__()
+        self.title = title
+        if isinstance(data, pd.DataFrame):
+            self.data = data.to_dict(orient='list')
+        else:
+            self.data = data
+        self.rows = len(next(iter(self.data.values())))
 
-    Returns:
-        A dictionary with the metadata specifying that it is to be
-        rendered as a table.
-    """
-    tb = {
-        'Type': 'Table',
-        'Title': title,
-        'Headers': headers,
-        'Data': data_node,
-    }
-    return tb
+        # FIXME: Remove once common.js is obsolete
+        self.Type = 'Table'
+        self.Title = self.title
+        self.Headers = list(self.data.keys())
+        self.Data = self.data
+
+    def _repr_html(self):
+        """Represent this element as HTML
+
+        Using the jinja2 template defined by ``self._html_template``, return an
+        HTML representation of this element
+
+        Returns:
+            str: The HTML representation of this element
+        """
+        template = _html_env.get_template(self._html_template)
+        return template.render(data=self.__dict__, rows=self.rows)
+
+    def _repr_latex(self):
+        """Represent this element as LaTeX
+
+        Using the jinja2 template defined by ``self._latex_template``, return an
+        LaTeX representation of this element
+
+        Returns:
+            str: The LaTeX representation of this element
+        """
+        template = _latex_env.get_template(self._latex_template)
+        return template.render(data=self.__dict__, rows=self.rows)
+
 
 
 def vtable(title, headers, data_node):

@@ -94,12 +94,12 @@ def parse_log(file_path):
         if iters_to_converge == []:
             iters_to_converge.append(int(iter_number))
     data = {
-        "Dycore Type": dycore_type,
-        "Processor Count": proc_count,
-        "Converged Iterations": len(converged_iters),
-        "Avg. Iterations to Converge": np.mean(iters_to_converge)
+        "Dycore Type": [dycore_type],
+        "Processor Count": [proc_count],
+        "Converged Iterations": [len(converged_iters)],
+        "Avg. Iterations to Converge": [np.mean(iters_to_converge)]
     }
-    return elements.table("Output Log", headers, data)
+    return elements.Table("Output Log", data).__dict__
 
 
 def parse_config(file_path):

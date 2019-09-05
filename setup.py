@@ -83,6 +83,7 @@ setup(
                         'jinja2',
                         'json_tricks==3.11.0',
                         'pybtex==0.21',
+                        'pandas',
                         ],
 
       packages=['livvkit',

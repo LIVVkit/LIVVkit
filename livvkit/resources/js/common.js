@@ -304,7 +304,6 @@ function drawError(data, div) {
     $(div).append(html);
 }
 
-
 /**
  * Build a file diff
  *
@@ -378,11 +377,14 @@ function drawTable(data, div) {
     }
 
     // Draw the cells
-    html += "<tr>\n";
-    for (var idx in data["Headers"]) {
-        html += "<td>" + data["Data"][data["Headers"][idx]] + "</td>\n";
+    for (var rr = 0;  rr < data["rows"]; rr++) {
+        html += "<tr>\n";
+        for (var idx in data["Headers"]) {
+            html += "<td>" + data["Data"][data["Headers"][idx]][rr] + "</td>\n";
+        }
+        html += "</tr>\n";
     }
-    html += "</tr>\n </table>\n </div>";
+    html += "</table>\n </div>";
     $(div).append(html);
 }
 

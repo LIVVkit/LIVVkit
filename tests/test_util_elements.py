@@ -155,11 +155,88 @@ def test_el_section_html():
 
 
 def test_el_table_json():
-    assert False
+    truth = '{\n' \
+            '    "Table": {\n' \
+            '        "title": "title",\n' \
+            '        "data": {\n' \
+            '            "h1": [\n' \
+            '                "v1",\n' \
+            '                "v2"\n' \
+            '            ],\n' \
+            '            "h2": [\n' \
+            '                "v3",\n' \
+            '                "v4"\n' \
+            '            ]\n' \
+            '        },\n' \
+            '        "rows": 2,\n' \
+            '        "Type": "Table",\n' \
+            '        "Title": "title",\n' \
+            '        "Headers": [\n' \
+            '            "h1",\n' \
+            '            "h2"\n' \
+            '        ],\n' \
+            '        "Data": {\n' \
+            '            "h1": [\n' \
+            '                "v1",\n' \
+            '                "v2"\n' \
+            '            ],\n' \
+            '            "h2": [\n' \
+            '                "v3",\n' \
+            '                "v4"\n' \
+            '            ]\n' \
+            '        },\n' \
+            '        "__module__": "livvkit.util.elements.elements",\n' \
+            '        "_html_template": "table.html",\n' \
+            '        "_latex_template": "table.tex"\n' \
+            '    }\n' \
+            '}'
+
+    table = el.Table('title', {'h1': ['v1', 'v2'], 'h2': ['v3', 'v4']})
+
+    # Will raise a JSONDecodeError if not valid JSON
+    _ = json.loads(table._repr_json())
+
+    assert truth == table._repr_json()
 
 
 def test_el_table_html():
-    assert False
+    truth = '<div class="table">\n' \
+            '    <h3>title</h3>\n' \
+            '    <table>\n' \
+            '        <tr>\n' \
+            '            <th>h1</th>\n' \
+            '            <th>h2</th>\n' \
+            '        </tr>\n' \
+            '        <tr>\n' \
+            '            <td>v1</td>\n' \
+            '            <td>v3</td>\n' \
+            '        </tr>\n' \
+            '        <tr>\n' \
+            '            <td>v2</td>\n' \
+            '            <td>v4</td>\n' \
+            '        </tr>\n' \
+            '    </table>\n' \
+            '</div>'
+
+    table = el.Table('title', {'h1': ['v1', 'v2'], 'h2': ['v3', 'v4']})
+
+    assert truth == table._repr_html()
+
+
+def test_el_table_latex():
+    truth = '\\begin{table}[h!]\n' \
+            '    \\centering\n' \
+            '    \\begin{tabular}{cc}\n' \
+            '        h1 & h2 \\\\\n' \
+            '        \\hline\n' \
+            '        v1 & v3  \\\\\n' \
+            '        v2 & v4  \\\\\n' \
+            '        \\end{tabular}\n' \
+            '\\end{table}'
+
+    table = el.Table('title', {'h1': ['v1', 'v2'], 'h2': ['v3', 'v4']})
+
+    assert truth == table._repr_latex()
 
 
 def test_el_vtable_json():
@@ -277,6 +354,9 @@ def test_el_image_json():
             '}'
 
     image = el.Image('title', 'description', 'path/name.png', group='group', height=300)
+
+    # Will raise a JSONDecodeError if not valid JSON
+    _ = json.loads(image._repr_json())
 
     assert truth == image._repr_json()
 
@@ -400,6 +480,9 @@ def test_el_error_json():
 
     err = el.Error('WOOPS', 'Mistakes were made.')
 
+    # Will raise a JSONDecodeError if not valid JSON
+    _ = json.loads(err._repr_json())
+
     assert truth == err._repr_json()
 
 
@@ -435,6 +518,9 @@ def test_el_raw_html_json():
             '}'
 
     html = el.RawHTML('<div>Hi</div>')
+
+    # Will raise a JSONDecodeError if not valid JSON
+    _ = json.loads(html._repr_json())
 
     assert truth == html._repr_json()
 
