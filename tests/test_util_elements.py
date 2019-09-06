@@ -197,7 +197,7 @@ def test_el_table_json():
     # Will raise a JSONDecodeError if not valid JSON
     _ = json.loads(table._repr_json())
 
-    assert truth == table._repr_json()
+    assert table._repr_json() == truth
 
 
 def test_el_table_html():
@@ -221,7 +221,7 @@ def test_el_table_html():
 
     table = el.Table('title', {'h1': ['v1', 'v2'], 'h2': ['v3', 'v4']})
 
-    assert truth == table._repr_html()
+    assert table._repr_html() == truth
 
 
 def test_el_table_latex():
@@ -237,7 +237,7 @@ def test_el_table_latex():
 
     table = el.Table('title', {'h1': ['v1', 'v2'], 'h2': ['v3', 'v4']})
 
-    assert truth == table._repr_latex()
+    assert table._repr_latex() == truth
 
 
 def test_el_table_w_index_html():
@@ -280,7 +280,7 @@ def test_el_table_w_index_latex():
 
     table = el.Table('title', {'h1': ['v1', 'v2'], 'h2': ['v3', 'v4']}, index=True)
 
-    assert truth == table._repr_latex()
+    assert table._repr_latex() == truth
 
 
 def test_el_table_w_custom_index_html():
@@ -323,7 +323,7 @@ def test_el_table_w_custom_index_latex():
 
     table = el.Table('title', {'h1': ['v1', 'v2'], 'h2': ['v3', 'v4']}, index=['i0', 'i1'])
 
-    assert truth == table._repr_latex()
+    assert table._repr_latex() == truth
 
 
 def test_el_table_transposed_html():
@@ -445,7 +445,7 @@ def test_el_image_json():
     # Will raise a JSONDecodeError if not valid JSON
     _ = json.loads(image._repr_json())
 
-    assert truth == image._repr_json()
+    assert image._repr_json() == truth
 
 
 def test_el_image_html():
@@ -465,7 +465,7 @@ def test_el_image_html():
 
     image = el.Image('title', 'description', 'path/name.png', group='group', height=300)
 
-    assert truth == image._repr_html()
+    assert image._repr_html() == truth
 
 
 def test_el_image_latex():
@@ -477,7 +477,7 @@ def test_el_image_latex():
 
     image = el.Image('title', 'description', 'path/name.png', group='group', height=300)
 
-    assert truth == image._repr_latex()
+    assert image._repr_latex() == truth
 
 
 def test_el_file_diff_json(diff_data):
@@ -570,7 +570,7 @@ def test_el_error_json():
     # Will raise a JSONDecodeError if not valid JSON
     _ = json.loads(err._repr_json())
 
-    assert truth == err._repr_json()
+    assert err._repr_json() == truth
 
 
 def test_el_error_html():
@@ -581,7 +581,7 @@ def test_el_error_html():
 
     err = el.Error('WOOPS', 'Mistakes were made.')
 
-    assert truth == err._repr_html()
+    assert err._repr_html() == truth
 
 
 def test_el_error_latex():
@@ -590,7 +590,7 @@ def test_el_error_latex():
             '}}'
     err = el.Error('WOOPS', 'Mistakes were made.')
 
-    assert truth == err._repr_latex()
+    assert err._repr_latex() == truth
 
 
 def test_el_raw_html_json():
@@ -609,7 +609,7 @@ def test_el_raw_html_json():
     # Will raise a JSONDecodeError if not valid JSON
     _ = json.loads(html._repr_json())
 
-    assert truth == html._repr_json()
+    assert html._repr_json() == truth
 
 
 def test_el_raw_html_html():
@@ -617,7 +617,7 @@ def test_el_raw_html_html():
 
     html = el.RawHTML('<div>Hi</div>')
 
-    assert truth == html._repr_html()
+    assert html._repr_html() == truth
 
 
 def test_el_raw_html_latex():
@@ -625,4 +625,4 @@ def test_el_raw_html_latex():
 
     html = el.RawHTML('<div>Hi</div>')
 
-    assert truth == html._repr_latex()
+    assert html._repr_latex() == truth
