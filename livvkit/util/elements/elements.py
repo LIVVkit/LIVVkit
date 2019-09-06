@@ -277,10 +277,14 @@ class Table(BaseElement):
 
     # FIXME: Typehinting and docstring for data, which should look like
     #        {header1:[val1, val2...],... }
-    # FIXME: Index = True --> use pandas index or simply number the rows
+    #
+    #        Index = True --> use pandas index or simply number the rows
     #        Index = False --> No index
     #        Index = iterable (list) --> override index with iterable
-    def __init__(self, title, data, index=False):
+    #
+    #        Transpose = False --> do nothing
+    #        Transpose = True  --> flip table so header is a column and index is a row
+    def __init__(self, title, data, index=False, transpose=False):
         super(Table, self).__init__()
         self.title = title
 
@@ -300,6 +304,10 @@ class Table(BaseElement):
                 raise IndexError('Table index must be the same length as the table. '
                                  'Table rows: {}, index length: {}.'.format(self.rows, len(index)))
             self.index = index
+
+        if transpose:
+            self._html_template = 'table_transposed.html'
+            self._latex_template = 'table_transposed.tex'
 
         # FIXME: Remove once common.js is obsolete
         self.Type = 'Table'
@@ -330,34 +338,6 @@ class Table(BaseElement):
         """
         template = _latex_env.get_template(self._latex_template)
         return template.render(data=self.__dict__, rows=self.rows, index=self.index)
-
-
-def vtable(title, headers, data_node):
-    """
-    Returns a dictionary representing a new table element.  Tables
-    are specified with two main pieces of information, the headers
-    and the data to put into the table.  Rendering of the table is
-    the responsibility of the Javascript in the resources directory.
-    When the data does not line up with the headers given this should
-    be handled within the Javascript itself, not here.
-
-    Args:
-        title: The title to display
-        headers: The columns to put into the table
-        data_node: A dictionary with the form::
-            {'case' : {'subcase' : { 'header' : data } } }
-
-    Returns:
-        A dictionary with the metadata specifying that it is to be
-        rendered as a table.
-    """
-    tb = {
-        'Type': 'Vertical Table',
-        'Title': title,
-        'Headers': headers,
-        'Data': data_node,
-    }
-    return tb
 
 
 def bit_for_bit(title, headers, data_node):
