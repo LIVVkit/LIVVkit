@@ -312,7 +312,7 @@ class Table(BaseElement):
         self.Type = 'Table'
         self.Title = self.title
         self.Headers = list(self.data.keys())
-        self.Data = self.data
+        self.Data = self._repr_html()
 
     def _repr_html(self):
         """Represent this element as HTML

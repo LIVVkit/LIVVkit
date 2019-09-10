@@ -186,21 +186,13 @@ def test_el_table_json():
             '            "h1",\n' \
             '            "h2"\n' \
             '        ],\n' \
-            '        "Data": {\n' \
-            '            "h1": [\n' \
-            '                "v1",\n' \
-            '                "v2"\n' \
-            '            ],\n' \
-            '            "h2": [\n' \
-            '                "v3",\n' \
-            '                "v4"\n' \
-            '            ]\n' \
-            '        },\n' \
+            '        "Data": "<div class=\\"table\\">\\n    <h3>title</h3>\\n    <table>\\n        <tr>\\n            <th>h1</th>\\n            <th>h2</th>\\n        </tr>\\n        <tr>\\n            <td>v1</td>\\n            <td>v3</td>\\n        </tr>\\n        <tr>\\n            <td>v2</td>\\n            <td>v4</td>\\n        </tr>\\n    </table>\\n</div>",\n' \
             '        "__module__": "livvkit.util.elements.elements",\n' \
             '        "_html_template": "table.html",\n' \
             '        "_latex_template": "table.tex"\n' \
             '    }\n' \
             '}'
+
 
     table = el.Table('title', {'h1': ['v1', 'v2'], 'h2': ['v3', 'v4']})
 

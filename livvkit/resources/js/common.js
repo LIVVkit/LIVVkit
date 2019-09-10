@@ -43,8 +43,6 @@ $(document).ready(function() {
         "Bit for Bit"    : drawBitForBit,
         "Gallery"        : drawGallery,
         "Table"          : drawTable,
-        "Vertical Table" : drawVTable,
-        "V-H Table"      : drawVHTable,
         "HTML"           : drawHTML
     };
 
@@ -338,104 +336,8 @@ function drawBitForBit(data, div) {
  *                       determines whether it is a class or id (ie include # or .)
  */
 function drawTable(data, div) {
-    var html = "<h3>" + data["Title"] + "</h3>\n";
-    html += "<div class=\"table\">";
-    html += "<table>\n";
-    // Draw the headers
-    for (var idx in data["Headers"]) {
-        html += "<th>" + data["Headers"][idx] + "</th>\n";
-    }
-
-    // Draw the cells
-    for (var rr = 0;  rr < data["rows"]; rr++) {
-        html += "<tr>\n";
-        for (var idx in data["Headers"]) {
-            html += "<td>" + data["Data"][data["Headers"][idx]][rr] + "</td>\n";
-        }
-        html += "</tr>\n";
-    }
-    html += "</table>\n </div>";
-    $(div).append(html);
-}
-
-/**
- * Build a vertical table
- *
- * @param {Object} data - The data representing the table.  Determined by data["Type"] = "Vertical Table"
- * @param {string} div - The name of the div to draw to.  Should be referenced as a string that 
- *                       determines whether it is a class or id (ie include # or .)
- */
-function drawVTable(data, div) {
-    var html = "<h3>" + data["Title"] + "</h3>\n";
-    html += "<div class=\"table\">";
-    html += "<table>\n";
-    for (var idx in data["Headers"]) {
-        html += "<tr>\n";
-        // Draw the headers
-        html += "<th>" + data["Headers"][idx] + "</th>\n";
-        // Draw the cells
-        html += "<td>" + data["Data"][data["Headers"][idx]] + "</td>\n";
-        html += "</tr>\n";
-    }
-    html += "</table>\n </div>";
-    $(div).append(html);
-}
-
-/**
- * Build a table with horizontal and vertical headers and add it to the div.
- *
- * @param {Object} data - The data representing the summary.  Determined by data["Type"] = "V-H Table"
- * @param {string} div - The name of the div to draw to.  Should be referenced as a string that 
- *                       determines whether it is a class or id (ie include # or .)
- */
-function drawVHTable(data, div) {
-    var html = "<h3>" + data["TableTitle"] + "</h3>";
-    html += "<table class=\"table\">\n";
-    // Add the headers
-    html += "<th></th>\n";
-    for (var header in data["Headers"]) {
-        html += "<th>" + data["Headers"][header] + "</th>\n";
-    }
-    // Add the data
-    var testNames = Object.keys(data["Data"]).sort();
-    for (var idx in testNames) {
-        testName = testNames[idx];
-        html += "<tr class=\"testName\"><td>" + testName + "</td></tr>\n";
-        for (var testCase in data["Data"][testName]) {
-            html_tmp1 = "<tr ";
-            html_tmp2 = ">\n<td>" + testCase + "</td>\n";
-            style = "";  
-            for (var headerIdx in data["Headers"]) {
-                header = data["Headers"][headerIdx];
-                html_tmp2 += "<td>"; 
-                value = data["Data"][testName][testCase][header];
-                dtype = typeof value;
-                if (dtype == 'string') {
-                    html_tmp2 += value;
-                } else if (dtype == 'number') {
-                    html_tmp2 += value.toFixed(3);
-                } else if (dtype == 'object') {
-                    html_tmp2 += " (";
-                    for (var v in data["Data"][testName][testCase][header]) {
-                        v_val = data["Data"][testName][testCase][header][v];
-                        vtype = typeof v_val;
-                        if (vtype == 'number') {
-                            html_tmp2 += v_val.toExponential(3);
-                        } else {
-                            html_tmp2 += v_val;
-                            html_tmp2 += vtype;
-                        }
-                        html_tmp2 += ", ";
-                    }
-                    html_tmp2 = html_tmp2.replace(/, $/, '');
-                    html_tmp2 += ")";
-                }
-                html_tmp2 += "</td>\n";
-            }
-            html += html_tmp1 + style + html_tmp2 + "</tr>\n";
-        }
-    }
-    html += "</table>\n";
+    var html = data['Data'];
+    html += "</div>";
     $(div).append(html);
 }
 
