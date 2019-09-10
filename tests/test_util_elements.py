@@ -157,11 +157,71 @@ def test_el_tab_html():
 
 
 def test_el_section_json():
-    assert False
+    truth = '{\n' \
+            '    "Section": {\n' \
+            '        "elements": [\n' \
+            '            "{\\n    \\"Table\\": {\\n        \\"title\\": \\"title\\",\\n        \\"data\\": {\\n            \\"h1\\": [\\n                \\"v1\\",\\n                \\"v2\\"\\n            ],\\n            \\"h2\\": [\\n                \\"v3\\",\\n                \\"v4\\"\\n            ]\\n        },\\n        \\"index\\": null,\\n        \\"rows\\": 2,\\n        \\"Type\\": \\"Table\\",\\n        \\"Title\\": \\"title\\",\\n        \\"Headers\\": [\\n            \\"h1\\",\\n            \\"h2\\"\\n        ],\\n        \\"Data\\": \\"<div class=\\\\\\"table\\\\\\">\\\\n    <h3>title</h3>\\\\n    <table>\\\\n        <tr>\\\\n            <th>h1</th>\\\\n            <th>h2</th>\\\\n        </tr>\\\\n        <tr>\\\\n            <td>v1</td>\\\\n            <td>v3</td>\\\\n        </tr>\\\\n        <tr>\\\\n            <td>v2</td>\\\\n            <td>v4</td>\\\\n        </tr>\\\\n    </table>\\\\n</div>\\",\\n        \\"__module__\\": \\"livvkit.util.elements.elements\\",\\n        \\"_html_template\\": \\"table.html\\",\\n        \\"_latex_template\\": \\"table.tex\\"\\n    }\\n}"\n' \
+            '        ],\n' \
+            '        "title": "A cool table",\n' \
+            '        "Type": "Gallery",\n' \
+            '        "Title": "A cool table",\n' \
+            '        "Data": "<div class=\\"section\\">\\n    <h2>A cool table</h2>\\n    <div class=\\"table\\">\\n    <h3>title</h3>\\n    <table>\\n        <tr>\\n            <th>h1</th>\\n            <th>h2</th>\\n        </tr>\\n        <tr>\\n            <td>v1</td>\\n            <td>v3</td>\\n        </tr>\\n        <tr>\\n            <td>v2</td>\\n            <td>v4</td>\\n        </tr>\\n    </table>\\n</div>\\n</div>",\n' \
+            '        "__module__": "livvkit.util.elements.elements",\n' \
+            '        "_html_template": "section.html",\n' \
+            '        "_latex_template": "section.tex"\n' \
+            '    }\n' \
+            '}'
+
+    section = el.Section('A cool table', [el.Table('title', {'h1': ['v1', 'v2'], 'h2': ['v3', 'v4']})])
+
+    # Will raise a JSONDecodeError if not valid JSON
+    _ = json.loads(section._repr_json())
+
+    assert section._repr_json() == truth
 
 
 def test_el_section_html():
-    assert False
+    truth = '<div class="section">\n' \
+            '    <h2>A cool table</h2>\n' \
+            '    <div class="table">\n' \
+            '    <h3>title</h3>\n' \
+            '    <table>\n' \
+            '        <tr>\n' \
+            '            <th>h1</th>\n' \
+            '            <th>h2</th>\n' \
+            '        </tr>\n' \
+            '        <tr>\n' \
+            '            <td>v1</td>\n' \
+            '            <td>v3</td>\n' \
+            '        </tr>\n' \
+            '        <tr>\n' \
+            '            <td>v2</td>\n' \
+            '            <td>v4</td>\n' \
+            '        </tr>\n' \
+            '    </table>\n' \
+            '</div>\n' \
+            '</div>'
+
+    section = el.Section('A cool table', [el.Table('title', {'h1': ['v1', 'v2'], 'h2': ['v3', 'v4']})])
+
+    assert section._repr_html() == truth
+
+
+def test_el_section_latex():
+    truth = '\\levelstay{A cool table}\n' \
+            '    \\begin{table}[h!]\n' \
+            '    \\centering\n' \
+            '    \\begin{tabular}{cc}\n' \
+            '        h1 & h2 \\\\\n' \
+            '        \\hline\n' \
+            '        v1 & v3  \\\\\n' \
+            '        v2 & v4  \\\\\n' \
+            '        \\end{tabular}\n' \
+            '\\end{table}\n'
+
+    section = el.Section('A cool table', [el.Table('title', {'h1': ['v1', 'v2'], 'h2': ['v3', 'v4']})])
+
+    assert section._repr_latex() == truth
 
 
 def test_el_table_json():

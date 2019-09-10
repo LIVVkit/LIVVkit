@@ -168,16 +168,8 @@ function drawContent() {
                 var sections = tab["Sections"];
                 for (var tab_idx in sections) {
                     var section  = sections[tab_idx];
-                    // Draw header
-                    var html = "<h2>" + section["Title"] + "</h3>";
-                    $("#"+tab["Title"]).append(html);
-                    if ("Elements" in section) {
-                        var elements = section["Elements"];
-                        for (var elem_idx in elements) {
-                            elem = elements[elem_idx];
-                            elementMap[elem["Type"]](elem, "#"+tab["Title"]);
-                        }
-                    }          
+                    var section_html =  section['Data'];
+                    $("#"+tab["Title"]).append(section_html);
                 }
             }
         }

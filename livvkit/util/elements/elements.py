@@ -304,30 +304,17 @@ def tab(tab_name, element_list=None, section_list=None):
     return _tab
 
 
-def section(title, element_list):
-    """
-    Returns a dictionary representing a new section.  Sections
-    contain a list of elements that are displayed separately from
-    the global elements on the page.
+class Section(CompositeElement):
+    _html_template = 'section.html'
+    _latex_template = 'section.tex'
 
-    Args:
-        title: The title of the section to be displayed
-        element_list: The list of elements to display within the section
-
-    Returns:
-        A dictionary with metadata specifying that it is to be rendered as
-        a section containing multiple elements
-    """
-    sect = {
-        'Type': 'Section',
-        'Title': title,
-    }
-
-    if isinstance(element_list, list):
-        sect['Elements'] = element_list
-    else:
-        sect['Elements'] = [element_list]
-    return sect
+    def __init__(self, title, elements):
+        super(Section, self).__init__(elements)
+        self.title = title
+        # FIXME: Remove once common.js is obsolete
+        self.Type = 'Gallery'
+        self.Title = title
+        self.Data = self._repr_html()
 
 
 class Table(BaseElement):

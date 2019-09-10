@@ -99,7 +99,7 @@ def parse_log(file_path):
         "Converged Iterations": [len(converged_iters)],
         "Avg. Iterations to Converge": [np.mean(iters_to_converge)]
     }
-    return elements.Table("Output Log", data).__dict__
+    return elements.Table("Output Log", data)
 
 
 def parse_config(file_path):

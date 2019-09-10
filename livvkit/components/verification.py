@@ -65,7 +65,7 @@ def run_suite(case, config, summary):
                      if mcase in bench_subcases else "")
             mpath = os.path.join(model_dir, subcase, mcase.replace("-", os.path.sep))
             case_result = _analyze_case(mpath, bpath, config)
-            case_sections.append(elements.section(mcase, case_result))
+            case_sections.append(elements.Section(mcase, case_result))
             case_summary[subcase] = _summarize_result(case_result,
                                                       case_summary[subcase])
         tabs.append(elements.tab(subcase, section_list=case_sections))
@@ -90,9 +90,9 @@ def _analyze_case(test_dir, ref_dir, config):
     ref_config = functions.find_file(ref_dir, "*"+config["config_ext"])
     model_log = functions.find_file(test_dir, "*"+config["logfile_ext"])
     el = [
-            bit_for_bit(test_out, ref_out, config).__dict__,
+            bit_for_bit(test_out, ref_out, config),
             elements.FileDiff("Configuration Comparison",
-                              ref_config, test_config).__dict__,
+                              ref_config, test_config),
             bundle.parse_log(model_log)
          ]
     return el
@@ -112,6 +112,7 @@ def _print_summary(case, summary):
         print("")
 
 
+# FIXME: Update to handle LIVVkit class elements
 def _summarize_result(result, summary):
     """ Trim out some data to return for the index page """
     if "Bit for Bit" not in summary:
@@ -126,6 +127,8 @@ def _summarize_result(result, summary):
     failure_count = 0
     summary_data = None
     for elem in result:
+        if isinstance(elem, elements.BaseElement):
+            elem = elem.__dict__
         if elem["Type"] == "Bit for Bit" and "data" in elem:
             elem_data = elem["data"]
             summary_data = summary["Bit for Bit"]
@@ -143,6 +146,8 @@ def _summarize_result(result, summary):
     total_count = 0
     failure_count = 0
     for elem in result:
+        if isinstance(elem, elements.BaseElement):
+            elem = elem.__dict__
         if elem["Title"] == "Configuration Comparison" and elem["Type"] == "Diff":
             summary_data = summary["Configurations"]
             total_count += 1
@@ -157,6 +162,8 @@ def _summarize_result(result, summary):
 
     # Get the number of files parsed
     for elem in result:
+        if isinstance(elem, elements.BaseElement):
+            elem = elem.__dict__
         if elem["Title"] == "Output Log" and elem["Type"] == "Table":
             summary["Std. Out Files"] += 1
             break
@@ -189,16 +196,16 @@ def bit_for_bit(model_path, bench_path, config):
     # Error handling
     if not (os.path.isfile(bench_path) and os.path.isfile(model_path)):
         return elements.Error("Bit for Bit",
-                              "File named " + fname + " has no suitable match!").__dict__
+                              "File named " + fname + " has no suitable match!")
     try:
         model_data = Dataset(model_path)
         bench_data = Dataset(bench_path)
     except (FileNotFoundError, PermissionError):
         return elements.Error("Bit for Bit",
-                              "File named " + fname + " could not be read!").__dict__
+                              "File named " + fname + " could not be read!")
     if not (netcdf.has_time(model_data) and netcdf.has_time(bench_data)):
         return elements.Error("Bit for Bit",
-                              "File named " + fname + " could not be read!").__dict__
+                              "File named " + fname + " could not be read!")
 
     # Begin bit for bit analysis
     headers = ["Max Error", "Index of Max Error", "RMS Error", "Plot"]
