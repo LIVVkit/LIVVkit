@@ -443,22 +443,8 @@ def test_el_b4b_json():
             '        },\n' \
             '        "rows": 2,\n' \
             '        "b4b_imgs": [\n' \
-            '            {\n' \
-            '                "title": "",\n' \
-            '                "desc": "desc.",\n' \
-            '                "path": "../imgs",\n' \
-            '                "name": "b4b.png",\n' \
-            '                "group": null,\n' \
-            '                "height": 50\n' \
-            '            },\n' \
-            '            {\n' \
-            '                "title": "",\n' \
-            '                "desc": "desc.",\n' \
-            '                "path": "../imgs",\n' \
-            '                "name": "b4b.png",\n' \
-            '                "group": null,\n' \
-            '                "height": 50\n' \
-            '            }\n' \
+            '            "{\\n    \\"B4BImage\\": {\\n        \\"title\\": \\"\\",\\n        \\"desc\\": \\"desc.\\",\\n        \\"path\\": \\"../imgs\\",\\n        \\"name\\": \\"b4b.png\\",\\n        \\"group\\": null,\\n        \\"height\\": 50,\\n        \\"__module__\\": \\"livvkit.util.elements.elements\\",\\n        \\"_html_template\\": \\"image.html\\",\\n        \\"_latex_template\\": \\"image.tex\\"\\n    }\\n}",\n' \
+            '            "{\\n    \\"B4BImage\\": {\\n        \\"title\\": \\"\\",\\n        \\"desc\\": \\"desc.\\",\\n        \\"path\\": \\"../imgs\\",\\n        \\"name\\": \\"b4b.png\\",\\n        \\"group\\": null,\\n        \\"height\\": 50,\\n        \\"__module__\\": \\"livvkit.util.elements.elements\\",\\n        \\"_html_template\\": \\"image.html\\",\\n        \\"_latex_template\\": \\"image.tex\\"\\n    }\\n}"\n' \
             '        ],\n' \
             '        "Type": "Bit for Bit",\n' \
             '        "Title": "title",\n' \
@@ -468,6 +454,7 @@ def test_el_b4b_json():
             '        "_latex_template": "bit4bit.tex"\n' \
             '    }\n' \
             '}'
+
 
     b4b = el.BitForBit('title', {'Variable': ['velnorm', 'thk'],
                                  'Max Error': [5.07070, 0.376806],
@@ -582,39 +569,28 @@ def test_el_b4b_latex():
 
 
 def test_el_gallery_json():
-    errors = []
-    elements = []
-    for ii in range(3):
-        elements.append(el.Image('Image {}'.format(ii),
-                                 'The {}-th image.'.format(ii),
-                                 'imgs/image{}.png'.format(ii)))
-
-    gallery = el.Gallery('An image gallery', elements=elements)
-
-    try:
-        _ = json.loads(gallery._repr_json())
-    except json.JSONDecodeError:
-        errors.append('Error: Gallery element did not produce valid JSON.')
-
     truth = '{\n' \
             '    "Gallery": {\n' \
-            '        "title": "Empty",\n' \
-            '        "elements": [],\n' \
+            '        "title": "The Gallery",\n' \
+            '        "elements": [\n' \
+            '            "{\\n    \\"Image\\": {\\n        \\"title\\": \\"The Image\\",\\n        \\"desc\\": \\"A very nice image.\\",\\n        \\"path\\": \\"imgs\\",\\n        \\"name\\": \\"image.png\\",\\n        \\"group\\": null,\\n        \\"height\\": null,\\n        \\"__module__\\": \\"livvkit.util.elements.elements\\",\\n        \\"_html_template\\": \\"image.html\\",\\n        \\"_latex_template\\": \\"image.tex\\"\\n    }\\n}"\n' \
+            '        ],\n' \
             '        "Type": "Gallery",\n' \
-            '        "Title": "Empty",\n' \
-            '        "Data": "<div class=\\"gallery\\">\\n    <h3>Empty</h3>\\n    \\n</div>\\n<div style=\\"clear:both\\"></div>",\n' \
+            '        "Title": "The Gallery",\n' \
+            '        "Data": "<div class=\\"gallery\\">\\n    <h3>The Gallery</h3>\\n    <div>\\n    <a href=\\"imgs/image.png\\"\\n       data-lightbox=\\"The Image\\"\\n       data-title=\\"A very nice image.\\"\\n    >\\n        <img class=\\"thumbnail caption\\"\\n             data-caption=\\"The Image\\"\\n             alt=\\"The Image\\"\\n             src=\\"imgs/image.png\\"\\n             style=\\"height: 200px; overflow: hidden; position: relative;\\"\\n        >\\n    </a>\\n</div>\\n    \\n</div>\\n<div style=\\"clear:both\\"></div>",\n' \
             '        "__module__": "livvkit.util.elements.elements",\n' \
             '        "_html_template": "gallery.html",\n' \
             '        "_latex_template": "gallery.tex"\n' \
             '    }\n' \
             '}'
 
-    empty_gallery = el.Gallery('Empty', [])
+    image = el.Image('The Image', 'A very nice image.', 'imgs/image.png')
+    gallery = el.Gallery('The Gallery', [image])
 
-    if empty_gallery._repr_json() != truth:
-        errors.append('Error: JSON representation of Gallery element has changed.')
+    # Will raise a JSONDecodeError if not valid JSON
+    _ = json.loads(gallery._repr_json())
 
-    assert not errors, 'Errors occurred:\n{}'.format('\n'.join(errors))
+    assert gallery._repr_json() == truth
 
 
 def test_el_gallery_html():
