@@ -131,7 +131,6 @@ class BaseElement(abc.ABC):
         jsn[type(self).__name__].update({'__module__': type(self).__module__,
                                          '_html_template': self._html_template,
                                          '_latex_template': self._latex_template})
-        print(jsn)
         return json_tricks.dumps(jsn, indent=4, primitives=True, allow_nan=True)
 
     def _repr_html(self):
@@ -340,30 +339,55 @@ class Table(BaseElement):
         return template.render(data=self.__dict__, rows=self.rows, index=self.index)
 
 
-def bit_for_bit(title, headers, data_node):
-    """
-    Returns a dictionary representing a new bit for bit table element.
-    Bit for bit elements can be thought of as tables, but require the
-    special addition that a diff plot may need to be embedded within
-    the table.
+class BitForBit(BaseElement):
+    _html_template = 'bit4bit.html'
+    _latex_template = 'bit4bit.tex'
 
-    Args:
-        title: The title to display
-        headers: Columns of the table
-        data_node: A dictionary with the form:
-            {'var_name' : {'header : { data } } }
+    def __init__(self, title, data, imgs):
+        super(BitForBit, self).__init__()
+        self.title = title
 
-    Returns:
-        A dictionary with the metadata specifying that it is to be
-        rendered as a bit for bit table
-    """
-    b4b = {
-        'Type': 'Bit for Bit',
-        'Title': title,
-        'Headers': headers,
-        'Data': data_node,
-    }
-    return b4b
+        if isinstance(data, pd.DataFrame):
+            self.data = data.to_dict(orient='list')
+        else:
+            self.data = data
+
+        self.rows = len(next(iter(self.data.values())))
+        if len(imgs) != self.rows:
+            raise IndexError('Imgs must be the same length as the table. '
+                             'Table rows: {}, imgs length: {}.'.format(self.rows, len(imgs)))
+        self.b4b_imgs = imgs
+
+        # FIXME: Remove once common.js is obsolete
+        self.Type = "Bit for Bit"
+        self.Title = title
+        self.Data = self._repr_html()
+
+    def _repr_html(self):
+        """Represent this element as HTML
+
+        Using the jinja2 template defined by ``self._html_template``, return an
+        HTML representation of this element
+
+        Returns:
+            str: The HTML representation of this element
+        """
+        imgs_repr = [img._repr_html() for img in self.b4b_imgs]
+        template = _html_env.get_template(self._html_template)
+        return template.render(data=self.__dict__, rows=self.rows, b4b_imgs=imgs_repr)
+
+    def _repr_latex(self):
+        """Represent this element as LaTeX
+
+        Using the jinja2 template defined by ``self._latex_template``, return an
+        LaTeX representation of this element
+
+        Returns:
+            str: The LaTeX representation of this element
+        """
+        imgs_repr = [img._repr_latex() for img in self.b4b_imgs]
+        template = _latex_env.get_template(self._latex_template)
+        return template.render(data=self.__dict__, rows=self.rows, b4b_imgs=imgs_repr)
 
 
 class Gallery(BaseElement):
@@ -375,7 +399,7 @@ class Gallery(BaseElement):
         self.title = title
         self.elements = elements
         # FIXME: Remove once common.js is obsolete
-        self.Type = 'Diff'
+        self.Type = 'Gallery'
         self.Title = title
         self.Data = self._repr_html()
 
@@ -400,17 +424,17 @@ class Image(BaseElement):
     _html_template = 'image.html'
     _latex_template = 'image.tex'
 
-    def __init__(self, title, desc, image_file, group=None, height=None):
+    def __init__(self, title, desc, image_file, group=None, height=None, relative_to=None):
         super(Image, self).__init__()
         self.title = title
         self.desc = desc
         self.path, self.name = os.path.split(image_file)
-        if not livvkit.index_dir:
-            relative = os.getcwd()
-            # TODO: Log a warning
-        else:
-            relative = os.path.dirname(livvkit.index_dir)
-        self.path = os.path.sep + os.path.relpath(self.path, relative)
+        # FIXME: This assumes that images are images are always located in a
+        #        subdirectory of the current page if a relative path start
+        #        location isn't specified
+        if relative_to is None:
+            relative_to = os.path.dirname(self.path)
+        self.path = os.path.relpath(self.path, relative_to)
         self.group = group
         self.height = height
 
@@ -419,6 +443,26 @@ class Image(BaseElement):
         data = self.__dict__
         data['path'] = self.path.lstrip('/')
         return template.render(data=data)
+
+
+class B4BImage(Image):
+    def __init__(self, title, description, page_path):
+        image_file = os.path.join(livvkit.output_dir, 'imgs', 'b4b.png')
+
+        super(B4BImage, self).__init__(title, description,
+                                       image_file=image_file,
+                                       relative_to=page_path,
+                                       height=50)
+
+
+class NAImage(Image):
+    def __init__(self, title, description, page_path):
+        image_file = os.path.join(livvkit.output_dir, 'imgs', 'na.png')
+
+        super(NAImage, self).__init__(title, description,
+                                      image_file=image_file,
+                                      relative_to=page_path,
+                                      height=50)
 
 
 class FileDiff(BaseElement):

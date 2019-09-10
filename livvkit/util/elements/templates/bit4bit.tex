@@ -1,0 +1,9 @@
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{\BLOCK{ for column in data['data'].keys() } c \BLOCK{ endfor } c }
+        \BLOCK{ for column in data['data'].keys() }\VAR{ column } & \BLOCK{ endfor }Plots \\
+        \hline
+        \BLOCK{ for row in range(rows) -}
+        \BLOCK{ for column in data['data'].keys() }\BLOCK{ if data['data'][column][row] is number }\VAR{ '{:.5e}'.format(data['data'][column][row]) }\BLOCK{ else }\VAR{ data['data'][column][row] }\BLOCK{ endif } & \BLOCK{ endfor }\begin{minipage}{0.3\textwidth}\VAR{ b4b_imgs[row] }\end{minipage} \\
+        \BLOCK{ endfor }\end{tabular}
+\end{table}

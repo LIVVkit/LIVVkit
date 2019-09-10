@@ -325,37 +325,7 @@ function drawDiff(data, div) {
  *                       determines whether it is a class or id (ie include # or .)
  */
 function drawBitForBit(data, div) {
-    var html = "<h3>" + data["Title"] + "</h3>\n";
-    html += "<div class=\"bitForBit\">";
-    html += "<table>\n";
-    html += "<th>Variable</th>\n";
-    // Draw the headers
-    for (var idx in data["Headers"]) {
-        html += "<th>" + data["Headers"][idx] + "</th>\n";
-    }
-    // Draw the cells
-    for (var varName in data["Data"]) {
-        html += "<tr>\n";
-        html += "<td>" + varName + "</td>\n";
-        for (var j in data["Headers"]) {
-            var header = data["Headers"][j];
-            var hData = data["Data"][varName][header];
-            // Handle the different data types to draw (image vs string/numeric data)
-            if (header == "Plot" && (hData !== "N/A" || hData.indexOf("ERROR:")!==-1)) {
-                var img_dict = {};
-                img_dict["name"] = data["Data"][varName][header];
-                img_dict["title"] = varName + "Bit-for-bit compairson";
-                html += "<td>" + drawThumbnail(img_dict, 50) + "</td>\n";
-            } else {
-                if (typeof hData == 'number') {
-                    hData = hData.toExponential(5);
-                }
-                html += "<td>" + hData + "</td>\n";
-            }
-        }
-        html += "</tr>\n";
-    }
-    html += "</table>\n";
+    var html = data['Data'];
     html += "</div>";
     $(div).append(html);
 }
@@ -480,56 +450,6 @@ function drawGallery(data, div) {
     var html = data['Data'];
     html += "</div>";
     $(div).append(html);
-}
-
-/**
- * Draw an image
- *
- * @param {Object} data - The data representing the image.  Determined by data["Type"] = "Image"
- * @param {string} div - The name of the div to draw to.  Should be referenced as a string that 
- *                       determines whether it is a class or id (ie include # or .)
- */
-function drawImage(img_elem, div) {
-    var html = "<div>";
-    html += drawLightbox(img_elem);
-    html += "</div>"
-    $(div).append(html);
-}
-
-/**
- * Draw an image thumbnail with a link to open the image in a lightbox 
- *
- * @param {dictionary} img_elem  - Dictionary describing the image location, title, album, and caption
- * @param {number} size - The desired height to draw
- *
- * @return the html to embed into another element
- */
-function drawLightbox(img_elem) {
-    var img_dir = window.location.href.substr(0,window.location.href.lastIndexOf('/')+1) + "imgs/";
-    var path = img_dir + img_elem["name"];
-    var lbox = img_elem["group"] ? img_elem["group"]  : img_elem["title"];
-    var size = img_elem["height"] ? img_elem["height"]  : 200;
-    var html = "<a href=\"" + path + "\" data-lightbox=\"" + lbox + "\" data-title=\"" + img_elem["desc"] + "\">";
-    html += "<img class=\"thumbnail caption\" data-caption=\"" + img_elem["title"]+ "\" alt=\"" + img_elem["title"] + "\" src=\"" + path + "\" style=\"height: " + size + "px; overflow: hidden; position: relative\">";
-    html += "</a>";
-    return html;
-}
-
-/**
- * Draw an image thumbnail with a link to open in a new tab 
- *
- * @param {string} path - The location of the image to thumbnail-size 
- * @param {number} size - The desired height to draw
- *
- * @return the html to embed into another element
- */
-function drawThumbnail(img_elem, size) {
-    var img_dir = window.location.href.substr(0,window.location.href.lastIndexOf('/')+1) + "imgs/";
-    var path = img_elem["name"];
-    var html = "<a target=\"_blank\" href=\"" + path + "\">";
-    html += "<img class=\"thumbnail\" alt=\"" + img_elem["title"] + "\" src=\"" + path + "\" style=\"height: " + size + "px; overflow: hidden; position: relative\">";
-    html += "</a>";
-    return html;
 }
 
 /**

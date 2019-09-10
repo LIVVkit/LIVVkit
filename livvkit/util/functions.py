@@ -220,6 +220,10 @@ def setup_output(cssd=None, jsd=None, imgd=None):
     # Get the index template from the resource directory
     shutil.copy(os.path.join(livvkit.resource_dir, "index.html"),
                 os.path.join(livvkit.index_dir, "index.html"))
+
+    shutil.copy(os.path.join(livvkit.resource_dir, "favicon.ico"),
+                os.path.join(livvkit.index_dir, "favicon.ico"))
+
     # Record when this data was recorded so we can make nice backups
     with open(os.path.join(livvkit.index_dir, "data.txt"), "w") as f:
         f.write(livvkit.timestamp + '\n')

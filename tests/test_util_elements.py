@@ -5,10 +5,20 @@
 from __future__ import absolute_import, print_function, unicode_literals
 
 import json
+from contextlib import ContextDecorator
 
 import pytest
 
+import livvkit
 from livvkit.util import elements as el
+
+
+class LIVVkitOutput(ContextDecorator):
+    def __enter__(self):
+        livvkit.output_dir = 'vv_test'
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        livvkit.output_dir = None
 
 
 def test_el_base_templates_as_property():
@@ -407,12 +417,176 @@ def test_el_table_w_index_transposed_latex():
     assert table._repr_latex() == truth
 
 
+@LIVVkitOutput()
 def test_el_b4b_json():
-    assert False
+    truth = '{\n' \
+            '    "BitForBit": {\n' \
+            '        "title": "title",\n' \
+            '        "data": {\n' \
+            '            "Variable": [\n' \
+            '                "velnorm",\n' \
+            '                "thk"\n' \
+            '            ],\n' \
+            '            "Max Error": [\n' \
+            '                5.0707,\n' \
+            '                0.376806\n' \
+            '            ],\n' \
+            '            "Index of Max Error": [\n' \
+            '                [\n' \
+            '                    2,\n' \
+            '                    1,\n' \
+            '                    24,\n' \
+            '                    19\n' \
+            '                ],\n' \
+            '                [\n' \
+            '                    3,\n' \
+            '                    23,\n' \
+            '                    23\n' \
+            '                ]\n' \
+            '            ],\n' \
+            '            "RMS Error": [\n' \
+            '                0.260977,\n' \
+            '                0.0354492\n' \
+            '            ]\n' \
+            '        },\n' \
+            '        "rows": 2,\n' \
+            '        "b4b_imgs": [\n' \
+            '            {\n' \
+            '                "title": "",\n' \
+            '                "desc": "desc.",\n' \
+            '                "path": "../imgs",\n' \
+            '                "name": "b4b.png",\n' \
+            '                "group": null,\n' \
+            '                "height": 50\n' \
+            '            },\n' \
+            '            {\n' \
+            '                "title": "",\n' \
+            '                "desc": "desc.",\n' \
+            '                "path": "../imgs",\n' \
+            '                "name": "b4b.png",\n' \
+            '                "group": null,\n' \
+            '                "height": 50\n' \
+            '            }\n' \
+            '        ],\n' \
+            '        "Type": "Bit for Bit",\n' \
+            '        "Title": "title",\n' \
+            '        "Data": "<div class=\\"bitForBit\\">\\n    <h3>title</h3>\\n    <table>\\n        <tr>\\n            <th>Variable</th>\\n            <th>Max Error</th>\\n            <th>Index of Max Error</th>\\n            <th>RMS Error</th>\\n            <th> Plot </th>\\n        </tr>\\n        <tr>\\n            <td>velnorm</td>\\n            <td>5.07070e+00</td>\\n            <td>(2, 1, 24, 19)</td>\\n            <td>2.60977e-01</td>\\n            <td>\\n                <div>\\n    <a href=\\"../imgs/b4b.png\\"\\n       data-lightbox=\\"\\"\\n       data-title=\\"desc.\\"\\n    >\\n        <img class=\\"thumbnail caption\\"\\n             data-caption=\\"\\"\\n             alt=\\"\\"\\n             src=\\"../imgs/b4b.png\\"\\n             style=\\"height: 50px; overflow: hidden; position: relative;\\"\\n        >\\n    </a>\\n</div>\\n            </td>\\n        </tr>\\n        <tr>\\n            <td>thk</td>\\n            <td>3.76806e-01</td>\\n            <td>(3, 23, 23)</td>\\n            <td>3.54492e-02</td>\\n            <td>\\n                <div>\\n    <a href=\\"../imgs/b4b.png\\"\\n       data-lightbox=\\"\\"\\n       data-title=\\"desc.\\"\\n    >\\n        <img class=\\"thumbnail caption\\"\\n             data-caption=\\"\\"\\n             alt=\\"\\"\\n             src=\\"../imgs/b4b.png\\"\\n             style=\\"height: 50px; overflow: hidden; position: relative;\\"\\n        >\\n    </a>\\n</div>\\n            </td>\\n        </tr>\\n    </table>\\n</div>",\n' \
+            '        "__module__": "livvkit.util.elements.elements",\n' \
+            '        "_html_template": "bit4bit.html",\n' \
+            '        "_latex_template": "bit4bit.tex"\n' \
+            '    }\n' \
+            '}'
+
+    b4b = el.BitForBit('title', {'Variable': ['velnorm', 'thk'],
+                                 'Max Error': [5.07070, 0.376806],
+                                 'Index of Max Error': [(2, 1, 24, 19), (3, 23, 23)],
+                                 'RMS Error': [.260977, .0354492]},
+                       imgs=[el.B4BImage('', 'desc.', page_path='vv_test/verification'),
+                             el.B4BImage('', 'desc.', page_path='vv_test/verification')])
+
+    # Will raise a JSONDecodeError if not valid JSON
+    _ = json.loads(b4b._repr_json())
+
+    assert b4b._repr_json() == truth
 
 
+@LIVVkitOutput()
 def test_el_b4b_html():
-    assert False
+    truth = '<div class="bitForBit">\n' \
+            '    <h3>title</h3>\n' \
+            '    <table>\n' \
+            '        <tr>\n' \
+            '            <th>Variable</th>\n' \
+            '            <th>Max Error</th>\n' \
+            '            <th>Index of Max Error</th>\n' \
+            '            <th>RMS Error</th>\n' \
+            '            <th> Plot </th>\n' \
+            '        </tr>\n' \
+            '        <tr>\n' \
+            '            <td>velnorm</td>\n' \
+            '            <td>5.07070e+00</td>\n' \
+            '            <td>(2, 1, 24, 19)</td>\n' \
+            '            <td>2.60977e-01</td>\n' \
+            '            <td>\n' \
+            '                <div>\n' \
+            '    <a href="../imgs/b4b.png"\n' \
+            '       data-lightbox=""\n' \
+            '       data-title="desc."\n' \
+            '    >\n' \
+            '        <img class="thumbnail caption"\n' \
+            '             data-caption=""\n' \
+            '             alt=""\n' \
+            '             src="../imgs/b4b.png"\n' \
+            '             style="height: 50px; overflow: hidden; position: relative;"\n' \
+            '        >\n' \
+            '    </a>\n' \
+            '</div>\n' \
+            '            </td>\n' \
+            '        </tr>\n' \
+            '        <tr>\n' \
+            '            <td>thk</td>\n' \
+            '            <td>3.76806e-01</td>\n' \
+            '            <td>(3, 23, 23)</td>\n' \
+            '            <td>3.54492e-02</td>\n' \
+            '            <td>\n' \
+            '                <div>\n' \
+            '    <a href="../imgs/b4b.png"\n' \
+            '       data-lightbox=""\n' \
+            '       data-title="desc."\n' \
+            '    >\n' \
+            '        <img class="thumbnail caption"\n' \
+            '             data-caption=""\n' \
+            '             alt=""\n' \
+            '             src="../imgs/b4b.png"\n' \
+            '             style="height: 50px; overflow: hidden; position: relative;"\n' \
+            '        >\n' \
+            '    </a>\n' \
+            '</div>\n' \
+            '            </td>\n' \
+            '        </tr>\n' \
+            '    </table>\n' \
+            '</div>'
+
+    b4b = el.BitForBit('title', {'Variable': ['velnorm', 'thk'],
+                                 'Max Error': [5.07070, 0.376806],
+                                 'Index of Max Error': [(2, 1, 24, 19), (3, 23, 23)],
+                                 'RMS Error': [.260977, .0354492]},
+                       imgs=[el.B4BImage('', 'desc.', page_path='vv_test/verification'),
+                             el.B4BImage('', 'desc.', page_path='vv_test/verification')])
+
+    assert b4b._repr_html() == truth
+
+
+@LIVVkitOutput()
+def test_el_b4b_latex():
+    truth = '\\begin{table}[h!]\n' \
+            '    \\centering\n' \
+            '    \\begin{tabular}{ c  c  c  c  c }\n' \
+            '        Variable & Max Error & Index of Max Error & RMS Error & Plots \\\\\n' \
+            '        \\hline\n' \
+            '        velnorm & 5.07070e+00 & (2, 1, 24, 19) & 2.60977e-01 & \\begin{minipage}{0.3\\textwidth}\\begin{figure}[h]\n' \
+            '    \\centering\n' \
+            '    \\includegraphics[height=50px]{../imgs/b4b.png}\n' \
+            '    \\caption[]{desc.}\n' \
+            '\\end{figure}\\end{minipage} \\\\\n' \
+            '        thk & 3.76806e-01 & (3, 23, 23) & 3.54492e-02 & \\begin{minipage}{0.3\\textwidth}\\begin{figure}[h]\n' \
+            '    \\centering\n' \
+            '    \\includegraphics[height=50px]{../imgs/b4b.png}\n' \
+            '    \\caption[]{desc.}\n' \
+            '\\end{figure}\\end{minipage} \\\\\n' \
+            '        \\end{tabular}\n' \
+            '\\end{table}'
+
+    b4b = el.BitForBit('title', {'Variable': ['velnorm', 'thk'],
+                                 'Max Error': [5.07070, 0.376806],
+                                 'Index of Max Error': [(2, 1, 24, 19), (3, 23, 23)],
+                                 'RMS Error': [.260977, .0354492]},
+                       imgs=[el.B4BImage('', 'desc.', page_path='vv_test/verification'),
+                             el.B4BImage('', 'desc.', page_path='vv_test/verification')])
+
+    assert b4b._repr_latex() == truth
+
+    livvkit.output_dir = None
 
 
 def test_el_gallery_json():
@@ -434,7 +608,7 @@ def test_el_gallery_json():
             '    "Gallery": {\n' \
             '        "title": "Empty",\n' \
             '        "elements": [],\n' \
-            '        "Type": "Diff",\n' \
+            '        "Type": "Gallery",\n' \
             '        "Title": "Empty",\n' \
             '        "Data": "<div class=\\"gallery\\">\\n    <h3>Empty</h3>\\n    \\n</div>\\n<div style=\\"clear:both\\"></div>",\n' \
             '        "__module__": "livvkit.util.elements.elements",\n' \
@@ -455,14 +629,14 @@ def test_el_gallery_html():
     truth = '<div class="gallery">\n' \
             '    <h3>The Gallery</h3>\n' \
             '    <div>\n' \
-            '    <a href="/imgs/image.png"\n' \
+            '    <a href="imgs/image.png"\n' \
             '       data-lightbox="The Image"\n' \
             '       data-title="A very nice image."\n' \
             '    >\n' \
             '        <img class="thumbnail caption"\n' \
             '             data-caption="The Image"\n' \
             '             alt="The Image"\n' \
-            '             src="/imgs/image.png"\n' \
+            '             src="imgs/image.png"\n' \
             '             style="height: 200px; overflow: hidden; position: relative;"\n' \
             '        >\n' \
             '    </a>\n' \
@@ -496,7 +670,7 @@ def test_el_image_json():
             '    "Image": {\n' \
             '        "title": "title",\n' \
             '        "desc": "description",\n' \
-            '        "path": "/path",\n' \
+            '        "path": "imgs",\n' \
             '        "name": "name.png",\n' \
             '        "group": "group",\n        "height": 300,\n' \
             '        "__module__": "livvkit.util.elements.elements",\n' \
@@ -505,7 +679,7 @@ def test_el_image_json():
             '    }\n' \
             '}'
 
-    image = el.Image('title', 'description', 'path/name.png', group='group', height=300)
+    image = el.Image('title', 'description', 'imgs/name.png', group='group', height=300)
 
     # Will raise a JSONDecodeError if not valid JSON
     _ = json.loads(image._repr_json())
@@ -515,20 +689,20 @@ def test_el_image_json():
 
 def test_el_image_html():
     truth = '<div>\n' \
-            '    <a href="/path/name.png"\n' \
+            '    <a href="imgs/name.png"\n' \
             '       data-lightbox="group"\n' \
             '       data-title="description"\n' \
             '    >\n' \
             '        <img class="thumbnail caption"\n' \
             '             data-caption="title"\n' \
             '             alt="title"\n' \
-            '             src="/path/name.png"\n' \
+            '             src="imgs/name.png"\n' \
             '             style="height: 300px; overflow: hidden; position: relative;"\n' \
             '        >\n' \
             '    </a>\n' \
             '</div>'
 
-    image = el.Image('title', 'description', 'path/name.png', group='group', height=300)
+    image = el.Image('title', 'description', 'imgs/name.png', group='group', height=300)
 
     assert image._repr_html() == truth
 
@@ -536,11 +710,11 @@ def test_el_image_html():
 def test_el_image_latex():
     truth = "\\begin{figure}[h]\n" \
             "    \\centering\n" \
-            "    \\includegraphics[height=300px]{path/name.png}\n" \
+            "    \\includegraphics[height=300px]{imgs/name.png}\n" \
             "    \\caption[title]{description}\n" \
             "\\end{figure}"
 
-    image = el.Image('title', 'description', 'path/name.png', group='group', height=300)
+    image = el.Image('title', 'description', 'imgs/name.png', group='group', height=300)
 
     assert image._repr_latex() == truth
 

@@ -90,7 +90,7 @@ def _analyze_case(test_dir, ref_dir, config):
     ref_config = functions.find_file(ref_dir, "*"+config["config_ext"])
     model_log = functions.find_file(test_dir, "*"+config["logfile_ext"])
     el = [
-            bit_for_bit(test_out, ref_out, config),
+            bit_for_bit(test_out, ref_out, config).__dict__,
             elements.FileDiff("Configuration Comparison",
                               ref_config, test_config).__dict__,
             bundle.parse_log(model_log)
@@ -126,12 +126,12 @@ def _summarize_result(result, summary):
     failure_count = 0
     summary_data = None
     for elem in result:
-        if elem["Type"] == "Bit for Bit" and "Data" in elem:
-            elem_data = elem["Data"]
+        if elem["Type"] == "Bit for Bit" and "data" in elem:
+            elem_data = elem["data"]
             summary_data = summary["Bit for Bit"]
             total_count += 1
-            for var in six.iterkeys(elem_data):
-                if elem_data[var]["Max Error"] != 0:
+            for ii, var in enumerate(elem_data['Variable']):
+                if elem_data["Max Error"][ii] != 0:
                     failure_count += 1
                     break
     if summary_data is not None:
@@ -202,28 +202,38 @@ def bit_for_bit(model_path, bench_path, config):
 
     # Begin bit for bit analysis
     headers = ["Max Error", "Index of Max Error", "RMS Error", "Plot"]
-    stats = LIVVDict()
-    for i, var in enumerate(config["bit_for_bit_vars"]):
+    plot_elements = []
+    table_data = {'Variable': [], 'Max Error': [], 'Index of Max Error': [], 'RMS Error': []}
+    for var in config["bit_for_bit_vars"]:
         if var in model_data.variables and var in bench_data.variables:
+            table_data['Variable'].append(var)
+
             m_vardata = model_data.variables[var][:]
             b_vardata = bench_data.variables[var][:]
             diff_data = m_vardata - b_vardata
+
             if diff_data.any():
-                stats[var]["Max Error"] = np.amax(np.absolute(diff_data))
-                stats[var]["Index of Max Error"] = str(
-                        np.unravel_index(np.absolute(diff_data).argmax(), diff_data.shape))
-                stats[var]["RMS Error"] = np.sqrt(np.sum(np.square(diff_data).flatten()) /
-                                                  diff_data.size)
-                pf = plot_bit_for_bit(fname, var, m_vardata, b_vardata, diff_data)
+                table_data["Max Error"].append(np.amax(np.absolute(diff_data)))
+                table_data["Index of Max Error"].append(str(
+                        np.unravel_index(np.absolute(diff_data).argmax(), diff_data.shape)))
+                table_data["RMS Error"].append(np.sqrt(np.sum(np.square(diff_data).flatten()) /
+                                               diff_data.size))
+                plot_elements.append(plot_bit_for_bit(fname, var, m_vardata, b_vardata, diff_data))
             else:
-                stats[var]["Max Error"] = stats[var]["RMS Error"] = 0
-                pf = stats[var]["Index of Max Error"] = "N/A"
-            stats[var]["Plot"] = pf
+                table_data["Max Error"].append(0)
+                table_data["Index of Max Error"].append("N/A")
+                table_data["RMS Error"].append(0)
+                plot_elements.append(elements.B4BImage('', '{} is bit-for-bit'.format(var),
+                                                       page_path=os.path.join(livvkit.output_dir, "verification")))
         else:
-            stats[var] = {"Max Error": "No Match", "RMS Error": "N/A", "Plot": "N/A"}
+            table_data["Max Error"].append("No Match")
+            table_data["Index of Max Error"].append("N/A")
+            table_data["RMS Error"].append("N/A")
+            plot_elements.append(elements.NAImage('', '{} is not in both test and reference data'.format(var),
+                                                  page_path=os.path.join(livvkit.output_dir, "verification")))
     model_data.close()
     bench_data.close()
-    return elements.bit_for_bit("Bit for Bit", headers, stats)
+    return elements.BitForBit("Bit for Bit", table_data, imgs=plot_elements)
 
 
 def plot_bit_for_bit(case, var_name, model_data, bench_data, diff_data):
@@ -286,6 +296,9 @@ def plot_bit_for_bit(case, var_name, model_data, bench_data, diff_data):
         plt.savefig(os.path.splitext(plot_file)[0]+'.eps', dpi=600)
     plt.savefig(plot_file)
     plt.close()
-    return os.path.join(os.path.relpath(plot_path,
-                                        os.path.join(livvkit.output_dir, "verification")),
-                        plot_name)
+
+    plot_element = elements.Image('',
+                                  'Bit for bit differences between test and reference',
+                                  plot_file,
+                                  height=50)
+    return plot_element
