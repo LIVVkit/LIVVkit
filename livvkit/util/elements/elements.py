@@ -66,7 +66,7 @@ _latex_env = jinja2.Environment(
 
 
 class BaseElement(abc.ABC):
-    """An abstract base LIVVkit Element
+    """An abstract base LIVVkit element
 
     An abstract base LIVVkit element providing the basic element interface
     expected by LIVVkit. All LIVVkit elements should either derive from this
@@ -156,6 +156,66 @@ class BaseElement(abc.ABC):
         """
         template = _latex_env.get_template(self._latex_template)
         return template.render(data=self.__dict__)
+
+
+class CompositeElement(BaseElement, abc.ABC):
+    """An abstract base LIVVkit element that contains other elements
+
+    An abstract base LIVVkit element that contains other elements in self.elements
+     and provids the basic element interface expected by LIVVkit. All LIVVkit
+     elements should either be derived from the LIVVkit BaseElement or implement
+     the same interface.
+    """
+    def __init__(self, elements):
+        """Initialize a composite LIVVkit element
+        """
+        super(CompositeElement, self).__init__()
+        self.elements = elements
+
+    def _repr_json(self):
+        """Represent this element as JSON
+
+        Using the internal dictionary representation of this element, return a
+        JSON representation of this element
+
+        Returns:
+            str: The JSON representation of this element
+        """
+        jsn = {type(self).__name__: self.__dict__.copy()}
+        jsn[type(self).__name__].update({'__module__': type(self).__module__,
+                                         '_html_template': self._html_template,
+                                         '_latex_template': self._latex_template})
+
+        elem_repr = [elem._repr_json() for elem in self.elements]
+        jsn[type(self).__name__]['elements'] = elem_repr
+
+        return json_tricks.dumps(jsn, indent=4, primitives=True, allow_nan=True)
+
+    def _repr_html(self):
+        """Represent this element as HTML
+
+        Using the jinja2 template defined by ``self._html_template``, return an
+        HTML representation of this element
+
+        Returns:
+            str: The HTML representation of this element
+        """
+        elem_repr = [elem._repr_html() for elem in self.elements]
+        template = _html_env.get_template(self._html_template)
+        return template.render(data=self.__dict__, elements=elem_repr)
+
+    def _repr_latex(self):
+        """Represent this element as LaTeX
+
+        Using the jinja2 template defined by ``self._latex_template``, return an
+        LaTeX representation of this element
+
+        Returns:
+            str: The LaTeX representation of this element
+        """
+        template = _latex_env.get_template(self._latex_template)
+        elem_repr = [elem._repr_latex() for elem in self.elements]
+        return template.render(data=self.__dict__, elements=elem_repr)
 
 
 def book(title, description, page_dict=None):
@@ -339,12 +399,12 @@ class Table(BaseElement):
         return template.render(data=self.__dict__, rows=self.rows, index=self.index)
 
 
-class BitForBit(BaseElement):
+class BitForBit(CompositeElement):
     _html_template = 'bit4bit.html'
     _latex_template = 'bit4bit.tex'
 
     def __init__(self, title, data, imgs):
-        super(BitForBit, self).__init__()
+        super(BitForBit, self).__init__(imgs)
         self.title = title
 
         if isinstance(data, pd.DataFrame):
@@ -356,34 +416,12 @@ class BitForBit(BaseElement):
         if len(imgs) != self.rows:
             raise IndexError('Imgs must be the same length as the table. '
                              'Table rows: {}, imgs length: {}.'.format(self.rows, len(imgs)))
-        self.b4b_imgs = imgs
 
         # FIXME: Remove once common.js is obsolete
         self.Type = "Bit for Bit"
         self.Title = title
         self.Data = self._repr_html()
 
-
-    def _repr_json(self):
-        """Represent this element as JSON
-
-        Using the internal dictionary representation of this element, return a
-        JSON representation of this element
-
-        Returns:
-            str: The JSON representation of this element
-        """
-        jsn = {type(self).__name__: self.__dict__.copy()}
-        jsn[type(self).__name__].update({'__module__': type(self).__module__,
-                                         '_html_template': self._html_template,
-                                         '_latex_template': self._latex_template})
-
-        imgs_repr = [img._repr_json() for img in self.b4b_imgs]
-        jsn[type(self).__name__]['b4b_imgs'] = imgs_repr
-
-        return json_tricks.dumps(jsn, indent=4, primitives=True, allow_nan=True)
-
-
     def _repr_html(self):
         """Represent this element as HTML
 
@@ -393,7 +431,7 @@ class BitForBit(BaseElement):
         Returns:
             str: The HTML representation of this element
         """
-        imgs_repr = [img._repr_html() for img in self.b4b_imgs]
+        imgs_repr = [img._repr_html() for img in self.elements]
         template = _html_env.get_template(self._html_template)
         return template.render(data=self.__dict__, rows=self.rows, b4b_imgs=imgs_repr)
 
@@ -406,68 +444,22 @@ class BitForBit(BaseElement):
         Returns:
             str: The LaTeX representation of this element
         """
-        imgs_repr = [img._repr_latex() for img in self.b4b_imgs]
+        imgs_repr = [img._repr_latex() for img in self.elements]
         template = _latex_env.get_template(self._latex_template)
         return template.render(data=self.__dict__, rows=self.rows, b4b_imgs=imgs_repr)
 
 
-class Gallery(BaseElement):
+class Gallery(CompositeElement):
     _html_template = 'gallery.html'
     _latex_template = 'gallery.tex'
 
     def __init__(self, title, elements):
-        super(Gallery, self).__init__()
+        super(Gallery, self).__init__(elements)
         self.title = title
-        self.elements = elements
         # FIXME: Remove once common.js is obsolete
         self.Type = 'Gallery'
         self.Title = title
         self.Data = self._repr_html()
-
-    def _repr_json(self):
-        """Represent this element as JSON
-
-        Using the internal dictionary representation of this element, return a
-        JSON representation of this element
-
-        Returns:
-            str: The JSON representation of this element
-        """
-        jsn = {type(self).__name__: self.__dict__.copy()}
-        jsn[type(self).__name__].update({'__module__': type(self).__module__,
-                                         '_html_template': self._html_template,
-                                         '_latex_template': self._latex_template})
-
-        elem_repr = [elem._repr_json() for elem in self.elements]
-        jsn[type(self).__name__]['elements'] = elem_repr
-
-        return json_tricks.dumps(jsn, indent=4, primitives=True, allow_nan=True)
-
-    def _repr_html(self):
-        """Represent this element as HTML
-
-        Using the jinja2 template defined by ``self._html_template``, return an
-        HTML representation of this element
-
-        Returns:
-            str: The HTML representation of this element
-        """
-        elem_repr = [elem._repr_html() for elem in self.elements]
-        template = _html_env.get_template(self._html_template)
-        return template.render(data=self.__dict__, elements=elem_repr)
-
-    def _repr_latex(self):
-        """Represent this element as LaTeX
-
-        Using the jinja2 template defined by ``self._latex_template``, return an
-        LaTeX representation of this element
-
-        Returns:
-            str: The LaTeX representation of this element
-        """
-        template = _latex_env.get_template(self._latex_template)
-        elem_repr = [elem._repr_latex() for elem in self.elements]
-        return template.render(data=self.__dict__, elements=elem_repr)
 
 
 class Image(BaseElement):

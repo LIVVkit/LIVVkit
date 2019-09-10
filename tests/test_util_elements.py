@@ -413,6 +413,9 @@ def test_el_table_w_index_transposed_latex():
 def test_el_b4b_json():
     truth = '{\n' \
             '    "BitForBit": {\n' \
+            '        "elements": [\n' \
+            '            "{\\n    \\"B4BImage\\": {\\n        \\"title\\": \\"\\",\\n        \\"desc\\": \\"desc.\\",\\n        \\"path\\": \\"../imgs\\",\\n        \\"name\\": \\"b4b.png\\",\\n        \\"group\\": null,\\n        \\"height\\": 50,\\n        \\"__module__\\": \\"livvkit.util.elements.elements\\",\\n        \\"_html_template\\": \\"image.html\\",\\n        \\"_latex_template\\": \\"image.tex\\"\\n    }\\n}",\n' \
+            '            "{\\n    \\"B4BImage\\": {\\n        \\"title\\": \\"\\",\\n        \\"desc\\": \\"desc.\\",\\n        \\"path\\": \\"../imgs\\",\\n        \\"name\\": \\"b4b.png\\",\\n        \\"group\\": null,\\n        \\"height\\": 50,\\n        \\"__module__\\": \\"livvkit.util.elements.elements\\",\\n        \\"_html_template\\": \\"image.html\\",\\n        \\"_latex_template\\": \\"image.tex\\"\\n    }\\n}"\n        ],\n' \
             '        "title": "title",\n' \
             '        "data": {\n' \
             '            "Variable": [\n' \
@@ -442,10 +445,6 @@ def test_el_b4b_json():
             '            ]\n' \
             '        },\n' \
             '        "rows": 2,\n' \
-            '        "b4b_imgs": [\n' \
-            '            "{\\n    \\"B4BImage\\": {\\n        \\"title\\": \\"\\",\\n        \\"desc\\": \\"desc.\\",\\n        \\"path\\": \\"../imgs\\",\\n        \\"name\\": \\"b4b.png\\",\\n        \\"group\\": null,\\n        \\"height\\": 50,\\n        \\"__module__\\": \\"livvkit.util.elements.elements\\",\\n        \\"_html_template\\": \\"image.html\\",\\n        \\"_latex_template\\": \\"image.tex\\"\\n    }\\n}",\n' \
-            '            "{\\n    \\"B4BImage\\": {\\n        \\"title\\": \\"\\",\\n        \\"desc\\": \\"desc.\\",\\n        \\"path\\": \\"../imgs\\",\\n        \\"name\\": \\"b4b.png\\",\\n        \\"group\\": null,\\n        \\"height\\": 50,\\n        \\"__module__\\": \\"livvkit.util.elements.elements\\",\\n        \\"_html_template\\": \\"image.html\\",\\n        \\"_latex_template\\": \\"image.tex\\"\\n    }\\n}"\n' \
-            '        ],\n' \
             '        "Type": "Bit for Bit",\n' \
             '        "Title": "title",\n' \
             '        "Data": "<div class=\\"bitForBit\\">\\n    <h3>title</h3>\\n    <table>\\n        <tr>\\n            <th>Variable</th>\\n            <th>Max Error</th>\\n            <th>Index of Max Error</th>\\n            <th>RMS Error</th>\\n            <th> Plot </th>\\n        </tr>\\n        <tr>\\n            <td>velnorm</td>\\n            <td>5.07070e+00</td>\\n            <td>(2, 1, 24, 19)</td>\\n            <td>2.60977e-01</td>\\n            <td>\\n                <div>\\n    <a href=\\"../imgs/b4b.png\\"\\n       data-lightbox=\\"\\"\\n       data-title=\\"desc.\\"\\n    >\\n        <img class=\\"thumbnail caption\\"\\n             data-caption=\\"\\"\\n             alt=\\"\\"\\n             src=\\"../imgs/b4b.png\\"\\n             style=\\"height: 50px; overflow: hidden; position: relative;\\"\\n        >\\n    </a>\\n</div>\\n            </td>\\n        </tr>\\n        <tr>\\n            <td>thk</td>\\n            <td>3.76806e-01</td>\\n            <td>(3, 23, 23)</td>\\n            <td>3.54492e-02</td>\\n            <td>\\n                <div>\\n    <a href=\\"../imgs/b4b.png\\"\\n       data-lightbox=\\"\\"\\n       data-title=\\"desc.\\"\\n    >\\n        <img class=\\"thumbnail caption\\"\\n             data-caption=\\"\\"\\n             alt=\\"\\"\\n             src=\\"../imgs/b4b.png\\"\\n             style=\\"height: 50px; overflow: hidden; position: relative;\\"\\n        >\\n    </a>\\n</div>\\n            </td>\\n        </tr>\\n    </table>\\n</div>",\n' \
@@ -454,7 +453,6 @@ def test_el_b4b_json():
             '        "_latex_template": "bit4bit.tex"\n' \
             '    }\n' \
             '}'
-
 
     b4b = el.BitForBit('title', {'Variable': ['velnorm', 'thk'],
                                  'Max Error': [5.07070, 0.376806],
@@ -571,10 +569,10 @@ def test_el_b4b_latex():
 def test_el_gallery_json():
     truth = '{\n' \
             '    "Gallery": {\n' \
-            '        "title": "The Gallery",\n' \
             '        "elements": [\n' \
             '            "{\\n    \\"Image\\": {\\n        \\"title\\": \\"The Image\\",\\n        \\"desc\\": \\"A very nice image.\\",\\n        \\"path\\": \\"imgs\\",\\n        \\"name\\": \\"image.png\\",\\n        \\"group\\": null,\\n        \\"height\\": null,\\n        \\"__module__\\": \\"livvkit.util.elements.elements\\",\\n        \\"_html_template\\": \\"image.html\\",\\n        \\"_latex_template\\": \\"image.tex\\"\\n    }\\n}"\n' \
             '        ],\n' \
+            '        "title": "The Gallery",\n' \
             '        "Type": "Gallery",\n' \
             '        "Title": "The Gallery",\n' \
             '        "Data": "<div class=\\"gallery\\">\\n    <h3>The Gallery</h3>\\n    <div>\\n    <a href=\\"imgs/image.png\\"\\n       data-lightbox=\\"The Image\\"\\n       data-title=\\"A very nice image.\\"\\n    >\\n        <img class=\\"thumbnail caption\\"\\n             data-caption=\\"The Image\\"\\n             alt=\\"The Image\\"\\n             src=\\"imgs/image.png\\"\\n             style=\\"height: 200px; overflow: hidden; position: relative;\\"\\n        >\\n    </a>\\n</div>\\n    \\n</div>\\n<div style=\\"clear:both\\"></div>",\n' \
