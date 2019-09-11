@@ -481,7 +481,7 @@ class B4BImage(Image):
         super(B4BImage, self).__init__(title, description,
                                        image_file=image_file,
                                        relative_to=page_path,
-                                       height=50)
+                                       height=50, group='b4b')
 
 
 class NAImage(Image):
@@ -491,7 +491,7 @@ class NAImage(Image):
         super(NAImage, self).__init__(title, description,
                                       image_file=image_file,
                                       relative_to=page_path,
-                                      height=50)
+                                      height=50, group='na')
 
 
 class FileDiff(BaseElement):

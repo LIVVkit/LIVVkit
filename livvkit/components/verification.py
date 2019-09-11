@@ -304,8 +304,11 @@ def plot_bit_for_bit(case, var_name, model_data, bench_data, diff_data):
     plt.savefig(plot_file)
     plt.close()
 
-    plot_element = elements.Image('',
-                                  'Bit for bit differences between test and reference',
-                                  plot_file,
-                                  height=50)
+    # NOTE: If you don't include a title, you must include a group for the image
+    #       to appear in a lightbox when clicked instead of as it's own page.
+    plot_element = elements.Image(
+            '', 'Bit for bit differences between test and reference for '
+                '{} in {}'.format(var_name, case),
+            plot_file, height=50, group='not-b4b'
+    )
     return plot_element

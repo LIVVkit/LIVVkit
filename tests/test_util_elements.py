@@ -474,8 +474,8 @@ def test_el_b4b_json():
     truth = '{\n' \
             '    "BitForBit": {\n' \
             '        "elements": [\n' \
-            '            "{\\n    \\"B4BImage\\": {\\n        \\"title\\": \\"\\",\\n        \\"desc\\": \\"desc.\\",\\n        \\"path\\": \\"../imgs\\",\\n        \\"name\\": \\"b4b.png\\",\\n        \\"group\\": null,\\n        \\"height\\": 50,\\n        \\"__module__\\": \\"livvkit.util.elements.elements\\",\\n        \\"_html_template\\": \\"image.html\\",\\n        \\"_latex_template\\": \\"image.tex\\"\\n    }\\n}",\n' \
-            '            "{\\n    \\"B4BImage\\": {\\n        \\"title\\": \\"\\",\\n        \\"desc\\": \\"desc.\\",\\n        \\"path\\": \\"../imgs\\",\\n        \\"name\\": \\"b4b.png\\",\\n        \\"group\\": null,\\n        \\"height\\": 50,\\n        \\"__module__\\": \\"livvkit.util.elements.elements\\",\\n        \\"_html_template\\": \\"image.html\\",\\n        \\"_latex_template\\": \\"image.tex\\"\\n    }\\n}"\n        ],\n' \
+            '            "{\\n    \\"B4BImage\\": {\\n        \\"title\\": \\"\\",\\n        \\"desc\\": \\"desc.\\",\\n        \\"path\\": \\"../imgs\\",\\n        \\"name\\": \\"b4b.png\\",\\n        \\"group\\": \\"b4b\\",\\n        \\"height\\": 50,\\n        \\"__module__\\": \\"livvkit.util.elements.elements\\",\\n        \\"_html_template\\": \\"image.html\\",\\n        \\"_latex_template\\": \\"image.tex\\"\\n    }\\n}",\n' \
+            '            "{\\n    \\"B4BImage\\": {\\n        \\"title\\": \\"\\",\\n        \\"desc\\": \\"desc.\\",\\n        \\"path\\": \\"../imgs\\",\\n        \\"name\\": \\"b4b.png\\",\\n        \\"group\\": \\"b4b\\",\\n        \\"height\\": 50,\\n        \\"__module__\\": \\"livvkit.util.elements.elements\\",\\n        \\"_html_template\\": \\"image.html\\",\\n        \\"_latex_template\\": \\"image.tex\\"\\n    }\\n}"\n        ],\n' \
             '        "title": "title",\n' \
             '        "data": {\n' \
             '            "Variable": [\n' \
@@ -507,7 +507,7 @@ def test_el_b4b_json():
             '        "rows": 2,\n' \
             '        "Type": "Bit for Bit",\n' \
             '        "Title": "title",\n' \
-            '        "Data": "<div class=\\"bitForBit\\">\\n    <h3>title</h3>\\n    <table>\\n        <tr>\\n            <th>Variable</th>\\n            <th>Max Error</th>\\n            <th>Index of Max Error</th>\\n            <th>RMS Error</th>\\n            <th> Plot </th>\\n        </tr>\\n        <tr>\\n            <td>velnorm</td>\\n            <td>5.07070e+00</td>\\n            <td>(2, 1, 24, 19)</td>\\n            <td>2.60977e-01</td>\\n            <td>\\n                <div>\\n    <a href=\\"../imgs/b4b.png\\"\\n       data-lightbox=\\"\\"\\n       data-title=\\"desc.\\"\\n    >\\n        <img class=\\"thumbnail caption\\"\\n             data-caption=\\"\\"\\n             alt=\\"\\"\\n             src=\\"../imgs/b4b.png\\"\\n             style=\\"height: 50px; overflow: hidden; position: relative;\\"\\n        >\\n    </a>\\n</div>\\n            </td>\\n        </tr>\\n        <tr>\\n            <td>thk</td>\\n            <td>3.76806e-01</td>\\n            <td>(3, 23, 23)</td>\\n            <td>3.54492e-02</td>\\n            <td>\\n                <div>\\n    <a href=\\"../imgs/b4b.png\\"\\n       data-lightbox=\\"\\"\\n       data-title=\\"desc.\\"\\n    >\\n        <img class=\\"thumbnail caption\\"\\n             data-caption=\\"\\"\\n             alt=\\"\\"\\n             src=\\"../imgs/b4b.png\\"\\n             style=\\"height: 50px; overflow: hidden; position: relative;\\"\\n        >\\n    </a>\\n</div>\\n            </td>\\n        </tr>\\n    </table>\\n</div>",\n' \
+            '        "Data": "<div class=\\"bitForBit\\">\\n    <h3>title</h3>\\n    <table>\\n        <tr>\\n            <th>Variable</th>\\n            <th>Max Error</th>\\n            <th>Index of Max Error</th>\\n            <th>RMS Error</th>\\n            <th> Plot </th>\\n        </tr>\\n        <tr>\\n            <td>velnorm</td>\\n            <td>5.07070e+00</td>\\n            <td>(2, 1, 24, 19)</td>\\n            <td>2.60977e-01</td>\\n            <td>\\n                <div>\\n    <a href=\\"../imgs/b4b.png\\"\\n       data-lightbox=\\"b4b\\"\\n       data-title=\\"desc.\\"\\n    >\\n        <img class=\\"thumbnail caption\\"\\n             data-caption=\\"\\"\\n             alt=\\"\\"\\n             src=\\"../imgs/b4b.png\\"\\n             style=\\"height: 50px; overflow: hidden; position: relative;\\"\\n        >\\n    </a>\\n</div>\\n            </td>\\n        </tr>\\n        <tr>\\n            <td>thk</td>\\n            <td>3.76806e-01</td>\\n            <td>(3, 23, 23)</td>\\n            <td>3.54492e-02</td>\\n            <td>\\n                <div>\\n    <a href=\\"../imgs/b4b.png\\"\\n       data-lightbox=\\"b4b\\"\\n       data-title=\\"desc.\\"\\n    >\\n        <img class=\\"thumbnail caption\\"\\n             data-caption=\\"\\"\\n             alt=\\"\\"\\n             src=\\"../imgs/b4b.png\\"\\n             style=\\"height: 50px; overflow: hidden; position: relative;\\"\\n        >\\n    </a>\\n</div>\\n            </td>\\n        </tr>\\n    </table>\\n</div>",\n' \
             '        "__module__": "livvkit.util.elements.elements",\n' \
             '        "_html_template": "bit4bit.html",\n' \
             '        "_latex_template": "bit4bit.tex"\n' \
@@ -547,7 +547,7 @@ def test_el_b4b_html():
             '            <td>\n' \
             '                <div>\n' \
             '    <a href="../imgs/b4b.png"\n' \
-            '       data-lightbox=""\n' \
+            '       data-lightbox="b4b"\n' \
             '       data-title="desc."\n' \
             '    >\n' \
             '        <img class="thumbnail caption"\n' \
@@ -568,7 +568,7 @@ def test_el_b4b_html():
             '            <td>\n' \
             '                <div>\n' \
             '    <a href="../imgs/b4b.png"\n' \
-            '       data-lightbox=""\n' \
+            '       data-lightbox="b4b"\n' \
             '       data-title="desc."\n' \
             '    >\n' \
             '        <img class="thumbnail caption"\n' \
