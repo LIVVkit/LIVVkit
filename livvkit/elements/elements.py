@@ -303,6 +303,12 @@ def tab(tab_name, element_list=None, section_list=None):
                 _tab['Elements'].append(element_list)
     return _tab
 
+class Tab(CompositeElement):
+    _html_template = 'tab.html'
+    _latex_template = 'tab.tex'
+
+    def __init__(self, tabs):
+        super(Tab, self).__init__(tabs)
 
 class Section(CompositeElement):
     _html_template = 'section.html'
@@ -536,6 +542,7 @@ class Error(BaseElement):
         self.message = message
         # FIXME: Remove once common.js is obsolete
         self.Type = 'Error'
+        self.Data = self._repr_html()
 
 
 class RawHTML(BaseElement):

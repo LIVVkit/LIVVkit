@@ -821,6 +821,7 @@ def test_el_error_json():
             '        "title": "WOOPS",\n' \
             '        "message": "Mistakes were made.",\n' \
             '        "Type": "Error",\n' \
+            '        "Data": "<div class=\\"error\\">\\n    <h3>WOOPS</h3>\\n    <p>Mistakes were made.</p>\\n</div>",\n' \
             '        "__module__": "livvkit.elements.elements",\n' \
             '        "_html_template": "err.html",\n' \
             '        "_latex_template": "err.tex"\n' \

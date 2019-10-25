@@ -287,10 +287,7 @@ function drawValSummary(data, div) {
  *                       determines whether it is a class or id (ie include # or .)
  */
 function drawError(data, div) {
-    var html = "<div class=\"error\">";
-    html += "<h3>" + data["title"] + "</h3>\n";
-    html += "<p>ERROR: " + data["message"] + "</p>\n";
-    html += "</div>";
+    var html =  data['Data'];
     $(div).append(html);
 }
 
