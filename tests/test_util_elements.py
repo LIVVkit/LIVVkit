@@ -24,7 +24,6 @@ class LIVVkitOutput(ContextDecorator):
 def test_el_base_templates_as_property():
     truth = 'template_string'
 
-    # noinspection PyMissingOrEmptyDocstring
     class Property(el.BaseElement):
         @property
         def _html_template(self):
@@ -33,7 +32,6 @@ def test_el_base_templates_as_property():
         @property
         def _latex_template(self):
             return truth
-
 
     p = Property()
 
@@ -55,7 +53,6 @@ def test_el_base_templates_as_class_attribute():
     class ClassAttribute(el.BaseElement):
         _html_template = truth
         _latex_template = truth
-
 
     ca = ClassAttribute()
 
