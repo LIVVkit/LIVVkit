@@ -316,7 +316,6 @@ function drawDiff(data, div) {
  */
 function drawBitForBit(data, div) {
     var html = data['Data'];
-    html += "</div>";
     $(div).append(html);
 }
 
@@ -329,7 +328,6 @@ function drawBitForBit(data, div) {
  */
 function drawTable(data, div) {
     var html = data['Data'];
-    html += "</div>";
     $(div).append(html);
 }
 
@@ -342,7 +340,6 @@ function drawTable(data, div) {
  */
 function drawGallery(data, div) {
     var html = data['Data'];
-    html += "</div>";
     $(div).append(html);
 }
 
