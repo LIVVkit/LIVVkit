@@ -70,9 +70,9 @@ def main(cl_args=None):
     from livvkit.components import verification
     from livvkit.components import performance
     from livvkit.components import validation
+    from livvkit import elements
     from livvkit import scheduler
     from livvkit.util import functions
-    from livvkit.util import elements
 
     summary_elements = []
 

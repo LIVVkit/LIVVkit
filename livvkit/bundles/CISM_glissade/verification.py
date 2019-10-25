@@ -37,7 +37,7 @@ import numpy as np
 
 from six.moves.configparser import ConfigParser
 
-from livvkit.util import elements
+from livvkit import elements
 
 
 def parse_log(file_path):

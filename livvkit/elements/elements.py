@@ -345,7 +345,7 @@ class Table(BaseElement):
 
         if index is True and self.index is None:
             self.index = range(self.rows)
-        elif isinstance(index, collections.Collection):
+        elif isinstance(index, collections.abc.Collection):
             if len(index) != self.rows:
                 raise IndexError('Table index must be the same length as the table. '
                                  'Table rows: {}, index length: {}.'.format(self.rows, len(index)))

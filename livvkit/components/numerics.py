@@ -36,7 +36,7 @@ import importlib
 
 import livvkit
 from livvkit.util import functions
-from livvkit.util import elements
+from livvkit import elements
 
 
 def run_suite(case, config, summary):

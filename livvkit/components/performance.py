@@ -38,10 +38,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 import livvkit
+from livvkit import elements
 from livvkit.util import functions
 from livvkit.util import colormaps
 from livvkit.util.LIVVDict import LIVVDict
-from livvkit.util import elements
 
 SEC_PER_DAY = 86400.0
 

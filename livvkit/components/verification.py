@@ -40,11 +40,11 @@ import matplotlib.pyplot as plt
 from netCDF4 import Dataset
 
 import livvkit
+from livvkit import elements
 from livvkit.util import netcdf
 from livvkit.util import functions
 from livvkit.util import colormaps
 from livvkit.util.LIVVDict import LIVVDict
-from livvkit.util import elements
 
 
 def run_suite(case, config, summary):

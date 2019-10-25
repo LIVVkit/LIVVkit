@@ -94,7 +94,7 @@ setup(
                 'livvkit.data',
                 'livvkit.data.numerics',
                 'livvkit.util',
-                'livvkit.util.elements',
+                'livvkit.elements',
                 ],
 
       entry_points={'console_scripts': ['livv = livvkit.__main__:main']},

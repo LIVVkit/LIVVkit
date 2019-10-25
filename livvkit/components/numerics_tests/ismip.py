@@ -41,7 +41,7 @@ import matplotlib.pyplot as plt
 
 import livvkit
 from livvkit.util.LIVVDict import LIVVDict
-from livvkit.util import elements
+from livvkit import elements
 from livvkit.util import functions
 
 
