@@ -129,18 +129,6 @@ def test_el_base_templates_as_method():
         lm = LatexMethod()
 
 
-def test_el_book_json():
-    assert False
-
-
-def test_el_book_html():
-    assert False
-
-
-def test_el_book_latex():
-    assert False
-
-
 def test_el_page_json():
     assert False
 

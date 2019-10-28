@@ -286,17 +286,6 @@ class NamedCompositeElement(BaseElement, abc.ABC):
         return template.render(data=self.__dict__, elements_dict=elem_repr)
 
 
-def book(title, description, page_dict=None):
-    _book = {'Type': 'Book',
-             'Title': title,
-             'Description': description,
-             }
-    if page_dict is not None:
-        _book['Data'] = page_dict
-
-    return _book
-
-
 def page(title, description, element_list=None, tabs=None):
     """
     Returns a dictionary representing a new page to display elements.
