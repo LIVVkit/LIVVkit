@@ -137,6 +137,10 @@ def test_el_book_html():
     assert False
 
 
+def test_el_book_latex():
+    assert False
+
+
 def test_el_page_json():
     assert False
 
@@ -145,12 +149,73 @@ def test_el_page_html():
     assert False
 
 
-def test_el_tab_json():
+def test_el_page_latx():
     assert False
 
 
-def test_el_tab_html():
-    assert False
+def test_el_tabs_json():
+    truth = '{\n' \
+            '    "Tabs": {\n' \
+            '        "elements_dict": {\n' \
+            '            "a": [\n' \
+            '                "{\\n    \\"Error\\": {\\n        \\"title\\": \\"AError\\",\\n        \\"message\\": \\"woops\\",\\n        \\"Type\\": \\"Error\\",\\n        \\"Data\\": \\"<div class=\\\\\\"error\\\\\\">\\\\n    <h3>AError</h3>\\\\n    <p>woops</p>\\\\n</div>\\",\\n        \\"__module__\\": \\"livvkit.elements.elements\\",\\n        \\"_html_template\\": \\"err.html\\",\\n        \\"_latex_template\\": \\"err.tex\\"\\n    }\\n}"\n' \
+            '            ],\n' \
+            '            "b": [\n' \
+            '                "{\\n    \\"Error\\": {\\n        \\"title\\": \\"BError\\",\\n        \\"message\\": \\"boogers\\",\\n        \\"Type\\": \\"Error\\",\\n        \\"Data\\": \\"<div class=\\\\\\"error\\\\\\">\\\\n    <h3>BError</h3>\\\\n    <p>boogers</p>\\\\n</div>\\",\\n        \\"__module__\\": \\"livvkit.elements.elements\\",\\n        \\"_html_template\\": \\"err.html\\",\\n        \\"_latex_template\\": \\"err.tex\\"\\n    }\\n}"\n' \
+            '            ]\n' \
+            '        },\n' \
+            '        "Data": "<div id=\\"tabs\\">\\n    <ul>\\n        <li><a href=\\"#a\\">a</a></li>\\n        <li><a href=\\"#b\\">b</a></li>\\n    </ul>\\n    <div id=\\"a\\">\\n        <div class=\\"error\\">\\n    <h3>AError</h3>\\n    <p>woops</p>\\n</div>\\n    </div>\\n    <div id=\\"b\\">\\n        <div class=\\"error\\">\\n    <h3>BError</h3>\\n    <p>boogers</p>\\n</div>\\n    </div>\\n</div>",\n' \
+            '        "__module__": "livvkit.elements.elements",\n' \
+            '        "_html_template": "tabs.html",\n' \
+            '        "_latex_template": "tabs.tex"\n' \
+            '    }\n' \
+            '}'
+
+    tabs = el.Tabs({'a': [el.Error('AError', 'woops')], 'b': [el.Error('BError', 'boogers')]})
+
+    # Will raise a JSONDecodeError if not valid JSON
+    _ = json.loads(tabs._repr_json())
+
+    assert tabs._repr_json() == truth
+
+
+def test_el_tabs_html():
+    truth = '<div id="tabs">\n' \
+            '    <ul>\n' \
+            '        <li><a href="#a">a</a></li>\n' \
+            '        <li><a href="#b">b</a></li>\n' \
+            '    </ul>\n' \
+            '    <div id="a">\n' \
+            '        <div class="error">\n' \
+            '    <h3>AError</h3>\n' \
+            '    <p>woops</p>\n' \
+            '</div>\n' \
+            '    </div>\n' \
+            '    <div id="b">\n' \
+            '        <div class="error">\n' \
+            '    <h3>BError</h3>\n' \
+            '    <p>boogers</p>\n' \
+            '</div>\n' \
+            '    </div>\n' \
+            '</div>'
+
+    tabs = el.Tabs({'a': [el.Error('AError', 'woops')], 'b': [el.Error('BError', 'boogers')]})
+
+    assert tabs._repr_html() == truth
+
+
+def test_el_tabs_latex():
+    truth = '\\levelstay{a}\n' \
+            '    \\colorbox{red}{\\parbox{\\textwidth}{\n' \
+            '    \\textbf{AError}: woops\n' \
+            '}}\\levelstay{b}\n' \
+            '    \\colorbox{red}{\\parbox{\\textwidth}{\n' \
+            '    \\textbf{BError}: boogers\n' \
+            '}}'
+
+    tabs = el.Tabs({'a': [el.Error('AError', 'woops')], 'b': [el.Error('BError', 'boogers')]})
+
+    assert tabs._repr_latex() == truth
 
 
 def test_el_section_json():

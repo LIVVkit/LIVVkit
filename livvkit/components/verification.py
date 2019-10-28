@@ -52,7 +52,7 @@ def run_suite(case, config, summary):
     config["name"] = case
     model_dir = os.path.join(livvkit.model_dir, config['data_dir'], case)
     bench_dir = os.path.join(livvkit.bench_dir, config['data_dir'], case)
-    tabs = []
+    tabs = {}
     case_summary = LIVVDict()
     model_cases = functions.collect_cases(model_dir)
     bench_cases = functions.collect_cases(bench_dir)
@@ -68,9 +68,9 @@ def run_suite(case, config, summary):
             case_sections.append(elements.Section(mcase, case_result))
             case_summary[subcase] = _summarize_result(case_result,
                                                       case_summary[subcase])
-        tabs.append(elements.tab(subcase, section_list=case_sections))
+        tabs[subcase] = case_sections
 
-    result = elements.page(case, config["description"], tab_list=tabs)
+    result = elements.page(case, config["description"], tabs=elements.Tabs(tabs))
     summary[case] = case_summary
     _print_summary(case, summary[case])
     functions.create_page_from_template("verification.html",

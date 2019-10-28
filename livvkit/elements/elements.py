@@ -162,9 +162,9 @@ class CompositeElement(BaseElement, abc.ABC):
     """An abstract base LIVVkit element that contains other elements
 
     An abstract base LIVVkit element that contains other elements in self.elements
-     and provids the basic element interface expected by LIVVkit. All LIVVkit
-     elements should either be derived from the LIVVkit BaseElement or implement
-     the same interface.
+    and provides the basic element interface expected by LIVVkit. All LIVVkit
+    elements should either be derived from the LIVVkit BaseElement or implement
+    the same interface.
     """
     def __init__(self, elements):
         """Initialize a composite LIVVkit element
@@ -218,6 +218,74 @@ class CompositeElement(BaseElement, abc.ABC):
         return template.render(data=self.__dict__, elements=elem_repr)
 
 
+class NamedCompositeElement(BaseElement, abc.ABC):
+    """An abstract base LIVVkit element that contains multiple other composite elements
+
+    An abstract base LIVVkit element that allows to logically group multiple
+    other composite elements in self.element_dict and provides the basic element
+    interface expected by LIVVkit. All LIVVkit elements should either be derived
+    from the LIVVkit BaseElement or implement the same interface.
+    """
+    def __init__(self, elements_dict):
+        """Initialize  a multi-composite LIVVkit element"""
+        super(NamedCompositeElement, self).__init__()
+        self.elements_dict = elements_dict
+
+    def _repr_json(self):
+        """Represent this element as JSON
+
+        Using the internal dictionary representation of this element, return a
+        JSON representation of this element
+
+        Returns:
+            str: The JSON representation of this element
+        """
+        jsn = {type(self).__name__: self.__dict__.copy()}
+        jsn[type(self).__name__].update({'__module__': type(self).__module__,
+                                         '_html_template': self._html_template,
+                                         '_latex_template': self._latex_template})
+
+        elem_repr = {}
+        for title, elements in self.elements_dict.items():
+            elem_repr[title] = [elem._repr_json() for elem in elements]
+
+        jsn[type(self).__name__]['elements_dict'] = elem_repr
+
+        return json_tricks.dumps(jsn, indent=4, primitives=True, allow_nan=True)
+
+    def _repr_html(self):
+        """Represent this element as HTML
+
+        Using the jinja2 template defined by ``self._html_template``, return an
+        HTML representation of this element
+
+        Returns:
+            str: The HTML representation of this element
+        """
+        elem_repr = {}
+        for title, elements in self.elements_dict.items():
+            elem_repr[title] = [elem._repr_html() for elem in elements]
+
+        template = _html_env.get_template(self._html_template)
+        return template.render(data=self.__dict__, elements_dict=elem_repr)
+
+    def _repr_latex(self):
+        """Represent this element as LaTeX
+
+        Using the jinja2 template defined by ``self._latex_template``, return an
+        LaTeX representation of this element
+
+        Returns:
+            str: The LaTeX representation of this element
+        """
+        elem_repr = {}
+        for title, elements in self.elements_dict.items():
+            elem_repr[title] = [elem._repr_latex() for elem in elements]
+
+        template = _latex_env.get_template(self._latex_template)
+        return template.render(data=self.__dict__, elements_dict=elem_repr)
+
+
 def book(title, description, page_dict=None):
     _book = {'Type': 'Book',
              'Title': title,
@@ -229,7 +297,7 @@ def book(title, description, page_dict=None):
     return _book
 
 
-def page(title, description, element_list=None, tab_list=None):
+def page(title, description, element_list=None, tabs=None):
     """
     Returns a dictionary representing a new page to display elements.
     This can be thought of as a simple container for displaying multiple
@@ -241,7 +309,7 @@ def page(title, description, element_list=None, tab_list=None):
         description: A description of the section
         element_list: The list of elements to display. If a single element is
                       given it will be wrapped in a list.
-        tab_list: A list of tabs to display.
+        tabs: A LIVVkit Tabs element containing the tabs to display on the page
 
     Returns:
         A dictionary with metadata specifying that it is to be rendered
@@ -259,56 +327,22 @@ def page(title, description, element_list=None, tab_list=None):
             _page['Data']['Elements'] = element_list
         else:
             _page['Data']['Elements'] = [element_list]
-    if tab_list is not None:
-        if isinstance(tab_list, list):
-            _page['Data']['Tabs'] = tab_list
-        else:
-            _page['Data']['Tabs'] = [tab_list]
+    if tabs is not None:
+        _page['Data']['Tabs'] = tabs.__dict__
+
     return _page
 
 
-def tab(tab_name, element_list=None, section_list=None):
-    """
-    Returns a dictionary representing a new tab to display elements.
-    This can be thought of as a simple container for displaying multiple
-    types of information.
-
-    Args:
-        tab_name: The title to display
-        element_list: The list of elements to display. If a single element is
-                      given it will be wrapped in a list.
-        section_list: A list of sections to display.
-
-    Returns:
-        A dictionary with metadata specifying that it is to be rendered
-        as a page containing multiple elements and/or tab.
-    """
-    _tab = {
-        'Type': 'Tab',
-        'Title': tab_name,
-    }
-
-    if element_list is not None:
-        if isinstance(element_list, list):
-            _tab['Elements'] = element_list
-        else:
-            _tab['Elements'] = [element_list]
-    if section_list is not None:
-        if isinstance(section_list, list):
-            _tab['Sections'] = section_list
-        else:
-            if 'Elements' not in section_list:
-                _tab['Elements'] = element_list
-            else:
-                _tab['Elements'].append(element_list)
-    return _tab
-
-class Tab(CompositeElement):
-    _html_template = 'tab.html'
-    _latex_template = 'tab.tex'
+# FIXME: Docstring --> pass in a dictionary like {tab_title: [tab_elements]}
+class Tabs(NamedCompositeElement):
+    _html_template = 'tabs.html'
+    _latex_template = 'tabs.tex'
 
     def __init__(self, tabs):
-        super(Tab, self).__init__(tabs)
+        super(Tabs, self).__init__(tabs)
+        # FIXME: Remove once common.js is obsolete
+        self.Data = self._repr_html()
+
 
 class Section(CompositeElement):
     _html_template = 'section.html'

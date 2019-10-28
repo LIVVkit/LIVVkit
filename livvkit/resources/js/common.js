@@ -119,8 +119,9 @@ function drawContent() {
     html += "</div>";
     $("#content").append(html);
   
-    // If there are plain data elements in the dataset draw and add them to the div
     var content = data["Data"];
+
+    // If there are plain data elements in the dataset draw and add them to the div
     if ("Elements" in content) {
         // Add the content
         for (var idx in content["Elements"]) {
@@ -133,46 +134,11 @@ function drawContent() {
     if ("Tabs" in content) {
         // Add the tabs
         var tabs = content["Tabs"];
-        tabs = tabs.sort();
         console.log(tabs);
 
-        var html = "<div id=\"tabs\">\n";
-        html += "<ul>\n";
-        for (var idx in tabs) {
-            console.log(idx);
-            var tab = tabs[idx];
-            html += "<li><a href=\"#" + tab["Title"] + "\">" + 
-                    tab["Title"] + "</a></li>\n";
-        }
-        html += "</ul>\n";
+        var tab_html = tabs["Data"];
+        $("#content").append(tab_html);
 
-        for (var idx in tabs) {
-            console.log(idx);
-            var tab = tabs[idx];
-            html += "<div id=\"" + tabs[idx]["Title"] + "\"></div>";
-        }
-        html += "</div>";
-        $("#content").append(html);
-
-        // Add the content
-        for (var idx in tabs) {
-            var tab = tabs[idx];
-            if ("Elements" in tab) {
-                var elements = tab["Elements"];
-                for (var elem_idx in elements) {
-                   elem = elements[elem_idx];
-                   elementMap[elem["Type"]](elem, "#"+tab["Title"]);
-                }
-            }
-            if ("Sections" in tab) {
-                var sections = tab["Sections"];
-                for (var tab_idx in sections) {
-                    var section  = sections[tab_idx];
-                    var section_html =  section['Data'];
-                    $("#"+tab["Title"]).append(section_html);
-                }
-            }
-        }
         $("#tabs").tabs();
     }
 }
