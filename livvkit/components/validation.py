@@ -119,25 +119,27 @@ def _load_case_module(case, config):
     return m
 
 
-def run_suite(case, config, summary):
+def run_suite(case, config):
     """ Run the full suite of validation tests """
     m = _load_case_module(case, config)
 
     result = m.run(case, config)
-    summary[case] = _summarize_result(m, result)
+    summary = _summarize_result(m, result)
     _print_summary(m, case, summary)
 
     functions.create_page_from_template("validation.html",
                                         os.path.join(livvkit.index_dir, "validation", case + ".html"))
     functions.write_json(result, os.path.join(livvkit.output_dir, "validation"), case + ".json")
 
+    return summary
+
 
 def _print_summary(module, case, summary):
     try:
         try:
-            module.print_summary(summary[case])
+            module.print_summary(summary)
         except TypeError:
-            module.print_summary(case, summary[case])
+            module.print_summary(case, summary)
     except (NotImplementedError, AttributeError):
         print("    Ran " + case + "!")
         print("")

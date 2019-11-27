@@ -39,7 +39,7 @@ from livvkit.util import functions
 from livvkit import elements
 
 
-def run_suite(case, config, summary):
+def run_suite(case, config):
     """ Run the full suite of numerics tests """
     m = importlib.import_module(config['module'])
     m.set_up()
@@ -70,14 +70,20 @@ def run_suite(case, config, summary):
     try:
         el = m.run(config, analysis_data)
     except KeyError:
-        el = elements.Error("Numerics Plots", "Missing data").__dict__
+        el = elements.Error("Numerics Plots", "Missing data")
 
-    result = elements.page(case, config['description'], element_list=el)
-    summary[case] = _summarize_result(m, analysis_data, config)
-    _print_summary(m, case, summary[case])
-    functions.create_page_from_template("numerics.html",
-                                        os.path.join(livvkit.index_dir, "numerics", case + ".html"))
-    functions.write_json(result, os.path.join(livvkit.output_dir, "numerics"), case + ".json")
+    result = elements.Page(case, config['description'], elements=[el])
+    summary = _summarize_result(m, analysis_data, config)
+
+    _print_summary(m, case, summary)
+
+    functions.create_page_from_template(
+        "numerics.html", os.path.join(livvkit.index_dir, "numerics", case + ".html")
+    )
+    with open(os.path.join(livvkit.output_dir, "numerics", case + ".json"), 'w') as f:
+        f.write(result._repr_json())
+
+    return summary
 
 
 def _print_summary(module, case, summary):

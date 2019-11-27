@@ -76,4 +76,4 @@ validation_model_configs = None
 # optional flags
 verify = False
 validate = False
-publish = False
+pool_size = None

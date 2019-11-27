@@ -65,7 +65,7 @@ function drawNav() {
     var html = "";
     getUrl = window.location.href.substr(0,window.location.href.lastIndexOf('/')+1);
     data = loadJSON(getUrl + indexPath + '/index.json');
-    
+    data = data["Page"]
     // Go through each category: numerics, verification, performance, and validation
     for (var cat in data["Data"]["Elements"]) {
         if (data["Data"]["Elements"][cat] != null && Object.keys(data["Data"]["Elements"][cat]["Data"]).length > 0) {
@@ -111,36 +111,9 @@ function drawContent() {
         html_file = "index";
     }
     var data = loadJSON('./' + html_file + ".json");
-    var html = "<div id=" + data["Title"] + ">";
-    if (data["Title"] != "Summary") {
-        html += "<h2>" + data["Title"] + "</h2>";
-    }
-    html += "<p>" + data["Description"];
-    html += "</div>";
+    var html = data["Page"]["Data"];
     $("#content").append(html);
-  
-    var content = data["Data"];
-
-    // If there are plain data elements in the dataset draw and add them to the div
-    if ("Elements" in content) {
-        // Add the content
-        for (var idx in content["Elements"]) {
-            elem = content["Elements"][idx];
-            elementMap[elem["Type"]](elem, "#"+data["Title"]);
-        }
-    }
-   
-    // If there are tabbed data elements in the dataset draw and add them to the div
-    if ("Tabs" in content) {
-        // Add the tabs
-        var tabs = content["Tabs"];
-        console.log(tabs);
-
-        var tab_html = tabs["Data"];
-        $("#content").append(tab_html);
-
-        $("#tabs").tabs();
-    }
+    $("#tabs").tabs();
 }
 
 

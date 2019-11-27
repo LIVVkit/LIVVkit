@@ -103,8 +103,9 @@ def main(cl_args=None):
         print("")
 
     if livvkit.verify or livvkit.validate:
-        result = elements.page("Summary", "", element_list=summary_elements)
-        functions.write_json(result, livvkit.output_dir, "index.json")
+        result = elements.Page("Summary", "", summary_elements)
+        with open(os.path.join(livvkit.output_dir, 'index.json'), 'w') as index_data:
+            index_data.write(result._repr_json())
         print("-------------------------------------------------------------------")
         print(" Done!  Results can be seen in a web browser at:")
         print("  " + os.path.join(livvkit.output_dir, 'index.html'))

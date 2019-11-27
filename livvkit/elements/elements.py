@@ -286,40 +286,18 @@ class NamedCompositeElement(BaseElement, abc.ABC):
         return template.render(data=self.__dict__, elements_dict=elem_repr)
 
 
-def page(title, description, element_list=None, tabs=None):
-    """
-    Returns a dictionary representing a new page to display elements.
-    This can be thought of as a simple container for displaying multiple
-    types of information. The ``section`` method can be used to create
-    separate tabs.
+class Page(CompositeElement):
+    _html_template = 'page.html'
+    _latex_template = 'page.tex'
 
-    Args:
-        title: The title to display
-        description: A description of the section
-        element_list: The list of elements to display. If a single element is
-                      given it will be wrapped in a list.
-        tabs: A LIVVkit Tabs element containing the tabs to display on the page
-
-    Returns:
-        A dictionary with metadata specifying that it is to be rendered
-        as a page containing multiple elements and/or tabs.
-    """
-    _page = {
-        'Type': 'Page',
-        'Title': title,
-        'Description': description,
-        'Data': {},
-    }
-
-    if element_list is not None:
-        if isinstance(element_list, list):
-            _page['Data']['Elements'] = element_list
-        else:
-            _page['Data']['Elements'] = [element_list]
-    if tabs is not None:
-        _page['Data']['Tabs'] = tabs.__dict__
-
-    return _page
+    def __init__(self, title, description, elements):
+        super(Page, self).__init__(elements)
+        self.title = title
+        self.description = description
+        # FIXME: remove once common.js is obsolete
+        self.Type = 'Page'
+        self.Title = title
+        self.Data = self._repr_html()
 
 
 # FIXME: Docstring --> pass in a dictionary like {tab_title: [tab_elements]}
@@ -350,7 +328,7 @@ class Table(BaseElement):
     _html_template = 'table.html'
     _latex_template = 'table.tex'
 
-    # FIXME: Typehinting and docstring for data, which should look like
+    # FIXME: Type hinting and docstring for data, which should look like
     #        {header1:[val1, val2...],... }
     #
     #        Index = True --> use pandas index or simply number the rows

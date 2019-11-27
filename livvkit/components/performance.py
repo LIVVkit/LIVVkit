@@ -46,7 +46,7 @@ from livvkit.util.LIVVDict import LIVVDict
 SEC_PER_DAY = 86400.0
 
 
-def run_suite(case, config, summary):
+def run_suite(case, config):
     """ Run the full suite of performance tests """
     config["name"] = case
     timing_data = dict()
@@ -109,16 +109,20 @@ def run_suite(case, config, summary):
 
     # Build an image gallery and write the results
     el = [
-            elements.Gallery("Performance Plots", timing_plots).__dict__
+            elements.Gallery("Performance Plots", timing_plots)
          ]
-    result = elements.page(case, config["description"], element_list=el)
-    summary[case] = _summarize_result(timing_data, config)
+    result = elements.Page(case, config["description"], elements=el)
+    summary = _summarize_result(timing_data, config)
+
     _print_result(case, summary)
+
     functions.create_page_from_template("performance.html",
                                         os.path.join(livvkit.index_dir, "performance",
                                                      case + ".html"))
-    functions.write_json(result, os.path.join(livvkit.output_dir, "performance"),
-                         case + ".json")
+    with open(os.path.join(livvkit.output_dir, "performance", case + ".json"), 'w') as f:
+        f.write(result._repr_json())
+
+    return summary
 
 
 def _analyze_case(model_dir, bench_dir, config):
@@ -138,13 +142,12 @@ def _analyze_case(model_dir, bench_dir, config):
 # noinspection PyUnusedLocal
 def _print_result(case, summary):
     """ Show some statistics from the run """
-    for case, case_data in summary.items():
-        for dof, data in case_data.items():
-            print("    " + case + " " + dof)
-            print("    -------------------")
-            for header, val in data.items():
-                print("    " + header + " : " + str(val))
-            print("")
+    for dof, data in summary.items():
+        print("    " + case + " " + dof)
+        print("    -------------------")
+        for header, val in data.items():
+            print("    " + header + " : " + str(val))
+        print("")
 
 
 def _summarize_result(result, config):
@@ -347,8 +350,6 @@ def generate_scaling_plot(timing_data, title, ylabel, description, plot_file):
         plt.text(0.0, 0.44, "To generate this data rerun BATS with the")
         plt.text(0.0, 0.36, "performance option enabled.")
 
-    if livvkit.publish:
-        plt.savefig(os.path.splitext(plot_file)[0]+'.eps', dpi=600)
     plt.savefig(plot_file)
     plt.close()
 
@@ -464,8 +465,6 @@ def generate_timing_breakdown_plot(timing_stats, scaling_var, title, description
             group.set_visible(False)
     sub_ax.set_visible(False)
 
-    if livvkit.publish:
-        plt.savefig(os.path.splitext(plot_file)[0]+'.eps', dpi=600)
     plt.savefig(plot_file)
     plt.close()
 

@@ -47,13 +47,13 @@ from livvkit.util import colormaps
 from livvkit.util.LIVVDict import LIVVDict
 
 
-def run_suite(case, config, summary):
+def run_suite(case, config):
     """ Run the full suite of verification tests """
     config["name"] = case
     model_dir = os.path.join(livvkit.model_dir, config['data_dir'], case)
     bench_dir = os.path.join(livvkit.bench_dir, config['data_dir'], case)
     tabs = {}
-    case_summary = LIVVDict()
+    summary = LIVVDict()
     model_cases = functions.collect_cases(model_dir)
     bench_cases = functions.collect_cases(bench_dir)
 
@@ -66,19 +66,21 @@ def run_suite(case, config, summary):
             mpath = os.path.join(model_dir, subcase, mcase.replace("-", os.path.sep))
             case_result = _analyze_case(mpath, bpath, config)
             case_sections.append(elements.Section(mcase, case_result))
-            case_summary[subcase] = _summarize_result(case_result,
-                                                      case_summary[subcase])
+            summary[subcase] = _summarize_result(case_result,
+                                                      summary[subcase])
         tabs[subcase] = case_sections
 
-    result = elements.page(case, config["description"], tabs=elements.Tabs(tabs))
-    summary[case] = case_summary
-    _print_summary(case, summary[case])
-    functions.create_page_from_template("verification.html",
-                                        os.path.join(livvkit.index_dir,
-                                                     "verification",
-                                                     case + ".html")
-                                        )
-    functions.write_json(result, os.path.join(livvkit.output_dir, "verification"), case+".json")
+    result = elements.Page(case, config["description"], elements=[elements.Tabs(tabs)])
+
+    _print_summary(case, summary)
+
+    functions.create_page_from_template(
+        "verification.html", os.path.join(livvkit.index_dir, "verification", case + ".html")
+    )
+    with open(os.path.join(livvkit.output_dir, "verification", case+".json"), 'w') as f:
+        f.write(result._repr_json())
+
+    return summary
 
 
 def _analyze_case(test_dir, ref_dir, config):
@@ -167,6 +169,7 @@ def _summarize_result(result, summary):
         if elem["Title"] == "Output Log" and elem["Type"] == "Table":
             summary["Std. Out Files"] += 1
             break
+
     return summary
 
 
@@ -299,8 +302,6 @@ def plot_bit_for_bit(case, var_name, model_data, bench_data, diff_data):
     plt.suptitle(plot_title)
 
     plot_file = os.path.sep.join([plot_path, plot_name])
-    if livvkit.publish:
-        plt.savefig(os.path.splitext(plot_file)[0]+'.eps', dpi=600)
     plt.savefig(plot_file)
     plt.close()
 

@@ -10,7 +10,7 @@ from contextlib import ContextDecorator
 import pytest
 
 import livvkit
-from livvkit import elements as el
+from livvkit import elements
 
 
 class LIVVkitOutput(ContextDecorator):
@@ -24,7 +24,7 @@ class LIVVkitOutput(ContextDecorator):
 def test_el_base_templates_as_property():
     truth = 'template_string'
 
-    class Property(el.BaseElement):
+    class Property(elements.BaseElement):
         @property
         def _html_template(self):
             return truth
@@ -50,7 +50,7 @@ def test_el_base_templates_as_class_attribute():
     truth = 'template_string'
 
     # noinspection PyMissingOrEmptyDocstring
-    class ClassAttribute(el.BaseElement):
+    class ClassAttribute(elements.BaseElement):
         _html_template = truth
         _latex_template = truth
 
@@ -69,7 +69,7 @@ def test_el_base_templates_as_instance_attribute():
     truth = 'template_string'
 
     # noinspection PyMissingOrEmptyDocstring,PyAbstractClass
-    class HTMLInstanceAttribute(el.BaseElement):
+    class HTMLInstanceAttribute(elements.BaseElement):
         def __init__(self, html):
             # noinspection PyPropertyAccess
             self._html_template = html
@@ -80,7 +80,7 @@ def test_el_base_templates_as_instance_attribute():
             return truth
 
     # noinspection PyMissingOrEmptyDocstring,PyAbstractClass
-    class LatexInstanceAttribute(el.BaseElement):
+    class LatexInstanceAttribute(elements.BaseElement):
         def __init__(self, latex):
             # noinspection PyPropertyAccess
             self._latex_template = latex
@@ -103,7 +103,7 @@ def test_el_base_templates_as_method():
     truth = 'template_string'
 
     # noinspection PyMissingOrEmptyDocstring
-    class HTMLMethod(el.BaseElement):
+    class HTMLMethod(elements.BaseElement):
         def _html_template(self):
             return truth
 
@@ -112,7 +112,7 @@ def test_el_base_templates_as_method():
             return truth
 
     # noinspection PyMissingOrEmptyDocstring
-    class LatexMethod(el.BaseElement):
+    class LatexMethod(elements.BaseElement):
         @property
         def _html_template(self):
             return truth
@@ -130,15 +130,88 @@ def test_el_base_templates_as_method():
 
 
 def test_el_page_json():
-    assert False
+    truth = '{\n' \
+            '    "Page": {\n' \
+            '        "elements": [\n' \
+            '            "{\\n    \\"Section\\": {\\n        \\"elements\\": [\\n            \\"{\\\\n    \\\\\\"Table\\\\\\": {\\\\n        \\\\\\"title\\\\\\": \\\\\\"title\\\\\\",\\\\n        \\\\\\"data\\\\\\": {\\\\n            \\\\\\"h1\\\\\\": [\\\\n                \\\\\\"v1\\\\\\",\\\\n                \\\\\\"v2\\\\\\"\\\\n            ],\\\\n            \\\\\\"h2\\\\\\": [\\\\n                \\\\\\"v3\\\\\\",\\\\n                \\\\\\"v4\\\\\\"\\\\n            ]\\\\n        },\\\\n        \\\\\\"index\\\\\\": null,\\\\n        \\\\\\"rows\\\\\\": 2,\\\\n        \\\\\\"Type\\\\\\": \\\\\\"Table\\\\\\",\\\\n        \\\\\\"Title\\\\\\": \\\\\\"title\\\\\\",\\\\n        \\\\\\"Headers\\\\\\": [\\\\n            \\\\\\"h1\\\\\\",\\\\n            \\\\\\"h2\\\\\\"\\\\n        ],\\\\n        \\\\\\"Data\\\\\\": \\\\\\"<div class=\\\\\\\\\\\\\\"table\\\\\\\\\\\\\\">\\\\\\\\n    <h3>title</h3>\\\\\\\\n    <table>\\\\\\\\n        <tr>\\\\\\\\n            <th>h1</th>\\\\\\\\n            <th>h2</th>\\\\\\\\n        </tr>\\\\\\\\n        <tr>\\\\\\\\n            <td>v1</td>\\\\\\\\n            <td>v3</td>\\\\\\\\n        </tr>\\\\\\\\n        <tr>\\\\\\\\n            <td>v2</td>\\\\\\\\n            <td>v4</td>\\\\\\\\n        </tr>\\\\\\\\n    </table>\\\\\\\\n</div>\\\\\\",\\\\n        \\\\\\"__module__\\\\\\": \\\\\\"livvkit.elements.elements\\\\\\",\\\\n        \\\\\\"_html_template\\\\\\": \\\\\\"table.html\\\\\\",\\\\n        \\\\\\"_latex_template\\\\\\": \\\\\\"table.tex\\\\\\"\\\\n    }\\\\n}\\"\\n        ],\\n        \\"title\\": \\"A cool table\\",\\n        \\"Type\\": \\"Gallery\\",\\n        \\"Title\\": \\"A cool table\\",\\n        \\"Data\\": \\"<div class=\\\\\\"section\\\\\\">\\\\n    <h2>A cool table</h2>\\\\n    <div class=\\\\\\"table\\\\\\">\\\\n    <h3>title</h3>\\\\n    <table>\\\\n        <tr>\\\\n            <th>h1</th>\\\\n            <th>h2</th>\\\\n        </tr>\\\\n        <tr>\\\\n            <td>v1</td>\\\\n            <td>v3</td>\\\\n        </tr>\\\\n        <tr>\\\\n            <td>v2</td>\\\\n            <td>v4</td>\\\\n        </tr>\\\\n    </table>\\\\n</div>\\\\n</div>\\",\\n        \\"__module__\\": \\"livvkit.elements.elements\\",\\n        \\"_html_template\\": \\"section.html\\",\\n        \\"_latex_template\\": \\"section.tex\\"\\n    }\\n}"\n' \
+            '        ],\n' \
+            '        "title": "A Page",\n' \
+            '        "description": "A good description",\n' \
+            '        "Type": "Page",\n' \
+            '        "Title": "A Page",\n' \
+            '        "Data": "<div id=\\"A Page\\">\\n    <h2>A Page</h2>\\n    <p>A good description</p>\\n    <div class=\\"section\\">\\n    <h2>A cool table</h2>\\n    <div class=\\"table\\">\\n    <h3>title</h3>\\n    <table>\\n        <tr>\\n            <th>h1</th>\\n            <th>h2</th>\\n        </tr>\\n        <tr>\\n            <td>v1</td>\\n            <td>v3</td>\\n        </tr>\\n        <tr>\\n            <td>v2</td>\\n            <td>v4</td>\\n        </tr>\\n    </table>\\n</div>\\n</div>\\n</div>",\n' \
+            '        "__module__": "livvkit.elements.elements",\n' \
+            '        "_html_template": "page.html",\n' \
+            '        "_latex_template": "page.tex"\n' \
+            '    }\n' \
+            '}'
+
+    page = elements.Page(
+        'A Page', 'A good description',
+        [elements.Section('A cool table', [elements.Table('title', {'h1': ['v1', 'v2'], 'h2': ['v3', 'v4']})])]
+    )
+
+    # Will raise a JSONDecodeError if not valid JSON
+    _ = json.loads(page._repr_json())
+
+    assert page._repr_json() == truth
 
 
 def test_el_page_html():
-    assert False
+    truth = '<div id="A Page">\n' \
+            '    <h2>A Page</h2>\n' \
+            '    <p>A good description</p>\n' \
+            '    <div class="section">\n' \
+            '    <h2>A cool table</h2>\n' \
+            '    <div class="table">\n' \
+            '    <h3>title</h3>\n' \
+            '    <table>\n' \
+            '        <tr>\n' \
+            '            <th>h1</th>\n ' \
+            '           <th>h2</th>\n' \
+            '        </tr>\n' \
+            '        <tr>\n' \
+            '            <td>v1</td>\n' \
+            '            <td>v3</td>\n' \
+            '        </tr>\n' \
+            '        <tr>\n' \
+            '            <td>v2</td>\n' \
+            '            <td>v4</td>\n' \
+            '        </tr>\n' \
+            '    </table>\n' \
+            '</div>\n' \
+            '</div>\n' \
+            '</div>'
 
 
-def test_el_page_latx():
-    assert False
+    page = elements.Page(
+        'A Page', 'A good description',
+        [elements.Section('A cool table', [elements.Table('title', {'h1': ['v1', 'v2'], 'h2': ['v3', 'v4']})])]
+    )
+
+    assert page._repr_html() == truth
+
+
+def test_el_page_latex():
+    truth = '\\levelstay{A Page}\n' \
+            'A good description\n' \
+            '    \\levelstay{A cool table}\n' \
+            '    \\begin{table}[h!]\n' \
+            '    \\centering\n' \
+            '    \\begin{tabular}{cc}\n' \
+            '        h1 & h2 \\\\\n' \
+            '        \\hline\n' \
+            '        v1 & v3  \\\\\n' \
+            '        v2 & v4  \\\\\n' \
+            '        \\end{tabular}\n' \
+            '\\end{table}\n\n'
+
+    page = elements.Page(
+        'A Page', 'A good description',
+        [elements.Section('A cool table', [elements.Table('title', {'h1': ['v1', 'v2'], 'h2': ['v3', 'v4']})])]
+    )
+
+    assert page._repr_latex() == truth
 
 
 def test_el_tabs_json():
@@ -159,7 +232,7 @@ def test_el_tabs_json():
             '    }\n' \
             '}'
 
-    tabs = el.Tabs({'a': [el.Error('AError', 'woops')], 'b': [el.Error('BError', 'boogers')]})
+    tabs = elements.Tabs({'a': [elements.Error('AError', 'woops')], 'b': [elements.Error('BError', 'boogers')]})
 
     # Will raise a JSONDecodeError if not valid JSON
     _ = json.loads(tabs._repr_json())
@@ -187,7 +260,7 @@ def test_el_tabs_html():
             '    </div>\n' \
             '</div>'
 
-    tabs = el.Tabs({'a': [el.Error('AError', 'woops')], 'b': [el.Error('BError', 'boogers')]})
+    tabs = elements.Tabs({'a': [elements.Error('AError', 'woops')], 'b': [elements.Error('BError', 'boogers')]})
 
     assert tabs._repr_html() == truth
 
@@ -201,7 +274,7 @@ def test_el_tabs_latex():
             '    \\textbf{BError}: boogers\n' \
             '}}'
 
-    tabs = el.Tabs({'a': [el.Error('AError', 'woops')], 'b': [el.Error('BError', 'boogers')]})
+    tabs = elements.Tabs({'a': [elements.Error('AError', 'woops')], 'b': [elements.Error('BError', 'boogers')]})
 
     assert tabs._repr_latex() == truth
 
@@ -222,7 +295,7 @@ def test_el_section_json():
             '    }\n' \
             '}'
 
-    section = el.Section('A cool table', [el.Table('title', {'h1': ['v1', 'v2'], 'h2': ['v3', 'v4']})])
+    section = elements.Section('A cool table', [elements.Table('title', {'h1': ['v1', 'v2'], 'h2': ['v3', 'v4']})])
 
     # Will raise a JSONDecodeError if not valid JSON
     _ = json.loads(section._repr_json())
@@ -252,7 +325,7 @@ def test_el_section_html():
             '</div>\n' \
             '</div>'
 
-    section = el.Section('A cool table', [el.Table('title', {'h1': ['v1', 'v2'], 'h2': ['v3', 'v4']})])
+    section = elements.Section('A cool table', [elements.Table('title', {'h1': ['v1', 'v2'], 'h2': ['v3', 'v4']})])
 
     assert section._repr_html() == truth
 
@@ -269,7 +342,7 @@ def test_el_section_latex():
             '        \\end{tabular}\n' \
             '\\end{table}\n'
 
-    section = el.Section('A cool table', [el.Table('title', {'h1': ['v1', 'v2'], 'h2': ['v3', 'v4']})])
+    section = elements.Section('A cool table', [elements.Table('title', {'h1': ['v1', 'v2'], 'h2': ['v3', 'v4']})])
 
     assert section._repr_latex() == truth
 
@@ -304,7 +377,7 @@ def test_el_table_json():
             '}'
 
 
-    table = el.Table('title', {'h1': ['v1', 'v2'], 'h2': ['v3', 'v4']})
+    table = elements.Table('title', {'h1': ['v1', 'v2'], 'h2': ['v3', 'v4']})
 
     # Will raise a JSONDecodeError if not valid JSON
     _ = json.loads(table._repr_json())
@@ -331,7 +404,7 @@ def test_el_table_html():
             '    </table>\n' \
             '</div>'
 
-    table = el.Table('title', {'h1': ['v1', 'v2'], 'h2': ['v3', 'v4']})
+    table = elements.Table('title', {'h1': ['v1', 'v2'], 'h2': ['v3', 'v4']})
 
     assert table._repr_html() == truth
 
@@ -347,7 +420,7 @@ def test_el_table_latex():
             '        \\end{tabular}\n' \
             '\\end{table}'
 
-    table = el.Table('title', {'h1': ['v1', 'v2'], 'h2': ['v3', 'v4']})
+    table = elements.Table('title', {'h1': ['v1', 'v2'], 'h2': ['v3', 'v4']})
 
     assert table._repr_latex() == truth
 
@@ -374,7 +447,7 @@ def test_el_table_w_index_html():
             '    </table>\n' \
             '</div>'
 
-    table = el.Table('title', {'h1': ['v1', 'v2'], 'h2': ['v3', 'v4']}, index=True)
+    table = elements.Table('title', {'h1': ['v1', 'v2'], 'h2': ['v3', 'v4']}, index=True)
 
     assert table._repr_html() == truth
 
@@ -390,7 +463,7 @@ def test_el_table_w_index_latex():
             '        \\end{tabular}\n' \
             '\\end{table}'
 
-    table = el.Table('title', {'h1': ['v1', 'v2'], 'h2': ['v3', 'v4']}, index=True)
+    table = elements.Table('title', {'h1': ['v1', 'v2'], 'h2': ['v3', 'v4']}, index=True)
 
     assert table._repr_latex() == truth
 
@@ -417,7 +490,7 @@ def test_el_table_w_custom_index_html():
             '    </table>\n' \
             '</div>'
 
-    table = el.Table('title', {'h1': ['v1', 'v2'], 'h2': ['v3', 'v4']}, index=['i0', 'i1'])
+    table = elements.Table('title', {'h1': ['v1', 'v2'], 'h2': ['v3', 'v4']}, index=['i0', 'i1'])
 
     assert table._repr_html() == truth
 
@@ -433,7 +506,7 @@ def test_el_table_w_custom_index_latex():
             '        \\end{tabular}\n' \
             '\\end{table}'
 
-    table = el.Table('title', {'h1': ['v1', 'v2'], 'h2': ['v3', 'v4']}, index=['i0', 'i1'])
+    table = elements.Table('title', {'h1': ['v1', 'v2'], 'h2': ['v3', 'v4']}, index=['i0', 'i1'])
 
     assert table._repr_latex() == truth
 
@@ -455,7 +528,7 @@ def test_el_table_transposed_html():
             '    </table>\n' \
             '</div>'
 
-    table = el.Table('title', {'h1': ['v1', 'v2'], 'h2': ['v3', 'v4']}, transpose=True)
+    table = elements.Table('title', {'h1': ['v1', 'v2'], 'h2': ['v3', 'v4']}, transpose=True)
 
     assert table._repr_html() == truth
 
@@ -469,7 +542,7 @@ def test_el_table_transposed_latex():
             '        \\end{tabular}\n' \
             '\\end{table}'
 
-    table = el.Table('title', {'h1': ['v1', 'v2'], 'h2': ['v3', 'v4']}, transpose=True)
+    table = elements.Table('title', {'h1': ['v1', 'v2'], 'h2': ['v3', 'v4']}, transpose=True)
 
     assert table._repr_latex() == truth
 
@@ -496,8 +569,8 @@ def test_el_table_w_index_transposed_html():
             '    </table>\n' \
             '</div>'
 
-    table = el.Table('title', {'h1': ['v1', 'v2'], 'h2': ['v3', 'v4']},
-                     index=True, transpose=True)
+    table = elements.Table('title', {'h1': ['v1', 'v2'], 'h2': ['v3', 'v4']},
+                           index=True, transpose=True)
 
     assert table._repr_html() == truth
 
@@ -513,8 +586,8 @@ def test_el_table_w_index_transposed_latex():
             '        \\end{tabular}\n' \
             '\\end{table}'
 
-    table = el.Table('title', {'h1': ['v1', 'v2'], 'h2': ['v3', 'v4']},
-                     index=True, transpose=True)
+    table = elements.Table('title', {'h1': ['v1', 'v2'], 'h2': ['v3', 'v4']},
+                           index=True, transpose=True)
 
     assert table._repr_latex() == truth
 
@@ -564,12 +637,12 @@ def test_el_b4b_json():
             '    }\n' \
             '}'
 
-    b4b = el.BitForBit('title', {'Variable': ['velnorm', 'thk'],
+    b4b = elements.BitForBit('title', {'Variable': ['velnorm', 'thk'],
                                  'Max Error': [5.07070, 0.376806],
                                  'Index of Max Error': [(2, 1, 24, 19), (3, 23, 23)],
                                  'RMS Error': [.260977, .0354492]},
-                       imgs=[el.B4BImage('', 'desc.', page_path='vv_test/verification'),
-                             el.B4BImage('', 'desc.', page_path='vv_test/verification')])
+                             imgs=[elements.B4BImage('', 'desc.', page_path='vv_test/verification'),
+                                   elements.B4BImage('', 'desc.', page_path='vv_test/verification')])
 
     # Will raise a JSONDecodeError if not valid JSON
     _ = json.loads(b4b._repr_json())
@@ -634,12 +707,12 @@ def test_el_b4b_html():
             '    </table>\n' \
             '</div>'
 
-    b4b = el.BitForBit('title', {'Variable': ['velnorm', 'thk'],
+    b4b = elements.BitForBit('title', {'Variable': ['velnorm', 'thk'],
                                  'Max Error': [5.07070, 0.376806],
                                  'Index of Max Error': [(2, 1, 24, 19), (3, 23, 23)],
                                  'RMS Error': [.260977, .0354492]},
-                       imgs=[el.B4BImage('', 'desc.', page_path='vv_test/verification'),
-                             el.B4BImage('', 'desc.', page_path='vv_test/verification')])
+                             imgs=[elements.B4BImage('', 'desc.', page_path='vv_test/verification'),
+                                   elements.B4BImage('', 'desc.', page_path='vv_test/verification')])
 
     assert b4b._repr_html() == truth
 
@@ -664,12 +737,12 @@ def test_el_b4b_latex():
             '        \\end{tabular}\n' \
             '\\end{table}'
 
-    b4b = el.BitForBit('title', {'Variable': ['velnorm', 'thk'],
+    b4b = elements.BitForBit('title', {'Variable': ['velnorm', 'thk'],
                                  'Max Error': [5.07070, 0.376806],
                                  'Index of Max Error': [(2, 1, 24, 19), (3, 23, 23)],
                                  'RMS Error': [.260977, .0354492]},
-                       imgs=[el.B4BImage('', 'desc.', page_path='vv_test/verification'),
-                             el.B4BImage('', 'desc.', page_path='vv_test/verification')])
+                             imgs=[elements.B4BImage('', 'desc.', page_path='vv_test/verification'),
+                                   elements.B4BImage('', 'desc.', page_path='vv_test/verification')])
 
     assert b4b._repr_latex() == truth
 
@@ -692,8 +765,8 @@ def test_el_gallery_json():
             '    }\n' \
             '}'
 
-    image = el.Image('The Image', 'A very nice image.', 'imgs/image.png')
-    gallery = el.Gallery('The Gallery', [image])
+    image = elements.Image('The Image', 'A very nice image.', 'imgs/image.png')
+    gallery = elements.Gallery('The Gallery', [image])
 
     # Will raise a JSONDecodeError if not valid JSON
     _ = json.loads(gallery._repr_json())
@@ -721,8 +794,8 @@ def test_el_gallery_html():
             '</div>\n' \
             '<div style="clear:both"></div>'
 
-    image = el.Image('The Image', 'A very nice image.', 'imgs/image.png')
-    gallery = el.Gallery('The Gallery', [image])
+    image = elements.Image('The Image', 'A very nice image.', 'imgs/image.png')
+    gallery = elements.Gallery('The Gallery', [image])
 
     assert gallery._repr_html() == truth
 
@@ -735,8 +808,8 @@ def test_el_gallery_latex():
             '    \\caption[The Image]{A very nice image.}\n' \
             '\\end{figure}\n'
 
-    image = el.Image('The Image', 'A very nice image.', 'imgs/image.png')
-    gallery = el.Gallery('The Gallery', [image])
+    image = elements.Image('The Image', 'A very nice image.', 'imgs/image.png')
+    gallery = elements.Gallery('The Gallery', [image])
 
     assert gallery._repr_latex() == truth
 
@@ -755,7 +828,7 @@ def test_el_image_json():
             '    }\n' \
             '}'
 
-    image = el.Image('title', 'description', 'imgs/name.png', group='group', height=300)
+    image = elements.Image('title', 'description', 'imgs/name.png', group='group', height=300)
 
     # Will raise a JSONDecodeError if not valid JSON
     _ = json.loads(image._repr_json())
@@ -778,7 +851,7 @@ def test_el_image_html():
             '    </a>\n' \
             '</div>'
 
-    image = el.Image('title', 'description', 'imgs/name.png', group='group', height=300)
+    image = elements.Image('title', 'description', 'imgs/name.png', group='group', height=300)
 
     assert image._repr_html() == truth
 
@@ -790,7 +863,7 @@ def test_el_image_latex():
             "    \\caption[title]{description}\n" \
             "\\end{figure}"
 
-    image = el.Image('title', 'description', 'imgs/name.png', group='group', height=300)
+    image = elements.Image('title', 'description', 'imgs/name.png', group='group', height=300)
 
     assert image._repr_latex() == truth
 
@@ -801,8 +874,8 @@ def test_el_file_diff_json(diff_data):
     with open(from_file) as from_:
         fromlines = from_.read().splitlines()
 
-    diff_diff = el.FileDiff('Test JSON', from_file=from_file, to_file=to_file)
-    diff_same = el.FileDiff('Test JSON', from_file=from_file, to_file=from_file)
+    diff_diff = elements.FileDiff('Test JSON', from_file=from_file, to_file=to_file)
+    diff_same = elements.FileDiff('Test JSON', from_file=from_file, to_file=from_file)
     errors = []
 
     if diff_diff.diff_status is not True or diff_diff.diff == fromlines:
@@ -841,7 +914,7 @@ def test_el_file_diff_html(diff_data):
 
     from_file, to_file = diff_data
 
-    diff = el.FileDiff('Test HTML', from_file=from_file, to_file=to_file)
+    diff = elements.FileDiff('Test HTML', from_file=from_file, to_file=to_file)
 
     assert diff._repr_html() == truth
 
@@ -863,7 +936,7 @@ def test_el_file_diff_latex(diff_data):
 
     from_file, to_file = diff_data
 
-    diff = el.FileDiff('Test HTML', from_file=from_file, to_file=to_file)
+    diff = elements.FileDiff('Test HTML', from_file=from_file, to_file=to_file)
 
     assert diff._repr_latex() == truth
 
@@ -881,7 +954,7 @@ def test_el_error_json():
             '    }\n' \
             '}'
 
-    err = el.Error('WOOPS', 'Mistakes were made.')
+    err = elements.Error('WOOPS', 'Mistakes were made.')
 
     # Will raise a JSONDecodeError if not valid JSON
     _ = json.loads(err._repr_json())
@@ -895,7 +968,7 @@ def test_el_error_html():
             '    <p>Mistakes were made.</p>\n' \
             '</div>'
 
-    err = el.Error('WOOPS', 'Mistakes were made.')
+    err = elements.Error('WOOPS', 'Mistakes were made.')
 
     assert err._repr_html() == truth
 
@@ -904,7 +977,7 @@ def test_el_error_latex():
     truth = '\\colorbox{red}{\\parbox{\\textwidth}{\n' \
             '    \\textbf{WOOPS}: Mistakes were made.\n' \
             '}}'
-    err = el.Error('WOOPS', 'Mistakes were made.')
+    err = elements.Error('WOOPS', 'Mistakes were made.')
 
     assert err._repr_latex() == truth
 
@@ -920,7 +993,7 @@ def test_el_raw_html_json():
             '    }\n' \
             '}'
 
-    html = el.RawHTML('<div>Hi</div>')
+    html = elements.RawHTML('<div>Hi</div>')
 
     # Will raise a JSONDecodeError if not valid JSON
     _ = json.loads(html._repr_json())
@@ -931,7 +1004,7 @@ def test_el_raw_html_json():
 def test_el_raw_html_html():
     truth = '<div>\n    <div>Hi</div>\n</div>'
 
-    html = el.RawHTML('<div>Hi</div>')
+    html = elements.RawHTML('<div>Hi</div>')
 
     assert html._repr_html() == truth
 
@@ -939,6 +1012,6 @@ def test_el_raw_html_html():
 def test_el_raw_html_latex():
     truth = '\\begin{minted}{html}\n    <div>Hi</div>\n\\end{minted}'
 
-    html = el.RawHTML('<div>Hi</div>')
+    html = elements.RawHTML('<div>Hi</div>')
 
     assert html._repr_latex() == truth

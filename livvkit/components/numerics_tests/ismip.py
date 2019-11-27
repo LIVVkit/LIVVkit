@@ -130,15 +130,13 @@ def run(config, analysis_data):
                              label=a+'-'+model)
 
             plt.legend(loc='best')
-            if livvkit.publish:
-                plt.savefig(os.path.splitext(plot_file)[0]+'.eps', dpi=600)
             plt.savefig(plot_file)
             plt.close()
 
             image = elements.Image(title, description, plot_file)
             plot_list.append(image)
 
-    return elements.Gallery("Numerics Plots", plot_list).__dict__
+    return elements.Gallery("Numerics Plots", plot_list)
 
 
 def summarize_result(data, config):
