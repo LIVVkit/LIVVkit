@@ -133,18 +133,37 @@ def test_el_page_json():
     truth = '{\n' \
             '    "Page": {\n' \
             '        "elements": [\n' \
-            '            "{\\n    \\"Section\\": {\\n        \\"elements\\": [\\n            \\"{\\\\n    \\\\\\"Table\\\\\\": {\\\\n        \\\\\\"title\\\\\\": \\\\\\"title\\\\\\",\\\\n        \\\\\\"data\\\\\\": {\\\\n            \\\\\\"h1\\\\\\": [\\\\n                \\\\\\"v1\\\\\\",\\\\n                \\\\\\"v2\\\\\\"\\\\n            ],\\\\n            \\\\\\"h2\\\\\\": [\\\\n                \\\\\\"v3\\\\\\",\\\\n                \\\\\\"v4\\\\\\"\\\\n            ]\\\\n        },\\\\n        \\\\\\"index\\\\\\": null,\\\\n        \\\\\\"rows\\\\\\": 2,\\\\n        \\\\\\"Type\\\\\\": \\\\\\"Table\\\\\\",\\\\n        \\\\\\"Title\\\\\\": \\\\\\"title\\\\\\",\\\\n        \\\\\\"Headers\\\\\\": [\\\\n            \\\\\\"h1\\\\\\",\\\\n            \\\\\\"h2\\\\\\"\\\\n        ],\\\\n        \\\\\\"Data\\\\\\": \\\\\\"<div class=\\\\\\\\\\\\\\"table\\\\\\\\\\\\\\">\\\\\\\\n    <h3>title</h3>\\\\\\\\n    <table>\\\\\\\\n        <tr>\\\\\\\\n            <th>h1</th>\\\\\\\\n            <th>h2</th>\\\\\\\\n        </tr>\\\\\\\\n        <tr>\\\\\\\\n            <td>v1</td>\\\\\\\\n            <td>v3</td>\\\\\\\\n        </tr>\\\\\\\\n        <tr>\\\\\\\\n            <td>v2</td>\\\\\\\\n            <td>v4</td>\\\\\\\\n        </tr>\\\\\\\\n    </table>\\\\\\\\n</div>\\\\\\",\\\\n        \\\\\\"__module__\\\\\\": \\\\\\"livvkit.elements.elements\\\\\\",\\\\n        \\\\\\"_html_template\\\\\\": \\\\\\"table.html\\\\\\",\\\\n        \\\\\\"_latex_template\\\\\\": \\\\\\"table.tex\\\\\\"\\\\n    }\\\\n}\\"\\n        ],\\n        \\"title\\": \\"A cool table\\",\\n        \\"Type\\": \\"Gallery\\",\\n        \\"Title\\": \\"A cool table\\",\\n        \\"Data\\": \\"<div class=\\\\\\"section\\\\\\">\\\\n    <h2>A cool table</h2>\\\\n    <div class=\\\\\\"table\\\\\\">\\\\n    <h3>title</h3>\\\\n    <table>\\\\n        <tr>\\\\n            <th>h1</th>\\\\n            <th>h2</th>\\\\n        </tr>\\\\n        <tr>\\\\n            <td>v1</td>\\\\n            <td>v3</td>\\\\n        </tr>\\\\n        <tr>\\\\n            <td>v2</td>\\\\n            <td>v4</td>\\\\n        </tr>\\\\n    </table>\\\\n</div>\\\\n</div>\\",\\n        \\"__module__\\": \\"livvkit.elements.elements\\",\\n        \\"_html_template\\": \\"section.html\\",\\n        \\"_latex_template\\": \\"section.tex\\"\\n    }\\n}"\n' \
-            '        ],\n' \
-            '        "title": "A Page",\n' \
-            '        "description": "A good description",\n' \
-            '        "Type": "Page",\n' \
-            '        "Title": "A Page",\n' \
-            '        "Data": "<div id=\\"A Page\\">\\n    <h2>A Page</h2>\\n    <p>A good description</p>\\n    <div class=\\"section\\">\\n    <h2>A cool table</h2>\\n    <div class=\\"table\\">\\n    <h3>title</h3>\\n    <table>\\n        <tr>\\n            <th>h1</th>\\n            <th>h2</th>\\n        </tr>\\n        <tr>\\n            <td>v1</td>\\n            <td>v3</td>\\n        </tr>\\n        <tr>\\n            <td>v2</td>\\n            <td>v4</td>\\n        </tr>\\n    </table>\\n</div>\\n</div>\\n</div>",\n' \
+            '            {\n' \
+            '                "Section": {\n' \
+            '                    "elements": [\n' \
+            '                        {\n' \
+            '                            "Table": {\n' \
+            '                                "title": "title",\n' \
+            '                                "data": {\n' \
+            '                                    "h1": [\n' \
+            '                                        "v1",\n' \
+            '                                        "v2"\n' \
+            '                                    ],\n' \
+            '                                    "h2": [\n' \
+            '                                        "v3",\n' \
+            '                                        "v4"\n' \
+            '                                    ]\n' \
+            '                                },\n' \
+            '                                "index": null,\n' \
+            '                                "rows": 2,\n' \
+            '                                "Type": "Table",\n' \
+            '                                "Title": "title",\n' \
+            '                                "Headers": [\n' \
+            '                                    "h1",\n' \
+            '                                    "h2"\n' \
+            '                                ],\n' \
+            '                                "Data": "<div class=\\"table\\">\\n    <h3>title</h3>\\n    <table>\\n        <tr>\\n            <th>h1</th>\\n            <th>h2</th>\\n        </tr>\\n        <tr>\\n            <td>v1</td>\\n            <td>v3</td>\\n        </tr>\\n        <tr>\\n            <td>v2</td>\\n            <td>v4</td>\\n        </tr>\\n    </table>\\n</div>",\n                                "__module__": "livvkit.elements.elements",\n                                "_html_template": "table.html",\n                                "_latex_template": "table.tex"\n                            }\n                        }\n                    ],\n                    "title": "A cool table",\n                    "Type": "Gallery",\n                    "Title": "A cool table",\n                    "Data": "<div class=\\"section\\">\\n    <h2>A cool table</h2>\\n    <div class=\\"table\\">\\n    <h3>title</h3>\\n    <table>\\n        <tr>\\n            <th>h1</th>\\n            <th>h2</th>\\n        </tr>\\n        <tr>\\n            <td>v1</td>\\n            <td>v3</td>\\n        </tr>\\n        <tr>\\n            <td>v2</td>\\n            <td>v4</td>\\n        </tr>\\n    </table>\\n</div>\\n</div>",\n                    "__module__": "livvkit.elements.elements",\n                    "_html_template": "section.html",\n                    "_latex_template": "section.tex"\n                }\n            }\n        ],\n        "title": "A Page",\n        "description": "A good description",\n        "Type": "Page",\n        "Title": "A Page",\n        "Data": "<div id=\\"A Page\\">\\n    <h2>A Page</h2>\\n    <p>A good description</p>\\n    <div class=\\"section\\">\\n    <h2>A cool table</h2>\\n    <div class=\\"table\\">\\n    <h3>title</h3>\\n    <table>\\n        <tr>\\n            <th>h1</th>\\n            <th>h2</th>\\n        </tr>\\n        <tr>\\n            <td>v1</td>\\n            <td>v3</td>\\n        </tr>\\n        <tr>\\n            <td>v2</td>\\n            <td>v4</td>\\n        </tr>\\n    </table>\\n</div>\\n</div>\\n</div>",\n' \
             '        "__module__": "livvkit.elements.elements",\n' \
             '        "_html_template": "page.html",\n' \
             '        "_latex_template": "page.tex"\n' \
             '    }\n' \
             '}'
+
 
     page = elements.Page(
         'A Page', 'A good description',
@@ -219,20 +238,21 @@ def test_el_tabs_json():
             '    "Tabs": {\n' \
             '        "elements_dict": {\n' \
             '            "a": [\n' \
-            '                "{\\n    \\"Error\\": {\\n        \\"title\\": \\"AError\\",\\n        \\"message\\": \\"woops\\",\\n        \\"Type\\": \\"Error\\",\\n        \\"Data\\": \\"<div class=\\\\\\"error\\\\\\">\\\\n    <h3>AError</h3>\\\\n    <p>woops</p>\\\\n</div>\\",\\n        \\"__module__\\": \\"livvkit.elements.elements\\",\\n        \\"_html_template\\": \\"err.html\\",\\n        \\"_latex_template\\": \\"err.tex\\"\\n    }\\n}"\n' \
-            '            ],\n' \
-            '            "b": [\n' \
-            '                "{\\n    \\"Error\\": {\\n        \\"title\\": \\"BError\\",\\n        \\"message\\": \\"boogers\\",\\n        \\"Type\\": \\"Error\\",\\n        \\"Data\\": \\"<div class=\\\\\\"error\\\\\\">\\\\n    <h3>BError</h3>\\\\n    <p>boogers</p>\\\\n</div>\\",\\n        \\"__module__\\": \\"livvkit.elements.elements\\",\\n        \\"_html_template\\": \\"err.html\\",\\n        \\"_latex_template\\": \\"err.tex\\"\\n    }\\n}"\n' \
-            '            ]\n' \
-            '        },\n' \
-            '        "Data": "<div id=\\"tabs\\">\\n    <ul>\\n        <li><a href=\\"#a\\">a</a></li>\\n        <li><a href=\\"#b\\">b</a></li>\\n    </ul>\\n    <div id=\\"a\\">\\n        <div class=\\"error\\">\\n    <h3>AError</h3>\\n    <p>woops</p>\\n</div>\\n    </div>\\n    <div id=\\"b\\">\\n        <div class=\\"error\\">\\n    <h3>BError</h3>\\n    <p>boogers</p>\\n</div>\\n    </div>\\n</div>",\n' \
+            '                {\n' \
+            '                    "Error": {\n' \
+            '                        "title": "AError",\n' \
+            '                        "message": "woops",\n' \
+            '                        "Type": "Error",\n' \
+            '                        "Data": "<div class=\\"error\\">\\n    <h3>AError</h3>\\n    <p>woops</p>\\n</div>",\n                        "__module__": "livvkit.elements.elements",\n                        "_html_template": "err.html",\n                        "_latex_template": "err.tex"\n                    }\n                }\n            ],\n            "b": [\n                {\n                    "Error": {\n                        "title": "BError",\n                        "message": "boogers",\n                        "Type": "Error",\n                        "Data": "<div class=\\"error\\">\\n    <h3>BError</h3>\\n    <p>boogers</p>\\n</div>",\n                        "__module__": "livvkit.elements.elements",\n                        "_html_template": "err.html",\n                        "_latex_template": "err.tex"\n                    }\n                }\n            ]\n        },\n        "Data": "<div id=\\"tabs\\">\\n    <ul>\\n        <li><a href=\\"#a\\">a</a></li>\\n        <li><a href=\\"#b\\">b</a></li>\\n    </ul>\\n    <div id=\\"a\\">\\n        <div class=\\"error\\">\\n    <h3>AError</h3>\\n    <p>woops</p>\\n</div>\\n    </div>\\n    <div id=\\"b\\">\\n        <div class=\\"error\\">\\n    <h3>BError</h3>\\n    <p>boogers</p>\\n</div>\\n    </div>\\n</div>",\n' \
             '        "__module__": "livvkit.elements.elements",\n' \
             '        "_html_template": "tabs.html",\n' \
             '        "_latex_template": "tabs.tex"\n' \
             '    }\n' \
             '}'
 
-    tabs = elements.Tabs({'a': [elements.Error('AError', 'woops')], 'b': [elements.Error('BError', 'boogers')]})
+    tabs = elements.Tabs(
+        {'a': [elements.Error('AError', 'woops')], 'b': [elements.Error('BError', 'boogers')]}
+    )
 
     # Will raise a JSONDecodeError if not valid JSON
     _ = json.loads(tabs._repr_json())
@@ -283,17 +303,34 @@ def test_el_section_json():
     truth = '{\n' \
             '    "Section": {\n' \
             '        "elements": [\n' \
-            '            "{\\n    \\"Table\\": {\\n        \\"title\\": \\"title\\",\\n        \\"data\\": {\\n            \\"h1\\": [\\n                \\"v1\\",\\n                \\"v2\\"\\n            ],\\n            \\"h2\\": [\\n                \\"v3\\",\\n                \\"v4\\"\\n            ]\\n        },\\n        \\"index\\": null,\\n        \\"rows\\": 2,\\n        \\"Type\\": \\"Table\\",\\n        \\"Title\\": \\"title\\",\\n        \\"Headers\\": [\\n            \\"h1\\",\\n            \\"h2\\"\\n        ],\\n        \\"Data\\": \\"<div class=\\\\\\"table\\\\\\">\\\\n    <h3>title</h3>\\\\n    <table>\\\\n        <tr>\\\\n            <th>h1</th>\\\\n            <th>h2</th>\\\\n        </tr>\\\\n        <tr>\\\\n            <td>v1</td>\\\\n            <td>v3</td>\\\\n        </tr>\\\\n        <tr>\\\\n            <td>v2</td>\\\\n            <td>v4</td>\\\\n        </tr>\\\\n    </table>\\\\n</div>\\",\\n        \\"__module__\\": \\"livvkit.elements.elements\\",\\n        \\"_html_template\\": \\"table.html\\",\\n        \\"_latex_template\\": \\"table.tex\\"\\n    }\\n}"\n' \
-            '        ],\n' \
-            '        "title": "A cool table",\n' \
-            '        "Type": "Gallery",\n' \
-            '        "Title": "A cool table",\n' \
-            '        "Data": "<div class=\\"section\\">\\n    <h2>A cool table</h2>\\n    <div class=\\"table\\">\\n    <h3>title</h3>\\n    <table>\\n        <tr>\\n            <th>h1</th>\\n            <th>h2</th>\\n        </tr>\\n        <tr>\\n            <td>v1</td>\\n            <td>v3</td>\\n        </tr>\\n        <tr>\\n            <td>v2</td>\\n            <td>v4</td>\\n        </tr>\\n    </table>\\n</div>\\n</div>",\n' \
+            '            {\n' \
+            '                "Table": {\n' \
+            '                    "title": "title",\n' \
+            '                    "data": {\n' \
+            '                        "h1": [\n' \
+            '                            "v1",\n' \
+            '                            "v2"\n' \
+            '                        ],\n' \
+            '                        "h2": [\n' \
+            '                            "v3",\n' \
+            '                            "v4"\n' \
+            '                        ]\n' \
+            '                    },\n' \
+            '                    "index": null,\n' \
+            '                    "rows": 2,\n' \
+            '                    "Type": "Table",\n' \
+            '                    "Title": "title",\n' \
+            '                    "Headers": [\n' \
+            '                        "h1",\n' \
+            '                        "h2"\n' \
+            '                    ],\n' \
+            '                    "Data": "<div class=\\"table\\">\\n    <h3>title</h3>\\n    <table>\\n        <tr>\\n            <th>h1</th>\\n            <th>h2</th>\\n        </tr>\\n        <tr>\\n            <td>v1</td>\\n            <td>v3</td>\\n        </tr>\\n        <tr>\\n            <td>v2</td>\\n            <td>v4</td>\\n        </tr>\\n    </table>\\n</div>",\n                    "__module__": "livvkit.elements.elements",\n                    "_html_template": "table.html",\n                    "_latex_template": "table.tex"\n                }\n            }\n        ],\n        "title": "A cool table",\n        "Type": "Gallery",\n        "Title": "A cool table",\n        "Data": "<div class=\\"section\\">\\n    <h2>A cool table</h2>\\n    <div class=\\"table\\">\\n    <h3>title</h3>\\n    <table>\\n        <tr>\\n            <th>h1</th>\\n            <th>h2</th>\\n        </tr>\\n        <tr>\\n            <td>v1</td>\\n            <td>v3</td>\\n        </tr>\\n        <tr>\\n            <td>v2</td>\\n            <td>v4</td>\\n        </tr>\\n    </table>\\n</div>\\n</div>",\n' \
             '        "__module__": "livvkit.elements.elements",\n' \
             '        "_html_template": "section.html",\n' \
             '        "_latex_template": "section.tex"\n' \
             '    }\n' \
             '}'
+
 
     section = elements.Section('A cool table', [elements.Table('title', {'h1': ['v1', 'v2'], 'h2': ['v3', 'v4']})])
 
@@ -597,8 +634,33 @@ def test_el_b4b_json():
     truth = '{\n' \
             '    "BitForBit": {\n' \
             '        "elements": [\n' \
-            '            "{\\n    \\"B4BImage\\": {\\n        \\"title\\": \\"\\",\\n        \\"desc\\": \\"desc.\\",\\n        \\"path\\": \\"../imgs\\",\\n        \\"name\\": \\"b4b.png\\",\\n        \\"group\\": \\"b4b\\",\\n        \\"height\\": 50,\\n        \\"__module__\\": \\"livvkit.elements.elements\\",\\n        \\"_html_template\\": \\"image.html\\",\\n        \\"_latex_template\\": \\"image.tex\\"\\n    }\\n}",\n' \
-            '            "{\\n    \\"B4BImage\\": {\\n        \\"title\\": \\"\\",\\n        \\"desc\\": \\"desc.\\",\\n        \\"path\\": \\"../imgs\\",\\n        \\"name\\": \\"b4b.png\\",\\n        \\"group\\": \\"b4b\\",\\n        \\"height\\": 50,\\n        \\"__module__\\": \\"livvkit.elements.elements\\",\\n        \\"_html_template\\": \\"image.html\\",\\n        \\"_latex_template\\": \\"image.tex\\"\\n    }\\n}"\n        ],\n' \
+            '            {\n' \
+            '                "B4BImage": {\n' \
+            '                    "title": "",\n' \
+            '                    "desc": "desc.",\n' \
+            '                    "path": "../imgs",\n' \
+            '                    "name": "b4b.png",\n' \
+            '                    "group": "b4b",\n' \
+            '                    "height": 50,\n' \
+            '                    "__module__": "livvkit.elements.elements",\n' \
+            '                    "_html_template": "image.html",\n' \
+            '                    "_latex_template": "image.tex"\n' \
+            '                }\n' \
+            '            },\n' \
+            '            {\n' \
+            '                "B4BImage": {\n' \
+            '                    "title": "",\n' \
+            '                    "desc": "desc.",\n' \
+            '                    "path": "../imgs",\n' \
+            '                    "name": "b4b.png",\n' \
+            '                    "group": "b4b",\n' \
+            '                    "height": 50,\n' \
+            '                    "__module__": "livvkit.elements.elements",\n' \
+            '                    "_html_template": "image.html",\n' \
+            '                    "_latex_template": "image.tex"\n' \
+            '                }\n' \
+            '            }\n' \
+            '        ],\n' \
             '        "title": "title",\n' \
             '        "data": {\n' \
             '            "Variable": [\n' \
@@ -636,6 +698,7 @@ def test_el_b4b_json():
             '        "_latex_template": "bit4bit.tex"\n' \
             '    }\n' \
             '}'
+
 
     b4b = elements.BitForBit('title', {'Variable': ['velnorm', 'thk'],
                                  'Max Error': [5.07070, 0.376806],
@@ -753,7 +816,19 @@ def test_el_gallery_json():
     truth = '{\n' \
             '    "Gallery": {\n' \
             '        "elements": [\n' \
-            '            "{\\n    \\"Image\\": {\\n        \\"title\\": \\"The Image\\",\\n        \\"desc\\": \\"A very nice image.\\",\\n        \\"path\\": \\"imgs\\",\\n        \\"name\\": \\"image.png\\",\\n        \\"group\\": null,\\n        \\"height\\": null,\\n        \\"__module__\\": \\"livvkit.elements.elements\\",\\n        \\"_html_template\\": \\"image.html\\",\\n        \\"_latex_template\\": \\"image.tex\\"\\n    }\\n}"\n' \
+            '            {\n' \
+            '                "Image": {\n' \
+            '                    "title": "The Image",\n' \
+            '                    "desc": "A very nice image.",\n' \
+            '                    "path": "imgs",\n' \
+            '                    "name": "image.png",\n' \
+            '                    "group": null,\n' \
+            '                    "height": null,\n' \
+            '                    "__module__": "livvkit.elements.elements",\n' \
+            '                    "_html_template": "image.html",\n' \
+            '                    "_latex_template": "image.tex"\n' \
+            '                }\n' \
+            '            }\n' \
             '        ],\n' \
             '        "title": "The Gallery",\n' \
             '        "Type": "Gallery",\n' \

@@ -186,7 +186,7 @@ class CompositeElement(BaseElement, abc.ABC):
                                          '_html_template': self._html_template,
                                          '_latex_template': self._latex_template})
 
-        elem_repr = [elem._repr_json() for elem in self.elements]
+        elem_repr = [json_tricks.loads(elem._repr_json()) for elem in self.elements]
         jsn[type(self).__name__]['elements'] = elem_repr
 
         return json_tricks.dumps(jsn, indent=4, primitives=True, allow_nan=True)
@@ -247,7 +247,7 @@ class NamedCompositeElement(BaseElement, abc.ABC):
 
         elem_repr = {}
         for title, elements in self.elements_dict.items():
-            elem_repr[title] = [elem._repr_json() for elem in elements]
+            elem_repr[title] = [json_tricks.loads(elem._repr_json()) for elem in elements]
 
         jsn[type(self).__name__]['elements_dict'] = elem_repr
 
