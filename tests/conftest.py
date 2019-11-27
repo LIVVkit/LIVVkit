@@ -123,7 +123,6 @@ def diff_data(tmpdir_factory):
                        'idiag = 10\n' \
                        'jdiag = 10\n'
 
-
     diff_dir = tmpdir_factory.mktemp('diff')
     from_file = diff_dir.join('from.cfg')
     to_file = diff_dir.join('to.cfg')
