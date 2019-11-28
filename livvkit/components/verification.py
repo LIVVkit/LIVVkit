@@ -39,7 +39,6 @@ from netCDF4 import Dataset
 
 import livvkit
 from livvkit import elements
-from livvkit.util import netcdf
 from livvkit.util import functions
 from livvkit.util import colormaps
 from livvkit.util.LIVVDict import LIVVDict
@@ -197,7 +196,7 @@ def bit_for_bit(model_path, bench_path, config):
     except (FileNotFoundError, PermissionError):
         return elements.Error("Bit for Bit",
                               "File named " + fname + " could not be read!")
-    if not (netcdf.has_time(model_data) and netcdf.has_time(bench_data)):
+    if not (len(model_data.dimensions['time']) > 0 and len(bench_data.dimensions['time']) > 0):
         return elements.Error("Bit for Bit",
                               "File named " + fname + " could not be read!")
 
