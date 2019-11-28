@@ -27,6 +27,7 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+# FIXME: This docstring
 """
 Module to help building new display elements in the output
 files easier and less error prone.
@@ -295,8 +296,6 @@ class Page(CompositeElement):
         self.title = title
         self.description = description
         # FIXME: remove once common.js is obsolete
-        self.Type = 'Page'
-        self.Title = title
         self.Data = self._repr_html()
 
 
@@ -307,8 +306,6 @@ class Tabs(NamedCompositeElement):
 
     def __init__(self, tabs):
         super(Tabs, self).__init__(tabs)
-        # FIXME: Remove once common.js is obsolete
-        self.Data = self._repr_html()
 
 
 class Section(CompositeElement):
@@ -318,10 +315,6 @@ class Section(CompositeElement):
     def __init__(self, title, elements):
         super(Section, self).__init__(elements)
         self.title = title
-        # FIXME: Remove once common.js is obsolete
-        self.Type = 'Gallery'
-        self.Title = title
-        self.Data = self._repr_html()
 
 
 class Table(BaseElement):
@@ -361,12 +354,6 @@ class Table(BaseElement):
         if transpose:
             self._html_template = 'table_transposed.html'
             self._latex_template = 'table_transposed.tex'
-
-        # FIXME: Remove once common.js is obsolete
-        self.Type = 'Table'
-        self.Title = self.title
-        self.Headers = list(self.data.keys())
-        self.Data = self._repr_html()
 
     def _repr_html(self):
         """Represent this element as HTML
@@ -411,11 +398,6 @@ class BitForBit(CompositeElement):
             raise IndexError('Imgs must be the same length as the table. '
                              'Table rows: {}, imgs length: {}.'.format(self.rows, len(imgs)))
 
-        # FIXME: Remove once common.js is obsolete
-        self.Type = "Bit for Bit"
-        self.Title = title
-        self.Data = self._repr_html()
-
     def _repr_html(self):
         """Represent this element as HTML
 
@@ -450,10 +432,6 @@ class Gallery(CompositeElement):
     def __init__(self, title, elements):
         super(Gallery, self).__init__(elements)
         self.title = title
-        # FIXME: Remove once common.js is obsolete
-        self.Type = 'Gallery'
-        self.Title = title
-        self.Data = self._repr_html()
 
 
 class Image(BaseElement):
@@ -511,10 +489,6 @@ class FileDiff(BaseElement):
         self.from_file = from_file
         self.to_file = to_file
         self.diff, self.diff_status = self.diff_files(context=context)
-        # FIXME: Remove once common.js is obsolete
-        self.Type = 'Diff'
-        self.Title = title
-        self.Data = self._repr_html()
 
     def diff_files(self, context=3):
         with open(self.from_file) as from_, open(self.to_file) as to_:
@@ -541,9 +515,6 @@ class Error(BaseElement):
         super(Error, self).__init__()
         self.title = title
         self.message = message
-        # FIXME: Remove once common.js is obsolete
-        self.Type = 'Error'
-        self.Data = self._repr_html()
 
 
 class RawHTML(BaseElement):
@@ -553,5 +524,3 @@ class RawHTML(BaseElement):
     def __init__(self, html):
         super(RawHTML, self).__init__()
         self.html = html
-        # FIXME: Remove once common.js is obsolete
-        self.Type = 'HTML'

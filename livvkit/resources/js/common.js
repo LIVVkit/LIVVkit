@@ -54,11 +54,11 @@ function drawNav() {
     data = data["Page"];
     // Go through each category: numerics, verification, performance, and validation
     for (var el_idx in data["elements"]) {
-        if (data["elements"][el_idx] != null && Object.keys(data["elements"][el_idx]["Table"]["Data"]).length > 0) {
-            html += "<h3>" + data["elements"][el_idx]["Table"]["Title"] + "</h3>\n";
+        if (data["elements"][el_idx] != null && Object.keys(data["elements"][el_idx]["Table"]["data"]).length > 0) {
+            html += "<h3>" + data["elements"][el_idx]["Table"]["title"] + "</h3>\n";
             var testList = Array.from(new Set( data["elements"][el_idx]["Table"]["index"])).sort();
             for (var idx in testList) {
-                html += "<a href=" + indexPath + "/" + data["elements"][el_idx]["Table"]["Title"].toLowerCase() +
+                html += "<a href=" + indexPath + "/" + data["elements"][el_idx]["Table"]["title"].toLowerCase() +
                         "/" + testList[idx] + ".html>" + testList[idx] + "</a></br>";
             }
         }

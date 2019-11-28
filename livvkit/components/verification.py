@@ -129,10 +129,8 @@ def _summarize_result(result, summary):
     failure_count = 0
     summary_data = None
     for elem in result:
-        if isinstance(elem, elements.BaseElement):
-            elem = elem.__dict__
-        if elem["Type"] == "Bit for Bit" and "data" in elem:
-            elem_data = elem["data"]
+        if isinstance(elem, elements.BitForBit):
+            elem_data = elem.data
             summary_data = summary["Bit for Bit"]
             total_count += 1
             for ii, var in enumerate(elem_data['Variable']):
@@ -148,12 +146,10 @@ def _summarize_result(result, summary):
     total_count = 0
     failure_count = 0
     for elem in result:
-        if isinstance(elem, elements.BaseElement):
-            elem = elem.__dict__
-        if elem["Title"] == "Configuration Comparison" and elem["Type"] == "Diff":
+        if isinstance(elem, elements.FileDiff) and elem.title == 'Configuration Comparison':
             summary_data = summary["Configurations"]
             total_count += 1
-            if elem['diff_status']:
+            if elem.diff_status:
                 failure_count += 1
             else:
                 continue
@@ -164,9 +160,7 @@ def _summarize_result(result, summary):
 
     # Get the number of files parsed
     for elem in result:
-        if isinstance(elem, elements.BaseElement):
-            elem = elem.__dict__
-        if elem["Title"] == "Output Log" and elem["Type"] == "Table":
+        if isinstance(elem, elements.Table) and elem.title == 'Output Log':
             summary["Std. Out Files"] += 1
             break
 
