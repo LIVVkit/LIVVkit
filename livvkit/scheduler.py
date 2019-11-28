@@ -31,9 +31,6 @@
 Provides functions for scheduling the runs of tests.
 """
 
-from __future__ import absolute_import, division, print_function, unicode_literals
-import six
-
 import os
 import sys
 import multiprocessing as mp
@@ -85,7 +82,7 @@ def run(run_type, module, config):
 
 
 def run_quiet(run_type, module, config, group=True):
-    tests = [t for t in six.iterkeys(config) if isinstance(config[t], dict)]
+    tests = [t for t in config if isinstance(config[t], dict)]
     if livvkit.pool_size == 0:
         test_summaries = {}
         for test in tests:
@@ -94,7 +91,7 @@ def run_quiet(run_type, module, config, group=True):
         test_summaries = launch_processes(run_type, tests, module, config)
 
         for t in tests:
-            with open(os.path.join(livvkit.index_dir, 'logs', '{}-{}.stdout'.format(run_type, t)), 'r') as log:
+            with open(os.path.join(livvkit.index_dir, 'logs', '{}-{}.stdout'.format(run_type, t))) as log:
                 stdout = log.read()
             print(stdout)
 

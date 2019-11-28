@@ -27,9 +27,6 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-from __future__ import absolute_import, print_function, unicode_literals
-import six
-
 import pybtex.database
 import pybtex.io
 
@@ -42,10 +39,8 @@ class HTMLBackend(BaseBackend):
         super(HTMLBackend, self).__init__(*args, **kwargs)
         self._html = ''
 
-
     def output(self, html):
         self._html += html
-
 
     def format_protected(self, text):
         if text[:4] == 'http':
@@ -53,14 +48,11 @@ class HTMLBackend(BaseBackend):
         else:
             return r'<span class="bibtex-protected">{}</span>'.format(text)
 
-
     def write_prologue(self):
         self.output('<div class="bibliography"><dl>')
 
-
     def write_epilogue(self):
         self.output('</dl></div>')
-
 
     def _repr_html(self, formatted_bibliography):
         self.write_prologue()
@@ -80,7 +72,7 @@ class HTMLBackend(BaseBackend):
 # def bib2html(bib, style=None, backend=None):
 #     raise NotImplementedError('I do not now how to convert a {} type to a bibliography'.format(type(bib)))
 def bib2html(bib, style=None, backend=None):
-    if isinstance(bib, six.string_types):
+    if isinstance(bib, str):
         return _bib2html_string(bib, style=style, backend=backend)
     if isinstance(bib, (list, set, tuple)):
         return _bib2html_list(bib, style=style, backend=backend)

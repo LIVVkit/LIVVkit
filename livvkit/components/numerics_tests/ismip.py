@@ -30,9 +30,6 @@
 """
 Utilities to provide numerical verification for the ISMIP test cases
 """
-from __future__ import absolute_import, division, print_function, unicode_literals
-import six
-
 
 import os
 
@@ -80,7 +77,7 @@ def run(config, analysis_data):
         coord = 'y_hat'
 
     lengths = list(set(
-        [get_case_length(d) for d in six.iterkeys(analysis_data)]
+        [get_case_length(d) for d in analysis_data]
         ))
 
     plot_list = []
@@ -116,12 +113,12 @@ def run(config, analysis_data):
             plt.plot(axis, ho_mean, 'g-', linewidth=2, label='Higher order')
 
             analysis = {}
-            for a in six.iterkeys(analysis_data):
+            for a in analysis_data:
                 if int(l) == int(a.split('-')[-1][1:]):
                     analysis[a] = analysis_data[a]
 
-            for a in six.iterkeys(analysis):
-                for model in sorted(six.iterkeys(analysis[a])):
+            for a in analysis:
+                for model in sorted(analysis[a]):
                     plt.plot(analysis[a][model][coord],
                              analysis[a][model][config['plot_vars'][p]],
                              line_style[model],
@@ -142,7 +139,7 @@ def run(config, analysis_data):
 def summarize_result(data, config):
     case = config['name']
     summary = LIVVDict()
-    lengths = list(set([get_case_length(d) for d in six.iterkeys(data)]))
+    lengths = list(set([get_case_length(d) for d in data]))
 
     for p, pattern in enumerate(sorted(setup[case]['pattern'])):
         for l in sorted(lengths):
@@ -155,12 +152,12 @@ def summarize_result(data, config):
                 np.genfromtxt(recreate_file, delimiter=',', missing_values='nan', unpack=True)
 
             analysis = {}
-            for a in six.iterkeys(data):
+            for a in data:
                 if int(l) == int(a.split('-')[-1][1:]):
                     analysis[a] = data[a]
 
-            for a in six.iterkeys(analysis):
-                for model in sorted(six.iterkeys(analysis[a])):
+            for a in analysis:
+                for model in sorted(analysis[a]):
                     if setup[case]['ylabel'][p].split(" ")[0].lower() == 'surface':
                         percent_errors = np.divide(analysis[a][model][config['plot_vars'][p]]
                                                    - ho_mean, ho_mean+1000)
@@ -186,7 +183,7 @@ def summarize_result(data, config):
 
 def print_summary(case, summary):
     """ Show some statistics from the run """
-    for subcase in six.iterkeys(summary):
+    for subcase in summary:
         message = case + " " + subcase
         print("    " + message)
         print("    " + "-"*len(message))

@@ -29,8 +29,6 @@
 """
 Validation Test Base Module
 """
-from __future__ import absolute_import, division, print_function, unicode_literals
-import six
 
 import os
 import importlib
@@ -94,26 +92,18 @@ def _load_case_module(case, config):
     except ImportError:
         mod_path = os.path.abspath(config['module'])
         try:
-            if six.PY2:
-                import imp
-                m = imp.load_source(case, mod_path)
-            elif six.PY3:
-                # noinspection PyUnresolvedReferences
-                spec = importlib.util.spec_from_file_location(case, mod_path,
-                                                              submodule_search_locations=os.path.dirname(mod_path))
-                # noinspection PyUnresolvedReferences
-                m = importlib.util.module_from_spec(spec)
-                spec.loader.exec_module(m)
-            else:
-                raise
+            spec = importlib.util.spec_from_file_location(
+                case, mod_path, submodule_search_locations=os.path.dirname(mod_path)
+            )
+            m = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(m)
         except IOError:
             # imp.load_source (py2) and spec.loader.exec_module (py3) raises an IOError if module isn't found
             print(ERR_MISSING_MOD_MSG.format(case, os.path.relpath(mod_path, os.getcwd())))
             raise
         except ImportError as iie:
             # If module's internal import statements fail
-            dep = str(iie).split()[-1] if six.PY2 else iie.name 
-            print(_case_dep_err(mod_path).format(case, dep))
+            print(_case_dep_err(mod_path).format(case, iie.name))
             raise
         
     return m

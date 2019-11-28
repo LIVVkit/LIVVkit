@@ -29,8 +29,6 @@
 """
 Verification Test Base Module
 """
-from __future__ import absolute_import, division, print_function, unicode_literals
-import six
 
 import os
 
@@ -57,7 +55,7 @@ def run_suite(case, config):
     model_cases = functions.collect_cases(model_dir)
     bench_cases = functions.collect_cases(bench_dir)
 
-    for subcase in sorted(six.iterkeys(model_cases)):
+    for subcase in sorted(model_cases):
         bench_subcases = bench_cases[subcase] if subcase in bench_cases else []
         case_sections = []
         for mcase in sorted(model_cases[subcase], key=functions.sort_processor_counts):
@@ -66,8 +64,7 @@ def run_suite(case, config):
             mpath = os.path.join(model_dir, subcase, mcase.replace("-", os.path.sep))
             case_result = _analyze_case(mpath, bpath, config)
             case_sections.append(elements.Section(mcase, case_result))
-            summary[subcase] = _summarize_result(case_result,
-                                                      summary[subcase])
+            summary[subcase] = _summarize_result(case_result, summary[subcase])
         tabs[subcase] = case_sections
 
     result = elements.Page(case, config["description"], elements=[elements.Tabs(tabs)])
@@ -205,7 +202,6 @@ def bit_for_bit(model_path, bench_path, config):
                               "File named " + fname + " could not be read!")
 
     # Begin bit for bit analysis
-    headers = ["Max Error", "Index of Max Error", "RMS Error", "Plot"]
     plot_elements = []
     table_data = {'Variable': [], 'Max Error': [], 'Index of Max Error': [], 'RMS Error': []}
     for var in config["bit_for_bit_vars"]:

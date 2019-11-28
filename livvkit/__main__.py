@@ -31,10 +31,11 @@
 Executable script to start a verification and validation test suite.
 Management of the tests to be run is handled by the scheduler in livvkit.util
 """
-from __future__ import absolute_import, division, print_function, unicode_literals
 
 import os
 import sys
+import http.server as server
+import socketserver as socket
 
 import livvkit
 from livvkit.util import options
@@ -95,7 +96,7 @@ def main(cl_args=None):
         for conf in livvkit.validation_model_configs:
             validation_config = functions.merge_dicts(validation_config,
                                                       functions.read_json(conf))
-        summary_elements.extend(scheduler.run_quiet(validation, validation_config,
+        summary_elements.extend(scheduler.run_quiet("validation", validation, validation_config,
                                                     group=False))
         print(" -----------------------------------------------------------------")
         print("   Validation test suite complete ")
@@ -112,17 +113,6 @@ def main(cl_args=None):
         print("-------------------------------------------------------------------")
 
     if args.serve:
-        try:
-            # Python 3
-            import http.server as server
-            import socketserver as socket
-        except ImportError:
-            # Python 2
-            # noinspection PyPep8Naming
-            import SimpleHTTPServer as server
-            # noinspection PyPep8Naming
-            import SocketServer as socket
-
         httpd = socket.TCPServer(('', args.serve), server.SimpleHTTPRequestHandler)
 
         sa = httpd.socket.getsockname()

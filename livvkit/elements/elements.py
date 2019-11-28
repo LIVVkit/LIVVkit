@@ -37,8 +37,6 @@ They will be written out to the JSON files as sub-objects, which must
 be interpreted by the Javascript found in the resources directory.
 """
 
-from __future__ import absolute_import, division, print_function, unicode_literals
-
 import os
 import abc
 import difflib

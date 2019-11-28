@@ -27,8 +27,6 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-from __future__ import absolute_import, print_function, unicode_literals
-
 import os
 import re
 
@@ -73,8 +71,7 @@ setup(
                    'Programming Language :: Python :: 3.8',
                    ],
 
-      install_requires=['six',
-                        'numpy',
+      install_requires=['numpy',
                         'scipy',
                         'netCDF4',
                         'matplotlib',
