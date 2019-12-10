@@ -8,71 +8,47 @@ livvkit.util.LIVVDict module
 ----------------------------
 
 .. automodule:: livvkit.util.LIVVDict
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
-livvkit.util.TexHelper module
------------------------------
+livvkit.util.bib module
+-----------------------
 
-.. automodule:: livvkit.util.TexHelper
-    :members:
-    :undoc-members:
-    :show-inheritance:
+.. automodule:: livvkit.util.bib
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 livvkit.util.colormaps module
 -----------------------------
 
 .. automodule:: livvkit.util.colormaps
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-livvkit.util.elements module
-----------------------------
-
-.. automodule:: livvkit.util.elements
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 livvkit.util.functions module
 -----------------------------
 
 .. automodule:: livvkit.util.functions
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-livvkit.util.make\_tex module
------------------------------
-
-.. automodule:: livvkit.util.make_tex
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-livvkit.util.netcdf module
---------------------------
-
-.. automodule:: livvkit.util.netcdf
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 livvkit.util.options module
 ---------------------------
 
 .. automodule:: livvkit.util.options
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 
 Module contents
 ---------------
 
 .. automodule:: livvkit.util
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:

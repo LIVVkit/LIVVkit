@@ -10,8 +10,19 @@ To build this documentation you will need to install some additional tools:
 
 
 We recommend you use ``npm``, a `Javascript package manager <https://www.npmjs.com/get-npm>`_, to install
-``JSDoc`` and ``pip`` to install the Sphinx packages (``sphinx`` itself can be installed
-via ``conda`` as well, but the others will still need ``pip``).
+``JSDoc``:
+
+.. code-block:: bash
+
+    npm install -g jsdoc
+
+and ``pip`` to install the development version of LIVVkit:
+
+.. code-block:: bash
+
+    git clone git@github.com:LIVVkit/LIVVkit.git
+    cd LIVVkit
+    pip install -e .[develop]
 
 To build the current version of the documentation website, simply run:
 

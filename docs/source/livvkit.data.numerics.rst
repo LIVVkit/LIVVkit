@@ -5,6 +5,6 @@ Module contents
 ---------------
 
 .. automodule:: livvkit.data.numerics
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:

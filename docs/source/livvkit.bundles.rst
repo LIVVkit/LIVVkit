@@ -6,12 +6,12 @@ Subpackages
 
 .. toctree::
 
-    livvkit.bundles.CISM_glissade
+   livvkit.bundles.CISM_glissade
 
 Module contents
 ---------------
 
 .. automodule:: livvkit.bundles
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
