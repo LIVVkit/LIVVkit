@@ -50,7 +50,7 @@ def parse_log(file_path):
         the results of the bit for bit testing
     """
     if not os.path.isfile(file_path):
-        return elements.Error("Output Log", "Could not open file: " + file_path.split(os.sep)[-1]).__dict__
+        return elements.Error("Output Log", "Could not open file: " + file_path.split(os.sep)[-1])
 
     with open(file_path) as f:
         dycore_types = {"0": "Glide",
