@@ -14,7 +14,7 @@ References
     `DOI:10.5194/gmd-12-1067-2019 <https://doi.org/10.5194/gmd-12-1067-2019>`__.
 
 
-.. [Kennedy2017] Kennedy, J.H., et al. (2017), LIVVkit: An extensible, python-based, land ice
+.. [Kennedy2017] Kennedy, J.H., et al. (2017), LIVVkit: An extensible, Python-based, land ice
     verification and validation toolkit for ice sheet models, J. Adv. Model. Earth Syst., 9,
     `DOI:10.1002/2017MS000916 <http://dx.doi.org/10.1002/2017MS000916>`__.
 

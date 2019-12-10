@@ -127,7 +127,7 @@ new extension.
 template.py:
 ^^^^^^^^^^^^
 
-This is the primary extension python module. In order to work with LIVVkit, the
+This is the primary extension Python module. In order to work with LIVVkit, the
 extension needs to provide a ``run(name, config)`` function which accepts two arguments:
 ``name``, the name of the extension which will be displayed on the extensions output
 webpage; and ``config`` which will contain the information in ``template.json``. This
@@ -178,7 +178,7 @@ list should minimally include [Kennedy2017]_ and [Evans2019]_.
 template.yml:
 ^^^^^^^^^^^^^
 
-If you use any python packages/modules beyond the required LIVVkit python dependencies
+If you use any Python packages/modules beyond the required LIVVkit Python dependencies
 (see LIVVkit's ``setup.py``), you should list them in this `Anaconda style environment
 YAML file <https://conda.io/docs/user-guide/tasks/manage-environments.html?highlight=yml#create-env-file-manually>`__.
 By doing so, when LIVVkit runs an extension in an environment without the required

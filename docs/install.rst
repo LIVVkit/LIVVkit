@@ -24,7 +24,7 @@ or `Python pip <https://pip.pypa.io/en/stable/>`__:
     pip isntall --user livvkit
 
 
-LIVVkit 3.0 is being developed and tested against python 3.6+, although earlier versions may work.
+LIVVkit 3.0 is being developed and tested against Python 3.6+, although earlier versions may work.
 If you require Python 2, you may use LIVVkit 2, but it is no longer supported in conjunction with the
 `Python 2 End of Life <https://www.python.org/doc/sunset-python-2/>`_.
 
@@ -51,7 +51,7 @@ Then, you can install an "editable" version of LIVVkit into a Python 3.6+ develo
     pip install -e .[develop]
 
 This will allow you to checkout different versions of LIVVkit, make changes, etc. and have those
-changes immediately reflected in your python environment. 
+changes immediately reflected in your Python environment.
 
 If you're having problems installing/developing/using LIVVkit,
 `open an issue on github <https://github.com/livvkit/livvkit/issues>`__.

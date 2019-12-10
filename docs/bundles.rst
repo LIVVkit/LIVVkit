@@ -23,7 +23,7 @@ entire directory to a new directory where the name should indicate the model bei
 
 .. warning::
 
-    The bundle's name needs to follow the python naming convention for a python package (see
+    The bundle's name needs to follow the Python naming convention for a Python package (see
     :pep:`8#package-and-module-names`).
 
 The new bundle will need to be edited for use each component (verification, performance, numerics,
