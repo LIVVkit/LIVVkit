@@ -39,14 +39,19 @@ be interpreted by the Javascript found in the resources directory.
 
 import os
 import abc
+import glob
 import difflib
 import collections
+
+from pathlib import Path
 
 import jinja2
 import json_tricks
 import pandas as pd
 
 import livvkit
+import livvkit.data
+from livvkit.util import bib
 
 _HERE = os.path.dirname(__file__)
 
@@ -289,12 +294,66 @@ class Page(CompositeElement):
     _html_template = 'page.html'
     _latex_template = 'page.tex'
 
-    def __init__(self, title, description, elements):
+    def __init__(self, title, description, elements, references=''):
         super(Page, self).__init__(elements)
         self.title = title
         self.description = description
+        self._ref_list = None
+        if references is not None:
+            self.add_references(references)
         # FIXME: remove once common.js is obsolete
         self.Data = self._repr_html()
+
+    def add_references(self, references):
+        self._ref_list = glob.glob(os.path.join(os.path.dirname(livvkit.data.__file__), '*.bib'))
+
+        if references:
+            if isinstance(references, (str, Path)):
+                self._ref_list.append(references)
+            elif isinstance(references, (list, set, tuple)):
+                self._ref_list += list(references)
+            else:
+                raise NotImplementedError(
+                    'Cannot add {} type to the reference list. References must be either a (str or '
+                    'Path) path to a bibtex file, or a list/set/tuple of bibtex files.'.format(type(references))
+                )
+
+    def _repr_html(self):
+        """Represent this element as HTML
+
+        Using the jinja2 template defined by ``self._html_template``, return an
+        HTML representation of this element
+
+        Returns:
+            str: The HTML representation of this element
+        """
+        template = _html_env.get_template(self._html_template)
+        elem_repr = [elem._repr_html() for elem in self.elements]
+        rendered_html = template.render(data=self.__dict__, elements=elem_repr)
+        if self._ref_list is not None:
+            rendered_html += bib.bib2html(self._ref_list)
+
+        return rendered_html
+
+    def _repr_latex(self):
+        """Represent this element as LaTeX
+
+        Using the jinja2 template defined by ``self._latex_template``, return an
+        LaTeX representation of this element
+
+        Returns:
+            str: The LaTeX representation of this element
+        """
+        template = _latex_env.get_template(self._latex_template)
+        elem_repr = [elem._repr_latex() for elem in self.elements]
+        rendered_tex = template.render(data=self.__dict__, elements=elem_repr)
+
+        # FIXME: This is hacky! We're cheating the livvkit.util.bib.bib2html
+        #  functionality to actually return latex... See the LatexBackend class
+        if self._ref_list is not None:
+            rendered_tex += bib.bib2html(self._ref_list, backend=bib.LatexBackend())
+
+        return rendered_tex
 
 
 # FIXME: Docstring --> pass in a dictionary like {tab_title: [tab_elements]}

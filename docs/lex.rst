@@ -113,7 +113,7 @@ Developing a custom extension
     we'll help you through the process.
 
 A template extension is provided as an absolute minimum working example
-in the ``examples/`` directory. To start developing a new extension, copy the
+in LEX's ``examples/`` directory. To start developing a new extension, copy the
 ``examples/template.*`` files to a (possibly new) relevant directory, and change
 these files' name to a descriptive name. These files will provide the basis for your
 new extension.
@@ -171,8 +171,8 @@ template.bib:
 
 The references that are relevant to this extension, and should be cited by anyone
 using the extension to support any work that will be published. These references
-will be displayed a the bottom of the extension's output webpage, and the reference
-list should minimally include [Kennedy2017]_ and [Evans2019]_.
+will be displayed a the bottom of the extension's output webpage, and will include
+[Kennedy2017]_ and [Evans2019]_ by default.
 
 
 template.yml:

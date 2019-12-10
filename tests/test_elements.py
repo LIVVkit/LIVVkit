@@ -164,7 +164,11 @@ def test_el_page_json():
             '        ],\n' \
             '        "title": "A Page",\n' \
             '        "description": "A good description",\n' \
-            '        "Data": "<div id=\\"A Page\\">\\n    <h2>A Page</h2>\\n    <p>A good description</p>\\n    <div class=\\"section\\">\\n    <h2>A cool table</h2>\\n    <div class=\\"table\\">\\n    <h3>title</h3>\\n    <table>\\n        <tr>\\n            <th>h1</th>\\n            <th>h2</th>\\n        </tr>\\n        <tr>\\n            <td>v1</td>\\n            <td>v3</td>\\n        </tr>\\n        <tr>\\n            <td>v2</td>\\n            <td>v4</td>\\n        </tr>\\n    </table>\\n</div>\\n</div>\\n</div>",\n' \
+            '        "_ref_list": [\n' \
+            '            "/home/jhkennedy/Documents/Code/LIVVkit/livv-dev/livvkit/data/Evans2019.bib",\n' \
+            '            "/home/jhkennedy/Documents/Code/LIVVkit/livv-dev/livvkit/data/Kennedy2017.bib"\n' \
+            '        ],\n' \
+            '        "Data": "<div id=\\"A Page\\">\\n    <h2>A Page</h2>\\n    <p>A good description</p>\\n    <div class=\\"section\\">\\n    <h2>A cool table</h2>\\n    <div class=\\"table\\">\\n    <h3>title</h3>\\n    <table>\\n        <tr>\\n            <th>h1</th>\\n            <th>h2</th>\\n        </tr>\\n        <tr>\\n            <td>v1</td>\\n            <td>v3</td>\\n        </tr>\\n        <tr>\\n            <td>v2</td>\\n            <td>v4</td>\\n        </tr>\\n    </table>\\n</div>\\n</div>\\n</div><div class=\\"bibliography\\"><h2>References</h2><p>LIVVkit is an open source project licensed under a BSD 3-clause License. We ask that you please acknowledge LIVVkit in any work it is used or supports. In any corresponding published work, please cite: </p><dl><dt>1</dt> <dd>K.&nbsp;J. Evans, J.&nbsp;H. Kennedy, D.&nbsp;Lu, M.&nbsp;M. Forrester, S.&nbsp;Price, J.&nbsp;Fyke, A.&nbsp;R. Bennett, M.&nbsp;J. Hoffman, I.&nbsp;Tezaur, C.&nbsp;S. Zender, and M.&nbsp;Vizca\\\\\'<span class=\\"bibtex-protected\\">\\u0131</span>no. Livvkit 2.1: automated and extensible ice sheet model validation. <em>Geoscientific Model Development</em>, 12(3):1067\\u20131086, 2019. URL: <a href=\\"https://www.geosci-model-dev.net/12/1067/2019/\\">https://www.geosci-model-dev.net/12/1067/2019/</a>, <a href=\\"https://doi.org/10.5194/gmd-12-1067-2019\\">doi:10.5194/gmd-12-1067-2019</a>.</dd> <dt>2</dt> <dd>Joseph&nbsp;H. Kennedy, Andrew&nbsp;R. Bennett, Katherine&nbsp;J. Evans, Stephen Price, Matthew Hoffman, William&nbsp;H. Lipscomb, Jeremy Fyke, Lauren Vargo, Adrianna Boghozian, Matthew Norman, and Patrick&nbsp;H. Worley. Livvkit: an extensible, python-based, land ice verification and validation toolkit for ice sheet models. <em>Journal of Advances in Modeling Earth Systems</em>, 9(2):854\\u2013869, 2017. <a href=\\"https://doi.org/10.1002/2017MS000916\\">doi:10.1002/2017MS000916</a>.</dd> </dl></div>",\n' \
             '        "__module__": "livvkit.elements.elements",\n' \
             '        "_html_template": "page.html",\n' \
             '        "_latex_template": "page.tex"\n' \
@@ -192,8 +196,8 @@ def test_el_page_html():
             '    <h3>title</h3>\n' \
             '    <table>\n' \
             '        <tr>\n' \
-            '            <th>h1</th>\n ' \
-            '           <th>h2</th>\n' \
+            '            <th>h1</th>\n' \
+            '            <th>h2</th>\n' \
             '        </tr>\n' \
             '        <tr>\n' \
             '            <td>v1</td>\n' \
@@ -206,7 +210,8 @@ def test_el_page_html():
             '    </table>\n' \
             '</div>\n' \
             '</div>\n' \
-            '</div>'
+            '</div><div class="bibliography"><h2>References</h2><p>LIVVkit is an open source project licensed under a BSD 3-clause License. We ask that you please acknowledge LIVVkit in any work it is used or supports. In any corresponding published work, please cite: </p><dl><dt>1</dt> <dd>K.&nbsp;J. Evans, J.&nbsp;H. Kennedy, D.&nbsp;Lu, M.&nbsp;M. Forrester, S.&nbsp;Price, J.&nbsp;Fyke, A.&nbsp;R. Bennett, M.&nbsp;J. Hoffman, I.&nbsp;Tezaur, C.&nbsp;S. Zender, and M.&nbsp;Vizca\\\'<span class="bibtex-protected">ı</span>no. Livvkit 2.1: automated and extensible ice sheet model validation. <em>Geoscientific Model Development</em>, 12(3):1067–1086, 2019. URL: <a href="https://www.geosci-model-dev.net/12/1067/2019/">https://www.geosci-model-dev.net/12/1067/2019/</a>, <a href="https://doi.org/10.5194/gmd-12-1067-2019">doi:10.5194/gmd-12-1067-2019</a>.</dd> <dt>2</dt> <dd>Joseph&nbsp;H. Kennedy, Andrew&nbsp;R. Bennett, Katherine&nbsp;J. Evans, Stephen Price, Matthew Hoffman, William&nbsp;H. Lipscomb, Jeremy Fyke, Lauren Vargo, Adrianna Boghozian, Matthew Norman, and Patrick&nbsp;H. Worley. Livvkit: an extensible, python-based, land ice verification and validation toolkit for ice sheet models. <em>Journal of Advances in Modeling Earth Systems</em>, 9(2):854–869, 2017. <a href="https://doi.org/10.1002/2017MS000916">doi:10.1002/2017MS000916</a>.</dd> </dl></div>'
+
 
     page = elements.Page(
         'A Page', 'A good description',
@@ -217,18 +222,34 @@ def test_el_page_html():
 
 
 def test_el_page_latex():
-    truth = '\\levelstay{A Page}\n' \
-            'A good description\n' \
-            '    \\levelstay{A cool table}\n' \
-            '    \\begin{table}[h!]\n' \
-            '    \\centering\n' \
-            '    \\begin{tabular}{cc}\n' \
-            '        h1 & h2 \\\\\n' \
-            '        \\hline\n' \
-            '        v1 & v3  \\\\\n' \
-            '        v2 & v4  \\\\\n' \
-            '        \\end{tabular}\n' \
-            '\\end{table}\n\n'
+    truth = "\\levelstay{A Page}\n" \
+            "A good description\n" \
+            "    \\levelstay{A cool table}\n" \
+            "    \\begin{table}[h!]\n" \
+            "    \\centering\n" \
+            "    \\begin{tabular}{cc}\n" \
+            "        h1 & h2 \\\\\n" \
+            "        \\hline\n" \
+            "        v1 & v3  \\\\\n" \
+            "        v2 & v4  \\\\\n" \
+            "        \\end{tabular}\n" \
+            "\\end{table}\n" \
+            "\n" \
+            "\\begin{thebibliography}{1}\n" \
+            "\n" \
+            "\\bibitem[1]{gmd-12-1067-2019}\n" \
+            "K.~J. Evans, J.~H. Kennedy, D.~Lu, M.~M. Forrester, S.~Price, J.~Fyke, A.~R. Bennett, M.~J. Hoffman, I.~Tezaur, C.~S. Zender, and M.~Vizca\\'{ı}no.\n" \
+            "\\newblock Livvkit 2.1: automated and extensible ice sheet model validation.\n" \
+            "\\newblock \\emph{Geoscientific Model Development}, 12(3):1067–1086, 2019.\n" \
+            "\\newblock URL: \\url{https://www.geosci-model-dev.net/12/1067/2019/}, \\href{https://doi.org/10.5194/gmd-12-1067-2019}{doi:10.5194/gmd-12-1067-2019}.\n" \
+            "\n" \
+            "\\bibitem[2]{Kennedy2017}\n" \
+            "Joseph~H. Kennedy, Andrew~R. Bennett, Katherine~J. Evans, Stephen Price, Matthew Hoffman, William~H. Lipscomb, Jeremy Fyke, Lauren Vargo, Adrianna Boghozian, Matthew Norman, and Patrick~H. Worley.\n" \
+            "\\newblock Livvkit: an extensible, python-based, land ice verification and validation toolkit for ice sheet models.\n" \
+            "\\newblock \\emph{Journal of Advances in Modeling Earth Systems}, 9(2):854–869, 2017.\n" \
+            "\\newblock \\href{https://doi.org/10.1002/2017MS000916}{doi:10.1002/2017MS000916}.\n" \
+            "\n" \
+            "\\end{thebibliography}\n"
 
     page = elements.Page(
         'A Page', 'A good description',
