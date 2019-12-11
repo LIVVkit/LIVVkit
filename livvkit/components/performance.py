@@ -137,7 +137,6 @@ def _analyze_case(model_dir, bench_dir, config):
     return dict(model=model_stats, bench=bench_stats)
 
 
-# noinspection PyUnusedLocal
 def _print_result(case, summary):
     """ Show some statistics from the run """
     for dof, data in summary.items():
@@ -175,7 +174,6 @@ def _summarize_result(result, config):
     return summary
 
 
-# noinspection PyUnusedLocal
 def populate_metadata(case, config):
     """ Provide some top level information for the summary """
     return {"Type": "Summary",
@@ -418,7 +416,6 @@ def generate_timing_breakdown_plot(timing_stats, scaling_var, title, description
     Returns:
         an image element containing the plot file and metadata
     """
-    # noinspection PyProtectedMember
     cmap_data = colormaps._viridis_data
     n_subplots = len(timing_stats)
     fig, ax = plt.subplots(1, n_subplots+1, figsize=(3*(n_subplots+2), 5))

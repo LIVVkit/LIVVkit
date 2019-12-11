@@ -42,7 +42,8 @@ import json_tricks
 import livvkit
 
 
-class temp_sys_path(object):
+class TempSysPath(object):
+    """Add a path to the PYTHONPATH temporarily"""
     def __init__(self, path):
         self.path = path
 
@@ -109,10 +110,10 @@ def find_file(search_dir, file_pattern):
     Returns:
         The path to the file if it was found, otherwise an empty string
     """
-    for root, dirnames, fnames in os.walk(search_dir):
-            for fname in fnames:
-                if fnmatch.fnmatch(fname, file_pattern):
-                    return os.path.join(root, fname)
+    for root, _, fnames in os.walk(search_dir):
+        for fname in fnames:
+            if fnmatch.fnmatch(fname, file_pattern):
+                return os.path.join(root, fname)
     return ""
 
 

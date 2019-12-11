@@ -12,6 +12,7 @@ from livvkit import elements
 
 
 class LIVVkitOutput(ContextDecorator):
+    """Decorator to set the required livvkit variable `livvkit.output_dir`"""
     def __enter__(self):
         livvkit.output_dir = 'vv_test'
 
@@ -23,6 +24,7 @@ def test_el_base_templates_as_property():
     truth = 'template_string'
 
     class Property(elements.BaseElement):
+        """Class to test property definition of _*_template"""
         @property
         def _html_template(self):
             return truth
@@ -47,8 +49,8 @@ def test_el_base_templates_as_class_attribute():
     errors = []
     truth = 'template_string'
 
-    # noinspection PyMissingOrEmptyDocstring
     class ClassAttribute(elements.BaseElement):
+        """Class to test attribute definition of _*_template"""
         _html_template = truth
         _latex_template = truth
 
@@ -66,10 +68,9 @@ def test_el_base_templates_as_class_attribute():
 def test_el_base_templates_as_instance_attribute():
     truth = 'template_string'
 
-    # noinspection PyMissingOrEmptyDocstring,PyAbstractClass
     class HTMLInstanceAttribute(elements.BaseElement):
+        """Class to test instance attribute definition of _*_template"""
         def __init__(self, html):
-            # noinspection PyPropertyAccess
             self._html_template = html
             super(HTMLInstanceAttribute, self).__init__()
 
@@ -77,10 +78,8 @@ def test_el_base_templates_as_instance_attribute():
         def _latex_template(self):
             return truth
 
-    # noinspection PyMissingOrEmptyDocstring,PyAbstractClass
     class LatexInstanceAttribute(elements.BaseElement):
         def __init__(self, latex):
-            # noinspection PyPropertyAccess
             self._latex_template = latex
             super(LatexInstanceAttribute, self).__init__()
 
@@ -89,19 +88,17 @@ def test_el_base_templates_as_instance_attribute():
             return truth
 
     with pytest.raises(TypeError):
-        # noinspection PyUnusedLocal
-        hia = HTMLInstanceAttribute(truth)
+        _ = HTMLInstanceAttribute(truth)
 
     with pytest.raises(TypeError):
-        # noinspection PyUnusedLocal
-        lia = LatexInstanceAttribute(truth)
+        _ = LatexInstanceAttribute(truth)
 
 
 def test_el_base_templates_as_method():
     truth = 'template_string'
 
-    # noinspection PyMissingOrEmptyDocstring
     class HTMLMethod(elements.BaseElement):
+        """Class to test method definition of _*_template"""
         def _html_template(self):
             return truth
 
@@ -109,8 +106,8 @@ def test_el_base_templates_as_method():
         def _latex_template(self):
             return truth
 
-    # noinspection PyMissingOrEmptyDocstring
     class LatexMethod(elements.BaseElement):
+        """Class to test method definition of _*_template"""
         @property
         def _html_template(self):
             return truth
@@ -119,12 +116,10 @@ def test_el_base_templates_as_method():
             return truth
 
     with pytest.raises(TypeError):
-        # noinspection PyUnusedLocal
-        hm = HTMLMethod()
+        _ = HTMLMethod()
 
     with pytest.raises(TypeError):
-        # noinspection PyUnusedLocal
-        lm = LatexMethod()
+        _ = LatexMethod()
 
 
 def test_el_page_json():

@@ -162,7 +162,6 @@ def _summarize_result(result, summary):
     return summary
 
 
-# noinspection PyUnusedLocal
 def populate_metadata(case, config):
     """ Provide some top level information for the summary """
     return {"Type": "Summary",

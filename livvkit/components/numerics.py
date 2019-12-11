@@ -104,7 +104,6 @@ def _summarize_result(module, data, config):
     return summary
 
 
-# noinspection PyUnusedLocal
 def populate_metadata(case, config):
     metadata = {"Type": "Summary",
                 "Title": "Numerics",
