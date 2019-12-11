@@ -110,7 +110,6 @@ def _print_summary(case, summary):
         print("")
 
 
-# FIXME: Update to handle LIVVkit class elements
 def _summarize_result(result, summary):
     """ Trim out some data to return for the index page """
     if "Bit for Bit" not in summary:

@@ -171,7 +171,7 @@ def _summarize_result(result, config):
         else:
             time_diff = 'NA'
         summary[size]['Proc. Counts'] = ", ".join([str(x) for x in sorted(proc_counts)])
-        summary[size]['Mean Time Diff (% of benchmark)'] = time_diff
+        summary[size]['Mean Time Diff (% of benchmark)'] = '{:.4f}'.format(time_diff*100)
     return summary
 
 
