@@ -1,0 +1,8 @@
+<h3>{{ data['title'] }}</h3>
+<div class="diff">{% for line in data['diff'] -%}{% if line[0] == '+' %}
+    <p class="new">{{ line }}</p>{% elif line[0] == '-' %}
+    <p class="old">{{ line }}</p>{% elif line[0:2] == '@@' %}
+    <p class="range">{{ line }}</p>{% else %}
+    <p>{{ line }}</p>{% endif %}
+{%- endfor %}
+</div>

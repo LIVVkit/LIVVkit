@@ -29,7 +29,6 @@
 """
 Module to hold LIVVkit specific functions
 """
-from __future__ import absolute_import, division, print_function, unicode_literals
 
 import os
 import sys
@@ -43,7 +42,8 @@ import json_tricks
 import livvkit
 
 
-class temp_sys_path(object):
+class TempSysPath(object):
+    """Add a path to the PYTHONPATH temporarily"""
     def __init__(self, path):
         self.path = path
 
@@ -110,10 +110,10 @@ def find_file(search_dir, file_pattern):
     Returns:
         The path to the file if it was found, otherwise an empty string
     """
-    for root, dirnames, fnames in os.walk(search_dir):
-            for fname in fnames:
-                if fnmatch.fnmatch(fname, file_pattern):
-                    return os.path.join(root, fname)
+    for root, _, fnames in os.walk(search_dir):
+        for fname in fnames:
+            if fnmatch.fnmatch(fname, file_pattern):
+                return os.path.join(root, fname)
     return ""
 
 
@@ -220,6 +220,10 @@ def setup_output(cssd=None, jsd=None, imgd=None):
     # Get the index template from the resource directory
     shutil.copy(os.path.join(livvkit.resource_dir, "index.html"),
                 os.path.join(livvkit.index_dir, "index.html"))
+
+    shutil.copy(os.path.join(livvkit.resource_dir, "favicon.ico"),
+                os.path.join(livvkit.index_dir, "favicon.ico"))
+
     # Record when this data was recorded so we can make nice backups
     with open(os.path.join(livvkit.index_dir, "data.txt"), "w") as f:
         f.write(livvkit.timestamp + '\n')

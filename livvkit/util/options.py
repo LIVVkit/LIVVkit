@@ -27,17 +27,29 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-from __future__ import absolute_import, division, print_function, unicode_literals
-
 import os
 import sys
 import time
 import pkgutil
 import argparse
 import importlib
+import multiprocessing as mp
 
 import livvkit
 from livvkit import bundles
+
+
+def positive_int(integer):
+    """
+    Argparse helper function to specify a zero or positive integer as an
+    argument type
+    :param integer: A zero or positive integer
+    :return: integer
+    """
+    integer = int(integer)
+    if integer < 0:
+        raise argparse.ArgumentTypeError('Must be zero or a positive integer')
+    return integer
 
 
 def parse_args(args=None):
@@ -47,30 +59,28 @@ def parse_args(args=None):
     Args:
         args: The list of arguments, typically sys.argv[1:]
     """
-    parser = argparse.ArgumentParser(description="Main script to run LIVVkit.",
+    parser = argparse.ArgumentParser(description='Main script to run LIVVkit.',
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter,
                                      fromfile_prefix_chars='@')
 
     parser.add_argument('-o', '--out-dir',
-                        default=os.path.join(os.getcwd(), "vv_" + time.strftime("%Y-%m-%d")),
+                        default=os.path.join(os.getcwd(), 'vv_' + time.strftime('%Y-%m-%d')),
                         help='Location to output the LIVVkit webpages.'
                         )
 
     parser.add_argument('-v', '--verify',
                         nargs=2,
                         default=None,
-                        help=' '.join(['Specify the locations of the test and bench bundle to',
-                                       'compare (respectively).'
-                                       ])
+                        help='Specify the locations of the test and bench bundle '
+                             'to compare (respectively).'
                         )
 
     parser.add_argument('-V', '--validate',
                         action='store',
                         nargs='+',
                         default=None,
-                        help=' '.join(['Specify the location of the configuration files for',
-                                       'validation tests.'
-                                       ])
+                        help='Specify the location of the configuration files '
+                             'for validation tests.'
                         )
 
     # FIXME: this just short-circuits to the validation option, and should become its own module
@@ -80,24 +90,25 @@ def parse_args(args=None):
                         default=None,
                         dest='validate',
                         metavar='EXTENSION',
-                        help=' '.join(['Specify the location of the configuration files for',
-                                       'LIVVkit extensions.'
-                                       ])
-                        )
-
-    parser.add_argument('-p', '--publish',
-                        action='store_true',
-                        help=' '.join(['Also produce a publication quality copy of the figure in',
-                                       'the output directory (eps, 600d pi).'
-                                       ])
+                        help='Specify the location of the configuration files '
+                             'for LIVVkit extensions.'
                         )
 
     parser.add_argument('-s', '--serve',
-                        nargs='?', type=int, const=8000,
-                        help=' '.join(['Start a simple HTTP server for the output website specified',
-                                       'by OUT_DIR on port SERVE.'
-                                       ])
+                        nargs='?',
+                        type=int,
+                        const=8000,
+                        help='Start a simple HTTP server for the output website '
+                             'specified by OUT_DIR on port SERVE.'
                         )
+
+    parser.add_argument('-p', '--pool-size',
+                        nargs='?',
+                        type=int,
+                        default=(mp.cpu_count() - 1 or 1),
+                        help='The number of multiprocessing processes to run '
+                             'analyses in. If zero, processes will run serially '
+                             'outside of the multiprocessing module.')
 
     parser.add_argument('--version',
                         action='version',
@@ -119,7 +130,7 @@ def init(options):
     livvkit.index_dir = livvkit.output_dir
     livvkit.verify = True if options.verify is not None else False
     livvkit.validate = True if options.validate is not None else False
-    livvkit.publish = options.publish
+    livvkit.pool_size = options.pool_size
 
     # Get a list of bundles that provide model specific implementations
     available_bundles = [mod for imp, mod, ispkg in pkgutil.iter_modules(bundles.__path__)]

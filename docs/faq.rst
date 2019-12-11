@@ -6,8 +6,8 @@
 Frequently Asked Questions
 ==========================
 
-Why is the output website blank? 
---------------------------------
+Why does the output website look weird and/or blank?
+----------------------------------------------------
 
 Web browsers are disabling the use of local resources, like javascript, when viewing local files
 (``file://``) due to possible security risks. As of writing this (2017/05/11), Firefox and Safari

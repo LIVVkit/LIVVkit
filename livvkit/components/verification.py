@@ -29,8 +29,6 @@
 """
 Verification Test Base Module
 """
-from __future__ import absolute_import, division, print_function, unicode_literals
-import six
 
 import os
 
@@ -40,24 +38,23 @@ import matplotlib.pyplot as plt
 from netCDF4 import Dataset
 
 import livvkit
-from livvkit.util import netcdf
+from livvkit import elements
 from livvkit.util import functions
 from livvkit.util import colormaps
 from livvkit.util.LIVVDict import LIVVDict
-from livvkit.util import elements
 
 
-def run_suite(case, config, summary):
+def run_suite(case, config):
     """ Run the full suite of verification tests """
     config["name"] = case
     model_dir = os.path.join(livvkit.model_dir, config['data_dir'], case)
     bench_dir = os.path.join(livvkit.bench_dir, config['data_dir'], case)
-    tabs = []
-    case_summary = LIVVDict()
+    tabs = {}
+    summary = LIVVDict()
     model_cases = functions.collect_cases(model_dir)
     bench_cases = functions.collect_cases(bench_dir)
 
-    for subcase in sorted(six.iterkeys(model_cases)):
+    for subcase in sorted(model_cases):
         bench_subcases = bench_cases[subcase] if subcase in bench_cases else []
         case_sections = []
         for mcase in sorted(model_cases[subcase], key=functions.sort_processor_counts):
@@ -65,33 +62,35 @@ def run_suite(case, config, summary):
                      if mcase in bench_subcases else "")
             mpath = os.path.join(model_dir, subcase, mcase.replace("-", os.path.sep))
             case_result = _analyze_case(mpath, bpath, config)
-            case_sections.append(elements.section(mcase, case_result))
-            case_summary[subcase] = _summarize_result(case_result,
-                                                      case_summary[subcase])
-        tabs.append(elements.tab(subcase, section_list=case_sections))
+            case_sections.append(elements.Section(mcase, case_result))
+            summary[subcase] = _summarize_result(case_result, summary[subcase])
+        tabs[subcase] = case_sections
 
-    result = elements.page(case, config["description"], tab_list=tabs)
-    summary[case] = case_summary
-    _print_summary(case, summary[case])
-    functions.create_page_from_template("verification.html",
-                                        os.path.join(livvkit.index_dir,
-                                                     "verification",
-                                                     case + ".html")
-                                        )
-    functions.write_json(result, os.path.join(livvkit.output_dir, "verification"), case+".json")
+    result = elements.Page(case, config["description"], elements=[elements.Tabs(tabs)])
+
+    _print_summary(case, summary)
+
+    functions.create_page_from_template(
+        "verification.html", os.path.join(livvkit.index_dir, "verification", case + ".html")
+    )
+    with open(os.path.join(livvkit.output_dir, "verification", case+".json"), 'w') as f:
+        f.write(result._repr_json())
+
+    return summary
 
 
-def _analyze_case(model_dir, bench_dir, config):
+def _analyze_case(test_dir, ref_dir, config):
     """ Runs all of the verification checks on a particular case """
     bundle = livvkit.verification_model_module
-    model_out = functions.find_file(model_dir, "*"+config["output_ext"])
-    bench_out = functions.find_file(bench_dir, "*"+config["output_ext"])
-    model_config = functions.find_file(model_dir, "*"+config["config_ext"])
-    bench_config = functions.find_file(bench_dir, "*"+config["config_ext"])
-    model_log = functions.find_file(model_dir, "*"+config["logfile_ext"])
+    test_out = functions.find_file(test_dir, "*"+config["output_ext"])
+    ref_out = functions.find_file(ref_dir, "*"+config["output_ext"])
+    test_config = functions.find_file(test_dir, "*"+config["config_ext"])
+    ref_config = functions.find_file(ref_dir, "*"+config["config_ext"])
+    model_log = functions.find_file(test_dir, "*"+config["logfile_ext"])
     el = [
-            bit_for_bit(model_out, bench_out, config),
-            diff_configurations(model_config, bench_config, bundle, bundle),
+            bit_for_bit(test_out, ref_out, config),
+            elements.FileDiff("Configuration Comparison",
+                              ref_config, test_config),
             bundle.parse_log(model_log)
          ]
     return el
@@ -125,12 +124,12 @@ def _summarize_result(result, summary):
     failure_count = 0
     summary_data = None
     for elem in result:
-        if elem["Type"] == "Bit for Bit" and "Data" in elem:
-            elem_data = elem["Data"]
+        if isinstance(elem, elements.BitForBit):
+            elem_data = elem.data
             summary_data = summary["Bit for Bit"]
             total_count += 1
-            for var in six.iterkeys(elem_data):
-                if elem_data[var]["Max Error"] != 0:
+            for ii, var in enumerate(elem_data['Variable']):
+                if elem_data["Max Error"][ii] != 0:
                     failure_count += 1
                     break
     if summary_data is not None:
@@ -142,17 +141,13 @@ def _summarize_result(result, summary):
     total_count = 0
     failure_count = 0
     for elem in result:
-        if elem["Title"] == "Configuration Comparison" and elem["Type"] == "Diff":
-            elem_data = elem["Data"]
+        if isinstance(elem, elements.FileDiff) and elem.title == 'Configuration Comparison':
             summary_data = summary["Configurations"]
             total_count += 1
-            failed = False
-            for section_name, varlist in elem_data.items():
-                for var, val in varlist.items():
-                    if not val[0]:
-                        failed = True
-            if failed:
+            if elem.diff_status:
                 failure_count += 1
+            else:
+                continue
     if summary_data is not None:
         success_count = total_count - failure_count
         summary_data = np.add(summary_data, [success_count, total_count]).tolist()
@@ -160,13 +155,13 @@ def _summarize_result(result, summary):
 
     # Get the number of files parsed
     for elem in result:
-        if elem["Title"] == "Output Log" and elem["Type"] == "Table":
+        if isinstance(elem, elements.Table) and elem.title == 'Output Log':
             summary["Std. Out Files"] += 1
             break
+
     return summary
 
 
-# noinspection PyUnusedLocal
 def populate_metadata(case, config):
     """ Provide some top level information for the summary """
     return {"Type": "Summary",
@@ -191,79 +186,51 @@ def bit_for_bit(model_path, bench_path, config):
     fname = model_path.split(os.path.sep)[-1]
     # Error handling
     if not (os.path.isfile(bench_path) and os.path.isfile(model_path)):
-        return elements.error("Bit for Bit",
+        return elements.Error("Bit for Bit",
                               "File named " + fname + " has no suitable match!")
     try:
         model_data = Dataset(model_path)
         bench_data = Dataset(bench_path)
     except (FileNotFoundError, PermissionError):
-        return elements.error("Bit for Bit",
+        return elements.Error("Bit for Bit",
                               "File named " + fname + " could not be read!")
-    if not (netcdf.has_time(model_data) and netcdf.has_time(bench_data)):
-        return elements.error("Bit for Bit",
+    if not (len(model_data.dimensions['time']) > 0 and len(bench_data.dimensions['time']) > 0):
+        return elements.Error("Bit for Bit",
                               "File named " + fname + " could not be read!")
 
     # Begin bit for bit analysis
-    headers = ["Max Error", "Index of Max Error", "RMS Error", "Plot"]
-    stats = LIVVDict()
-    for i, var in enumerate(config["bit_for_bit_vars"]):
+    plot_elements = []
+    table_data = {'Variable': [], 'Max Error': [], 'Index of Max Error': [], 'RMS Error': []}
+    for var in config["bit_for_bit_vars"]:
         if var in model_data.variables and var in bench_data.variables:
+            table_data['Variable'].append(var)
+
             m_vardata = model_data.variables[var][:]
             b_vardata = bench_data.variables[var][:]
             diff_data = m_vardata - b_vardata
+
             if diff_data.any():
-                stats[var]["Max Error"] = np.amax(np.absolute(diff_data))
-                stats[var]["Index of Max Error"] = str(
-                        np.unravel_index(np.absolute(diff_data).argmax(), diff_data.shape))
-                stats[var]["RMS Error"] = np.sqrt(np.sum(np.square(diff_data).flatten()) /
-                                                  diff_data.size)
-                pf = plot_bit_for_bit(fname, var, m_vardata, b_vardata, diff_data)
+                table_data["Max Error"].append(np.amax(np.absolute(diff_data)))
+                table_data["Index of Max Error"].append(str(
+                        np.unravel_index(np.absolute(diff_data).argmax(), diff_data.shape)))
+                table_data["RMS Error"].append(np.sqrt(np.sum(np.square(diff_data).flatten()) /
+                                               diff_data.size))
+                plot_elements.append(plot_bit_for_bit(fname, var, m_vardata, b_vardata, diff_data))
             else:
-                stats[var]["Max Error"] = stats[var]["RMS Error"] = 0
-                pf = stats[var]["Index of Max Error"] = "N/A"
-            stats[var]["Plot"] = pf
+                table_data["Max Error"].append(0)
+                table_data["Index of Max Error"].append("N/A")
+                table_data["RMS Error"].append(0)
+                plot_elements.append(elements.B4BImage('', '{} is bit-for-bit'.format(var),
+                                                       page_path=os.path.join(livvkit.output_dir, "verification")))
         else:
-            stats[var] = {"Max Error": "No Match", "RMS Error": "N/A", "Plot": "N/A"}
+            table_data["Max Error"].append("No Match")
+            table_data["Index of Max Error"].append("N/A")
+            table_data["RMS Error"].append("N/A")
+            plot_elements.append(elements.NAImage('', '{} is not in both test and reference data'.format(var),
+                                                  page_path=os.path.join(livvkit.output_dir, "verification")))
     model_data.close()
     bench_data.close()
-    return elements.bit_for_bit("Bit for Bit", headers, stats)
-
-
-def diff_configurations(model_config, bench_config, model_bundle, bench_bundle):
-    """
-    Description
-
-    Args:
-        model_config: a dictionary with the model configuration data
-        bench_config: a dictionary with the benchmark configuration data
-        model_bundle: a LIVVkit model bundle object
-        bench_bundle: a LIVVkit model bundle object
-
-    Returns:
-        A dictionary created by the elements object corresponding to
-        the results of the bit for bit testing
-    """
-    diff_dict = LIVVDict()
-    model_data = model_bundle.parse_config(model_config)
-    bench_data = bench_bundle.parse_config(bench_config)
-    if model_data == {} and bench_data == {}:
-        return elements.error("Configuration Comparison",
-                              "Could not open file: " + model_config.split(os.path.sep)[-1])
-
-    model_sections = set(six.iterkeys(model_data))
-    bench_sections = set(six.iterkeys(bench_data))
-    all_sections = set(model_sections.union(bench_sections))
-
-    for s in all_sections:
-        model_vars = set(six.iterkeys(model_data[s])) if s in model_sections else set()
-        bench_vars = set(six.iterkeys(bench_data[s])) if s in bench_sections else set()
-        all_vars = set(model_vars.union(bench_vars))
-        for v in all_vars:
-            model_val = model_data[s][v] if s in model_sections and v in model_vars else 'NA'
-            bench_val = bench_data[s][v] if s in bench_sections and v in bench_vars else 'NA'
-            same = True if model_val == bench_val and model_val != 'NA' else False
-            diff_dict[s][v] = (same, model_val, bench_val)
-    return elements.file_diff("Configuration Comparison", diff_dict)
+    return elements.BitForBit("Bit for Bit", table_data, imgs=plot_elements)
 
 
 def plot_bit_for_bit(case, var_name, model_data, bench_data, diff_data):
@@ -322,10 +289,14 @@ def plot_bit_for_bit(case, var_name, model_data, bench_data, diff_data):
     plt.suptitle(plot_title)
 
     plot_file = os.path.sep.join([plot_path, plot_name])
-    if livvkit.publish:
-        plt.savefig(os.path.splitext(plot_file)[0]+'.eps', dpi=600)
     plt.savefig(plot_file)
     plt.close()
-    return os.path.join(os.path.relpath(plot_path,
-                                        os.path.join(livvkit.output_dir, "verification")),
-                        plot_name)
+
+    # NOTE: If you don't include a title, you must include a group for the image
+    #       to appear in a lightbox when clicked instead of as it's own page.
+    plot_element = elements.Image(
+            '', 'Bit for bit differences between test and reference for '
+                '{} in {}'.format(var_name, case),
+            plot_file, height=50, group='not-b4b'
+    )
+    return plot_element

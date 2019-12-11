@@ -31,10 +31,11 @@
 Executable script to start a verification and validation test suite.
 Management of the tests to be run is handled by the scheduler in livvkit.util
 """
-from __future__ import absolute_import, division, print_function, unicode_literals
 
 import os
 import sys
+import http.server as server
+import socketserver as socket
 
 import livvkit
 from livvkit.util import options
@@ -52,14 +53,14 @@ def main(cl_args=None):
         cl_args = sys.argv[1:]
     args = options.parse_args(cl_args)
 
-    print("-------------------------------------------------------------------")
-    print("                      __   _____   ___   ____    _ __     ")
-    print("                     / /  /  _/ | / / | / / /__ (_) /_    ")
-    print("                    / /___/ / | |/ /| |/ /  '_// / __/    ")
-    print("                   /____/___/ |___/ |___/_/\_\/_/\__/     ")
-    print("")
-    print("                   Land Ice Verification & Validation     ")
-    print("-------------------------------------------------------------------")
+    print(r"-------------------------------------------------------------------")
+    print(r"                      __   _____   ___   ____    _ __     ")
+    print(r"                     / /  /  _/ | / / | / / /__ (_) /_    ")
+    print(r"                    / /___/ / | |/ /| |/ /  '_// / __/    ")
+    print(r"                   /____/___/ |___/ |___/_/\_\/_/\__/     ")
+    print(r"")
+    print(r"                   Land Ice Verification & Validation     ")
+    print(r"-------------------------------------------------------------------")
     print("")
     print("  Current run: " + livvkit.timestamp)
     print("  User: " + livvkit.user)
@@ -70,9 +71,9 @@ def main(cl_args=None):
     from livvkit.components import verification
     from livvkit.components import performance
     from livvkit.components import validation
+    from livvkit import elements
     from livvkit import scheduler
     from livvkit.util import functions
-    from livvkit.util import elements
 
     summary_elements = []
 
@@ -95,7 +96,7 @@ def main(cl_args=None):
         for conf in livvkit.validation_model_configs:
             validation_config = functions.merge_dicts(validation_config,
                                                       functions.read_json(conf))
-        summary_elements.extend(scheduler.run_quiet(validation, validation_config,
+        summary_elements.extend(scheduler.run_quiet("validation", validation, validation_config,
                                                     group=False))
         print(" -----------------------------------------------------------------")
         print("   Validation test suite complete ")
@@ -103,25 +104,15 @@ def main(cl_args=None):
         print("")
 
     if livvkit.verify or livvkit.validate:
-        result = elements.page("Summary", "", element_list=summary_elements)
-        functions.write_json(result, livvkit.output_dir, "index.json")
+        result = elements.Page("Summary", "", summary_elements)
+        with open(os.path.join(livvkit.output_dir, 'index.json'), 'w') as index_data:
+            index_data.write(result._repr_json())
         print("-------------------------------------------------------------------")
         print(" Done!  Results can be seen in a web browser at:")
         print("  " + os.path.join(livvkit.output_dir, 'index.html'))
         print("-------------------------------------------------------------------")
 
     if args.serve:
-        try:
-            # Python 3
-            import http.server as server
-            import socketserver as socket
-        except ImportError:
-            # Python 2
-            # noinspection PyPep8Naming
-            import SimpleHTTPServer as server
-            # noinspection PyPep8Naming
-            import SocketServer as socket
-
         httpd = socket.TCPServer(('', args.serve), server.SimpleHTTPRequestHandler)
 
         sa = httpd.socket.getsockname()

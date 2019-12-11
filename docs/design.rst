@@ -32,15 +32,15 @@ Therefore, LIVVkit strives to meet these core **usage requirements**:
   LIVVkit should be able to perform the desired sets of analyses with minimal overhead and time to
   results.
 
-Similarly, LIVVkit strives to meet these core **output requirements**:
+Similarly, LIVVkit strives to meet these core **reporting requirements**:
 
 **Informative**
-  The analysis results should be described in a quantified manner, using appropriate metrics that
+  Analysis results should be described in a quantified manner, using appropriate metrics that
   indicate the degree of certainty, *and* provide the necessary context to make the figures, metrics
   and other results understandable.
 
 **Shareable**
-  The results should be easy to share, publish, and examine using common tools. 
+  Results should be easy to share, publish, and examine using common tools.
 
 If you find LIVVkit isn't working for you, meeting these requirements, or have other suggestions for
 improvement, please let us know by `opening an issue on github
@@ -53,18 +53,16 @@ Architecture
     :align: center
     :alt: Schematic of LIVVkit's architecture and program flow.
 
-    Schematic of LIVVkit’s architecture and program flow [Kennedy2017]_. The light blue computers
-    indicate where the user will interact with LIVVkit, first using the livv interface and then
-    finally viewing the web output. The green boxes indicate core LIVVkit functionality, the black
-    boxes are the different analyses which are executed in parallel, and the blue and purple boxes
-    represent the ice-sheet model description bundles and any extensions analyses that may have been
-    requested, respectively. Programmatically, the livv interface is used to schedule a series of
-    analyses; the scheduler then pulls the requested analysis codes from the required bundles,
-    components, and extensions; and executes the analyses. As each analysis finishes, some
-    high-level summary information will be displayed on the command line through the interface and
-    fully detailed information will be collated into the output website. Once all analyses are
-    finished, the interface will inform the user and the results of all the analyses can be viewed
-    on the output website.
+    Schematic of LIVVkit’s architecture and program flow [Kennedy2017]_. The light blue computers indicate where the
+    user will interact with LIVVkit, first using the ``livv`` interface and then finally viewing the analyses report,
+    typically as a portable website. The green boxes indicate core LIVVkit functionality, the black boxes are the
+    different analyses which are executed in parallel, and the blue and purple boxes represent the ice-sheet model
+    description bundles and any extensions analyses that may have been requested, respectively. Programmatically, the
+    livv interface is used to schedule a series of analyses; the scheduler then pulls the requested analysis codes from
+    the required bundles, components, and extensions; and executes the analyses. As each analysis finishes, some
+    high-level summary information will be displayed on the command line through the interface and fully detailed
+    information will be collated into the report. Once all analyses are finished, the interface will inform the
+    user and the results of all the analyses can be viewed.
 
 
 Components
@@ -99,8 +97,11 @@ The major components of LIVVkit are:
 **Utilities**
   All the functionality that falls outside the V&V paradigm is contained in:
 
+  - :py:mod:`livvkit.elements`: LIVVkit element classes used to place figure/table/etc. elements into
+    the report.
+
   - :py:mod:`livvkit.util`: utility classes and functions for dealing with general LIVVkit data
-    manipulations, JSON element skeletons for output data, general I/O, etc. 
+    manipulations, general I/O, etc.
 
   - :py:mod:`livvkit.resources`: HTML, CSS, Javascript, and image resources for generating the
     output website.

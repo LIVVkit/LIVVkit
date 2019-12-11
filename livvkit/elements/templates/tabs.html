@@ -1,0 +1,12 @@
+<div id="tabs">
+    <ul>
+        {%- for title in elements_dict.keys() %}
+        <li><a href="#{{title}}">{{ title }}</a></li>
+        {%- endfor %}
+    </ul>
+    {%- for title, elements in elements_dict.items() %}
+    <div id="{{title}}">
+        {% for elem in elements %}{{ elem }}{% endfor %}
+    </div>
+    {%- endfor %}
+</div>

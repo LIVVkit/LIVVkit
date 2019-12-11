@@ -31,23 +31,32 @@
 Provides functions for scheduling the runs of tests.
 """
 
-from __future__ import absolute_import, division, print_function, unicode_literals
-import six
-
 import os
 import sys
-import multiprocessing
+import multiprocessing as mp
+
+import pandas as pd
 
 import livvkit
+from livvkit import elements
 
 
-class LIVVkitProcess(multiprocessing.Process):
-    def run(self):
-        sys.stdout = open(os.path.join(livvkit.index_dir,
-                                       'logs', '{}.stdout'.format(self._args[0])), 'a')
-        sys.stderr = open(os.path.join(livvkit.index_dir,
-                                       'logs', '{}.stderr'.format(self._args[0])), 'a')
-        super(LIVVkitProcess, self).run()
+def pool_worker(run_type, run_suite, test, config):
+    sys.stdout = open(
+        os.path.join(livvkit.index_dir, 'logs', '{}-{}.stdout'.format(run_type, test)),
+        'a',
+    )
+    sys.stderr = open(
+        os.path.join(livvkit.index_dir, 'logs', '{}-{}.stderr'.format(run_type, test)),
+        'a',
+    )
+
+    summary = run_suite(test, config)
+
+    sys.stdout.flush()
+    sys.stderr.flush()
+
+    return summary
 
 
 def run(run_type, module, config):
@@ -64,7 +73,7 @@ def run(run_type, module, config):
     print("   Beginning " + run_type.lower() + " test suite ")
     print(" -----------------------------------------------------------------")
     print("")
-    summary = run_quiet(module, config)
+    summary = run_quiet(run_type, module, config)
     print(" -----------------------------------------------------------------")
     print("   " + run_type.capitalize() + " test suite complete ")
     print(" -----------------------------------------------------------------")
@@ -72,39 +81,46 @@ def run(run_type, module, config):
     return summary
 
 
-def run_quiet(module, config, group=True):
-    tests = [t for t in six.iterkeys(config) if isinstance(config[t], dict)]
-    summary = launch_processes(tests, module, group=group, **config)
-    return summary
+def run_quiet(run_type, module, config, group=True):
+    tests = [t for t in config if isinstance(config[t], dict)]
+    if livvkit.pool_size == 0:
+        test_summaries = {}
+        for test in tests:
+            test_summaries[test] = module.run_suite(test, config[test])
+    else:
+        test_summaries = launch_processes(run_type, tests, module, config)
 
-
-def launch_processes(tests, run_module, group=True, **config):
-    """ Helper method to launch processes and sync output """
-    manager = multiprocessing.Manager()
-    test_summaries = manager.dict()
-    process_handles = [LIVVkitProcess(target=run_module.run_suite,
-                                      args=(test, config[test], test_summaries))
-                       for test in tests]
-    for p in process_handles:
-        p.start()
-    for p in process_handles:
-        p.join()
+        for t in tests:
+            with open(os.path.join(livvkit.index_dir, 'logs', '{}-{}.stdout'.format(run_type, t))) as log:
+                stdout = log.read()
+            print(stdout)
 
     if group:
-        summary = run_module.populate_metadata(tests[0], config[tests[0]])
-        summary["Data"] = dict(test_summaries)
+        meta = module.populate_metadata(tests[0], config[tests[0]])
+        df = pd.concat(
+            {k: pd.DataFrame.from_dict(v, orient='index') for k, v, in test_summaries.items()},
+            names=['case', 'scale']
+        ).reset_index()
+        summary = elements.Table(meta['Title'], df.set_index('case'))
     else:
-        test_summaries = dict(test_summaries)
         summary = []
-
-        for ii, test in enumerate(tests):
-            summary.append(run_module.populate_metadata(test, config[test]))
-            if summary[ii]:
-                summary[ii]['Data'] = {test: test_summaries[test]}
-
-    for test in tests:
-        with open(os.path.join(livvkit.index_dir, 'logs', '{}.stdout'.format(test)), 'r') as log:
-            stdout = log.read()
-        print(stdout)
+        for ii, t in enumerate(tests):
+            meta = module.populate_metadata(t, config[t])
+            df = pd.DataFrame.from_dict(test_summaries[t], orient='index')
+            summary.append(elements.Table(meta['title'], df))
 
     return summary
+
+
+def launch_processes(run_type, tests, run_module, config):
+    """ Helper method to launch processes and sync output """
+    test_summaries = {}
+    with mp.Pool(livvkit.pool_size) as pool:
+        results = [
+            pool.apply_async(pool_worker, (run_type, run_module.run_suite, t, config[t])) for t in tests
+        ]
+
+        for t, r in zip(tests, results):
+            test_summaries[t] = r.get()
+
+    return test_summaries

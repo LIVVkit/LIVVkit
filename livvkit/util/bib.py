@@ -27,25 +27,37 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-from __future__ import absolute_import, print_function, unicode_literals
-import six
+import io
+from pathlib import Path
 
 import pybtex.database
 import pybtex.io
 
-from pybtex.backends.html import Backend as BaseBackend
+from pybtex.backends.latex import Backend as LatexBaseBackend
+from pybtex.backends.html import Backend as HTMLBaseBackend
 from pybtex.style.formatting.plain import Style as PlainStyle
 
 
-class HTMLBackend(BaseBackend):
+# FIXME: This is hacky! Here we're returning actual latex as if it's html so we
+#        can coopt the bib2html function. Either need to make a generic renderbib
+#        function or a bib2latex function...
+class LatexBackend(LatexBaseBackend):
+    def __init__(self, *args, **kwargs):
+        super(LatexBackend, self).__init__(*args, **kwargs)
+
+    def _repr_html(self, formatted_bibliography):
+        stream = io.StringIO()
+        self.write_to_stream(formatted_bibliography, stream)
+        return stream.getvalue()
+
+
+class HTMLBackend(HTMLBaseBackend):
     def __init__(self, *args, **kwargs):
         super(HTMLBackend, self).__init__(*args, **kwargs)
         self._html = ''
 
-
     def output(self, html):
         self._html += html
-
 
     def format_protected(self, text):
         if text[:4] == 'http':
@@ -53,14 +65,14 @@ class HTMLBackend(BaseBackend):
         else:
             return r'<span class="bibtex-protected">{}</span>'.format(text)
 
-
     def write_prologue(self):
-        self.output('<div class="bibliography"><dl>')
-
+        self.output('<div class="bibliography"><h2>References</h2>'
+                    '<p>LIVVkit is an open source project licensed under a BSD 3-clause License. '
+                    'We ask that you please acknowledge LIVVkit in any work it is used or supports. '
+                    'In any corresponding published work, please cite: </p><dl>')
 
     def write_epilogue(self):
         self.output('</dl></div>')
-
 
     def _repr_html(self, formatted_bibliography):
         self.write_prologue()
@@ -74,13 +86,13 @@ class HTMLBackend(BaseBackend):
 # FIXME: For python 3.7+ only...
 # from functools import singledispatch
 # from collections.abc import Iterable
+# from typing import Union
 #
-# # noinspection PyUnusedLocal
 # @singledispatch
 # def bib2html(bib, style=None, backend=None):
 #     raise NotImplementedError('I do not now how to convert a {} type to a bibliography'.format(type(bib)))
 def bib2html(bib, style=None, backend=None):
-    if isinstance(bib, six.string_types):
+    if isinstance(bib, (str, Path)):
         return _bib2html_string(bib, style=style, backend=backend)
     if isinstance(bib, (list, set, tuple)):
         return _bib2html_list(bib, style=style, backend=backend)
@@ -92,7 +104,7 @@ def bib2html(bib, style=None, backend=None):
 
 # FIXME: For python 3.7+ only...
 # @bib2html.register
-# def _bib2html_string(bib: str, style=None, backend=None):
+# def _bib2html_string(bib: Union[str, Path], style=None, backend=None):
 def _bib2html_string(bib, style=None, backend=None):
     if style is None:
         style = PlainStyle()

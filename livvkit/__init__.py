@@ -39,7 +39,7 @@ import socket
 from livvkit import bundles
 from livvkit import resources
 
-__version_info__ = (2, 2, 0)
+__version_info__ = (3, 0, 0)
 __version__ = '.'.join(str(vi) for vi in __version_info__)
 
 cwd = os.getcwd()
@@ -76,4 +76,4 @@ validation_model_configs = None
 # optional flags
 verify = False
 validate = False
-publish = False
+pool_size = None

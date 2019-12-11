@@ -10,16 +10,16 @@ LIVVkit is extensible to more in-depth or larger validation analyses. However, b
 analyses are particularly data intensive, many of the observational and example model output files are
 much too large to distribute in the LIVVkit package. Therefore, we've developed a LIVVkit Extensions
 repository (LEX) which uses `git-lfs <https://git-lfs.github.com>`_ (Git Large File Support) in order to
-distribute the required data  [#]_. LEX holds a collection of  validation and custom analyses of ice sheet models and their associated Earth
-system models.
+distribute the required data  [#]_. LEX holds a collection of  validation and custom analyses of ice
+sheet models and their associated Earth system models.
 
-LEX was first described in [Evans2018]_; to reproduce the analyses there, see the
-`Reproducing Evans et al. (2018)`_ section.
+LEX was first described in [Evans2019]_; to reproduce the analyses there, see the
+`Reproducing Evans et al. (2019)`_ section.
 
-    Evans, K.J., J.H. Kennedy, D. Lu, M.M. Forrester, S. Price, J. Fyke,
-    A.R. Bennett, M.J. Hoffman, I. Tezaur, C.S. Zender, and M. Vizcaino (In Review).
-    LIVVkit 2.1: Automated and extensible ice sheet model validation.
-    *Geoscientific Model Development.*
+    Evans, K. J., et al. (2019), LIVVkit 2.1: Automated and extensible ice sheet model validation,
+    Geosci. Model Dev., 12, 1067–1086,
+    `DOI:10.5194/gmd-12-1067-2019 <https://doi.org/10.5194/gmd-12-1067-2019>`_.
+
 
 Dependencies
 ------------
@@ -81,12 +81,12 @@ that ``livv`` can find the required files.
 Likewise, you can also apply these analyses to any new model run [#]_ by adjusting
 the paths to point to your model run.
 
-Reproducing Evans et al. (2018)
+Reproducing Evans et al. (2019)
 -------------------------------
 
 If all the required `Dependencies`_ are installed, and you've cloned the repository
 into the directory ``lex``, you can reproduce all the figures and tables in
-[Evans2018]_ by running this command from within the ``lex`` directory:
+[Evans2019]_ by running this command from within the ``lex`` directory:
 
 .. code:: bash
 
@@ -113,7 +113,7 @@ Developing a custom extension
     we'll help you through the process.
 
 A template extension is provided as an absolute minimum working example
-in the ``examples/`` directory. To start developing a new extension, copy the
+in LEX's ``examples/`` directory. To start developing a new extension, copy the
 ``examples/template.*`` files to a (possibly new) relevant directory, and change
 these files' name to a descriptive name. These files will provide the basis for your
 new extension.
@@ -127,13 +127,13 @@ new extension.
 template.py:
 ^^^^^^^^^^^^
 
-This is the primary extension python module. In order to work with LIVVkit, the
+This is the primary extension Python module. In order to work with LIVVkit, the
 extension needs to provide a ``run(name, config)`` function which accepts two arguments:
 ``name``, the name of the extension which will be displayed on the extensions output
 webpage; and ``config`` which will contain the information in ``template.json``. This
-function will then need to return a LIVVkit page element (:func:`livvkit.util.elements.page`)
+function will then need to return a LIVVkit page element (:class:`livvkit.elements.elements.Page`)
 which will contain a summary description of the extension (typically the extensions docstring),
-and all the page elements to display (see :mod:`livvkit.util.elements`).
+and all the page elements to display (see :mod:`livvkit.elements`).
 
 
 template.json:
@@ -171,14 +171,14 @@ template.bib:
 
 The references that are relevant to this extension, and should be cited by anyone
 using the extension to support any work that will be published. These references
-will be displayed a the bottom of the extension's output webpage, and the reference
-list should minimally include [Kennedy2017]_ and [Evans2018]_.
+will be displayed a the bottom of the extension's output webpage, and will include
+[Kennedy2017]_ and [Evans2019]_ by default.
 
 
 template.yml:
 ^^^^^^^^^^^^^
 
-If you use any python packages/modules beyond the required LIVVkit python dependencies
+If you use any Python packages/modules beyond the required LIVVkit Python dependencies
 (see LIVVkit's ``setup.py``), you should list them in this `Anaconda style environment
 YAML file <https://conda.io/docs/user-guide/tasks/manage-environments.html?highlight=yml#create-env-file-manually>`__.
 By doing so, when LIVVkit runs an extension in an environment without the required
