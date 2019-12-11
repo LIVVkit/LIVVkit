@@ -80,6 +80,14 @@ setup(
                         'pybtex==0.21',
                         'pandas',
                         ],
+      extras_require={'develop': ['requests',
+                                  'pytest',
+                                  'pytest-cov',
+                                  'tox',
+                                  'sphinx',
+                                  'sphinx-js',
+                                  'sphinx-py3doc-enhanced-theme',
+                                  ]},
 
       python_requires='>=3.6',
 

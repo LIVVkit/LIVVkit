@@ -13,6 +13,7 @@ dependencies:
 - pybtex==0.21
 - nodejs
 - pytest
+- pytest-cov
 - tox
 - requests
 - pip:

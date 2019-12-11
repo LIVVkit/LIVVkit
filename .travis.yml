@@ -1,8 +1,22 @@
 language: python
 dist: xenial
 python:
+  # Only legacy python versions here; latest included below
   - "3.6"
   - "3.7"
-  - "3.8"
-install: pip install tox-travis
-script: tox
+install:
+  - pip install tox-travis
+script:
+  - tox
+
+jobs:
+  include:
+    - stage: test
+      python: "3.8"
+      before_script:
+        - npm install -g jsdoc
+        - pip install -e .[develop]
+      script:
+        - pytest --cov=livvkit --cov-config=.coveragerc --cov-report xml
+        - curl https://deepsource.io/cli | sh
+        - ./bin/deepsource report --analyzer test-coverage --key python --value-file ./coverage.xml
