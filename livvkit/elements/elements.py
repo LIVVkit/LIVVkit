@@ -28,13 +28,15 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 # FIXME: This docstring
-"""
-Module to help building new display elements in the output
-files easier and less error prone.
+"""Module containing report generation and display elements
 
-Implementing new elements is possible simply by adding new functions
-They will be written out to the JSON files as sub-objects, which must
-be interpreted by the Javascript found in the resources directory.
+The elements in this module are used by LIVVkit to generate analyses reports.
+Reports by default will be a portable HTML website, but each of these elements
+provide some experimental (and therefore undocumented) report formats: JSON-Only
+and LaTeX.
+
+New elements should derive from, or implement the same interface as, the
+BaseElement abstract class.
 """
 
 import os
@@ -172,6 +174,9 @@ class CompositeElement(BaseElement, abc.ABC):
     """
     def __init__(self, elements):
         """Initialize a composite LIVVkit element
+
+        Args:
+            elements: A list of LIVVkit elements
         """
         super(CompositeElement, self).__init__()
         self.elements = elements
@@ -231,7 +236,13 @@ class NamedCompositeElement(BaseElement, abc.ABC):
     from the LIVVkit BaseElement or implement the same interface.
     """
     def __init__(self, elements_dict):
-        """Initialize  a multi-composite LIVVkit element"""
+        """Initialize  a multi-composite LIVVkit element
+
+        Args:
+            elements_dict: A dictionary where the (key, value) item represents a
+             collection of LIVVkit elements. The key should be a name for the
+             collection and the value should be a list of elements.
+        """
         super(NamedCompositeElement, self).__init__()
         self.elements_dict = elements_dict
 
@@ -291,10 +302,39 @@ class NamedCompositeElement(BaseElement, abc.ABC):
 
 
 class Page(CompositeElement):
+    """A LIVVkit Page element
+
+    The Page element contains the description of an analysis, the elements
+    that should be displayed for this analysis on the report, as well as any
+    references that should be included in the report. In general usage, this
+    will be used to create an HTML page inside LIVVkit output website. It also
+    will allow for the generation of other (experimental!) Report types
+    (e.g., LaTeX), where the "page" meaning might be better interpreted as
+    a "section".
+
+    For LIVVkit Extensions (LEX), an instance of this class should be returned
+    from the extensions `run()` function.
+    """
     _html_template = 'page.html'
     _latex_template = 'page.tex'
 
     def __init__(self, title, description, elements, references=''):
+        """Initialize a Page elements
+
+        Args:
+            title: the title to display on the analysis
+            description: A long (paragraph or more) description of the analysis
+                being performed. Typically, it's best to write this description
+                as the LEX extension's docstring and pass this class `__doc__`
+            elements: A list of LIVVkit elements to include in the report
+            references: The references to include as part of this analysis. This
+                can be a path to a bibtex file containing the references, or a
+                list/set/tuple of bibtex files containing the references (Note:
+                ALL references inside the bibtex file(s) will be included!). Default
+                value is `references=''` which will cause only the default LIVVkit
+                references to be displayed. References can be entirely removed by
+                setting `references=None`, however, this is *not* recommended.
+        """
         super(Page, self).__init__(elements)
         self.title = title
         self.description = description
@@ -305,7 +345,19 @@ class Page(CompositeElement):
         self.Data = self._repr_html()
 
     def add_references(self, references):
-        self._ref_list = glob.glob(os.path.join(os.path.dirname(livvkit.data.__file__), '*.bib'))
+        """Add a reference to the internal reference list
+
+        Args:
+            references: The references to add to this page's internal reference
+                list. This can be a path to a bibtex file containing the
+                references, or a list/set/tuple of bibtex files containing the
+                references (Note: This will include the default LIVVkit
+                references and ALL references inside the bibtex file(s)!).
+        """
+        if self._ref_list is None:
+            self._ref_list = glob.glob(
+                os.path.join(os.path.dirname(livvkit.data.__file__), '*.bib')
+            )
 
         if references:
             if isinstance(references, (str, Path)):
@@ -356,38 +408,77 @@ class Page(CompositeElement):
         return rendered_tex
 
 
-# FIXME: Docstring --> pass in a dictionary like {tab_title: [tab_elements]}
 class Tabs(NamedCompositeElement):
+    """A LIVVkit Tabs element
+
+    The Tabs element is a super element intended to logically separate elements
+    into clickable tabs on the output website. It also will allow for the
+    generation of other (experimental!) Report types (e.g., LaTeX), where the
+    "tabs" meaning might be better interpreted as a "subsection".
+    """
     _html_template = 'tabs.html'
     _latex_template = 'tabs.tex'
 
     def __init__(self, tabs):
+        """Initialize a Tabs element
+
+        Args:
+            tabs: A dictionary where each (key, value) item represents a tab.
+                Keys will become the tab text and values should be lists of
+                LIVVkit elements to display within the tab
+        """
         super(Tabs, self).__init__(tabs)
 
 
 class Section(CompositeElement):
+    """A LIVVkit Section element
+
+    The Section element is a super element intended to logically separate elements
+    into titled sections. It also will allow for the generation of other
+    (experimental!) Report types (e.g., LaTeX), where the "section" meaning might
+    be better interpreted as a "subsection".
+    """
     _html_template = 'section.html'
     _latex_template = 'section.tex'
 
     def __init__(self, title, elements):
+        """Initialize a Section element
+
+        Args:
+            title: The title of the section
+            elements: A list of LIVVkit elements to display within the section
+        """
         super(Section, self).__init__(elements)
         self.title = title
 
 
 class Table(BaseElement):
+    """A LIVVkit Table element
+
+    The Table element will produce a table in the analysis report.
+    """
     _html_template = 'table.html'
     _latex_template = 'table.tex'
 
-    # FIXME: Type hinting and docstring for data, which should look like
-    #        {header1:[val1, val2...],... }
-    #
-    #        Index = True --> use pandas index or simply number the rows
-    #        Index = False --> No index
-    #        Index = iterable (list) --> override index with iterable
-    #
-    #        Transpose = False --> do nothing
-    #        Transpose = True  --> flip table so header is a column and index is a row
     def __init__(self, title, data, index=False, transpose=False):
+        """Initialize a Section element
+
+                Args:
+                    title: The title of the table
+                    data: The data to display in the table in the form of either
+                        a pandas DataFrame or a dictionary of the form
+                        {column1:[row1, row2...],... } where each (key, value)
+                        item is a table column, with the key being the column
+                        header and the value being a list of that's columns' row
+                        values.
+                    index: The index to include in the table. If False, no index
+                        will be included. If True, a numbered index beginning at
+                        zero will be included in the table. If a collection of
+                        values the same length as the data rows, the collection
+                        will be used to label the rows.
+                    transpose: A boolean (default: False) which will flip the
+                        table (headers become the index, index becomes the header).
+                """
         super(Table, self).__init__()
         self.title = title
 
@@ -438,10 +529,30 @@ class Table(BaseElement):
 
 
 class BitForBit(CompositeElement):
+    """A LIVVkit BitForBit element
+
+    The BitForBit element will produce a table in the analysis report indicating
+    bit-for-bit statuses with a difference image shown in the final column of
+    the table.
+    """
     _html_template = 'bit4bit.html'
     _latex_template = 'bit4bit.tex'
 
     def __init__(self, title, data, imgs):
+        """Initialize a BitForBit element
+
+        Args:
+            title: The title of the bit-for-bit comparisons
+            data: The data to display in the table in the form of either
+                a pandas DataFrame or a dictionary of the form
+                {column1:[row1, row2...],... } where each (key, value)
+                item is a table column, with the key being the column
+                header and the value being a list of that's columns' row
+                values
+            imgs: A list of LIVVkit Image elements to display in an additional
+                final column of the bit-for-bit table. Note: The list must be
+                same length as the number of rows in the table data
+        """
         super(BitForBit, self).__init__(imgs)
         self.title = title
 
@@ -483,19 +594,52 @@ class BitForBit(CompositeElement):
 
 
 class Gallery(CompositeElement):
+    """A LIVVkit Gallery element
+
+    The Gallery element is a super element intended to group LIVVkit Image
+    elements into a gallery. It also will allow for the generation of other
+    (experimental!) Report types (e.g., LaTeX), where the "Gallery" meaning
+    might be better interpreted as a figure "subsection".
+    """
     _html_template = 'gallery.html'
     _latex_template = 'gallery.tex'
 
     def __init__(self, title, elements):
+        """Initialize a Gallery element
+
+        Args:
+            title: The title of the image gallery
+            elements: A list of LIVVkit Image elements to display within the
+                gallery
+        """
         super(Gallery, self).__init__(elements)
         self.title = title
 
 
 class Image(BaseElement):
+    """A LIVVkit Image element
+
+    The Image element produces an image/figure in the report.
+    """
     _html_template = 'image.html'
     _latex_template = 'image.tex'
 
     def __init__(self, title, desc, image_file, group=None, height=None, relative_to=None):
+        """Initialize a Section element
+
+        Args:
+            title: The title of the image
+            desc: A description of the image which in most report forms will be
+                figure caption
+            image_file: The path to the image to display. Note: this should resolve
+                to a path inside the report output directory
+            group: Group the images into a JavaScript Lightbox with this name
+                (default: None). Note: this is only relevant for an HTML report
+            height: The height of the image in pixels
+            relative_to: Transform the image path to be relative to this
+                directory. By default, the image will assumed to be in the
+                directory, or a subdirectory, of the page it's displayed on.
+        """
         super(Image, self).__init__()
         self.title = title
         self.desc = desc
@@ -517,7 +661,21 @@ class Image(BaseElement):
 
 
 class B4BImage(Image):
+    """A B4BImage element
+
+    A dummy Image that can be used by the BitForBit element indicating a
+    bit-for-bit verification result.
+    """
     def __init__(self, title, description, page_path):
+        """Initialize a dummy B4BImage element
+
+        Args:
+            title: The title of the image
+            description: A description of the image which in most report forms
+                will be figure caption
+            page_path: The path to the page on which the dummy image will be
+                displayed
+        """
         image_file = os.path.join(livvkit.output_dir, 'imgs', 'b4b.png')
 
         super(B4BImage, self).__init__(title, description,
@@ -527,7 +685,20 @@ class B4BImage(Image):
 
 
 class NAImage(Image):
+    """A NAImage element
+
+    A dummy Image that can be used to indicate a missing image
+    """
     def __init__(self, title, description, page_path):
+        """Initialize a dummy NAImage element
+
+        Args:
+            title: The title of the image
+            description: A description of the image which in most report forms
+                will be figure caption
+            page_path: The path to the page on which the dummy image will be
+                displayed
+        """
         image_file = os.path.join(livvkit.output_dir, 'imgs', 'na.png')
 
         super(NAImage, self).__init__(title, description,
@@ -537,10 +708,24 @@ class NAImage(Image):
 
 
 class FileDiff(BaseElement):
+    """A LIVVkit FileDiff element
+
+    The FilleDiff element will compare two text files and produce a git-diff
+    style diff of the files.
+    """
     _html_template = 'diff.html'
     _latex_template = 'diff.tex'
 
     def __init__(self, title, from_file, to_file, context=3):
+        """Initialize a FileDiff element
+
+        Args:
+            title: The title of the diff
+            from_file: A path to the file which will be compared against
+            to_file: A path to the file which which to compare
+            context: An positive int indicating the number of lines of context
+                to display on either side of each difference found
+        """
         super(FileDiff, self).__init__()
         self.title = title
         self.from_file = from_file
@@ -548,6 +733,18 @@ class FileDiff(BaseElement):
         self.diff, self.diff_status = self.diff_files(context=context)
 
     def diff_files(self, context=3):
+        """Perform the file diff
+
+        Args:
+            context: An positive int indicating the number of lines of context
+                to display on either side of each difference found
+
+        Returns:
+            diff: Either a git-style diff of the files if a difference was
+                found or the original file in full
+            diff_status: A boolean indicating whether any differences were
+                found
+        """
         with open(self.from_file) as from_, open(self.to_file) as to_:
             fromlines = from_.read().splitlines()
             tolines = to_.read().splitlines()
@@ -565,19 +762,42 @@ class FileDiff(BaseElement):
 
 
 class Error(BaseElement):
+    """A LIVVkit Error element
+
+    The Error element will produce an error message in the analysis report.
+    """
     _html_template = 'err.html'
     _latex_template = 'err.tex'
 
     def __init__(self, title, message):
+        """Initialize a LIVVkit Error element
+
+        Args:
+            title: The title of the error
+            message: The error message to display
+        """
         super(Error, self).__init__()
         self.title = title
         self.message = message
 
 
 class RawHTML(BaseElement):
+    """A LIVVkit RawHTML element
+
+    The RawHTML element will directly display the contained HTML in the analysis
+    report. For an HTML report (default) this will be directly written onto the
+    page so is a potential security hole and should be used with caution. For the
+    experimental report types (e.g., LaTeX) the contained HTML will be written to
+    report in a code display block or as a raw string.
+    """
     _html_template = 'raw.html'
     _latex_template = 'raw.tex'
 
     def __init__(self, html):
+        """Initialize a LIVVkit RawHTML element
+
+        Args:
+            html: An HTML str
+        """
         super(RawHTML, self).__init__()
         self.html = html
