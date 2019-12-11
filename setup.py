@@ -77,7 +77,7 @@ setup(
                         'matplotlib',
                         'jinja2',
                         'json_tricks==3.11.0',
-                        'pybtex==0.21',
+                        'pybtex',
                         'pandas',
                         ],
       extras_require={'develop': ['requests',
