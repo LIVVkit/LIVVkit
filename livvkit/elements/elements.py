@@ -57,9 +57,11 @@ from livvkit.util import bib
 
 _HERE = os.path.dirname(__file__)
 
+# skipcq: BAN-B701
 _html_env = jinja2.Environment(
         loader=jinja2.FileSystemLoader(os.path.join(_HERE, 'templates')))
 
+# skipcq: BAN-B701
 _latex_env = jinja2.Environment(
         block_start_string=r'\BLOCK{',    # default: {%
         block_end_string=r'}',            # default: %}
