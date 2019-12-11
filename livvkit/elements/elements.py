@@ -740,10 +740,12 @@ class FileDiff(BaseElement):
                 to display on either side of each difference found
 
         Returns:
-            diff: Either a git-style diff of the files if a difference was
-                found or the original file in full
-            diff_status: A boolean indicating whether any differences were
-                found
+            (tuple): Tuple containing:
+                difference: A str containing either a git-style diff of the
+                    files if a difference was found or the original file in
+                    full
+                diff_status: A boolean indicating whether any differences were
+                    found
         """
         with open(self.from_file) as from_, open(self.to_file) as to_:
             fromlines = from_.read().splitlines()
