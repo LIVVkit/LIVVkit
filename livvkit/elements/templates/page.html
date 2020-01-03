@@ -1,0 +1,7 @@
+<div id="{{ data["title"] }}">
+    {% if data["title"] != "Summary" %}<h2>{{ data["title"] }}</h2>{% endif %}
+    {% if data["description"] %}<p>{{ data["description"] }}</p>{% endif %}
+    {% for elem in elements -%}
+    {{ elem }}
+    {%- endfor %}
+</div>

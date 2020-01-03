@@ -1,0 +1,10 @@
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{r|\BLOCK{ for row in range(data['rows'])}c\BLOCK{ endfor }}
+        \BLOCK{ if index is not none } & \BLOCK{ for idx in index }\VAR{ idx }\BLOCK{ if not loop.last } & \BLOCK{ endif }\BLOCK{ endfor }\\
+        \hline
+        \BLOCK{ endif -}
+        \BLOCK{ for column in data['data'].keys() -}
+        \VAR{column} & \BLOCK{ for val in data['data'][column] }\VAR{val }\BLOCK{ if not loop.last } & \BLOCK{ endif }\BLOCK{ endfor }  \\
+        \BLOCK{ endfor }\end{tabular}
+\end{table}

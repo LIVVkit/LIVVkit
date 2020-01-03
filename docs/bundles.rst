@@ -8,12 +8,12 @@ Model Bundles
 
 .. warning::
 
-    The model bundle abstraction is undergoing an overhaul (slated for LIVVkit 2.2) to make adding
+    The model bundle abstraction is undergoing an overhaul (slated for LIVVkit 3.1) to make adding
     new models significantly easier. We are actively working on supporting
     MALI (`MPAS-Albany Land Ice <http://mpas-dev.github.io/land_ice/download.html>`_),
-    PISM (`Parallel Ice Sheet Model <http://pism-docs.org/wiki/doku.php>`_),
-    and others. If you'd like to help or request support for your model, please contact
-    Joseph H. Kennedy at kennedyjh@ornl.gov.
+    BISICLES (`Parallel Ice Sheet Model <https://commons.lbl.gov/display/bisicles/BISICLES>`_),
+    and others. If you'd like to help or request support for your model, please `open an issue on github
+    <https://github.com/livvkit/livvkit/issues>`_.
 
 
 Adding new models requires a new implementation in the ``bundles`` directory.  Currently, ``CISM_glissade``
@@ -23,7 +23,7 @@ entire directory to a new directory where the name should indicate the model bei
 
 .. warning::
 
-    The bundle's name needs to follow the python naming convention for a python package (see
+    The bundle's name needs to follow the Python naming convention for a Python package (see
     :pep:`8#package-and-module-names`).
 
 The new bundle will need to be edited for use each component (verification, performance, numerics,

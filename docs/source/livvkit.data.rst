@@ -6,12 +6,12 @@ Subpackages
 
 .. toctree::
 
-    livvkit.data.numerics
+   livvkit.data.numerics
 
 Module contents
 ---------------
 
 .. automodule:: livvkit.data
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:

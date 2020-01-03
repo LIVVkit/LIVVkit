@@ -1,0 +1,21 @@
+<div class="bitForBit">
+    <h3>{{ data['title'] }}</h3>
+    <table>
+        <tr>
+            {%- for column in data['data'].keys() %}
+            <th>{{ column }}</th>
+            {%- endfor %}
+            <th> Plot </th>
+        </tr>
+        {%- for row in range(rows) %}
+        <tr>
+            {%- for column in data['data'].keys() %}
+            <td>{% if data['data'][column][row] is number %}{{ '{:.5e}'.format(data['data'][column][row]) }}{% else %}{{ data['data'][column][row] }}{% endif %}</td>
+            {%- endfor %}
+            <td>
+                {{ b4b_imgs[row] }}
+            </td>
+        </tr>
+        {%- endfor %}
+    </table>
+</div>

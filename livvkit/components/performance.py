@@ -29,8 +29,6 @@
 """
 Performance Test Base Module.
 """
-from __future__ import absolute_import, division, print_function, unicode_literals
-import six
 
 import os
 import glob
@@ -38,15 +36,15 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 import livvkit
+from livvkit import elements
 from livvkit.util import functions
 from livvkit.util import colormaps
 from livvkit.util.LIVVDict import LIVVDict
-from livvkit.util import elements
 
 SEC_PER_DAY = 86400.0
 
 
-def run_suite(case, config, summary):
+def run_suite(case, config):
     """ Run the full suite of performance tests """
     config["name"] = case
     timing_data = dict()
@@ -98,27 +96,31 @@ def run_suite(case, config, summary):
                                        ),
         ]
 
-    timing_plots = timing_plots + \
+    timing_plots += \
         [generate_timing_breakdown_plot(timing_data[s],
                                         config['scaling_var'],
                                         "Timing breakdown for " + case.capitalize()+" "+s,
                                         "",
                                         os.path.join(plot_dir, case+"_"+s+"_timing_breakdown.png")
                                         )
-         for s in sorted(six.iterkeys(timing_data), key=functions.sort_scale)]
+         for s in sorted(timing_data, key=functions.sort_scale)]
 
     # Build an image gallery and write the results
     el = [
-            elements.gallery("Performance Plots", timing_plots)
+            elements.Gallery("Performance Plots", timing_plots)
          ]
-    result = elements.page(case, config["description"], element_list=el)
-    summary[case] = _summarize_result(timing_data, config)
+    result = elements.Page(case, config["description"], elements=el)
+    summary = _summarize_result(timing_data, config)
+
     _print_result(case, summary)
+
     functions.create_page_from_template("performance.html",
                                         os.path.join(livvkit.index_dir, "performance",
                                                      case + ".html"))
-    functions.write_json(result, os.path.join(livvkit.output_dir, "performance"),
-                         case + ".json")
+    with open(os.path.join(livvkit.output_dir, "performance", case + ".json"), 'w') as f:
+        f.write(result._repr_json())
+
+    return summary
 
 
 def _analyze_case(model_dir, bench_dir, config):
@@ -135,16 +137,14 @@ def _analyze_case(model_dir, bench_dir, config):
     return dict(model=model_stats, bench=bench_stats)
 
 
-# noinspection PyUnusedLocal
 def _print_result(case, summary):
     """ Show some statistics from the run """
-    for case, case_data in summary.items():
-        for dof, data in case_data.items():
-            print("    " + case + " " + dof)
-            print("    -------------------")
-            for header, val in data.items():
-                print("    " + header + " : " + str(val))
-            print("")
+    for dof, data in summary.items():
+        print("    " + case + " " + dof)
+        print("    -------------------")
+        for header, val in data.items():
+            print("    " + header + " : " + str(val))
+        print("")
 
 
 def _summarize_result(result, config):
@@ -170,11 +170,10 @@ def _summarize_result(result, config):
         else:
             time_diff = 'NA'
         summary[size]['Proc. Counts'] = ", ".join([str(x) for x in sorted(proc_counts)])
-        summary[size]['Mean Time Diff (% of benchmark)'] = time_diff
+        summary[size]['Mean Time Diff (% of benchmark)'] = '{:.4f}'.format(time_diff*100)
     return summary
 
 
-# noinspection PyUnusedLocal
 def populate_metadata(case, config):
     """ Provide some top level information for the summary """
     return {"Type": "Summary",
@@ -347,11 +346,12 @@ def generate_scaling_plot(timing_data, title, ylabel, description, plot_file):
         plt.text(0.0, 0.44, "To generate this data rerun BATS with the")
         plt.text(0.0, 0.36, "performance option enabled.")
 
-    if livvkit.publish:
-        plt.savefig(os.path.splitext(plot_file)[0]+'.eps', dpi=600)
     plt.savefig(plot_file)
     plt.close()
-    return elements.image(title, description, os.path.basename(plot_file))
+
+    image = elements.Image(title, description, plot_file)
+
+    return image
 
 
 def scaling_sypd_plot(timing_data, title, ylabel, description, plot_file):
@@ -416,15 +416,14 @@ def generate_timing_breakdown_plot(timing_stats, scaling_var, title, description
     Returns:
         an image element containing the plot file and metadata
     """
-    # noinspection PyProtectedMember
     cmap_data = colormaps._viridis_data
-    n_subplots = len(six.viewkeys(timing_stats))
+    n_subplots = len(timing_stats)
     fig, ax = plt.subplots(1, n_subplots+1, figsize=(3*(n_subplots+2), 5))
     for plot_num, p_count in enumerate(
-            sorted(six.iterkeys(timing_stats), key=functions.sort_processor_counts)):
+            sorted(timing_stats, key=functions.sort_processor_counts)):
 
         case_data = timing_stats[p_count]
-        all_timers = set(six.iterkeys(case_data['model'])) | set(six.iterkeys(case_data['bench']))
+        all_timers = set(case_data['model']) | set(case_data['bench'])
         all_timers = sorted(list(all_timers), reverse=True)
         cmap_stride = int(len(cmap_data)/(len(all_timers)+1))
         colors = {all_timers[i]: cmap_data[i*cmap_stride] for i in range(len(all_timers))}
@@ -440,7 +439,7 @@ def generate_timing_breakdown_plot(timing_stats, scaling_var, title, description
 
             offset = 0
             if var_data != {}:
-                for var in sorted(six.iterkeys(var_data), reverse=True):
+                for var in sorted(var_data, reverse=True):
                     if var != scaling_var:
                         plt.bar(bar_num, var_data[var]['mean'], 0.8, bottom=offset,
                                 color=colors[var], label=(var if bar_num == 1 else '_none'))
@@ -461,8 +460,9 @@ def generate_timing_breakdown_plot(timing_stats, scaling_var, title, description
             group.set_visible(False)
     sub_ax.set_visible(False)
 
-    if livvkit.publish:
-        plt.savefig(os.path.splitext(plot_file)[0]+'.eps', dpi=600)
     plt.savefig(plot_file)
     plt.close()
-    return elements.image(title, description, os.path.basename(plot_file))
+
+    image = elements.Image(title, description, plot_file)
+
+    return image

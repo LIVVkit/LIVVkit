@@ -15,7 +15,7 @@ Introduction to V&V
 
 Verification and validation (V&V) is a set of techniques that are used to build and quantify
 confidence in *something*. That something can be a *numerical model* or a piece of *software*, and
-building confidence in each of these will require the use of specialized teniques.
+building confidence in each of these will require the use of specialized techniques.
 
 Model V&V
 ---------

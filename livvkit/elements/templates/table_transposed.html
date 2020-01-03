@@ -1,0 +1,21 @@
+<div class="table">
+    <h3>{{ data['title'] }}</h3>
+    <table>
+        {%- if index is not none %}
+        <tr>
+            <th>&nbsp;</th>
+            {%- for idx in index %}
+            <th>{{ idx }}</th>
+            {%- endfor %}
+        </tr>
+        {%- endif %}
+        {%- for column in data['data'].keys() %}
+        <tr>
+            <th>{{column}}</th>
+            {%- for val in data['data'][column] %}
+            <td>{{ val }}</td>
+            {%- endfor %}
+        </tr>
+        {%- endfor %}
+    </table>
+</div>

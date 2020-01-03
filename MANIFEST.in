@@ -3,7 +3,10 @@ include LICENSE
 include LIVVkit.yml
 
 recursive-include livvkit *.json
-recursive-include livvkit/data *
-recursive-include livvkit/resources *
 
-recursive-include hpcs *
+graft livvkit/data
+graft livvkit/resources
+graft livvkit/elements/templates
+
+global-exclude *.py[co]
+

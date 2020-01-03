@@ -16,7 +16,7 @@ into this development process like:
     :align: center
     :alt: Development cycle
 
-    Schematic of the public-private development cycle used by many scientfic modeling groups
+    Schematic of the public-private development cycle used by many scientific modeling groups
     [Kennedy2017]_. A feature branch is created (``d124``, green path) from the current development
     branch (light purple path) and incremental changes are made (``f001``--``f003``). These changes
     frequently undergo the standard set of LIVVkit verification tests (dashed cyan circles). Once

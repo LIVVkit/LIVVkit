@@ -174,7 +174,7 @@ Both the verification and validation commands can be executed at the same time a
 be placed into the same website. Additionally, you can pass the ``-V/validate`` option multiple
 JSON configuration files, and it will run all of them. 
 
-For more information, see :doc:`install`, :doc:`usage`, and :doc:`contrib`.
+For more information, see :doc:`install`, :doc:`usage`, and :doc:`CONTRIBUTING`.
 
 
 ----------------------------------------------------------------------------------------------------

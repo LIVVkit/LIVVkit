@@ -29,8 +29,6 @@
 """
 Validation Test Base Module
 """
-from __future__ import absolute_import, division, print_function, unicode_literals
-import six
 
 import os
 import importlib
@@ -94,56 +92,44 @@ def _load_case_module(case, config):
     except ImportError:
         mod_path = os.path.abspath(config['module'])
         try:
-            if six.PY2:
-                import imp
-                m = imp.load_source(case, mod_path)
-            elif six.PY3:
-                # noinspection PyUnresolvedReferences
-                spec = importlib.util.spec_from_file_location(case, mod_path,
-                                                              submodule_search_locations=os.path.dirname(mod_path))
-                # noinspection PyUnresolvedReferences
-                m = importlib.util.module_from_spec(spec)
-                spec.loader.exec_module(m)
-            else:
-                raise
+            spec = importlib.util.spec_from_file_location(
+                case, mod_path, submodule_search_locations=os.path.dirname(mod_path)
+            )
+            m = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(m)
         except IOError:
             # imp.load_source (py2) and spec.loader.exec_module (py3) raises an IOError if module isn't found
             print(ERR_MISSING_MOD_MSG.format(case, os.path.relpath(mod_path, os.getcwd())))
             raise
         except ImportError as iie:
             # If module's internal import statements fail
-            dep = str(iie).split()[-1] if six.PY2 else iie.name 
-            print(_case_dep_err(mod_path).format(case, dep))
+            print(_case_dep_err(mod_path).format(case, iie.name))
             raise
         
     return m
 
 
-def run_suite(case, config, summary):
+def run_suite(case, config):
     """ Run the full suite of validation tests """
     m = _load_case_module(case, config)
 
     result = m.run(case, config)
-    summary[case] = _summarize_result(m, result)
+    summary = _summarize_result(m, result)
     _print_summary(m, case, summary)
-   
-    if result['Type'] == 'Book':
-        for name, page in six.iteritems(result['Data']):
-            functions.create_page_from_template("validation.html",
-                                                os.path.join(livvkit.index_dir, "validation", name + ".html"))
-            functions.write_json(page, os.path.join(livvkit.output_dir, "validation"), name + ".json")
-    else:
-        functions.create_page_from_template("validation.html",
-                                            os.path.join(livvkit.index_dir, "validation", case + ".html"))
-        functions.write_json(result, os.path.join(livvkit.output_dir, "validation"), case + ".json")
+
+    functions.create_page_from_template("validation.html",
+                                        os.path.join(livvkit.index_dir, "validation", case + ".html"))
+    functions.write_json(result, os.path.join(livvkit.output_dir, "validation"), case + ".json")
+
+    return summary
 
 
 def _print_summary(module, case, summary):
     try:
         try:
-            module.print_summary(summary[case])
+            module.print_summary(summary)
         except TypeError:
-            module.print_summary(case, summary[case])
+            module.print_summary(case, summary)
     except (NotImplementedError, AttributeError):
         print("    Ran " + case + "!")
         print("")

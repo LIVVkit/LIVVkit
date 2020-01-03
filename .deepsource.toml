@@ -1,0 +1,21 @@
+version = 1
+
+test_patterns = [
+  'tests/test_*.py'
+]
+
+exclude_patterns = [
+  'livvkit/resources/js/*.min.js',
+  'livvkit/resources/css/*.min.css',
+  'livvkit/resources/imgs/*',
+  'livvkit/resources/imgs/*',
+  'livvkit/data/*'
+]
+
+[[analyzers]]
+name = 'python'
+enabled = true
+
+[[analyzers]]
+name = 'test-coverage'
+enabled = true

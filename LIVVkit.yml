@@ -10,8 +10,10 @@ dependencies:
 - netcdf4
 - matplotlib
 - json_tricks==3.11.0
+- pybtex==0.21
 - nodejs
 - pytest
+- pytest-cov
 - tox
 - requests
 - pip:

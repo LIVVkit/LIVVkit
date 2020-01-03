@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # coding=utf-8
 # Copyright (c) 2015-2018, UT-BATTELLE, LLC
 # All rights reserved.
@@ -28,33 +27,4 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-from __future__ import absolute_import, division, print_function, unicode_literals
-
-
-import os
-import sys
-import glob
-
-from livvkit.util import TexHelper as th
-from livvkit.util import functions
-
-
-def main():
-    datadir = sys.argv[1]
-    outdir = sys.argv[2]
-    functions.mkdir_p(outdir)
-
-    data_files = glob.glob(datadir + "/**/*.json", recursive=True)
-    data_files = [datadir + '/verification/dome.json']
-    # data_files = [datadir + '/index.json']
-
-    for each in data_files:
-        data = functions.read_json(each)
-        tex = th.translate_page(data)
-        outfile = os.path.join(outdir, os.path.basename(each).replace('json', 'tex'))
-        with open(outfile, 'w') as f:
-            f.write(tex)
-
-
-if __name__ == '__main__':
-    main()
+from .elements import *

@@ -27,8 +27,6 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-from __future__ import absolute_import, print_function, unicode_literals
-
 import os
 import re
 
@@ -67,20 +65,31 @@ setup(
 
                    'License :: OSI Approved :: BSD License',
 
-                   'Programming Language :: Python :: 2',
-                   'Programming Language :: Python :: 2.7',
                    'Programming Language :: Python :: 3',
-                   'Programming Language :: Python :: 3.5',
                    'Programming Language :: Python :: 3.6',
+                   'Programming Language :: Python :: 3.7',
+                   'Programming Language :: Python :: 3.8',
                    ],
 
-      install_requires=['six',
-                        'numpy',
+      install_requires=['numpy',
                         'scipy',
                         'netCDF4',
                         'matplotlib',
-                        'json_tricks==3.11.0'
+                        'jinja2',
+                        'json_tricks==3.11.0',
+                        'pybtex',
+                        'pandas',
                         ],
+      extras_require={'develop': ['requests',
+                                  'pytest',
+                                  'pytest-cov',
+                                  'tox',
+                                  'sphinx',
+                                  'sphinx-js',
+                                  'sphinx-py3doc-enhanced-theme',
+                                  ]},
+
+      python_requires='>=3.6',
 
       packages=['livvkit',
                 'livvkit.bundles',
@@ -88,7 +97,9 @@ setup(
                 'livvkit.components',
                 'livvkit.components.numerics_tests',
                 'livvkit.data',
+                'livvkit.data.numerics',
                 'livvkit.util',
+                'livvkit.elements',
                 ],
 
       entry_points={'console_scripts': ['livv = livvkit.__main__:main']},

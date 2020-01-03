@@ -29,15 +29,13 @@
 """
 Provides CISM_glissade specific verification tools
 """
-from __future__ import absolute_import, division, print_function, unicode_literals
-import six
 
 import os
 import numpy as np
 
-from six.moves.configparser import ConfigParser
+from configparser import ConfigParser
 
-from livvkit.util import elements
+from livvkit import elements
 
 
 def parse_log(file_path):
@@ -52,14 +50,9 @@ def parse_log(file_path):
         the results of the bit for bit testing
     """
     if not os.path.isfile(file_path):
-        return elements.error("Output Log", "Could not open file: " + file_path.split(os.sep)[-1])
+        return elements.Error("Output Log", "Could not open file: " + file_path.split(os.sep)[-1])
 
-    headers = ["Converged Iterations",
-               "Avg. Iterations to Converge",
-               "Processor Count",
-               "Dycore Type"]
-
-    with open(file_path, 'r') as f:
+    with open(file_path) as f:
         dycore_types = {"0": "Glide",
                         "1": "Glam",
                         "2": "Glissade",
@@ -72,34 +65,34 @@ def parse_log(file_path):
         iters_to_converge = []
         for line in f:
             split = line.split()
-            if ('CISM dycore type' in line):
+            if 'CISM dycore type' in line:
                 if line.split()[-1] == '=':
                     dycore_type = dycore_types[next(f).strip()]
                 else:
                     dycore_type = dycore_types[line.split()[-1]]
-            elif ('total procs' in line):
+            elif 'total procs' in line:
                 proc_count += int(line.split()[-1])
-            elif ('Nonlinear Solver Step' in line):
+            elif 'Nonlinear Solver Step' in line:
                 curr_step = int(line.split()[4])
-            elif ('Compute ice velocities, time = ' in line):
+            elif 'Compute ice velocities, time = ' in line:
                 converged_iters.append(curr_step)
                 curr_step = float(line.split()[-1])
-            elif ('"SOLVE_STATUS_CONVERGED"' in line):
+            elif '"SOLVE_STATUS_CONVERGED"' in line:
                 split = line.split()
                 iters_to_converge.append(int(split[split.index('"SOLVE_STATUS_CONVERGED"') + 2]))
-            elif ("Compute dH/dt" in line):
+            elif "Compute dH/dt" in line:
                 iters_to_converge.append(int(iter_number))
             elif len(split) > 0 and split[0].isdigit():
                 iter_number = split[0]
-        if iters_to_converge == []:
+        if not iters_to_converge:
             iters_to_converge.append(int(iter_number))
     data = {
-        "Dycore Type": dycore_type,
-        "Processor Count": proc_count,
-        "Converged Iterations": len(converged_iters),
-        "Avg. Iterations to Converge": np.mean(iters_to_converge)
+        "Dycore Type": [dycore_type],
+        "Processor Count": [proc_count],
+        "Converged Iterations": [len(converged_iters)],
+        "Avg. Iterations to Converge": [np.mean(iters_to_converge)]
     }
-    return elements.table("Output Log", headers, data)
+    return elements.Table("Output Log", data)
 
 
 def parse_config(file_path):
@@ -118,6 +111,6 @@ def parse_config(file_path):
     parser.read(file_path)
     # Strip out inline comments
     for s in parser._sections:
-        for v in six.iterkeys(parser._sections[s]):
+        for v in parser._sections[s]:
             parser._sections[s][v] = parser._sections[s][v].split("#")[0].strip()
     return parser._sections

@@ -1,0 +1,5 @@
+\begin{figure}[h]
+    \centering
+    \includegraphics[height=\VAR{ data['height']|string()+'px' if data['height'] else '200px' }]{\VAR{ data['path'] ~ '/' ~ data['name'] }}
+    \caption[\VAR{ data['title'] }]{\VAR{ data['desc'] }}
+\end{figure}

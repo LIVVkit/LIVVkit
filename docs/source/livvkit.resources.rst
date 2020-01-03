@@ -5,6 +5,6 @@ Module contents
 ---------------
 
 .. automodule:: livvkit.resources
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:

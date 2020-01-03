@@ -29,17 +29,16 @@
 """
 Numerics Test Base Module.
 """
-from __future__ import absolute_import, division, print_function, unicode_literals
 
 import os
 import importlib
 
 import livvkit
 from livvkit.util import functions
-from livvkit.util import elements
+from livvkit import elements
 
 
-def run_suite(case, config, summary):
+def run_suite(case, config):
     """ Run the full suite of numerics tests """
     m = importlib.import_module(config['module'])
     m.set_up()
@@ -70,13 +69,20 @@ def run_suite(case, config, summary):
     try:
         el = m.run(config, analysis_data)
     except KeyError:
-        el = elements.error("Numerics Plots", "Missing data")
-    result = elements.page(case, config['description'], element_list=el)
-    summary[case] = _summarize_result(m, analysis_data, config)
-    _print_summary(m, case, summary[case])
-    functions.create_page_from_template("numerics.html",
-                                        os.path.join(livvkit.index_dir, "numerics", case + ".html"))
-    functions.write_json(result, os.path.join(livvkit.output_dir, "numerics"), case + ".json")
+        el = elements.Error("Numerics Plots", "Missing data")
+
+    result = elements.Page(case, config['description'], elements=[el])
+    summary = _summarize_result(m, analysis_data, config)
+
+    _print_summary(m, case, summary)
+
+    functions.create_page_from_template(
+        "numerics.html", os.path.join(livvkit.index_dir, "numerics", case + ".html")
+    )
+    with open(os.path.join(livvkit.output_dir, "numerics", case + ".json"), 'w') as f:
+        f.write(result._repr_json())
+
+    return summary
 
 
 def _print_summary(module, case, summary):
@@ -98,7 +104,6 @@ def _summarize_result(module, data, config):
     return summary
 
 
-# noinspection PyUnusedLocal
 def populate_metadata(case, config):
     metadata = {"Type": "Summary",
                 "Title": "Numerics",
