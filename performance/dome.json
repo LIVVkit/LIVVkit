@@ -1,69 +1,143 @@
 {
-    "Type": "Page",
-    "Title": "dome",
-    "Description": "The time evolution of a 3-D paraboloid dome of ice sitting on a flat bed. This is a very basic ice-sheet like test case that is simple and relatively fast to run. It confirms that the basic higher-order model physics are working, but it does not strenuously test the physics and boundary conditions.",
-    "Data": {
-        "Elements": [
+    "Page": {
+        "elements": [
             {
-                "Type": "Gallery",
-                "Title": "Performance Plots",
-                "Data": [
-                    {
-                        "Type": "Image",
-                        "Title": "Weak scaling for Dome",
-                        "Desciption": "",
-                        "Plot File": "dome_weak_scaling.png"
-                    },
-                    {
-                        "Type": "Image",
-                        "Title": "Weak scaling efficiency for Dome",
-                        "Desciption": "",
-                        "Plot File": "dome_weak_scaling_efficiency.png"
-                    },
-                    {
-                        "Type": "Image",
-                        "Title": "Strong scaling for Dome",
-                        "Desciption": "",
-                        "Plot File": "dome_strong_scaling.png"
-                    },
-                    {
-                        "Type": "Image",
-                        "Title": "Strong scaling efficiency for Dome",
-                        "Desciption": "",
-                        "Plot File": "dome_strong_scaling_efficiency.png"
-                    },
-                    {
-                        "Type": "Image",
-                        "Title": "Timing breakdown for Dome s0",
-                        "Desciption": "",
-                        "Plot File": "dome_s0_timing_breakdown.png"
-                    },
-                    {
-                        "Type": "Image",
-                        "Title": "Timing breakdown for Dome s1",
-                        "Desciption": "",
-                        "Plot File": "dome_s1_timing_breakdown.png"
-                    },
-                    {
-                        "Type": "Image",
-                        "Title": "Timing breakdown for Dome s2",
-                        "Desciption": "",
-                        "Plot File": "dome_s2_timing_breakdown.png"
-                    },
-                    {
-                        "Type": "Image",
-                        "Title": "Timing breakdown for Dome s3",
-                        "Desciption": "",
-                        "Plot File": "dome_s3_timing_breakdown.png"
-                    },
-                    {
-                        "Type": "Image",
-                        "Title": "Timing breakdown for Dome s4",
-                        "Desciption": "",
-                        "Plot File": "dome_s4_timing_breakdown.png"
-                    }
-                ]
+                "Gallery": {
+                    "elements": [
+                        {
+                            "Image": {
+                                "title": "Weak scaling for Dome",
+                                "desc": "",
+                                "path": "imgs",
+                                "name": "dome_weak_scaling.png",
+                                "group": null,
+                                "height": null,
+                                "__module__": "livvkit.elements.elements",
+                                "_html_template": "image.html",
+                                "_latex_template": "image.tex"
+                            }
+                        },
+                        {
+                            "Image": {
+                                "title": "Weak scaling efficiency for Dome",
+                                "desc": "",
+                                "path": "imgs",
+                                "name": "dome_weak_scaling_efficiency.png",
+                                "group": null,
+                                "height": null,
+                                "__module__": "livvkit.elements.elements",
+                                "_html_template": "image.html",
+                                "_latex_template": "image.tex"
+                            }
+                        },
+                        {
+                            "Image": {
+                                "title": "Strong scaling for Dome",
+                                "desc": "",
+                                "path": "imgs",
+                                "name": "dome_strong_scaling.png",
+                                "group": null,
+                                "height": null,
+                                "__module__": "livvkit.elements.elements",
+                                "_html_template": "image.html",
+                                "_latex_template": "image.tex"
+                            }
+                        },
+                        {
+                            "Image": {
+                                "title": "Strong scaling efficiency for Dome",
+                                "desc": "",
+                                "path": "imgs",
+                                "name": "dome_strong_scaling_efficiency.png",
+                                "group": null,
+                                "height": null,
+                                "__module__": "livvkit.elements.elements",
+                                "_html_template": "image.html",
+                                "_latex_template": "image.tex"
+                            }
+                        },
+                        {
+                            "Image": {
+                                "title": "Timing breakdown for Dome s0",
+                                "desc": "",
+                                "path": "imgs",
+                                "name": "dome_s0_timing_breakdown.png",
+                                "group": null,
+                                "height": null,
+                                "__module__": "livvkit.elements.elements",
+                                "_html_template": "image.html",
+                                "_latex_template": "image.tex"
+                            }
+                        },
+                        {
+                            "Image": {
+                                "title": "Timing breakdown for Dome s1",
+                                "desc": "",
+                                "path": "imgs",
+                                "name": "dome_s1_timing_breakdown.png",
+                                "group": null,
+                                "height": null,
+                                "__module__": "livvkit.elements.elements",
+                                "_html_template": "image.html",
+                                "_latex_template": "image.tex"
+                            }
+                        },
+                        {
+                            "Image": {
+                                "title": "Timing breakdown for Dome s2",
+                                "desc": "",
+                                "path": "imgs",
+                                "name": "dome_s2_timing_breakdown.png",
+                                "group": null,
+                                "height": null,
+                                "__module__": "livvkit.elements.elements",
+                                "_html_template": "image.html",
+                                "_latex_template": "image.tex"
+                            }
+                        },
+                        {
+                            "Image": {
+                                "title": "Timing breakdown for Dome s3",
+                                "desc": "",
+                                "path": "imgs",
+                                "name": "dome_s3_timing_breakdown.png",
+                                "group": null,
+                                "height": null,
+                                "__module__": "livvkit.elements.elements",
+                                "_html_template": "image.html",
+                                "_latex_template": "image.tex"
+                            }
+                        },
+                        {
+                            "Image": {
+                                "title": "Timing breakdown for Dome s4",
+                                "desc": "",
+                                "path": "imgs",
+                                "name": "dome_s4_timing_breakdown.png",
+                                "group": null,
+                                "height": null,
+                                "__module__": "livvkit.elements.elements",
+                                "_html_template": "image.html",
+                                "_latex_template": "image.tex"
+                            }
+                        }
+                    ],
+                    "title": "Performance Plots",
+                    "__module__": "livvkit.elements.elements",
+                    "_html_template": "gallery.html",
+                    "_latex_template": "gallery.tex"
+                }
             }
-        ]
+        ],
+        "title": "dome",
+        "description": "The time evolution of a 3-D paraboloid dome of ice sitting on a flat bed. This is a very basic ice-sheet like test case that is simple and relatively fast to run. It confirms that the basic higher-order model physics are working, but it does not strenuously test the physics and boundary conditions.",
+        "_ref_list": [
+            "/home/jhkennedy/miniconda3/envs/livv-3.0.0-test/lib/python3.7/site-packages/livvkit/data/Evans2019.bib",
+            "/home/jhkennedy/miniconda3/envs/livv-3.0.0-test/lib/python3.7/site-packages/livvkit/data/Kennedy2017.bib"
+        ],
+        "Data": "<div id=\"dome\">\n    <h2>dome</h2>\n    <p>The time evolution of a 3-D paraboloid dome of ice sitting on a flat bed. This is a very basic ice-sheet like test case that is simple and relatively fast to run. It confirms that the basic higher-order model physics are working, but it does not strenuously test the physics and boundary conditions.</p>\n    <div class=\"gallery\">\n    <h3>Performance Plots</h3>\n    <div>\n    <a href=\"imgs/dome_weak_scaling.png\"\n       data-lightbox=\"Weak scaling for Dome\"\n       data-title=\"\"\n    >\n        <img class=\"thumbnail caption\"\n             data-caption=\"Weak scaling for Dome\"\n             alt=\"Weak scaling for Dome\"\n             src=\"imgs/dome_weak_scaling.png\"\n             style=\"height: 200px; overflow: hidden; position: relative;\"\n        >\n    </a>\n</div>\n    <div>\n    <a href=\"imgs/dome_weak_scaling_efficiency.png\"\n       data-lightbox=\"Weak scaling efficiency for Dome\"\n       data-title=\"\"\n    >\n        <img class=\"thumbnail caption\"\n             data-caption=\"Weak scaling efficiency for Dome\"\n             alt=\"Weak scaling efficiency for Dome\"\n             src=\"imgs/dome_weak_scaling_efficiency.png\"\n             style=\"height: 200px; overflow: hidden; position: relative;\"\n        >\n    </a>\n</div>\n    <div>\n    <a href=\"imgs/dome_strong_scaling.png\"\n       data-lightbox=\"Strong scaling for Dome\"\n       data-title=\"\"\n    >\n        <img class=\"thumbnail caption\"\n             data-caption=\"Strong scaling for Dome\"\n             alt=\"Strong scaling for Dome\"\n             src=\"imgs/dome_strong_scaling.png\"\n             style=\"height: 200px; overflow: hidden; position: relative;\"\n        >\n    </a>\n</div>\n    <div>\n    <a href=\"imgs/dome_strong_scaling_efficiency.png\"\n       data-lightbox=\"Strong scaling efficiency for Dome\"\n       data-title=\"\"\n    >\n        <img class=\"thumbnail caption\"\n             data-caption=\"Strong scaling efficiency for Dome\"\n             alt=\"Strong scaling efficiency for Dome\"\n             src=\"imgs/dome_strong_scaling_efficiency.png\"\n             style=\"height: 200px; overflow: hidden; position: relative;\"\n        >\n    </a>\n</div>\n    <div>\n    <a href=\"imgs/dome_s0_timing_breakdown.png\"\n       data-lightbox=\"Timing breakdown for Dome s0\"\n       data-title=\"\"\n    >\n        <img class=\"thumbnail caption\"\n             data-caption=\"Timing breakdown for Dome s0\"\n             alt=\"Timing breakdown for Dome s0\"\n             src=\"imgs/dome_s0_timing_breakdown.png\"\n             style=\"height: 200px; overflow: hidden; position: relative;\"\n        >\n    </a>\n</div>\n    <div>\n    <a href=\"imgs/dome_s1_timing_breakdown.png\"\n       data-lightbox=\"Timing breakdown for Dome s1\"\n       data-title=\"\"\n    >\n        <img class=\"thumbnail caption\"\n             data-caption=\"Timing breakdown for Dome s1\"\n             alt=\"Timing breakdown for Dome s1\"\n             src=\"imgs/dome_s1_timing_breakdown.png\"\n             style=\"height: 200px; overflow: hidden; position: relative;\"\n        >\n    </a>\n</div>\n    <div>\n    <a href=\"imgs/dome_s2_timing_breakdown.png\"\n       data-lightbox=\"Timing breakdown for Dome s2\"\n       data-title=\"\"\n    >\n        <img class=\"thumbnail caption\"\n             data-caption=\"Timing breakdown for Dome s2\"\n             alt=\"Timing breakdown for Dome s2\"\n             src=\"imgs/dome_s2_timing_breakdown.png\"\n             style=\"height: 200px; overflow: hidden; position: relative;\"\n        >\n    </a>\n</div>\n    <div>\n    <a href=\"imgs/dome_s3_timing_breakdown.png\"\n       data-lightbox=\"Timing breakdown for Dome s3\"\n       data-title=\"\"\n    >\n        <img class=\"thumbnail caption\"\n             data-caption=\"Timing breakdown for Dome s3\"\n             alt=\"Timing breakdown for Dome s3\"\n             src=\"imgs/dome_s3_timing_breakdown.png\"\n             style=\"height: 200px; overflow: hidden; position: relative;\"\n        >\n    </a>\n</div>\n    <div>\n    <a href=\"imgs/dome_s4_timing_breakdown.png\"\n       data-lightbox=\"Timing breakdown for Dome s4\"\n       data-title=\"\"\n    >\n        <img class=\"thumbnail caption\"\n             data-caption=\"Timing breakdown for Dome s4\"\n             alt=\"Timing breakdown for Dome s4\"\n             src=\"imgs/dome_s4_timing_breakdown.png\"\n             style=\"height: 200px; overflow: hidden; position: relative;\"\n        >\n    </a>\n</div>\n    \n</div>\n<div style=\"clear:both\"></div>\n</div><div class=\"bibliography\"><h2>References</h2><p>LIVVkit is an open source project licensed under a BSD 3-clause License. We ask that you please acknowledge LIVVkit in any work it is used or supports. In any corresponding published work, please cite: </p><dl><dt>1</dt> <dd>K.&nbsp;J. Evans, J.&nbsp;H. Kennedy, D.&nbsp;Lu, M.&nbsp;M. Forrester, S.&nbsp;Price, J.&nbsp;Fyke, A.&nbsp;R. Bennett, M.&nbsp;J. Hoffman, I.&nbsp;Tezaur, C.&nbsp;S. Zender, and M.&nbsp;Vizca\\'<span class=\"bibtex-protected\">\u0131</span>no. Livvkit 2.1: automated and extensible ice sheet model validation. <em>Geoscientific Model Development</em>, 12(3):1067\u20131086, 2019. URL: <a href=\"https://www.geosci-model-dev.net/12/1067/2019/\">https://www.geosci-model-dev.net/12/1067/2019/</a>, <a href=\"https://doi.org/10.5194/gmd-12-1067-2019\">doi:10.5194/gmd-12-1067-2019</a>.</dd> <dt>2</dt> <dd>Joseph&nbsp;H. Kennedy, Andrew&nbsp;R. Bennett, Katherine&nbsp;J. Evans, Stephen Price, Matthew Hoffman, William&nbsp;H. Lipscomb, Jeremy Fyke, Lauren Vargo, Adrianna Boghozian, Matthew Norman, and Patrick&nbsp;H. Worley. Livvkit: an extensible, python-based, land ice verification and validation toolkit for ice sheet models. <em>Journal of Advances in Modeling Earth Systems</em>, 9(2):854\u2013869, 2017. <a href=\"https://doi.org/10.1002/2017MS000916\">doi:10.1002/2017MS000916</a>.</dd> </dl></div>",
+        "__module__": "livvkit.elements.elements",
+        "_html_template": "page.html",
+        "_latex_template": "page.tex"
     }
 }

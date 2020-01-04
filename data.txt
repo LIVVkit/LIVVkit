@@ -1,1 +1,6 @@
-2017-10-25 14:43:49
+2020-01-03 14:54:09
+Call: livv -v tests/_data/cism-2.0.0-tests/titan-gnu/CISM_glissade tests/_data/cism-2.0.6-tests/titan-gnu/CISM_glissade -o tests/vv_test -s -p 3 
+Version: 3.0.0
+User: jhkennedy
+OS Type: Linux 5.3.0-7625-generic
+Machine: joexps

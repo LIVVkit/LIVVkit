@@ -1,234 +1,248 @@
 {
-    "Type": "Page",
-    "Title": "Summary",
-    "Description": "",
-    "Data": {
-        "Elements": [
+    "Page": {
+        "elements": [
             {
-                "Type": "Summary",
-                "Title": "Numerics",
-                "Headers": [
-                    "Bench mean % error",
-                    "Test mean % error",
-                    "Coefficient of variation"
-                ],
-                "Data": {
-                    "ismip-hom-a": {
-                        "s0-p1-z20 Velocity": {
-                            "Bench mean % error": "-0.23%",
-                            "Coefficient of variation": "6.23%",
-                            "Test mean % error": "-0.23%"
-                        },
-                        "s0-p1-z80 Velocity": {
-                            "Bench mean % error": "4.15%",
-                            "Coefficient of variation": "4.39%",
-                            "Test mean % error": "4.15%"
-                        }
+                "Table": {
+                    "title": "Numerics",
+                    "data": {
+                        "scale": [
+                            "s0-p1-z20 Velocity",
+                            "s0-p1-z80 Velocity",
+                            "s0-p1-z20 Velocity",
+                            "s0-p1-z80 Velocity",
+                            "s0-p1-z0 Surface",
+                            "s0-p1-z0 Velocity"
+                        ],
+                        "Bench mean % error": [
+                            "-0.23%",
+                            "4.15%",
+                            "3.03%",
+                            "9.10%",
+                            "-0.06%",
+                            "-0.42%"
+                        ],
+                        "Coefficient of variation": [
+                            "6.23%",
+                            "4.39%",
+                            "5.71%",
+                            "6.54%",
+                            "0.17%",
+                            "2.64%"
+                        ],
+                        "Test mean % error": [
+                            "-0.23%",
+                            "4.15%",
+                            "3.03%",
+                            "9.10%",
+                            "-0.06%",
+                            "-0.42%"
+                        ]
                     },
-                    "ismip-hom-c": {
-                        "s0-p1-z20 Velocity": {
-                            "Bench mean % error": "3.03%",
-                            "Coefficient of variation": "5.71%",
-                            "Test mean % error": "3.03%"
-                        },
-                        "s0-p1-z80 Velocity": {
-                            "Bench mean % error": "9.10%",
-                            "Coefficient of variation": "6.54%",
-                            "Test mean % error": "9.10%"
-                        }
-                    },
-                    "ismip-hom-f": {
-                        "s0-p1-z0 Surface": {
-                            "Bench mean % error": "-0.06%",
-                            "Coefficient of variation": "0.17%",
-                            "Test mean % error": "-0.06%"
-                        },
-                        "s0-p1-z0 Velocity": {
-                            "Bench mean % error": "-0.42%",
-                            "Coefficient of variation": "2.64%",
-                            "Test mean % error": "-0.42%"
-                        }
-                    }
+                    "index": [
+                        "ismip-hom-a",
+                        "ismip-hom-a",
+                        "ismip-hom-c",
+                        "ismip-hom-c",
+                        "ismip-hom-f",
+                        "ismip-hom-f"
+                    ],
+                    "rows": 6,
+                    "__module__": "livvkit.elements.elements",
+                    "_html_template": "table.html",
+                    "_latex_template": "table.tex"
                 }
             },
             {
-                "Type": "Summary",
-                "Title": "Verification",
-                "Headers": [
-                    "Bit for Bit",
-                    "Configurations",
-                    "Std. Out Files"
-                ],
-                "Data": {
-                    "shelf-circular": {
-                        "s0": {
-                            "Bit for Bit": [
-                                1,
-                                1
-                            ],
-                            "Configurations": [
-                                1,
-                                1
-                            ],
-                            "Std. Out Files": 1
-                        }
-                    },
-                    "shelf-confined": {
-                        "s0": {
-                            "Bit for Bit": [
-                                1,
-                                1
-                            ],
-                            "Configurations": [
-                                1,
-                                1
-                            ],
-                            "Std. Out Files": 1
-                        }
-                    },
-                    "stream": {
-                        "s0": {
-                            "Bit for Bit": [
-                                0,
-                                1
-                            ],
-                            "Configurations": [
-                                1,
-                                1
-                            ],
-                            "Std. Out Files": 1
-                        }
-                    },
-                    "ismip-hom-c": {
-                        "s0": {
-                            "Bit for Bit": [
-                                0,
-                                2
-                            ],
-                            "Configurations": [
-                                2,
-                                2
-                            ],
-                            "Std. Out Files": 2
-                        }
-                    },
-                    "ismip-hom-a": {
-                        "s0": {
-                            "Bit for Bit": [
-                                0,
-                                2
-                            ],
-                            "Configurations": [
-                                2,
-                                2
-                            ],
-                            "Std. Out Files": 2
-                        }
-                    },
-                    "ismip-hom-f": {
-                        "s0": {
-                            "Bit for Bit": [
-                                0,
-                                1
-                            ],
-                            "Configurations": [
-                                1,
-                                1
-                            ],
-                            "Std. Out Files": 1
-                        }
-                    },
-                    "dome": {
-                        "s0": {
-                            "Bit for Bit": [
+                "Table": {
+                    "title": "Verification",
+                    "data": {
+                        "scale": [
+                            "s0",
+                            "s1",
+                            "s2",
+                            "s3",
+                            "s4",
+                            "s0",
+                            "s0",
+                            "s0",
+                            "s0",
+                            "s0",
+                            "s0"
+                        ],
+                        "Bit for Bit": [
+                            [
                                 0,
                                 4
                             ],
-                            "Configurations": [
+                            [
+                                0,
+                                2
+                            ],
+                            [
+                                0,
+                                3
+                            ],
+                            [
+                                0,
+                                2
+                            ],
+                            [
+                                0,
+                                1
+                            ],
+                            [
+                                0,
+                                2
+                            ],
+                            [
+                                0,
+                                2
+                            ],
+                            [
+                                0,
+                                1
+                            ],
+                            [
+                                1,
+                                1
+                            ],
+                            [
+                                1,
+                                1
+                            ],
+                            [
+                                0,
+                                1
+                            ]
+                        ],
+                        "Configurations": [
+                            [
                                 4,
                                 4
                             ],
-                            "Std. Out Files": 4
-                        },
-                        "s1": {
-                            "Bit for Bit": [
-                                0,
-                                2
-                            ],
-                            "Configurations": [
+                            [
                                 2,
                                 2
                             ],
-                            "Std. Out Files": 2
-                        },
-                        "s2": {
-                            "Bit for Bit": [
-                                0,
-                                3
-                            ],
-                            "Configurations": [
+                            [
                                 3,
                                 3
                             ],
-                            "Std. Out Files": 3
-                        },
-                        "s3": {
-                            "Bit for Bit": [
-                                0,
-                                2
-                            ],
-                            "Configurations": [
+                            [
                                 2,
                                 2
                             ],
-                            "Std. Out Files": 2
-                        },
-                        "s4": {
-                            "Bit for Bit": [
-                                0,
-                                1
-                            ],
-                            "Configurations": [
+                            [
                                 1,
                                 1
                             ],
-                            "Std. Out Files": 1
-                        }
-                    }
+                            [
+                                2,
+                                2
+                            ],
+                            [
+                                2,
+                                2
+                            ],
+                            [
+                                1,
+                                1
+                            ],
+                            [
+                                1,
+                                1
+                            ],
+                            [
+                                1,
+                                1
+                            ],
+                            [
+                                1,
+                                1
+                            ]
+                        ],
+                        "Std. Out Files": [
+                            4,
+                            2,
+                            3,
+                            2,
+                            1,
+                            2,
+                            2,
+                            1,
+                            1,
+                            1,
+                            1
+                        ]
+                    },
+                    "index": [
+                        "dome",
+                        "dome",
+                        "dome",
+                        "dome",
+                        "dome",
+                        "ismip-hom-a",
+                        "ismip-hom-c",
+                        "ismip-hom-f",
+                        "shelf-circular",
+                        "shelf-confined",
+                        "stream"
+                    ],
+                    "rows": 11,
+                    "__module__": "livvkit.elements.elements",
+                    "_html_template": "table.html",
+                    "_latex_template": "table.tex"
                 }
             },
             {
-                "Type": "Summary",
-                "Title": "Performance",
-                "Headers": [
-                    "Proc. Counts",
-                    "Mean Time Diff (% of benchmark)"
-                ],
-                "Data": {
-                    "dome": {
-                        "s0": {
-                            "Proc. Counts": "1, 2, 4, 8",
-                            "Mean Time Diff (% of benchmark)": 1.0309685603814236
-                        },
-                        "s1": {
-                            "Proc. Counts": "1, 4",
-                            "Mean Time Diff (% of benchmark)": 1.0284273808380955
-                        },
-                        "s2": {
-                            "Proc. Counts": "1, 16, 256",
-                            "Mean Time Diff (% of benchmark)": 1.009236663102728
-                        },
-                        "s3": {
-                            "Proc. Counts": "64, 256",
-                            "Mean Time Diff (% of benchmark)": 1.0107292049253125
-                        },
-                        "s4": {
-                            "Proc. Counts": "256",
-                            "Mean Time Diff (% of benchmark)": 1.0076891276264142
-                        }
-                    }
+                "Table": {
+                    "title": "Performance",
+                    "data": {
+                        "scale": [
+                            "s0",
+                            "s1",
+                            "s2",
+                            "s3",
+                            "s4"
+                        ],
+                        "Proc. Counts": [
+                            "1, 2, 4, 8",
+                            "1, 4",
+                            "1, 16, 256",
+                            "64, 256",
+                            "256"
+                        ],
+                        "Mean Time Diff (% of benchmark)": [
+                            "96.9962",
+                            "97.2358",
+                            "99.0848",
+                            "98.9385",
+                            "99.2370"
+                        ]
+                    },
+                    "index": [
+                        "dome",
+                        "dome",
+                        "dome",
+                        "dome",
+                        "dome"
+                    ],
+                    "rows": 5,
+                    "__module__": "livvkit.elements.elements",
+                    "_html_template": "table.html",
+                    "_latex_template": "table.tex"
                 }
             }
-        ]
+        ],
+        "title": "Summary",
+        "description": "",
+        "_ref_list": [
+            "/home/jhkennedy/miniconda3/envs/livv-3.0.0-test/lib/python3.7/site-packages/livvkit/data/Evans2019.bib",
+            "/home/jhkennedy/miniconda3/envs/livv-3.0.0-test/lib/python3.7/site-packages/livvkit/data/Kennedy2017.bib"
+        ],
+        "Data": "<div id=\"Summary\">\n    \n    \n    <div class=\"table\">\n    <h3>Numerics</h3>\n    <table>\n        <tr>\n            <th>&nbsp;</th>\n            <th>scale</th>\n            <th>Bench mean % error</th>\n            <th>Coefficient of variation</th>\n            <th>Test mean % error</th>\n        </tr>\n        <tr>\n            <th>ismip-hom-a</th>\n            <td>s0-p1-z20 Velocity</td>\n            <td>-0.23%</td>\n            <td>6.23%</td>\n            <td>-0.23%</td>\n        </tr>\n        <tr>\n            <th>ismip-hom-a</th>\n            <td>s0-p1-z80 Velocity</td>\n            <td>4.15%</td>\n            <td>4.39%</td>\n            <td>4.15%</td>\n        </tr>\n        <tr>\n            <th>ismip-hom-c</th>\n            <td>s0-p1-z20 Velocity</td>\n            <td>3.03%</td>\n            <td>5.71%</td>\n            <td>3.03%</td>\n        </tr>\n        <tr>\n            <th>ismip-hom-c</th>\n            <td>s0-p1-z80 Velocity</td>\n            <td>9.10%</td>\n            <td>6.54%</td>\n            <td>9.10%</td>\n        </tr>\n        <tr>\n            <th>ismip-hom-f</th>\n            <td>s0-p1-z0 Surface</td>\n            <td>-0.06%</td>\n            <td>0.17%</td>\n            <td>-0.06%</td>\n        </tr>\n        <tr>\n            <th>ismip-hom-f</th>\n            <td>s0-p1-z0 Velocity</td>\n            <td>-0.42%</td>\n            <td>2.64%</td>\n            <td>-0.42%</td>\n        </tr>\n    </table>\n</div><div class=\"table\">\n    <h3>Verification</h3>\n    <table>\n        <tr>\n            <th>&nbsp;</th>\n            <th>scale</th>\n            <th>Bit for Bit</th>\n            <th>Configurations</th>\n            <th>Std. Out Files</th>\n        </tr>\n        <tr>\n            <th>dome</th>\n            <td>s0</td>\n            <td>[0, 4]</td>\n            <td>[4, 4]</td>\n            <td>4</td>\n        </tr>\n        <tr>\n            <th>dome</th>\n            <td>s1</td>\n            <td>[0, 2]</td>\n            <td>[2, 2]</td>\n            <td>2</td>\n        </tr>\n        <tr>\n            <th>dome</th>\n            <td>s2</td>\n            <td>[0, 3]</td>\n            <td>[3, 3]</td>\n            <td>3</td>\n        </tr>\n        <tr>\n            <th>dome</th>\n            <td>s3</td>\n            <td>[0, 2]</td>\n            <td>[2, 2]</td>\n            <td>2</td>\n        </tr>\n        <tr>\n            <th>dome</th>\n            <td>s4</td>\n            <td>[0, 1]</td>\n            <td>[1, 1]</td>\n            <td>1</td>\n        </tr>\n        <tr>\n            <th>ismip-hom-a</th>\n            <td>s0</td>\n            <td>[0, 2]</td>\n            <td>[2, 2]</td>\n            <td>2</td>\n        </tr>\n        <tr>\n            <th>ismip-hom-c</th>\n            <td>s0</td>\n            <td>[0, 2]</td>\n            <td>[2, 2]</td>\n            <td>2</td>\n        </tr>\n        <tr>\n            <th>ismip-hom-f</th>\n            <td>s0</td>\n            <td>[0, 1]</td>\n            <td>[1, 1]</td>\n            <td>1</td>\n        </tr>\n        <tr>\n            <th>shelf-circular</th>\n            <td>s0</td>\n            <td>[1, 1]</td>\n            <td>[1, 1]</td>\n            <td>1</td>\n        </tr>\n        <tr>\n            <th>shelf-confined</th>\n            <td>s0</td>\n            <td>[1, 1]</td>\n            <td>[1, 1]</td>\n            <td>1</td>\n        </tr>\n        <tr>\n            <th>stream</th>\n            <td>s0</td>\n            <td>[0, 1]</td>\n            <td>[1, 1]</td>\n            <td>1</td>\n        </tr>\n    </table>\n</div><div class=\"table\">\n    <h3>Performance</h3>\n    <table>\n        <tr>\n            <th>&nbsp;</th>\n            <th>scale</th>\n            <th>Proc. Counts</th>\n            <th>Mean Time Diff (% of benchmark)</th>\n        </tr>\n        <tr>\n            <th>dome</th>\n            <td>s0</td>\n            <td>1, 2, 4, 8</td>\n            <td>96.9962</td>\n        </tr>\n        <tr>\n            <th>dome</th>\n            <td>s1</td>\n            <td>1, 4</td>\n            <td>97.2358</td>\n        </tr>\n        <tr>\n            <th>dome</th>\n            <td>s2</td>\n            <td>1, 16, 256</td>\n            <td>99.0848</td>\n        </tr>\n        <tr>\n            <th>dome</th>\n            <td>s3</td>\n            <td>64, 256</td>\n            <td>98.9385</td>\n        </tr>\n        <tr>\n            <th>dome</th>\n            <td>s4</td>\n            <td>256</td>\n            <td>99.2370</td>\n        </tr>\n    </table>\n</div>\n</div><div class=\"bibliography\"><h2>References</h2><p>LIVVkit is an open source project licensed under a BSD 3-clause License. We ask that you please acknowledge LIVVkit in any work it is used or supports. In any corresponding published work, please cite: </p><dl><dt>1</dt> <dd>K.&nbsp;J. Evans, J.&nbsp;H. Kennedy, D.&nbsp;Lu, M.&nbsp;M. Forrester, S.&nbsp;Price, J.&nbsp;Fyke, A.&nbsp;R. Bennett, M.&nbsp;J. Hoffman, I.&nbsp;Tezaur, C.&nbsp;S. Zender, and M.&nbsp;Vizca\\'<span class=\"bibtex-protected\">\u0131</span>no. Livvkit 2.1: automated and extensible ice sheet model validation. <em>Geoscientific Model Development</em>, 12(3):1067\u20131086, 2019. URL: <a href=\"https://www.geosci-model-dev.net/12/1067/2019/\">https://www.geosci-model-dev.net/12/1067/2019/</a>, <a href=\"https://doi.org/10.5194/gmd-12-1067-2019\">doi:10.5194/gmd-12-1067-2019</a>.</dd> <dt>2</dt> <dd>Joseph&nbsp;H. Kennedy, Andrew&nbsp;R. Bennett, Katherine&nbsp;J. Evans, Stephen Price, Matthew Hoffman, William&nbsp;H. Lipscomb, Jeremy Fyke, Lauren Vargo, Adrianna Boghozian, Matthew Norman, and Patrick&nbsp;H. Worley. Livvkit: an extensible, python-based, land ice verification and validation toolkit for ice sheet models. <em>Journal of Advances in Modeling Earth Systems</em>, 9(2):854\u2013869, 2017. <a href=\"https://doi.org/10.1002/2017MS000916\">doi:10.1002/2017MS000916</a>.</dd> </dl></div>",
+        "__module__": "livvkit.elements.elements",
+        "_html_template": "page.html",
+        "_latex_template": "page.tex"
     }
 }

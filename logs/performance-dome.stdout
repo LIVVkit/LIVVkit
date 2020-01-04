@@ -1,0 +1,25 @@
+    dome s0
+    -------------------
+    Proc. Counts : 1, 2, 4, 8
+    Mean Time Diff (% of benchmark) : 96.9962
+
+    dome s1
+    -------------------
+    Proc. Counts : 1, 4
+    Mean Time Diff (% of benchmark) : 97.2358
+
+    dome s2
+    -------------------
+    Proc. Counts : 1, 16, 256
+    Mean Time Diff (% of benchmark) : 99.0848
+
+    dome s3
+    -------------------
+    Proc. Counts : 64, 256
+    Mean Time Diff (% of benchmark) : 98.9385
+
+    dome s4
+    -------------------
+    Proc. Counts : 256
+    Mean Time Diff (% of benchmark) : 99.2370
+

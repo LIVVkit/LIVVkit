@@ -1,0 +1,30 @@
+    dome s0
+    --------------------
+     Bit for bit matches   : 0 of 4
+     Configuration matches : 4 of 4
+     Std. Out files parsed : 4
+
+    dome s1
+    --------------------
+     Bit for bit matches   : 0 of 2
+     Configuration matches : 2 of 2
+     Std. Out files parsed : 2
+
+    dome s2
+    --------------------
+     Bit for bit matches   : 0 of 3
+     Configuration matches : 3 of 3
+     Std. Out files parsed : 3
+
+    dome s3
+    --------------------
+     Bit for bit matches   : 0 of 2
+     Configuration matches : 2 of 2
+     Std. Out files parsed : 2
+
+    dome s4
+    --------------------
+     Bit for bit matches   : 0 of 1
+     Configuration matches : 1 of 1
+     Std. Out files parsed : 1
+

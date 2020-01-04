@@ -1,238 +1,178 @@
 {
-    "Type": "Page",
-    "Title": "shelf-circular",
-    "Description": "An idealized 1000 meter circular ice shelf, grounded at a single grid point in its center. This test case confirms a working \"floating ice\" boundary condition in 2D (i.e., in map-plane view) and also confirms radial symmetry.",
-    "Data": {
-        "Tabs": [
+    "Page": {
+        "elements": [
             {
-                "Type": "Tab",
-                "Title": "s0",
-                "Sections": [
-                    {
-                        "Type": "Section",
-                        "Title": "p1",
-                        "Elements": [
+                "Tabs": {
+                    "elements_dict": {
+                        "s0": [
                             {
-                                "Type": "Bit for Bit",
-                                "Title": "Bit for Bit",
-                                "Headers": [
-                                    "Max Error",
-                                    "Index of Max Error",
-                                    "RMS Error",
-                                    "Plot"
-                                ],
-                                "Data": {
-                                    "velnorm": {
-                                        "Max Error": 0,
-                                        "RMS Error": 0,
-                                        "Index of Max Error": "N/A",
-                                        "Plot": "N/A"
-                                    },
-                                    "thk": {
-                                        "Max Error": 0,
-                                        "RMS Error": 0,
-                                        "Index of Max Error": "N/A",
-                                        "Plot": "N/A"
-                                    }
-                                }
-                            },
-                            {
-                                "Type": "Diff",
-                                "Title": "Configuration Comparison",
-                                "Data": {
-                                    "CF input": {
-                                        "time": [
-                                            true,
-                                            "1",
-                                            "1"
-                                        ],
-                                        "name": [
-                                            true,
-                                            "shelf-circular.0041.p001.nc",
-                                            "shelf-circular.0041.p001.nc"
-                                        ]
-                                    },
-                                    "options": {
-                                        "marine_margin": [
-                                            true,
-                                            "0",
-                                            "0"
-                                        ],
-                                        "evolution": [
-                                            true,
-                                            "3",
-                                            "3"
-                                        ],
-                                        "flow_law": [
-                                            true,
-                                            "0",
-                                            "0"
-                                        ],
-                                        "temperature": [
-                                            true,
-                                            "0",
-                                            "0"
-                                        ],
-                                        "dycore": [
-                                            true,
-                                            "2",
-                                            "2"
-                                        ]
-                                    },
-                                    "parameters": {
-                                        "default_flwa": [
-                                            true,
-                                            "5.7e-18",
-                                            "5.7e-18"
-                                        ]
-                                    },
-                                    "time": {
-                                        "jdiag": [
-                                            true,
-                                            "10",
-                                            "10"
-                                        ],
-                                        "dt": [
-                                            true,
-                                            "1.0",
-                                            "1.0"
-                                        ],
-                                        "tstart": [
-                                            true,
-                                            "0.",
-                                            "0."
-                                        ],
-                                        "idiag": [
-                                            true,
-                                            "10",
-                                            "10"
-                                        ],
-                                        "tend": [
-                                            true,
-                                            "0.",
-                                            "0."
-                                        ],
-                                        "dt_diag": [
-                                            true,
-                                            "1.0",
-                                            "1.0"
-                                        ]
-                                    },
-                                    "grid": {
-                                        "nsn": [
-                                            true,
-                                            "41",
-                                            "41"
-                                        ],
-                                        "dns": [
-                                            true,
-                                            "1250.0",
-                                            "1250.0"
-                                        ],
-                                        "dew": [
-                                            true,
-                                            "1250.0",
-                                            "1250.0"
-                                        ],
-                                        "upn": [
-                                            true,
-                                            "5",
-                                            "5"
-                                        ],
-                                        "ewn": [
-                                            true,
-                                            "41",
-                                            "41"
-                                        ]
-                                    },
-                                    "CF default": {
-                                        "comment": [
-                                            true,
-                                            "created by runShelfCircular.py",
-                                            "created by runShelfCircular.py"
-                                        ],
-                                        "title": [
-                                            true,
-                                            "Circular Shelf Experiment (first-order dynamics)",
-                                            "Circular Shelf Experiment (first-order dynamics)"
-                                        ]
-                                    },
-                                    "CF output": {
-                                        "frequency": [
-                                            true,
-                                            "1",
-                                            "1"
-                                        ],
-                                        "variables": [
-                                            true,
-                                            "thk uvel vvel velnorm flwa topg lsurf",
-                                            "thk uvel vvel velnorm flwa topg lsurf"
-                                        ],
-                                        "name": [
-                                            true,
-                                            "shelf-circular.0041.p001.out.nc",
-                                            "shelf-circular.0041.p001.out.nc"
-                                        ],
-                                        "xtype": [
-                                            true,
-                                            "double",
-                                            "double"
-                                        ]
-                                    },
-                                    "ho_options": {
-                                        "which_ho_sparse": [
-                                            true,
-                                            "3",
-                                            "3"
-                                        ],
-                                        "which_ho_approx": [
-                                            true,
-                                            "2",
-                                            "2"
-                                        ],
-                                        "which_ho_efvs": [
-                                            true,
-                                            "2",
-                                            "2"
-                                        ],
-                                        "which_ho_babc": [
-                                            true,
-                                            "5",
-                                            "5"
-                                        ],
-                                        "which_ho_nonlinear": [
-                                            true,
-                                            "0",
-                                            "0"
-                                        ],
-                                        "which_ho_precond": [
-                                            true,
-                                            "2",
-                                            "2"
-                                        ]
-                                    }
-                                }
-                            },
-                            {
-                                "Type": "Table",
-                                "Title": "Output Log",
-                                "Headers": [
-                                    "Converged Iterations",
-                                    "Avg. Iterations to Converge",
-                                    "Processor Count",
-                                    "Dycore Type"
-                                ],
-                                "Data": {
-                                    "Dycore Type": "Glissade",
-                                    "Processor Count": 1,
-                                    "Converged Iterations": 1,
-                                    "Avg. Iterations to Converge": 48.0
+                                "Section": {
+                                    "elements": [
+                                        {
+                                            "BitForBit": {
+                                                "elements": [
+                                                    {
+                                                        "B4BImage": {
+                                                            "title": "",
+                                                            "desc": "velnorm is bit-for-bit",
+                                                            "path": "../imgs",
+                                                            "name": "b4b.png",
+                                                            "group": "b4b",
+                                                            "height": 50,
+                                                            "__module__": "livvkit.elements.elements",
+                                                            "_html_template": "image.html",
+                                                            "_latex_template": "image.tex"
+                                                        }
+                                                    },
+                                                    {
+                                                        "B4BImage": {
+                                                            "title": "",
+                                                            "desc": "thk is bit-for-bit",
+                                                            "path": "../imgs",
+                                                            "name": "b4b.png",
+                                                            "group": "b4b",
+                                                            "height": 50,
+                                                            "__module__": "livvkit.elements.elements",
+                                                            "_html_template": "image.html",
+                                                            "_latex_template": "image.tex"
+                                                        }
+                                                    }
+                                                ],
+                                                "title": "Bit for Bit",
+                                                "data": {
+                                                    "Variable": [
+                                                        "velnorm",
+                                                        "thk"
+                                                    ],
+                                                    "Max Error": [
+                                                        0,
+                                                        0
+                                                    ],
+                                                    "Index of Max Error": [
+                                                        "N/A",
+                                                        "N/A"
+                                                    ],
+                                                    "RMS Error": [
+                                                        0,
+                                                        0
+                                                    ]
+                                                },
+                                                "rows": 2,
+                                                "__module__": "livvkit.elements.elements",
+                                                "_html_template": "bit4bit.html",
+                                                "_latex_template": "bit4bit.tex"
+                                            }
+                                        },
+                                        {
+                                            "FileDiff": {
+                                                "title": "Configuration Comparison",
+                                                "from_file": "tests/_data/cism-2.0.6-tests/titan-gnu/CISM_glissade/shelf/shelf-circular/s0/p1/shelf-circular.0041.p001.config",
+                                                "to_file": "tests/_data/cism-2.0.0-tests/titan-gnu/CISM_glissade/shelf/shelf-circular/s0/p1/shelf-circular.0041.p001.config",
+                                                "diff": [
+                                                    "[SHELF-TEST]",
+                                                    "",
+                                                    "[grid]",
+                                                    "upn = 5",
+                                                    "ewn = 41",
+                                                    "nsn = 41",
+                                                    "dew = 1250.0",
+                                                    "dns = 1250.0",
+                                                    "",
+                                                    "[time]",
+                                                    "tstart = 0.",
+                                                    "tend = 0.",
+                                                    "dt = 1.0",
+                                                    "dt_diag = 1.0",
+                                                    "idiag = 10",
+                                                    "jdiag = 10",
+                                                    "",
+                                                    "[options]",
+                                                    "dycore = 2              # 1 = glam, 2 = glissade",
+                                                    "flow_law = 0            # 0 = isothermal, 2 = temperature dependent",
+                                                    "evolution = 3           # 3 = inc. remapping, 4 = FO upwind",
+                                                    "temperature = 0         # 0 = set column to surf. air temp, 1 = prognostic, 2 = hold at init. values",
+                                                    "marine_margin = 0       # 0 = do nothing (also see option \"whichmarn\" in glide_types.F90)",
+                                                    "",
+                                                    "[ho_options]",
+                                                    "which_ho_babc = 5       # 5 = take basal traction param value from .nc input",
+                                                    "which_ho_efvs = 2       # 2 = nonlinear eff. visc. w/ n=3",
+                                                    "which_ho_sparse = 3     # 1 = SLAP GMRES, 3 = glissade parallel PCG, 4 = Trilinos for linear solver",
+                                                    "which_ho_nonlinear = 0  # 0 = Picard, 1=JFNK",
+                                                    "which_ho_approx = 2     # 1 = SSA, 2 = Blatter-Pattyn, 3 = L1L2",
+                                                    "which_ho_precond = 2    # 0 = none, 1 = diagonal, 2 = SIA based (ONLY use for which_ho_approx = 2)",
+                                                    "",
+                                                    "[parameters]",
+                                                    "default_flwa = 5.7e-18",
+                                                    "",
+                                                    "[CF default]",
+                                                    "comment = created by runShelfCircular.py",
+                                                    "title = Circular Shelf Experiment (first-order dynamics)",
+                                                    "",
+                                                    "[CF input]",
+                                                    "name = shelf-circular.0041.p001.nc",
+                                                    "time = 1",
+                                                    "",
+                                                    "[CF output]",
+                                                    "variables = thk uvel vvel velnorm flwa topg lsurf",
+                                                    "frequency = 1",
+                                                    "name = shelf-circular.0041.p001.out.nc",
+                                                    "xtype = double",
+                                                    ""
+                                                ],
+                                                "diff_status": false,
+                                                "__module__": "livvkit.elements.elements",
+                                                "_html_template": "diff.html",
+                                                "_latex_template": "diff.tex"
+                                            }
+                                        },
+                                        {
+                                            "Table": {
+                                                "title": "Output Log",
+                                                "data": {
+                                                    "Dycore Type": [
+                                                        "Glissade"
+                                                    ],
+                                                    "Processor Count": [
+                                                        1
+                                                    ],
+                                                    "Converged Iterations": [
+                                                        1
+                                                    ],
+                                                    "Avg. Iterations to Converge": [
+                                                        48.0
+                                                    ]
+                                                },
+                                                "index": null,
+                                                "rows": 1,
+                                                "__module__": "livvkit.elements.elements",
+                                                "_html_template": "table.html",
+                                                "_latex_template": "table.tex"
+                                            }
+                                        }
+                                    ],
+                                    "title": "p1",
+                                    "__module__": "livvkit.elements.elements",
+                                    "_html_template": "section.html",
+                                    "_latex_template": "section.tex"
                                 }
                             }
                         ]
-                    }
-                ]
+                    },
+                    "__module__": "livvkit.elements.elements",
+                    "_html_template": "tabs.html",
+                    "_latex_template": "tabs.tex"
+                }
             }
-        ]
+        ],
+        "title": "shelf-circular",
+        "description": "An idealized 1000 meter circular ice shelf, grounded at a single grid point in its center. This test case confirms a working \"floating ice\" boundary condition in 2D (i.e., in map-plane view) and also confirms radial symmetry.",
+        "_ref_list": [
+            "/home/jhkennedy/miniconda3/envs/livv-3.0.0-test/lib/python3.7/site-packages/livvkit/data/Evans2019.bib",
+            "/home/jhkennedy/miniconda3/envs/livv-3.0.0-test/lib/python3.7/site-packages/livvkit/data/Kennedy2017.bib"
+        ],
+        "Data": "<div id=\"shelf-circular\">\n    <h2>shelf-circular</h2>\n    <p>An idealized 1000 meter circular ice shelf, grounded at a single grid point in its center. This test case confirms a working \"floating ice\" boundary condition in 2D (i.e., in map-plane view) and also confirms radial symmetry.</p>\n    <div id=\"tabs\">\n    <ul>\n        <li><a href=\"#s0\">s0</a></li>\n    </ul>\n    <div id=\"s0\">\n        <div class=\"section\">\n    <h2>p1</h2>\n    <div class=\"bitForBit\">\n    <h3>Bit for Bit</h3>\n    <table>\n        <tr>\n            <th>Variable</th>\n            <th>Max Error</th>\n            <th>Index of Max Error</th>\n            <th>RMS Error</th>\n            <th> Plot </th>\n        </tr>\n        <tr>\n            <td>velnorm</td>\n            <td>0.00000e+00</td>\n            <td>N/A</td>\n            <td>0.00000e+00</td>\n            <td>\n                <div>\n    <a href=\"../imgs/b4b.png\"\n       data-lightbox=\"b4b\"\n       data-title=\"velnorm is bit-for-bit\"\n    >\n        <img class=\"thumbnail caption\"\n             data-caption=\"\"\n             alt=\"\"\n             src=\"../imgs/b4b.png\"\n             style=\"height: 50px; overflow: hidden; position: relative;\"\n        >\n    </a>\n</div>\n            </td>\n        </tr>\n        <tr>\n            <td>thk</td>\n            <td>0.00000e+00</td>\n            <td>N/A</td>\n            <td>0.00000e+00</td>\n            <td>\n                <div>\n    <a href=\"../imgs/b4b.png\"\n       data-lightbox=\"b4b\"\n       data-title=\"thk is bit-for-bit\"\n    >\n        <img class=\"thumbnail caption\"\n             data-caption=\"\"\n             alt=\"\"\n             src=\"../imgs/b4b.png\"\n             style=\"height: 50px; overflow: hidden; position: relative;\"\n        >\n    </a>\n</div>\n            </td>\n        </tr>\n    </table>\n</div><h3>Configuration Comparison</h3>\n<div class=\"diff\">\n    <p>[SHELF-TEST]</p>\n    <p></p>\n    <p>[grid]</p>\n    <p>upn = 5</p>\n    <p>ewn = 41</p>\n    <p>nsn = 41</p>\n    <p>dew = 1250.0</p>\n    <p>dns = 1250.0</p>\n    <p></p>\n    <p>[time]</p>\n    <p>tstart = 0.</p>\n    <p>tend = 0.</p>\n    <p>dt = 1.0</p>\n    <p>dt_diag = 1.0</p>\n    <p>idiag = 10</p>\n    <p>jdiag = 10</p>\n    <p></p>\n    <p>[options]</p>\n    <p>dycore = 2              # 1 = glam, 2 = glissade</p>\n    <p>flow_law = 0            # 0 = isothermal, 2 = temperature dependent</p>\n    <p>evolution = 3           # 3 = inc. remapping, 4 = FO upwind</p>\n    <p>temperature = 0         # 0 = set column to surf. air temp, 1 = prognostic, 2 = hold at init. values</p>\n    <p>marine_margin = 0       # 0 = do nothing (also see option \"whichmarn\" in glide_types.F90)</p>\n    <p></p>\n    <p>[ho_options]</p>\n    <p>which_ho_babc = 5       # 5 = take basal traction param value from .nc input</p>\n    <p>which_ho_efvs = 2       # 2 = nonlinear eff. visc. w/ n=3</p>\n    <p>which_ho_sparse = 3     # 1 = SLAP GMRES, 3 = glissade parallel PCG, 4 = Trilinos for linear solver</p>\n    <p>which_ho_nonlinear = 0  # 0 = Picard, 1=JFNK</p>\n    <p>which_ho_approx = 2     # 1 = SSA, 2 = Blatter-Pattyn, 3 = L1L2</p>\n    <p>which_ho_precond = 2    # 0 = none, 1 = diagonal, 2 = SIA based (ONLY use for which_ho_approx = 2)</p>\n    <p></p>\n    <p>[parameters]</p>\n    <p>default_flwa = 5.7e-18</p>\n    <p></p>\n    <p>[CF default]</p>\n    <p>comment = created by runShelfCircular.py</p>\n    <p>title = Circular Shelf Experiment (first-order dynamics)</p>\n    <p></p>\n    <p>[CF input]</p>\n    <p>name = shelf-circular.0041.p001.nc</p>\n    <p>time = 1</p>\n    <p></p>\n    <p>[CF output]</p>\n    <p>variables = thk uvel vvel velnorm flwa topg lsurf</p>\n    <p>frequency = 1</p>\n    <p>name = shelf-circular.0041.p001.out.nc</p>\n    <p>xtype = double</p>\n    <p></p>\n</div><div class=\"table\">\n    <h3>Output Log</h3>\n    <table>\n        <tr>\n            <th>Dycore Type</th>\n            <th>Processor Count</th>\n            <th>Converged Iterations</th>\n            <th>Avg. Iterations to Converge</th>\n        </tr>\n        <tr>\n            <td>Glissade</td>\n            <td>1</td>\n            <td>1</td>\n            <td>48.0</td>\n        </tr>\n    </table>\n</div>\n</div>\n    </div>\n</div>\n</div><div class=\"bibliography\"><h2>References</h2><p>LIVVkit is an open source project licensed under a BSD 3-clause License. We ask that you please acknowledge LIVVkit in any work it is used or supports. In any corresponding published work, please cite: </p><dl><dt>1</dt> <dd>K.&nbsp;J. Evans, J.&nbsp;H. Kennedy, D.&nbsp;Lu, M.&nbsp;M. Forrester, S.&nbsp;Price, J.&nbsp;Fyke, A.&nbsp;R. Bennett, M.&nbsp;J. Hoffman, I.&nbsp;Tezaur, C.&nbsp;S. Zender, and M.&nbsp;Vizca\\'<span class=\"bibtex-protected\">\u0131</span>no. Livvkit 2.1: automated and extensible ice sheet model validation. <em>Geoscientific Model Development</em>, 12(3):1067\u20131086, 2019. URL: <a href=\"https://www.geosci-model-dev.net/12/1067/2019/\">https://www.geosci-model-dev.net/12/1067/2019/</a>, <a href=\"https://doi.org/10.5194/gmd-12-1067-2019\">doi:10.5194/gmd-12-1067-2019</a>.</dd> <dt>2</dt> <dd>Joseph&nbsp;H. Kennedy, Andrew&nbsp;R. Bennett, Katherine&nbsp;J. Evans, Stephen Price, Matthew Hoffman, William&nbsp;H. Lipscomb, Jeremy Fyke, Lauren Vargo, Adrianna Boghozian, Matthew Norman, and Patrick&nbsp;H. Worley. Livvkit: an extensible, python-based, land ice verification and validation toolkit for ice sheet models. <em>Journal of Advances in Modeling Earth Systems</em>, 9(2):854\u2013869, 2017. <a href=\"https://doi.org/10.1002/2017MS000916\">doi:10.1002/2017MS000916</a>.</dd> </dl></div>",
+        "__module__": "livvkit.elements.elements",
+        "_html_template": "page.html",
+        "_latex_template": "page.tex"
     }
 }

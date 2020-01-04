@@ -1,27 +1,52 @@
 {
-    "Type": "Page",
-    "Title": "ismip-hom-c",
-    "Description": "The Ice Sheet Model Intercomparison Project for Higher-Order Models (ISMIP-HOM) prescribes a set of experiments meant to test the implementation of higher-order physics. The results of this benchmark experiment was published in The Cryosphere and can be found <a target=_blank href=\"http://dx.doi.org/10.5194/tc-2-95-2008\">here.</a> <br> <br>Experiment C (shown here), simulates a parallel-sided slab of ice lying on a sloped bed that has a sinusoidally oscillating basal friction coefficient. The experimental domain is a square of side length L, with periodic boundary conditions applied in the horizontal. The ice thickness is 1000 m, the slope is 0.1 &deg; (maximum in x, zero in y), the basal friction coefficient is perscribed by &#946;(x,y)= 1000 + 1000 sin(&#969;x)*sin(&#969;y), and the frequency of the oscillations is &#969; = 2 &#960;/L.",
-    "Data": {
-        "Elements": [
+    "Page": {
+        "elements": [
             {
-                "Type": "Gallery",
-                "Title": "Numerics Plots",
-                "Data": [
-                    {
-                        "Type": "Image",
-                        "Title": "Fig. 8: 20 km",
-                        "Desciption": "",
-                        "Plot File": "ismip-hom-c_Fig8_020.png"
-                    },
-                    {
-                        "Type": "Image",
-                        "Title": "Fig. 8: 80 km",
-                        "Desciption": "",
-                        "Plot File": "ismip-hom-c_Fig8_080.png"
-                    }
-                ]
+                "Gallery": {
+                    "elements": [
+                        {
+                            "Image": {
+                                "title": "Fig. 8: 20 km",
+                                "desc": "",
+                                "path": "imgs",
+                                "name": "ismip-hom-c_Fig8_020.png",
+                                "group": null,
+                                "height": null,
+                                "__module__": "livvkit.elements.elements",
+                                "_html_template": "image.html",
+                                "_latex_template": "image.tex"
+                            }
+                        },
+                        {
+                            "Image": {
+                                "title": "Fig. 8: 80 km",
+                                "desc": "",
+                                "path": "imgs",
+                                "name": "ismip-hom-c_Fig8_080.png",
+                                "group": null,
+                                "height": null,
+                                "__module__": "livvkit.elements.elements",
+                                "_html_template": "image.html",
+                                "_latex_template": "image.tex"
+                            }
+                        }
+                    ],
+                    "title": "Numerics Plots",
+                    "__module__": "livvkit.elements.elements",
+                    "_html_template": "gallery.html",
+                    "_latex_template": "gallery.tex"
+                }
             }
-        ]
+        ],
+        "title": "ismip-hom-c",
+        "description": "The Ice Sheet Model Intercomparison Project for Higher-Order Models (ISMIP-HOM) prescribes a set of experiments meant to test the implementation of higher-order physics. The results of this benchmark experiment was published in The Cryosphere and can be found <a target=_blank href=\"http://dx.doi.org/10.5194/tc-2-95-2008\">here.</a> <br> <br>Experiment C (shown here), simulates a parallel-sided slab of ice lying on a sloped bed that has a sinusoidally oscillating basal friction coefficient. The experimental domain is a square of side length L, with periodic boundary conditions applied in the horizontal. The ice thickness is 1000 m, the slope is 0.1 &deg; (maximum in x, zero in y), the basal friction coefficient is perscribed by &#946;(x,y)= 1000 + 1000 sin(&#969;x)*sin(&#969;y), and the frequency of the oscillations is &#969; = 2 &#960;/L.",
+        "_ref_list": [
+            "/home/jhkennedy/miniconda3/envs/livv-3.0.0-test/lib/python3.7/site-packages/livvkit/data/Evans2019.bib",
+            "/home/jhkennedy/miniconda3/envs/livv-3.0.0-test/lib/python3.7/site-packages/livvkit/data/Kennedy2017.bib"
+        ],
+        "Data": "<div id=\"ismip-hom-c\">\n    <h2>ismip-hom-c</h2>\n    <p>The Ice Sheet Model Intercomparison Project for Higher-Order Models (ISMIP-HOM) prescribes a set of experiments meant to test the implementation of higher-order physics. The results of this benchmark experiment was published in The Cryosphere and can be found <a target=_blank href=\"http://dx.doi.org/10.5194/tc-2-95-2008\">here.</a> <br> <br>Experiment C (shown here), simulates a parallel-sided slab of ice lying on a sloped bed that has a sinusoidally oscillating basal friction coefficient. The experimental domain is a square of side length L, with periodic boundary conditions applied in the horizontal. The ice thickness is 1000 m, the slope is 0.1 &deg; (maximum in x, zero in y), the basal friction coefficient is perscribed by &#946;(x,y)= 1000 + 1000 sin(&#969;x)*sin(&#969;y), and the frequency of the oscillations is &#969; = 2 &#960;/L.</p>\n    <div class=\"gallery\">\n    <h3>Numerics Plots</h3>\n    <div>\n    <a href=\"imgs/ismip-hom-c_Fig8_020.png\"\n       data-lightbox=\"Fig. 8: 20 km\"\n       data-title=\"\"\n    >\n        <img class=\"thumbnail caption\"\n             data-caption=\"Fig. 8: 20 km\"\n             alt=\"Fig. 8: 20 km\"\n             src=\"imgs/ismip-hom-c_Fig8_020.png\"\n             style=\"height: 200px; overflow: hidden; position: relative;\"\n        >\n    </a>\n</div>\n    <div>\n    <a href=\"imgs/ismip-hom-c_Fig8_080.png\"\n       data-lightbox=\"Fig. 8: 80 km\"\n       data-title=\"\"\n    >\n        <img class=\"thumbnail caption\"\n             data-caption=\"Fig. 8: 80 km\"\n             alt=\"Fig. 8: 80 km\"\n             src=\"imgs/ismip-hom-c_Fig8_080.png\"\n             style=\"height: 200px; overflow: hidden; position: relative;\"\n        >\n    </a>\n</div>\n    \n</div>\n<div style=\"clear:both\"></div>\n</div><div class=\"bibliography\"><h2>References</h2><p>LIVVkit is an open source project licensed under a BSD 3-clause License. We ask that you please acknowledge LIVVkit in any work it is used or supports. In any corresponding published work, please cite: </p><dl><dt>1</dt> <dd>K.&nbsp;J. Evans, J.&nbsp;H. Kennedy, D.&nbsp;Lu, M.&nbsp;M. Forrester, S.&nbsp;Price, J.&nbsp;Fyke, A.&nbsp;R. Bennett, M.&nbsp;J. Hoffman, I.&nbsp;Tezaur, C.&nbsp;S. Zender, and M.&nbsp;Vizca\\'<span class=\"bibtex-protected\">\u0131</span>no. Livvkit 2.1: automated and extensible ice sheet model validation. <em>Geoscientific Model Development</em>, 12(3):1067\u20131086, 2019. URL: <a href=\"https://www.geosci-model-dev.net/12/1067/2019/\">https://www.geosci-model-dev.net/12/1067/2019/</a>, <a href=\"https://doi.org/10.5194/gmd-12-1067-2019\">doi:10.5194/gmd-12-1067-2019</a>.</dd> <dt>2</dt> <dd>Joseph&nbsp;H. Kennedy, Andrew&nbsp;R. Bennett, Katherine&nbsp;J. Evans, Stephen Price, Matthew Hoffman, William&nbsp;H. Lipscomb, Jeremy Fyke, Lauren Vargo, Adrianna Boghozian, Matthew Norman, and Patrick&nbsp;H. Worley. Livvkit: an extensible, python-based, land ice verification and validation toolkit for ice sheet models. <em>Journal of Advances in Modeling Earth Systems</em>, 9(2):854\u2013869, 2017. <a href=\"https://doi.org/10.1002/2017MS000916\">doi:10.1002/2017MS000916</a>.</dd> </dl></div>",
+        "__module__": "livvkit.elements.elements",
+        "_html_template": "page.html",
+        "_latex_template": "page.tex"
     }
 }

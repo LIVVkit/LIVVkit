@@ -1,0 +1,12 @@
+    ismip-hom-c s0-p1-z20 Velocity
+    ------------------------------
+    Bench mean % error       :  3.03%
+    Coefficient of variation :  5.71%
+    Test mean % error        :  3.03%
+
+    ismip-hom-c s0-p1-z80 Velocity
+    ------------------------------
+    Bench mean % error       :  9.10%
+    Coefficient of variation :  6.54%
+    Test mean % error        :  9.10%
+

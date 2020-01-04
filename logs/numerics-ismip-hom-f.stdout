@@ -1,0 +1,12 @@
+    ismip-hom-f s0-p1-z0 Surface
+    ----------------------------
+    Bench mean % error       : -0.06%
+    Coefficient of variation :  0.17%
+    Test mean % error        : -0.06%
+
+    ismip-hom-f s0-p1-z0 Velocity
+    -----------------------------
+    Bench mean % error       : -0.42%
+    Coefficient of variation :  2.64%
+    Test mean % error        : -0.42%
+

@@ -8,10 +8,7 @@ html {
 
 body {
 	height: 100%;
-	margin-top: 0px;
-	margin-right: 0px;
-	margin-bottom: 0px;
-	margin-left: 0px;
+    margin: 0;
     min-width: 1125px;
     background: url("../imgs/background.jpg") no-repeat center center fixed;
 }
@@ -54,9 +51,8 @@ a {
 }
 
 #header-icon {
-    float: left; 
-    padding: 10px; 
-    padding-left: 15px;
+    float: left;
+    padding: 10px 10px 10px 15px;
     width: 40px; 
 }
 
@@ -94,7 +90,7 @@ a {
 #wrapper {
     margin: auto;
     width: 80%;
-    background-color: white;
+    background-color: #ffffff;
     overflow: auto;
 }
 
@@ -111,7 +107,7 @@ a {
 }
 
 #content div {
-    background-color: white;
+    background-color: #ffffff;
 }
 
 /******************************************************************************
@@ -149,7 +145,7 @@ td {
 .error {}
 
 .error p {
-    color: red;
+    color: #ff0000;
 }
 
 .tabs {
@@ -163,17 +159,23 @@ td {
 
 .diff p {
     line-height: 1.05em;
-    margin: 0px;
+    margin: 0;
     padding-left:10%;
     font-family: monospace;
 }
 
 .diff p.old {
-    background-color: #ffcccc;
+    background-color: #ffeef0;
+    color: #b31d28;
 }
 
 .diff p.new {
-    background-color: #ccffcc;
+    background-color: #f0fff4;
+    color: #22863a;
+}
+
+.diff p.range {
+    color: #6f42c1;
 }
 
 .bitForBit {}
@@ -184,8 +186,8 @@ td {
 
 .gallery p {
     text-align: center;
-    padding: none;
-    margin: none;
+    padding: 0;
+    margin: 0;
 }
 
 .gallery div {
@@ -199,3 +201,12 @@ td {
 }
 
 .summary {}
+
+.bitForBit figure {
+    margin-block-start: 0;
+    margin-block-end: 0;
+    margin-inline-start: 0;
+    margin-inline-end: 0;
+    margin-left: auto;
+    margin-right: auto;
+}
