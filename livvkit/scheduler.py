@@ -101,13 +101,13 @@ def run_quiet(run_type, module, config, group=True):
             {k: pd.DataFrame.from_dict(v, orient='index') for k, v, in test_summaries.items()},
             names=['case', 'scale']
         ).reset_index()
-        summary = elements.Table(meta['Title'], df.set_index('case'))
+        summary = [elements.Table(meta['Title'], df.set_index('case'))]
     else:
         summary = []
         for ii, t in enumerate(tests):
             meta = module.populate_metadata(t, config[t])
             df = pd.DataFrame.from_dict(test_summaries[t], orient='index')
-            summary.append(elements.Table(meta['title'], df))
+            summary.append(elements.Table(meta['Title'], df))
 
     return summary
 
