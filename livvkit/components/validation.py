@@ -117,9 +117,11 @@ def run_suite(case, config):
     summary = _summarize_result(m, result)
     _print_summary(m, case, summary)
 
+
     functions.create_page_from_template("validation.html",
                                         os.path.join(livvkit.index_dir, "validation", case + ".html"))
-    functions.write_json(result, os.path.join(livvkit.output_dir, "validation"), case + ".json")
+    with open(os.path.join(livvkit.output_dir, "validation", case + ".json"), 'w') as f:
+        f.write(result._repr_json())
 
     return summary
 
@@ -140,7 +142,7 @@ def _summarize_result(module, result):
         summary = module.summarize_result(result)
     except (NotImplementedError, AttributeError):
         status = "Success"
-        if result["Type"] == "Error":
+        if isinstance(result, livvkit.elements.Error):
             status = "Failure"
         summary = {"": {"Outcome": status}}
     return summary
