@@ -26,6 +26,20 @@ a {
     color: #007acc;
 }
 
+.section h2{
+    background-color: #66c2ff;
+    color: white;
+    margin-top: 0;
+    padding: 0.5em;
+    text-align: center;
+}
+.section {
+    padding-top: 0;
+    border-left: 2px solid #66c2ff;
+    border-right: 2px solid #66c2ff;
+    margin-top: .5em;
+}
+
 /******************************************************************************
   Header/Footer Styling
 ******************************************************************************/
