@@ -101,7 +101,7 @@ def run_quiet(run_type, module, config, group=True):
             {k: pd.DataFrame.from_dict(v, orient='index') for k, v, in test_summaries.items()},
             names=['case', 'scale']
         ).reset_index()
-        summary = [elements.Table(meta['Title'], df.set_index('case'))]
+        summary = elements.Table(meta['Title'], df.set_index('case'))
     else:
         summary = []
         for ii, t in enumerate(tests):
@@ -110,8 +110,6 @@ def run_quiet(run_type, module, config, group=True):
             # Set the index so that navigation in HTML page links correctly
             if "Case" in df.keys():
                 df = df.set_index("Case")
-            else:
-                df = df.set_index(list(df.keys()[0]))
             summary.append(elements.Table(meta['Title'], df))
 
     return summary
