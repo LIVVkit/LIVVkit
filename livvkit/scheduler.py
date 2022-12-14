@@ -107,7 +107,10 @@ def run_quiet(run_type, module, config, group=True):
         for ii, t in enumerate(tests):
             meta = module.populate_metadata(t, config[t])
             df = pd.DataFrame.from_dict(test_summaries[t], orient='index')
-            summary.append(elements.Table(meta['title'], df))
+            # Set the index so that navigation in HTML page links correctly
+            if "Case" in df.keys():
+                df = df.set_index("Case")
+            summary.append(elements.Table(meta['Title'], df))
 
     return summary
 
