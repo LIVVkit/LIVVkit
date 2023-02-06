@@ -224,10 +224,13 @@ def bit_for_bit(model_path, bench_path, config, bundle=None):
             diff_data = m_vardata - b_vardata
 
             if diff_data.any():
-                try:
+                if hasattr(bundle, "plot_bit_for_bit"):
+                    # Try to use the bundle's plotting routine first, mainly for MALI
                     _plot = bundle.plot_bit_for_bit
-                except AttributeError:
+                else:
+                    # Default back to the local plotting routine
                     _plot = plot_bit_for_bit
+
                 table_data["Max Error"].append(np.amax(np.absolute(diff_data)))
                 table_data["Index of Max Error"].append(str(
                         np.unravel_index(np.absolute(diff_data).argmax(), diff_data.shape)))
@@ -257,6 +260,12 @@ def plot_bit_for_bit(case, var_name, model_data, bench_data, diff_data):
     plot_name = case + "_" + var_name + ".png"
     plot_path = os.path.join(os.path.join(livvkit.output_dir, "verification", "imgs"))
     functions.mkdir_p(plot_path)
+
+    # The new MALI bundle needs the full dataset to plot, so that gets passed now
+    # here we only need the variable data since no coords are plotted
+    model_data = model_data.variables[var_name]
+    bench_data = bench_data.variables[var_name]
+
     m_ndim = np.ndim(model_data)
     b_ndim = np.ndim(bench_data)
     if m_ndim != b_ndim:

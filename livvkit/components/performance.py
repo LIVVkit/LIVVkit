@@ -65,7 +65,6 @@ def run_suite(case, config):
                      if mcase in bench_subcases else None)
             mpath = os.path.join(model_dir, subcase, mcase.replace("-", os.path.sep))
             timing_data[subcase][mcase] = _analyze_case(mpath, bpath, config)
-
     # Create scaling and timing breakdown plots
     weak_data = weak_scaling(timing_data, config['scaling_var'],
                              config['weak_scaling_points'])
