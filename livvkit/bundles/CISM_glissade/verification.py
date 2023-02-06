@@ -38,7 +38,7 @@ from configparser import ConfigParser
 from livvkit import elements
 
 
-def parse_log(file_path):
+def parse_log(file_path, title=None):
     """
     Parse a CISM output log and extract some information.
 
@@ -92,7 +92,9 @@ def parse_log(file_path):
         "Converged Iterations": [len(converged_iters)],
         "Avg. Iterations to Converge": [np.mean(iters_to_converge)]
     }
-    return elements.Table("Output Log", data)
+    if title is None:
+        title = "Output Log"
+    return elements.Table(title, data)
 
 
 def parse_config(file_path):
