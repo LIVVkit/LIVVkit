@@ -100,8 +100,8 @@ def _analyze_case(test_dir, ref_dir, config):
                 bit_for_bit(test_out, ref_out, config, bundle),
                 elements.FileDiff("Configuration Comparison",
                                 ref_config, test_config),
-            bundle.parse_log(ref_log),
-            bundle.parse_log(model_log),
+            bundle.parse_log(ref_log, title="Ref Output Log"),
+            bundle.parse_log(model_log, title="Test Output Log"),
         ]
     except (FileNotFoundError, IndexError):
         el = []
