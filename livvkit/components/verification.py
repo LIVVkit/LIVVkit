@@ -57,7 +57,14 @@ def run_suite(case, config):
     for subcase in sorted(model_cases):
         bench_subcases = bench_cases[subcase] if subcase in bench_cases else []
         case_sections = []
-        for mcase in sorted(model_cases[subcase], key=functions.sort_processor_counts):
+        try:
+            _mcases = sorted(model_cases[subcase], key=functions.sort_processor_counts)
+        except ValueError:
+            _mcases = sorted(model_cases[subcase])
+
+        for mcase in _mcases:
+            if "setup_mesh" in mcase:
+                continue
             bpath = (os.path.join(bench_dir, subcase, mcase.replace("-", os.path.sep))
                      if mcase in bench_subcases else "")
             mpath = os.path.join(model_dir, subcase, mcase.replace("-", os.path.sep))
@@ -87,12 +94,17 @@ def _analyze_case(test_dir, ref_dir, config):
     test_config = functions.find_file(test_dir, "*"+config["config_ext"])
     ref_config = functions.find_file(ref_dir, "*"+config["config_ext"])
     model_log = functions.find_file(test_dir, "*"+config["logfile_ext"])
-    el = [
-            bit_for_bit(test_out, ref_out, config),
-            elements.FileDiff("Configuration Comparison",
-                              ref_config, test_config),
-            bundle.parse_log(model_log)
-         ]
+    ref_log = functions.find_file(ref_dir, "*"+config["logfile_ext"])
+    try:
+        el = [
+                bit_for_bit(test_out, ref_out, config, bundle),
+                elements.FileDiff("Configuration Comparison",
+                                ref_config, test_config),
+            bundle.parse_log(ref_log, title="Benchmark Output Log"),
+            bundle.parse_log(model_log, title="Model Output Log"),
+        ]
+    except (FileNotFoundError, IndexError):
+        el = []
     return el
 
 
@@ -169,7 +181,7 @@ def populate_metadata(case, config):
             "Headers": ["Bit for Bit", "Configurations", "Std. Out Files"]}
 
 
-def bit_for_bit(model_path, bench_path, config):
+def bit_for_bit(model_path, bench_path, config, bundle=None):
     """
     Checks whether the given files have bit for bit solution matches
     on the given variable list.
@@ -184,6 +196,7 @@ def bit_for_bit(model_path, bench_path, config):
         the results of the bit for bit testing
     """
     fname = model_path.split(os.path.sep)[-1]
+    title = "_".join(model_path.split(os.path.sep)[-5:])[:-3]
     # Error handling
     if not (os.path.isfile(bench_path) and os.path.isfile(model_path)):
         return elements.Error("Bit for Bit",
@@ -194,7 +207,8 @@ def bit_for_bit(model_path, bench_path, config):
     except (FileNotFoundError, PermissionError):
         return elements.Error("Bit for Bit",
                               "File named " + fname + " could not be read!")
-    if not (len(model_data.dimensions['time']) > 0 and len(bench_data.dimensions['time']) > 0):
+    _timevar = config.get("time_var", "time")
+    if not (len(model_data.dimensions[_timevar]) > 0 and len(bench_data.dimensions[_timevar]) > 0):
         return elements.Error("Bit for Bit",
                               "File named " + fname + " could not be read!")
 
@@ -210,12 +224,19 @@ def bit_for_bit(model_path, bench_path, config):
             diff_data = m_vardata - b_vardata
 
             if diff_data.any():
+                if hasattr(bundle, "plot_bit_for_bit"):
+                    # Try to use the bundle's plotting routine first, mainly for MALI
+                    _plot = bundle.plot_bit_for_bit
+                else:
+                    # Default back to the local plotting routine
+                    _plot = plot_bit_for_bit
+
                 table_data["Max Error"].append(np.amax(np.absolute(diff_data)))
                 table_data["Index of Max Error"].append(str(
                         np.unravel_index(np.absolute(diff_data).argmax(), diff_data.shape)))
                 table_data["RMS Error"].append(np.sqrt(np.sum(np.square(diff_data).flatten()) /
                                                diff_data.size))
-                plot_elements.append(plot_bit_for_bit(fname, var, m_vardata, b_vardata, diff_data))
+                plot_elements.append(_plot(title, var, model_data, bench_data, diff_data))
             else:
                 table_data["Max Error"].append(0)
                 table_data["Index of Max Error"].append("N/A")
@@ -239,6 +260,12 @@ def plot_bit_for_bit(case, var_name, model_data, bench_data, diff_data):
     plot_name = case + "_" + var_name + ".png"
     plot_path = os.path.join(os.path.join(livvkit.output_dir, "verification", "imgs"))
     functions.mkdir_p(plot_path)
+
+    # The new MALI bundle needs the full dataset to plot, so that gets passed now
+    # here we only need the variable data since no coords are plotted
+    model_data = model_data.variables[var_name]
+    bench_data = bench_data.variables[var_name]
+
     m_ndim = np.ndim(model_data)
     b_ndim = np.ndim(bench_data)
     if m_ndim != b_ndim:
