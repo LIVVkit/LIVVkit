@@ -164,7 +164,7 @@ def init(options):
         # For MPAS/COMPASS/MALI, the basename isn't MALI it's the generic "landice"
         # check if the bundle is in the available bundles, then see if an available bundle
         # is somewhere in the path, and use that bundle
-        if not livvkit.model_bundle in available_bundles:
+        if livvkit.model_bundle not in available_bundles:
             bundle_in_path = [_bundle in livvkit.model_dir for _bundle in available_bundles]
             if any(bundle_in_path):
                 # This uses the first found bundle in the path (Left-to-right) in the unlikely
