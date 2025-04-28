@@ -124,6 +124,7 @@ def main(cl_args=None):
             print("  " + webaddress)
         print("-------------------------------------------------------------------")
 
+    os.system(f"chmod -R 0755 {livvkit.output_dir}")
     if args.serve:
         httpd = socket.TCPServer(('', args.serve), server.SimpleHTTPRequestHandler)
 
