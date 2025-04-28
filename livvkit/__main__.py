@@ -107,9 +107,21 @@ def main(cl_args=None):
         result = elements.Page("Summary", "", summary_elements)
         with open(os.path.join(livvkit.output_dir, 'index.json'), 'w') as index_data:
             index_data.write(result._repr_json())
+
+        if "/global/cfs/projectdirs" in livvkit.output_dir:
+            webaddress = livvkit.output_dir.replace(
+                "/global/cfs/projectdirs",
+                "https://portal.nersc.gov/project"
+            ).replace("/www", "")
+        else:
+            webaddress = ""
+
         print("-------------------------------------------------------------------")
         print(" Done!  Results can be seen in a web browser at:")
         print("  " + os.path.join(livvkit.output_dir, 'index.html'))
+        if webaddress:
+            print("    or")
+            print("  " + webaddress)
         print("-------------------------------------------------------------------")
 
     if args.serve:
