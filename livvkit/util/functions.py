@@ -192,7 +192,8 @@ def setup_output(cssd=None, jsd=None, imgd=None):
             prev_time = f.readline().replace(":", "").replace("-", "").replace(" ", "_").rstrip()
             f.close()
         except IOError:
-            prev_time = "bkd_"+datetime.now().strftime("%Y%m%d_%H%M%S")
+            prev_time = datetime.now().strftime("%Y%m%d_%H%M%S")
+        prev_time = f"bkd_{prev_time}"
         print('   Backing up data to:')
         print('   ' + livvkit.index_dir + "_" + prev_time)
         print("-------------------------------------------------------------------")
