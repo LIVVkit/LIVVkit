@@ -36,14 +36,16 @@ import errno
 import shutil
 import fnmatch
 from datetime import datetime
+from pathlib import Path
 
 import json_tricks
-
+import ruamel.yaml
 import livvkit
 
 
 class TempSysPath(object):
     """Add a path to the PYTHONPATH temporarily"""
+
     def __init__(self, path):
         self.path = path
 
@@ -68,7 +70,7 @@ def mkdir_p(path):
 
 
 def merge_dicts(dict1, dict2):
-    """ Merge two dictionaries and return the result """
+    """Merge two dictionaries and return the result"""
     tmp = dict1.copy()
     tmp.update(dict2)
     return tmp
@@ -88,11 +90,13 @@ def parse_gptl(file_path, var_list):
     """
     timing_result = dict()
     if os.path.isfile(file_path):
-        with open(file_path, 'r') as f:
+        with open(file_path, "r") as f:
             for var in var_list:
                 for line in f:
                     if var in line:
-                        timing_result[var] = float(line.split()[4])/int(line.split()[2])
+                        timing_result[var] = float(line.split()[4]) / int(
+                            line.split()[2]
+                        )
                         break
     return timing_result
 
@@ -118,32 +122,34 @@ def find_file(search_dir, file_pattern):
 
 
 def sort_processor_counts(p_string):
-    """ Simple wrapper to help sort processor counts """
-    return int(p_string.split('-')[0][1:])
+    """Simple wrapper to help sort processor counts"""
+    return int(p_string.split("-")[0][1:])
 
 
 def sort_scale(s_string):
-    """ Simple wrapper to help sort scale sizes """
+    """Simple wrapper to help sort scale sizes"""
     return int(s_string[1:])
 
 
 def create_page_from_template(template_file, output_path):
-    """ Copy the correct html template file to the output directory """
+    """Copy the correct html template file to the output directory"""
     mkdir_p(os.path.dirname(output_path))
     shutil.copy(os.path.join(livvkit.resource_dir, template_file), output_path)
 
 
 def read_json(file_path):
-    """ Read in a json file and return a dictionary representation """
+    """Read in a json file and return a dictionary representation"""
     try:
-        with open(file_path, 'r') as f:
+        with open(file_path, "r") as f:
             config = json_tricks.load(f)
     except ValueError:
-        print('    '+'!'*58)
-        print('    Woops! Looks the JSON syntax is not valid in:')
-        print('        {}'.format(file_path))
-        print('    Note: commonly this is a result of having a trailing comma \n    in the file')
-        print('    '+'!'*58)
+        print("    " + "!" * 58)
+        print("    Woops! Looks the JSON syntax is not valid in:")
+        print("        {}".format(file_path))
+        print(
+            "    Note: commonly this is a result of having a trailing comma \n    in the file"
+        )
+        print("    " + "!" * 58)
         raise
 
     return config
@@ -162,12 +168,79 @@ def write_json(data, path, file_name):
         return
     elif not os.path.exists(path):
         mkdir_p(path)
-    with open(os.path.join(path, file_name), 'w') as f:
+    with open(os.path.join(path, file_name), "w") as f:
         json_tricks.dump(data, f, indent=4, primitives=True, allow_nan=True)
 
 
+class YAMLParser(ruamel.yaml.YAML):
+    def add_cfg_path(self, cfg_path):
+        self.cfg_path = Path(cfg_path)
+
+
+class YAMLIncluder(ruamel.yaml.Constructor):
+    pass
+
+
+def include(loader, node):
+    path = Path(loader.construct_scalar(node)).resolve()
+    _yaml = ruamel.yaml.YAML(typ="safe", pure=True)
+
+    config = _yaml.load(path.read_text("utf-8"))
+
+    return config
+
+
+YAMLIncluder.add_constructor("!include", include)
+
+
+def read_yaml(file_path):
+    """Read in a YAML file and return a dictionary representation."""
+    try:
+        # _yaml = ruamel.yaml.YAML(typ="safe", pure=True)
+        _yaml = YAMLParser(typ="safe", pure=True)
+
+        # Replace the default constructor with one that has a custom method
+        # for refering to other yaml files with !include directive
+        _yaml.Constructor = YAMLIncluder
+
+        with open(file_path, "r", encoding="utf-8") as _fin:
+            config = _yaml.load(_fin.read())
+    except ValueError:
+        print("    " + "!" * 58)
+        print("    Woops! Looks the YAML syntax is not valid in:")
+        print("        {}".format(file_path))
+        print("    " + "!" * 58)
+        raise
+
+    return config
+
+
+def write_yaml(data, path, file_name):
+    """
+    Write out data to a YAML file.
+
+    Args:
+        data: A dictionary representation of the data to write out
+        path: The directory to output the file in
+        file_name: The name of the file to write out
+
+    """
+    if os.path.exists(path) and not os.path.isdir(path):
+        return
+    elif not os.path.exists(path):
+        mkdir_p(path)
+
+    with open(os.path.join(path, file_name), "w", encoding="utf-8") as f:
+        # yaml = ruamel.yaml.YAML(typ="safe", pure=True)
+        yaml = ruamel.yaml.YAML()
+        yaml.dump(
+            data,
+            f,
+        )
+
+
 def collect_cases(data_dir):
-    """ Find all cases and subcases of a particular run type """
+    """Find all cases and subcases of a particular run type"""
     cases = {}
     for root, dirs, files in os.walk(data_dir):
         if not dirs:
@@ -186,16 +259,22 @@ def setup_output(cssd=None, jsd=None, imgd=None):
     # Check if we need to back up an old run
     if os.path.isdir(livvkit.index_dir):
         print("-------------------------------------------------------------------")
-        print('  Previous output data found in output directory!')
+        print("  Previous output data found in output directory!")
         try:
             f = open(os.path.join(livvkit.index_dir, "data.txt"), "r")
-            prev_time = f.readline().replace(":", "").replace("-", "").replace(" ", "_").rstrip()
+            prev_time = (
+                f.readline()
+                .replace(":", "")
+                .replace("-", "")
+                .replace(" ", "_")
+                .rstrip()
+            )
             f.close()
         except IOError:
             prev_time = datetime.now().strftime("%Y%m%d_%H%M%S")
         prev_time = f"bkd_{prev_time}"
-        print('   Backing up data to:')
-        print('   ' + livvkit.index_dir + "_" + prev_time)
+        print("   Backing up data to:")
+        print("   " + livvkit.index_dir + "_" + prev_time)
         print("-------------------------------------------------------------------")
         shutil.move(livvkit.index_dir, livvkit.index_dir + "_" + prev_time)
     else:
@@ -205,38 +284,48 @@ def setup_output(cssd=None, jsd=None, imgd=None):
     if cssd:
         shutil.copytree(cssd, os.path.join(livvkit.index_dir, "css"))
     else:
-        shutil.copytree(os.path.join(livvkit.resource_dir, "css"),
-                        os.path.join(livvkit.index_dir, "css"))
+        shutil.copytree(
+            os.path.join(livvkit.resource_dir, "css"),
+            os.path.join(livvkit.index_dir, "css"),
+        )
     if jsd:
         shutil.copytree(jsd, os.path.join(livvkit.index_dir, "js"))
     else:
-        shutil.copytree(os.path.join(livvkit.resource_dir, "js"),
-                        os.path.join(livvkit.index_dir, "js"))
+        shutil.copytree(
+            os.path.join(livvkit.resource_dir, "js"),
+            os.path.join(livvkit.index_dir, "js"),
+        )
     if imgd:
         shutil.copytree(imgd, os.path.join(livvkit.index_dir, "js"))
     else:
-        shutil.copytree(os.path.join(livvkit.resource_dir, "imgs"),
-                        os.path.join(livvkit.index_dir, "imgs"))
+        shutil.copytree(
+            os.path.join(livvkit.resource_dir, "imgs"),
+            os.path.join(livvkit.index_dir, "imgs"),
+        )
 
     # Get the index template from the resource directory
-    shutil.copy(os.path.join(livvkit.resource_dir, "index.html"),
-                os.path.join(livvkit.index_dir, "index.html"))
+    shutil.copy(
+        os.path.join(livvkit.resource_dir, "index.html"),
+        os.path.join(livvkit.index_dir, "index.html"),
+    )
 
-    shutil.copy(os.path.join(livvkit.resource_dir, "favicon.ico"),
-                os.path.join(livvkit.index_dir, "favicon.ico"))
+    shutil.copy(
+        os.path.join(livvkit.resource_dir, "favicon.ico"),
+        os.path.join(livvkit.index_dir, "favicon.ico"),
+    )
 
     # Record when this data was recorded so we can make nice backups
     with open(os.path.join(livvkit.index_dir, "data.txt"), "w") as f:
-        f.write(livvkit.timestamp + '\n')
-        f.write('Call: livv ')
+        f.write(livvkit.timestamp + "\n")
+        f.write("Call: livv ")
         for arg in sys.argv[1:]:
             f.write(arg)
-            f.write(' ')
-        f.write('\n')
-        f.write('Version: ' + livvkit.__version__ + '\n')
-        f.write("User: " + livvkit.user + '\n')
-        f.write("OS Type: " + livvkit.os_type + '\n')
-        f.write("Machine: " + livvkit.machine + '\n')
+            f.write(" ")
+        f.write("\n")
+        f.write("Version: " + livvkit.__version__ + "\n")
+        f.write("User: " + livvkit.user + "\n")
+        f.write("OS Type: " + livvkit.os_type + "\n")
+        f.write("Machine: " + livvkit.machine + "\n")
 
     # Make a directory to keep log files
-    mkdir_p(os.path.join(livvkit.index_dir, 'logs'))
+    mkdir_p(os.path.join(livvkit.index_dir, "logs"))
