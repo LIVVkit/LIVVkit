@@ -30,6 +30,7 @@ def test_fn_merge_dicts():
     assert test == truth
 
 
+@pytest.mark.skip(reason="Currently missing data")
 def test_fn_parse_gptl(ref_data):
     timing_file = ref_data.join('titan-gnu', 'CISM_glissade',
                                 'dome', 'dome', 's0', 'p1',
@@ -39,6 +40,7 @@ def test_fn_parse_gptl(ref_data):
     assert timing_results['cism'] == pytest.approx(66.73883)
 
 
+@pytest.mark.skip(reason="Currently missing data")
 def test_fn_find_file(ref_data):
     search_dir = ref_data.join('titan-gnu', 'CISM_glissade',
                                'dome', 'dome', 's0', 'p1')
@@ -112,6 +114,7 @@ def test_fn_read_write_numpy_json(tmpdir):
     assert test == truth
 
 
+@pytest.mark.skip(reason="Currently missing data")
 def test_fn_collect_cases(ref_data):
     case_dir = ref_data.join('titan-gnu', 'CISM_glissade', 'dome')
     truth = {'s1-p1', 's1-p4', 's0-p1', 's0-p4', 's0-p2', 's0-p8', 's2-p1',

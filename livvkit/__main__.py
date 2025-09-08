@@ -45,22 +45,24 @@ if not sys.warnoptions:
     import warnings
     warnings.simplefilter("ignore")
 
+LOGO = r"""-------------------------------------------------------------------
+                   __   _____   ___   ____    _ __
+                  / /  /  _/ | / / | / / /__ (_) /_
+                 / /___/ / | |/ /| |/ /  '_// / __/
+                /____/___/ |___/ |___/_/\_\/_/\__/
+
+                Land Ice Verification & Validation
+-------------------------------------------------------------------
+"""
+
 
 def main(cl_args=None):
-    """ Direct execution. """
-
+    """Direct execution."""
     if cl_args is None and len(sys.argv) > 1:
         cl_args = sys.argv[1:]
     args = options.parse_args(cl_args)
 
-    print(r"-------------------------------------------------------------------")
-    print(r"                      __   _____   ___   ____    _ __     ")
-    print(r"                     / /  /  _/ | / / | / / /__ (_) /_    ")
-    print(r"                    / /___/ / | |/ /| |/ /  '_// / __/    ")
-    print(r"                   /____/___/ |___/ |___/_/\_\/_/\__/     ")
-    print(r"")
-    print(r"                   Land Ice Verification & Validation     ")
-    print(r"-------------------------------------------------------------------")
+    print(LOGO)
     print("")
     print("  Current run: " + livvkit.timestamp)
     print("  User: " + livvkit.user)
@@ -94,8 +96,12 @@ def main(cl_args=None):
         print("")
         validation_config = {}
         for conf in livvkit.validation_model_configs:
-            validation_config = functions.merge_dicts(validation_config,
-                                                      functions.read_json(conf))
+            if "yml" in conf or "yaml" in conf:
+                validation_config = functions.merge_dicts(validation_config,
+                                                        functions.read_yaml(conf))
+            else:
+                validation_config = functions.merge_dicts(validation_config,
+                                                        functions.read_json(conf))
         summary_elements.extend(scheduler.run_quiet("validation", validation, validation_config,
                                                     group=False))
         print(" -----------------------------------------------------------------")
@@ -107,10 +113,25 @@ def main(cl_args=None):
         result = elements.Page("Summary", "", summary_elements)
         with open(os.path.join(livvkit.output_dir, 'index.json'), 'w') as index_data:
             index_data.write(result._repr_json())
+
+        if "/global/cfs/projectdirs" in livvkit.output_dir:
+            webaddress = livvkit.output_dir.replace(
+                "/global/cfs/projectdirs",
+                "https://portal.nersc.gov/project"
+            ).replace("/www", "")
+        else:
+            webaddress = ""
+
         print("-------------------------------------------------------------------")
         print(" Done!  Results can be seen in a web browser at:")
         print("  " + os.path.join(livvkit.output_dir, 'index.html'))
+        if webaddress:
+            print("    or")
+            print("  " + webaddress)
         print("-------------------------------------------------------------------")
+
+    # Make webpage output directory have 0755 permissions
+    functions.webdir_chmod(livvkit.output_dir)
 
     if args.serve:
         httpd = socket.TCPServer(('', args.serve), server.SimpleHTTPRequestHandler)
