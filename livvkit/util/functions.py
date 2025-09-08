@@ -31,6 +31,7 @@ Module to hold LIVVkit specific functions
 """
 
 import os
+import stat
 import sys
 import errno
 import shutil
@@ -67,6 +68,18 @@ def mkdir_p(path):
             pass
         else:
             raise
+
+
+def webdir_chmod(in_dir):
+    """Change permissions to 0755 for LIVVkit webpage output directory."""
+    mode_0755 = stat.S_IRWXU | stat.S_IRGRP | stat.S_IXGRP | stat.S_IROTH | stat.S_IXOTH
+
+    # Recursively walk the web directory, apply 0755 permissions to each sub-directory and file
+    for root, dirs, files in os.walk(in_dir):
+        for _subdir in dirs:
+            os.chmod(os.path.join(root, _subdir), mode_0755)
+        for _file in files:
+            os.chmod(os.path.join(root, _file), mode_0755)
 
 
 def merge_dicts(dict1, dict2):
@@ -166,7 +179,7 @@ def write_json(data, path, file_name):
     """
     if os.path.exists(path) and not os.path.isdir(path):
         return
-    elif not os.path.exists(path):
+    if not os.path.exists(path):
         mkdir_p(path)
     with open(os.path.join(path, file_name), "w") as f:
         json_tricks.dump(data, f, indent=4, primitives=True, allow_nan=True)
@@ -196,11 +209,10 @@ YAMLIncluder.add_constructor("!include", include)
 def read_yaml(file_path):
     """Read in a YAML file and return a dictionary representation."""
     try:
-        # _yaml = ruamel.yaml.YAML(typ="safe", pure=True)
         _yaml = YAMLParser(typ="safe", pure=True)
 
         # Replace the default constructor with one that has a custom method
-        # for refering to other yaml files with !include directive
+        # for referring to other yaml files with !include directive
         _yaml.Constructor = YAMLIncluder
 
         with open(file_path, "r", encoding="utf-8") as _fin:
@@ -227,11 +239,10 @@ def write_yaml(data, path, file_name):
     """
     if os.path.exists(path) and not os.path.isdir(path):
         return
-    elif not os.path.exists(path):
+    if not os.path.exists(path):
         mkdir_p(path)
 
     with open(os.path.join(path, file_name), "w", encoding="utf-8") as f:
-        # yaml = ruamel.yaml.YAML(typ="safe", pure=True)
         yaml = ruamel.yaml.YAML()
         yaml.dump(
             data,

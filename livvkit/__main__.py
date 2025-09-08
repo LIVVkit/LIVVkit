@@ -34,6 +34,7 @@ Management of the tests to be run is handled by the scheduler in livvkit.util
 
 import os
 import sys
+import stat
 import http.server as server
 import socketserver as socket
 
@@ -130,7 +131,9 @@ def main(cl_args=None):
             print("  " + webaddress)
         print("-------------------------------------------------------------------")
 
-    os.system(f"chmod -R 0755 {livvkit.output_dir}")
+    # Make webpage output directory have 0755 permissions
+    functions.webdir_chmod(livvkit.output_dir)
+
     if args.serve:
         httpd = socket.TCPServer(('', args.serve), server.SimpleHTTPRequestHandler)
 
