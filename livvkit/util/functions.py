@@ -186,15 +186,19 @@ def write_json(data, path, file_name):
 
 
 class YAMLParser(ruamel.yaml.YAML):
+    """Custom ruamel.yaml.YAML class for parsing LEX YAML files."""
     def add_cfg_path(self, cfg_path):
+        """Initialize cfg_path instance variable."""
         self.cfg_path = Path(cfg_path)
 
 
 class YAMLIncluder(ruamel.yaml.Constructor):
+    """Define a custom yaml Constructor to parse !include directive."""
     pass
 
 
 def include(loader, node):
+    """Method to parse !include constructor in YAML files."""
     path = Path(loader.construct_scalar(node)).resolve()
     _yaml = ruamel.yaml.YAML(typ="safe", pure=True)
 

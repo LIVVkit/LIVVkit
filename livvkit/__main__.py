@@ -34,7 +34,6 @@ Management of the tests to be run is handled by the scheduler in livvkit.util
 
 import os
 import sys
-import stat
 import http.server as server
 import socketserver as socket
 
@@ -56,9 +55,9 @@ LOGO = r"""-------------------------------------------------------------------
 -------------------------------------------------------------------
 """
 
-def main(cl_args=None):
-    """ Direct execution. """
 
+def main(cl_args=None):
+    """Direct execution."""
     if cl_args is None and len(sys.argv) > 1:
         cl_args = sys.argv[1:]
     args = options.parse_args(cl_args)
