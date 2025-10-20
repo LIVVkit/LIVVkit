@@ -64,6 +64,7 @@ dependencies = [
     "netcdf4",
     "matplotlib",
     "jinja2",
+    "loguru",
     "json_tricks>=3.11.0",
     "pybtex",
     "pandas>=2.1.0",

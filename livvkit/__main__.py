@@ -39,7 +39,16 @@ import socketserver as socket
 
 import livvkit
 from livvkit.util import options
-
+from loguru import logger
+log_format =(
+    "<green>{time:YYYY-MM-DD HH:mm:ss.SSS Z}</green> | "
+    "<level>{level: <8}</level> | "
+    "<cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> | "
+    "<magenta>{process.name}.{process.id}</magenta> | "
+    "<level>{message}</level>"
+)
+logger.remove(0)    # Don't log to sys.stderr
+logger.add("livv_log_{time}.log", format=log_format, enqueue=True)
 
 if not sys.warnoptions:
     import warnings
@@ -56,6 +65,7 @@ LOGO = r"""-------------------------------------------------------------------
 """
 
 
+@logger.catch
 def main(cl_args=None):
     """Direct execution."""
     if cl_args is None and len(sys.argv) > 1:
@@ -80,6 +90,7 @@ def main(cl_args=None):
     summary_elements = []
 
     if livvkit.verify or livvkit.validate:
+        logger.info("SETUP OUTPUT")
         functions.setup_output()
 
     if livvkit.verify:
@@ -96,12 +107,14 @@ def main(cl_args=None):
         print("")
         validation_config = {}
         for conf in livvkit.validation_model_configs:
+            logger.info(f"ADDING {conf} config")
             if "yml" in conf or "yaml" in conf:
                 validation_config = functions.merge_dicts(validation_config,
                                                         functions.read_yaml(conf))
             else:
                 validation_config = functions.merge_dicts(validation_config,
                                                         functions.read_json(conf))
+        logger.info("BEGIN RUNNING VALIDATION SUITE")
         summary_elements.extend(scheduler.run_quiet("validation", validation, validation_config,
                                                     group=False))
         print(" -----------------------------------------------------------------")
@@ -131,7 +144,7 @@ def main(cl_args=None):
         print("-------------------------------------------------------------------")
 
     # Make webpage output directory have 0755 permissions
-    functions.webdir_chmod(livvkit.output_dir)
+    # functions.webdir_chmod(livvkit.output_dir)
 
     if args.serve:
         httpd = socket.TCPServer(('', args.serve), server.SimpleHTTPRequestHandler)
