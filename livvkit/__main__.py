@@ -36,6 +36,8 @@ import os
 import sys
 import http.server as server
 import socketserver as socket
+from pathlib import Path
+import shutil
 
 import livvkit
 from livvkit.util import options
@@ -48,7 +50,6 @@ log_format =(
     "<level>{message}</level>"
 )
 logger.remove(0)    # Don't log to sys.stderr
-logger.add("livv_log_{time}.log", format=log_format, enqueue=True)
 
 if not sys.warnoptions:
     import warnings
@@ -71,6 +72,14 @@ def main(cl_args=None):
     if cl_args is None and len(sys.argv) > 1:
         cl_args = sys.argv[1:]
     args = options.parse_args(cl_args)
+    out_name = Path(livvkit.output_dir).parts[-1]
+    log_file = Path(f"livv_log_{out_name}.log")
+    if log_file.exists():
+        # Backup the log file
+        _filetime = str(os.stat(log_file).st_ctime).replace(".", "_")
+        _newname = f"{log_file.stem}_bkd_{_filetime}.log"
+        shutil.move(log_file, _newname)
+    logger.add(log_file, format=log_format, enqueue=True)
 
     print(LOGO)
     print("")
