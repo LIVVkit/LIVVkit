@@ -82,7 +82,7 @@ def run(run_type, module, config):
 
 
 def run_quiet(run_type, module, config, group=True):
-    tests = [t for t in config if isinstance(config[t], dict)]
+    tests = [t for t in config if isinstance(config[t], dict) and "common" not in t.lower()]
     if livvkit.pool_size == 0:
         test_summaries = {}
         for test in tests:
