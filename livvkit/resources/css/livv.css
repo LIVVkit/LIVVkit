@@ -126,13 +126,10 @@ a {
 }
 
 #content {
+    background-color: #ffffff;
     padding: 10px;
     width: 71%;
     float: left;
-}
-
-#content div {
-    background-color: #ffffff;
 }
 
 /******************************************************************************
@@ -144,7 +141,7 @@ table {
     border-spacing: 0;
 }
 
-th {
+thead, th {
     background-color: #66c2ff;
     color: #ffffff;
     padding: 10px;
@@ -162,6 +159,11 @@ td {
 
 .testCase {
     text-align: right;
+}
+
+div.dt-container {
+    width: 100%;
+    margin: auto auto;
 }
 
 /******************************************************************************
