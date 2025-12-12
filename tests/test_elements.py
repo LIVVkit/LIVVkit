@@ -472,6 +472,34 @@ def test_el_table_html():
     assert table._repr_html() == truth
 
 
+def test_el_datatable_html():
+    truth = '<div class="table dt-container">\n' \
+            '    <h3>title</h3>\n' \
+            '    <table class="display nowrap dataTable">\n' \
+            '        <thead>\n' \
+            '            <td>h1</td>\n' \
+            '            <td>h2</td>\n' \
+            '        </thead>\n' \
+            '        <tbody>\n' \
+            '            <tr>\n' \
+            '                <td>v1</td>\n' \
+            '                <td>v3</td>\n' \
+            '            </tr>\n' \
+            '            <tr>\n' \
+            '                <td>v2</td>\n' \
+            '                <td>v4</td>\n' \
+            '            </tr>\n' \
+            '        </tbody>\n' \
+            '    </table>\n' \
+            '</div>'
+
+    table = elements.Table(
+        'title', {'h1': ['v1', 'v2'], 'h2': ['v3', 'v4']}, data_table=True
+    )
+
+    assert table._repr_html() == truth
+
+
 def test_el_table_latex():
     truth = '\\begin{table}[h!]\n' \
             '    \\centering\n' \
@@ -511,6 +539,37 @@ def test_el_table_w_index_html():
             '</div>'
 
     table = elements.Table('title', {'h1': ['v1', 'v2'], 'h2': ['v3', 'v4']}, index=True)
+
+    assert table._repr_html() == truth
+
+
+def test_el_data_table_w_index_html():
+    truth = '<div class="table dt-container">\n' \
+            '    <h3>title</h3>\n' \
+            '    <table class="display nowrap dataTable">\n' \
+            '        <thead>\n' \
+            '            <td>&nbsp;</td>\n' \
+            '            <td>h1</td>\n' \
+            '            <td>h2</td>\n' \
+            '        </thead>\n' \
+            '        <tbody>\n' \
+            '            <tr>\n' \
+            '                <th>0</th>\n' \
+            '                <td>v1</td>\n' \
+            '                <td>v3</td>\n' \
+            '            </tr>\n' \
+            '            <tr>\n' \
+            '                <th>1</th>\n' \
+            '                <td>v2</td>\n' \
+            '                <td>v4</td>\n' \
+            '            </tr>\n' \
+            '        </tbody>\n' \
+            '    </table>\n' \
+            '</div>'
+
+    table = elements.Table(
+        'title', {'h1': ['v1', 'v2'], 'h2': ['v3', 'v4']}, index=True, data_table=True
+    )
 
     assert table._repr_html() == truth
 

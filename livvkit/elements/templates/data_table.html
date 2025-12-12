@@ -1,0 +1,25 @@
+<div class="table dt-container">
+    <h3>{{ data['title'] }}</h3>
+    <table class="display nowrap dataTable">
+        <thead>
+            {%- if index is not none %}
+            <td>&nbsp;</td>
+            {%- endif %}
+            {%- for column in data['data'].keys() %}
+            <td>{{ column }}</td>
+            {%- endfor %}
+        </thead>
+        <tbody>
+        {%- for row in range(rows) %}
+            <tr>
+                {%- if index is not none %}
+                <th>{{index[row]}}</th>
+                {%- endif %}
+                {%- for column in data['data'].keys() %}
+                <td>{{ data['data'][column][row] }}</td>
+                {%- endfor %}
+            </tr>
+        {%- endfor %}
+        </tbody>
+    </table>
+</div>
