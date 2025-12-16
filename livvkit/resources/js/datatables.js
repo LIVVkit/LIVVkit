@@ -4,10 +4,10 @@
  *
  * To rebuild or modify this file with the latest versions of the included
  * software please visit:
- *   https://datatables.net/download/#dt/dt-2.3.5
+ *   https://datatables.net/download/#dt/dt-2.3.5/b-3.2.5/b-colvis-3.2.5/b-html5-3.2.5/cr-2.1.2/cc-1.1.1/date-1.6.2/fc-5.0.5/fh-4.0.5
  *
  * Included libraries:
- *   DataTables 2.3.5
+ *   DataTables 2.3.5, Buttons 3.2.5, Column visibility 3.2.5, HTML5 export 3.2.5, ColReorder 2.1.2, ColumnControl 1.1.1, DateTime 1.6.2, FixedColumns 5.0.5, FixedHeader 4.0.5
  */
 
 /*! DataTables 2.3.5
@@ -516,7 +516,7 @@
 		 *
 		 *  @type string
 		 */
-		builder: "dt/dt-2.3.5",
+		builder: "dt/dt-2.3.5/b-3.2.5/b-colvis-3.2.5/b-html5-3.2.5/cr-2.1.2/cc-1.1.1/date-1.6.2/fc-5.0.5/fh-4.0.5",
 	
 		/**
 		 * Buttons. For use with the Buttons extension for DataTables. This is
@@ -14190,6 +14190,12766 @@ var DataTable = $.fn.dataTable;
 
 
 
+
+
+return DataTable;
+}));
+
+
+/*! Buttons for DataTables 3.2.5
+ * © SpryMedia Ltd - datatables.net/license
+ */
+
+(function( factory ){
+	if ( typeof define === 'function' && define.amd ) {
+		// AMD
+		define( ['jquery', 'datatables.net'], function ( $ ) {
+			return factory( $, window, document );
+		} );
+	}
+	else if ( typeof exports === 'object' ) {
+		// CommonJS
+		var jq = require('jquery');
+		var cjsRequires = function (root, $) {
+			if ( ! $.fn.dataTable ) {
+				require('datatables.net')(root, $);
+			}
+		};
+
+		if (typeof window === 'undefined') {
+			module.exports = function (root, $) {
+				if ( ! root ) {
+					// CommonJS environments without a window global must pass a
+					// root. This will give an error otherwise
+					root = window;
+				}
+
+				if ( ! $ ) {
+					$ = jq( root );
+				}
+
+				cjsRequires( root, $ );
+				return factory( $, root, root.document );
+			};
+		}
+		else {
+			cjsRequires( window, jq );
+			module.exports = factory( jq, window, window.document );
+		}
+	}
+	else {
+		// Browser
+		factory( jQuery, window, document );
+	}
+}(function( $, window, document ) {
+'use strict';
+var DataTable = $.fn.dataTable;
+
+
+
+// Used for namespacing events added to the document by each instance, so they
+// can be removed on destroy
+var _instCounter = 0;
+
+// Button namespacing counter for namespacing events on individual buttons
+var _buttonCounter = 0;
+
+var _dtButtons = DataTable.ext.buttons;
+
+// Custom entity decoder for data export
+var _entityDecoder = null;
+
+// Allow for jQuery slim
+function _fadeIn(el, duration, fn) {
+	if ($.fn.animate) {
+		el.stop().fadeIn(duration, fn);
+	}
+	else {
+		el.css('display', 'block');
+
+		if (fn) {
+			fn.call(el);
+		}
+	}
+}
+
+function _fadeOut(el, duration, fn) {
+	if ($.fn.animate) {
+		el.stop().fadeOut(duration, fn);
+	}
+	else {
+		el.css('display', 'none');
+
+		if (fn) {
+			fn.call(el);
+		}
+	}
+}
+
+/**
+ * [Buttons description]
+ * @param {[type]}
+ * @param {[type]}
+ */
+var Buttons = function (dt, config) {
+	if (!DataTable.versionCheck('2')) {
+		throw 'Warning: Buttons requires DataTables 2 or newer';
+	}
+
+	// If not created with a `new` keyword then we return a wrapper function that
+	// will take the settings object for a DT. This allows easy use of new instances
+	// with the `layout` option - e.g. `topLeft: $.fn.dataTable.Buttons( ... )`.
+	if (!(this instanceof Buttons)) {
+		return function (settings) {
+			return new Buttons(settings, dt).container();
+		};
+	}
+
+	// If there is no config set it to an empty object
+	if (typeof config === 'undefined') {
+		config = {};
+	}
+
+	// Allow a boolean true for defaults
+	if (config === true) {
+		config = {};
+	}
+
+	// For easy configuration of buttons an array can be given
+	if (Array.isArray(config)) {
+		config = { buttons: config };
+	}
+
+	this.c = $.extend(true, {}, Buttons.defaults, config);
+
+	// Don't want a deep copy for the buttons
+	if (config.buttons) {
+		this.c.buttons = config.buttons;
+	}
+
+	this.s = {
+		dt: new DataTable.Api(dt),
+		buttons: [],
+		listenKeys: '',
+		namespace: 'dtb' + _instCounter++
+	};
+
+	this.dom = {
+		container: $('<' + this.c.dom.container.tag + '/>').addClass(
+			this.c.dom.container.className
+		)
+	};
+
+	this._constructor();
+};
+
+$.extend(Buttons.prototype, {
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 * Public methods
+	 */
+
+	/**
+	 * Get the action of a button
+	 * @param  {int|string} Button index
+	 * @return {function}
+	 */ /**
+	 * Set the action of a button
+	 * @param  {node} node Button element
+	 * @param  {function} action Function to set
+	 * @return {Buttons} Self for chaining
+	 */
+	action: function (node, action) {
+		var button = this._nodeToButton(node);
+
+		if (action === undefined) {
+			return button.conf.action;
+		}
+
+		button.conf.action = action;
+
+		return this;
+	},
+
+	/**
+	 * Add an active class to the button to make to look active or get current
+	 * active state.
+	 * @param  {node} node Button element
+	 * @param  {boolean} [flag] Enable / disable flag
+	 * @return {Buttons} Self for chaining or boolean for getter
+	 */
+	active: function (node, flag) {
+		var button = this._nodeToButton(node);
+		var klass = this.c.dom.button.active;
+		var jqNode = $(button.node);
+
+		if (
+			button.inCollection &&
+			this.c.dom.collection.button &&
+			this.c.dom.collection.button.active !== undefined
+		) {
+			klass = this.c.dom.collection.button.active;
+		}
+
+		if (flag === undefined) {
+			return jqNode.hasClass(klass);
+		}
+
+		jqNode.toggleClass(klass, flag === undefined ? true : flag);
+
+		return this;
+	},
+
+	/**
+	 * Add a new button
+	 * @param {object} config Button configuration object, base string name or function
+	 * @param {int|string} [idx] Button index for where to insert the button
+	 * @param {boolean} [draw=true] Trigger a draw. Set a false when adding
+	 *   lots of buttons, until the last button.
+	 * @return {Buttons} Self for chaining
+	 */
+	add: function (config, idx, draw) {
+		var buttons = this.s.buttons;
+
+		if (typeof idx === 'string') {
+			var split = idx.split('-');
+			var base = this.s;
+
+			for (var i = 0, ien = split.length - 1; i < ien; i++) {
+				base = base.buttons[split[i] * 1];
+			}
+
+			buttons = base.buttons;
+			idx = split[split.length - 1] * 1;
+		}
+
+		let node = this._expandButton(
+			buttons,
+			config,
+			config !== undefined ? config.split : undefined,
+			(config === undefined ||
+				config.split === undefined ||
+				config.split.length === 0) &&
+				base !== undefined,
+			false,
+			idx
+		);
+
+		if (draw === undefined || draw === true) {
+			this._draw();
+		}
+
+		return node;
+	},
+
+	/**
+	 * Clear buttons from a collection and then insert new buttons
+	 */
+	collectionRebuild: function (node, newButtons) {
+		var button = this._nodeToButton(node);
+
+		if (newButtons !== undefined) {
+			var i;
+			// Need to reverse the array
+			for (i = button.buttons.length - 1; i >= 0; i--) {
+				this.remove(button.buttons[i].node);
+			}
+
+			// If the collection has prefix and / or postfix buttons we need to add them in
+			if (button.conf.prefixButtons) {
+				newButtons.unshift.apply(newButtons, button.conf.prefixButtons);
+			}
+
+			if (button.conf.postfixButtons) {
+				newButtons.push.apply(newButtons, button.conf.postfixButtons);
+			}
+
+			for (i = 0; i < newButtons.length; i++) {
+				var newBtn = newButtons[i];
+
+				this._expandButton(
+					button.buttons,
+					newBtn,
+					newBtn !== undefined &&
+						newBtn.config !== undefined &&
+						newBtn.config.split !== undefined,
+					true,
+					newBtn.parentConf !== undefined &&
+						newBtn.parentConf.split !== undefined,
+					null,
+					newBtn.parentConf
+				);
+			}
+		}
+
+		this._draw(button.collection, button.buttons);
+	},
+
+	/**
+	 * Get the container node for the buttons
+	 * @return {jQuery} Buttons node
+	 */
+	container: function () {
+		return this.dom.container;
+	},
+
+	/**
+	 * Disable a button
+	 * @param  {node} node Button node
+	 * @return {Buttons} Self for chaining
+	 */
+	disable: function (node) {
+		var button = this._nodeToButton(node);
+
+		if (button.isSplit) {
+			$(button.node.childNodes[0])
+				.addClass(this.c.dom.button.disabled)
+				.prop('disabled', true);
+		}
+		else {
+			$(button.node)
+				.addClass(this.c.dom.button.disabled)
+				.prop('disabled', true);
+		}
+
+		button.disabled = true;
+
+		this._checkSplitEnable();
+
+		return this;
+	},
+
+	/**
+	 * Destroy the instance, cleaning up event handlers and removing DOM
+	 * elements
+	 * @return {Buttons} Self for chaining
+	 */
+	destroy: function () {
+		// Key event listener
+		$('body').off('keyup.' + this.s.namespace);
+
+		// Individual button destroy (so they can remove their own events if
+		// needed). Take a copy as the array is modified by `remove`
+		var buttons = this.s.buttons.slice();
+		var i, ien;
+
+		for (i = 0, ien = buttons.length; i < ien; i++) {
+			this.remove(buttons[i].node);
+		}
+
+		// Container
+		this.dom.container.remove();
+
+		// Remove from the settings object collection
+		var buttonInsts = this.s.dt.settings()[0];
+
+		for (i = 0, ien = buttonInsts.length; i < ien; i++) {
+			if (buttonInsts.inst === this) {
+				buttonInsts.splice(i, 1);
+				break;
+			}
+		}
+
+		return this;
+	},
+
+	/**
+	 * Enable / disable a button
+	 * @param  {node} node Button node
+	 * @param  {boolean} [flag=true] Enable / disable flag
+	 * @return {Buttons} Self for chaining
+	 */
+	enable: function (node, flag) {
+		if (flag === false) {
+			return this.disable(node);
+		}
+
+		var button = this._nodeToButton(node);
+
+		if (button.isSplit) {
+			$(button.node.childNodes[0])
+				.removeClass(this.c.dom.button.disabled)
+				.prop('disabled', false);
+		}
+		else {
+			$(button.node)
+				.removeClass(this.c.dom.button.disabled)
+				.prop('disabled', false);
+		}
+
+		button.disabled = false;
+
+		this._checkSplitEnable();
+
+		return this;
+	},
+
+	/**
+	 * Get a button's index
+	 *
+	 * This is internally recursive
+	 * @param {element} node Button to get the index of
+	 * @return {string} Button index
+	 */
+	index: function (node, nested, buttons) {
+		if (!nested) {
+			nested = '';
+			buttons = this.s.buttons;
+		}
+
+		for (var i = 0, ien = buttons.length; i < ien; i++) {
+			var inner = buttons[i].buttons;
+
+			if (buttons[i].node === node) {
+				return nested + i;
+			}
+
+			if (inner && inner.length) {
+				var match = this.index(node, i + '-', inner);
+
+				if (match !== null) {
+					return match;
+				}
+			}
+		}
+
+		return null;
+	},
+
+	/**
+	 * Get the instance name for the button set selector
+	 * @return {string} Instance name
+	 */
+	name: function () {
+		return this.c.name;
+	},
+
+	/**
+	 * Get a button's node of the buttons container if no button is given
+	 * @param  {node} [node] Button node
+	 * @return {jQuery} Button element, or container
+	 */
+	node: function (node) {
+		if (!node) {
+			return this.dom.container;
+		}
+
+		var button = this._nodeToButton(node);
+		return $(button.node);
+	},
+
+	/**
+	 * Set / get a processing class on the selected button
+	 * @param {element} node Triggering button node
+	 * @param  {boolean} flag true to add, false to remove, undefined to get
+	 * @return {boolean|Buttons} Getter value or this if a setter.
+	 */
+	processing: function (node, flag) {
+		var dt = this.s.dt;
+		var button = this._nodeToButton(node);
+
+		if (flag === undefined) {
+			return $(button.node).hasClass('processing');
+		}
+
+		$(button.node).toggleClass('processing', flag);
+
+		$(dt.table().node()).triggerHandler('buttons-processing.dt', [
+			flag,
+			dt.button(node),
+			dt,
+			$(node),
+			button.conf
+		]);
+
+		return this;
+	},
+
+	/**
+	 * Remove a button.
+	 * @param  {node} node Button node
+	 * @return {Buttons} Self for chaining
+	 */
+	remove: function (node) {
+		var button = this._nodeToButton(node);
+		var host = this._nodeToHost(node);
+		var dt = this.s.dt;
+
+		// Remove any child buttons first
+		if (button.buttons.length) {
+			for (var i = button.buttons.length - 1; i >= 0; i--) {
+				this.remove(button.buttons[i].node);
+			}
+		}
+
+		button.conf.destroying = true;
+
+		// Allow the button to remove event handlers, etc
+		if (button.conf.destroy) {
+			button.conf.destroy.call(dt.button(node), dt, $(node), button.conf);
+		}
+
+		this._removeKey(button.conf);
+
+		$(button.node).remove();
+
+		if (button.inserter) {
+			$(button.inserter).remove();
+		}
+
+		var idx = $.inArray(button, host);
+		host.splice(idx, 1);
+
+		return this;
+	},
+
+	/**
+	 * Get the text for a button
+	 * @param  {int|string} node Button index
+	 * @return {string} Button text
+	 */ /**
+	 * Set the text for a button
+	 * @param  {int|string|function} node Button index
+	 * @param  {string} label Text
+	 * @return {Buttons} Self for chaining
+	 */
+	text: function (node, label) {
+		var button = this._nodeToButton(node);
+		var textNode = button.textNode;
+		var dt = this.s.dt;
+		var jqNode = $(button.node);
+		var text = function (opt) {
+			return typeof opt === 'function'
+				? opt(dt, jqNode, button.conf)
+				: opt;
+		};
+
+		if (label === undefined) {
+			return text(button.conf.text);
+		}
+
+		button.conf.text = label;
+		textNode.html(text(label));
+
+		return this;
+	},
+
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 * Constructor
+	 */
+
+	/**
+	 * Buttons constructor
+	 * @private
+	 */
+	_constructor: function () {
+		var that = this;
+		var dt = this.s.dt;
+		var dtSettings = dt.settings()[0];
+		var buttons = this.c.buttons;
+
+		if (!dtSettings._buttons) {
+			dtSettings._buttons = [];
+		}
+
+		dtSettings._buttons.push({
+			inst: this,
+			name: this.c.name
+		});
+
+		for (var i = 0, ien = buttons.length; i < ien; i++) {
+			this.add(buttons[i]);
+		}
+
+		dt.on('destroy', function (e, settings) {
+			if (settings === dtSettings) {
+				that.destroy();
+			}
+		});
+
+		// Global key event binding to listen for button keys
+		$('body').on('keyup.' + this.s.namespace, function (e) {
+			if (
+				!document.activeElement ||
+				document.activeElement === document.body
+			) {
+				// SUse a string of characters for fast lookup of if we need to
+				// handle this
+				var character = String.fromCharCode(e.keyCode).toLowerCase();
+
+				if (that.s.listenKeys.toLowerCase().indexOf(character) !== -1) {
+					that._keypress(character, e);
+				}
+			}
+		});
+	},
+
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 * Private methods
+	 */
+
+	/**
+	 * Add a new button to the key press listener
+	 * @param {object} conf Resolved button configuration object
+	 * @private
+	 */
+	_addKey: function (conf) {
+		if (conf.key) {
+			this.s.listenKeys += $.isPlainObject(conf.key)
+				? conf.key.key
+				: conf.key;
+		}
+	},
+
+	/**
+	 * Insert the buttons into the container. Call without parameters!
+	 * @param  {node} [container] Recursive only - Insert point
+	 * @param  {array} [buttons] Recursive only - Buttons array
+	 * @private
+	 */
+	_draw: function (container, buttons) {
+		if (!container) {
+			container = this.dom.container;
+			buttons = this.s.buttons;
+		}
+
+		container.children().detach();
+
+		for (var i = 0, ien = buttons.length; i < ien; i++) {
+			container.append(buttons[i].inserter);
+			container.append(' ');
+
+			if (buttons[i].buttons && buttons[i].buttons.length) {
+				this._draw(buttons[i].collection, buttons[i].buttons);
+			}
+		}
+	},
+
+	/**
+	 * Create buttons from an array of buttons
+	 * @param  {array} attachTo Buttons array to attach to
+	 * @param  {object} button Button definition
+	 * @param  {boolean} inCollection true if the button is in a collection
+	 * @private
+	 */
+	_expandButton: function (
+		attachTo,
+		button,
+		split,
+		inCollection,
+		inSplit,
+		attachPoint,
+		parentConf
+	) {
+		var dt = this.s.dt;
+		var isSplit = false;
+		var domCollection = this.c.dom.collection;
+		var buttons = !Array.isArray(button) ? [button] : button;
+		var lastButton;
+
+		if (button === undefined) {
+			buttons = !Array.isArray(split) ? [split] : split;
+		}
+
+		for (var i = 0, ien = buttons.length; i < ien; i++) {
+			var conf = this._resolveExtends(buttons[i]);
+
+			if (!conf) {
+				continue;
+			}
+
+			isSplit = conf.config && conf.config.split ? true : false;
+
+			// If the configuration is an array, then expand the buttons at this
+			// point
+			if (Array.isArray(conf)) {
+				this._expandButton(
+					attachTo,
+					conf,
+					built !== undefined && built.conf !== undefined
+						? built.conf.split
+						: undefined,
+					inCollection,
+					parentConf !== undefined && parentConf.split !== undefined,
+					attachPoint,
+					parentConf
+				);
+				continue;
+			}
+
+			var built = this._buildButton(
+				conf,
+				inCollection,
+				conf.split !== undefined ||
+					(conf.config !== undefined &&
+						conf.config.split !== undefined),
+				inSplit
+			);
+			if (!built) {
+				continue;
+			}
+
+			if (attachPoint !== undefined && attachPoint !== null) {
+				attachTo.splice(attachPoint, 0, built);
+				attachPoint++;
+			}
+			else {
+				attachTo.push(built);
+			}
+
+			// Any button type can have a drop icon set
+			if (built.conf.dropIcon && ! built.conf.split) {
+				$(built.node)
+					.addClass(this.c.dom.button.dropClass)
+					.append(this.c.dom.button.dropHtml);
+			}
+
+			// Create the dropdown for a collection
+			if (built.conf.buttons) {
+				built.collection = $(
+					'<' + domCollection.container.content.tag + '/>'
+				);
+				built.conf._collection = built.collection;
+
+				this._expandButton(
+					built.buttons,
+					built.conf.buttons,
+					built.conf.split,
+					!isSplit,
+					isSplit,
+					attachPoint,
+					built.conf
+				);
+			}
+
+			// And the split collection
+			if (built.conf.split) {
+				built.collection = $('<' + domCollection.container.tag + '/>');
+				built.conf._collection = built.collection;
+
+				for (var j = 0; j < built.conf.split.length; j++) {
+					var item = built.conf.split[j];
+
+					if (typeof item === 'object') {
+						item.parent = parentConf;
+
+						if (item.collectionLayout === undefined) {
+							item.collectionLayout = built.conf.collectionLayout;
+						}
+
+						if (item.dropup === undefined) {
+							item.dropup = built.conf.dropup;
+						}
+
+						if (item.fade === undefined) {
+							item.fade = built.conf.fade;
+						}
+					}
+				}
+
+				this._expandButton(
+					built.buttons,
+					built.conf.buttons,
+					built.conf.split,
+					!isSplit,
+					isSplit,
+					attachPoint,
+					built.conf
+				);
+			}
+
+			built.conf.parent = parentConf;
+
+			// init call is made here, rather than buildButton as it needs to
+			// be selectable, and for that it needs to be in the buttons array
+			if (conf.init) {
+				conf.init.call(dt.button(built.node), dt, $(built.node), conf);
+			}
+
+			lastButton = built.node;
+		}
+
+		return lastButton;
+	},
+
+	/**
+	 * Create an individual button
+	 * @param  {object} config            Resolved button configuration
+	 * @param  {boolean} inCollection `true` if a collection button
+	 * @return {object} Completed button description object
+	 * @private
+	 */
+	_buildButton: function (config, inCollection, isSplit, inSplit) {
+		var that = this;
+		var configDom = this.c.dom;
+		var textNode;
+		var dt = this.s.dt;
+		var setLinerTab = false;
+		var text = function (opt) {
+			return typeof opt === 'function' ? opt(dt, button, config) : opt;
+		};
+
+		// Create an object that describes the button which can be in `dom.button`, or
+		// `dom.collection.button` or `dom.split.button` or `dom.collection.split.button`!
+		// Each should extend from `dom.button`.
+		var dom = $.extend(true, {}, configDom.button);
+
+		if (inCollection && isSplit && configDom.collection.split) {
+			$.extend(true, dom, configDom.collection.split.action);
+		}
+		else if (inSplit || inCollection) {
+			$.extend(true, dom, configDom.collection.button);
+		}
+		else if (isSplit) {
+			$.extend(true, dom, configDom.split.button);
+		}
+
+		// Spacers don't do much other than insert an element into the DOM
+		if (config.spacer) {
+			var spacer = $('<' + dom.spacer.tag + '/>')
+				.addClass(
+					'dt-button-spacer ' +
+						config.style +
+						' ' +
+						dom.spacer.className
+				)
+				.html(text(config.text));
+
+			return {
+				conf: config,
+				node: spacer,
+				nodeChild: null,
+				inserter: spacer,
+				buttons: [],
+				inCollection: inCollection,
+				isSplit: isSplit,
+				collection: null,
+				textNode: spacer
+			};
+		}
+
+		// Make sure that the button is available based on whatever requirements
+		// it has. For example, PDF button require pdfmake
+		if (
+			config.available &&
+			!config.available(dt, config) &&
+			!config.html
+		) {
+			return false;
+		}
+
+		var button;
+
+		if (!config.html) {
+			var run = function (e, dt, button, config, done) {
+				config.action.call(dt.button(button), e, dt, button, config, done);
+
+				$(dt.table().node()).triggerHandler('buttons-action.dt', [
+					dt.button(button),
+					dt,
+					button,
+					config
+				]);
+			};
+
+			var action = function(e, dt, button, config) {
+				if (config.async) {
+					that.processing(button[0], true);
+
+					setTimeout(function () {
+						run(e, dt, button, config, function () {
+							that.processing(button[0], false);
+						});
+					}, config.async);
+				}
+				else {
+					run(e, dt, button, config, function () {});
+				}
+			};
+
+			var tag = config.tag || dom.tag;
+			var clickBlurs =
+				config.clickBlurs === undefined ? true : config.clickBlurs;
+
+			button = $('<' + tag + '/>')
+				.addClass(dom.className)
+				.attr('aria-controls', this.s.dt.table().node().id)
+				.on('click.dtb', function (e) {
+					e.preventDefault();
+
+					if (!button.hasClass(dom.disabled) && config.action) {
+						action(e, dt, button, config);
+					}
+
+					if (clickBlurs) {
+						button.trigger('blur');
+					}
+				})
+				.on('keypress.dtb', function (e) {
+					if (e.keyCode === 13) {
+						e.preventDefault();
+
+						if (!button.hasClass(dom.disabled) && config.action) {
+							action(e, dt, button, config);
+						}
+					}
+				});
+
+			// Make `a` tags act like a link
+			if (tag.toLowerCase() === 'a') {
+				button.attr('href', '#');
+			}
+
+			// Button tags should have `type=button` so they don't have any default behaviour
+			if (tag.toLowerCase() === 'button') {
+				button.attr('type', 'button');
+			}
+
+			if (dom.liner.tag) {
+				var lc = dom.liner.tag.toLowerCase();
+				var liner = $('<' + lc + '/>')
+					.html(text(config.text))
+					.addClass(dom.liner.className);
+
+				if (lc === 'a') {
+					liner.attr('href', '#');
+				}
+
+				if (lc === 'a' || lc === 'button') {
+					liner.attr('tabindex', this.s.dt.settings()[0].iTabIndex);
+					setLinerTab = true;
+				}
+
+				button.append(liner);
+				textNode = liner;
+			}
+			else {
+				button.html(text(config.text));
+				textNode = button;
+			}
+
+			if (! setLinerTab) {
+				button.attr('tabindex', this.s.dt.settings()[0].iTabIndex)
+			}
+
+			if (config.enabled === false) {
+				button.addClass(dom.disabled);
+			}
+
+			if (config.className) {
+				button.addClass(config.className);
+			}
+
+			if (config.titleAttr) {
+				button.attr('title', text(config.titleAttr));
+			}
+
+			if (config.attr) {
+				button.attr(config.attr);
+			}
+
+			if (!config.namespace) {
+				config.namespace = '.dt-button-' + _buttonCounter++;
+			}
+
+			if (config.config !== undefined && config.config.split) {
+				config.split = config.config.split;
+			}
+		}
+		else {
+			button = $(config.html);
+		}
+
+		var buttonContainer = this.c.dom.buttonContainer;
+		var inserter;
+		if (buttonContainer && buttonContainer.tag) {
+			inserter = $('<' + buttonContainer.tag + '/>')
+				.addClass(buttonContainer.className)
+				.append(button);
+		}
+		else {
+			inserter = button;
+		}
+
+		this._addKey(config);
+
+		// Style integration callback for DOM manipulation
+		// Note that this is _not_ documented. It is currently
+		// for style integration only
+		if (this.c.buttonCreated) {
+			inserter = this.c.buttonCreated(config, inserter);
+		}
+
+		var splitDiv;
+
+		if (isSplit) {
+			var dropdownConf = inCollection
+				? $.extend(true, this.c.dom.split, this.c.dom.collection.split)
+				: this.c.dom.split;
+			var wrapperConf = dropdownConf.wrapper;
+
+			splitDiv = $('<' + wrapperConf.tag + '/>')
+				.addClass(wrapperConf.className)
+				.append(button);
+
+			var dropButtonConfig = $.extend(config, {
+				autoClose: true,
+				align: dropdownConf.dropdown.align,
+				attr: {
+					'aria-haspopup': 'dialog',
+					'aria-expanded': false
+				},
+				className: dropdownConf.dropdown.className,
+				closeButton: false,
+				splitAlignClass: dropdownConf.dropdown.splitAlignClass,
+				text: dropdownConf.dropdown.text
+			});
+
+			this._addKey(dropButtonConfig);
+
+			var splitAction = function (e, dt, button, config) {
+				_dtButtons.split.action.call(
+					dt.button(splitDiv),
+					e,
+					dt,
+					button,
+					config
+				);
+
+				$(dt.table().node()).triggerHandler('buttons-action.dt', [
+					dt.button(button),
+					dt,
+					button,
+					config
+				]);
+				button.attr('aria-expanded', true);
+			};
+
+			var dropButton = $(
+				'<button class="' +
+					dropdownConf.dropdown.className +
+					' dt-button"></button>'
+			)
+				.html(this.c.dom.button.dropHtml)
+				.addClass(this.c.dom.button.dropClass)
+				.on('click.dtb', function (e) {
+					e.preventDefault();
+					e.stopPropagation();
+
+					if (!dropButton.hasClass(dom.disabled)) {
+						splitAction(e, dt, dropButton, dropButtonConfig);
+					}
+					if (clickBlurs) {
+						dropButton.trigger('blur');
+					}
+				})
+				.on('keypress.dtb', function (e) {
+					if (e.keyCode === 13) {
+						e.preventDefault();
+
+						if (!dropButton.hasClass(dom.disabled)) {
+							splitAction(e, dt, dropButton, dropButtonConfig);
+						}
+					}
+				});
+
+			if (config.split.length === 0) {
+				dropButton.addClass('dtb-hide-drop');
+			}
+
+			splitDiv.append(dropButton).attr(dropButtonConfig.attr);
+		}
+
+		var node = isSplit ? splitDiv.get(0) : button.get(0);
+
+		return {
+			conf: config,
+			node: node,
+			nodeChild: node && node.children && node.children.length ? node.children[0] : null,
+			inserter: isSplit ? splitDiv : inserter,
+			buttons: [],
+			inCollection: inCollection,
+			isSplit: isSplit,
+			inSplit: inSplit,
+			collection: null,
+			textNode: textNode
+		};
+	},
+
+	/**
+	 * Spin over buttons checking if splits should be enabled or not.
+	 * @param {*} buttons Array of buttons to check
+	 */
+	_checkSplitEnable: function (buttons) {
+		if (! buttons) {
+			buttons = this.s.buttons;
+		}
+
+		for (var i=0 ; i<buttons.length ; i++) {
+			var button = buttons[i];
+
+			// Check if the button is a split one and if so, determine
+			// its state
+			if (button.isSplit) {
+				var splitBtn = button.node.childNodes[1];
+
+				if (this._checkAnyEnabled(button.buttons)) {
+					// Enable the split
+					$(splitBtn)
+						.removeClass(this.c.dom.button.disabled)
+						.prop('disabled', false);
+				}
+				else {
+					$(splitBtn)
+						.addClass(this.c.dom.button.disabled)
+						.prop('disabled', false);
+				}
+			}
+			else if (button.isCollection) {
+				// Nest down into collections
+				this._checkSplitEnable(button.buttons);
+			}
+		}
+	},
+
+	/**
+	 * Check an array of buttons and see if any are enabled in it
+	 * @param {*} buttons Button array
+	 * @returns true if a button is enabled, false otherwise
+	 */
+	_checkAnyEnabled: function (buttons) {
+		for (var i=0 ; i<buttons.length ; i++) {
+			if (! buttons[i].disabled) {
+				return true;
+			}
+		}
+
+		return false;
+	},
+
+	/**
+	 * Get the button object from a node (recursive)
+	 * @param  {node} node Button node
+	 * @param  {array} [buttons] Button array, uses base if not defined
+	 * @return {object} Button object
+	 * @private
+	 */
+	_nodeToButton: function (node, buttons) {
+		if (!buttons) {
+			buttons = this.s.buttons;
+		}
+
+		for (var i = 0, ien = buttons.length; i < ien; i++) {
+			if (buttons[i].node === node || buttons[i].nodeChild === node) {
+				return buttons[i];
+			}
+
+			if (buttons[i].buttons.length) {
+				var ret = this._nodeToButton(node, buttons[i].buttons);
+
+				if (ret) {
+					return ret;
+				}
+			}
+		}
+	},
+
+	/**
+	 * Get container array for a button from a button node (recursive)
+	 * @param  {node} node Button node
+	 * @param  {array} [buttons] Button array, uses base if not defined
+	 * @return {array} Button's host array
+	 * @private
+	 */
+	_nodeToHost: function (node, buttons) {
+		if (!buttons) {
+			buttons = this.s.buttons;
+		}
+
+		for (var i = 0, ien = buttons.length; i < ien; i++) {
+			if (buttons[i].node === node) {
+				return buttons;
+			}
+
+			if (buttons[i].buttons.length) {
+				var ret = this._nodeToHost(node, buttons[i].buttons);
+
+				if (ret) {
+					return ret;
+				}
+			}
+		}
+	},
+
+	/**
+	 * Handle a key press - determine if any button's key configured matches
+	 * what was typed and trigger the action if so.
+	 * @param  {string} character The character pressed
+	 * @param  {object} e Key event that triggered this call
+	 * @private
+	 */
+	_keypress: function (character, e) {
+		// Check if this button press already activated on another instance of Buttons
+		if (e._buttonsHandled) {
+			return;
+		}
+
+		var run = function (conf, node) {
+			if (!conf.key) {
+				return;
+			}
+
+			if (conf.key === character) {
+				e._buttonsHandled = true;
+				$(node).click();
+			}
+			else if ($.isPlainObject(conf.key)) {
+				if (conf.key.key !== character) {
+					return;
+				}
+
+				if (conf.key.shiftKey && !e.shiftKey) {
+					return;
+				}
+
+				if (conf.key.altKey && !e.altKey) {
+					return;
+				}
+
+				if (conf.key.ctrlKey && !e.ctrlKey) {
+					return;
+				}
+
+				if (conf.key.metaKey && !e.metaKey) {
+					return;
+				}
+
+				// Made it this far - it is good
+				e._buttonsHandled = true;
+				$(node).click();
+			}
+		};
+
+		var recurse = function (a) {
+			for (var i = 0, ien = a.length; i < ien; i++) {
+				run(a[i].conf, a[i].node);
+
+				if (a[i].buttons.length) {
+					recurse(a[i].buttons);
+				}
+			}
+		};
+
+		recurse(this.s.buttons);
+	},
+
+	/**
+	 * Remove a key from the key listener for this instance (to be used when a
+	 * button is removed)
+	 * @param  {object} conf Button configuration
+	 * @private
+	 */
+	_removeKey: function (conf) {
+		if (conf.key) {
+			var character = $.isPlainObject(conf.key) ? conf.key.key : conf.key;
+
+			// Remove only one character, as multiple buttons could have the
+			// same listening key
+			var a = this.s.listenKeys.split('');
+			var idx = $.inArray(character, a);
+			a.splice(idx, 1);
+			this.s.listenKeys = a.join('');
+		}
+	},
+
+	/**
+	 * Resolve a button configuration
+	 * @param  {string|function|object} conf Button config to resolve
+	 * @return {object} Button configuration
+	 * @private
+	 */
+	_resolveExtends: function (conf) {
+		var that = this;
+		var dt = this.s.dt;
+		var i, ien;
+		var toConfObject = function (base) {
+			var loop = 0;
+
+			// Loop until we have resolved to a button configuration, or an
+			// array of button configurations (which will be iterated
+			// separately)
+			while (!$.isPlainObject(base) && !Array.isArray(base)) {
+				if (base === undefined) {
+					return;
+				}
+
+				if (typeof base === 'function') {
+					base = base.call(that, dt, conf);
+
+					if (!base) {
+						return false;
+					}
+				}
+				else if (typeof base === 'string') {
+					if (!_dtButtons[base]) {
+						return { html: base };
+					}
+
+					base = _dtButtons[base];
+				}
+
+				loop++;
+				if (loop > 30) {
+					// Protect against misconfiguration killing the browser
+					throw 'Buttons: Too many iterations';
+				}
+			}
+
+			return Array.isArray(base) ? base : $.extend({}, base);
+		};
+
+		conf = toConfObject(conf);
+
+		while (conf && conf.extend) {
+			// Use `toConfObject` in case the button definition being extended
+			// is itself a string or a function
+			if (!_dtButtons[conf.extend]) {
+				throw 'Cannot extend unknown button type: ' + conf.extend;
+			}
+
+			var objArray = toConfObject(_dtButtons[conf.extend]);
+			if (Array.isArray(objArray)) {
+				return objArray;
+			}
+			else if (!objArray) {
+				// This is a little brutal as it might be possible to have a
+				// valid button without the extend, but if there is no extend
+				// then the host button would be acting in an undefined state
+				return false;
+			}
+
+			// Stash the current class name
+			var originalClassName = objArray.className;
+
+			if (conf.config !== undefined && objArray.config !== undefined) {
+				conf.config = $.extend({}, objArray.config, conf.config);
+			}
+
+			conf = $.extend({}, objArray, conf);
+
+			// The extend will have overwritten the original class name if the
+			// `conf` object also assigned a class, but we want to concatenate
+			// them so they are list that is combined from all extended buttons
+			if (originalClassName && conf.className !== originalClassName) {
+				conf.className = originalClassName + ' ' + conf.className;
+			}
+
+			// Although we want the `conf` object to overwrite almost all of
+			// the properties of the object being extended, the `extend`
+			// property should come from the object being extended
+			conf.extend = objArray.extend;
+		}
+
+		// Buttons to be added to a collection  -gives the ability to define
+		// if buttons should be added to the start or end of a collection
+		var postfixButtons = conf.postfixButtons;
+		if (postfixButtons) {
+			if (!conf.buttons) {
+				conf.buttons = [];
+			}
+
+			for (i = 0, ien = postfixButtons.length; i < ien; i++) {
+				conf.buttons.push(postfixButtons[i]);
+			}
+		}
+
+		var prefixButtons = conf.prefixButtons;
+		if (prefixButtons) {
+			if (!conf.buttons) {
+				conf.buttons = [];
+			}
+
+			for (i = 0, ien = prefixButtons.length; i < ien; i++) {
+				conf.buttons.splice(i, 0, prefixButtons[i]);
+			}
+		}
+
+		return conf;
+	},
+
+	/**
+	 * Display (and replace if there is an existing one) a popover attached to a button
+	 * @param {string|node} content Content to show
+	 * @param {DataTable.Api} hostButton DT API instance of the button
+	 * @param {object} inOpts Options (see object below for all options)
+	 */
+	_popover: function (content, hostButton, inOpts) {
+		var dt = hostButton;
+		var c = this.c;
+		var closed = false;
+		var options = $.extend(
+			{
+				align: 'button-left', // button-right, dt-container, split-left, split-right
+				autoClose: false,
+				background: true,
+				backgroundClassName: 'dt-button-background',
+				closeButton: true,
+				containerClassName: c.dom.collection.container.className,
+				contentClassName: c.dom.collection.container.content.className,
+				collectionLayout: '',
+				collectionTitle: '',
+				dropup: false,
+				fade: 400,
+				popoverTitle: '',
+				rightAlignClassName: 'dt-button-right',
+				tag: c.dom.collection.container.tag
+			},
+			inOpts
+		);
+
+		var containerSelector =
+			options.tag + '.' + options.containerClassName.replace(/ /g, '.');
+		var hostButtonNode = hostButton.node();
+		var hostNode = options.collectionLayout.includes('fixed') ? $('body') : hostButton.node();
+
+		var close = function () {
+			closed = true;
+
+			_fadeOut($(containerSelector), options.fade, function () {
+				$(this).detach();
+			});
+
+			$(
+				dt
+					.buttons('[aria-haspopup="dialog"][aria-expanded="true"]')
+					.nodes()
+			).attr('aria-expanded', 'false');
+
+			$('div.dt-button-background').off('click.dtb-collection');
+			Buttons.background(
+				false,
+				options.backgroundClassName,
+				options.fade,
+				hostNode
+			);
+
+			$(window).off('resize.resize.dtb-collection');
+			$('body').off('.dtb-collection');
+			dt.off('buttons-action.b-internal');
+			dt.off('destroy');
+
+			$('body').trigger('buttons-popover-hide.dt');
+		};
+
+		if (content === false) {
+			close();
+			return;
+		}
+
+		var existingExpanded = $(
+			dt.buttons('[aria-haspopup="dialog"][aria-expanded="true"]').nodes()
+		);
+		if (existingExpanded.length) {
+			// Reuse the current position if the button that was triggered is inside an existing collection
+			if (hostNode.closest(containerSelector).length) {
+				hostNode = existingExpanded.eq(0);
+			}
+
+			close();
+		}
+
+		// Sort buttons if defined
+		if (options.sort) {
+			var elements = $('button', content)
+				.map(function (idx, el) {
+					return {
+						text: $(el).text(),
+						el: el
+					};
+				})
+				.toArray();
+
+			elements.sort(function (a, b) {
+				return a.text.localeCompare(b.text);
+			});
+
+			$(content).append(elements.map(function (v) {
+				return v.el;
+			}));
+		}
+
+		// Try to be smart about the layout
+		var cnt = $('.dt-button', content).length;
+		var mod = '';
+
+		if (cnt === 3) {
+			mod = 'dtb-b3';
+		}
+		else if (cnt === 2) {
+			mod = 'dtb-b2';
+		}
+		else if (cnt === 1) {
+			mod = 'dtb-b1';
+		}
+
+		var display = $('<' + options.tag + '/>')
+			.addClass(options.containerClassName)
+			.addClass(options.collectionLayout)
+			.addClass(options.splitAlignClass)
+			.addClass(mod)
+			.css('display', 'none')
+			.attr({
+				'aria-modal': true,
+				role: 'dialog'
+			});
+
+		content = $(content)
+			.addClass(options.contentClassName)
+			.attr('role', 'menu')
+			.appendTo(display);
+
+		hostButtonNode.attr('aria-expanded', 'true');
+
+		if (hostNode.parents('body')[0] !== document.body) {
+			hostNode = $(document.body).children('div, section, p').last();
+		}
+
+		if (options.popoverTitle) {
+			display.prepend(
+				'<div class="dt-button-collection-title">' +
+					options.popoverTitle +
+					'</div>'
+			);
+		}
+		else if (options.collectionTitle) {
+			display.prepend(
+				'<div class="dt-button-collection-title">' +
+					options.collectionTitle +
+					'</div>'
+			);
+		}
+
+		if (options.closeButton) {
+			display
+				.prepend('<div class="dtb-popover-close">&times;</div>')
+				.addClass('dtb-collection-closeable');
+		}
+
+		_fadeIn(display.insertAfter(hostNode), options.fade);
+
+		var tableContainer = $(hostButton.table().container());
+		var position = display.css('position');
+
+		if (options.span === 'container' || options.align === 'dt-container') {
+			hostNode = hostNode.parent();
+			display.css('width', tableContainer.width());
+		}
+
+		// Align the popover relative to the DataTables container
+		// Useful for wide popovers such as SearchPanes
+		if (position === 'absolute') {
+			// Align relative to the host button
+			var offsetParent = $(hostNode[0].offsetParent);
+			var buttonPosition = hostNode.position();
+			var buttonOffset = hostNode.offset();
+			var tableSizes = offsetParent.offset();
+			var containerPosition = offsetParent.position();
+			var computed = window.getComputedStyle(offsetParent[0]);
+
+			tableSizes.height = offsetParent.outerHeight();
+			tableSizes.width =
+				offsetParent.width() + parseFloat(computed.paddingLeft);
+			tableSizes.right = tableSizes.left + tableSizes.width;
+			tableSizes.bottom = tableSizes.top + tableSizes.height;
+
+			// Set the initial position so we can read height / width
+			var top = buttonPosition.top + hostNode.outerHeight();
+			var left = buttonPosition.left;
+
+			display.css({
+				top: top,
+				left: left
+			});
+
+			// Get the popover position
+			computed = window.getComputedStyle(display[0]);
+			var popoverSizes = display.offset();
+
+			popoverSizes.height = display.outerHeight();
+			popoverSizes.width = display.outerWidth();
+			popoverSizes.right = popoverSizes.left + popoverSizes.width;
+			popoverSizes.bottom = popoverSizes.top + popoverSizes.height;
+			popoverSizes.marginTop = parseFloat(computed.marginTop);
+			popoverSizes.marginBottom = parseFloat(computed.marginBottom);
+
+			// First position per the class requirements - pop up and right align
+			if (options.dropup) {
+				top =
+					buttonPosition.top -
+					popoverSizes.height -
+					popoverSizes.marginTop -
+					popoverSizes.marginBottom;
+			}
+
+			if (
+				options.align === 'button-right' ||
+				display.hasClass(options.rightAlignClassName)
+			) {
+				left =
+					buttonPosition.left -
+					popoverSizes.width +
+					hostNode.outerWidth();
+			}
+
+			// Container alignment - make sure it doesn't overflow the table container
+			if (
+				options.align === 'dt-container' ||
+				options.align === 'container'
+			) {
+				if (left < buttonPosition.left) {
+					left = -buttonPosition.left;
+				}
+			}
+
+			// Window adjustment
+			if (
+				containerPosition.left + left + popoverSizes.width >
+				$(window).width()
+			) {
+				// Overflowing the document to the right
+				left =
+					$(window).width() -
+					popoverSizes.width -
+					containerPosition.left;
+			}
+
+			if (buttonOffset.left + left < 0) {
+				// Off to the left of the document
+				left = -buttonOffset.left;
+			}
+
+			if (
+				containerPosition.top + top + popoverSizes.height >
+				$(window).height() + $(window).scrollTop()
+			) {
+				// Pop up if otherwise we'd need the user to scroll down
+				top =
+					buttonPosition.top -
+					popoverSizes.height -
+					popoverSizes.marginTop -
+					popoverSizes.marginBottom;
+			}
+
+			if (offsetParent.offset().top + top < $(window).scrollTop()) {
+				// Correction for when the top is beyond the top of the page
+				top = buttonPosition.top + hostNode.outerHeight();
+			}
+
+			// Calculations all done - now set it
+			display.css({
+				top: top,
+				left: left
+			});
+		}
+		else {
+			// Fix position - centre on screen
+			var place = function () {
+				var half = $(window).height() / 2;
+
+				var top = display.height() / 2;
+				if (top > half) {
+					top = half;
+				}
+
+				display.css('marginTop', top * -1);
+			};
+
+			place();
+
+			$(window).on('resize.dtb-collection', function () {
+				place();
+			});
+		}
+
+		if (options.background) {
+			Buttons.background(
+				true,
+				options.backgroundClassName,
+				options.fade,
+				options.backgroundHost || hostNode
+			);
+		}
+
+		// This is bonkers, but if we don't have a click listener on the
+		// background element, iOS Safari will ignore the body click
+		// listener below. An empty function here is all that is
+		// required to make it work...
+		$('div.dt-button-background').on(
+			'click.dtb-collection',
+			function () {}
+		);
+
+		if (options.autoClose) {
+			setTimeout(function () {
+				dt.on('buttons-action.b-internal', function (e, btn, dt, node) {
+					if (node[0] === hostNode[0]) {
+						return;
+					}
+					close();
+				});
+			}, 0);
+		}
+
+		$(display).trigger('buttons-popover.dt');
+
+		dt.on('destroy', close);
+
+		setTimeout(function () {
+			closed = false;
+			$('body')
+				.on('click.dtb-collection', function (e) {
+					if (closed) {
+						return;
+					}
+
+					// andSelf is deprecated in jQ1.8, but we want 1.7 compat
+					var back = $.fn.addBack ? 'addBack' : 'andSelf';
+					var parent = $(e.target).parent()[0];
+
+					if (
+						(!$(e.target).parents()[back]().filter(content)
+							.length &&
+							!$(parent).hasClass('dt-buttons')) ||
+						$(e.target).hasClass('dt-button-background')
+					) {
+						close();
+					}
+				})
+				.on('keyup.dtb-collection', function (e) {
+					if (e.keyCode === 27) {
+						close();
+					}
+				})
+				.on('keydown.dtb-collection', function (e) {
+					// Focus trap for tab key
+					var elements = $('a, button', content);
+					var active = document.activeElement;
+
+					if (e.keyCode !== 9) {
+						// tab
+						return;
+					}
+
+					if (elements.index(active) === -1) {
+						// If current focus is not inside the popover
+						elements.first().focus();
+						e.preventDefault();
+					}
+					else if (e.shiftKey) {
+						// Reverse tabbing order when shift key is pressed
+						if (active === elements[0]) {
+							elements.last().focus();
+							e.preventDefault();
+						}
+					}
+					else {
+						if (active === elements.last()[0]) {
+							elements.first().focus();
+							e.preventDefault();
+						}
+					}
+				});
+		}, 0);
+	}
+});
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * Statics
+ */
+
+/**
+ * Show / hide a background layer behind a collection
+ * @param  {boolean} Flag to indicate if the background should be shown or
+ *   hidden
+ * @param  {string} Class to assign to the background
+ * @static
+ */
+Buttons.background = function (show, className, fade, insertPoint) {
+	if (fade === undefined) {
+		fade = 400;
+	}
+	if (!insertPoint) {
+		insertPoint = document.body;
+	}
+
+	if (show) {
+		_fadeIn(
+			$('<div/>')
+				.addClass(className)
+				.css('display', 'none')
+				.insertAfter(insertPoint),
+			fade
+		);
+	}
+	else {
+		_fadeOut($('div.' + className), fade, function () {
+			$(this).removeClass(className).remove();
+		});
+	}
+};
+
+/**
+ * Instance selector - select Buttons instances based on an instance selector
+ * value from the buttons assigned to a DataTable. This is only useful if
+ * multiple instances are attached to a DataTable.
+ * @param  {string|int|array} Instance selector - see `instance-selector`
+ *   documentation on the DataTables site
+ * @param  {array} Button instance array that was attached to the DataTables
+ *   settings object
+ * @return {array} Buttons instances
+ * @static
+ */
+Buttons.instanceSelector = function (group, buttons) {
+	if (group === undefined || group === null) {
+		return $.map(buttons, function (v) {
+			return v.inst;
+		});
+	}
+
+	var ret = [];
+	var names = $.map(buttons, function (v) {
+		return v.name;
+	});
+
+	// Flatten the group selector into an array of single options
+	var process = function (input) {
+		if (Array.isArray(input)) {
+			for (var i = 0, ien = input.length; i < ien; i++) {
+				process(input[i]);
+			}
+			return;
+		}
+
+		if (typeof input === 'string') {
+			if (input.indexOf(',') !== -1) {
+				// String selector, list of names
+				process(input.split(','));
+			}
+			else {
+				// String selector individual name
+				var idx = $.inArray(input.trim(), names);
+
+				if (idx !== -1) {
+					ret.push(buttons[idx].inst);
+				}
+			}
+		}
+		else if (typeof input === 'number') {
+			// Index selector
+			ret.push(buttons[input].inst);
+		}
+		else if (typeof input === 'object' && input.nodeName) {
+			// Element selector
+			for (var j = 0; j < buttons.length; j++) {
+				if (buttons[j].inst.dom.container[0] === input) {
+					ret.push(buttons[j].inst);
+				}
+			}
+		}
+		else if (typeof input === 'object') {
+			// Actual instance selector
+			ret.push(input);
+		}
+	};
+
+	process(group);
+
+	return ret;
+};
+
+/**
+ * Button selector - select one or more buttons from a selector input so some
+ * operation can be performed on them.
+ * @param  {array} Button instances array that the selector should operate on
+ * @param  {string|int|node|jQuery|array} Button selector - see
+ *   `button-selector` documentation on the DataTables site
+ * @return {array} Array of objects containing `inst` and `idx` properties of
+ *   the selected buttons so you know which instance each button belongs to.
+ * @static
+ */
+Buttons.buttonSelector = function (insts, selector) {
+	var ret = [];
+	var nodeBuilder = function (a, buttons, baseIdx) {
+		var button;
+		var idx;
+
+		for (var i = 0, ien = buttons.length; i < ien; i++) {
+			button = buttons[i];
+
+			if (button) {
+				idx = baseIdx !== undefined ? baseIdx + i : i + '';
+
+				a.push({
+					node: button.node,
+					name: button.conf.name,
+					idx: idx
+				});
+
+				if (button.buttons) {
+					nodeBuilder(a, button.buttons, idx + '-');
+				}
+			}
+		}
+	};
+
+	var run = function (selector, inst) {
+		var i, ien;
+		var buttons = [];
+		nodeBuilder(buttons, inst.s.buttons);
+
+		var nodes = $.map(buttons, function (v) {
+			return v.node;
+		});
+
+		if (Array.isArray(selector) || selector instanceof $) {
+			for (i = 0, ien = selector.length; i < ien; i++) {
+				run(selector[i], inst);
+			}
+			return;
+		}
+
+		if (selector === null || selector === undefined || selector === '*') {
+			// Select all
+			for (i = 0, ien = buttons.length; i < ien; i++) {
+				ret.push({
+					inst: inst,
+					node: buttons[i].node
+				});
+			}
+		}
+		else if (typeof selector === 'number') {
+			// Main button index selector
+			if (inst.s.buttons[selector]) {
+				ret.push({
+					inst: inst,
+					node: inst.s.buttons[selector].node
+				});
+			}
+		}
+		else if (typeof selector === 'string') {
+			if (selector.indexOf(',') !== -1) {
+				// Split
+				var a = selector.split(',');
+
+				for (i = 0, ien = a.length; i < ien; i++) {
+					run(a[i].trim(), inst);
+				}
+			}
+			else if (selector.match(/^\d+(\-\d+)*$/)) {
+				// Sub-button index selector
+				var indexes = $.map(buttons, function (v) {
+					return v.idx;
+				});
+
+				ret.push({
+					inst: inst,
+					node: buttons[$.inArray(selector, indexes)].node
+				});
+			}
+			else if (selector.indexOf(':name') !== -1) {
+				// Button name selector
+				var name = selector.replace(':name', '');
+
+				for (i = 0, ien = buttons.length; i < ien; i++) {
+					if (buttons[i].name === name) {
+						ret.push({
+							inst: inst,
+							node: buttons[i].node
+						});
+					}
+				}
+			}
+			else {
+				// jQuery selector on the nodes
+				$(nodes)
+					.filter(selector)
+					.each(function () {
+						ret.push({
+							inst: inst,
+							node: this
+						});
+					});
+			}
+		}
+		else if (typeof selector === 'object' && selector.nodeName) {
+			// Node selector
+			var idx = $.inArray(selector, nodes);
+
+			if (idx !== -1) {
+				ret.push({
+					inst: inst,
+					node: nodes[idx]
+				});
+			}
+		}
+	};
+
+	for (var i = 0, ien = insts.length; i < ien; i++) {
+		var inst = insts[i];
+
+		run(selector, inst);
+	}
+
+	return ret;
+};
+
+/**
+ * Default function used for formatting output data.
+ * @param {*} str Data to strip
+ */
+Buttons.stripData = function (str, config) {
+	// If the input is an HTML element, we can use the HTML from it (HTML might be stripped below).
+	if (str !== null && typeof str === 'object' && str.nodeName && str.nodeType) {
+		str = str.innerHTML;
+	}
+
+	if (typeof str !== 'string') {
+		return str;
+	}
+
+	// Always remove script tags
+	str = Buttons.stripHtmlScript(str);
+
+	// Always remove comments
+	str = Buttons.stripHtmlComments(str);
+
+	if (!config || config.stripHtml) {
+		str = DataTable.util.stripHtml(str);
+	}
+
+	if (!config || config.trim) {
+		str = str.trim();
+	}
+
+	if (!config || config.stripNewlines) {
+		str = str.replace(/\n/g, ' ');
+	}
+
+	if (!config || config.decodeEntities) {
+		if (_entityDecoder) {
+			str = _entityDecoder(str);
+		}
+		else {
+			_exportTextarea.innerHTML = str;
+			str = _exportTextarea.value;
+		}
+	}
+
+	// Prevent Excel from running a formula
+	if (!config || config.escapeExcelFormula) {
+		if (str.match(/^[=@\t\r]/)) {
+			str = "'" + str;
+		}
+	}
+
+	return str;
+};
+
+/**
+ * Provide a custom entity decoding function - e.g. a regex one, which can be
+ * much faster than the built in DOM option, but also larger code size.
+ * @param {function} fn
+ */
+Buttons.entityDecoder = function (fn) {
+	_entityDecoder = fn;
+};
+
+/**
+ * Common function for stripping HTML comments
+ *
+ * @param {*} input 
+ * @returns 
+ */
+Buttons.stripHtmlComments = function (input) {
+	var previous;  
+	
+	do {  
+		previous = input;
+		input = input.replace(/(<!--.*?--!?>)|(<!--[\S\s]+?--!?>)|(<!--[\S\s]*?$)/g, '');
+	} while (input !== previous);  
+
+	return input;  
+};
+
+/**
+ * Common function for stripping HTML script tags
+ *
+ * @param {*} input 
+ * @returns 
+ */
+Buttons.stripHtmlScript = function (input) {
+	var previous;  
+	
+	do {  
+		previous = input;
+		input = input.replace(/<script\b[^<]*(?:(?!<\/script[^>]*>)<[^<]*)*<\/script[^>]*>/gi, '');
+	} while (input !== previous);  
+
+	return input;  
+};
+
+/**
+ * Buttons defaults. For full documentation, please refer to the docs/option
+ * directory or the DataTables site.
+ * @type {Object}
+ * @static
+ */
+Buttons.defaults = {
+	buttons: ['copy', 'excel', 'csv', 'pdf', 'print'],
+	name: 'main',
+	tabIndex: 0,
+	dom: {
+		container: {
+			tag: 'div',
+			className: 'dt-buttons'
+		},
+		collection: {
+			container: {
+				// The element used for the dropdown
+				className: 'dt-button-collection',
+				content: {
+					className: '',
+					tag: 'div'
+				},
+				tag: 'div'
+			}
+			// optionally
+			// , button: IButton - buttons inside the collection container
+			// , split: ISplit - splits inside the collection container
+		},
+		button: {
+			tag: 'button',
+			className: 'dt-button',
+			active: 'dt-button-active', // class name
+			disabled: 'disabled', // class name
+			spacer: {
+				className: 'dt-button-spacer',
+				tag: 'span'
+			},
+			liner: {
+				tag: 'span',
+				className: ''
+			},
+			dropClass: '',
+			dropHtml: '<span class="dt-button-down-arrow">&#x25BC;</span>'
+		},
+		split: {
+			action: {
+				// action button
+				className: 'dt-button-split-drop-button dt-button',
+				tag: 'button'
+			},
+			dropdown: {
+				// button to trigger the dropdown
+				align: 'split-right',
+				className: 'dt-button-split-drop',
+				splitAlignClass: 'dt-button-split-left',
+				tag: 'button'
+			},
+			wrapper: {
+				// wrap around both
+				className: 'dt-button-split',
+				tag: 'div'
+			}
+		}
+	}
+};
+
+/**
+ * Version information
+ * @type {string}
+ * @static
+ */
+Buttons.version = '3.2.5';
+
+$.extend(_dtButtons, {
+	collection: {
+		text: function (dt) {
+			return dt.i18n('buttons.collection', 'Collection');
+		},
+		className: 'buttons-collection',
+		closeButton: false,
+		dropIcon: true,
+		init: function (dt, button) {
+			button.attr('aria-expanded', false);
+		},
+		action: function (e, dt, button, config) {
+			if (config._collection.parents('body').length) {
+				this.popover(false, config);
+			}
+			else {
+				this.popover(config._collection, config);
+			}
+
+			// When activated using a key - auto focus on the
+			// first item in the popover
+			if (e.type === 'keypress') {
+				$('a, button', config._collection).eq(0).focus();
+			}
+		},
+		attr: {
+			'aria-haspopup': 'dialog'
+		}
+		// Also the popover options, defined in Buttons.popover
+	},
+	split: {
+		text: function (dt) {
+			return dt.i18n('buttons.split', 'Split');
+		},
+		className: 'buttons-split',
+		closeButton: false,
+		init: function (dt, button) {
+			return button.attr('aria-expanded', false);
+		},
+		action: function (e, dt, button, config) {
+			this.popover(config._collection, config);
+		},
+		attr: {
+			'aria-haspopup': 'dialog'
+		}
+		// Also the popover options, defined in Buttons.popover
+	},
+	copy: function () {
+		if (_dtButtons.copyHtml5) {
+			return 'copyHtml5';
+		}
+	},
+	csv: function (dt, conf) {
+		if (_dtButtons.csvHtml5 && _dtButtons.csvHtml5.available(dt, conf)) {
+			return 'csvHtml5';
+		}
+	},
+	excel: function (dt, conf) {
+		if (
+			_dtButtons.excelHtml5 &&
+			_dtButtons.excelHtml5.available(dt, conf)
+		) {
+			return 'excelHtml5';
+		}
+	},
+	pdf: function (dt, conf) {
+		if (_dtButtons.pdfHtml5 && _dtButtons.pdfHtml5.available(dt, conf)) {
+			return 'pdfHtml5';
+		}
+	},
+	pageLength: function (dt) {
+		var lengthMenu = dt.settings()[0].aLengthMenu;
+		var vals = [];
+		var lang = [];
+		var text = function (dt) {
+			return dt.i18n(
+				'buttons.pageLength',
+				{
+					'-1': 'Show all rows',
+					_: 'Show %d rows'
+				},
+				dt.page.len()
+			);
+		};
+
+		// Support for DataTables 1.x 2D array
+		if (Array.isArray(lengthMenu[0])) {
+			vals = lengthMenu[0];
+			lang = lengthMenu[1];
+		}
+		else {
+			for (var i = 0; i < lengthMenu.length; i++) {
+				var option = lengthMenu[i];
+
+				// Support for DataTables 2 object in the array
+				if ($.isPlainObject(option)) {
+					vals.push(option.value);
+					lang.push(option.label);
+				}
+				else {
+					vals.push(option);
+					lang.push(option);
+				}
+			}
+		}
+
+		return {
+			extend: 'collection',
+			text: text,
+			className: 'buttons-page-length',
+			autoClose: true,
+			buttons: $.map(vals, function (val, i) {
+				return {
+					text: lang[i],
+					className: 'button-page-length',
+					action: function (e, dt) {
+						dt.page.len(val).draw();
+					},
+					init: function (dt, node, conf) {
+						var that = this;
+						var fn = function () {
+							that.active(dt.page.len() === val);
+						};
+
+						dt.on('length.dt' + conf.namespace, fn);
+						fn();
+					},
+					destroy: function (dt, node, conf) {
+						dt.off('length.dt' + conf.namespace);
+					}
+				};
+			}),
+			init: function (dt, node, conf) {
+				var that = this;
+				dt.on('length.dt' + conf.namespace, function () {
+					that.text(conf.text);
+				});
+			},
+			destroy: function (dt, node, conf) {
+				dt.off('length.dt' + conf.namespace);
+			}
+		};
+	},
+	spacer: {
+		style: 'empty',
+		spacer: true,
+		text: function (dt) {
+			return dt.i18n('buttons.spacer', '');
+		}
+	}
+});
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * DataTables API
+ *
+ * For complete documentation, please refer to the docs/api directory or the
+ * DataTables site
+ */
+
+// Buttons group and individual button selector
+DataTable.Api.register('buttons()', function (group, selector) {
+	// Argument shifting
+	if (selector === undefined) {
+		selector = group;
+		group = undefined;
+	}
+
+	this.selector.buttonGroup = group;
+
+	var res = this.iterator(
+		true,
+		'table',
+		function (ctx) {
+			if (ctx._buttons) {
+				return Buttons.buttonSelector(
+					Buttons.instanceSelector(group, ctx._buttons),
+					selector
+				);
+			}
+		},
+		true
+	);
+
+	res._groupSelector = group;
+	return res;
+});
+
+// Individual button selector
+DataTable.Api.register('button()', function (group, selector) {
+	// just run buttons() and truncate
+	var buttons = this.buttons(group, selector);
+
+	if (buttons.length > 1) {
+		buttons.splice(1, buttons.length);
+	}
+
+	return buttons;
+});
+
+// Active buttons
+DataTable.Api.registerPlural(
+	'buttons().active()',
+	'button().active()',
+	function (flag) {
+		if (flag === undefined) {
+			return this.map(function (set) {
+				return set.inst.active(set.node);
+			});
+		}
+
+		return this.each(function (set) {
+			set.inst.active(set.node, flag);
+		});
+	}
+);
+
+// Get / set button action
+DataTable.Api.registerPlural(
+	'buttons().action()',
+	'button().action()',
+	function (action) {
+		if (action === undefined) {
+			return this.map(function (set) {
+				return set.inst.action(set.node);
+			});
+		}
+
+		return this.each(function (set) {
+			set.inst.action(set.node, action);
+		});
+	}
+);
+
+// Collection control
+DataTable.Api.registerPlural(
+	'buttons().collectionRebuild()',
+	'button().collectionRebuild()',
+	function (buttons) {
+		return this.each(function (set) {
+			for (var i = 0; i < buttons.length; i++) {
+				if (typeof buttons[i] === 'object') {
+					buttons[i].parentConf = set;
+				}
+			}
+			set.inst.collectionRebuild(set.node, buttons);
+		});
+	}
+);
+
+// Enable / disable buttons
+DataTable.Api.register(
+	['buttons().enable()', 'button().enable()'],
+	function (flag) {
+		return this.each(function (set) {
+			set.inst.enable(set.node, flag);
+		});
+	}
+);
+
+// Disable buttons
+DataTable.Api.register(
+	['buttons().disable()', 'button().disable()'],
+	function () {
+		return this.each(function (set) {
+			set.inst.disable(set.node);
+		});
+	}
+);
+
+// Button index
+DataTable.Api.register('button().index()', function () {
+	var idx = null;
+
+	this.each(function (set) {
+		var res = set.inst.index(set.node);
+
+		if (res !== null) {
+			idx = res;
+		}
+	});
+
+	return idx;
+});
+
+// Get button nodes
+DataTable.Api.registerPlural(
+	'buttons().nodes()',
+	'button().node()',
+	function () {
+		var jq = $();
+
+		// jQuery will automatically reduce duplicates to a single entry
+		$(
+			this.each(function (set) {
+				jq = jq.add(set.inst.node(set.node));
+			})
+		);
+
+		return jq;
+	}
+);
+
+// Get / set button processing state
+DataTable.Api.registerPlural(
+	'buttons().processing()',
+	'button().processing()',
+	function (flag) {
+		if (flag === undefined) {
+			return this.map(function (set) {
+				return set.inst.processing(set.node);
+			});
+		}
+
+		return this.each(function (set) {
+			set.inst.processing(set.node, flag);
+		});
+	}
+);
+
+// Get / set button text (i.e. the button labels)
+DataTable.Api.registerPlural(
+	'buttons().text()',
+	'button().text()',
+	function (label) {
+		if (label === undefined) {
+			return this.map(function (set) {
+				return set.inst.text(set.node);
+			});
+		}
+
+		return this.each(function (set) {
+			set.inst.text(set.node, label);
+		});
+	}
+);
+
+// Trigger a button's action
+DataTable.Api.registerPlural(
+	'buttons().trigger()',
+	'button().trigger()',
+	function () {
+		return this.each(function (set) {
+			set.inst.node(set.node).trigger('click');
+		});
+	}
+);
+
+// Button resolver to the popover
+DataTable.Api.register('button().popover()', function (content, options) {
+	return this.map(function (set) {
+		return set.inst._popover(content, this.button(this[0].node), options);
+	});
+});
+
+// Get the container elements
+DataTable.Api.register('buttons().containers()', function () {
+	var jq = $();
+	var groupSelector = this._groupSelector;
+
+	// We need to use the group selector directly, since if there are no buttons
+	// the result set will be empty
+	this.iterator(true, 'table', function (ctx) {
+		if (ctx._buttons) {
+			var insts = Buttons.instanceSelector(groupSelector, ctx._buttons);
+
+			for (var i = 0, ien = insts.length; i < ien; i++) {
+				jq = jq.add(insts[i].container());
+			}
+		}
+	});
+
+	return jq;
+});
+
+DataTable.Api.register('buttons().container()', function () {
+	// API level of nesting is `buttons()` so we can zip into the containers method
+	return this.containers().eq(0);
+});
+
+// Add a new button
+DataTable.Api.register('button().add()', function (idx, conf, draw) {
+	var ctx = this.context;
+	var node;
+
+	// Don't use `this` as it could be empty - select the instances directly
+	if (ctx.length) {
+		var inst = Buttons.instanceSelector(
+			this._groupSelector,
+			ctx[0]._buttons
+		);
+
+		if (inst.length) {
+			node = inst[0].add(conf, idx, draw);
+		}
+	}
+
+	return node
+		? this.button(this._groupSelector, node)
+		: this;
+});
+
+// Destroy the button sets selected
+DataTable.Api.register('buttons().destroy()', function () {
+	this.pluck('inst')
+		.unique()
+		.each(function (inst) {
+			inst.destroy();
+		});
+
+	return this;
+});
+
+// Remove a button
+DataTable.Api.registerPlural(
+	'buttons().remove()',
+	'buttons().remove()',
+	function () {
+		this.each(function (set) {
+			set.inst.remove(set.node);
+		});
+
+		return this;
+	}
+);
+
+// Information box that can be used by buttons
+var _infoTimer;
+DataTable.Api.register('buttons.info()', function (title, message, time) {
+	var that = this;
+
+	if (title === false) {
+		this.off('destroy.btn-info');
+		_fadeOut($('#datatables_buttons_info'), 400, function () {
+			$(this).remove();
+		});
+		clearTimeout(_infoTimer);
+		_infoTimer = null;
+
+		return this;
+	}
+
+	if (_infoTimer) {
+		clearTimeout(_infoTimer);
+	}
+
+	if ($('#datatables_buttons_info').length) {
+		$('#datatables_buttons_info').remove();
+	}
+
+	title = title ? '<h2>' + title + '</h2>' : '';
+
+	_fadeIn(
+		$('<div id="datatables_buttons_info" class="dt-button-info"/>')
+			.html(title)
+			.append(
+				$('<div/>')[typeof message === 'string' ? 'html' : 'append'](
+					message
+				)
+			)
+			.css('display', 'none')
+			.appendTo('body')
+	);
+
+	if (time !== undefined && time !== 0) {
+		_infoTimer = setTimeout(function () {
+			that.buttons.info(false);
+		}, time);
+	}
+
+	this.on('destroy.btn-info', function () {
+		that.buttons.info(false);
+	});
+
+	return this;
+});
+
+// Get data from the table for export - this is common to a number of plug-in
+// buttons so it is included in the Buttons core library
+DataTable.Api.register('buttons.exportData()', function (options) {
+	if (this.context.length) {
+		return _exportData(new DataTable.Api(this.context[0]), options);
+	}
+});
+
+// Get information about the export that is common to many of the export data
+// types (DRY)
+DataTable.Api.register('buttons.exportInfo()', function (conf) {
+	if (!conf) {
+		conf = {};
+	}
+
+	return {
+		filename: _filename(conf, this),
+		title: _title(conf, this),
+		messageTop: _message(this, conf, conf.message || conf.messageTop, 'top'),
+		messageBottom: _message(this, conf, conf.messageBottom, 'bottom')
+	};
+});
+
+/**
+ * Get the file name for an exported file.
+ *
+ * @param {object} config Button configuration
+ * @param {object} dt DataTable instance
+ */
+var _filename = function (config, dt) {
+	// Backwards compatibility
+	var filename =
+		config.filename === '*' &&
+		config.title !== '*' &&
+		config.title !== undefined &&
+		config.title !== null &&
+		config.title !== ''
+			? config.title
+			: config.filename;
+
+	if (typeof filename === 'function') {
+		filename = filename(config, dt);
+	}
+
+	if (filename === undefined || filename === null) {
+		return null;
+	}
+
+	if (filename.indexOf('*') !== -1) {
+		filename = filename.replace(/\*/g, $('head > title').text()).trim();
+	}
+
+	// Strip characters which the OS will object to
+	filename = filename.replace(/[^a-zA-Z0-9_\u00A1-\uFFFF\.,\-_ !\(\)]/g, '');
+
+	var extension = _stringOrFunction(config.extension, config, dt);
+	if (!extension) {
+		extension = '';
+	}
+
+	return filename + extension;
+};
+
+/**
+ * Simply utility method to allow parameters to be given as a function
+ *
+ * @param {undefined|string|function} option Option
+ * @return {null|string} Resolved value
+ */
+var _stringOrFunction = function (option, config, dt) {
+	if (option === null || option === undefined) {
+		return null;
+	}
+	else if (typeof option === 'function') {
+		return option(config, dt);
+	}
+	return option;
+};
+
+/**
+ * Get the title for an exported file.
+ *
+ * @param {object} config	Button configuration
+ */
+var _title = function (config, dt) {
+	var title = _stringOrFunction(config.title, config, dt);
+
+	return title === null
+		? null
+		: title.indexOf('*') !== -1
+		? title.replace(/\*/g, $('head > title').text() || 'Exported data')
+		: title;
+};
+
+var _message = function (dt, config, option, position) {
+	var message = _stringOrFunction(option, config, dt);
+	if (message === null) {
+		return null;
+	}
+
+	var caption = $('caption', dt.table().container()).eq(0);
+	if (message === '*') {
+		var side = caption.css('caption-side');
+		if (side !== position) {
+			return null;
+		}
+
+		return caption.length ? caption.text() : '';
+	}
+
+	return message;
+};
+
+var _exportTextarea = $('<textarea/>')[0];
+var _exportData = function (dt, inOpts) {
+	var config = $.extend(
+		true,
+		{},
+		{
+			rows: null,
+			columns: '',
+			modifier: {
+				search: 'applied',
+				order: 'applied'
+			},
+			orthogonal: 'display',
+			stripHtml: true,
+			stripNewlines: true,
+			decodeEntities: true,
+			escapeExcelFormula: false,
+			trim: true,
+			format: {
+				header: function (d) {
+					return Buttons.stripData(d, config);
+				},
+				footer: function (d) {
+					return Buttons.stripData(d, config);
+				},
+				body: function (d) {
+					return Buttons.stripData(d, config);
+				}
+			},
+			customizeData: null,
+			customizeZip: null
+		},
+		inOpts
+	);
+
+	var header = dt
+		.columns(config.columns)
+		.indexes()
+		.map(function (idx) {
+			var col = dt.column(idx);
+			return config.format.header(col.title(), idx, col.header());
+		})
+		.toArray();
+
+	var footer = dt.table().footer()
+		? dt
+				.columns(config.columns)
+				.indexes()
+				.map(function (idx) {
+					var el = dt.column(idx).footer();
+					var val = '';
+
+					if (el) {
+						var inner = $('.dt-column-title', el);
+
+						val = inner.length
+							? inner.html()
+							: $(el).html();
+					}
+
+					return config.format.footer(val, idx, el);
+				})
+				.toArray()
+		: null;
+
+	// If Select is available on this table, and any rows are selected, limit the export
+	// to the selected rows. If no rows are selected, all rows will be exported. Specify
+	// a `selected` modifier to control directly.
+	var modifier = $.extend({}, config.modifier);
+	if (
+		dt.select &&
+		typeof dt.select.info === 'function' &&
+		modifier.selected === undefined
+	) {
+		if (
+			dt.rows(config.rows, $.extend({ selected: true }, modifier)).any()
+		) {
+			$.extend(modifier, { selected: true });
+		}
+	}
+
+	var rowIndexes = dt.rows(config.rows, modifier).indexes().toArray();
+	var selectedCells = dt.cells(rowIndexes, config.columns, {
+		order: modifier.order
+	});
+	var cells = selectedCells.render(config.orthogonal).toArray();
+	var cellNodes = selectedCells.nodes().toArray();
+	var cellIndexes = selectedCells.indexes().toArray();
+
+	var columns = dt.columns(config.columns).count();
+	var rows = columns > 0 ? cells.length / columns : 0;
+	var body = [];
+	var cellCounter = 0;
+
+	for (var i = 0, ien = rows; i < ien; i++) {
+		var row = [columns];
+
+		for (var j = 0; j < columns; j++) {
+			row[j] = config.format.body(
+				cells[cellCounter],
+				cellIndexes[cellCounter].row,
+				cellIndexes[cellCounter].column,
+				cellNodes[cellCounter]
+			);
+			cellCounter++;
+		}
+
+		body[i] = row;
+	}
+
+	var data = {
+		header: header,
+		headerStructure: _headerFormatter(
+			config.format.header,
+			dt.table().header.structure(config.columns)
+		),
+		footer: footer,
+		footerStructure: _headerFormatter(
+			config.format.footer,
+			dt.table().footer.structure(config.columns)
+		),
+		body: body
+	};
+
+	if (config.customizeData) {
+		config.customizeData(data);
+	}
+
+	return data;
+};
+
+function _headerFormatter(formatter, struct) {
+	for (var i=0 ; i<struct.length ; i++) {
+		for (var j=0 ; j<struct[i].length ; j++) {
+			var item = struct[i][j];
+
+			if (item) {
+				item.title = formatter(
+					item.title,
+					j,
+					item.cell
+				);
+			}
+		}
+	}
+
+	return struct;
+}
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * DataTables interface
+ */
+
+// Attach to DataTables objects for global access
+$.fn.dataTable.Buttons = Buttons;
+$.fn.DataTable.Buttons = Buttons;
+
+// DataTables creation - check if the buttons have been defined for this table,
+// they will have been if the `B` option was used in `dom`, otherwise we should
+// create the buttons instance here so they can be inserted into the document
+// using the API. Listen for `init` for compatibility with pre 1.10.10, but to
+// be removed in future.
+$(document).on('init.dt plugin-init.dt', function (e, settings) {
+	if (e.namespace !== 'dt') {
+		return;
+	}
+
+	var opts = settings.oInit.buttons || DataTable.defaults.buttons;
+
+	if (opts && !settings._buttons) {
+		new Buttons(settings, opts).container();
+	}
+});
+
+function _init(settings, options) {
+	var api = new DataTable.Api(settings);
+	var opts = options
+		? options
+		: api.init().buttons || DataTable.defaults.buttons;
+
+	return new Buttons(api, opts).container();
+}
+
+// DataTables 1 `dom` feature option
+DataTable.ext.feature.push({
+	fnInit: _init,
+	cFeature: 'B'
+});
+
+// DataTables 2 layout feature
+if (DataTable.feature) {
+	DataTable.feature.register('buttons', _init);
+}
+
+
+return DataTable;
+}));
+
+
+/*! DataTables styling wrapper for Buttons
+ * © SpryMedia Ltd - datatables.net/license
+ */
+
+(function( factory ){
+	if ( typeof define === 'function' && define.amd ) {
+		// AMD
+		define( ['jquery', 'datatables.net-dt', 'datatables.net-buttons'], function ( $ ) {
+			return factory( $, window, document );
+		} );
+	}
+	else if ( typeof exports === 'object' ) {
+		// CommonJS
+		var jq = require('jquery');
+		var cjsRequires = function (root, $) {
+			if ( ! $.fn.dataTable ) {
+				require('datatables.net-dt')(root, $);
+			}
+
+			if ( ! $.fn.dataTable.Buttons ) {
+				require('datatables.net-buttons')(root, $);
+			}
+		};
+
+		if (typeof window === 'undefined') {
+			module.exports = function (root, $) {
+				if ( ! root ) {
+					// CommonJS environments without a window global must pass a
+					// root. This will give an error otherwise
+					root = window;
+				}
+
+				if ( ! $ ) {
+					$ = jq( root );
+				}
+
+				cjsRequires( root, $ );
+				return factory( $, root, root.document );
+			};
+		}
+		else {
+			cjsRequires( window, jq );
+			module.exports = factory( jq, window, window.document );
+		}
+	}
+	else {
+		// Browser
+		factory( jQuery, window, document );
+	}
+}(function( $, window, document ) {
+'use strict';
+var DataTable = $.fn.dataTable;
+
+
+
+
+return DataTable;
+}));
+
+
+/*!
+ * Column visibility buttons for Buttons and DataTables.
+ * © SpryMedia Ltd - datatables.net/license
+ */
+
+(function( factory ){
+	if ( typeof define === 'function' && define.amd ) {
+		// AMD
+		define( ['jquery', 'datatables.net', 'datatables.net-buttons'], function ( $ ) {
+			return factory( $, window, document );
+		} );
+	}
+	else if ( typeof exports === 'object' ) {
+		// CommonJS
+		var jq = require('jquery');
+		var cjsRequires = function (root, $) {
+			if ( ! $.fn.dataTable ) {
+				require('datatables.net')(root, $);
+			}
+
+			if ( ! $.fn.dataTable.Buttons ) {
+				require('datatables.net-buttons')(root, $);
+			}
+		};
+
+		if (typeof window === 'undefined') {
+			module.exports = function (root, $) {
+				if ( ! root ) {
+					// CommonJS environments without a window global must pass a
+					// root. This will give an error otherwise
+					root = window;
+				}
+
+				if ( ! $ ) {
+					$ = jq( root );
+				}
+
+				cjsRequires( root, $ );
+				return factory( $, root, root.document );
+			};
+		}
+		else {
+			cjsRequires( window, jq );
+			module.exports = factory( jq, window, window.document );
+		}
+	}
+	else {
+		// Browser
+		factory( jQuery, window, document );
+	}
+}(function( $, window, document ) {
+'use strict';
+var DataTable = $.fn.dataTable;
+
+
+
+$.extend(DataTable.ext.buttons, {
+	// A collection of column visibility buttons
+	colvis: function (dt, conf) {
+		var node = null;
+		var buttonConf = {
+			extend: 'collection',
+			init: function (dt, n) {
+				node = n;
+			},
+			text: function (dt) {
+				return dt.i18n('buttons.colvis', 'Column visibility');
+			},
+			className: 'buttons-colvis',
+			closeButton: false,
+			buttons: [
+				{
+					extend: 'columnsToggle',
+					columns: conf.columns,
+					columnText: conf.columnText
+				}
+			]
+		};
+
+		// Rebuild the collection with the new column structure if columns are reordered
+		dt.on('column-reorder.dt' + conf.namespace, function () {
+			dt.button(null, dt.button(null, node).node()).collectionRebuild([
+				{
+					extend: 'columnsToggle',
+					columns: conf.columns,
+					columnText: conf.columnText
+				}
+			]);
+		});
+
+		return buttonConf;
+	},
+
+	// Selected columns with individual buttons - toggle column visibility
+	columnsToggle: function (dt, conf) {
+		var columns = dt
+			.columns(conf.columns)
+			.indexes()
+			.map(function (idx) {
+				return {
+					extend: 'columnToggle',
+					columns: idx,
+					columnText: conf.columnText
+				};
+			})
+			.toArray();
+
+		return columns;
+	},
+
+	// Single button to toggle column visibility
+	columnToggle: function (dt, conf) {
+		return {
+			extend: 'columnVisibility',
+			columns: conf.columns,
+			columnText: conf.columnText
+		};
+	},
+
+	// Selected columns with individual buttons - set column visibility
+	columnsVisibility: function (dt, conf) {
+		var columns = dt
+			.columns(conf.columns)
+			.indexes()
+			.map(function (idx) {
+				return {
+					extend: 'columnVisibility',
+					columns: idx,
+					visibility: conf.visibility,
+					columnText: conf.columnText
+				};
+			})
+			.toArray();
+
+		return columns;
+	},
+
+	// Single button to set column visibility
+	columnVisibility: {
+		columns: undefined, // column selector
+		text: function (dt, button, conf) {
+			return conf._columnText(dt, conf);
+		},
+		className: 'buttons-columnVisibility',
+		action: function (e, dt, button, conf) {
+			var col = dt.columns(conf.columns);
+			var curr = col.visible();
+
+			col.visible(
+				conf.visibility !== undefined ? conf.visibility : !(curr.length ? curr[0] : false)
+			);
+		},
+		init: function (dt, button, conf) {
+			var that = this;
+			var column = dt.column(conf.columns);
+
+			button.attr('data-cv-idx', conf.columns);
+
+			dt.on('column-visibility.dt' + conf.namespace, function (e, settings, index, state) {
+				if (
+					column.index() === index &&
+					!settings.bDestroying &&
+					settings.nTable == dt.settings()[0].nTable
+				) {
+					that.active(state);
+				}
+			}).on('column-reorder.dt' + conf.namespace, function () {
+				// Button has been removed from the DOM
+				if (conf.destroying) {
+					return;
+				}
+
+				if (dt.columns(conf.columns).count() !== 1) {
+					return;
+				}
+
+				// Reassign the column for the updated indexes
+				column = dt.column(conf.columns);
+
+				// This button controls the same column index but the text for the column has
+				// changed
+				that.text(conf._columnText(dt, conf));
+
+				// Since its a different column, we need to check its visibility
+				that.active(column.visible());
+			});
+
+			this.active(column.visible());
+		},
+		destroy: function (dt, button, conf) {
+			dt.off('column-visibility.dt' + conf.namespace).off(
+				'column-reorder.dt' + conf.namespace
+			);
+		},
+
+		_columnText: function (dt, conf) {
+			if (typeof conf.text === 'string') {
+				return conf.text;
+			}
+
+			var title = dt.column(conf.columns).title();
+			var idx = dt.column(conf.columns).index();
+
+			title = title
+				.replace(/\n/g, ' ') // remove new lines
+				.replace(/<br\s*\/?>/gi, ' ') // replace line breaks with spaces
+				.replace(/<select(.*?)<\/select\s*>/gi, ''); // remove select tags, including options text
+
+			// Strip HTML comments
+			title = DataTable.Buttons.stripHtmlComments(title);
+
+			// Use whatever HTML stripper DataTables is configured for
+			title = DataTable.util.stripHtml(title).trim();
+
+			return conf.columnText ? conf.columnText(dt, idx, title) : title;
+		}
+	},
+
+	colvisRestore: {
+		className: 'buttons-colvisRestore',
+
+		text: function (dt) {
+			return dt.i18n('buttons.colvisRestore', 'Restore visibility');
+		},
+
+		init: function (dt, button, conf) {
+			// Use a private parameter on the column. This gets moved around with the
+			// column if ColReorder changes the order
+			dt.columns().every(function () {
+				var init = this.init();
+
+				if (init.__visOriginal === undefined) {
+					init.__visOriginal = this.visible();
+				}
+			});
+		},
+
+		action: function (e, dt, button, conf) {
+			dt.columns().every(function (i) {
+				var init = this.init();
+
+				this.visible(init.__visOriginal);
+			});
+		}
+	},
+
+	colvisGroup: {
+		className: 'buttons-colvisGroup',
+
+		action: function (e, dt, button, conf) {
+			dt.columns(conf.show).visible(true, false);
+			dt.columns(conf.hide).visible(false, false);
+
+			dt.columns.adjust();
+		},
+
+		show: [],
+
+		hide: []
+	}
+});
+
+
+return DataTable;
+}));
+
+
+/*!
+ * HTML5 export buttons for Buttons and DataTables.
+ * © SpryMedia Ltd - datatables.net/license
+ *
+ * FileSaver.js (1.3.3) - MIT license
+ * Copyright © 2016 Eli Grey - http://eligrey.com
+ */
+
+(function( factory ){
+	if ( typeof define === 'function' && define.amd ) {
+		// AMD
+		define( ['jquery', 'datatables.net', 'datatables.net-buttons'], function ( $ ) {
+			return factory( $, window, document );
+		} );
+	}
+	else if ( typeof exports === 'object' ) {
+		// CommonJS
+		var jq = require('jquery');
+		var cjsRequires = function (root, $) {
+			if ( ! $.fn.dataTable ) {
+				require('datatables.net')(root, $);
+			}
+
+			if ( ! $.fn.dataTable.Buttons ) {
+				require('datatables.net-buttons')(root, $);
+			}
+		};
+
+		if (typeof window === 'undefined') {
+			module.exports = function (root, $) {
+				if ( ! root ) {
+					// CommonJS environments without a window global must pass a
+					// root. This will give an error otherwise
+					root = window;
+				}
+
+				if ( ! $ ) {
+					$ = jq( root );
+				}
+
+				cjsRequires( root, $ );
+				return factory( $, root, root.document );
+			};
+		}
+		else {
+			cjsRequires( window, jq );
+			module.exports = factory( jq, window, window.document );
+		}
+	}
+	else {
+		// Browser
+		factory( jQuery, window, document );
+	}
+}(function( $, window, document ) {
+'use strict';
+var DataTable = $.fn.dataTable;
+
+
+
+// Allow the constructor to pass in JSZip and PDFMake from external requires.
+// Otherwise, use globally defined variables, if they are available.
+var useJszip;
+var usePdfmake;
+
+function _jsZip() {
+	return useJszip || window.JSZip;
+}
+function _pdfMake() {
+	return usePdfmake || window.pdfMake;
+}
+
+DataTable.Buttons.pdfMake = function (_) {
+	if (!_) {
+		return _pdfMake();
+	}
+	usePdfmake = _;
+};
+
+DataTable.Buttons.jszip = function (_) {
+	if (!_) {
+		return _jsZip();
+	}
+	useJszip = _;
+};
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * FileSaver.js dependency
+ */
+
+/*jslint bitwise: true, indent: 4, laxbreak: true, laxcomma: true, smarttabs: true, plusplus: true */
+
+var _saveAs = (function (view) {
+	'use strict';
+	// IE <10 is explicitly unsupported
+	if (
+		typeof view === 'undefined' ||
+		(typeof navigator !== 'undefined' &&
+			/MSIE [1-9]\./.test(navigator.userAgent))
+	) {
+		return;
+	}
+	var doc = view.document,
+		// only get URL when necessary in case Blob.js hasn't overridden it yet
+		get_URL = function () {
+			return view.URL || view.webkitURL || view;
+		},
+		save_link = doc.createElementNS('http://www.w3.org/1999/xhtml', 'a'),
+		can_use_save_link = 'download' in save_link,
+		click = function (node) {
+			var event = new MouseEvent('click');
+			node.dispatchEvent(event);
+		},
+		is_safari = /constructor/i.test(view.HTMLElement) || view.safari,
+		is_chrome_ios = /CriOS\/[\d]+/.test(navigator.userAgent),
+		throw_outside = function (ex) {
+			(view.setImmediate || view.setTimeout)(function () {
+				throw ex;
+			}, 0);
+		},
+		force_saveable_type = 'application/octet-stream',
+		// the Blob API is fundamentally broken as there is no "downloadfinished" event to subscribe to
+		arbitrary_revoke_timeout = 1000 * 40, // in ms
+		revoke = function (file) {
+			var revoker = function () {
+				if (typeof file === 'string') {
+					// file is an object URL
+					get_URL().revokeObjectURL(file);
+				}
+				else {
+					// file is a File
+					file.remove();
+				}
+			};
+			setTimeout(revoker, arbitrary_revoke_timeout);
+		},
+		dispatch = function (filesaver, event_types, event) {
+			event_types = [].concat(event_types);
+			var i = event_types.length;
+			while (i--) {
+				var listener = filesaver['on' + event_types[i]];
+				if (typeof listener === 'function') {
+					try {
+						listener.call(filesaver, event || filesaver);
+					} catch (ex) {
+						throw_outside(ex);
+					}
+				}
+			}
+		},
+		auto_bom = function (blob) {
+			// prepend BOM for UTF-8 XML and text/* types (including HTML)
+			// note: your browser will automatically convert UTF-16 U+FEFF to EF BB BF
+			if (
+				/^\s*(?:text\/\S*|application\/xml|\S*\/\S*\+xml)\s*;.*charset\s*=\s*utf-8/i.test(
+					blob.type
+				)
+			) {
+				return new Blob([String.fromCharCode(0xfeff), blob], {
+					type: blob.type
+				});
+			}
+			return blob;
+		},
+		FileSaver = function (blob, name, no_auto_bom) {
+			if (!no_auto_bom) {
+				blob = auto_bom(blob);
+			}
+			// First try a.download, then web filesystem, then object URLs
+			var filesaver = this,
+				type = blob.type,
+				force = type === force_saveable_type,
+				object_url,
+				dispatch_all = function () {
+					dispatch(
+						filesaver,
+						'writestart progress write writeend'.split(' ')
+					);
+				},
+				// on any filesys errors revert to saving with object URLs
+				fs_error = function () {
+					if (
+						(is_chrome_ios || (force && is_safari)) &&
+						view.FileReader
+					) {
+						// Safari doesn't allow downloading of blob urls
+						var reader = new FileReader();
+						reader.onloadend = function () {
+							var url = is_chrome_ios
+								? reader.result
+								: reader.result.replace(
+										/^data:[^;]*;/,
+										'data:attachment/file;'
+								);
+							var popup = view.open(url, '_blank');
+							if (!popup) view.location.href = url;
+							url = undefined; // release reference before dispatching
+							filesaver.readyState = filesaver.DONE;
+							dispatch_all();
+						};
+						reader.readAsDataURL(blob);
+						filesaver.readyState = filesaver.INIT;
+						return;
+					}
+					// don't create more object URLs than needed
+					if (!object_url) {
+						object_url = get_URL().createObjectURL(blob);
+					}
+					if (force) {
+						view.location.href = object_url;
+					}
+					else {
+						var opened = view.open(object_url, '_blank');
+						if (!opened) {
+							// Apple does not allow window.open, see https://developer.apple.com/library/safari/documentation/Tools/Conceptual/SafariExtensionGuide/WorkingwithWindowsandTabs/WorkingwithWindowsandTabs.html
+							view.location.href = object_url;
+						}
+					}
+					filesaver.readyState = filesaver.DONE;
+					dispatch_all();
+					revoke(object_url);
+				};
+			filesaver.readyState = filesaver.INIT;
+
+			if (can_use_save_link) {
+				object_url = get_URL().createObjectURL(blob);
+				setTimeout(function () {
+					save_link.href = object_url;
+					save_link.download = name;
+					click(save_link);
+					dispatch_all();
+					revoke(object_url);
+					filesaver.readyState = filesaver.DONE;
+				});
+				return;
+			}
+
+			fs_error();
+		},
+		FS_proto = FileSaver.prototype,
+		saveAs = function (blob, name, no_auto_bom) {
+			return new FileSaver(
+				blob,
+				name || blob.name || 'download',
+				no_auto_bom
+			);
+		};
+	// IE 10+ (native saveAs)
+	if (typeof navigator !== 'undefined' && navigator.msSaveOrOpenBlob) {
+		return function (blob, name, no_auto_bom) {
+			name = name || blob.name || 'download';
+
+			if (!no_auto_bom) {
+				blob = auto_bom(blob);
+			}
+			return navigator.msSaveOrOpenBlob(blob, name);
+		};
+	}
+
+	FS_proto.abort = function () {};
+	FS_proto.readyState = FS_proto.INIT = 0;
+	FS_proto.WRITING = 1;
+	FS_proto.DONE = 2;
+
+	FS_proto.error =
+		FS_proto.onwritestart =
+		FS_proto.onprogress =
+		FS_proto.onwrite =
+		FS_proto.onabort =
+		FS_proto.onerror =
+		FS_proto.onwriteend =
+			null;
+
+	return saveAs;
+})(
+	(typeof self !== 'undefined' && self) ||
+		(typeof window !== 'undefined' && window) ||
+		this.content
+);
+
+// Expose file saver on the DataTables API. Can't attach to `DataTables.Buttons`
+// since this file can be loaded before Button's core!
+DataTable.fileSave = _saveAs;
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * Local (private) functions
+ */
+
+/**
+ * Get the sheet name for Excel exports.
+ *
+ * @param {object}	config Button configuration
+ */
+var _sheetname = function (config) {
+	var sheetName = 'Sheet1';
+
+	if (config.sheetName) {
+		sheetName = config.sheetName.replace(/[\[\]\*\/\\\?\:]/g, '');
+	}
+
+	return sheetName;
+};
+
+/**
+ * Get the newline character(s)
+ *
+ * @param {object}	config Button configuration
+ * @return {string}				Newline character
+ */
+var _newLine = function (config) {
+	return config.newline
+		? config.newline
+		: navigator.userAgent.match(/Windows/)
+		? '\r\n'
+		: '\n';
+};
+
+/**
+ * Combine the data from the `buttons.exportData` method into a string that
+ * will be used in the export file.
+ *
+ * @param	{DataTable.Api} dt		 DataTables API instance
+ * @param	{object}				config Button configuration
+ * @return {object}							 The data to export
+ */
+var _exportData = function (dt, config) {
+	var newLine = _newLine(config);
+	var data = dt.buttons.exportData(config.exportOptions);
+	var boundary = config.fieldBoundary;
+	var separator = config.fieldSeparator;
+	var reBoundary = new RegExp(boundary, 'g');
+	var escapeChar = config.escapeChar !== undefined ? config.escapeChar : '\\';
+	var join = function (a) {
+		var s = '';
+
+		// If there is a field boundary, then we might need to escape it in
+		// the source data
+		for (var i = 0, ien = a.length; i < ien; i++) {
+			if (i > 0) {
+				s += separator;
+			}
+
+			s += boundary
+				? boundary +
+				('' + a[i]).replace(reBoundary, escapeChar + boundary) +
+				boundary
+				: a[i];
+		}
+
+		return s;
+	};
+
+	var header = '';
+	var footer = '';
+	var body = [];
+
+	if (config.header) {
+		header =
+			data.headerStructure
+				.map(function (row) {
+					return join(
+						row.map(function (cell) {
+							return cell ? cell.title : '';
+						})
+					);
+				})
+				.join(newLine) + newLine;
+	}
+
+	if (config.footer && data.footer) {
+		footer =
+			data.footerStructure
+				.map(function (row) {
+					return join(
+						row.map(function (cell) {
+							return cell ? cell.title : '';
+						})
+					);
+				})
+				.join(newLine) + newLine;
+	}
+
+	for (var i = 0, ien = data.body.length; i < ien; i++) {
+		body.push(join(data.body[i]));
+	}
+
+	return {
+		str: header + body.join(newLine) + newLine + footer,
+		rows: body.length
+	};
+};
+
+/**
+ * Older versions of Safari (prior to tech preview 18) don't support the
+ * download option required.
+ *
+ * @return {Boolean} `true` if old Safari
+ */
+var _isDuffSafari = function () {
+	var safari =
+		navigator.userAgent.indexOf('Safari') !== -1 &&
+		navigator.userAgent.indexOf('Chrome') === -1 &&
+		navigator.userAgent.indexOf('Opera') === -1;
+
+	if (!safari) {
+		return false;
+	}
+
+	var version = navigator.userAgent.match(/AppleWebKit\/(\d+\.\d+)/);
+	if (version && version.length > 1 && version[1] * 1 < 603.1) {
+		return true;
+	}
+
+	return false;
+};
+
+/**
+ * Convert from numeric position to letter for column names in Excel
+ * @param  {int} n Column number
+ * @return {string} Column letter(s) name
+ */
+function createCellPos(n) {
+	var ordA = 'A'.charCodeAt(0);
+	var ordZ = 'Z'.charCodeAt(0);
+	var len = ordZ - ordA + 1;
+	var s = '';
+
+	while (n >= 0) {
+		s = String.fromCharCode((n % len) + ordA) + s;
+		n = Math.floor(n / len) - 1;
+	}
+
+	return s;
+}
+
+try {
+	var _serialiser = new XMLSerializer();
+	var _ieExcel;
+} catch (t) {
+	// noop
+}
+
+/**
+ * Recursively add XML files from an object's structure to a ZIP file. This
+ * allows the XSLX file to be easily defined with an object's structure matching
+ * the files structure.
+ *
+ * @param {JSZip} zip ZIP package
+ * @param {object} obj Object to add (recursive)
+ */
+function _addToZip(zip, obj) {
+	if (_ieExcel === undefined) {
+		// Detect if we are dealing with IE's _awful_ serialiser by seeing if it
+		// drop attributes
+		_ieExcel =
+			_serialiser
+				.serializeToString(
+					new window.DOMParser().parseFromString(
+						excelStrings['xl/worksheets/sheet1.xml'],
+						'text/xml'
+					)
+				)
+				.indexOf('xmlns:r') === -1;
+	}
+
+	$.each(obj, function (name, val) {
+		if ($.isPlainObject(val)) {
+			var newDir = zip.folder(name);
+			_addToZip(newDir, val);
+		}
+		else {
+			if (_ieExcel) {
+				// IE's XML serialiser will drop some name space attributes from
+				// from the root node, so we need to save them. Do this by
+				// replacing the namespace nodes with a regular attribute that
+				// we convert back when serialised. Edge does not have this
+				// issue
+				var worksheet = val.childNodes[0];
+				var i, ien;
+				var attrs = [];
+
+				for (i = worksheet.attributes.length - 1; i >= 0; i--) {
+					var attrName = worksheet.attributes[i].nodeName;
+					var attrValue = worksheet.attributes[i].nodeValue;
+
+					if (attrName.indexOf(':') !== -1) {
+						attrs.push({ name: attrName, value: attrValue });
+
+						worksheet.removeAttribute(attrName);
+					}
+				}
+
+				for (i = 0, ien = attrs.length; i < ien; i++) {
+					var attr = val.createAttribute(
+						attrs[i].name.replace(':', '_dt_b_namespace_token_')
+					);
+					attr.value = attrs[i].value;
+					worksheet.setAttributeNode(attr);
+				}
+			}
+
+			var str = _serialiser.serializeToString(val);
+
+			// Fix IE's XML
+			if (_ieExcel) {
+				// IE doesn't include the XML declaration
+				if (str.indexOf('<?xml') === -1) {
+					str =
+						'<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+						str;
+				}
+
+				// Return namespace attributes to being as such
+				str = str.replace(/_dt_b_namespace_token_/g, ':');
+
+				// Remove testing name space that IE puts into the space preserve attr
+				str = str.replace(/xmlns:NS[\d]+="" NS[\d]+:/g, '');
+			}
+
+			// Safari, IE and Edge will put empty name space attributes onto
+			// various elements making them useless. This strips them out
+			str = str.replace(/<([^<>]*?) xmlns=""([^<>]*?)>/g, '<$1 $2>');
+
+			zip.file(name, str);
+		}
+	});
+}
+
+/**
+ * Create an XML node and add any children, attributes, etc without needing to
+ * be verbose in the DOM.
+ *
+ * @param  {object} doc      XML document
+ * @param  {string} nodeName Node name
+ * @param  {object} opts     Options - can be `attr` (attributes), `children`
+ *   (child nodes) and `text` (text content)
+ * @return {node}            Created node
+ */
+function _createNode(doc, nodeName, opts) {
+	var tempNode = doc.createElement(nodeName);
+
+	if (opts) {
+		if (opts.attr) {
+			$(tempNode).attr(opts.attr);
+		}
+
+		if (opts.children) {
+			$.each(opts.children, function (key, value) {
+				tempNode.appendChild(value);
+			});
+		}
+
+		if (opts.text !== null && opts.text !== undefined) {
+			tempNode.appendChild(doc.createTextNode(opts.text));
+		}
+	}
+
+	return tempNode;
+}
+
+/**
+ * Get the width for an Excel column based on the contents of that column
+ * @param  {object} data Data for export
+ * @param  {int}    col  Column index
+ * @return {int}         Column width
+ */
+function _excelColWidth(data, col) {
+	var max = data.header[col].length;
+	var len, lineSplit, str;
+
+	if (data.footer && data.footer[col] && data.footer[col].length > max) {
+		max = data.footer[col].length;
+	}
+
+	for (var i = 0, ien = data.body.length; i < ien; i++) {
+		var point = data.body[i][col];
+		str = point !== null && point !== undefined ? point.toString() : '';
+
+		// If there is a newline character, workout the width of the column
+		// based on the longest line in the string
+		if (str.indexOf('\n') !== -1) {
+			lineSplit = str.split('\n');
+			lineSplit.sort(function (a, b) {
+				return b.length - a.length;
+			});
+
+			len = lineSplit[0].length;
+		}
+		else {
+			len = str.length;
+		}
+
+		if (len > max) {
+			max = len;
+		}
+
+		// Max width rather than having potentially massive column widths
+		if (max > 40) {
+			return 54; // 40 * 1.35
+		}
+	}
+
+	max *= 1.35;
+
+	// And a min width
+	return max > 6 ? max : 6;
+}
+
+// Excel - Pre-defined strings to build a basic XLSX file
+var excelStrings = {
+	'_rels/.rels':
+		'<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+		'<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
+		'<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/>' +
+		'</Relationships>',
+
+	'xl/_rels/workbook.xml.rels':
+		'<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+		'<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
+		'<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/>' +
+		'<Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>' +
+		'</Relationships>',
+
+	'[Content_Types].xml':
+		'<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+		'<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">' +
+		'<Default Extension="xml" ContentType="application/xml" />' +
+		'<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml" />' +
+		'<Default Extension="jpeg" ContentType="image/jpeg" />' +
+		'<Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml" />' +
+		'<Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml" />' +
+		'<Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml" />' +
+		'</Types>',
+
+	'xl/workbook.xml':
+		'<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+		'<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">' +
+		'<fileVersion appName="xl" lastEdited="5" lowestEdited="5" rupBuild="24816"/>' +
+		'<workbookPr showInkAnnotation="0" autoCompressPictures="0"/>' +
+		'<bookViews>' +
+		'<workbookView xWindow="0" yWindow="0" windowWidth="25600" windowHeight="19020" tabRatio="500"/>' +
+		'</bookViews>' +
+		'<sheets>' +
+		'<sheet name="Sheet1" sheetId="1" r:id="rId1"/>' +
+		'</sheets>' +
+		'<definedNames/>' +
+		'</workbook>',
+
+	'xl/worksheets/sheet1.xml':
+		'<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+		'<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="x14ac" xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac">' +
+		'<sheetData/>' +
+		'<mergeCells count="0"/>' +
+		'</worksheet>',
+
+	'xl/styles.xml':
+		'<?xml version="1.0" encoding="UTF-8"?>' +
+		'<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="x14ac" xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac">' +
+		'<numFmts count="6">' +
+		'<numFmt numFmtId="164" formatCode="[$$-409]#,##0.00;-[$$-409]#,##0.00"/>' +
+		'<numFmt numFmtId="165" formatCode="&quot;£&quot;#,##0.00"/>' +
+		'<numFmt numFmtId="166" formatCode="[$€-2] #,##0.00"/>' +
+		'<numFmt numFmtId="167" formatCode="0.0%"/>' +
+		'<numFmt numFmtId="168" formatCode="#,##0;(#,##0)"/>' +
+		'<numFmt numFmtId="169" formatCode="#,##0.00;(#,##0.00)"/>' +
+		'</numFmts>' +
+		'<fonts count="5" x14ac:knownFonts="1">' +
+		'<font>' +
+		'<sz val="11" />' +
+		'<name val="Calibri" />' +
+		'</font>' +
+		'<font>' +
+		'<sz val="11" />' +
+		'<name val="Calibri" />' +
+		'<color rgb="FFFFFFFF" />' +
+		'</font>' +
+		'<font>' +
+		'<sz val="11" />' +
+		'<name val="Calibri" />' +
+		'<b />' +
+		'</font>' +
+		'<font>' +
+		'<sz val="11" />' +
+		'<name val="Calibri" />' +
+		'<i />' +
+		'</font>' +
+		'<font>' +
+		'<sz val="11" />' +
+		'<name val="Calibri" />' +
+		'<u />' +
+		'</font>' +
+		'</fonts>' +
+		'<fills count="6">' +
+		'<fill>' +
+		'<patternFill patternType="none" />' +
+		'</fill>' +
+		'<fill>' + // Excel appears to use this as a dotted background regardless of values but
+		'<patternFill patternType="none" />' + // to be valid to the schema, use a patternFill
+		'</fill>' +
+		'<fill>' +
+		'<patternFill patternType="solid">' +
+		'<fgColor rgb="FFD9D9D9" />' +
+		'<bgColor indexed="64" />' +
+		'</patternFill>' +
+		'</fill>' +
+		'<fill>' +
+		'<patternFill patternType="solid">' +
+		'<fgColor rgb="FFD99795" />' +
+		'<bgColor indexed="64" />' +
+		'</patternFill>' +
+		'</fill>' +
+		'<fill>' +
+		'<patternFill patternType="solid">' +
+		'<fgColor rgb="ffc6efce" />' +
+		'<bgColor indexed="64" />' +
+		'</patternFill>' +
+		'</fill>' +
+		'<fill>' +
+		'<patternFill patternType="solid">' +
+		'<fgColor rgb="ffc6cfef" />' +
+		'<bgColor indexed="64" />' +
+		'</patternFill>' +
+		'</fill>' +
+		'</fills>' +
+		'<borders count="2">' +
+		'<border>' +
+		'<left />' +
+		'<right />' +
+		'<top />' +
+		'<bottom />' +
+		'<diagonal />' +
+		'</border>' +
+		'<border diagonalUp="false" diagonalDown="false">' +
+		'<left style="thin">' +
+		'<color auto="1" />' +
+		'</left>' +
+		'<right style="thin">' +
+		'<color auto="1" />' +
+		'</right>' +
+		'<top style="thin">' +
+		'<color auto="1" />' +
+		'</top>' +
+		'<bottom style="thin">' +
+		'<color auto="1" />' +
+		'</bottom>' +
+		'<diagonal />' +
+		'</border>' +
+		'</borders>' +
+		'<cellStyleXfs count="1">' +
+		'<xf numFmtId="0" fontId="0" fillId="0" borderId="0" />' +
+		'</cellStyleXfs>' +
+		'<cellXfs count="68">' +
+		'<xf numFmtId="0" fontId="0" fillId="0" borderId="0" applyFont="1" applyFill="1" applyBorder="1"/>' +
+		'<xf numFmtId="0" fontId="1" fillId="0" borderId="0" applyFont="1" applyFill="1" applyBorder="1"/>' +
+		'<xf numFmtId="0" fontId="2" fillId="0" borderId="0" applyFont="1" applyFill="1" applyBorder="1"/>' +
+		'<xf numFmtId="0" fontId="3" fillId="0" borderId="0" applyFont="1" applyFill="1" applyBorder="1"/>' +
+		'<xf numFmtId="0" fontId="4" fillId="0" borderId="0" applyFont="1" applyFill="1" applyBorder="1"/>' +
+		'<xf numFmtId="0" fontId="0" fillId="2" borderId="0" applyFont="1" applyFill="1" applyBorder="1"/>' +
+		'<xf numFmtId="0" fontId="1" fillId="2" borderId="0" applyFont="1" applyFill="1" applyBorder="1"/>' +
+		'<xf numFmtId="0" fontId="2" fillId="2" borderId="0" applyFont="1" applyFill="1" applyBorder="1"/>' +
+		'<xf numFmtId="0" fontId="3" fillId="2" borderId="0" applyFont="1" applyFill="1" applyBorder="1"/>' +
+		'<xf numFmtId="0" fontId="4" fillId="2" borderId="0" applyFont="1" applyFill="1" applyBorder="1"/>' +
+		'<xf numFmtId="0" fontId="0" fillId="3" borderId="0" applyFont="1" applyFill="1" applyBorder="1"/>' +
+		'<xf numFmtId="0" fontId="1" fillId="3" borderId="0" applyFont="1" applyFill="1" applyBorder="1"/>' +
+		'<xf numFmtId="0" fontId="2" fillId="3" borderId="0" applyFont="1" applyFill="1" applyBorder="1"/>' +
+		'<xf numFmtId="0" fontId="3" fillId="3" borderId="0" applyFont="1" applyFill="1" applyBorder="1"/>' +
+		'<xf numFmtId="0" fontId="4" fillId="3" borderId="0" applyFont="1" applyFill="1" applyBorder="1"/>' +
+		'<xf numFmtId="0" fontId="0" fillId="4" borderId="0" applyFont="1" applyFill="1" applyBorder="1"/>' +
+		'<xf numFmtId="0" fontId="1" fillId="4" borderId="0" applyFont="1" applyFill="1" applyBorder="1"/>' +
+		'<xf numFmtId="0" fontId="2" fillId="4" borderId="0" applyFont="1" applyFill="1" applyBorder="1"/>' +
+		'<xf numFmtId="0" fontId="3" fillId="4" borderId="0" applyFont="1" applyFill="1" applyBorder="1"/>' +
+		'<xf numFmtId="0" fontId="4" fillId="4" borderId="0" applyFont="1" applyFill="1" applyBorder="1"/>' +
+		'<xf numFmtId="0" fontId="0" fillId="5" borderId="0" applyFont="1" applyFill="1" applyBorder="1"/>' +
+		'<xf numFmtId="0" fontId="1" fillId="5" borderId="0" applyFont="1" applyFill="1" applyBorder="1"/>' +
+		'<xf numFmtId="0" fontId="2" fillId="5" borderId="0" applyFont="1" applyFill="1" applyBorder="1"/>' +
+		'<xf numFmtId="0" fontId="3" fillId="5" borderId="0" applyFont="1" applyFill="1" applyBorder="1"/>' +
+		'<xf numFmtId="0" fontId="4" fillId="5" borderId="0" applyFont="1" applyFill="1" applyBorder="1"/>' +
+		'<xf numFmtId="0" fontId="0" fillId="0" borderId="1" applyFont="1" applyFill="1" applyBorder="1"/>' +
+		'<xf numFmtId="0" fontId="1" fillId="0" borderId="1" applyFont="1" applyFill="1" applyBorder="1"/>' +
+		'<xf numFmtId="0" fontId="2" fillId="0" borderId="1" applyFont="1" applyFill="1" applyBorder="1"/>' +
+		'<xf numFmtId="0" fontId="3" fillId="0" borderId="1" applyFont="1" applyFill="1" applyBorder="1"/>' +
+		'<xf numFmtId="0" fontId="4" fillId="0" borderId="1" applyFont="1" applyFill="1" applyBorder="1"/>' +
+		'<xf numFmtId="0" fontId="0" fillId="2" borderId="1" applyFont="1" applyFill="1" applyBorder="1"/>' +
+		'<xf numFmtId="0" fontId="1" fillId="2" borderId="1" applyFont="1" applyFill="1" applyBorder="1"/>' +
+		'<xf numFmtId="0" fontId="2" fillId="2" borderId="1" applyFont="1" applyFill="1" applyBorder="1"/>' +
+		'<xf numFmtId="0" fontId="3" fillId="2" borderId="1" applyFont="1" applyFill="1" applyBorder="1"/>' +
+		'<xf numFmtId="0" fontId="4" fillId="2" borderId="1" applyFont="1" applyFill="1" applyBorder="1"/>' +
+		'<xf numFmtId="0" fontId="0" fillId="3" borderId="1" applyFont="1" applyFill="1" applyBorder="1"/>' +
+		'<xf numFmtId="0" fontId="1" fillId="3" borderId="1" applyFont="1" applyFill="1" applyBorder="1"/>' +
+		'<xf numFmtId="0" fontId="2" fillId="3" borderId="1" applyFont="1" applyFill="1" applyBorder="1"/>' +
+		'<xf numFmtId="0" fontId="3" fillId="3" borderId="1" applyFont="1" applyFill="1" applyBorder="1"/>' +
+		'<xf numFmtId="0" fontId="4" fillId="3" borderId="1" applyFont="1" applyFill="1" applyBorder="1"/>' +
+		'<xf numFmtId="0" fontId="0" fillId="4" borderId="1" applyFont="1" applyFill="1" applyBorder="1"/>' +
+		'<xf numFmtId="0" fontId="1" fillId="4" borderId="1" applyFont="1" applyFill="1" applyBorder="1"/>' +
+		'<xf numFmtId="0" fontId="2" fillId="4" borderId="1" applyFont="1" applyFill="1" applyBorder="1"/>' +
+		'<xf numFmtId="0" fontId="3" fillId="4" borderId="1" applyFont="1" applyFill="1" applyBorder="1"/>' +
+		'<xf numFmtId="0" fontId="4" fillId="4" borderId="1" applyFont="1" applyFill="1" applyBorder="1"/>' +
+		'<xf numFmtId="0" fontId="0" fillId="5" borderId="1" applyFont="1" applyFill="1" applyBorder="1"/>' +
+		'<xf numFmtId="0" fontId="1" fillId="5" borderId="1" applyFont="1" applyFill="1" applyBorder="1"/>' +
+		'<xf numFmtId="0" fontId="2" fillId="5" borderId="1" applyFont="1" applyFill="1" applyBorder="1"/>' +
+		'<xf numFmtId="0" fontId="3" fillId="5" borderId="1" applyFont="1" applyFill="1" applyBorder="1"/>' +
+		'<xf numFmtId="0" fontId="4" fillId="5" borderId="1" applyFont="1" applyFill="1" applyBorder="1"/>' +
+		'<xf numFmtId="0" fontId="0" fillId="0" borderId="0" applyFont="1" applyFill="1" applyBorder="1" xfId="0" applyAlignment="1">' +
+		'<alignment horizontal="left"/>' +
+		'</xf>' +
+		'<xf numFmtId="0" fontId="0" fillId="0" borderId="0" applyFont="1" applyFill="1" applyBorder="1" xfId="0" applyAlignment="1">' +
+		'<alignment horizontal="center"/>' +
+		'</xf>' +
+		'<xf numFmtId="0" fontId="0" fillId="0" borderId="0" applyFont="1" applyFill="1" applyBorder="1" xfId="0" applyAlignment="1">' +
+		'<alignment horizontal="right"/>' +
+		'</xf>' +
+		'<xf numFmtId="0" fontId="0" fillId="0" borderId="0" applyFont="1" applyFill="1" applyBorder="1" xfId="0" applyAlignment="1">' +
+		'<alignment horizontal="fill"/>' +
+		'</xf>' +
+		'<xf numFmtId="0" fontId="0" fillId="0" borderId="0" applyFont="1" applyFill="1" applyBorder="1" xfId="0" applyAlignment="1">' +
+		'<alignment textRotation="90"/>' +
+		'</xf>' +
+		'<xf numFmtId="0" fontId="0" fillId="0" borderId="0" applyFont="1" applyFill="1" applyBorder="1" xfId="0" applyAlignment="1">' +
+		'<alignment wrapText="1"/>' +
+		'</xf>' +
+		'<xf numFmtId="9"   fontId="0" fillId="0" borderId="0" applyFont="1" applyFill="1" applyBorder="1" xfId="0" applyNumberFormat="1"/>' +
+		'<xf numFmtId="164" fontId="0" fillId="0" borderId="0" applyFont="1" applyFill="1" applyBorder="1" xfId="0" applyNumberFormat="1"/>' +
+		'<xf numFmtId="165" fontId="0" fillId="0" borderId="0" applyFont="1" applyFill="1" applyBorder="1" xfId="0" applyNumberFormat="1"/>' +
+		'<xf numFmtId="166" fontId="0" fillId="0" borderId="0" applyFont="1" applyFill="1" applyBorder="1" xfId="0" applyNumberFormat="1"/>' +
+		'<xf numFmtId="167" fontId="0" fillId="0" borderId="0" applyFont="1" applyFill="1" applyBorder="1" xfId="0" applyNumberFormat="1"/>' +
+		'<xf numFmtId="168" fontId="0" fillId="0" borderId="0" applyFont="1" applyFill="1" applyBorder="1" xfId="0" applyNumberFormat="1"/>' +
+		'<xf numFmtId="169" fontId="0" fillId="0" borderId="0" applyFont="1" applyFill="1" applyBorder="1" xfId="0" applyNumberFormat="1"/>' +
+		'<xf numFmtId="3" fontId="0" fillId="0" borderId="0" applyFont="1" applyFill="1" applyBorder="1" xfId="0" applyNumberFormat="1"/>' +
+		'<xf numFmtId="4" fontId="0" fillId="0" borderId="0" applyFont="1" applyFill="1" applyBorder="1" xfId="0" applyNumberFormat="1"/>' +
+		'<xf numFmtId="1" fontId="0" fillId="0" borderId="0" applyFont="1" applyFill="1" applyBorder="1" xfId="0" applyNumberFormat="1"/>' +
+		'<xf numFmtId="2" fontId="0" fillId="0" borderId="0" applyFont="1" applyFill="1" applyBorder="1" xfId="0" applyNumberFormat="1"/>' +
+		'<xf numFmtId="14" fontId="0" fillId="0" borderId="0" applyFont="1" applyFill="1" applyBorder="1" xfId="0" applyNumberFormat="1"/>' +
+		'</cellXfs>' +
+		'<cellStyles count="1">' +
+		'<cellStyle name="Normal" xfId="0" builtinId="0" />' +
+		'</cellStyles>' +
+		'<dxfs count="0" />' +
+		'<tableStyles count="0" defaultTableStyle="TableStyleMedium9" defaultPivotStyle="PivotStyleMedium4" />' +
+		'</styleSheet>'
+};
+// Note we could use 3 `for` loops for the styles, but when gzipped there is
+// virtually no difference in size, since the above can be easily compressed
+
+// Pattern matching for special number formats. Perhaps this should be exposed
+// via an API in future?
+// Ref: section 3.8.30 - built in formatters in open spreadsheet
+//   https://www.ecma-international.org/news/TC45_current_work/Office%20Open%20XML%20Part%204%20-%20Markup%20Language%20Reference.pdf
+var _excelSpecials = [
+	{
+		match: /^\-?\d+\.\d%$/,
+		style: 60,
+		fmt: function (d) {
+			return d / 100;
+		}
+	}, // Percent with d.p.
+	{
+		match: /^\-?\d+\.?\d*%$/,
+		style: 56,
+		fmt: function (d) {
+			return d / 100;
+		}
+	}, // Percent
+	{ match: /^\-?\$[\d,]+.?\d*$/, style: 57 }, // Dollars
+	{ match: /^\-?£[\d,]+.?\d*$/, style: 58 }, // Pounds
+	{ match: /^\-?€[\d,]+.?\d*$/, style: 59 }, // Euros
+	{ match: /^\-?\d+$/, style: 65 }, // Numbers without thousand separators
+	{ match: /^\-?\d+\.\d{2}$/, style: 66 }, // Numbers 2 d.p. without thousands separators
+	{
+		match: /^\([\d,]+\)$/,
+		style: 61,
+		fmt: function (d) {
+			return -1 * d.replace(/[\(\)]/g, '');
+		}
+	}, // Negative numbers indicated by brackets
+	{
+		match: /^\([\d,]+\.\d{2}\)$/,
+		style: 62,
+		fmt: function (d) {
+			return -1 * d.replace(/[\(\)]/g, '');
+		}
+	}, // Negative numbers indicated by brackets - 2d.p.
+	{ match: /^\-?[\d,]+$/, style: 63 }, // Numbers with thousand separators
+	{ match: /^\-?[\d,]+\.\d{2}$/, style: 64 },
+	{
+		match: /^(19\d\d|[2-9]\d\d\d)\-(0\d|1[012])\-[0123][\d]$/,
+		style: 67,
+		fmt: function (d) {
+			return Math.round(25569 + Date.parse(d) / (86400 * 1000));
+		}
+	} //Date yyyy-mm-dd
+];
+
+var _excelMergeCells = function (rels, row, column, rowspan, colspan) {
+	var mergeCells = $('mergeCells', rels);
+
+	mergeCells[0].appendChild(
+		_createNode(rels, 'mergeCell', {
+			attr: {
+				ref:
+					createCellPos(column) +
+					row +
+					':' +
+					createCellPos(column + colspan - 1) +
+					(row + rowspan - 1)
+			}
+		})
+	);
+
+	mergeCells.attr('count', parseFloat(mergeCells.attr('count')) + 1);
+};
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * Buttons
+ */
+
+//
+// Copy to clipboard
+//
+DataTable.ext.buttons.copyHtml5 = {
+	className: 'buttons-copy buttons-html5',
+
+	text: function (dt) {
+		return dt.i18n('buttons.copy', 'Copy');
+	},
+
+	action: function (e, dt, button, config, cb) {
+		var exportData = _exportData(dt, config);
+		var info = dt.buttons.exportInfo(config);
+		var newline = _newLine(config);
+		var output = exportData.str;
+		var hiddenDiv = $('<div/>').css({
+			height: 1,
+			width: 1,
+			overflow: 'hidden',
+			position: 'fixed',
+			top: 0,
+			left: 0
+		});
+
+		if (info.title) {
+			output = info.title + newline + newline + output;
+		}
+
+		if (info.messageTop) {
+			output = info.messageTop + newline + newline + output;
+		}
+
+		if (info.messageBottom) {
+			output = output + newline + newline + info.messageBottom;
+		}
+
+		if (config.customize) {
+			output = config.customize(output, config, dt);
+		}
+
+		var textarea = $('<textarea readonly/>')
+			.val(output)
+			.appendTo(hiddenDiv);
+
+		// For browsers that support the copy execCommand, try to use it
+		if (document.queryCommandSupported('copy')) {
+			hiddenDiv.appendTo(dt.table().container());
+			textarea[0].focus();
+			textarea[0].select();
+
+			try {
+				var successful = document.execCommand('copy');
+				hiddenDiv.remove();
+
+				if (successful) {
+					if (config.copySuccess) {
+						dt.buttons.info(
+							dt.i18n('buttons.copyTitle', 'Copy to clipboard'),
+							dt.i18n(
+								'buttons.copySuccess',
+								{
+									1: 'Copied one row to clipboard',
+									_: 'Copied %d rows to clipboard'
+								},
+								exportData.rows
+							),
+							2000
+						);
+					}
+
+					cb();
+					return;
+				}
+			} catch (t) {
+				// noop
+			}
+		}
+
+		// Otherwise we show the text box and instruct the user to use it
+		var message = $(
+			'<span>' +
+				dt.i18n(
+					'buttons.copyKeys',
+					'Press <i>ctrl</i> or <i>\u2318</i> + <i>C</i> to copy the table data<br>to your system clipboard.<br><br>' +
+						'To cancel, click this message or press escape.'
+				) +
+				'</span>'
+		).append(hiddenDiv);
+
+		dt.buttons.info(
+			dt.i18n('buttons.copyTitle', 'Copy to clipboard'),
+			message,
+			0
+		);
+
+		// Select the text so when the user activates their system clipboard
+		// it will copy that text
+		textarea[0].focus();
+		textarea[0].select();
+
+		// Event to hide the message when the user is done
+		var container = $(message).closest('.dt-button-info');
+		var close = function () {
+			container.off('click.buttons-copy');
+			$(document).off('.buttons-copy');
+			dt.buttons.info(false);
+		};
+
+		container.on('click.buttons-copy', function () {
+			close();
+			cb();
+		});
+		$(document)
+			.on('keydown.buttons-copy', function (e) {
+				if (e.keyCode === 27) {
+					// esc
+					close();
+					cb();
+				}
+			})
+			.on('copy.buttons-copy cut.buttons-copy', function () {
+				close();
+				cb();
+			});
+	},
+
+	async: 100,
+
+	copySuccess: true,
+
+	exportOptions: {},
+
+	fieldSeparator: '\t',
+
+	fieldBoundary: '',
+
+	header: true,
+
+	footer: true,
+
+	title: '*',
+
+	messageTop: '*',
+
+	messageBottom: '*'
+};
+
+//
+// CSV export
+//
+DataTable.ext.buttons.csvHtml5 = {
+	bom: false,
+
+	className: 'buttons-csv buttons-html5',
+
+	available: function () {
+		return window.FileReader !== undefined && window.Blob;
+	},
+
+	text: function (dt) {
+		return dt.i18n('buttons.csv', 'CSV');
+	},
+
+	action: function (e, dt, button, config, cb) {
+		// Set the text
+		var output = _exportData(dt, config).str;
+		var info = dt.buttons.exportInfo(config);
+		var charset = config.charset;
+
+		if (config.customize) {
+			output = config.customize(output, config, dt);
+		}
+
+		if (charset !== false) {
+			if (!charset) {
+				charset = document.characterSet || document.charset;
+			}
+
+			if (charset) {
+				charset = ';charset=' + charset;
+			}
+		}
+		else {
+			charset = '';
+		}
+
+		if (config.bom) {
+			output = String.fromCharCode(0xfeff) + output;
+		}
+
+		_saveAs(
+			new Blob([output], { type: 'text/csv' + charset }),
+			info.filename,
+			true
+		);
+
+		cb();
+	},
+
+	async: 100,
+
+	filename: '*',
+
+	extension: '.csv',
+
+	exportOptions: {
+		escapeExcelFormula: true
+	},
+
+	fieldSeparator: ',',
+
+	fieldBoundary: '"',
+
+	escapeChar: '"',
+
+	charset: null,
+
+	header: true,
+
+	footer: true
+};
+
+//
+// Excel (xlsx) export
+//
+DataTable.ext.buttons.excelHtml5 = {
+	className: 'buttons-excel buttons-html5',
+
+	available: function () {
+		return (
+			window.FileReader !== undefined &&
+			_jsZip() !== undefined &&
+			!_isDuffSafari() &&
+			_serialiser
+		);
+	},
+
+	text: function (dt) {
+		return dt.i18n('buttons.excel', 'Excel');
+	},
+
+	action: function (e, dt, button, config, cb) {
+		var rowPos = 0;
+		var dataStartRow, dataEndRow;
+		var getXml = function (type) {
+			var str = excelStrings[type];
+
+			//str = str.replace( /xmlns:/g, 'xmlns_' ).replace( /mc:/g, 'mc_' );
+
+			return $.parseXML(str);
+		};
+		var rels = getXml('xl/worksheets/sheet1.xml');
+		var relsGet = rels.getElementsByTagName('sheetData')[0];
+
+		var xlsx = {
+			_rels: {
+				'.rels': getXml('_rels/.rels')
+			},
+			xl: {
+				_rels: {
+					'workbook.xml.rels': getXml('xl/_rels/workbook.xml.rels')
+				},
+				'workbook.xml': getXml('xl/workbook.xml'),
+				'styles.xml': getXml('xl/styles.xml'),
+				worksheets: {
+					'sheet1.xml': rels
+				}
+			},
+			'[Content_Types].xml': getXml('[Content_Types].xml')
+		};
+
+		var data = dt.buttons.exportData(config.exportOptions);
+		var currentRow, rowNode;
+		var addRow = function (row) {
+			currentRow = rowPos + 1;
+			rowNode = _createNode(rels, 'row', { attr: { r: currentRow } });
+
+			for (var i = 0, ien = row.length; i < ien; i++) {
+				// Concat both the Cell Columns as a letter and the Row of the cell.
+				var cellId = createCellPos(i) + '' + currentRow;
+				var cell = null;
+
+				// For null, undefined of blank cell, continue so it doesn't create the _createNode
+				if (row[i] === null || row[i] === undefined || row[i] === '') {
+					if (config.createEmptyCells === true) {
+						row[i] = '';
+					}
+					else {
+						continue;
+					}
+				}
+
+				var originalContent = row[i];
+				row[i] =
+					typeof row[i].trim === 'function' ? row[i].trim() : row[i];
+
+				// Special number formatting options
+				for (var j = 0, jen = _excelSpecials.length; j < jen; j++) {
+					var special = _excelSpecials[j];
+
+					// TODO Need to provide the ability for the specials to say
+					// if they are returning a string, since at the moment it is
+					// assumed to be a number
+					if (
+						row[i].match &&
+						!row[i].match(/^0\d+/) &&
+						row[i].match(special.match)
+					) {
+						var val = row[i].replace(/[^\d\.\-]/g, '');
+
+						if (special.fmt) {
+							val = special.fmt(val);
+						}
+
+						cell = _createNode(rels, 'c', {
+							attr: {
+								r: cellId,
+								s: special.style
+							},
+							children: [_createNode(rels, 'v', { text: val })]
+						});
+
+						break;
+					}
+				}
+
+				if (!cell) {
+					if (
+						typeof row[i] === 'number' ||
+						(row[i].match &&
+							row[i].match(/^-?\d+(\.\d+)?([eE]\-?\d+)?$/) && // Includes exponential format
+							!row[i].match(/^0\d+/))
+					) {
+						// Detect numbers - don't match numbers with leading zeros
+						// or a negative anywhere but the start
+						cell = _createNode(rels, 'c', {
+							attr: {
+								t: 'n',
+								r: cellId
+							},
+							children: [_createNode(rels, 'v', { text: row[i] })]
+						});
+					}
+					else {
+						// String output - replace non standard characters for text output
+						/*eslint no-control-regex: "off"*/
+						var text = !originalContent.replace
+							? originalContent
+							: originalContent.replace(
+									/[\x00-\x09\x0B\x0C\x0E-\x1F\x7F-\x9F]/g,
+									''
+							);
+
+						cell = _createNode(rels, 'c', {
+							attr: {
+								t: 'inlineStr',
+								r: cellId
+							},
+							children: {
+								row: _createNode(rels, 'is', {
+									children: {
+										row: _createNode(rels, 't', {
+											text: text,
+											attr: {
+												'xml:space': 'preserve'
+											}
+										})
+									}
+								})
+							}
+						});
+					}
+				}
+
+				rowNode.appendChild(cell);
+			}
+
+			relsGet.appendChild(rowNode);
+			rowPos++;
+		};
+
+		var addHeader = function (structure) {
+			structure.forEach(function (row) {
+				addRow(
+					row.map(function (cell) {
+						return cell ? cell.title : '';
+					}),
+					rowPos
+				);
+				$('row:last c', rels).attr('s', '2'); // bold
+
+				// Add any merge cells
+				row.forEach(function (cell, columnCounter) {
+					if (cell && (cell.colSpan > 1 || cell.rowSpan > 1)) {
+						_excelMergeCells(
+							rels,
+							rowPos,
+							columnCounter,
+							cell.rowSpan,
+							cell.colSpan
+						);
+					}
+				});
+			});
+		};
+
+		// Title and top messages
+		var exportInfo = dt.buttons.exportInfo(config);
+		if (exportInfo.title) {
+			addRow([exportInfo.title], rowPos);
+			_excelMergeCells(rels, rowPos, 0, 1, data.header.length);
+			$('row:last c', rels).attr('s', '51'); // centre
+		}
+
+		if (exportInfo.messageTop) {
+			addRow([exportInfo.messageTop], rowPos);
+			_excelMergeCells(rels, rowPos, 0, 1, data.header.length);
+		}
+
+		// Table header
+		if (config.header) {
+			addHeader(data.headerStructure);
+		}
+
+		dataStartRow = rowPos;
+
+		// Table body
+		for (var n = 0, ie = data.body.length; n < ie; n++) {
+			addRow(data.body[n], rowPos);
+		}
+
+		dataEndRow = rowPos;
+
+		// Table footer
+		if (config.footer && data.footer) {
+			addHeader(data.footerStructure);
+		}
+
+		// Below the table
+		if (exportInfo.messageBottom) {
+			addRow([exportInfo.messageBottom], rowPos);
+			_excelMergeCells(rels, rowPos, 0, 1, data.header.length);
+		}
+
+		// Set column widths
+		var cols = _createNode(rels, 'cols');
+		$('worksheet', rels).prepend(cols);
+
+		for (var i = 0, ien = data.header.length; i < ien; i++) {
+			cols.appendChild(
+				_createNode(rels, 'col', {
+					attr: {
+						min: i + 1,
+						max: i + 1,
+						width: _excelColWidth(data, i),
+						customWidth: 1
+					}
+				})
+			);
+		}
+
+		// Workbook modifications
+		var workbook = xlsx.xl['workbook.xml'];
+
+		$('sheets sheet', workbook).attr('name', _sheetname(config));
+
+		// Auto filter for columns
+		if (config.autoFilter) {
+			$('mergeCells', rels).before(
+				_createNode(rels, 'autoFilter', {
+					attr: {
+						ref:
+							'A' +
+							dataStartRow +
+							':' +
+							createCellPos(data.header.length - 1) +
+							dataEndRow
+					}
+				})
+			);
+
+			$('definedNames', workbook).append(
+				_createNode(workbook, 'definedName', {
+					attr: {
+						name: '_xlnm._FilterDatabase',
+						localSheetId: '0',
+						hidden: 1
+					},
+					text:
+						'\'' +
+						_sheetname(config).replace(/'/g, '\'\'') +
+						'\'!$A$' +
+						dataStartRow +
+						':$' +
+						createCellPos(data.header.length - 1) +
+						'$' +
+						dataEndRow
+				})
+			);
+		}
+
+		// Let the developer customise the document if they want to
+		if (config.customize) {
+			config.customize(xlsx, config, dt);
+		}
+
+		// Excel doesn't like an empty mergeCells tag
+		if ($('mergeCells', rels).children().length === 0) {
+			$('mergeCells', rels).remove();
+		}
+
+		var jszip = _jsZip();
+		var zip = new jszip();
+		var zipConfig = {
+			compression: 'DEFLATE',
+			type: 'blob',
+			mimeType:
+				'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+		};
+
+		_addToZip(zip, xlsx);
+
+		// Modern Excel has a 218 character limit on the file name + path of the file (why!?)
+		// https://support.microsoft.com/en-us/office/excel-specifications-and-limits-1672b34d-7043-467e-8e27-269d656771c3
+		// So we truncate to allow for this.
+		var filename = exportInfo.filename;
+
+		if (filename > 175) {
+			filename = filename.substr(0, 175);
+		}
+
+		// Let the developer customize the final zip file if they want to before it is generated and sent to the browser
+		if (config.customizeZip) {
+			config.customizeZip(zip, data, filename);
+		}
+
+
+		if (zip.generateAsync) {
+			// JSZip 3+
+			zip.generateAsync(zipConfig).then(function (blob) {
+				_saveAs(blob, filename);
+				cb();
+			});
+		}
+		else {
+			// JSZip 2.5
+			_saveAs(zip.generate(zipConfig), filename);
+			cb();
+		}
+	},
+
+	async: 100,
+
+	filename: '*',
+
+	extension: '.xlsx',
+
+	exportOptions: {},
+
+	header: true,
+
+	footer: true,
+
+	title: '*',
+
+	messageTop: '*',
+
+	messageBottom: '*',
+
+	createEmptyCells: false,
+
+	autoFilter: false,
+
+	sheetName: ''
+};
+
+//
+// PDF export - using pdfMake - http://pdfmake.org
+//
+DataTable.ext.buttons.pdfHtml5 = {
+	className: 'buttons-pdf buttons-html5',
+
+	available: function () {
+		return window.FileReader !== undefined && _pdfMake();
+	},
+
+	text: function (dt) {
+		return dt.i18n('buttons.pdf', 'PDF');
+	},
+
+	action: function (e, dt, button, config, cb) {
+		var data = dt.buttons.exportData(config.exportOptions);
+		var info = dt.buttons.exportInfo(config);
+		var rows = [];
+
+		if (config.header) {
+			data.headerStructure.forEach(function (row) {
+				rows.push(
+					row.map(function (cell) {
+						return cell
+							? {
+									text: cell.title,
+									colSpan: cell.colspan,
+									rowSpan: cell.rowspan,
+									style: 'tableHeader'
+							}
+							: {};
+					})
+				);
+			});
+		}
+
+		for (var i = 0, ien = data.body.length; i < ien; i++) {
+			rows.push(
+				data.body[i].map(function (d) {
+					return {
+						text:
+							d === null || d === undefined
+								? ''
+								: typeof d === 'string'
+								? d
+								: d.toString()
+					};
+				})
+			);
+		}
+
+		if (config.footer) {
+			data.footerStructure.forEach(function (row) {
+				rows.push(
+					row.map(function (cell) {
+						return cell
+							? {
+									text: cell.title,
+									colSpan: cell.colspan,
+									rowSpan: cell.rowspan,
+									style: 'tableFooter'
+							}
+							: {};
+					})
+				);
+			});
+		}
+
+		var doc = {
+			pageSize: config.pageSize,
+			pageOrientation: config.orientation,
+			content: [
+				{
+					style: 'table',
+					table: {
+						headerRows: config.header
+							? data.headerStructure.length
+							: 0,
+						footerRows: config.footer // Used for styling, doesn't do anything in pdfmake
+							? data.footerStructure.length
+							: 0,
+						body: rows
+					},
+					layout: {
+						hLineWidth: function (i, node) {
+							if (i === 0 || i === node.table.body.length) {
+								return 0;
+							}
+							return 0.5;
+						},
+						vLineWidth: function () {
+							return 0;
+						},
+						hLineColor: function (i, node) {
+							return i === node.table.headerRows ||
+								i ===
+									node.table.body.length -
+										node.table.footerRows
+								? '#333'
+								: '#ddd';
+						},
+						fillColor: function (rowIndex) {
+							if (rowIndex < data.headerStructure.length) {
+								return '#fff';
+							}
+							return rowIndex % 2 === 0 ? '#f3f3f3' : null;
+						},
+						paddingTop: function () {
+							return 5;
+						},
+						paddingBottom: function () {
+							return 5;
+						}
+					}
+				}
+			],
+			styles: {
+				tableHeader: {
+					bold: true,
+					fontSize: 11,
+					alignment: 'center'
+				},
+				tableFooter: {
+					bold: true,
+					fontSize: 11,
+					alignment: 'center'
+				},
+				table: {
+					margin: [0, 5, 0, 5]
+				},
+				title: {
+					alignment: 'center',
+					fontSize: 13
+				},
+				message: {}
+			},
+			defaultStyle: {
+				fontSize: 10
+			}
+		};
+
+		if (info.messageTop) {
+			doc.content.unshift({
+				text: info.messageTop,
+				style: 'message',
+				margin: [0, 0, 0, 12]
+			});
+		}
+
+		if (info.messageBottom) {
+			doc.content.push({
+				text: info.messageBottom,
+				style: 'message',
+				margin: [0, 0, 0, 12]
+			});
+		}
+
+		if (info.title) {
+			doc.content.unshift({
+				text: info.title,
+				style: 'title',
+				margin: [0, 0, 0, 12]
+			});
+		}
+
+		if (config.customize) {
+			config.customize(doc, config, dt);
+		}
+
+		var pdf = _pdfMake().createPdf(doc);
+
+		if (config.download === 'open' && !_isDuffSafari()) {
+			pdf.open();
+		}
+		else {
+			pdf.download(info.filename);
+		}
+
+		cb();
+	},
+
+	async: 100,
+
+	title: '*',
+
+	filename: '*',
+
+	extension: '.pdf',
+
+	exportOptions: {},
+
+	orientation: 'portrait',
+
+	// This isn't perfect, but it is close
+	pageSize:
+		navigator.language === 'en-US' || navigator.language === 'en-CA'
+			? 'LETTER'
+			: 'A4',
+
+	header: true,
+
+	footer: true,
+
+	messageTop: '*',
+
+	messageBottom: '*',
+
+	customize: null,
+
+	download: 'download'
+};
+
+
+return DataTable;
+}));
+
+
+/*! ColReorder 2.1.2
+ * © SpryMedia Ltd - datatables.net/license
+ */
+
+(function( factory ){
+	if ( typeof define === 'function' && define.amd ) {
+		// AMD
+		define( ['jquery', 'datatables.net'], function ( $ ) {
+			return factory( $, window, document );
+		} );
+	}
+	else if ( typeof exports === 'object' ) {
+		// CommonJS
+		var jq = require('jquery');
+		var cjsRequires = function (root, $) {
+			if ( ! $.fn.dataTable ) {
+				require('datatables.net')(root, $);
+			}
+		};
+
+		if (typeof window === 'undefined') {
+			module.exports = function (root, $) {
+				if ( ! root ) {
+					// CommonJS environments without a window global must pass a
+					// root. This will give an error otherwise
+					root = window;
+				}
+
+				if ( ! $ ) {
+					$ = jq( root );
+				}
+
+				cjsRequires( root, $ );
+				return factory( $, root, root.document );
+			};
+		}
+		else {
+			cjsRequires( window, jq );
+			module.exports = factory( jq, window, window.document );
+		}
+	}
+	else {
+		// Browser
+		factory( jQuery, window, document );
+	}
+}(function( $, window, document ) {
+'use strict';
+var DataTable = $.fn.dataTable;
+
+
+/**
+ * Mutate an array, moving a set of elements into a new index position
+ *
+ * @param arr Array to modify
+ * @param from Start move index
+ * @param count Number of elements to move
+ * @param to Index where the start element will move to
+ */
+function arrayMove(arr, from, count, to) {
+    var movers = arr.splice(from, count);
+    // Add delete and start to the array, so we can use it for the `apply`
+    movers.unshift(0); // splice delete param
+    movers.unshift(to < from ? to : to - count + 1); // splice start param
+    arr.splice.apply(arr, movers);
+}
+/**
+ * Run finishing activities after one or more columns have been reordered.
+ *
+ * @param dt DataTable being operated on - must be a single table instance
+ */
+function finalise(dt) {
+    // Cache invalidation. Always read from the data object rather
+    // than reading back from the DOM since it could have been
+    // changed by a renderer
+    dt.rows().invalidate('data');
+    // Redraw the header / footer. Its a little bit of a hack this, as DT
+    // doesn't expose the header draw as an API method. It calls state
+    // saving, so we don't need to here.
+    dt.column(0).visible(dt.column(0).visible());
+    dt.columns.adjust();
+    // Fire an event so other plug-ins can update
+    var order = dt.colReorder.order();
+    dt.trigger('columns-reordered', [
+        {
+            order: order,
+            mapping: invertKeyValues(order)
+        }
+    ]);
+}
+/**
+ * Get the original indexes in their current order
+ *
+ * @param dt DataTable being operated on - must be a single table instance
+ * @returns Original indexes in current order
+ */
+function getOrder(dt) {
+    return dt.settings()[0].aoColumns.map(function (col) {
+        return col._crOriginalIdx;
+    });
+}
+/**
+ * Manipulate a header / footer array in DataTables settings to reorder
+ * the columns.
+ */
+function headerUpdate(structure, map, from, to) {
+    var done = [];
+    for (var i = 0; i < structure.length; i++) {
+        var headerRow = structure[i];
+        arrayMove(headerRow, from[0], from.length, to);
+        for (var j = 0; j < headerRow.length; j++) {
+            var cell = headerRow[j].cell;
+            // Only work on a DOM element once, otherwise we risk remapping a
+            // remapped value (etc).
+            if (done.includes(cell)) {
+                continue;
+            }
+            var indexes = cell.getAttribute('data-dt-column').split(',');
+            var mapped = indexes
+                .map(function (idx) {
+                return map[idx];
+            })
+                .join(',');
+            // Update data attributes for the new column position
+            cell.setAttribute('data-dt-column', mapped);
+            done.push(cell);
+        }
+    }
+}
+/**
+ * Setup for ColReorder API operations
+ *
+ * @param dt DataTable(s) being operated on - might have multiple tables!
+ */
+function init(api) {
+    // Assign the original column index to a parameter that we can lookup.
+    // On the first pass (i.e. when the parameter hasn't yet been set), the
+    // index order will be the original order, so this is quite a simple
+    // assignment.
+    api.columns().iterator('column', function (s, idx) {
+        var columns = s.aoColumns;
+        if (columns[idx]._crOriginalIdx === undefined) {
+            columns[idx]._crOriginalIdx = idx;
+        }
+    });
+}
+/**
+ * Switch the key value pairing of an index array to be value key (i.e. the old value is now the
+ * key). For example consider [ 2, 0, 1 ] this would be returned as [ 1, 2, 0 ].
+ *
+ *  @param   array arr Array to switch around
+ */
+function invertKeyValues(arr) {
+    var result = [];
+    for (var i = 0; i < arr.length; i++) {
+        result[arr[i]] = i;
+    }
+    return result;
+}
+/**
+ * Move one or more columns from one index to another.
+ *
+ * This method has a lot of knowledge about how DataTables works internally.
+ * If DataTables changes how it handles cells, columns, etc, then this
+ * method would need to be updated accordingly.
+ *
+ * @param dt DataTable being operated on - must be a single table instance
+ * @param from Column indexes to move
+ * @param to Destination index (starting if multiple)
+ */
+function move(dt, from, to) {
+    var i, j;
+    var settings = dt.settings()[0];
+    var columns = settings.aoColumns;
+    var newOrder = columns.map(function (col, idx) {
+        return idx;
+    });
+    // The to column in already inside the from column(s) (might be the same)
+    // no change required
+    if (from.includes(to)) {
+        return;
+    }
+    // A reverse index array so we can look up new indexes from old
+    arrayMove(newOrder, from[0], from.length, to);
+    var reverseIndexes = invertKeyValues(newOrder);
+    // Main column
+    arrayMove(columns, from[0], from.length, to);
+    // Per row manipulations
+    for (i = 0; i < settings.aoData.length; i++) {
+        var data = settings.aoData[i];
+        // Allow for sparse array
+        if (!data) {
+            continue;
+        }
+        var cells = data.anCells;
+        // Not yet rendered
+        if (!cells) {
+            continue;
+        }
+        // Array of cells
+        arrayMove(cells, from[0], from.length, to);
+        for (j = 0; j < cells.length; j++) {
+            // Reinsert into the document in the new order
+            if (data.nTr && cells[j] && columns[j].bVisible) {
+                data.nTr.appendChild(cells[j]);
+            }
+            // Update lookup index
+            if (cells[j] && cells[j]._DT_CellIndex) {
+                cells[j]._DT_CellIndex.column = j;
+            }
+        }
+    }
+    // Per column manipulation
+    for (i = 0; i < columns.length; i++) {
+        var column = columns[i];
+        // Data column sorting
+        for (j = 0; j < column.aDataSort.length; j++) {
+            column.aDataSort[j] = reverseIndexes[column.aDataSort[j]];
+        }
+        // Update the column indexes
+        column.idx = reverseIndexes[column.idx];
+        // Reorder the colgroup > col elements for the new order
+        if (column.bVisible) {
+            settings.colgroup.append(column.colEl);
+        }
+    }
+    // Header and footer
+    headerUpdate(settings.aoHeader, reverseIndexes, from, to);
+    headerUpdate(settings.aoFooter, reverseIndexes, from, to);
+    // Search - columns
+    arrayMove(settings.aoPreSearchCols, from[0], from.length, to);
+    // Ordering indexes update - note that the sort listener on the
+    // header works out the index to apply on each draw, so it doesn't
+    // need to be updated here.
+    orderingIndexes(reverseIndexes, settings.aaSorting);
+    if (Array.isArray(settings.aaSortingFixed)) {
+        orderingIndexes(reverseIndexes, settings.aaSortingFixed);
+    }
+    else if (settings.aaSortingFixed.pre) {
+        orderingIndexes(reverseIndexes, settings.aaSortingFixed.pre);
+    }
+    else if (settings.aaSortingFixed.post) {
+        orderingIndexes(reverseIndexes, settings.aaSortingFixed.pre);
+    }
+    settings.aLastSort.forEach(function (el) {
+        el.src = reverseIndexes[el.src];
+    });
+    // Fire an event so other plug-ins can update
+    dt.trigger('column-reorder', [
+        dt.settings()[0],
+        {
+            from: from,
+            to: to,
+            mapping: reverseIndexes
+        }
+    ]);
+}
+/**
+ * Update the indexing for ordering arrays
+ *
+ * @param map Reverse index map
+ * @param order Array to update
+ */
+function orderingIndexes(map, order) {
+    // Can happen if the order was deleted from a saved state
+    if (!order) {
+        return;
+    }
+    for (var i = 0; i < order.length; i++) {
+        var el = order[i];
+        if (typeof el === 'number') {
+            // Just a number
+            order[i] = map[el];
+        }
+        else if ($.isPlainObject(el) && el.idx !== undefined) {
+            // New index in an object style
+            el.idx = map[el.idx];
+        }
+        else if (Array.isArray(el) && typeof el[0] === 'number') {
+            // The good old fixes length array
+            el[0] = map[el[0]];
+        }
+        // No need to update if in object + .name style
+    }
+}
+/**
+ * Take an index array for the current positioned, reordered to what you want
+ * them to be.
+ *
+ * @param dt DataTable being operated on - must be a single table instance
+ * @param order Indexes from current order, positioned as you want them to be
+ */
+function setOrder(dt, order, original) {
+    var changed = false;
+    var i;
+    if (order.length !== dt.columns().count()) {
+        dt.error('ColReorder - column count mismatch');
+        return;
+    }
+    // The order given is based on the original indexes, rather than the
+    // existing ones, so we need to translate from the original to current
+    // before then doing the order
+    if (original) {
+        order = transpose(dt, order, 'toCurrent');
+    }
+    // The API is array index as the desired position, but our algorithm below is
+    // for array index as the current position. So we need to invert for it to work.
+    var setOrder = invertKeyValues(order);
+    // Move columns, one by one with validation disabled!
+    for (i = 0; i < setOrder.length; i++) {
+        var currentIndex = setOrder.indexOf(i);
+        if (i !== currentIndex) {
+            // Reorder our switching error
+            arrayMove(setOrder, currentIndex, 1, i);
+            // Do the reorder
+            move(dt, [currentIndex], i);
+            changed = true;
+        }
+    }
+    // Reorder complete
+    if (changed) {
+        finalise(dt);
+    }
+}
+/**
+ * Convert the DataTables header structure array into a 2D array where each
+ * element has a reference to its TH/TD cell (regardless of spanning).
+ *
+ * @param structure Header / footer structure object
+ * @returns 2D array of header cells
+ */
+function structureFill(structure) {
+    var filledIn = [];
+    for (var row = 0; row < structure.length; row++) {
+        filledIn.push([]);
+        for (var col = 0; col < structure[row].length; col++) {
+            var cell = structure[row][col];
+            if (cell) {
+                for (var rowInner = 0; rowInner < cell.rowspan; rowInner++) {
+                    if (!filledIn[row + rowInner]) {
+                        filledIn[row + rowInner] = [];
+                    }
+                    for (var colInner = 0; colInner < cell.colspan; colInner++) {
+                        filledIn[row + rowInner][col + colInner] = cell.cell;
+                    }
+                }
+            }
+        }
+    }
+    return filledIn;
+}
+/**
+ * Convert the index type
+ *
+ * @param dt DataTable to work on
+ * @param idx Index to transform
+ * @param dir Transform direction
+ * @returns Converted number(s)
+ */
+function transpose(dt, idx, dir) {
+    var order = dt.colReorder.order();
+    var columns = dt.settings()[0].aoColumns;
+    if (dir === 'toCurrent' || dir === 'fromOriginal') {
+        // Given an original index, want the current
+        return !Array.isArray(idx)
+            ? order.indexOf(idx)
+            : idx.map(function (index) {
+                return order.indexOf(index);
+            });
+    }
+    // Given a current index, want the original
+    return !Array.isArray(idx)
+        ? columns[idx]._crOriginalIdx
+        : idx.map(function (index) {
+            return columns[index]._crOriginalIdx;
+        });
+}
+/**
+ * Validate that a requested move is okay. This includes bound checking
+ * and that it won't split colspan'ed cells.
+ *
+ * @param table API instance
+ * @param from Column indexes to move
+ * @param to Destination index (starting if multiple)
+ * @returns Validation result
+ */
+function validateMove(table, from, to) {
+    var columns = table.columns().count();
+    // Sanity and bound checking
+    if (from[0] < to && to < from[from.length]) {
+        return false;
+    }
+    if (from[0] < 0 && from[from.length - 1] > columns) {
+        return false;
+    }
+    if (to < 0 && to > columns) {
+        return false;
+    }
+    // No change - it's valid
+    if (from.includes(to)) {
+        return true;
+    }
+    if (!validateStructureMove(table.table().header.structure(), from, to)) {
+        return false;
+    }
+    if (!validateStructureMove(table.table().footer.structure(), from, to)) {
+        return false;
+    }
+    return true;
+}
+/**
+ * For a given structure check that the move is valid.
+ * @param structure
+ * @param from
+ * @param to
+ * @returns
+ */
+function validateStructureMove(structure, from, to) {
+    var header = structureFill(structure);
+    var i;
+    // Shuffle the header cells around
+    for (i = 0; i < header.length; i++) {
+        arrayMove(header[i], from[0], from.length, to);
+    }
+    // Sanity check that the headers are next to each other
+    for (i = 0; i < header.length; i++) {
+        var seen = [];
+        for (var j = 0; j < header[i].length; j++) {
+            var cell = header[i][j];
+            if (!seen.includes(cell)) {
+                // Hasn't been seen before
+                seen.push(cell);
+            }
+            else if (seen[seen.length - 1] !== cell) {
+                // Has been seen before and is not the previous cell - validation failed
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+/**
+ * This is one possible UI for column reordering in DataTables. In this case
+ * columns are reordered by clicking and dragging a column header. It calculates
+ * where columns can be dropped based on the column header used to start the drag
+ * and then `colReorder.move()` method to alter the DataTable.
+ */
+var ColReorder = /** @class */ (function () {
+    function ColReorder(dt, opts) {
+        this.dom = {
+            drag: null
+        };
+        this.c = {
+            columns: null,
+            enable: null,
+            headerRows: null,
+            order: null
+        };
+        this.s = {
+            dropZones: [],
+            mouse: {
+                absLeft: -1,
+                offset: {
+                    x: -1,
+                    y: -1
+                },
+                start: {
+                    x: -1,
+                    y: -1
+                },
+                target: null,
+                targets: []
+            },
+            scrollInterval: null
+        };
+        var that = this;
+        var ctx = dt.settings()[0];
+        // Check if ColReorder already has been initialised on this DataTable - only
+        // one can exist.
+        if (ctx._colReorder) {
+            return;
+        }
+        dt.settings()[0]._colReorder = this;
+        this.dt = dt;
+        $.extend(this.c, ColReorder.defaults, opts);
+        init(dt);
+        dt.on('stateSaveParams', function (e, s, d) {
+            d.colReorder = getOrder(dt);
+        });
+        dt.on('destroy', function () {
+            dt.off('.colReorder');
+            dt.colReorder.reset();
+        });
+        // Initial ordering / state restoring
+        var loaded = dt.state.loaded();
+        var order = this.c.order;
+        if (loaded && loaded.colReorder && dt.columns().count() === loaded.colReorder.length) {
+            order = loaded.colReorder;
+        }
+        if (order) {
+            dt.ready(function () {
+                setOrder(dt, order, true);
+            });
+        }
+        dt.table()
+            .header.structure()
+            .forEach(function (row, rowIdx) {
+            var headerRows = opts.headerRows;
+            for (var i = 0; i < row.length; i++) {
+                if (!headerRows || headerRows.includes(rowIdx)) {
+                    if (row[i] && row[i].cell) {
+                        that._addListener(row[i].cell);
+                    }
+                }
+            }
+        });
+    }
+    ColReorder.prototype.disable = function () {
+        this.c.enable = false;
+        return this;
+    };
+    ColReorder.prototype.enable = function (flag) {
+        if (flag === void 0) { flag = true; }
+        if (flag === false) {
+            return this.disable();
+        }
+        this.c.enable = true;
+        return this;
+    };
+    /**
+     * Attach the mouse down listener to an element to start a column reorder action
+     *
+     * @param el
+     */
+    ColReorder.prototype._addListener = function (el) {
+        var that = this;
+        $(el)
+            .on('selectstart.colReorder', function () {
+            return false;
+        })
+            .on('mousedown.colReorder touchstart.colReorder', function (e) {
+            // Ignore middle and right click
+            if (e.type === 'mousedown' && e.which !== 1) {
+                return;
+            }
+            // Ignore if disabled
+            if (!that.c.enable) {
+                return;
+            }
+            // ColumnControl integration - if there is a CC reorder button in the header
+            // then the mousedown is limited to that
+            var btn = $('button.dtcc-button_reorder', this);
+            if (btn.length && e.target !== btn[0] && btn.find(e.target).length === 0) {
+                return;
+            }
+            that._mouseDown(e, this);
+        });
+    };
+    /**
+     * Create the element that is dragged around the page
+     */
+    ColReorder.prototype._createDragNode = function () {
+        var origCell = this.s.mouse.target;
+        var origTr = origCell.parent();
+        var origThead = origTr.parent();
+        var origTable = origThead.parent();
+        var cloneCell = origCell.clone();
+        // This is a slightly odd combination of jQuery and DOM, but it is the
+        // fastest and least resource intensive way I could think of cloning
+        // the table with just a single header cell in it.
+        this.dom.drag = $(origTable[0].cloneNode(false))
+            .addClass('dtcr-cloned')
+            .append($(origThead[0].cloneNode(false)).append($(origTr[0].cloneNode(false)).append(cloneCell[0])) // Not sure why  it doesn't want to append a jQuery node
+        )
+            .css({
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: $(origCell).outerWidth(),
+            height: $(origCell).outerHeight()
+        })
+            .appendTo('body');
+    };
+    /**
+     * Get cursor position regardless of mouse or touch input
+     *
+     * @param e Event
+     * @param prop Property name to get
+     * @returns Value - assuming a number here
+     */
+    ColReorder.prototype._cursorPosition = function (e, prop) {
+        return e.type.indexOf('touch') !== -1 ? e.originalEvent.touches[0][prop] : e[prop];
+    };
+    /**
+     * Cache values at start
+     *
+     * @param e Triggering event
+     * @param cell Cell that the action started on
+     * @returns
+     */
+    ColReorder.prototype._mouseDown = function (e, cell) {
+        var _this = this;
+        var target = $(e.target).closest('th, td');
+        var offset = target.offset();
+        var moveableColumns = this.dt.columns(this.c.columns).indexes().toArray();
+        var moveColumnIndexes = $(cell)
+            .attr('data-dt-column')
+            .split(',')
+            .map(function (val) {
+            return parseInt(val, 10);
+        });
+        // Don't do anything for columns which are not selected as moveable
+        for (var j = 0; j < moveColumnIndexes.length; j++) {
+            if (!moveableColumns.includes(moveColumnIndexes[j])) {
+                return false;
+            }
+        }
+        this.s.mouse.start.x = this._cursorPosition(e, 'pageX');
+        this.s.mouse.start.y = this._cursorPosition(e, 'pageY');
+        this.s.mouse.offset.x = this._cursorPosition(e, 'pageX') - offset.left;
+        this.s.mouse.offset.y = this._cursorPosition(e, 'pageY') - offset.top;
+        this.s.mouse.target = target;
+        this.s.mouse.targets = moveColumnIndexes;
+        // Classes to highlight the columns being moved
+        for (var i = 0; i < moveColumnIndexes.length; i++) {
+            var cells = this.dt
+                .cells(null, moveColumnIndexes[i], { page: 'current' })
+                .nodes()
+                .to$();
+            var klass = 'dtcr-moving';
+            if (i === 0) {
+                klass += ' dtcr-moving-first';
+            }
+            if (i === moveColumnIndexes.length - 1) {
+                klass += ' dtcr-moving-last';
+            }
+            cells.addClass(klass);
+        }
+        this._regions(moveColumnIndexes);
+        this._scrollRegions();
+        /* Add event handlers to the document */
+        $(document)
+            .on('mousemove.colReorder touchmove.colReorder', function (e) {
+            _this._mouseMove(e);
+        })
+            .on('mouseup.colReorder touchend.colReorder', function (e) {
+            _this._mouseUp(e);
+        });
+    };
+    ColReorder.prototype._mouseMove = function (e) {
+        if (this.dom.drag === null) {
+            // Only create the drag element if the mouse has moved a specific distance from the start
+            // point - this allows the user to make small mouse movements when sorting and not have a
+            // possibly confusing drag element showing up
+            if (Math.pow(Math.pow(this._cursorPosition(e, 'pageX') - this.s.mouse.start.x, 2) +
+                Math.pow(this._cursorPosition(e, 'pageY') - this.s.mouse.start.y, 2), 0.5) < 5) {
+                return;
+            }
+            $(document.body).addClass('dtcr-dragging');
+            this._createDragNode();
+        }
+        // Position the element - we respect where in the element the click occurred
+        this.dom.drag.css({
+            left: this._cursorPosition(e, 'pageX') - this.s.mouse.offset.x,
+            top: this._cursorPosition(e, 'pageY') - this.s.mouse.offset.y
+        });
+        // Find cursor's left position relative to the table
+        var tableNode = this.dt.table().node();
+        var tableOffset = $(tableNode).offset().left;
+        var cursorMouseLeft = this._cursorPosition(e, 'pageX') - tableOffset;
+        var cursorInlineStart;
+        if (this._isRtl()) {
+            var tableWidth = tableNode.clientWidth;
+            cursorInlineStart = tableWidth - cursorMouseLeft;
+        }
+        else {
+            cursorInlineStart = cursorMouseLeft;
+        }
+        var dropZone = this.s.dropZones.find(function (zone) {
+            if (zone.inlineStart <= cursorInlineStart && cursorInlineStart <= zone.inlineStart + zone.width) {
+                return true;
+            }
+            return false;
+        });
+        this.s.mouse.absLeft = this._cursorPosition(e, 'pageX');
+        if (!dropZone) {
+            return;
+        }
+        if (!dropZone.self) {
+            this._move(dropZone, cursorInlineStart);
+        }
+    };
+    ColReorder.prototype._mouseUp = function (e) {
+        var _this = this;
+        $(document).off('.colReorder');
+        $(document.body).removeClass('dtcr-dragging');
+        if (this.dom.drag) {
+            this.dom.drag.remove();
+            this.dom.drag = null;
+            // Once the element is removed, Firefox will then complete the mouse event
+            // sequence by firing a click event on the element that the mouse is now
+            // over. This means that a click event happens on the header cell triggering
+            // a sort. A setTimeout on the remove doesn't appear to work around this.
+            //
+            // Therefore, we need to add a click event listener that will kill the
+            // bubbling of the event, and then _almost_ immediately remove it.
+            this.s.mouse.target.on('click.dtcr', function (e) {
+                return false;
+            });
+            setTimeout(function () {
+                _this.s.mouse.target.off('.dtcr');
+            }, 10);
+        }
+        if (this.s.scrollInterval) {
+            clearInterval(this.s.scrollInterval);
+        }
+        this.dt.cells('.dtcr-moving').nodes().to$().removeClass('dtcr-moving dtcr-moving-first dtcr-moving-last');
+    };
+    /**
+     * Shift columns around
+     *
+     * @param dropZone Where to move to
+     * @param cursorInlineStart Cursor position, relative to the inline start (left or right) of the table
+     */
+    ColReorder.prototype._move = function (dropZone, cursorInlineStart) {
+        var that = this;
+        this.dt.colReorder.move(this.s.mouse.targets, dropZone.colIdx);
+        // Update the targets
+        this.s.mouse.targets = $(this.s.mouse.target)
+            .attr('data-dt-column')
+            .split(',')
+            .map(function (val) {
+            return parseInt(val, 10);
+        });
+        this._regions(this.s.mouse.targets);
+        var visibleTargets = this.s.mouse.targets.filter(function (val) {
+            return that.dt.column(val).visible();
+        });
+        // If the column being moved is smaller than the column it is replacing,
+        // the drop zones might need a correction to allow for this since, otherwise
+        // we might immediately be changing the column order as soon as it was placed.
+        // Find the drop zone for the first in the list of targets - is its
+        // left greater than the mouse position. If so, it needs correcting
+        var dz = this.s.dropZones.find(function (zone) {
+            return zone.colIdx === visibleTargets[0];
+        });
+        var dzIdx = this.s.dropZones.indexOf(dz);
+        if (dz.inlineStart > cursorInlineStart) {
+            var previousDiff = dz.inlineStart - cursorInlineStart;
+            var previousDz = this.s.dropZones[dzIdx - 1];
+            dz.inlineStart -= previousDiff;
+            dz.width += previousDiff;
+            if (previousDz) {
+                previousDz.width -= previousDiff;
+            }
+        }
+        // And for the last in the list
+        dz = this.s.dropZones.find(function (zone) {
+            return zone.colIdx === visibleTargets[visibleTargets.length - 1];
+        });
+        if (dz.inlineStart + dz.width < cursorInlineStart) {
+            var nextDiff = cursorInlineStart - (dz.inlineStart + dz.width);
+            var nextDz = this.s.dropZones[dzIdx + 1];
+            dz.width += nextDiff;
+            if (nextDz) {
+                nextDz.inlineStart += nextDiff;
+                nextDz.width -= nextDiff;
+            }
+        }
+    };
+    /**
+     * Determine the boundaries for where drops can happen and where they would
+     * insert into.
+     */
+    ColReorder.prototype._regions = function (moveColumns) {
+        var that = this;
+        var dropZones = [];
+        var totalWidth = 0;
+        var negativeCorrect = 0;
+        var allowedColumns = this.dt.columns(this.c.columns).indexes().toArray();
+        var widths = this.dt.columns().widths();
+        // Each column is a drop zone
+        this.dt.columns().every(function (colIdx, tabIdx, i) {
+            if (!this.visible()) {
+                return;
+            }
+            var columnWidth = widths[colIdx];
+            // Check that we are allowed to move into this column - if not, need
+            // to offset the widths
+            if (!allowedColumns.includes(colIdx)) {
+                totalWidth += columnWidth;
+                return;
+            }
+            var valid = validateMove(that.dt, moveColumns, colIdx);
+            if (valid) {
+                // New drop zone. Note that it might have it's offset moved
+                // by the final condition in this logic set
+                dropZones.push({
+                    colIdx: colIdx,
+                    inlineStart: totalWidth - negativeCorrect,
+                    self: moveColumns[0] <= colIdx && colIdx <= moveColumns[moveColumns.length - 1],
+                    width: columnWidth + negativeCorrect
+                });
+            }
+            else if (colIdx < moveColumns[0]) {
+                // Not valid and before the column(s) to be moved - the drop
+                // zone for the previous valid drop point is extended
+                if (dropZones.length) {
+                    dropZones[dropZones.length - 1].width += columnWidth;
+                }
+            }
+            else if (colIdx > moveColumns[moveColumns.length - 1]) {
+                // Not valid and after the column(s) to be moved - the next
+                // drop zone to be created will be extended
+                negativeCorrect += columnWidth;
+            }
+            totalWidth += columnWidth;
+        });
+        this.s.dropZones = dropZones;
+        // this._drawDropZones();
+    };
+    /**
+     * Check if the table is scrolling or not. It is it the `table` isn't the same for
+     * the header and body parents.
+     *
+     * @returns
+     */
+    ColReorder.prototype._isScrolling = function () {
+        return this.dt.table().body().parentNode !== this.dt.table().header().parentNode;
+    };
+    /**
+     * Set an interval clock that will check to see if the scrolling of the table body should be moved
+     * as the mouse moves on the scroll (allowing a drag and drop to columns which aren't yet visible)
+     */
+    ColReorder.prototype._scrollRegions = function () {
+        if (!this._isScrolling()) {
+            // Not scrolling - nothing to do
+            return;
+        }
+        var that = this;
+        var tableLeft = $(this.dt.table().container()).offset().left;
+        var tableWidth = $(this.dt.table().container()).outerWidth();
+        var mouseBuffer = 75;
+        var scrollContainer = this.dt.table().body().parentElement.parentElement;
+        this.s.scrollInterval = setInterval(function () {
+            var mouseLeft = that.s.mouse.absLeft;
+            // On initial mouse down the mouse position can be -1, which we want to ignore
+            if (mouseLeft === -1) {
+                return;
+            }
+            if (mouseLeft < tableLeft + mouseBuffer && scrollContainer.scrollLeft) {
+                scrollContainer.scrollLeft -= 5;
+            }
+            else if (mouseLeft > tableLeft + tableWidth - mouseBuffer &&
+                scrollContainer.scrollLeft < scrollContainer.scrollWidth) {
+                scrollContainer.scrollLeft += 5;
+            }
+        }, 25);
+    };
+    // This is handy for debugging where the drop zones actually are!
+    // private _drawDropZones () {
+    // 	let dropZones = this.s.dropZones;
+    // 	$('div.allan').remove();
+    // 	for (let i=0 ; i<dropZones.length ; i++) {
+    // 		let zone = dropZones[i];
+    // 		$(this.dt.table().container()).append(
+    // 			$('<div>')
+    // 				.addClass('allan')
+    // 				.css({
+    // 					position: 'absolute',
+    // 					top: 0,
+    // 					width: zone.width - 4,
+    // 					height: 20,
+    // 					left: zone.left + 2,
+    // 					border: '1px solid red',
+    // 				})
+    // 		);
+    // 	}
+    // }
+    ColReorder.prototype._isRtl = function () {
+        return $(this.dt.table().node()).css('direction') === 'rtl';
+    };
+    ColReorder.defaults = {
+        columns: '',
+        enable: true,
+        headerRows: null,
+        order: null
+    };
+    ColReorder.version = '2.1.2';
+    return ColReorder;
+}());
+
+/*! ColReorder 2.1.2
+ * © SpryMedia Ltd - datatables.net/license
+ */
+/**
+ * @summary     ColReorder
+ * @description Provide the ability to reorder columns in a DataTable
+ * @version     2.1.2
+ * @author      SpryMedia Ltd
+ * @contact     datatables.net
+ * @copyright   SpryMedia Ltd.
+ *
+ * This source file is free software, available under the following license:
+ *   MIT license - http://datatables.net/license/mit
+ *
+ * This source file is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the license files for details.
+ *
+ * For details please refer to: http://www.datatables.net
+ */
+ // declare var DataTable: any;
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * UI interaction class
+ */
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * DataTables API integration
+ */
+/** Enable mouse column reordering */
+DataTable.Api.register('colReorder.enable()', function (flag) {
+    return this.iterator('table', function (ctx) {
+        if (ctx._colReorder) {
+            ctx._colReorder.enable(flag);
+        }
+    });
+});
+/** Disable mouse column reordering */
+DataTable.Api.register('colReorder.disable()', function () {
+    return this.iterator('table', function (ctx) {
+        if (ctx._colReorder) {
+            ctx._colReorder.disable();
+        }
+    });
+});
+/**
+ * Change the ordering of the columns in the DataTable.
+ */
+DataTable.Api.register('colReorder.move()', function (from, to) {
+    init(this);
+    if (!Array.isArray(from)) {
+        from = [from];
+    }
+    if (!validateMove(this, from, to)) {
+        this.error('ColReorder - invalid move');
+        return this;
+    }
+    return this.tables().every(function () {
+        move(this, from, to);
+        finalise(this);
+    });
+});
+DataTable.Api.register('colReorder.order()', function (set, original) {
+    init(this);
+    if (!set) {
+        return this.context.length ? getOrder(this) : null;
+    }
+    return this.tables().every(function () {
+        setOrder(this, set, original);
+    });
+});
+DataTable.Api.register('colReorder.reset()', function () {
+    init(this);
+    return this.tables().every(function () {
+        var order = this.columns()
+            .every(function (i) {
+            return i;
+        })
+            .flatten()
+            .toArray();
+        setOrder(this, order, true);
+    });
+});
+DataTable.Api.register('colReorder.transpose()', function (idx, dir) {
+    init(this);
+    if (!dir) {
+        dir = 'toCurrent';
+    }
+    return transpose(this, idx, dir);
+});
+DataTable.ColReorder = ColReorder;
+// Called when DataTables is going to load a state. That might be
+// before the table is ready (state saving) or after (state restoring).
+// Also note that it happens _before_ preInit (below).
+$(document).on('stateLoadInit.dt', function (e, settings, state) {
+    if (e.namespace !== 'dt') {
+        return;
+    }
+    var dt = new DataTable.Api(settings);
+    if (state.colReorder && dt.columns().count() === state.colReorder.length) {
+        if (dt.ready()) {
+            // Table is fully loaded - do the column reordering here
+            // so that the stored indexes are in the correct place
+            // e.g. column visibility
+            setOrder(dt, state.colReorder, true);
+        }
+        else {
+            // If the table is not ready, column reordering is done
+            // after it becomes fully ready. That means that saved
+            // column indexes need to be updated for where those columns
+            // currently are. Any properties which refer to column indexes
+            // would need to be updated here.
+            // State's ordering indexes
+            orderingIndexes(state.colReorder, state.order);
+            // State's columns array - sort by restore index
+            if (state.columns) {
+                for (var i = 0; i < state.columns.length; i++) {
+                    state.columns[i]._cr_sort = state.colReorder[i];
+                }
+                state.columns.sort(function (a, b) {
+                    return a._cr_sort - b._cr_sort;
+                });
+            }
+        }
+    }
+});
+$(document).on('preInit.dt', function (e, settings) {
+    if (e.namespace !== 'dt') {
+        return;
+    }
+    var init = settings.oInit.colReorder;
+    var defaults = DataTable.defaults.colReorder;
+    if (init || defaults) {
+        var opts = $.extend({}, defaults, init);
+        if (init !== false) {
+            var dt = new DataTable.Api(settings);
+            new ColReorder(dt, opts);
+        }
+    }
+});
+
+
+return DataTable;
+}));
+
+
+/*! ColumnControl 1.1.1
+ * Copyright (c) SpryMedia Ltd - datatables.net/license
+ *
+ * SVG icons: ISC License
+ * Copyright (c) for portions of Lucide are held by Cole Bemis 2013-2022 as part of Feather (MIT).
+ * All other copyright (c) for Lucide are held by Lucide Contributors 2022.
+ */
+
+(function( factory ){
+	if ( typeof define === 'function' && define.amd ) {
+		// AMD
+		define( ['jquery', 'datatables.net'], function ( $ ) {
+			return factory( $, window, document );
+		} );
+	}
+	else if ( typeof exports === 'object' ) {
+		// CommonJS
+		var jq = require('jquery');
+		var cjsRequires = function (root, $) {
+			if ( ! $.fn.dataTable ) {
+				require('datatables.net')(root, $);
+			}
+		};
+
+		if (typeof window === 'undefined') {
+			module.exports = function (root, $) {
+				if ( ! root ) {
+					// CommonJS environments without a window global must pass a
+					// root. This will give an error otherwise
+					root = window;
+				}
+
+				if ( ! $ ) {
+					$ = jq( root );
+				}
+
+				cjsRequires( root, $ );
+				return factory( $, root, root.document );
+			};
+		}
+		else {
+			cjsRequires( window, jq );
+			module.exports = factory( jq, window, window.document );
+		}
+	}
+	else {
+		// Browser
+		factory( jQuery, window, document );
+	}
+}(function( $, window, document ) {
+'use strict';
+var DataTable = $.fn.dataTable;
+
+
+
+function createElement(type, classes, text, children) {
+    if (classes === void 0) { classes = []; }
+    if (text === void 0) { text = null; }
+    if (children === void 0) { children = []; }
+    var el = document.createElement(type);
+    addClass(el, classes);
+    if (text) {
+        el.innerHTML = text;
+    }
+    children.forEach(function (child) {
+        el.appendChild(child);
+    });
+    return el;
+}
+function addClass(el, classes) {
+    if (!classes) {
+        return;
+    }
+    if (!Array.isArray(classes)) {
+        classes = [classes];
+    }
+    classes.forEach(function (className) {
+        if (el && className) {
+            el.classList.add(className);
+        }
+    });
+}
+
+// The SVG for many of these icons are from Lucide ( https://lucide.dev ), which are available
+// under the ISC License. There are a number of custom icons as well. These are optimised through
+// https://optimize.svgomg.net/
+function wrap(paths) {
+    return ('<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+        paths +
+        '</svg>');
+}
+var icons = {
+    chevronRight: wrap('<path d="m9 18 6-6-6-6"/>'),
+    // columns-3
+    columns: wrap('<rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/><path d="M15 3v18"/>'),
+    // Custom
+    contains: wrap('<path d="M10 3h4v18h-4z"/><path d="M18 8h3v9h-3"/><path d="M6 17H3V8h3"/>'),
+    empty: wrap('<circle cx="12" cy="12" r="10"/>'),
+    ends: wrap('<path d="M21 3h-4v18h4z"/><path d="M13 8H3v9h10"/>'),
+    // Customised
+    equal: wrap('<line x1="5" x2="19" y1="9" y2="9"/><line x1="5" x2="19" y1="15" y2="15"/>'),
+    greater: wrap('<path d="m9 18 6-6-6-6"/>'),
+    // Custom
+    greaterOrEqual: wrap('<path d="m9 16 6-6-6-6"/><path d="m9 21 6-6"/>'),
+    // Custom
+    groupAdd: wrap('<path d="M6 21v-7.5m-3.549 3.75H9.75"/><rect width="13.5" height="7.5" x="3" y="3" rx="1.5"/><rect width="7.5" height="7.5" x="13.5" y="13.5" fill="currentColor" rx="1.5"/>'),
+    // Custom
+    groupClear: wrap('<rect width="13.5" height="7.5" x="3" y="3" rx="1.5"/><rect width="7.5" height="7.5" x="13.5" y="13.5" rx="1.5"/>'),
+    // Custom
+    groupTop: wrap('<rect width="13.5" height="7.5" x="3" y="3" fill="currentColor" rx="1.5"/><rect width="7.5" height="7.5" x="13.5" y="13.5" rx="1.5"/>'),
+    // Custom
+    groupRemove: wrap('<path d="M2.451 17.25H9.75"/><rect width="13.5" height="7.5" x="3" y="3" rx="1.5"/><rect width="7.5" height="7.5" x="13.5" y="13.5" rx="1.5"/>'),
+    less: wrap('<path d="m15 18-6-6 6-6"/>'),
+    // Custom
+    lessOrEqual: wrap('<path d="m15 16-6-6 6-6"/><path d="m15 21-6-6"/>'),
+    menu: wrap('<line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/>'),
+    // move-horizontal
+    move: wrap('<line x1="12" x2="12" y1="3" y2="21"/><polyline points="8 8 4 12 8 16"/><polyline points="16 16 20 12 16 8"/>'),
+    // arrow-left-from-line
+    moveLeft: wrap('<path d="m9 6-6 6 6 6"/><path d="M3 12h14"/><path d="M21 19V5"/>'),
+    // arrow-right-from-line
+    moveRight: wrap('<path d="M3 5v14"/><path d="M21 12H7"/><path d="m15 18 6-6-6-6"/>'),
+    // Custom
+    notContains: wrap('<path d="M15 4 9 20"/><path d="M3 8h18v9H3z"/>'),
+    notEmpty: wrap('<circle cx="12" cy="12" r="10"/><line x1="9" x2="15" y1="15" y2="9"/>'),
+    notEqual: wrap('<path d="M5 9h14"/><path d="M5 15h14"/><path d="M15 5 9 19"/>'),
+    // Custom
+    orderAddAsc: wrap('<path d="M17 21v-8"/><path d="M3 4h6"/><path d="M3 8h9"/><path d="M3 12h10"/><path d="M13 17h8"/>'),
+    // Custom
+    orderAddDesc: wrap('<path d="M17 21v-8"/><path d="M3 4h12"/><path d="M3 8h9"/><path d="M3 12h6"/><path d="M13 17h8"/>'),
+    orderAsc: wrap('<path d="m3 8 4-4 4 4"/><path d="M7 4v16"/><path d="M11 12h4"/><path d="M11 16h7"/><path d="M11 20h10"/>'),
+    // Custom
+    orderClear: wrap('<path d="m21 21-8-8"/><path d="M3 4h12"/><path d="M3 8h9"/><path d="M3 12h6"/><path d="m13 21 8-8"/>'),
+    orderDesc: wrap('<path d="m3 16 4 4 4-4"/><path d="M7 20V4"/><path d="M11 4h10"/><path d="M11 8h7"/><path d="M11 12h4"/>'),
+    // Custom
+    orderRemove: wrap('<path d="M3 4h12"/><path d="M3 8h9"/><path d="M3 12h6"/><path d="M13 17h8"/>'),
+    // Custom
+    orderNone: wrap('<path d="m3 8 4-4 4 4"/><path d="m11 16-4 4-4-4"/><path d="M7 4v16"/><path d="M15 8h6"/><path d="M15 16h6"/><path d="M13 12h8"/>'),
+    // search
+    search: wrap('<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>'),
+    // search-x
+    searchClear: wrap('<path d="m13.5 8.5-5 5"/><path d="m8.5 8.5 5 5"/><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>'),
+    // Custom
+    starts: wrap('<path d="M3 3h4v18H3z"/><path d="M11 8h10v9H11"/>'),
+    // tick
+    tick: wrap('<path d="M20 6 9 17l-5-5"/>'),
+    // x
+    x: wrap('<path d="M18 6 6 18"/><path d="m6 6 12 12"/>')
+};
+
+/**
+ * Close all or only other dropdowns
+ *
+ * @param e Event or null to close all others
+ */
+function close(e) {
+    if (e === void 0) { e = null; }
+    document.querySelectorAll('div.dtcc-dropdown').forEach(function (el) {
+        if (e === null || !el.contains(e.target)) {
+            el._close();
+            if (!e._closed) {
+                e._closed = [];
+            }
+            e._closed.push(el);
+        }
+    });
+}
+function getContainer(dt, btn) {
+    return btn.closest('div.dtfh-floatingparent') || dt.table().container();
+}
+/**
+ * Position the dropdown relative to the button that activated it, with possible corrections
+ * to make sure it is visible on the page.
+ *
+ * @param dropdown Dropdown element
+ * @param dt Container DataTable
+ * @param btn Button the dropdown emanates from
+ */
+function positionDropdown(dropdown, dt, btn) {
+    var header = btn.closest('div.dt-column-header');
+    var container = getContainer(dt, btn);
+    var headerStyle = getComputedStyle(header);
+    var dropdownWidth = dropdown.offsetWidth;
+    var position = relativePosition(container, btn);
+    var left, top;
+    top = position.top + btn.offsetHeight;
+    if (headerStyle.flexDirection === 'row-reverse') {
+        // Icon is on the left of the header - align the left hand sides
+        left = position.left;
+    }
+    else {
+        // Icon is on the right of the header - align the right hand sides
+        left = position.left - dropdownWidth + btn.offsetWidth;
+    }
+    // Corrections - don't extend past the DataTable to the left and right
+    var containerWidth = container.offsetWidth;
+    if (left + dropdownWidth > containerWidth) {
+        left -= left + dropdownWidth - containerWidth;
+    }
+    if (left < 0) {
+        left = 0;
+    }
+    dropdown.style.top = top + 'px';
+    dropdown.style.left = left + 'px';
+}
+/**
+ * Display the dropdown in the document
+ *
+ * @param dropdown Dropdown element
+ * @param dt Container DataTable
+ * @param btn Button the dropdown emanates from
+ * @returns Function to call when the dropdown should be removed from the document
+ */
+function attachDropdown(dropdown, dt, btn) {
+    var dtContainer = getContainer(dt, btn.element());
+    dropdown._shown = true;
+    dtContainer.append(dropdown);
+    positionDropdown(dropdown, dt, btn.element());
+    btn.element().setAttribute('aria-expanded', 'true');
+    // Note that this could be called when the dropdown has already been removed from the document
+    // via another dropdown being shown. This will clean up the event on the next body click.
+    var removeDropdown = function (e) {
+        // Not in document, so just clean up the event handler
+        if (!dropdown._shown) {
+            document.body.removeEventListener('click', removeDropdown);
+            return;
+        }
+        // If the click is inside the dropdown, ignore it - we don't want to immediately close
+        if (e.target === dropdown || dropdown.contains(e.target)) {
+            return;
+        }
+        // If there is currently a datetime picker visible on the page, assume that it belongs to
+        // this dropdown. Don't want to close while operating on the picker.
+        var datetime = document.querySelector('div.dt-datetime');
+        if (datetime && (e.target === datetime || datetime.contains(e.target))) {
+            return;
+        }
+        dropdown._close();
+        document.body.removeEventListener('click', removeDropdown);
+    };
+    document.body.addEventListener('click', removeDropdown);
+    return removeDropdown;
+}
+/**
+ * Get the position of an element, relative to a given parent. The origin MUST be under the
+ * parent's tree.
+ *
+ * @param parent Parent element to get position relative to
+ * @param origin Target element
+ */
+function relativePosition(parent, origin) {
+    var top = 0;
+    var left = 0;
+    while (origin && origin !== parent && origin !== document.body) {
+        top += origin.offsetTop;
+        left += origin.offsetLeft;
+        if (origin.scrollTop) {
+            left -= origin.scrollTop;
+        }
+        if (origin.scrollLeft) {
+            left -= origin.scrollLeft;
+        }
+        origin = origin.offsetParent;
+    }
+    return {
+        top: top,
+        left: left
+    };
+}
+/**
+ * Function that will provide the keyboard navigation for the dropdown
+ *
+ * @param dropdown Dropdown element in question
+ * @returns Function that can be bound to `keypress`
+ */
+function focusCapture(dropdown, host) {
+    return function (e) {
+        // Do nothing if not shown
+        if (!dropdown._shown) {
+            return;
+        }
+        // Focus trap for tab key
+        var elements = Array.from(dropdown.querySelectorAll('a, button, input, select'));
+        var active = document.activeElement;
+        // An escape key should close the dropdown
+        if (e.key === 'Escape') {
+            dropdown._close();
+            host.focus(); // Restore focus to the host
+            return;
+        }
+        else if (e.key !== 'Tab' || elements.length === 0) {
+            // Anything other than tab we aren't interested in from here
+            return;
+        }
+        if (!elements.includes(active)) {
+            // If new focus is not inside the popover we want to drag it back in
+            elements[0].focus();
+            e.preventDefault();
+        }
+        else if (e.shiftKey) {
+            // Reverse tabbing order when shift key is pressed
+            if (active === elements[0]) {
+                elements[elements.length - 1].focus();
+                e.preventDefault();
+            }
+        }
+        else {
+            if (active === elements[elements.length - 1]) {
+                elements[0].focus();
+                e.preventDefault();
+            }
+        }
+    };
+}
+var dropdownContent = {
+    classes: {
+        container: 'dtcc-dropdown',
+        liner: 'dtcc-dropdown-liner'
+    },
+    defaults: {
+        className: 'dropdown',
+        content: [],
+        icon: 'menu',
+        text: 'More...'
+    },
+    init: function (config) {
+        var dt = this.dt();
+        var dropdown = createElement('div', dropdownContent.classes.container, '', [
+            createElement('div', dropdownContent.classes.liner)
+        ]);
+        dropdown._shown = false;
+        dropdown._close = function () {
+            dropdown.remove();
+            dropdown._shown = false;
+            btn.element().setAttribute('aria-expanded', 'false');
+        };
+        dropdown.setAttribute('role', 'dialog');
+        dropdown.setAttribute('aria-label', dt.i18n('columnControl.dropdown', config.text));
+        // When FixedHeader is used, the transition between states messes up positioning, so if
+        // shown we just reattach the dropdown.
+        dt.on('fixedheader-mode', function () {
+            if (dropdown._shown) {
+                attachDropdown(dropdown, dt, config._parents ? config._parents[0] : btn);
+            }
+        });
+        // A liner element allows more styling options, so the contents go inside this
+        var liner = dropdown.childNodes[0];
+        var btn = new Button(dt, this)
+            .text(dt.i18n('columnControl.dropdown', config.text))
+            .icon(config.icon)
+            .className(config.className)
+            .dropdownDisplay(liner)
+            .handler(function (e) {
+            // Do nothing if our dropdown was just closed as part of the event (i.e. allow
+            // the button to toggle it closed)
+            if (e._closed && e._closed.includes(dropdown)) {
+                return;
+            }
+            attachDropdown(dropdown, dt, config._parents ? config._parents[0] : btn);
+            // When activated using a key - auto focus on the first item in the popover
+            var focusable = dropdown.querySelector('input, a, button');
+            if (focusable && e.type === 'keypress') {
+                focusable.focus();
+            }
+        });
+        btn.element().setAttribute('aria-haspopup', 'dialog');
+        btn.element().setAttribute('aria-expanded', 'false');
+        // Add the content for the dropdown
+        for (var i = 0; i < config.content.length; i++) {
+            var content = this.resolve(config.content[i]);
+            // For nested items we need to keep a reference to the top level so the sub-levels
+            // can communicate back - e.g. active or positioned relative to that top level.
+            if (!content.config._parents) {
+                content.config._parents = [];
+            }
+            content.config._parents.push(btn);
+            var el = content.plugin.init.call(this, content.config);
+            liner.appendChild(el);
+        }
+        // For nested dropdowns, add an extra icon element to show that it will dropdown further
+        if (config._parents && config._parents.length) {
+            btn.extra('chevronRight');
+        }
+        // Reposition if needed
+        dt.on('columns-reordered', function () {
+            positionDropdown(dropdown, dt, btn.element());
+        });
+        // Focus capture events
+        var capture = focusCapture(dropdown, btn.element());
+        document.body.addEventListener('keydown', capture);
+        dt.on('destroy', function () {
+            document.body.removeEventListener('keydown', capture);
+        });
+        return btn.element();
+    }
+};
+
+var _namespace = 0;
+var Button = /** @class */ (function () {
+    /**
+     * Create a new button for use in ColumnControl contents. Buttons created by this class can be
+     * used at the top level in the header or in a dropdown.
+     */
+    function Button(dt, host) {
+        this._s = {
+            active: false,
+            activeList: [],
+            buttonClick: null,
+            dt: null,
+            enabled: true,
+            host: null,
+            label: '',
+            namespace: '',
+            value: null
+        };
+        this._s.dt = dt;
+        this._s.host = host;
+        this._dom = {
+            button: createElement('button', Button.classes.container),
+            dropdownDisplay: null,
+            extra: createElement('span', 'dtcc-button-extra'),
+            icon: createElement('span', 'dtcc-button-icon'),
+            state: createElement('span', 'dtcc-button-state'),
+            text: createElement('span', 'dtcc-button-text')
+        };
+        this._dom.button.setAttribute('type', 'button');
+        this._dom.button.append(this._dom.icon);
+        this._dom.button.append(this._dom.text);
+        this._dom.button.append(this._dom.state);
+        this._dom.button.append(this._dom.extra);
+        // Default state is enabled
+        this.enable(true);
+    }
+    Button.prototype.active = function (active) {
+        if (active === undefined) {
+            return this._s.active;
+        }
+        this._s.active = active;
+        this._checkActive();
+        return this;
+    };
+    /**
+     * A button can be marked as active by any of its sub-buttons (i.e. if it is a dropdown)
+     * and each one needs to be able to enable this button without effecting the active state
+     * trigged by any other sub-buttons. This method provides a way to do that.
+     *
+     * @param unique Unique id for the activate state
+     * @param active If it is active
+     * @returns Button instance
+     */
+    Button.prototype.activeList = function (unique, active) {
+        this._s.activeList[unique] = active;
+        this._checkActive();
+        return this;
+    };
+    /**
+     * Scan over the dropdown element looking for any visible content. If there isn't any then
+     * we hide this button.
+     *
+     * @returns Button instance
+     */
+    Button.prototype.checkDisplay = function () {
+        var visible = 0;
+        var children = this._dom.dropdownDisplay.childNodes;
+        for (var i = 0; i < children.length; i++) {
+            // No need to getComputedStyle since if a button is hidden, it was done with JS writing
+            // to style.display, so we can check against that.
+            if (children[i].style.display !== 'none') {
+                visible++;
+            }
+        }
+        if (visible === 0) {
+            this._dom.button.style.display = 'none';
+        }
+        return this;
+    };
+    /**
+     * Set the class name for the button
+     *
+     * @param className Class name
+     * @returns Button instance
+     */
+    Button.prototype.className = function (className) {
+        this._dom.button.classList.add('dtcc-button_' + className);
+        return this;
+    };
+    /**
+     * Destroy the button, cleaning up event listeners
+     */
+    Button.prototype.destroy = function () {
+        if (this._s.buttonClick) {
+            this._dom.button.removeEventListener('click', this._s.buttonClick);
+            this._dom.button.removeEventListener('keypress', this._s.buttonClick);
+        }
+        this._s.host.destroyRemove(this);
+    };
+    /**
+     * Relevant for drop downs only. When a button in a dropdown is hidden, we might want to
+     * hide the host button as well (if it has nothing else to show). For that we need to know
+     * what the dropdown element is.
+     *
+     * @param el Element that can be used for telling us about drop down elements.
+     * @returns Button instance
+     */
+    Button.prototype.dropdownDisplay = function (el) {
+        this._dom.dropdownDisplay = el;
+        return this;
+    };
+    /**
+     * Get the DOM Button element to attach into the document
+     *
+     * @returns The Button element
+     */
+    Button.prototype.element = function () {
+        return this._dom.button;
+    };
+    Button.prototype.enable = function (enable) {
+        if (enable === undefined) {
+            return this._s.enabled;
+        }
+        this._dom.button.classList.toggle('dtcc-button_disabled', !enable);
+        this._s.enabled = enable;
+        return this;
+    };
+    /**
+     * Set the extra information icon
+     *
+     * @param icon Icon name
+     * @returns Button instance
+     */
+    Button.prototype.extra = function (icon) {
+        this._dom.extra.innerHTML = icon ? icons[icon] : '';
+        return this;
+    };
+    /**
+     * Set the event handler for when the button is activated
+     *
+     * @param fn Event handler
+     * @returns Button instance
+     */
+    Button.prototype.handler = function (fn) {
+        var _this = this;
+        var buttonClick = function (e) {
+            // Close any dropdowns which are already open
+            close(e);
+            // Stop bubbling to the DataTables default header, which  might still be enabled
+            e.stopPropagation();
+            e.preventDefault();
+            if (_this._s.enabled) {
+                fn(e);
+            }
+        };
+        this._s.buttonClick = buttonClick;
+        this._s.namespace = 'dtcc-' + _namespace++;
+        this._dom.button.addEventListener('click', buttonClick);
+        this._dom.button.addEventListener('keypress', buttonClick);
+        this._s.host.destroyAdd(this);
+        return this;
+    };
+    /**
+     * Set the icon to display in the button
+     *
+     * @param icon Icon name
+     * @returns Button instance
+     */
+    Button.prototype.icon = function (icon) {
+        this._dom.icon.innerHTML = icon ? icons[icon] : '';
+        return this;
+    };
+    Button.prototype.text = function (text) {
+        if (text === undefined) {
+            return this._s.label;
+        }
+        this._dom.text.innerHTML = text;
+        this._s.label = text; // for fast retrieval
+        this._dom.button.setAttribute('aria-label', text);
+        return this;
+    };
+    Button.prototype.value = function (val) {
+        if (val === undefined) {
+            return this._s.value;
+        }
+        this._s.value = val;
+        return this;
+    };
+    /**
+     * Check if anything is making this button active
+     *
+     * @returns Self for chaining
+     */
+    Button.prototype._checkActive = function () {
+        if (this._s.active === true || Object.values(this._s.activeList).includes(true)) {
+            this._dom.state.innerHTML = icons.tick;
+            this._dom.button.classList.add('dtcc-button_active');
+        }
+        else {
+            this._dom.state.innerHTML = '';
+            this._dom.button.classList.remove('dtcc-button_active');
+        }
+        return this;
+    };
+    Button.classes = {
+        container: 'dtcc-button'
+    };
+    return Button;
+}());
+
+var CheckList = /** @class */ (function () {
+    /**
+     * Container for a list of buttons
+     */
+    function CheckList(dt, host, opts) {
+        var _this = this;
+        this._s = {
+            buttons: [],
+            dt: null,
+            handler: function () { },
+            host: null,
+            search: ''
+        };
+        this._s.dt = dt;
+        this._s.host = host;
+        this._dom = {
+            buttons: createElement('div', 'dtcc-list-buttons'),
+            container: createElement('div', CheckList.classes.container),
+            controls: createElement('div', 'dtcc-list-controls'),
+            empty: createElement('div', 'dtcc-list-empty', dt.i18n('columnControl.list.empty', 'No options')),
+            title: createElement('div', 'dtcc-list-title'),
+            selectAll: createElement('button', 'dtcc-list-selectAll', dt.i18n('columnControl.list.all', 'Select all')),
+            selectAllCount: createElement('span'),
+            selectNone: createElement('button', 'dtcc-list-selectNone', dt.i18n('columnControl.list.none', 'Deselect')),
+            selectNoneCount: createElement('span'),
+            search: createElement('input', CheckList.classes.input)
+        };
+        var dom = this._dom;
+        dom.search.setAttribute('type', 'text');
+        dom.container.append(dom.title);
+        dom.container.append(dom.controls);
+        dom.container.append(dom.empty);
+        dom.container.append(dom.buttons);
+        if (opts.select) {
+            dom.controls.append(dom.selectAll);
+            dom.controls.append(dom.selectNone);
+            dom.selectAll.append(dom.selectAllCount);
+            dom.selectNone.append(dom.selectNoneCount);
+            dom.selectAll.setAttribute('type', 'button');
+            dom.selectNone.setAttribute('type', 'button');
+        }
+        // Events
+        var searchInput = function () {
+            _this._s.search = dom.search.value;
+            _this._redraw();
+        };
+        var selectAllClick = function (e) {
+            _this.selectAll();
+            _this._s.handler(e, null, _this._s.buttons, true);
+            _this._updateCount();
+        };
+        var selectNoneClick = function (e) {
+            _this.selectNone();
+            _this._s.handler(e, null, _this._s.buttons, true);
+            _this._updateCount();
+        };
+        if (opts.search) {
+            dom.controls.append(dom.search);
+            dom.search.setAttribute('placeholder', dt.i18n('columnControl.list.search', 'Search...'));
+            dom.search.addEventListener('input', searchInput);
+        }
+        dom.selectAll.addEventListener('click', selectAllClick);
+        dom.selectNone.addEventListener('click', selectNoneClick);
+        dt.on('destroy', function () {
+            dom.selectAll.removeEventListener('click', selectAllClick);
+            dom.selectNone.removeEventListener('click', selectNoneClick);
+            dom.search.removeEventListener('input', searchInput);
+        });
+    }
+    /**
+     * Add one or more buttons to the list
+     *
+     * @param options Configuration for the button(s) to add
+     * @returns Self for chaining
+     */
+    CheckList.prototype.add = function (options, update) {
+        var _this = this;
+        if (!Array.isArray(options)) {
+            options = [options];
+        }
+        var _loop_1 = function (i) {
+            var option = options[i];
+            var btn = new Button(this_1._s.dt, this_1._s.host)
+                .active(option.active || false)
+                .handler(function (e) {
+                _this._s.handler(e, btn, _this._s.buttons, true);
+                _this._updateCount();
+            })
+                .icon(option.icon || '')
+                .text(option.label !== ''
+                ? option.label
+                : this_1._s.dt.i18n('columnControl.list.empty', 'Empty'))
+                .value(option.value);
+            if (option.label === '') {
+                btn.className('empty');
+            }
+            this_1._s.buttons.push(btn);
+        };
+        var this_1 = this;
+        for (var i = 0; i < options.length; i++) {
+            _loop_1(i);
+        }
+        var count = this._s.buttons.length;
+        if (update === true || update === undefined) {
+            this._dom.selectAllCount.innerHTML = count ? '(' + count + ')' : '';
+            this._redraw();
+        }
+        return this;
+    };
+    /**
+     * Find a button with a given value
+     *
+     * @param val Value to search for
+     * @returns Found button
+     */
+    CheckList.prototype.button = function (val) {
+        var buttons = this._s.buttons;
+        for (var i = 0; i < buttons.length; i++) {
+            if (buttons[i].value() === val) {
+                return buttons[i];
+            }
+        }
+        return null;
+    };
+    /**
+     * Remove all buttons from the list
+     *
+     * @returns Self for chaining
+     */
+    CheckList.prototype.clear = function () {
+        // Clean up the buttons
+        for (var i = 0; i < this._s.buttons.length; i++) {
+            this._s.buttons[i].destroy();
+        }
+        // Then empty them out
+        this._dom.buttons.replaceChildren();
+        this._s.buttons.length = 0;
+        return this;
+    };
+    /**
+     * Get the DOM container element to attach into the document
+     *
+     * @returns Container
+     */
+    CheckList.prototype.element = function () {
+        return this._dom.container;
+    };
+    /**
+     * Set the event handler for what happens when a button is clicked
+     *
+     * @param fn Event handler
+     */
+    CheckList.prototype.handler = function (fn) {
+        this._s.handler = fn;
+        return this;
+    };
+    /**
+     * Indicate that this is a search control and should listen for corresponding events
+     *
+     * @param dt DataTable instance
+     * @param idx Column index
+     */
+    CheckList.prototype.searchListener = function (dt) {
+        var _this = this;
+        // Column control search clearing (column().columnControl.searchClear() method)
+        dt.on('cc-search-clear', function (e, colIdx) {
+            if (colIdx === _this._s.host.idx()) {
+                _this.selectNone();
+                _this._s.handler(e, null, _this._s.buttons, false);
+                _this._s.search = '';
+                _this._dom.search.value = '';
+                _this._redraw();
+                _this._updateCount();
+            }
+        });
+        return this;
+    };
+    /**
+     * Select all buttons
+     *
+     * @returns Self for chaining
+     */
+    CheckList.prototype.selectAll = function () {
+        for (var i = 0; i < this._s.buttons.length; i++) {
+            this._s.buttons[i].active(true);
+        }
+        return this;
+    };
+    /**
+     * Deselect all buttons
+     *
+     * @returns Self for chaining
+     */
+    CheckList.prototype.selectNone = function () {
+        for (var i = 0; i < this._s.buttons.length; i++) {
+            this._s.buttons[i].active(false);
+        }
+        return this;
+    };
+    /**
+     * Set the list's title
+     *
+     * @param title Display title
+     * @returns Button instance
+     */
+    CheckList.prototype.title = function (title) {
+        this._dom.title.innerHTML = title;
+        return this;
+    };
+    CheckList.prototype.values = function (values) {
+        var i;
+        var result = [];
+        var buttons = this._s.buttons;
+        if (values !== undefined) {
+            for (i = 0; i < buttons.length; i++) {
+                if (values.includes(buttons[i].value())) {
+                    buttons[i].active(true);
+                }
+            }
+            this._updateCount();
+            return this;
+        }
+        for (i = 0; i < buttons.length; i++) {
+            if (buttons[i].active()) {
+                result.push(buttons[i].value());
+            }
+        }
+        return result;
+    };
+    /**
+     * Update the deselect counter
+     */
+    CheckList.prototype._updateCount = function () {
+        var count = this.values().length;
+        this._dom.selectNoneCount.innerHTML = count ? '(' + count + ')' : '';
+    };
+    /**
+     * Add the buttons to the page - taking into account filtering
+     */
+    CheckList.prototype._redraw = function () {
+        var buttons = this._s.buttons;
+        var el = this._dom.buttons;
+        var searchTerm = this._s.search.toLowerCase();
+        el.replaceChildren();
+        for (var i = 0; i < buttons.length; i++) {
+            var btn = buttons[i];
+            if (!searchTerm ||
+                btn
+                    .text()
+                    .toLowerCase()
+                    .includes(searchTerm)) {
+                el.appendChild(btn.element());
+            }
+        }
+        this._dom.empty.style.display = buttons.length === 0 ? 'block' : 'none';
+        el.style.display = buttons.length > 0 ? 'block' : 'none';
+    };
+    CheckList.classes = {
+        container: 'dtcc-list',
+        input: 'dtcc-list-search'
+    };
+    return CheckList;
+}());
+
+var colVis = {
+    defaults: {
+        className: 'colVis',
+        columns: '',
+        search: false,
+        select: false,
+        title: 'Column visibility'
+    },
+    init: function (config) {
+        var dt = this.dt();
+        var checkList = new CheckList(dt, this, {
+            search: config.search,
+            select: config.select
+        })
+            .title(dt.i18n('columnControl.colVis', config.title))
+            .handler(function (e, btn, buttons) {
+            if (btn) {
+                btn.active(!btn.active());
+            }
+            apply(buttons);
+        });
+        // Need to apply in a loop to allow for select all / select none
+        var apply = function (buttons) {
+            for (var i = 0; i < buttons.length; i++) {
+                var btn = buttons[i];
+                var idx = btn.value();
+                var col = dt.column(idx);
+                if (btn.active() && !col.visible()) {
+                    col.visible(true);
+                }
+                else if (!btn.active() && col.visible()) {
+                    col.visible(false);
+                }
+            }
+        };
+        var rebuild = function () {
+            var columns = dt.columns(config.columns);
+            columns.every(function () {
+                checkList.add({
+                    active: this.visible(),
+                    label: this.title(),
+                    value: this.index()
+                });
+            });
+        };
+        rebuild();
+        dt.on('column-visibility', function (e, s, colIdx, state) {
+            var btn = checkList.button(colIdx);
+            if (btn) {
+                btn.active(state);
+            }
+        });
+        dt.on('columns-reordered', function (e, details) {
+            checkList.clear();
+            rebuild();
+        });
+        return checkList.element();
+    }
+};
+
+var colVisDropdown = {
+    defaults: {
+        className: 'colVis',
+        columns: '',
+        search: false,
+        select: false,
+        text: 'Column visibility',
+        title: 'Column visibility'
+    },
+    extend: function (config) {
+        var dt = this.dt();
+        return {
+            extend: 'dropdown',
+            icon: 'columns',
+            text: dt.i18n('columnControl.colVisDropdown', config.text),
+            content: [
+                Object.assign(config, {
+                    extend: 'colVis'
+                })
+            ]
+        };
+    }
+};
+
+var reorder = {
+    defaults: {
+        className: 'reorder',
+        icon: 'move',
+        text: 'Reorder columns'
+    },
+    init: function (config) {
+        var _this = this;
+        var dt = this.dt();
+        var btn = new Button(dt, this)
+            .text(dt.i18n('columnControl.reorder', config.text))
+            .icon(config.icon)
+            .className(config.className);
+        // The event handling for this is done in ColReorder._addListener - no event
+        // handler needed here for click / drag
+        if (this.idx() === 0) {
+            btn.enable(false);
+        }
+        dt.on('columns-reordered', function (e, details) {
+            btn.enable(_this.idx() > 0);
+        });
+        // If ColReorder wasn't initialised on this DataTable, then we need to add it
+        if (!dt.init().colReorder) {
+            new DataTable.ColReorder(dt, {});
+        }
+        return btn.element();
+    }
+};
+
+var reorderLeft = {
+    defaults: {
+        className: 'reorderLeft',
+        icon: 'moveLeft',
+        text: 'Move column left'
+    },
+    init: function (config) {
+        var _this = this;
+        var dt = this.dt();
+        var btn = new Button(dt, this)
+            .text(dt.i18n('columnControl.reorderLeft', config.text))
+            .icon(config.icon)
+            .className(config.className)
+            .handler(function () {
+            var idx = _this.idx();
+            // TODO account for visibility
+            if (idx > 0) {
+                dt.colReorder.move(idx, idx - 1);
+            }
+        });
+        if (this.idx() === 0) {
+            btn.enable(false);
+        }
+        dt.on('columns-reordered', function (e, details) {
+            btn.enable(_this.idx() > 0);
+        });
+        return btn.element();
+    }
+};
+
+var reorderRight = {
+    defaults: {
+        className: 'reorderRight',
+        icon: 'moveRight',
+        text: 'Move column right'
+    },
+    init: function (config) {
+        var _this = this;
+        var dt = this.dt();
+        var btn = new Button(dt, this)
+            .text(dt.i18n('columnControl.reorderRight', config.text))
+            .icon(config.icon)
+            .className(config.className)
+            .handler(function () {
+            var idx = _this.idx();
+            if (idx < dt.columns().count() - 1) {
+                dt.colReorder.move(idx, idx + 1);
+            }
+        });
+        if (this.idx() === dt.columns().count() - 1) {
+            btn.enable(false);
+        }
+        dt.on('columns-reordered', function (e, details) {
+            btn.enable(_this.idx() < dt.columns().count() - 1);
+        });
+        return btn.element();
+    }
+};
+
+var order = {
+    defaults: {
+        className: 'order',
+        iconAsc: 'orderAsc',
+        iconDesc: 'orderDesc',
+        iconNone: 'orderNone',
+        statusOnly: false,
+        text: 'Toggle ordering'
+    },
+    init: function (config) {
+        var _this = this;
+        var dt = this.dt();
+        var btn = new Button(dt, this)
+            .text(dt.i18n('columnControl.order', config.text))
+            .icon('orderAsc')
+            .className(config.className);
+        if (!config.statusOnly) {
+            dt.order.listener(btn.element(), DataTable.versionCheck('2.3.2') ? function () { return [_this.idx()]; } : this.idx(), function () { });
+        }
+        dt.on('order', function (e, s, order) {
+            var found = order.find(function (o) { return o.col === _this.idx(); });
+            if (!found) {
+                btn.active(false).icon(config.iconNone);
+            }
+            else if (found.dir === 'asc') {
+                btn.active(true).icon(config.iconAsc);
+            }
+            else if (found.dir === 'desc') {
+                btn.active(true).icon(config.iconDesc);
+            }
+        });
+        return btn.element();
+    }
+};
+
+var orderAddAsc = {
+    defaults: {
+        className: 'orderAddAsc',
+        icon: 'orderAddAsc',
+        text: 'Add Sort Ascending'
+    },
+    init: function (config) {
+        var _this = this;
+        var dt = this.dt();
+        var btn = new Button(dt, this)
+            .text(dt.i18n('columnControl.orderAddAsc', config.text))
+            .icon(config.icon)
+            .className(config.className)
+            .handler(function () {
+            var order = dt.order();
+            order.push([_this.idx(), 'asc']);
+            dt.draw();
+        });
+        dt.on('order', function (e, s, order) {
+            var found = order.some(function (o) { return o.col === _this.idx(); });
+            btn.enable(!found);
+        });
+        return btn.element();
+    }
+};
+
+var orderAddDesc = {
+    defaults: {
+        className: 'orderAddDesc',
+        icon: 'orderAddDesc',
+        text: 'Add Sort Descending'
+    },
+    init: function (config) {
+        var _this = this;
+        var dt = this.dt();
+        var btn = new Button(dt, this)
+            .text(dt.i18n('columnControl.orderAddDesc', config.text))
+            .icon(config.icon)
+            .className(config.className)
+            .handler(function () {
+            var order = dt.order();
+            order.push([_this.idx(), 'desc']);
+            dt.draw();
+        });
+        dt.on('order', function (e, s, order) {
+            var found = order.some(function (o) { return o.col === _this.idx(); });
+            btn.enable(!found);
+        });
+        return btn.element();
+    }
+};
+
+var orderAsc = {
+    defaults: {
+        className: 'orderAsc',
+        icon: 'orderAsc',
+        text: 'Sort Ascending'
+    },
+    init: function (config) {
+        var _this = this;
+        var dt = this.dt();
+        var btn = new Button(dt, this)
+            .text(dt.i18n('columnControl.orderAsc', config.text))
+            .icon(config.icon)
+            .className(config.className)
+            .handler(function () {
+            _this.dt()
+                .order([
+                {
+                    idx: _this.idx(),
+                    dir: 'asc'
+                }
+            ])
+                .draw();
+        });
+        dt.on('order', function (e, s, order) {
+            var found = order.some(function (o) { return o.col === _this.idx() && o.dir === 'asc'; });
+            btn.active(found);
+        });
+        return btn.element();
+    }
+};
+
+var orderClear = {
+    defaults: {
+        className: 'orderClear',
+        icon: 'orderClear',
+        text: 'Clear sort'
+    },
+    init: function (config) {
+        var dt = this.dt();
+        var btn = new Button(dt, this)
+            .text(dt.i18n('columnControl.orderClear', config.text))
+            .icon(config.icon)
+            .className(config.className)
+            .handler(function () {
+            dt.order([]).draw();
+        });
+        dt.on('order', function (e, s, order) {
+            btn.enable(order.length > 0);
+        });
+        if (dt.order().length === 0) {
+            btn.enable(false);
+        }
+        return btn.element();
+    }
+};
+
+var orderDesc = {
+    defaults: {
+        className: 'orderDesc',
+        icon: 'orderDesc',
+        text: 'Sort Descending'
+    },
+    init: function (config) {
+        var _this = this;
+        var dt = this.dt();
+        var btn = new Button(dt, this)
+            .text(dt.i18n('columnControl.orderDesc', config.text))
+            .icon(config.icon)
+            .className(config.className)
+            .handler(function () {
+            _this.dt()
+                .order([
+                {
+                    idx: _this.idx(),
+                    dir: 'desc'
+                }
+            ])
+                .draw();
+        });
+        dt.on('order', function (e, s, order) {
+            var found = order.some(function (o) { return o.col === _this.idx() && o.dir === 'desc'; });
+            btn.active(found);
+        });
+        return btn.element();
+    }
+};
+
+var orderRemove = {
+    defaults: {
+        className: 'orderRemove',
+        icon: 'orderRemove',
+        text: 'Remove from sort'
+    },
+    init: function (config) {
+        var _this = this;
+        var dt = this.dt();
+        var btn = new Button(dt, this)
+            .text(dt.i18n('columnControl.orderRemove', config.text))
+            .icon(config.icon)
+            .className(config.className)
+            .handler(function () {
+            // Remove the current column from the ordering array, then reorder the table
+            var order = dt.order();
+            var idx = order.findIndex(function (o) { return o[0] === _this.idx(); });
+            order.splice(idx, 1);
+            dt.order(order).draw();
+        });
+        dt.on('order', function (e, s, order) {
+            var found = order.some(function (o) { return o.col === _this.idx(); });
+            btn.enable(found);
+        });
+        btn.enable(false);
+        return btn.element();
+    }
+};
+
+var orderStatus = {
+    defaults: {
+        className: 'order',
+        iconAsc: 'orderAsc',
+        iconDesc: 'orderDesc',
+        iconNone: 'orderNone',
+        statusOnly: true,
+        text: 'Sort status'
+    },
+    extend: function (config) {
+        return Object.assign(config, { extend: 'order' });
+    }
+};
+
+/**
+ * Add an item to the grouping structure
+ *
+ * @param dt DataTable API instance
+ * @param dataSrc Grouping data point to add
+ * @returns Grouping array
+ */
+function rowGroupAdd$1(dt, dataSrc) {
+    var applied = rowGroupApplied(dt);
+    var idx = applied.indexOf(dataSrc);
+    if (idx === -1) {
+        applied.push(dataSrc);
+        dt.rowGroup().dataSrc(applied);
+    }
+    return applied;
+}
+/**
+ * Always want an array return
+ *
+ * @param dt DataTable API instance
+ * @returns
+ */
+function rowGroupApplied(dt) {
+    var applied = dt.rowGroup().dataSrc();
+    return Array.isArray(applied)
+        ? applied
+        : [applied];
+}
+/**
+ * Remove all grouping
+ *
+ * @param dt DataTable API instance
+ */
+function rowGroupClear$1(dt) {
+    dt.rowGroup().dataSrc([]);
+}
+/**
+ * Remove an item from the grouping structure
+ *
+ * @param dt DataTable API instance
+ * @param dataSrc Grouping data point to remove
+ * @returns Grouping array
+ */
+function rowGroupRemove$1(dt, dataSrc) {
+    var applied = rowGroupApplied(dt);
+    var idx = applied.indexOf(dataSrc);
+    if (idx !== -1) {
+        applied.splice(idx, 1);
+        dt.rowGroup().dataSrc(applied);
+    }
+    return applied;
+}
+var rowGroup = {
+    defaults: {
+        className: 'rowGroup',
+        icon: 'groupTop',
+        order: true,
+        text: 'Group rows'
+    },
+    init: function (config) {
+        var _this = this;
+        var dt = this.dt();
+        var btn = new Button(dt, this)
+            .text(dt.i18n('columnControl.rowGroup', config.text))
+            .icon(config.icon)
+            .className(config.className)
+            .handler(function () {
+            var dataSrc = dt.column(_this.idx()).dataSrc();
+            if (btn.active()) {
+                // Grouping is active - remove
+                rowGroupRemove$1(dt, dataSrc);
+            }
+            else {
+                // No grouping by this column yet, set it
+                rowGroupClear$1(dt);
+                rowGroupAdd$1(dt, dataSrc);
+                if (config.order !== false) {
+                    dt.order([_this.idx(), 'asc']);
+                }
+            }
+            dt.draw();
+        });
+        // Show as active when grouping is applied
+        dt.on('rowgroup-datasrc', function () {
+            var applied = rowGroupApplied(dt);
+            var ours = dt.column(_this.idx()).dataSrc();
+            btn.active(applied.includes(ours));
+        });
+        return btn.element();
+    }
+};
+
+var rowGroupAdd = {
+    defaults: {
+        className: 'rowGroupAdd',
+        icon: 'groupAdd',
+        order: true,
+        text: 'Add to grouping'
+    },
+    init: function (config) {
+        var _this = this;
+        var dt = this.dt();
+        var btn = new Button(dt, this)
+            .text(dt.i18n('columnControl.rowGroup', config.text))
+            .icon(config.icon)
+            .className(config.className)
+            .handler(function () {
+            var dataSrc = dt.column(_this.idx()).dataSrc();
+            if (btn.enable()) {
+                // No grouping by this column yet, add it
+                rowGroupAdd$1(dt, dataSrc);
+            }
+            dt.draw();
+        });
+        // Show as active when grouping is applied
+        dt.on('rowgroup-datasrc', function () {
+            var applied = rowGroupApplied(dt);
+            var ours = dt.column(_this.idx()).dataSrc();
+            btn.enable(!applied.includes(ours));
+        });
+        return btn.element();
+    }
+};
+
+var rowGroupClear = {
+    defaults: {
+        className: 'rowGroupClear',
+        icon: 'groupClear',
+        text: 'Clear all grouping'
+    },
+    init: function (config) {
+        var dt = this.dt();
+        var btn = new Button(dt, this)
+            .text(dt.i18n('columnControl.rowGroup', config.text))
+            .icon(config.icon)
+            .className(config.className)
+            .handler(function () {
+            rowGroupClear$1(dt);
+            dt.draw();
+        });
+        // Show as active when any grouping is applied
+        dt.on('rowgroup-datasrc', function () {
+            btn.enable(rowGroupApplied(dt).length > 0);
+        });
+        // Default status
+        btn.enable(rowGroupApplied(dt).length > 0);
+        return btn.element();
+    }
+};
+
+var rowGroupRemove = {
+    defaults: {
+        className: 'rowGroupRemove',
+        icon: 'groupRemove',
+        order: true,
+        text: 'Remove from grouping'
+    },
+    init: function (config) {
+        var _this = this;
+        var dt = this.dt();
+        var btn = new Button(dt, this)
+            .text(dt.i18n('columnControl.rowGroup', config.text))
+            .icon(config.icon)
+            .className(config.className)
+            .handler(function () {
+            var dataSrc = dt.column(_this.idx()).dataSrc();
+            if (btn.enable()) {
+                // Grouping is active - remove
+                rowGroupRemove$1(dt, dataSrc);
+                dt.draw();
+            }
+        });
+        // Show as active when grouping is applied
+        dt.on('rowgroup-datasrc', function () {
+            var applied = rowGroupApplied(dt);
+            var ours = dt.column(_this.idx()).dataSrc();
+            btn.enable(applied.includes(ours));
+        });
+        // Default disabled
+        btn.enable(false);
+        return btn.element();
+    }
+};
+
+var SearchInput = /** @class */ (function () {
+    /**
+     * Create a container element, for consistent DOM structure and styling
+     */
+    function SearchInput(dt, idx) {
+        var _this = this;
+        this._type = 'text';
+        this._sspTransform = null;
+        this._sspData = {};
+        this._dt = dt;
+        this._idx = idx;
+        this._dom = {
+            clear: createElement('span', 'dtcc-search-clear', icons['x']),
+            container: createElement('div', SearchInput.classes.container),
+            typeIcon: createElement('div', 'dtcc-search-type-icon'),
+            searchIcon: createElement('div', 'dtcc-search-icon', icons['search']),
+            input: createElement('input', SearchInput.classes.input),
+            inputs: createElement('div'),
+            select: createElement('select', SearchInput.classes.select),
+            title: createElement('div', 'dtcc-search-title')
+        };
+        var dom = this._dom;
+        var originalIdx = idx;
+        dom.input.setAttribute('type', 'text');
+        dom.container.append(dom.title, dom.inputs);
+        dom.inputs.append(dom.typeIcon, dom.select, dom.searchIcon, dom.clear, dom.input);
+        // Listeners
+        var inputInput = function () {
+            _this.runSearch();
+        };
+        var selectInput = function () {
+            dom.typeIcon.innerHTML = icons[dom.select.value];
+            _this.runSearch();
+        };
+        var clearClick = function () {
+            _this.clear();
+        };
+        dom.input.addEventListener('input', inputInput);
+        dom.select.addEventListener('input', selectInput);
+        dom.clear.addEventListener('click', clearClick);
+        dt.on('destroy', function () {
+            dom.input.removeEventListener('input', inputInput);
+            dom.select.removeEventListener('input', selectInput);
+            dom.clear.removeEventListener('click', clearClick);
+        });
+        // State handling - all components that use this class have the same state saving structure
+        // so shared handling can be performed here.
+        dt.on('stateSaveParams.DT', function (e, s, data) {
+            if (!data.columnControl) {
+                data.columnControl = {};
+            }
+            if (!data.columnControl[_this._idx]) {
+                data.columnControl[_this._idx] = {};
+            }
+            data.columnControl[_this._idx].searchInput = {
+                logic: dom.select.value,
+                type: _this._type,
+                value: dom.input.value
+            };
+        });
+        dt.on('stateLoaded.DT', function (e, s, state) {
+            _this._stateLoad(state);
+        });
+        // Same as for ColumnControl - reassign a column index if needed.
+        dt.on('columns-reordered.DT', function (e, details) {
+            _this._idx = dt.colReorder.transpose(originalIdx, 'fromOriginal');
+        });
+        // Column control search clearing (column().columnControl.searchClear() method)
+        dt.on('cc-search-clear.DT', function (e, colIdx) {
+            if (colIdx === _this._idx) {
+                // Don't want an automatic redraw on this event
+                _this._loadingState = true;
+                _this.clear();
+                _this._loadingState = false;
+            }
+        });
+        // Data for server-side processing
+        if (dt.page.info().serverSide) {
+            dt.on('preXhr.DT', function (e, s, d) {
+                // The column has been removed from the submit data - can't do anything
+                if (!d.columns || !d.columns[_this._idx]) {
+                    return;
+                }
+                if (!d.columns[_this._idx].columnControl) {
+                    d.columns[_this._idx].columnControl = {};
+                }
+                var val = _this._dom.input.value;
+                if (_this._sspTransform) {
+                    val = _this._sspTransform(val);
+                }
+                d.columns[_this._idx].columnControl.search = Object.assign({
+                    value: val,
+                    logic: _this._dom.select.value,
+                    type: _this._type
+                }, _this._sspData);
+            });
+        }
+    }
+    /**
+     * Add a class to the container
+     *
+     * @param name Class name to add
+     * @returns Self for chaining
+     */
+    SearchInput.prototype.addClass = function (name) {
+        this._dom.container.classList.add(name);
+        return this;
+    };
+    /**
+     * Clear any applied search
+     *
+     * @returns Self for chaining
+     */
+    SearchInput.prototype.clear = function () {
+        this.set(this._dom.select.children[0].getAttribute('value'), '');
+        return this;
+    };
+    /**
+     * Set the clear icon feature can be used or not
+     *
+     * @param set Flag
+     * @returns Self for chaining
+     */
+    SearchInput.prototype.clearable = function (set) {
+        // Note there is no add here as it is added by default and never used after setup, so
+        // no need.
+        if (!set) {
+            this._dom.clear.remove();
+        }
+        return this;
+    };
+    /**
+     * Get the container element
+     *
+     * @returns The container element
+     */
+    SearchInput.prototype.element = function () {
+        return this._dom.container;
+    };
+    /**
+     * Get the HTML input element for this control
+     *
+     * @returns HTML Input element
+     */
+    SearchInput.prototype.input = function () {
+        return this._dom.input;
+    };
+    /**
+     * Set the list of options for the dropdown
+     *
+     * @param opts List of options
+     * @returns Self for chaining
+     */
+    SearchInput.prototype.options = function (opts) {
+        var select = this._dom.select;
+        for (var i = 0; i < opts.length; i++) {
+            select.add(new Option(opts[i].label, opts[i].value));
+        }
+        // Initial icon
+        this._dom.typeIcon.innerHTML = icons[opts[0].value];
+        return this;
+    };
+    /**
+     * Set the placeholder attribute for the input element
+     *
+     * @param placeholder Placeholder string
+     * @returns Self for chaining
+     */
+    SearchInput.prototype.placeholder = function (placeholder) {
+        if (placeholder) {
+            var columnTitle = this._dt.column(this._idx).title();
+            this._dom.input.placeholder = placeholder.replace('[title]', columnTitle);
+        }
+        return this;
+    };
+    /**
+     * Run the search method
+     */
+    SearchInput.prototype.runSearch = function () {
+        var dom = this._dom;
+        var isActive = dom.select.value === 'empty' ||
+            dom.select.value === 'notEmpty' ||
+            dom.input.value !== '';
+        dom.container.classList.toggle('dtcc-search_active', isActive);
+        if (this._search &&
+            (this._lastValue !== dom.input.value || this._lastType !== dom.select.value)) {
+            this._search(dom.select.value, dom.input.value, this._loadingState);
+            this._lastValue = dom.input.value;
+            this._lastType = dom.select.value;
+        }
+    };
+    /**
+     * Set the function that will be run when a search operation is required. Note that this can
+     * trigger the function to run if there is a saved state.
+     *
+     * @param fn Search callback
+     * @returns Self for chaining
+     */
+    SearchInput.prototype.search = function (fn) {
+        this._search = fn;
+        // If there is a saved state, load it now that set up is done.
+        this._stateLoad(this._dt.state.loaded());
+        return this;
+    };
+    /**
+     * Set a value for the search input
+     *
+     * @param logic Logic type
+     * @param val Value
+     * @returns Self for chaining
+     */
+    SearchInput.prototype.set = function (logic, val) {
+        var dom = this._dom;
+        dom.input.value = val;
+        dom.select.value = logic;
+        dom.typeIcon.innerHTML = icons[dom.select.value];
+        this.runSearch();
+        return this;
+    };
+    /**
+     * Set a function to transform the input value before SSP data submission
+     *
+     * @param fn Transform function
+     * @returns Self for chaining
+     */
+    SearchInput.prototype.sspTransform = function (fn) {
+        this._sspTransform = fn;
+        return this;
+    };
+    /**
+     * Set extra information to be send to the server for server-side processing
+     *
+     * @param data Data object
+     * @returns Self for chaining
+     */
+    SearchInput.prototype.sspData = function (data) {
+        this._sspData = data;
+        return this;
+    };
+    /**
+     * Set the text that will be shown as the title for the control
+     *
+     * @param text Set the title text
+     * @returns Self for chaining
+     */
+    SearchInput.prototype.title = function (text) {
+        if (text) {
+            var columnTitle = this._dt.column(this._idx).title();
+            this._dom.title.innerHTML = text.replace('[title]', columnTitle);
+        }
+        return this;
+    };
+    /**
+     * Set the title attribute for the input element
+     *
+     * @param title Title attribute string
+     * @returns Self for chaining
+     */
+    SearchInput.prototype.titleAttr = function (title) {
+        if (title) {
+            var columnTitle = this._dt.column(this._idx).title();
+            this._dom.input.title = title.replace('[title]', columnTitle);
+        }
+        return this;
+    };
+    SearchInput.prototype.type = function (t) {
+        this._type = t;
+        return this;
+    };
+    /**
+     * Load a DataTables state
+     *
+     * @param state State object being loaded
+     */
+    SearchInput.prototype._stateLoad = function (state) {
+        var _a, _b;
+        var dom = this._dom;
+        var idx = this._idx;
+        var loadedState = (_b = (_a = state === null || state === void 0 ? void 0 : state.columnControl) === null || _a === void 0 ? void 0 : _a[idx]) === null || _b === void 0 ? void 0 : _b.searchInput;
+        if (loadedState) {
+            // The search callback needs to know if we are loading an existing state or not
+            // so it can determine if it needs to draw the table. If it was a user input, then
+            // it redraws, if it was a state load, then there should be no redraw.
+            this._loadingState = true;
+            dom.select.value = loadedState.logic;
+            dom.input.value = loadedState.value;
+            dom.select.dispatchEvent(new Event('input'));
+            this._loadingState = false;
+        }
+    };
+    SearchInput.classes = {
+        container: ['dtcc-content', 'dtcc-search'],
+        input: '',
+        select: ''
+    };
+    return SearchInput;
+}());
+
+var searchDateTime = {
+    defaults: {
+        clear: true,
+        format: '',
+        mask: '',
+        placeholder: '',
+        title: '',
+        titleAttr: ''
+    },
+    init: function (config) {
+        var _this = this;
+        var fromPicker = false;
+        var moment = DataTable.use('moment');
+        var luxon = DataTable.use('luxon');
+        var dt = this.dt();
+        var i18nBase = 'columnControl.search.datetime.';
+        var pickerFormat = '';
+        var dataSrcFormat = '';
+        var dateTime;
+        var searchInput = new SearchInput(dt, this.idx())
+            .type('date')
+            .addClass('dtcc-searchDateTime')
+            .sspTransform(function (val) { return toISO(val, pickerFormat, moment, luxon); })
+            .sspData({ mask: config.mask })
+            .clearable(config.clear)
+            .placeholder(config.placeholder)
+            .title(config.title)
+            .titleAttr(config.titleAttr)
+            .options([
+            { label: dt.i18n(i18nBase + 'equal', 'Equals'), value: 'equal' },
+            { label: dt.i18n(i18nBase + 'notEqual', 'Does not equal'), value: 'notEqual' },
+            { label: dt.i18n(i18nBase + 'greater', 'After'), value: 'greater' },
+            { label: dt.i18n(i18nBase + 'less', 'Before'), value: 'less' },
+            { label: dt.i18n(i18nBase + 'empty', 'Empty'), value: 'empty' },
+            { label: dt.i18n(i18nBase + 'notEmpty', 'Not empty'), value: 'notEmpty' }
+        ])
+            .search(function (searchType, searchTerm, loadingState) {
+            // When SSP, don't apply a filter here, SearchInput will add to the submit data
+            if (dt.page.info().serverSide) {
+                if (!loadingState) {
+                    dt.draw();
+                }
+                return;
+            }
+            var mask = config.mask;
+            var column = dt.column(_this.idx());
+            var search = searchTerm === ''
+                ? ''
+                : dateToNum(dateTime && fromPicker ? dateTime.val() : searchTerm.trim(), pickerFormat, moment, luxon, mask);
+            if (searchType === 'empty') {
+                column.search.fixed('dtcc', function (haystack) { return !haystack; });
+            }
+            else if (searchType === 'notEmpty') {
+                column.search.fixed('dtcc', function (haystack) { return !!haystack; });
+            }
+            else if (column.search.fixed('dtcc') === '' && search === '') {
+                // No change - don't do anything
+                return;
+            }
+            else if (!search) {
+                // Clear search
+                column.search.fixed('dtcc', '');
+            }
+            else if (searchType === 'equal') {
+                // Use a function for matching - weak typing
+                // Note that the haystack in the search function is the rendered date - it
+                // might need to be converted back to a date
+                column.search.fixed('dtcc', function (haystack) {
+                    return dateToNum(haystack, dataSrcFormat, moment, luxon, mask) == search;
+                });
+            }
+            else if (searchType === 'notEqual') {
+                column.search.fixed('dtcc', function (haystack) {
+                    return dateToNum(haystack, dataSrcFormat, moment, luxon, mask) != search;
+                });
+            }
+            else if (searchType === 'greater') {
+                column.search.fixed('dtcc', function (haystack) {
+                    return dateToNum(haystack, dataSrcFormat, moment, luxon, mask) > search;
+                });
+            }
+            else if (searchType === 'less') {
+                column.search.fixed('dtcc', function (haystack) {
+                    return dateToNum(haystack, dataSrcFormat, moment, luxon, mask) < search;
+                });
+            }
+            // If in a dropdown, set the parent levels as active
+            if (config._parents) {
+                config._parents.forEach(function (btn) {
+                    return btn.activeList(_this.unique(), !!column.search.fixed('dtcc'));
+                });
+            }
+            if (!loadingState) {
+                column.draw();
+            }
+        });
+        // Once data has been loaded we can run DateTime with the specified format
+        dt.ready(function () {
+            var DateTime = DataTable.use('datetime');
+            dataSrcFormat = getFormat(dt, _this.idx());
+            pickerFormat = config.format
+                ? config.format
+                : dataSrcFormat;
+            if (DateTime) {
+                dateTime = new DateTime(searchInput.input(), {
+                    format: pickerFormat,
+                    i18n: dt.settings()[0].oLanguage.datetime, // could be undefined
+                    onChange: function () {
+                        fromPicker = true;
+                        searchInput.runSearch();
+                        fromPicker = false;
+                    }
+                });
+            }
+        });
+        return searchInput.element();
+    }
+};
+/**
+ * Determine the formatting string for the date time information in the colum
+ *
+ * @param dt DataTable instance
+ * @param column Column index
+ * @returns Date / time formatting string
+ */
+function getFormat(dt, column) {
+    var type = dt.column(column).type();
+    if (!type) {
+        // Assume that it is ISO unless otherwise specified - that is all DataTables can do anyway
+        return 'YYYY-MM-DD';
+    }
+    else if (type === 'datetime') {
+        // If no format was specified in the DT type, a Javascript native toLocaleDateString
+        // was used. Need to work out what that format is in Moment or Luxon. We need to pass
+        // a known value though the renderer and work out the format
+        var renderer = dt.settings()[0].aoColumns[column].mRender;
+        var resultPm = renderer('1999-08-07T23:05:04Z', 'display');
+        var resultAm = renderer('1999-08-07T03:05:04Z', 'display');
+        var leadingZero = resultAm.includes('03');
+        // What formatter are we using?
+        if (DataTable.use('moment')) {
+            return resultPm
+                .replace('23', leadingZero ? 'HH' : 'H')
+                .replace('11', leadingZero ? 'hh' : 'h')
+                .replace('05', 'mm')
+                .replace('04', 'ss')
+                .replace('PM', 'A')
+                .replace('pm', 'a')
+                .replace('07', 'DD')
+                .replace('7', 'D')
+                .replace('08', 'MM')
+                .replace('8', 'M')
+                .replace('1999', 'YYYY')
+                .replace('99', 'YY');
+        }
+        else if (DataTable.use('luxon')) {
+            return resultPm
+                .replace('23', leadingZero ? 'HH' : 'H')
+                .replace('11', leadingZero ? 'hh' : 'h')
+                .replace('05', 'mm')
+                .replace('04', 'ss')
+                .replace('PM', 'a')
+                .replace('07', 'dd')
+                .replace('7', 'd')
+                .replace('08', 'MM')
+                .replace('8', 'M')
+                .replace('1999', 'yyyy')
+                .replace('99', 'yy');
+        }
+        else if (resultPm.includes('23') && resultPm.includes('1999')) {
+            return 'YYYY-MM-DD hh:mm:ss';
+        }
+        else if (resultPm.includes('23')) {
+            return 'hh:mm:ss';
+        }
+        // fall through to final return
+    }
+    else if (type.includes('datetime-')) {
+        // Column was specified with a particular display format - we can extract that format from
+        // the type, as it is part of the type name.
+        return type.replace(/datetime-/g, '');
+    }
+    else if (type.includes('moment')) {
+        return type.replace(/moment-/g, '');
+    }
+    else if (type.includes('luxon')) {
+        return type.replace(/luxon-/g, '');
+    }
+    return 'YYYY-MM-DD';
+}
+/**
+ * Convert from a source date / time value (usually a string) to a timestamp for comparisons.
+ *
+ * @param input Input value
+ * @param srcFormat String format of the input
+ * @param moment Moment instance, if it is available
+ * @param luxon Luxon object, if it is available
+ * @returns Time stamp - milliseconds
+ */
+function dateToNum(input, srcFormat, moment, luxon, mask) {
+    var d;
+    if (input === '') {
+        return '';
+    }
+    if (input instanceof Date) {
+        d = input;
+    }
+    else if (srcFormat !== 'YYYY-MM-DD' && (moment || luxon)) {
+        d = new Date(moment
+            ? moment(input, srcFormat).unix() * 1000
+            : luxon.DateTime.fromFormat(input, srcFormat).toMillis());
+    }
+    else {
+        // new Date() with `/` separators will treat the input as local time, but with `-` it will
+        // treat it as UTC. We want UTC so do a replacement
+        d = new Date(input.replace(/\//g, '-'));
+    }
+    if (mask) {
+        if (!mask.includes('YYYY')) {
+            d.setFullYear(1970);
+        }
+        if (!mask.includes('MM')) {
+            d.setUTCMonth(0);
+        }
+        if (!mask.includes('DD')) {
+            d.setUTCDate(1);
+        }
+        if (!mask.includes('hh')) {
+            d.setUTCHours(0);
+        }
+        if (!mask.includes('mm')) {
+            d.setUTCMinutes(0);
+        }
+        if (!mask.includes('ss')) {
+            // This will match milliseconds as well, but that's fine, you won't match mS but not S
+            d.setUTCSeconds(0);
+        }
+        if (!mask.includes('sss')) {
+            d.setUTCMilliseconds(0);
+        }
+    }
+    return d.getTime();
+}
+/**
+ * Convert an input string to an ISO formatted date
+ *
+ * @param input Input value
+ * @param srcFormat String format of the input
+ * @param moment Moment instance, if it is available
+ * @param luxon Luxon object, if it is available
+ * @returns Value in ISO
+ */
+function toISO(input, srcFormat, moment, luxon) {
+    if (input === '') {
+        return '';
+    }
+    else if (srcFormat !== 'YYYY-MM-DD' && moment) {
+        // TODO Does it have a time component?
+        return moment.utc(input, srcFormat).toISOString();
+    }
+    else if (srcFormat !== 'YYYY-MM-DD' && luxon) {
+        // TODO Does it have a time component?
+        return luxon.DateTime.fromFormat(input, srcFormat).toISO();
+    }
+    // new Date() with `/` separators will treat the input as local time, but with `-` it will
+    // treat it as UTC. We want UTC so do a replacement
+    input = input.replace(/\//g, '-');
+    return input;
+}
+
+/** Set the options to show in the list */
+function setOptions(checkList, opts) {
+    var existing = checkList.values();
+    checkList.clear();
+    for (var i = 0; i < opts.length; i++) {
+        if (typeof opts[i] === 'object') {
+            checkList.add({
+                active: false,
+                label: opts[i].label,
+                value: opts[i].value
+            }, i === opts.length - 1);
+        }
+        else {
+            checkList.add({
+                active: false,
+                label: opts[i],
+                value: opts[i]
+            }, i === opts.length - 1);
+        }
+    }
+    if (existing.length) {
+        checkList.values(existing);
+    }
+}
+/** Load a saved state */
+function getState(columnIdx, state) {
+    var _a, _b;
+    var loadedState = (_b = (_a = state === null || state === void 0 ? void 0 : state.columnControl) === null || _a === void 0 ? void 0 : _a[columnIdx]) === null || _b === void 0 ? void 0 : _b.searchList;
+    if (loadedState) {
+        return loadedState;
+    }
+}
+/** Get the options for a column from a DT JSON object */
+function getJsonOptions(dt, idx) {
+    var _a;
+    var json = (_a = dt.ajax.json()) === null || _a === void 0 ? void 0 : _a.columnControl;
+    var column = dt.column(idx);
+    var name = column.name();
+    var dataSrc = column.dataSrc();
+    if (json && json[name]) {
+        // Found options matching the column's name - top priority
+        return json[name];
+    }
+    else if (json && typeof dataSrc === 'string' && json[dataSrc]) {
+        // Found options matching the column's data source string
+        return json[dataSrc];
+    }
+    else if (json && json[idx]) {
+        // Found options matching the column's data index
+        return json[idx];
+    }
+    return null;
+}
+function reloadOptions(dt, config, idx, checkList, loadedValues) {
+    var _a;
+    // Was there options specified in the Ajax return?
+    var json = (_a = dt.ajax.json()) === null || _a === void 0 ? void 0 : _a.columnControl;
+    var options = [];
+    var jsonOptions = getJsonOptions(dt, idx);
+    if (jsonOptions) {
+        options = jsonOptions;
+    }
+    else if (json && config.ajaxOnly) {
+        if (config.hidable) {
+            // Ajax only options - need to hide the search list
+            checkList.element().style.display = 'none';
+            // Check if the parent buttons should be hidden as well (they will be if there
+            // is no visible content in them)
+            if (config._parents) {
+                config._parents.forEach(function (btn) { return btn.checkDisplay(); });
+            }
+        }
+        // No point in doing any further processing here
+        return;
+    }
+    else if (!dt.page.info().serverSide) {
+        // Either no ajax object (i.e. not an Ajax table), or no matching ajax options
+        // for this column - get the values for the column, taking into account
+        // orthogonal rendering
+        var found = {};
+        var rows = dt.rows({ order: idx }).indexes().toArray();
+        var settings = dt.settings()[0];
+        for (var i = 0; i < rows.length; i++) {
+            var raw = settings.fastData(rows[i], idx, 'filter');
+            var filter = raw !== null && raw !== undefined
+                ? raw.toString()
+                : '';
+            if (!found[filter]) {
+                found[filter] = true;
+                options.push({
+                    label: settings.fastData(rows[i], idx, config.orthogonal),
+                    value: filter
+                });
+            }
+        }
+    }
+    setOptions(checkList, options);
+    // If there was a state loaded at start up, then we need to set the visual
+    // appearance to match
+    if (loadedValues) {
+        checkList.values(loadedValues);
+    }
+}
+var searchList = {
+    defaults: {
+        ajaxOnly: true,
+        className: 'searchList',
+        hidable: true,
+        options: null,
+        orthogonal: 'display',
+        search: true,
+        select: true,
+        title: ''
+    },
+    init: function (config) {
+        var _this = this;
+        var loadedValues = null;
+        var dt = this.dt();
+        // The search can be applied from a stored start at start up before the options are
+        // available. It can also be applied by user input, so it is generalised into this function.
+        var applySearch = function (values) {
+            // When SSP, don't do any client-side filtering
+            if (dt.page.info().serverSide) {
+                return;
+            }
+            var col = dt.column(_this.idx());
+            if (!values) {
+                return;
+            }
+            else if (values.length === 0) {
+                // Nothing selected - clear the filter
+                col.search.fixed('dtcc-list', '');
+            }
+            else {
+                // Find all matching options from the list of values
+                col.search.fixed('dtcc-list', function (val) {
+                    return values.includes(val);
+                });
+            }
+            // If in a dropdown, set the parent levels as active
+            if (config._parents) {
+                config._parents.forEach(function (btn) { return btn.activeList(_this.unique(), !!values.length); });
+            }
+        };
+        var checkList = new CheckList(dt, this, {
+            search: config.search,
+            select: config.select
+        })
+            .searchListener(dt)
+            .title(dt
+            .i18n('columnControl.searchList', config.title)
+            .replace('[title]', dt.column(this.idx()).title()))
+            .handler(function (e, btn, btns, redraw) {
+            if (btn) {
+                btn.active(!btn.active());
+            }
+            applySearch(checkList.values());
+            if (redraw) {
+                dt.draw();
+            }
+        });
+        if (config.options) {
+            setOptions(checkList, config.options);
+        }
+        else {
+            dt.ready(function () {
+                reloadOptions(dt, config, _this.idx(), checkList, loadedValues);
+            });
+            // Xhr event listener for updates of options
+            dt.on('xhr', function (e, s, json) {
+                // Need to wait for the draw to complete so the table has the latest data
+                dt.one('draw', function () {
+                    reloadOptions(dt, config, _this.idx(), checkList, loadedValues);
+                });
+            });
+        }
+        // Data for server-side processing
+        if (dt.page.info().serverSide) {
+            dt.on('preXhr.DT', function (e, s, d) {
+                // The column has been removed from the submit data - can't do anything
+                if (!d.columns || !d.columns[_this.idx()]) {
+                    return;
+                }
+                if (!d.columns[_this.idx()].columnControl) {
+                    d.columns[_this.idx()].columnControl = {};
+                }
+                // We need the indexes in the HTTP parameter names (for .NET), so use an object.
+                d.columns[_this.idx()].columnControl.list = Object.assign({}, checkList.values());
+            });
+        }
+        // Unlike the SearchInput based search contents, CheckList does not handle state saving
+        // (since the mechanism for column visibility is different), so state saving is handled
+        // here.
+        dt.on('stateLoaded', function (e, s, state) {
+            var values = getState(_this.idx(), state);
+            if (values) {
+                checkList.values(values);
+                applySearch(values);
+            }
+        });
+        dt.on('stateSaveParams', function (e, s, data) {
+            var idx = _this.idx();
+            if (!data.columnControl) {
+                data.columnControl = {};
+            }
+            if (!data.columnControl[idx]) {
+                data.columnControl[idx] = {};
+            }
+            // If the table isn't yet ready, then the options for the list won't have been
+            // populated (above) and therefore there can't be an values. In such a case
+            // use the last saved values and this will refresh on the next draw.
+            data.columnControl[idx].searchList = dt.ready()
+                ? checkList.values()
+                : loadedValues;
+        });
+        dt.settings()[0].aoColumns[this.idx()].columnControlSearchList = function (options) {
+            if (options === 'refresh') {
+                reloadOptions(dt, config, _this.idx(), checkList, null);
+            }
+            else {
+                setOptions(checkList, options);
+            }
+        };
+        loadedValues = getState(this.idx(), dt.state.loaded());
+        applySearch(loadedValues);
+        return checkList.element();
+    }
+};
+
+var searchNumber = {
+    defaults: {
+        clear: true,
+        placeholder: '',
+        title: '',
+        titleAttr: ''
+    },
+    init: function (config) {
+        var _this = this;
+        var dt = this.dt();
+        var i18nBase = 'columnControl.search.number.';
+        var searchInput = new SearchInput(dt, this.idx())
+            .type('num')
+            .addClass('dtcc-searchNumber')
+            .clearable(config.clear)
+            .placeholder(config.placeholder)
+            .title(config.title)
+            .titleAttr(config.titleAttr)
+            .options([
+            { label: dt.i18n(i18nBase + 'equal', 'Equals'), value: 'equal' },
+            { label: dt.i18n(i18nBase + 'notEqual', 'Does not equal'), value: 'notEqual' },
+            { label: dt.i18n(i18nBase + 'greater', 'Greater than'), value: 'greater' },
+            {
+                label: dt.i18n(i18nBase + 'greaterOrEqual', 'Greater or equal'),
+                value: 'greaterOrEqual'
+            },
+            { label: dt.i18n(i18nBase + 'less', 'Less than'), value: 'less' },
+            { label: dt.i18n(i18nBase + 'lessOrEqual', 'Less or equal'), value: 'lessOrEqual' },
+            { label: dt.i18n(i18nBase + 'empty', 'Empty'), value: 'empty' },
+            { label: dt.i18n(i18nBase + 'notEmpty', 'Not empty'), value: 'notEmpty' }
+        ])
+            .search(function (searchType, searchTerm, loadingState) {
+            // When SSP, don't apply a filter here, SearchInput will add to the submit data
+            if (dt.page.info().serverSide) {
+                if (!loadingState) {
+                    dt.draw();
+                }
+                return;
+            }
+            var column = dt.column(_this.idx());
+            if (searchType === 'empty') {
+                column.search.fixed('dtcc', function (haystack) { return !haystack; });
+            }
+            else if (searchType === 'notEmpty') {
+                column.search.fixed('dtcc', function (haystack) { return !!haystack; });
+            }
+            else if (column.search.fixed('dtcc') === '' && searchTerm === '') {
+                // No change - don't do anything
+                return;
+            }
+            else if (searchTerm === '') {
+                // Clear search
+                column.search.fixed('dtcc', '');
+            }
+            else if (searchType === 'equal') {
+                // Use a function for matching - weak typing
+                column.search.fixed('dtcc', function (haystack) { return stringToNum(haystack) == searchTerm; });
+            }
+            else if (searchType === 'notEqual') {
+                column.search.fixed('dtcc', function (haystack) { return stringToNum(haystack) != searchTerm; });
+            }
+            else if (searchType === 'greater') {
+                column.search.fixed('dtcc', function (haystack) { return stringToNum(haystack) > searchTerm; });
+            }
+            else if (searchType === 'greaterOrEqual') {
+                column.search.fixed('dtcc', function (haystack) { return stringToNum(haystack) >= searchTerm; });
+            }
+            else if (searchType === 'less') {
+                column.search.fixed('dtcc', function (haystack) { return stringToNum(haystack) < searchTerm; });
+            }
+            else if (searchType === 'lessOrEqual') {
+                column.search.fixed('dtcc', function (haystack) { return stringToNum(haystack) <= searchTerm; });
+            }
+            // If in a dropdown, set the parents as active
+            if (config._parents) {
+                config._parents.forEach(function (btn) {
+                    return btn.activeList(_this.unique(), !!column.search.fixed('dtcc'));
+                });
+            }
+            if (!loadingState) {
+                column.draw();
+            }
+        });
+        // Set a numeric input type, per BBC's guidelines
+        searchInput.input().setAttribute('inputmode', 'numeric');
+        searchInput.input().setAttribute('pattern', '[0-9]*');
+        return searchInput.element();
+    }
+};
+var _re_html = /<([^>]*>)/g;
+var _re_formatted_numeric = /['\u00A0,$£€¥%\u2009\u202F\u20BD\u20a9\u20BArfkɃΞ]/gi;
+function stringToNum(d) {
+    if (d !== 0 && (!d || d === '-')) {
+        return -Infinity;
+    }
+    var type = typeof d;
+    if (type === 'number' || type === 'bigint') {
+        return d;
+    }
+    if (d.replace) {
+        d = d.replace(_re_html, '').replace(_re_formatted_numeric, '');
+    }
+    return d * 1;
+}
+
+var searchText = {
+    defaults: {
+        clear: true,
+        placeholder: '',
+        title: '',
+        titleAttr: ''
+    },
+    init: function (config) {
+        var _this = this;
+        var dt = this.dt();
+        var i18nBase = 'columnControl.search.text.';
+        var searchInput = new SearchInput(dt, this.idx())
+            .addClass('dtcc-searchText')
+            .clearable(config.clear)
+            .placeholder(config.placeholder)
+            .title(config.title)
+            .titleAttr(config.titleAttr)
+            .options([
+            { label: dt.i18n(i18nBase + 'contains', 'Contains'), value: 'contains' },
+            {
+                label: dt.i18n(i18nBase + 'notContains', 'Does not contain'),
+                value: 'notContains'
+            },
+            { label: dt.i18n(i18nBase + 'equal', 'Equals'), value: 'equal' },
+            { label: dt.i18n(i18nBase + 'notEqual', 'Does not equal'), value: 'notEqual' },
+            { label: dt.i18n(i18nBase + 'starts', 'Starts'), value: 'starts' },
+            { label: dt.i18n(i18nBase + 'ends', 'Ends'), value: 'ends' },
+            { label: dt.i18n(i18nBase + 'empty', 'Empty'), value: 'empty' },
+            { label: dt.i18n(i18nBase + 'notEmpty', 'Not empty'), value: 'notEmpty' }
+        ])
+            .search(function (searchType, searchTerm, loadingState) {
+            // When SSP, don't apply a filter here, SearchInput will add to the submit data
+            if (dt.page.info().serverSide) {
+                if (!loadingState) {
+                    dt.draw();
+                }
+                return;
+            }
+            var column = dt.column(_this.idx());
+            searchTerm = searchTerm.toLowerCase();
+            if (searchType === 'empty') {
+                column.search.fixed('dtcc', function (haystack) { return !haystack; });
+            }
+            else if (searchType === 'notEmpty') {
+                column.search.fixed('dtcc', function (haystack) { return !!haystack; });
+            }
+            else if (column.search.fixed('dtcc') === '' && searchTerm === '') {
+                // No change - don't do anything
+                return;
+            }
+            else if (searchTerm === '') {
+                // Clear search
+                column.search.fixed('dtcc', '');
+            }
+            else if (searchType === 'equal') {
+                // Use a function for exact matching
+                column.search.fixed('dtcc', function (haystack) { return haystack.toLowerCase() == searchTerm; });
+            }
+            else if (searchType === 'notEqual') {
+                column.search.fixed('dtcc', function (haystack) { return haystack.toLowerCase() != searchTerm; });
+            }
+            else if (searchType === 'contains') {
+                // Use the built in smart search
+                column.search.fixed('dtcc', searchTerm);
+            }
+            else if (searchType === 'notContains') {
+                // Use the built in smart search
+                column.search.fixed('dtcc', function (haystack) { return !haystack.toLowerCase().includes(searchTerm); });
+            }
+            else if (searchType === 'starts') {
+                // Use a function for startsWith case insensitive search
+                column.search.fixed('dtcc', function (haystack) {
+                    return haystack.toLowerCase().startsWith(searchTerm);
+                });
+            }
+            else if (searchType === 'ends') {
+                column.search.fixed('dtcc', function (haystack) {
+                    return haystack.toLowerCase().endsWith(searchTerm);
+                });
+            }
+            // If in a dropdown, set the parent levels as active
+            if (config._parents) {
+                config._parents.forEach(function (btn) {
+                    return btn.activeList(_this.unique(), !!column.search.fixed('dtcc'));
+                });
+            }
+            if (!loadingState) {
+                column.draw();
+            }
+        });
+        return searchInput.element();
+    }
+};
+
+var search = {
+    defaults: {
+        allowSearchList: false
+    },
+    init: function (config) {
+        var _this = this;
+        var _a, _b, _c;
+        var dt = this.dt();
+        var idx = this.idx();
+        var displayEl;
+        var loadedState = (_c = (_b = (_a = dt.state.loaded()) === null || _a === void 0 ? void 0 : _a.columnControl) === null || _b === void 0 ? void 0 : _b[idx]) === null || _c === void 0 ? void 0 : _c.searchInput;
+        var initType = function (type) {
+            var json = getJsonOptions(dt, idx);
+            // Attempt to match what type of search should be shown
+            if (config.allowSearchList && json) {
+                // We've got a list of JSON options, and are allowed to show the searchList
+                return searchList.init.call(_this, Object.assign({}, searchList.defaults, config));
+            }
+            else if (type === 'date' || type.startsWith('datetime')) {
+                // Date types
+                return searchDateTime.init.call(_this, Object.assign({}, searchDateTime.defaults, config));
+            }
+            else if (type.includes('num')) {
+                // Number types
+                return searchNumber.init.call(_this, Object.assign({}, searchNumber.defaults, config));
+            }
+            else {
+                // Everything else
+                return searchText.init.call(_this, Object.assign({}, searchText.defaults, config));
+            }
+        };
+        // If we know the type from the saved state, we can load it immediately. This is required
+        // to allow the state to be applied to the table and the first draw to have a filter
+        // applied (if it is needed).
+        if (loadedState) {
+            displayEl = initType(loadedState.type);
+        }
+        else {
+            // Wait until we can get the data type for the column and the run the corresponding type
+            displayEl = document.createElement('div');
+            dt.ready(function () {
+                var column = dt.column(idx);
+                var display = initType(column.type());
+                displayEl.replaceWith(display);
+            });
+        }
+        return displayEl;
+    }
+};
+
+var searchClear$1 = {
+    defaults: {
+        className: 'searchClear',
+        icon: 'searchClear',
+        text: 'Clear Search'
+    },
+    init: function (config) {
+        var _this = this;
+        var dt = this.dt();
+        var btn = new Button(dt, this)
+            .text(dt.i18n('columnControl.searchClear', config.text))
+            .icon(config.icon)
+            .className(config.className)
+            .handler(function () {
+            dt.column(_this.idx()).columnControl.searchClear().draw();
+        })
+            .enable(false);
+        dt.on('draw', function () {
+            // change enable state
+            var search = dt.column(_this.idx()).search.fixed('dtcc');
+            var searchList = dt.column(_this.idx()).search.fixed('dtcc-list');
+            btn.enable(!!(search || searchList));
+        });
+        return btn.element();
+    }
+};
+
+var searchDropdown = {
+    defaults: {
+        ajaxOnly: true,
+        allowSearchList: true,
+        className: 'searchDropdown',
+        clear: true,
+        columns: '',
+        hidable: true,
+        options: null,
+        orthogonal: 'display',
+        placeholder: '',
+        search: true,
+        select: true,
+        text: 'Search',
+        title: '',
+        titleAttr: ''
+    },
+    extend: function (config) {
+        var dt = this.dt();
+        return {
+            extend: 'dropdown',
+            icon: 'search',
+            text: dt.i18n('columnControl.searchDropdown', config.text),
+            content: [
+                Object.assign(config, {
+                    extend: 'search'
+                })
+            ]
+        };
+    }
+};
+
+var spacer = {
+    defaults: {
+        className: 'dtcc-spacer',
+        text: ''
+    },
+    init: function (config) {
+        var dt = this.dt();
+        var spacer = createElement('div', config.className, dt.i18n('columnControl.spacer', config.text));
+        spacer.setAttribute('role', 'separator');
+        return spacer;
+    }
+};
+
+var title = {
+    defaults: {
+        className: 'dtcc-title',
+        text: null
+    },
+    init: function (config) {
+        var dt = this.dt();
+        var title = dt.column(this.idx()).title();
+        var text = config.text === null ? '[title]' : config.text;
+        var el = createElement('div', config.className, text.replace('[title]', title));
+        return el;
+    }
+};
+
+var contentTypes = {
+    colVis: colVis,
+    colVisDropdown: colVisDropdown,
+    dropdown: dropdownContent,
+    reorder: reorder,
+    reorderLeft: reorderLeft,
+    reorderRight: reorderRight,
+    rowGroup: rowGroup,
+    rowGroupAdd: rowGroupAdd,
+    rowGroupClear: rowGroupClear,
+    rowGroupRemove: rowGroupRemove,
+    order: order,
+    orderAddAsc: orderAddAsc,
+    orderAddDesc: orderAddDesc,
+    orderAsc: orderAsc,
+    orderClear: orderClear,
+    orderDesc: orderDesc,
+    orderRemove: orderRemove,
+    orderStatus: orderStatus,
+    search: search,
+    searchClear: searchClear$1,
+    searchDropdown: searchDropdown,
+    searchDateTime: searchDateTime,
+    searchList: searchList,
+    searchNumber: searchNumber,
+    searchText: searchText,
+    spacer: spacer,
+    title: title
+};
+
+/**
+ *
+ */
+var ColumnControl = /** @class */ (function () {
+    /**
+     * Create a new ColumnControl instance to control a DataTables column.
+     *
+     * @param dt DataTables API instance
+     * @param columnIdx Column index to operation on
+     * @param opts Configuration options
+     */
+    function ColumnControl(dt, columnIdx, opts) {
+        var _this = this;
+        this._dom = {
+            target: null,
+            wrapper: null
+        };
+        this._c = {};
+        this._s = {
+            columnIdx: null,
+            unique: null,
+            toDestroy: []
+        };
+        this._dt = dt;
+        this._s.columnIdx = columnIdx;
+        this._s.unique = Math.random();
+        var originalIdx = columnIdx;
+        Object.assign(this._c, ColumnControl.defaults, opts);
+        this._dom.target = this._target();
+        if (opts.className) {
+            addClass(this._dom.target.closest('tr'), opts.className);
+        }
+        if (this._c.content) {
+            // If column reordering can be done, we reassign the column index here, and before the
+            // plugins can add their own listeners.
+            dt.on('columns-reordered', function (e, details) {
+                _this._s.columnIdx = dt.colReorder.transpose(originalIdx, 'fromOriginal');
+            });
+            this._dom.wrapper = document.createElement('span');
+            this._dom.wrapper.classList.add('dtcc');
+            this._dom.target.appendChild(this._dom.wrapper);
+            this._c.content.forEach(function (content) {
+                var _a = _this.resolve(content), plugin = _a.plugin, config = _a.config;
+                var el = plugin.init.call(_this, config);
+                _this._dom.wrapper.appendChild(el);
+            });
+            dt.on('destroy', function () {
+                _this._s.toDestroy.slice().forEach(function (el) {
+                    el.destroy();
+                });
+                _this._dom.wrapper.remove();
+            });
+        }
+    }
+    /**
+     * Add a component to the destroy list. This is so there is a single destroy event handler,
+     * which is much better for performance.
+     *
+     * @param component Any instance with a `destroy` method
+     */
+    ColumnControl.prototype.destroyAdd = function (component) {
+        this._s.toDestroy.push(component);
+    };
+    /**
+     * Remove an instance from the destroy list (it has been destroyed itself)
+     *
+     * @param component Any instance with a `destroy` method
+     */
+    ColumnControl.prototype.destroyRemove = function (component) {
+        var idx = this._s.toDestroy.indexOf(component);
+        if (idx !== -1) {
+            this._s.toDestroy.splice(idx, 1);
+        }
+    };
+    /**
+     * Get the DataTables API instance that hosts this instance of ColumnControl
+     *
+     * @returns DataTables API instance
+     */
+    ColumnControl.prototype.dt = function () {
+        return this._dt;
+    };
+    /**
+     * Get what column index this instance of ColumnControl is operating on
+     *
+     * @returns Column index
+     */
+    ColumnControl.prototype.idx = function () {
+        return this._s.columnIdx;
+    };
+    /**
+     * Covert the options from `content` in the DataTable initialisation for this instance into a
+     * resolved plugin and options.
+     *
+     * @param content The dev's supplied configuration for the content
+     * @returns Resolved plugin information
+     */
+    ColumnControl.prototype.resolve = function (content) {
+        var plugin = null;
+        var config = null;
+        var type = null;
+        if (typeof content === 'string') {
+            // Simple content - uses default options
+            type = content;
+            plugin = ColumnControl.content[type];
+            config = Object.assign({}, plugin === null || plugin === void 0 ? void 0 : plugin.defaults);
+        }
+        else if (Array.isArray(content)) {
+            // An array is a shorthand for a dropdown with its default options
+            type = 'dropdown';
+            plugin = ColumnControl.content[type];
+            config = Object.assign({}, plugin === null || plugin === void 0 ? void 0 : plugin.defaults, {
+                content: content
+            });
+        }
+        else if (content.extend) {
+            // Content with custom options
+            type = content.extend;
+            plugin = ColumnControl.content[type];
+            config = Object.assign({}, plugin === null || plugin === void 0 ? void 0 : plugin.defaults, content);
+        }
+        if (!plugin) {
+            throw new Error('Unknown ColumnControl content type: ' + type);
+        }
+        // If the plugin is a wrapper around another type - e.g. the colVisDropdown
+        if (plugin.extend) {
+            var self_1 = plugin.extend.call(this, config);
+            return this.resolve(self_1);
+        }
+        return {
+            config: config,
+            type: type,
+            plugin: plugin
+        };
+    };
+    /**
+     * Get the unique id for the instance
+     *
+     * @returns Instant unique id
+     */
+    ColumnControl.prototype.unique = function () {
+        return this._s.unique;
+    };
+    /**
+     * Resolve the configured target into a DOM element
+     */
+    ColumnControl.prototype._target = function () {
+        var target = this._c.target;
+        var column = this._dt.column(this._s.columnIdx);
+        var node;
+        var className = 'header';
+        // Header row index
+        if (typeof target === 'number') {
+            node = column.header(target);
+        }
+        else {
+            var parts = target.split(':');
+            var isHeader = parts[0] === 'tfoot' ? false : true;
+            var row = parts[1] ? parseInt(parts[1]) : 0;
+            if (isHeader) {
+                node = column.header(row);
+            }
+            else {
+                node = column.footer(row);
+                className = 'footer';
+            }
+        }
+        return node.querySelector('div.dt-column-' + className);
+    };
+    // Classes for common UI
+    ColumnControl.Button = Button;
+    ColumnControl.CheckList = CheckList;
+    ColumnControl.SearchInput = SearchInput;
+    /** Content plugins */
+    ColumnControl.content = contentTypes;
+    /** Defaults for ColumnControl */
+    ColumnControl.defaults = {
+        className: '',
+        content: null,
+        target: 0,
+    };
+    /** SVG icons that can be used by the content plugins */
+    ColumnControl.icons = icons;
+    /** Version */
+    ColumnControl.version = '1.1.1';
+    return ColumnControl;
+}());
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * DataTables API integration
+ */
+DataTable.ColumnControl = ColumnControl;
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * DataTables listeners for initialisation
+ */
+// Create header / footer rows that don't exist, but have been referenced in the ColumnControl
+// targets. This needs to be done _before_ the header / footer structure is detected.
+$(document).on('i18n.dt', function (e, settings) {
+    if (e.namespace !== 'dt') {
+        return;
+    }
+    var api = new DataTable.Api(settings);
+    var thead = api.table().header();
+    var tableInit = settings.oInit.columnControl;
+    var defaultInit = ColumnControl.defaults;
+    var baseTargets = [];
+    var ackTargets = {};
+    // Determine if there is only one header row initially. If there is, we might append more
+    // after it. Mark the top row as the header row using `titleRow` in the DataTables configuration
+    if (thead.querySelectorAll('tr').length <= 1 && settings.titleRow === null) {
+        settings.titleRow = 0;
+    }
+    identifyTargets(baseTargets, tableInit);
+    if (ColumnControl.defaults.content) {
+        identifyTargets(baseTargets, defaultInit);
+    }
+    api.columns().every(function (i) {
+        var columnInit = this.init().columnControl;
+        identifyTargets(baseTargets, columnInit);
+    });
+    for (var i = 0; i < baseTargets.length; i++) {
+        assetTarget(ackTargets, baseTargets[i], api);
+    }
+});
+// Initialisation of ColumnControl instances - has to be done _after_ the header / footer structure
+// is detected by DataTables.
+$(document).on('preInit.dt', function (e, settings) {
+    if (e.namespace !== 'dt') {
+        return;
+    }
+    var api = new DataTable.Api(settings);
+    var tableInit = settings.oInit.columnControl;
+    var defaultInit = ColumnControl.defaults;
+    var baseTargets = [];
+    identifyTargets(baseTargets, tableInit);
+    // Only add the default target if there is actually content for it
+    if (ColumnControl.defaults.content) {
+        identifyTargets(baseTargets, defaultInit);
+    }
+    api.columns().every(function (i) {
+        var columnInit = this.init().columnControl;
+        var targets = identifyTargets(baseTargets.slice(), columnInit);
+        for (var i_1 = 0; i_1 < targets.length; i_1++) {
+            // Each of the column, table and defaults configuration can be an array of config
+            // objects, an array of content, or a configuration object. There might be multiple
+            // targets for each one, and they might not exist! Therefore this is more complex
+            // than it might be desirable.
+            var columnTargetInit = getOptionsForTarget(targets[i_1], columnInit);
+            var tableTargetInit = getOptionsForTarget(targets[i_1], tableInit);
+            var defaultTargetInit = getOptionsForTarget(targets[i_1], defaultInit);
+            if (defaultTargetInit || tableTargetInit || columnTargetInit) {
+                new ColumnControl(api, this.index(), Object.assign({}, defaultTargetInit || {}, tableTargetInit || {}, columnTargetInit || {}));
+            }
+        }
+    });
+});
+function searchClear() {
+    var ctx = this;
+    return this.iterator('column', function (settings, idx) {
+        // Note that the listeners for this will not redraw the table.
+        ctx.trigger('cc-search-clear', [idx]);
+    });
+}
+DataTable.Api.registerPlural('columns().columnControl.searchClear()', 'column().columnControl.searchClear()', searchClear);
+// Legacy (1.0.x)) - was never documented, but was mentioned in the forum
+DataTable.Api.registerPlural('columns().ccSearchClear()', 'column().ccSearchClear()', searchClear);
+DataTable.Api.registerPlural('columns().columnControl.searchList()', 'column().columnControl.searchList()', function (options) {
+    return this.iterator('column', function (settings, idx) {
+        var fn = settings.aoColumns[idx].columnControlSearchList;
+        if (fn) {
+            fn(options);
+        }
+    });
+});
+DataTable.ext.buttons.ccSearchClear = {
+    text: function (dt) {
+        return dt.i18n('columnControl.buttons.searchClear', 'Clear search');
+    },
+    init: function (dt, node, config) {
+        var _this = this;
+        dt.on('draw.DT', function () {
+            var enabled = false;
+            var glob = !!dt.search();
+            // No point in wasting clock cycles if we already know it will be enabled
+            if (!glob) {
+                dt.columns().every(function () {
+                    if (this.search.fixed('dtcc') || this.search.fixed('dtcc-list')) {
+                        enabled = true;
+                    }
+                });
+            }
+            _this.enable(glob || enabled);
+        });
+        this.enable(false);
+    },
+    action: function (e, dt, node, config) {
+        dt.search('');
+        dt.columns().columnControl.searchClear();
+        dt.draw();
+    }
+};
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * Initialisation support - this is more involved than normal as targets might
+ * need to be created, and also options needs to be resolved into a standard
+ * ColumnControl configuration object, from the various forms allowed in the
+ * DataTables configuration.
+ */
+/**
+ * Given a ColumnControl target, make sure that it exists. If not, create it.
+ *
+ * @param ackTargets Cache for list of targets that have already been found or created
+ * @param target Current target
+ * @param dt DataTable API
+ * @returns Void
+ */
+function assetTarget(ackTargets, target, dt) {
+    // Check if we already know about the target - if so, we know that it must already be in place
+    if (ackTargets[target]) {
+        return;
+    }
+    var isHeader = true; // false for footer
+    var row = 0;
+    if (typeof target === 'number') {
+        row = target;
+    }
+    else {
+        var parts = target.split(':');
+        if (parts[0] === 'tfoot') {
+            isHeader = false;
+        }
+        if (parts[1]) {
+            row = parseInt(parts[1]);
+        }
+    }
+    // The header / footer have not yet had their structure read, so they aren't available via
+    // the API. As such we need to do our own DOM tweaking
+    var node = isHeader ? dt.table().header() : dt.table().footer();
+    // If the node doesn't exist yet, we need to create it
+    if (!node.querySelectorAll('tr')[row]) {
+        var columns = dt.columns().count();
+        var tr = createElement('tr');
+        tr.setAttribute('data-dt-order', 'disable');
+        for (var i = 0; i < columns; i++) {
+            tr.appendChild(createElement('td'));
+        }
+        node.appendChild(tr);
+    }
+    ackTargets[target] = true;
+}
+/**
+ * Given a target, get the config object for it from the parameter passed in
+ *
+ * @param target ColumnControl target
+ * @param input The dev's configuration
+ * @returns The resolved config object, if found
+ */
+function getOptionsForTarget(target, input) {
+    var defaultTarget = ColumnControl.defaults.target;
+    var selfTarget;
+    if (isIContentArray(input)) {
+        // Top level content array - e.g. `columnControl: ['order']`
+        if (defaultTarget === target) {
+            return {
+                target: defaultTarget,
+                content: input
+            };
+        }
+    }
+    else if (Array.isArray(input)) {
+        // Top level array, some items of which will be configuration objects (possibly not all)
+        for (var i = 0; i < input.length; i++) {
+            var item = input[i];
+            if (isIContentArray(item)) {
+                // A content array, e.g. the inner array from: `columnControl: [['order']]
+                if (defaultTarget === target) {
+                    return {
+                        target: defaultTarget,
+                        content: item
+                    };
+                }
+            }
+            else if (isIConfig(item)) {
+                // A config object, e.g. the object from: `columnControl: [{content: []}]`
+                selfTarget = item.target !== undefined ? item.target : defaultTarget;
+                if (target === selfTarget) {
+                    return item;
+                }
+            }
+            else {
+                // A content object
+                if (target === defaultTarget) {
+                    return {
+                        target: defaultTarget,
+                        content: input
+                    };
+                }
+            }
+        }
+    }
+    else if (typeof input === 'object') {
+        // An object can be either a config object, or an extending content object
+        if (isIConfig(input)) {
+            // Config object: columnControl: {content: []}
+            selfTarget = input.target !== undefined ? input.target : defaultTarget;
+            if (target === selfTarget) {
+                return input;
+            }
+        }
+        else {
+            // content object: columnControl: [{extend: 'order'}]
+            if (target === defaultTarget) {
+                return {
+                    target: defaultTarget,
+                    content: input
+                };
+            }
+        }
+    }
+}
+/**
+ * Get a list of all targets from the configuration objects / arrays
+ *
+ * @param targets Established list of targets - mutated
+ * @param input Configuration object / array
+ * @returns Updated array
+ */
+function identifyTargets(targets, input) {
+    function add(target) {
+        if (!targets.includes(target)) {
+            targets.push(target);
+        }
+    }
+    if (Array.isArray(input)) {
+        if (input.length === 0) {
+            // Empty array - assume it is empty content
+            add(ColumnControl.defaults.target);
+        }
+        else {
+            // Array of options, or an array of content
+            input.forEach(function (item) {
+                add(typeof item === 'object' && item.target !== undefined
+                    ? item.target
+                    : ColumnControl.defaults.target);
+            });
+        }
+    }
+    else if (typeof input === 'object') {
+        // Full options defined: { target: x, content: [] }
+        add(input.target !== undefined ? input.target : ColumnControl.defaults.target);
+    }
+    return targets;
+}
+/**
+ * Check if an item is a configuration object or not
+ *
+ * @param item Item to check
+ * @returns true if it is a config object
+ */
+function isIConfig(item) {
+    return typeof item === 'object' && item.target !== undefined ? true : false;
+}
+/**
+ * Determine if an array contains only content items or not
+ *
+ * @param arr Array to check
+ * @returns true if is content only, false if not (i.e. is an array with configuration objects).
+ */
+function isIContentArray(arr) {
+    var detectedConfig = false;
+    if (!Array.isArray(arr)) {
+        return false;
+    }
+    for (var i = 0; i < arr.length; i++) {
+        if (isIConfig(arr[i])) {
+            detectedConfig = true;
+            break;
+        }
+    }
+    return !detectedConfig;
+}
+
+
+return DataTable;
+}));
+
+
+/*! DataTables styling wrapper for ColReorder
+ * © SpryMedia Ltd - datatables.net/license
+ */
+
+(function( factory ){
+	if ( typeof define === 'function' && define.amd ) {
+		// AMD
+		define( ['jquery', 'datatables.net-dt', 'datatables.net-columncontrol'], function ( $ ) {
+			return factory( $, window, document );
+		} );
+	}
+	else if ( typeof exports === 'object' ) {
+		// CommonJS
+		var jq = require('jquery');
+		var cjsRequires = function (root, $) {
+			if ( ! $.fn.dataTable ) {
+				require('datatables.net-dt')(root, $);
+			}
+
+			if ( ! $.fn.dataTable.ColumnControl ) {
+				require('datatables.net-columncontrol')(root, $);
+			}
+		};
+
+		if (typeof window === 'undefined') {
+			module.exports = function (root, $) {
+				if ( ! root ) {
+					// CommonJS environments without a window global must pass a
+					// root. This will give an error otherwise
+					root = window;
+				}
+
+				if ( ! $ ) {
+					$ = jq( root );
+				}
+
+				cjsRequires( root, $ );
+				return factory( $, root, root.document );
+			};
+		}
+		else {
+			cjsRequires( window, jq );
+			module.exports = factory( jq, window, window.document );
+		}
+	}
+	else {
+		// Browser
+		factory( jQuery, window, document );
+	}
+}(function( $, window, document ) {
+'use strict';
+var DataTable = $.fn.dataTable;
+
+
+
+
+return DataTable;
+}));
+
+
+/*! DateTime picker for DataTables.net v1.6.2
+ *
+ * © SpryMedia Ltd, all rights reserved.
+ * License: MIT datatables.net/license/mit
+ */
+
+(function( factory ){
+	if ( typeof define === 'function' && define.amd ) {
+		// AMD
+		define( ['jquery'], function () {
+			return factory( window, document );
+		} );
+	}
+	else if ( typeof exports === 'object' ) {
+		// CommonJS
+		var cjsRequires = function (root) {		};
+
+		if (typeof window === 'undefined') {
+			module.exports = function (root, $) {
+				if ( ! root ) {
+					// CommonJS environments without a window global must pass a
+					// root. This will give an error otherwise
+					root = window;
+				}
+
+				cjsRequires( root );
+				return factory( root, root.document );
+			};
+		}
+		else {
+			cjsRequires( window );
+			module.exports = factory( window, window.document );
+		}
+	}
+	else {
+		// Browser
+		factory( window, document );
+	}
+}(function( window, document ) {
+'use strict';
+
+
+
+/**
+ * @summary     DateTime picker for DataTables.net
+ * @version     1.6.2
+ * @file        dataTables.dateTime.js
+ * @author      SpryMedia Ltd
+ * @contact     www.datatables.net/contact
+ */
+
+// Supported formatting and parsing libraries:
+// * Moment
+// * Luxon
+// * DayJS
+var dateLib;
+
+/*
+ * This file provides a DateTime GUI picker (calendar and time input). Only the
+ * format YYYY-MM-DD is supported without additional software, but the end user
+ * experience can be greatly enhanced by including the momentjs, dayjs or luxon library
+ * which provide date / time parsing and formatting options.
+ *
+ * This functionality is required because the HTML5 date and datetime input
+ * types are not widely supported in desktop browsers.
+ *
+ * Constructed by using:
+ *
+ *     new DateTime( input, opts )
+ *
+ * where `input` is the HTML input element to use and `opts` is an object of
+ * options based on the `DateTime.defaults` object.
+ */
+var DateTime = function (input, opts) {
+        // Check if called with a window or jQuery object for DOM less applications
+	// This is for backwards compatibility with CommonJS loader
+	if (DateTime.factory(input, opts)) {
+		return DateTime;
+	}
+
+	// Attempt to auto detect the formatting library (if there is one). Having it in
+	// the constructor allows load order independence.
+	if (typeof dateLib === 'undefined') {
+		dateLib = window.moment
+			? window.moment
+			: window.dayjs
+				? window.dayjs
+				: window.luxon
+					? window.luxon
+					: null;
+	}
+
+	this.c = $.extend(true, {}, DateTime.defaults, opts);
+	var classPrefix = this.c.classPrefix;
+
+	// Only IS8601 dates are supported without moment, dayjs or luxon
+	if (!dateLib && this.c.format !== 'YYYY-MM-DD') {
+		throw "DateTime: Without momentjs, dayjs or luxon only the format 'YYYY-MM-DD' can be used";
+	}
+
+	if (this._isLuxon() && this.c.format == 'YYYY-MM-DD') {
+		this.c.format =  'yyyy-MM-dd'
+	}
+
+	// Min and max need to be `Date` objects in the config
+	if (typeof this.c.minDate === 'string') {
+		this.c.minDate = new Date(this.c.minDate);
+	}
+	if (typeof this.c.maxDate === 'string') {
+		this.c.maxDate = new Date(this.c.maxDate);
+	}
+
+	// DOM structure
+	var structure = $(
+		'<div class="' + classPrefix + '">' +
+		'<div class="' + classPrefix + '-date">' +
+		'<div class="' + classPrefix + '-title">' +
+		'<div class="' + classPrefix + '-iconLeft">' +
+		'<button type="button"></button>' +
+		'</div>' +
+		'<div class="' + classPrefix + '-iconRight">' +
+		'<button type="button"></button>' +
+		'</div>' +
+		'<div class="' + classPrefix + '-label">' +
+		'<span></span>' +
+		'<select class="' + classPrefix + '-month"></select>' +
+		'</div>' +
+		'<div class="' + classPrefix + '-label">' +
+		'<span></span>' +
+		'<select class="' + classPrefix + '-year"></select>' +
+		'</div>' +
+		'</div>' +
+		'<div class="' + classPrefix + '-buttons">' +
+		'<a class="' + classPrefix + '-clear"></a>' +
+		'<a class="' + classPrefix + '-today"></a>' +
+		'<a class="' + classPrefix + '-selected"></a>' +
+		'</div>' +
+		'<div class="' + classPrefix + '-calendar"></div>' +
+		'</div>' +
+		'<div class="' + classPrefix + '-time">' +
+		'<div class="' + classPrefix + '-hours"></div>' +
+		'<div class="' + classPrefix + '-minutes"></div>' +
+		'<div class="' + classPrefix + '-seconds"></div>' +
+		'</div>' +
+		'<div class="' + classPrefix + '-error"></div>' +
+		'</div>'
+	);
+
+	this.dom = {
+		container: structure,
+		date: structure.find('.' + classPrefix + '-date'),
+		title: structure.find('.' + classPrefix + '-title'),
+		calendar: structure.find('.' + classPrefix + '-calendar'),
+		time: structure.find('.' + classPrefix + '-time'),
+		error: structure.find('.' + classPrefix + '-error'),
+		buttons: structure.find('.' + classPrefix + '-buttons'),
+		clear: structure.find('.' + classPrefix + '-clear'),
+		today: structure.find('.' + classPrefix + '-today'),
+		selected: structure.find('.' + classPrefix + '-selected'),
+		previous: structure.find('.' + classPrefix + '-iconLeft'),
+		next: structure.find('.' + classPrefix + '-iconRight'),
+		input: $(input)
+	};
+
+	this.s = {
+		/** @type {Date} Date value that the picker has currently selected */
+		d: null,
+
+		/** @type {Date} Date of the calendar - might not match the value */
+		display: null,
+
+		/** @type {number} Used to select minutes in a range where the range base is itself unavailable */
+		minutesRange: null,
+
+		/** @type {number} Used to select minutes in a range where the range base is itself unavailable */
+		secondsRange: null,
+
+		/** @type {String} Unique namespace string for this instance */
+		namespace: 'datetime-' + (DateTime._instance++),
+
+		/** @type {Object} Parts of the picker that should be shown */
+		parts: {
+			date: this.c.format.match(/[yYMDd]|L(?!T)|l/) !== null,
+			time: this.c.format.match(/[Hhm]|LT|LTS/) !== null,
+			seconds: this.c.format.indexOf('s') !== -1,
+			hours12: this.c.format.match(/[haA]/) !== null
+		},
+
+		/** Timeout when showing the control to listen for a blur */
+		showTo: null
+	};
+
+	this.dom.container
+		.append(this.dom.date)
+		.append(this.dom.time)
+		.append(this.dom.error);
+
+	this.dom.date
+		.append(this.dom.title)
+		.append(this.dom.buttons)
+		.append(this.dom.calendar);
+
+	this.dom.input.addClass('dt-datetime');
+
+	this._constructor();
+};
+
+$.extend(DateTime.prototype, {
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 * Public
+	 */
+
+	/**
+	 * Destroy the control
+	 */
+	destroy: function () {
+		clearTimeout(this.s.showTo);
+		this._hide(true);
+		this.dom.container.off().empty();
+		this.dom.input
+			.removeClass('dt-datetime')
+			.removeAttr('autocomplete')
+			.off('.datetime');
+	},
+
+	display: function (year, month) {
+		if (year !== undefined) {
+			this.s.display.setUTCFullYear(year);
+		}
+
+		if (month !== undefined) {
+			this.s.display.setUTCMonth(month - 1);
+		}
+
+		if (year !== undefined || month !== undefined) {
+			this._setTitle();
+			this._setCalander();
+
+			return this;
+		}
+
+		return this.s.display ?
+			{
+				month: this.s.display.getUTCMonth() + 1,
+				year: this.s.display.getUTCFullYear()
+			} : {
+				month: null,
+				year: null
+			};
+	},
+
+	errorMsg: function (msg) {
+		var error = this.dom.error;
+
+		if (msg) {
+			error.html(msg);
+		}
+		else {
+			error.empty();
+		}
+
+		return this;
+	},
+
+	hide: function () {
+		this._hide();
+
+		return this;
+	},
+
+	max: function (date) {
+		this.c.maxDate = typeof date === 'string'
+			? new Date(date)
+			: date;
+
+		this._optionsTitle();
+		this._setCalander();
+
+		return this;
+	},
+
+	min: function (date) {
+		this.c.minDate = typeof date === 'string'
+			? new Date(date)
+			: date;
+
+		this._optionsTitle();
+		this._setCalander();
+
+		return this;
+	},
+
+	/**
+	 * Check if an element belongs to this control
+	 *
+	 * @param  {node} node Element to check
+	 * @return {boolean}   true if owned by this control, false otherwise
+	 */
+	owns: function (node) {
+		return $(node).parents().filter(this.dom.container).length > 0;
+	},
+
+	/**
+	 * Get / set the value
+	 *
+	 * @param  {string|Date} set   Value to set
+	 * @param  {boolean} [write=true] Flag to indicate if the formatted value
+	 *   should be written into the input element
+	 */
+	val: function (set, write) {
+		if (set === undefined) {
+			return this.s.d;
+		}
+
+		var oldVal = this.s.d;
+
+		if (set instanceof Date) {
+			this.s.d = this._dateToUtc(set);
+		}
+		else if (set === null || set === '') {
+			this.s.d = null;
+		}
+		else if (set === '--now') {
+			this.s.d = this._dateToUtc(new Date());
+		}
+		else if (typeof set === 'string') {
+			this.s.d = this._dateToUtc(
+				this._convert(set, this.c.format, null)
+			);
+		}
+
+		if (write || write === undefined) {
+			if (this.s.d) {
+				this._writeOutput(
+					false,
+					(oldVal === null && this.s.d !== null) ||
+						(oldVal !== null && this.s.d === null) ||
+						oldVal.toString() !== this.s.d.toString()
+				);
+			}
+			else {
+				// The input value was not valid...
+				this.dom.input.val(set);
+			}
+		}
+
+		// Need something to display
+		if (this.s.d) {
+			this.s.display = new Date(this.s.d.toString());
+		}
+		else if (this.c.display) {
+			this.s.display = new Date();
+			this.s.display.setUTCDate(1);
+			this.display(this.c.display.year, this.c.display.month);
+		}
+		else {
+			this.s.display = new Date();
+		}
+
+		// Set the day of the month to be 1 so changing between months doesn't
+		// run into issues when going from day 31 to 28 (for example)
+		this.s.display.setUTCDate(1);
+
+		// Update the display elements for the new value
+		this._setTitle();
+		this._setCalander();
+		this._setTime();
+
+		return this;
+	},
+
+	/**
+	 * Similar to `val()` but uses a given date / time format
+	 *
+	 * @param format Format to get the data as (getter) or that is input (setter)
+	 * @param val Value to write (if undefined, used as a getter)
+	 * @returns 
+	 */
+	valFormat: function (format, val) {
+		if (!val) {
+			return this._convert(this.val(), null, format);
+		}
+
+		// Convert from the format given here to the instance's configured format
+		this.val(
+			this._convert(val, format, null)
+		);
+
+		return this;
+	},
+
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 * Constructor
+	 */
+
+	/**
+	 * Build the control and assign initial event handlers
+	 *
+	 * @private
+	 */
+	_constructor: function () {
+		var that = this;
+		var classPrefix = this.c.classPrefix;
+		var last = this.dom.input.val();
+
+		var onChange = function () {
+			var curr = that.dom.input.val();
+
+			if (curr !== last) {
+				that.c.onChange.call(that, curr, that.s.d, that.dom.input);
+				last = curr;
+			}
+		};
+
+		if (!this.s.parts.date) {
+			this.dom.date.css('display', 'none');
+		}
+
+		if (!this.s.parts.time) {
+			this.dom.time.css('display', 'none');
+		}
+
+		if (!this.s.parts.seconds) {
+			this.dom.time.children('div.' + classPrefix + '-seconds').remove();
+			this.dom.time.children('span').eq(1).remove();
+		}
+
+		if (!this.c.buttons.clear) {
+			this.dom.clear.css('display', 'none');
+		}
+
+		if (!this.c.buttons.today) {
+			this.dom.today.css('display', 'none');
+		}
+
+		if (!this.c.buttons.selected) {
+			this.dom.selected.css('display', 'none');
+		}
+
+		// Render the options
+		this._optionsTitle();
+
+		$(document).on('i18n.dt', function (e, settings) {
+			if (settings.oLanguage.datetime) {
+				$.extend(true, that.c.i18n, settings.oLanguage.datetime);
+				that._optionsTitle();
+			}
+		});
+
+		// When attached to a hidden input, we always show the input picker, and
+		// do so inline
+		if (this.dom.input.attr('type') === 'hidden' || this.c.alwaysVisible) {
+			this.dom.container.addClass('inline');
+			this.c.attachTo = 'input';
+
+			this.val(this.dom.input.val(), false);
+			this._show();
+		}
+
+		// Set the initial value
+		if (last) {
+			this.val(last, false);
+		}
+
+		// Trigger the display of the widget when clicking or focusing on the
+		// input element
+		this.dom.input
+			.attr('autocomplete', 'off')
+			.on('focus.datetime click.datetime', function () {
+				// If already visible - don't do anything
+				if (that.dom.container.is(':visible') || that.dom.input.is(':disabled')) {
+					return;
+				}
+
+				// In case the value has changed by text
+				last = that.dom.input.val();
+				that.val(last, false);
+
+				that._show();
+			})
+			.on('keyup.datetime', function () {
+				// Update the calendar's displayed value as the user types
+				that.val(that.dom.input.val(), false);
+			});
+
+		// Want to prevent the focus bubbling up the document to account for
+		// focus capture in modals (e.g. Editor and Bootstrap). They can see
+		// the focus as outside the modal and thus immediately blur focus on
+		// the picker. Need to use a native addEL since jQuery changes the
+		// focusin to focus for some reason! focusin bubbles, focus does not.
+		this.dom.container[0].addEventListener('focusin', function (e) {
+			e.stopPropagation();
+		});
+
+		// Main event handlers for input in the widget
+		this.dom.container
+			.on('change', 'select', function () {
+				var select = $(this);
+				var val = select.val();
+
+				if (select.hasClass(classPrefix + '-month')) {
+					// Month select
+					that._correctMonth(that.s.display, val);
+					that._setTitle();
+					that._setCalander();
+				}
+				else if (select.hasClass(classPrefix + '-year')) {
+					// Year select
+					that.s.display.setUTCFullYear(val);
+					that._setTitle();
+					that._setCalander();
+				}
+				else if (select.hasClass(classPrefix + '-hours') || select.hasClass(classPrefix + '-ampm')) {
+					// Hours - need to take account of AM/PM input if present
+					if (that.s.parts.hours12) {
+						var hours = $(that.dom.container).find('.' + classPrefix + '-hours').val() * 1;
+						var pm = $(that.dom.container).find('.' + classPrefix + '-ampm').val() === 'pm';
+
+						that.s.d.setUTCHours(hours === 12 && !pm ?
+							0 :
+							pm && hours !== 12 ?
+								hours + 12 :
+								hours
+						);
+					}
+					else {
+						that.s.d.setUTCHours(val);
+					}
+
+					that._setTime();
+					that._writeOutput(true);
+
+					onChange();
+				}
+				else if (select.hasClass(classPrefix + '-minutes')) {
+					// Minutes select
+					that.s.d.setUTCMinutes(val);
+					that._setTime();
+					that._writeOutput(true);
+
+					onChange();
+				}
+				else if (select.hasClass(classPrefix + '-seconds')) {
+					// Seconds select
+					that.s.d.setSeconds(val);
+					that._setTime();
+					that._writeOutput(true);
+
+					onChange();
+				}
+
+				that.dom.input.focus();
+				that._position();
+			})
+			.on('click', function (e) {
+				var d = that.s.d;
+				var nodeName = e.target.nodeName.toLowerCase();
+				var target = nodeName === 'span' ?
+					e.target.parentNode :
+					e.target;
+
+				nodeName = target.nodeName.toLowerCase();
+
+				if (nodeName === 'select') {
+					return;
+				}
+
+				e.stopPropagation();
+
+				if (nodeName === 'a') {
+					e.preventDefault();
+
+					if ($(target).hasClass(classPrefix + '-clear')) {
+						// Clear the value and don't change the display
+						that.s.d = null;
+						that.dom.input.val('');
+						that._writeOutput();
+						that._setCalander();
+						that._setTime();
+
+						onChange();
+					}
+					else if ($(target).hasClass(classPrefix + '-today')) {
+						// Don't change the value, but jump to the month
+						// containing today
+						that.s.display = new Date();
+
+						that._setTitle();
+						that._setCalander();
+					}
+					else if ($(target).hasClass(classPrefix + '-selected')) {
+						// Don't change the value, but jump to where the selected value is
+						that.s.display = new Date(that.s.d.getTime());
+
+						that._setTitle();
+						that._setCalander();
+					}
+				}
+				if (nodeName === 'button') {
+					var button = $(target);
+					var parent = button.parent();
+
+					if (parent.hasClass('disabled') && !parent.hasClass('range')) {
+						button.blur();
+						return;
+					}
+
+					if (parent.hasClass(classPrefix + '-iconLeft')) {
+						// Previous month
+						that.s.display.setUTCMonth(that.s.display.getUTCMonth() - 1);
+						that._setTitle();
+						that._setCalander();
+
+						that.dom.input.focus();
+					}
+					else if (parent.hasClass(classPrefix + '-iconRight')) {
+						// Next month
+						that._correctMonth(that.s.display, that.s.display.getUTCMonth() + 1);
+						that._setTitle();
+						that._setCalander();
+
+						that.dom.input.focus();
+					}
+					else if (button.parents('.' + classPrefix + '-time').length) {
+						var val = button.data('value');
+						var unit = button.data('unit');
+
+						d = that._needValue();
+
+						if (unit === 'minutes') {
+							if (parent.hasClass('disabled') && parent.hasClass('range')) {
+								that.s.minutesRange = val;
+								that._setTime();
+								return;
+							}
+							else {
+								that.s.minutesRange = null;
+							}
+						}
+
+						if (unit === 'seconds') {
+							if (parent.hasClass('disabled') && parent.hasClass('range')) {
+								that.s.secondsRange = val;
+								that._setTime();
+								return;
+							}
+							else {
+								that.s.secondsRange = null;
+							}
+						}
+
+						// Specific to hours for 12h clock
+						if (val === 'am') {
+							if (d.getUTCHours() >= 12) {
+								val = d.getUTCHours() - 12;
+							}
+							else {
+								return;
+							}
+						}
+						else if (val === 'pm') {
+							if (d.getUTCHours() < 12) {
+								val = d.getUTCHours() + 12;
+							}
+							else {
+								return;
+							}
+						}
+
+						var set = unit === 'hours' ?
+							'setUTCHours' :
+							unit === 'minutes' ?
+								'setUTCMinutes' :
+								'setSeconds';
+
+						d[set](val);
+						that._setCalander();
+						that._setTime();
+						that._writeOutput(true);
+						onChange();
+					}
+					else {
+						// Calendar click
+						d = that._needValue();
+
+						// Can't be certain that the current day will exist in
+						// the new month, and likewise don't know that the
+						// new day will exist in the old month, But 1 always
+						// does, so we can change the month without worry of a
+						// recalculation being done automatically by `Date`
+						d.setUTCDate(1);
+						d.setUTCFullYear(button.data('year'));
+						d.setUTCMonth(button.data('month'));
+						d.setUTCDate(button.data('day'));
+
+						that._writeOutput(true);
+
+						// Don't hide if there is a time picker, since we want to
+						// be able to select a time as well.
+						if (!that.s.parts.time) {
+							// This is annoying but IE has some kind of async
+							// behaviour with focus and the focus from the above
+							// write would occur after this hide - resulting in the
+							// calendar opening immediately
+							setTimeout(function () {
+								that._hide();
+							}, 10);
+						}
+						else {
+							that._setCalander();
+							that._setTime();
+						}
+
+						onChange();
+					}
+				}
+				else {
+					// Click anywhere else in the widget - return focus to the
+					// input element
+					that.dom.input.focus();
+				}
+			});
+	},
+
+
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 * Private
+	 */
+
+	/**
+	 * Compare the date part only of two dates - this is made super easy by the
+	 * toDateString method!
+	 *
+	 * @param  {Date} a Date 1
+	 * @param  {Date} b Date 2
+	 * @private
+	 */
+	_compareDates: function (a, b) {
+		// Can't use toDateString as that converts to local time
+		// luxon uses different method names so need to be able to call them
+		return this._isLuxon()
+			? dateLib.DateTime.fromJSDate(a).toUTC().toISODate() === dateLib.DateTime.fromJSDate(b).toUTC().toISODate()
+			: this._dateToUtcString(a) === this._dateToUtcString(b);
+	},
+
+	/**
+	 * Convert from one format to another
+	 *
+	 * @param {string|Date} val Value 
+	 * @param {string|null} from Format to convert from. If null a `Date` must be given
+	 * @param {string|null} to Format to convert to. If null a `Date` will be returned
+	 * @returns {string|Date} Converted value
+	 */
+	_convert: function (val, from, to) {
+		if (!val) {
+			return val;
+		}
+
+		if (!dateLib) {
+			// Note that in here from and to can either be null or YYYY-MM-DD
+			// They cannot be anything else
+			if ((!from && !to) || (from && to)) {
+				// No conversion
+				return val;
+			}
+			else if (!from) {
+				// Date in, string back
+				return val.getUTCFullYear() + '-' +
+					this._pad(val.getUTCMonth() + 1) + '-' +
+					this._pad(val.getUTCDate());
+			}
+			else { // (! to)
+				// String in, date back
+				var match = val.match(/(\d{4})\-(\d{2})\-(\d{2})/);
+				return match ?
+					new Date(match[1], match[2] - 1, match[3]) :
+					null;
+			}
+		}
+		else if (this._isLuxon()) {
+			// Luxon
+			var dtLux = val instanceof Date
+				? dateLib.DateTime.fromJSDate(val).toUTC()
+				: dateLib.DateTime.fromFormat(val, from);
+
+			if (!dtLux.isValid) {
+				return null;
+			}
+
+			return to
+				? dtLux.toFormat(to)
+				: dtLux.toJSDate();
+		}
+		else {
+			// Moment / DayJS
+			var dtMo = val instanceof Date
+				? dateLib.utc(val, undefined, this.c.locale, this.c.strict)
+				: dateLib(val, from, this.c.locale, this.c.strict);
+
+			if (!dtMo.isValid()) {
+				return null;
+			}
+
+			return to
+				? dtMo.format(to)
+				: dtMo.toDate();
+		}
+	},
+
+	/**
+	 * When changing month, take account of the fact that some months don't have
+	 * the same number of days. For example going from January to February you
+	 * can have the 31st of Jan selected and just add a month since the date
+	 * would still be 31, and thus drop you into March.
+	 *
+	 * @param  {Date} date  Date - will be modified
+	 * @param  {integer} month Month to set
+	 * @private
+	 */
+	_correctMonth: function (date, month) {
+		var days = this._daysInMonth(date.getUTCFullYear(), month);
+		var correctDays = date.getUTCDate() > days;
+
+		date.setUTCMonth(month);
+
+		if (correctDays) {
+			date.setUTCDate(days);
+			date.setUTCMonth(month);
+		}
+	},
+
+	/**
+	 * Get the number of days in a method. Based on
+	 * http://stackoverflow.com/a/4881951 by Matti Virkkunen
+	 *
+	 * @param  {integer} year  Year
+	 * @param  {integer} month Month (starting at 0)
+	 * @private
+	 */
+	_daysInMonth: function (year, month) {
+		// 
+		var isLeap = ((year % 4) === 0 && ((year % 100) !== 0 || (year % 400) === 0));
+		var months = [31, (isLeap ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+		return months[month];
+	},
+
+	/**
+	 * Create a new date object which has the UTC values set to the local time.
+	 * This allows the local time to be used directly for the library which
+	 * always bases its calculations and display on UTC.
+	 *
+	 * @param  {Date} s Date to "convert"
+	 * @return {Date}   Shifted date
+	 */
+	_dateToUtc: function (s) {
+		if (!s) {
+			return s;
+		}
+
+		return new Date(Date.UTC(
+			s.getFullYear(), s.getMonth(), s.getDate(),
+			s.getHours(), s.getMinutes(), s.getSeconds()
+		));
+	},
+
+	/**
+	 * Create a UTC ISO8601 date part from a date object
+	 *
+	 * @param  {Date} d Date to "convert"
+	 * @return {string} ISO formatted date
+	 */
+	_dateToUtcString: function (d) {
+		// luxon uses different method names so need to be able to call them
+		return this._isLuxon()
+			? dateLib.DateTime.fromJSDate(d).toUTC().toISODate()
+			: d.getUTCFullYear() + '-' +
+			this._pad(d.getUTCMonth() + 1) + '-' +
+			this._pad(d.getUTCDate());
+	},
+
+	/**
+	 * Hide the control and remove events related to its display
+	 *
+	 * @private
+	 */
+	_hide: function (destroy) {
+		if (!destroy && (this.dom.input.attr('type') === 'hidden' || this.c.alwaysVisible)) {
+			// Normally we wouldn't need to redraw the calander if it changes
+			// and then hides, but if it is hidden, then we do need to make sure
+			// that it is correctly up to date.
+			this._setCalander();
+			this._setTime();
+
+			return;
+		}
+
+		var namespace = this.s.namespace;
+
+		this.dom.container.detach();
+
+		$(window).off('.' + namespace);
+		$(document)
+			.off('keydown.' + namespace)
+			.off('keyup.' + namespace)
+			.off('click.' + namespace);
+		$('div.dataTables_scrollBody').off('scroll.' + namespace);
+		$('div.DTE_Body_Content').off('scroll.' + namespace);
+		$(this.dom.input[0].offsetParent).off('.' + namespace);
+	},
+
+	/**
+	 * Convert a 24 hour value to a 12 hour value
+	 *
+	 * @param  {integer} val 24 hour value
+	 * @return {integer}     12 hour value
+	 * @private
+	 */
+	_hours24To12: function (val) {
+		return val === 0 ?
+			12 :
+			val > 12 ?
+				val - 12 :
+				val;
+	},
+
+	/**
+	 * Generate the HTML for a single day in the calendar - this is basically
+	 * and HTML cell with a button that has data attributes so we know what was
+	 * clicked on (if it is clicked on) and a bunch of classes for styling.
+	 *
+	 * @param  {object} day Day object from the `_htmlMonth` method
+	 * @return {string}     HTML cell
+	 */
+	_htmlDay: function (day) {
+		var classPrefix = this.c.classPrefix;
+		if (day.empty) {
+			return '<td class="' + classPrefix + '-empty"></td>';
+		}
+
+		var classes = ['selectable'];
+
+		if (day.disabled) {
+			classes.push('disabled');
+		}
+
+		if (day.today) {
+			classes.push('now');
+		}
+
+		if (day.selected) {
+			classes.push('selected');
+		}
+
+		return '<td data-day="' + day.day + '" class="' + classes.join(' ') + '">' +
+			'<button class="' + classPrefix + '-button ' + classPrefix + '-day" type="button" ' + 'data-year="' + day.year + '" data-month="' + day.month + '" data-day="' + day.day + '">' +
+			'<span>' + day.day + '</span>' +
+			'</button>' +
+			'</td>';
+	},
+
+
+	/**
+	 * Create the HTML for a month to be displayed in the calendar table.
+	 * 
+	 * Based upon the logic used in Pikaday - MIT licensed
+	 * Copyright (c) 2014 David Bushell
+	 * https://github.com/dbushell/Pikaday
+	 *
+	 * @param  {integer} year  Year
+	 * @param  {integer} month Month (starting at 0)
+	 * @return {string} Calendar month HTML
+	 * @private
+	 */
+	_htmlMonth: function (year, month) {
+		var now = this._dateToUtc(new Date()),
+			days = this._daysInMonth(year, month),
+			before = new Date(Date.UTC(year, month, 1)).getUTCDay(),
+			data = [],
+			row = [];
+
+		if (this.c.firstDay > 0) {
+			before -= this.c.firstDay;
+
+			if (before < 0) {
+				before += 7;
+			}
+		}
+
+		var cells = days + before,
+			after = cells;
+
+		while (after > 7) {
+			after -= 7;
+		}
+
+		cells += 7 - after;
+
+		var minDate = this.c.minDate;
+		var maxDate = this.c.maxDate;
+
+		if (minDate) {
+			minDate.setUTCHours(0);
+			minDate.setUTCMinutes(0);
+			minDate.setSeconds(0);
+		}
+
+		if (maxDate) {
+			maxDate.setUTCHours(23);
+			maxDate.setUTCMinutes(59);
+			maxDate.setSeconds(59);
+		}
+
+		for (var i = 0, r = 0; i < cells; i++) {
+			var day = new Date(Date.UTC(year, month, 1 + (i - before))),
+				selected = this.s.d ? this._compareDates(day, this.s.d) : false,
+				today = this._compareDates(day, now),
+				empty = i < before || i >= (days + before),
+				disabled = (minDate && day < minDate) ||
+					(maxDate && day > maxDate);
+
+			var disableDays = this.c.disableDays;
+			if (Array.isArray(disableDays) && $.inArray(day.getUTCDay(), disableDays) !== -1) {
+				disabled = true;
+			}
+			else if (typeof disableDays === 'function' && disableDays(day) === true) {
+				disabled = true;
+			}
+
+			var dayConfig = {
+				day: 1 + (i - before),
+				month: month,
+				year: year,
+				selected: selected,
+				today: today,
+				disabled: disabled,
+				empty: empty
+			};
+
+			row.push(this._htmlDay(dayConfig));
+
+			if (++r === 7) {
+				if (this.c.showWeekNumber) {
+					row.unshift(this._htmlWeekOfYear(i - before, month, year));
+				}
+
+				data.push('<tr>' + row.join('') + '</tr>');
+				row = [];
+				r = 0;
+			}
+		}
+
+		var classPrefix = this.c.classPrefix;
+		var className = classPrefix + '-table';
+		if (this.c.showWeekNumber) {
+			className += ' weekNumber';
+		}
+
+		// Show / hide month icons based on min/max
+		if (minDate) {
+			var underMin = minDate >= new Date(Date.UTC(year, month, 1, 0, 0, 0));
+
+			this.dom.title.find('div.' + classPrefix + '-iconLeft')
+				.css('display', underMin ? 'none' : 'block');
+		}
+
+		if (maxDate) {
+			var overMax = maxDate < new Date(Date.UTC(year, month + 1, 1, 0, 0, 0));
+
+			this.dom.title.find('div.' + classPrefix + '-iconRight')
+				.css('display', overMax ? 'none' : 'block');
+		}
+
+		return '<table class="' + className + '">' +
+			'<thead>' +
+			this._htmlMonthHead() +
+			'</thead>' +
+			'<tbody>' +
+			data.join('') +
+			'</tbody>' +
+			'</table>';
+	},
+
+	/**
+	 * Create the calendar table's header (week days)
+	 *
+	 * @return {string} HTML cells for the row
+	 * @private
+	 */
+	_htmlMonthHead: function () {
+		var a = [];
+		var firstDay = this.c.firstDay;
+		var i18n = this.c.i18n;
+
+		// Take account of the first day shift
+		var dayName = function (day) {
+			day += firstDay;
+
+			while (day >= 7) {
+				day -= 7;
+			}
+
+			return i18n.weekdays[day];
+		};
+
+		// Empty cell in the header
+		if (this.c.showWeekNumber) {
+			a.push('<th></th>');
+		}
+
+		for (var i = 0; i < 7; i++) {
+			a.push('<th>' + dayName(i) + '</th>');
+		}
+
+		return a.join('');
+	},
+
+	/**
+	 * Create a cell that contains week of the year - ISO8601
+	 *
+	 * Based on https://stackoverflow.com/questions/6117814/ and
+	 * http://techblog.procurios.nl/k/n618/news/view/33796/14863/
+	 *
+	 * @param  {integer} d Day of month
+	 * @param  {integer} m Month of year (zero index)
+	 * @param  {integer} y Year
+	 * @return {string}   
+	 * @private
+	 */
+	_htmlWeekOfYear: function (d, m, y) {
+		var date = new Date(y, m, d, 0, 0, 0, 0);
+
+		// First week of the year always has 4th January in it
+		date.setDate(date.getDate() + 4 - (date.getDay() || 7));
+
+		var oneJan = new Date(y, 0, 1);
+		var weekNum = Math.ceil((((date - oneJan) / 86400000) + 1) / 7);
+
+		return '<td class="' + this.c.classPrefix + '-week">' + weekNum + '</td>';
+	},
+
+	/**
+	 * Determine if Luxon is being used
+	 *
+	 * @returns Flag for Luxon
+	 */
+	_isLuxon: function () {
+		return dateLib && dateLib.DateTime && dateLib.Duration && dateLib.Settings
+			? true
+			: false;
+	},
+
+	/**
+	 * Check if the instance has a date object value - it might be null.
+	 * If is doesn't set one to now.
+	 * @returns A Date object
+	 * @private
+	 */
+	_needValue: function () {
+		if (!this.s.d) {
+			this.s.d = this._dateToUtc(new Date());
+
+			if (!this.s.parts.time) {
+				this.s.d.setUTCHours(0);
+				this.s.d.setUTCMinutes(0);
+				this.s.d.setSeconds(0);
+				this.s.d.setMilliseconds(0);
+			}
+		}
+
+		return this.s.d;
+	},
+
+	/**
+	 * Create option elements from a range in an array
+	 *
+	 * @param  {string} selector Class name unique to the select element to use
+	 * @param  {array} values   Array of values
+	 * @param  {array} [labels] Array of labels. If given must be the same
+	 *   length as the values parameter.
+	 * @private
+	 */
+	_options: function (selector, values, labels) {
+		if (!labels) {
+			labels = values;
+		}
+
+		var select = this.dom.container.find('select.' + this.c.classPrefix + '-' + selector);
+		select.empty();
+
+		for (var i = 0, ien = values.length; i < ien; i++) {
+			select.append('<option value="' + values[i] + '">' + labels[i] + '</option>');
+		}
+	},
+
+	/**
+	 * Set an option and update the option's span pair (since the select element
+	 * has opacity 0 for styling)
+	 *
+	 * @param  {string} selector Class name unique to the select element to use
+	 * @param  {*}      val      Value to set
+	 * @private
+	 */
+	_optionSet: function (selector, val) {
+		var select = this.dom.container.find('select.' + this.c.classPrefix + '-' + selector);
+		var span = select.parent().children('span');
+
+		select.val(val);
+
+		var selected = select.find('option:selected');
+		span.html(selected.length !== 0 ?
+			selected.text() :
+			this.c.i18n.unknown
+		);
+	},
+
+	/**
+	 * Create time options list.
+	 *
+	 * @param  {string} unit Time unit - hours, minutes or seconds
+	 * @param  {integer} count Count range - 12, 24 or 60
+	 * @param  {integer} val Existing value for this unit
+	 * @param  {integer[]} allowed Values allow for selection
+	 * @param  {integer} range Override range
+	 * @private
+	 */
+	_optionsTime: function (unit, count, val, allowed, range) {
+		var classPrefix = this.c.classPrefix;
+		var container = this.dom.container.find('div.' + classPrefix + '-' + unit);
+		var i, j;
+		var render = count === 12 ?
+			function (i) { return i; } :
+			this._pad;
+		var className = classPrefix + '-table';
+		var i18n = this.c.i18n;
+
+		if (!container.length) {
+			return;
+		}
+
+		var a = '';
+		var span = 10;
+		var button = function (value, label, className) {
+			// Shift the value for PM
+			if (count === 12 && typeof value === 'number') {
+				if (val >= 12) {
+					value += 12;
+				}
+
+				if (value == 12) {
+					value = 0;
+				}
+				else if (value == 24) {
+					value = 12;
+				}
+			}
+
+			var selected = val === value || (value === 'am' && val < 12) || (value === 'pm' && val >= 12) ?
+				'selected' :
+				'';
+
+			if (typeof value === 'number' && allowed && $.inArray(value, allowed) === -1) {
+				selected += ' disabled';
+			}
+
+			if (className) {
+				selected += ' ' + className;
+			}
+
+			return '<td class="selectable ' + selected + '">' +
+				'<button class="' + classPrefix + '-button ' + classPrefix + '-day" type="button" data-unit="' + unit + '" data-value="' + value + '">' +
+				'<span>' + label + '</span>' +
+				'</button>' +
+				'</td>';
+		}
+
+		if (count === 12) {
+			// Hours with AM/PM
+			a += '<tr>';
+
+			for (i = 1; i <= 6; i++) {
+				a += button(i, render(i));
+			}
+			a += button('am', i18n.amPm[0]);
+
+			a += '</tr>';
+			a += '<tr>';
+
+			for (i = 7; i <= 12; i++) {
+				a += button(i, render(i));
+			}
+			a += button('pm', i18n.amPm[1]);
+			a += '</tr>';
+
+			span = 7;
+		}
+		else if (count === 24) {
+			// Hours - 24
+			var c = 0;
+			for (j = 0; j < 4; j++) {
+				a += '<tr>';
+				for (i = 0; i < 6; i++) {
+					a += button(c, render(c));
+					c++;
+				}
+				a += '</tr>';
+			}
+
+			span = 6;
+		}
+		else {
+			// Minutes and seconds
+			a += '<tr>';
+			for (j = 0; j < 60; j += 10) {
+				a += button(j, render(j), 'range');
+			}
+			a += '</tr>';
+
+			// Slight hack to allow for the different number of columns
+			a += '</tbody></thead><table class="' + className + ' ' + className + '-nospace"><tbody>';
+
+			var start = range !== null
+				? range
+				: val === -1
+					? 0
+					: Math.floor(val / 10) * 10;
+
+			a += '<tr>';
+			for (j = start + 1; j < start + 10; j++) {
+				a += button(j, render(j));
+			}
+			a += '</tr>';
+
+			span = 6;
+		}
+
+		container
+			.empty()
+			.append(
+				'<table class="' + className + '">' +
+				'<thead><tr><th colspan="' + span + '">' +
+				i18n[unit] +
+				'</th></tr></thead>' +
+				'<tbody>' +
+				a +
+				'</tbody>' +
+				'</table>'
+			);
+	},
+
+	/**
+	 * Create the options for the month and year
+	 *
+	 * @param  {integer} year  Year
+	 * @param  {integer} month Month (starting at 0)
+	 * @private
+	 */
+	_optionsTitle: function () {
+		var i18n = this.c.i18n;
+		var min = this.c.minDate;
+		var max = this.c.maxDate;
+		var minYear = min ? min.getFullYear() : null;
+		var maxYear = max ? max.getFullYear() : null;
+
+		var i = minYear !== null ? minYear : new Date().getFullYear() - this.c.yearRange;
+		var j = maxYear !== null ? maxYear : new Date().getFullYear() + this.c.yearRange;
+
+		this._options('month', this._range(0, 11), i18n.months);
+		this._options('year', this._range(i, j));
+
+		// Set the language strings in case any have changed
+		this.dom.today.text(i18n.today).text(i18n.today);
+		this.dom.selected.text(i18n.selected).text(i18n.selected);
+		this.dom.clear.text(i18n.clear).text(i18n.clear);
+		this.dom.previous
+			.attr('title', i18n.previous)
+			.children('button')
+			.text(i18n.previous);
+		this.dom.next
+			.attr('title', i18n.next)
+			.children('button')
+			.text(i18n.next);
+	},
+
+	/**
+	 * Simple two digit pad
+	 *
+	 * @param  {integer} i      Value that might need padding
+	 * @return {string|integer} Padded value
+	 * @private
+	 */
+	_pad: function (i) {
+		return i < 10 ? '0' + i : i;
+	},
+
+	/**
+	 * Position the calendar to look attached to the input element
+	 * @private
+	 */
+	_position: function () {
+		var offset = this.c.attachTo === 'input' ? this.dom.input.position() : this.dom.input.offset();
+		var container = this.dom.container;
+		var inputHeight = this.dom.input.outerHeight();
+
+		if (container.hasClass('inline')) {
+			container.insertAfter(this.dom.input);
+			return;
+		}
+
+		if (this.s.parts.date && this.s.parts.time && $(window).width() > 550) {
+			container.addClass('horizontal');
+		}
+		else {
+			container.removeClass('horizontal');
+		}
+
+		if (this.c.attachTo === 'input') {
+			container
+				.css({
+					top: offset.top + inputHeight,
+					left: offset.left
+				})
+				.insertAfter(this.dom.input);
+		}
+		else {
+			container
+				.css({
+					top: offset.top + inputHeight,
+					left: offset.left
+				})
+				.appendTo('body');
+		}
+
+		var calHeight = container.outerHeight();
+		var calWidth = container.outerWidth();
+		var scrollTop = $(window).scrollTop();
+
+		// Correct to the bottom
+		if (offset.top + inputHeight + calHeight - scrollTop > $(window).height()) {
+			var newTop = offset.top - calHeight;
+
+			container.css('top', newTop < 0 ? 0 : newTop);
+		}
+
+		// Correct to the right
+		if (calWidth + offset.left > $(window).width()) {
+			var newLeft = $(window).width() - calWidth - 5;
+
+			// Account for elements which are inside a position absolute element
+			if (this.c.attachTo === 'input') {
+				newLeft -= $(container).offsetParent().offset().left;
+			}
+
+			container.css('left', newLeft < 0 ? 0 : newLeft);
+		}
+	},
+
+	/**
+	 * Create a simple array with a range of values
+	 *
+	 * @param  {integer} start   Start value (inclusive)
+	 * @param  {integer} end     End value (inclusive)
+	 * @param  {integer} [inc=1] Increment value
+	 * @return {array}           Created array
+	 * @private
+	 */
+	_range: function (start, end, inc) {
+		var a = [];
+
+		if (!inc) {
+			inc = 1;
+		}
+
+		for (var i = start; i <= end; i += inc) {
+			a.push(i);
+		}
+
+		return a;
+	},
+
+	/**
+	 * Redraw the calendar based on the display date - this is a destructive
+	 * operation
+	 *
+	 * @private
+	 */
+	_setCalander: function () {
+		if (this.s.display) {
+			this.dom.calendar
+				.empty()
+				.append(this._htmlMonth(
+					this.s.display.getUTCFullYear(),
+					this.s.display.getUTCMonth()
+				));
+		}
+	},
+
+	/**
+	 * Set the month and year for the calendar based on the current display date
+	 *
+	 * @private
+	 */
+	_setTitle: function () {
+		this._optionSet('month', this.s.display.getUTCMonth());
+		this._optionSet('year', this.s.display.getUTCFullYear());
+	},
+
+	/**
+	 * Set the time based on the current value of the widget
+	 *
+	 * @private
+	 */
+	_setTime: function () {
+		var that = this;
+		var d = this.s.d;
+
+		// luxon uses different method names so need to be able to call them. This happens a few time later in this method too
+		var luxDT = null
+		if (this._isLuxon()) {
+			luxDT = dateLib.DateTime.fromJSDate(d).toUTC();
+		}
+
+		var hours = luxDT != null
+			? luxDT.hour
+			: d
+				? d.getUTCHours()
+				: -1;
+
+		var allowed = function (prop) { // Backwards compt with `Increment` option
+			return that.c[prop + 'Available'] ?
+				that.c[prop + 'Available'] :
+				that._range(0, 59, that.c[prop + 'Increment']);
+		}
+
+		this._optionsTime('hours', this.s.parts.hours12 ? 12 : 24, hours, this.c.hoursAvailable)
+		this._optionsTime(
+			'minutes',
+			60,
+			luxDT != null
+				? luxDT.minute
+				: d
+					? d.getUTCMinutes()
+					: -1,
+			allowed('minutes'),
+			this.s.minutesRange
+		);
+		this._optionsTime(
+			'seconds',
+			60,
+			luxDT != null
+				? luxDT.second
+				: d
+					? d.getSeconds()
+					: -1,
+			allowed('seconds'),
+			this.s.secondsRange
+		);
+	},
+
+	/**
+	 * Show the widget and add events to the document required only while it
+	 * is displayed
+	 * 
+	 * @private
+	 */
+	_show: function () {
+		var that = this;
+		var namespace = this.s.namespace;
+
+		this._position();
+
+		// Need to reposition on scroll
+		$(window).on('scroll.' + namespace + ' resize.' + namespace, function () {
+			that._position();
+		});
+
+		$('div.DTE_Body_Content').on('scroll.' + namespace, function () {
+			that._position();
+		});
+
+		$('div.dataTables_scrollBody').on('scroll.' + namespace, function () {
+			that._position();
+		});
+
+		var offsetParent = this.dom.input[0].offsetParent;
+
+		if (offsetParent !== document.body) {
+			$(offsetParent).on('scroll.' + namespace, function () {
+				that._position();
+			});
+		}
+
+		// On tab focus will move to a different field (no keyboard navigation
+		// in the date picker - this might need to be changed).
+		$(document).on('keydown.' + namespace, function (e) {
+			if (
+				that.dom.container.is(':visible') && (
+					e.keyCode === 9 || // tab
+					e.keyCode === 13    // return
+				)
+			) {
+				that._hide();
+			}
+		});
+
+		// Esc is on keyup to allow Editor to know that the container was hidden and thus
+		// not act on the esc itself.
+		$(document).on('keyup.' + namespace, function (e) {
+			if (that.dom.container.is(':visible') && e.keyCode === 27 ) { // esc
+				e.preventDefault();
+				that._hide();
+			}
+		});
+
+		clearTimeout(this.s.showTo);
+
+		// We can't use blur to hide, as we want to keep the picker open while
+		// to let the user select from it. But if focus is moved outside of of
+		// the picker, then we auto hide.
+		this.dom.input.on('blur', function (e) {
+			that.s.showTo = setTimeout(function () {
+				let name = document.activeElement.tagName.toLowerCase();
+
+				if (document.activeElement === that.dom.input[0]) {
+					return;
+				}
+
+				if (that.dom.container.find(document.activeElement).length) {
+					return;
+				}
+
+				if (['input', 'select', 'button'].includes(name)) {
+					that.hide();
+				}
+			}, 10);
+		});
+
+		// Hide if clicking outside of the widget - but in a different click
+		// event from the one that was used to trigger the show (bubble and
+		// inline)
+		setTimeout(function () {
+			$(document).on('click.' + namespace, function (e) {
+				var parents = $(e.target).parents();
+
+				if (!parents.filter(that.dom.container).length && e.target !== that.dom.input[0]) {
+					that._hide();
+				}
+			});
+		}, 10);
+	},
+
+	/**
+	 * Write the formatted string to the input element this control is attached
+	 * to
+	 *
+	 * @private
+	 */
+	_writeOutput: function (focus, change) {
+		var date = this.s.d;
+		var out = '';
+		var input = this.dom.input;
+
+		if (date) {
+			out = this._convert(date, null, this.c.format);
+		}
+
+		input.val(out);
+
+		if (change === undefined || change) {
+			// Create a DOM synthetic event. Can't use $().trigger() as
+			// that doesn't actually trigger non-jQuery event listeners
+			var event = new Event('change', { bubbles: true });
+			input[0].dispatchEvent(event);
+		}
+
+		if (input.attr('type') === 'hidden') {
+			this.val(out, false);
+		}
+
+		if (focus) {
+			input.focus();
+		}
+	}
+});
+
+/**
+ * Use a specificmoment compatible date library
+ */
+DateTime.use = function (lib) {
+	dateLib = lib;
+};
+
+/**
+ * For generating unique namespaces
+ *
+ * @type {Number}
+ * @private
+ */
+DateTime._instance = 0;
+
+/**
+ * To indicate to DataTables what type of library this is
+ */
+DateTime.type = 'DateTime';
+
+/**
+ * Defaults for the date time picker
+ *
+ * @type {Object}
+ */
+DateTime.defaults = {
+	alwaysVisible: false,
+
+	attachTo: 'body',
+
+	buttons: {
+		clear: false,
+		selected: false,
+		today: false
+	},
+
+	// Not documented - could be an internal property
+	classPrefix: 'dt-datetime',
+
+	// function or array of ints
+	disableDays: null,
+
+	// first day of the week (0: Sunday, 1: Monday, etc)
+	firstDay: 1,
+
+	format: 'YYYY-MM-DD',
+
+	hoursAvailable: null,
+
+	i18n: {
+		clear: 'Clear',
+		previous: 'Previous',
+		next: 'Next',
+		months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+		weekdays: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+		amPm: ['am', 'pm'],
+		hours: 'Hour',
+		minutes: 'Minute',
+		seconds: 'Second',
+		unknown: '-',
+		today: 'Today',
+		selected: 'Selected'
+	},
+
+	maxDate: null,
+
+	minDate: null,
+
+	minutesAvailable: null,
+
+	minutesIncrement: 1, // deprecated
+
+	strict: true,
+
+	locale: 'en',
+
+	onChange: function () { },
+
+	secondsAvailable: null,
+
+	secondsIncrement: 1, // deprecated
+
+	// show the ISO week number at the head of the row
+	showWeekNumber: false,
+
+	// overruled by max / min date
+	yearRange: 25
+};
+
+DateTime.version = '1.6.2';
+
+/**
+ * CommonJS factory function pass through. Matches DataTables.
+ * @param {*} root Window
+ * @param {*} jq jQUery
+ * @returns {boolean} Indicator
+ */
+DateTime.factory = function (root, jq) {
+	var is = false;
+
+	// Test if the first parameter is a window object
+	if (root && root.document) {
+		window = root;
+		document = root.document;
+	}
+
+	// Test if the second parameter is a jQuery object
+	if (jq && jq.fn && jq.fn.jquery) {
+		$ = jq;
+		is = true;
+	}
+
+	return is;
+}
+
+// Global export - if no conflicts
+if (!window.DateTime) {
+	window.DateTime = DateTime;
+}
+
+// Global DataTable
+if (window.DataTable) {
+	window.DataTable.DateTime = DateTime;
+	DataTable.use('datetime', DateTime);
+}
+
+// Make available via jQuery
+$.fn.dtDateTime = function (options) {
+	return this.each(function () {
+		new DateTime(this, options);
+	});
+}
+
+// Attach to DataTables if present
+if ($.fn.dataTable) {
+	$.fn.dataTable.DateTime = DateTime;
+	$.fn.DataTable.DateTime = DateTime;
+
+	if ($.fn.dataTable.Editor) {
+		$.fn.dataTable.Editor.DateTime = DateTime;
+	}
+}
+
+
+return DateTime;
+}));
+
+
+/*! FixedColumns 5.0.5
+ * © SpryMedia Ltd - datatables.net/license
+ */
+
+(function( factory ){
+	if ( typeof define === 'function' && define.amd ) {
+		// AMD
+		define( ['jquery', 'datatables.net'], function ( $ ) {
+			return factory( $, window, document );
+		} );
+	}
+	else if ( typeof exports === 'object' ) {
+		// CommonJS
+		var jq = require('jquery');
+		var cjsRequires = function (root, $) {
+			if ( ! $.fn.dataTable ) {
+				require('datatables.net')(root, $);
+			}
+		};
+
+		if (typeof window === 'undefined') {
+			module.exports = function (root, $) {
+				if ( ! root ) {
+					// CommonJS environments without a window global must pass a
+					// root. This will give an error otherwise
+					root = window;
+				}
+
+				if ( ! $ ) {
+					$ = jq( root );
+				}
+
+				cjsRequires( root, $ );
+				return factory( $, root, root.document );
+			};
+		}
+		else {
+			cjsRequires( window, jq );
+			module.exports = factory( jq, window, window.document );
+		}
+	}
+	else {
+		// Browser
+		factory( jQuery, window, document );
+	}
+}(function( $, window, document ) {
+'use strict';
+var DataTable = $.fn.dataTable;
+
+
+(function () {
+    'use strict';
+
+    var $$1;
+    var DataTable$1;
+    function setJQuery(jq) {
+        $$1 = jq;
+        DataTable$1 = $$1.fn.dataTable;
+    }
+    var FixedColumns = /** @class */ (function () {
+        function FixedColumns(settings, opts) {
+            var _this = this;
+            // Check that the required version of DataTables is included
+            if (!DataTable$1 ||
+                !DataTable$1.versionCheck ||
+                !DataTable$1.versionCheck('2')) {
+                throw new Error('FixedColumns requires DataTables 2 or newer');
+            }
+            var table = new DataTable$1.Api(settings);
+            this.classes = $$1.extend(true, {}, FixedColumns.classes);
+            // Get options from user
+            this.c = $$1.extend(true, {}, FixedColumns.defaults, opts);
+            this.s = {
+                dt: table,
+                rtl: $$1(table.table().node()).css('direction') === 'rtl'
+            };
+            // Backwards compatibility for deprecated options
+            if (opts && opts.leftColumns !== undefined) {
+                opts.left = opts.leftColumns;
+            }
+            if (opts && opts.left !== undefined) {
+                this.c[this.s.rtl ? 'end' : 'start'] = opts.left;
+            }
+            if (opts && opts.rightColumns !== undefined) {
+                opts.right = opts.rightColumns;
+            }
+            if (opts && opts.right !== undefined) {
+                this.c[this.s.rtl ? 'start' : 'end'] = opts.right;
+            }
+            this.dom = {
+                bottomBlocker: $$1('<div>').addClass(this.classes.bottomBlocker),
+                topBlocker: $$1('<div>').addClass(this.classes.topBlocker),
+                scroller: $$1('div.dt-scroll-body', this.s.dt.table().container())
+            };
+            if (this.s.dt.settings()[0]._bInitComplete) {
+                // Fixed Columns Initialisation
+                this._addStyles();
+                this._setKeyTableListener();
+            }
+            else {
+                table.one('init.dt.dtfc', function () {
+                    // Fixed Columns Initialisation
+                    _this._addStyles();
+                    _this._setKeyTableListener();
+                });
+            }
+            // Lots or reasons to redraw the column styles
+            table.on('column-sizing.dt.dtfc column-reorder.dt.dtfc draw.dt.dtfc', function () { return _this._addStyles(); });
+            // Column visibility can trigger a number of times quickly, so we debounce it
+            var debounced = DataTable$1.util.debounce(function () {
+                _this._addStyles();
+            }, 50);
+            table.on('column-visibility.dt.dtfc', function () {
+                debounced();
+            });
+            // Add classes to indicate scrolling state for styling
+            this.dom.scroller.on('scroll.dtfc', function () { return _this._scroll(); });
+            this._scroll();
+            // Make class available through dt object
+            table.settings()[0]._fixedColumns = this;
+            table.on('destroy', function () { return _this._destroy(); });
+            return this;
+        }
+        FixedColumns.prototype.end = function (newVal) {
+            // If the value is to change
+            if (newVal !== undefined) {
+                if (newVal >= 0 && newVal <= this.s.dt.columns().count()) {
+                    // Set the new values and redraw the columns
+                    this.c.end = newVal;
+                    this._addStyles();
+                }
+                return this;
+            }
+            return this.c.end;
+        };
+        /**
+         * Left fix - accounting for RTL
+         *
+         * @param count Columns to fix, or undefined for getter
+         */
+        FixedColumns.prototype.left = function (count) {
+            return this.s.rtl
+                ? this.end(count)
+                : this.start(count);
+        };
+        /**
+         * Right fix - accounting for RTL
+         *
+         * @param count Columns to fix, or undefined for getter
+         */
+        FixedColumns.prototype.right = function (count) {
+            return this.s.rtl
+                ? this.start(count)
+                : this.end(count);
+        };
+        FixedColumns.prototype.start = function (newVal) {
+            // If the value is to change
+            if (newVal !== undefined) {
+                if (newVal >= 0 && newVal <= this.s.dt.columns().count()) {
+                    // Set the new values and redraw the columns
+                    this.c.start = newVal;
+                    this._addStyles();
+                }
+                return this;
+            }
+            return this.c.start;
+        };
+        /**
+         * Iterates over the columns, fixing the appropriate ones to the left and right
+         */
+        FixedColumns.prototype._addStyles = function () {
+            var dt = this.s.dt;
+            var that = this;
+            var colCount = this.s.dt.columns(':visible').count();
+            var headerStruct = dt.table().header.structure(':visible');
+            var footerStruct = dt.table().footer.structure(':visible');
+            var widths = dt.columns(':visible').widths().toArray();
+            var wrapper = $$1(dt.table().node()).closest('div.dt-scroll');
+            var scroller = $$1(dt.table().node()).closest('div.dt-scroll-body')[0];
+            var rtl = this.s.rtl;
+            var start = this.c.start;
+            var end = this.c.end;
+            var left = rtl ? end : start;
+            var right = rtl ? start : end;
+            var barWidth = dt.settings()[0].oBrowser.barWidth; // dt internal
+            // Do nothing if no scrolling in the DataTable
+            if (wrapper.length === 0) {
+                return this;
+            }
+            // Bar not needed - no vertical scrolling
+            if (scroller.offsetWidth === scroller.clientWidth) {
+                barWidth = 0;
+            }
+            // Loop over the visible columns, setting their state
+            dt.columns().every(function (colIdx) {
+                var visIdx = dt.column.index('toVisible', colIdx);
+                var offset;
+                // Skip the hidden columns
+                if (visIdx === null) {
+                    return;
+                }
+                if (visIdx < start) {
+                    // Fix to the start
+                    offset = that._sum(widths, visIdx);
+                    that._fixColumn(visIdx, offset, 'start', headerStruct, footerStruct, barWidth);
+                }
+                else if (visIdx >= colCount - end) {
+                    // Fix to the end
+                    offset = that._sum(widths, colCount - visIdx - 1, true);
+                    that._fixColumn(visIdx, offset, 'end', headerStruct, footerStruct, barWidth);
+                }
+                else {
+                    // Release
+                    that._fixColumn(visIdx, 0, 'none', headerStruct, footerStruct, barWidth);
+                }
+            });
+            // Apply classes to table to indicate what state we are in
+            $$1(dt.table().node())
+                .toggleClass(that.classes.tableFixedStart, start > 0)
+                .toggleClass(that.classes.tableFixedEnd, end > 0)
+                .toggleClass(that.classes.tableFixedLeft, left > 0)
+                .toggleClass(that.classes.tableFixedRight, right > 0);
+            // Blocker elements for when scroll bars are always visible
+            var headerEl = dt.table().header();
+            var footerEl = dt.table().footer();
+            var headerHeight = $$1(headerEl).outerHeight();
+            var footerHeight = $$1(footerEl).outerHeight();
+            this.dom.topBlocker
+                .appendTo(wrapper)
+                .css('top', 0)
+                .css(this.s.rtl ? 'left' : 'right', 0)
+                .css('height', headerHeight)
+                .css('width', barWidth + 1)
+                .css('display', barWidth ? 'block' : 'none');
+            if (footerEl) {
+                this.dom.bottomBlocker
+                    .appendTo(wrapper)
+                    .css('bottom', 0)
+                    .css(this.s.rtl ? 'left' : 'right', 0)
+                    .css('height', footerHeight)
+                    .css('width', barWidth + 1)
+                    .css('display', barWidth ? 'block' : 'none');
+            }
+        };
+        /**
+         * Clean up
+         */
+        FixedColumns.prototype._destroy = function () {
+            this.s.dt.off('.dtfc');
+            this.dom.scroller.off('.dtfc');
+            $$1(this.s.dt.table().node())
+                .removeClass(this.classes.tableScrollingEnd + ' ' +
+                this.classes.tableScrollingLeft + ' ' +
+                this.classes.tableScrollingStart + ' ' +
+                this.classes.tableScrollingRight);
+            this.dom.bottomBlocker.remove();
+            this.dom.topBlocker.remove();
+        };
+        /**
+         * Fix or unfix a column
+         *
+         * @param idx Column visible index to operate on
+         * @param offset Offset from the start (pixels)
+         * @param side start, end or none to unfix a column
+         * @param header DT header structure object
+         * @param footer DT footer structure object
+         */
+        FixedColumns.prototype._fixColumn = function (idx, offset, side, header, footer, barWidth) {
+            var _this = this;
+            var dt = this.s.dt;
+            var applyStyles = function (jq, part) {
+                if (side === 'none') {
+                    jq.css('position', '')
+                        .css('left', '')
+                        .css('right', '')
+                        .removeClass(_this.classes.fixedEnd + ' ' +
+                        _this.classes.fixedLeft + ' ' +
+                        _this.classes.fixedRight + ' ' +
+                        _this.classes.fixedStart);
+                }
+                else {
+                    var positionSide = side === 'start' ? 'left' : 'right';
+                    if (_this.s.rtl) {
+                        positionSide = side === 'start' ? 'right' : 'left';
+                    }
+                    var off = offset;
+                    if (side === 'end' && (part === 'header' || part === 'footer')) {
+                        off += barWidth;
+                    }
+                    jq.css('position', 'sticky')
+                        .css(positionSide, off)
+                        .addClass(side === 'start'
+                        ? _this.classes.fixedStart
+                        : _this.classes.fixedEnd)
+                        .addClass(positionSide === 'left'
+                        ? _this.classes.fixedLeft
+                        : _this.classes.fixedRight);
+                }
+            };
+            header.forEach(function (row) {
+                if (row[idx]) {
+                    applyStyles($$1(row[idx].cell), 'header');
+                }
+            });
+            applyStyles(dt.column(idx + ':visible', { page: 'current' }).nodes().to$(), 'body');
+            if (footer) {
+                footer.forEach(function (row) {
+                    if (row[idx]) {
+                        applyStyles($$1(row[idx].cell), 'footer');
+                    }
+                });
+            }
+        };
+        /**
+         * Update classes on the table to indicate if the table is scrolling or not
+         */
+        FixedColumns.prototype._scroll = function () {
+            var scroller = this.dom.scroller[0];
+            // Not a scrolling table
+            if (!scroller) {
+                return;
+            }
+            // Need to update the classes on potentially multiple table tags. There is the
+            // main one, the scrolling ones and if FixedHeader is active, the holding
+            // position ones! jQuery will deduplicate for us.
+            var table = $$1(this.s.dt.table().node())
+                .add(this.s.dt.table().header().parentNode)
+                .add(this.s.dt.table().footer().parentNode)
+                .add('div.dt-scroll-headInner table', this.s.dt.table().container())
+                .add('div.dt-scroll-footInner table', this.s.dt.table().container());
+            var scrollLeft = scroller.scrollLeft; // 0 when fully scrolled left
+            var ltr = !this.s.rtl;
+            var scrollStart = scrollLeft !== 0;
+            var scrollEnd = scroller.scrollWidth > (scroller.clientWidth + Math.abs(scrollLeft) + 1); // extra 1 for Chrome
+            table.toggleClass(this.classes.tableScrollingStart, scrollStart);
+            table.toggleClass(this.classes.tableScrollingEnd, scrollEnd);
+            table.toggleClass(this.classes.tableScrollingLeft, (scrollStart && ltr) || (scrollEnd && !ltr));
+            table.toggleClass(this.classes.tableScrollingRight, (scrollEnd && ltr) || (scrollStart && !ltr));
+        };
+        FixedColumns.prototype._setKeyTableListener = function () {
+            var _this = this;
+            this.s.dt.on('key-focus.dt.dtfc', function (e, dt, cell) {
+                var currScroll;
+                var cellPos = $$1(cell.node()).offset();
+                var scroller = _this.dom.scroller[0];
+                var scroll = $$1($$1(_this.s.dt.table().node()).closest('div.dt-scroll-body'));
+                // If there are fixed columns to the left
+                if (_this.c.start > 0) {
+                    // Get the rightmost left fixed column header, it's position and it's width
+                    var rightMost = $$1(_this.s.dt.column(_this.c.start - 1).header());
+                    var rightMostPos = rightMost.offset();
+                    var rightMostWidth = rightMost.outerWidth();
+                    // If the current highlighted cell is left of the rightmost cell on the screen
+                    if ($$1(cell.node()).hasClass(_this.classes.fixedLeft)) {
+                        // Fixed columns have the scrollbar at the start, always
+                        scroll.scrollLeft(0);
+                    }
+                    else if (cellPos.left < rightMostPos.left + rightMostWidth) {
+                        // Scroll it into view
+                        currScroll = scroll.scrollLeft();
+                        scroll.scrollLeft(currScroll -
+                            (rightMostPos.left + rightMostWidth - cellPos.left));
+                    }
+                }
+                // If there are fixed columns to the right
+                if (_this.c.end > 0) {
+                    // Get the number of columns and the width of the cell as doing right side calc
+                    var numCols = _this.s.dt.columns().data().toArray().length;
+                    var cellWidth = $$1(cell.node()).outerWidth();
+                    // Get the leftmost right fixed column header and it's position
+                    var leftMost = $$1(_this.s.dt.column(numCols - _this.c.end).header());
+                    var leftMostPos = leftMost.offset();
+                    // If the current highlighted cell is right of the leftmost cell on the screen
+                    if ($$1(cell.node()).hasClass(_this.classes.fixedRight)) {
+                        scroll.scrollLeft(scroller.scrollWidth - scroller.clientWidth);
+                    }
+                    else if (cellPos.left + cellWidth > leftMostPos.left) {
+                        // Scroll it into view
+                        currScroll = scroll.scrollLeft();
+                        scroll.scrollLeft(currScroll -
+                            (leftMostPos.left - (cellPos.left + cellWidth)));
+                    }
+                }
+            });
+        };
+        /**
+         * Sum a range of values from an array
+         *
+         * @param widths
+         * @param index
+         * @returns
+         */
+        FixedColumns.prototype._sum = function (widths, index, reverse) {
+            if (reverse === void 0) { reverse = false; }
+            if (reverse) {
+                widths = widths.slice().reverse();
+            }
+            return widths.slice(0, index).reduce(function (accum, val) { return accum + val; }, 0);
+        };
+        FixedColumns.version = '5.0.5';
+        FixedColumns.classes = {
+            bottomBlocker: 'dtfc-bottom-blocker',
+            fixedEnd: 'dtfc-fixed-end',
+            fixedLeft: 'dtfc-fixed-left',
+            fixedRight: 'dtfc-fixed-right',
+            fixedStart: 'dtfc-fixed-start',
+            tableFixedEnd: 'dtfc-has-end',
+            tableFixedLeft: 'dtfc-has-left',
+            tableFixedRight: 'dtfc-has-right',
+            tableFixedStart: 'dtfc-has-start',
+            tableScrollingEnd: 'dtfc-scrolling-end',
+            tableScrollingLeft: 'dtfc-scrolling-left',
+            tableScrollingRight: 'dtfc-scrolling-right',
+            tableScrollingStart: 'dtfc-scrolling-start',
+            topBlocker: 'dtfc-top-blocker'
+        };
+        FixedColumns.defaults = {
+            i18n: {
+                button: 'FixedColumns'
+            },
+            start: 1,
+            end: 0
+        };
+        return FixedColumns;
+    }());
+
+    /*! FixedColumns 5.0.5
+     * © SpryMedia Ltd - datatables.net/license
+     */
+    setJQuery($);
+    $.fn.dataTable.FixedColumns = FixedColumns;
+    $.fn.DataTable.FixedColumns = FixedColumns;
+    var apiRegister = DataTable.Api.register;
+    apiRegister('fixedColumns()', function () {
+        return this;
+    });
+    apiRegister('fixedColumns().start()', function (newVal) {
+        var ctx = this.context[0];
+        if (newVal !== undefined) {
+            ctx._fixedColumns.start(newVal);
+            return this;
+        }
+        else {
+            return ctx._fixedColumns.start();
+        }
+    });
+    apiRegister('fixedColumns().end()', function (newVal) {
+        var ctx = this.context[0];
+        if (newVal !== undefined) {
+            ctx._fixedColumns.end(newVal);
+            return this;
+        }
+        else {
+            return ctx._fixedColumns.end();
+        }
+    });
+    apiRegister('fixedColumns().left()', function (newVal) {
+        var ctx = this.context[0];
+        if (newVal !== undefined) {
+            ctx._fixedColumns.left(newVal);
+            return this;
+        }
+        else {
+            return ctx._fixedColumns.left();
+        }
+    });
+    apiRegister('fixedColumns().right()', function (newVal) {
+        var ctx = this.context[0];
+        if (newVal !== undefined) {
+            ctx._fixedColumns.right(newVal);
+            return this;
+        }
+        else {
+            return ctx._fixedColumns.right();
+        }
+    });
+    DataTable.ext.buttons.fixedColumns = {
+        action: function (e, dt, node, config) {
+            if ($(node).attr('active')) {
+                $(node).removeAttr('active').removeClass('active');
+                dt.fixedColumns().start(0);
+                dt.fixedColumns().end(0);
+            }
+            else {
+                $(node).attr('active', 'true').addClass('active');
+                dt.fixedColumns().start(config.config.start);
+                dt.fixedColumns().end(config.config.end);
+            }
+        },
+        config: {
+            start: 1,
+            end: 0
+        },
+        init: function (dt, node, config) {
+            if (dt.settings()[0]._fixedColumns === undefined) {
+                _init(dt.settings(), config.config);
+            }
+            $(node).attr('active', 'true').addClass('active');
+            dt.button(node).text(config.text || dt.i18n('buttons.fixedColumns', dt.settings()[0]._fixedColumns.c.i18n.button));
+        },
+        text: null
+    };
+    function _init(settings, options) {
+        if (options === void 0) { options = null; }
+        var api = new DataTable.Api(settings);
+        var opts = options
+            ? options
+            : api.init().fixedColumns || DataTable.defaults.fixedColumns;
+        var fixedColumns = new FixedColumns(api, opts);
+        return fixedColumns;
+    }
+    // Attach a listener to the document which listens for DataTables initialisation
+    // events so we can automatically initialise
+    $(document).on('plugin-init.dt', function (e, settings) {
+        if (e.namespace !== 'dt') {
+            return;
+        }
+        if (settings.oInit.fixedColumns ||
+            DataTable.defaults.fixedColumns) {
+            if (!settings._fixedColumns) {
+                _init(settings, null);
+            }
+        }
+    });
+
+})();
+
+
+return DataTable;
+}));
+
+
+/*! FixedHeader 4.0.5
+ * © SpryMedia Ltd - datatables.net/license
+ */
+
+(function( factory ){
+	if ( typeof define === 'function' && define.amd ) {
+		// AMD
+		define( ['jquery', 'datatables.net'], function ( $ ) {
+			return factory( $, window, document );
+		} );
+	}
+	else if ( typeof exports === 'object' ) {
+		// CommonJS
+		var jq = require('jquery');
+		var cjsRequires = function (root, $) {
+			if ( ! $.fn.dataTable ) {
+				require('datatables.net')(root, $);
+			}
+		};
+
+		if (typeof window === 'undefined') {
+			module.exports = function (root, $) {
+				if ( ! root ) {
+					// CommonJS environments without a window global must pass a
+					// root. This will give an error otherwise
+					root = window;
+				}
+
+				if ( ! $ ) {
+					$ = jq( root );
+				}
+
+				cjsRequires( root, $ );
+				return factory( $, root, root.document );
+			};
+		}
+		else {
+			cjsRequires( window, jq );
+			module.exports = factory( jq, window, window.document );
+		}
+	}
+	else {
+		// Browser
+		factory( jQuery, window, document );
+	}
+}(function( $, window, document ) {
+'use strict';
+var DataTable = $.fn.dataTable;
+
+
+
+/**
+ * @summary     FixedHeader
+ * @description Fix a table's header or footer, so it is always visible while
+ *              scrolling
+ * @version     4.0.5
+ * @author      SpryMedia Ltd
+ * @contact     datatables.net
+ *
+ * This source file is free software, available under the following license:
+ *   MIT license - http://datatables.net/license/mit
+ *
+ * This source file is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the license files for details.
+ *
+ * For details please refer to: http://www.datatables.net
+ */
+
+var _instCounter = 0;
+
+var FixedHeader = function (dt, config) {
+	if (!DataTable.versionCheck('2')) {
+		throw 'Warning: FixedHeader requires DataTables 2 or newer';
+	}
+
+	// Sanity check - you just know it will happen
+	if (!(this instanceof FixedHeader)) {
+		throw "FixedHeader must be initialised with the 'new' keyword.";
+	}
+
+	// Allow a boolean true for defaults
+	if (config === true) {
+		config = {};
+	}
+
+	dt = new DataTable.Api(dt);
+
+	this.c = $.extend(true, {}, FixedHeader.defaults, config);
+
+	this.s = {
+		dt: dt,
+		position: {
+			theadTop: 0,
+			tbodyTop: 0,
+			tfootTop: 0,
+			tfootBottom: 0,
+			width: 0,
+			left: 0,
+			tfootHeight: 0,
+			theadHeight: 0,
+			windowHeight: $(window).height(),
+			visible: true
+		},
+		headerMode: null,
+		footerMode: null,
+		autoWidth: dt.settings()[0].oFeatures.bAutoWidth,
+		namespace: '.dtfc' + _instCounter++,
+		scrollLeft: {
+			header: -1,
+			footer: -1
+		},
+		enable: true,
+		autoDisable: false
+	};
+
+	this.dom = {
+		floatingHeader: null,
+		thead: $(dt.table().header()),
+		tbody: $(dt.table().body()),
+		tfoot: $(dt.table().footer()),
+		header: {
+			host: null,
+			scrollAdjust: null,
+			floating: null,
+			floatingParent: $(
+				'<div class="dtfh-floatingparent">' + // location
+					'<div class="dtfh-floating-limiter">' + // hidden overflow / scrolling
+						'<div></div>' + // adjustment for scrollbar (padding)
+					'</div>' + 
+				'</div>'),
+			limiter: null,
+			placeholder: null
+		},
+		footer: {
+			host: null,
+			scrollAdjust: null,
+			floating: null,
+			floatingParent: $(
+				'<div class="dtfh-floatingparent">' +
+					'<div class="dtfh-floating-limiter">' +
+						'<div></div>' +
+					'</div>' + 
+				'</div>'),
+			limiter: null,
+			placeholder: null
+		}
+	};
+
+	var dom = this.dom;
+
+	dom.header.host = dom.thead.parent();
+	dom.header.limiter = dom.header.floatingParent.children();
+	dom.header.scrollAdjust = dom.header.limiter.children();
+
+	dom.footer.host = dom.tfoot.parent();
+	dom.footer.limiter = dom.footer.floatingParent.children();
+	dom.footer.scrollAdjust = dom.footer.limiter.children();
+
+	var dtSettings = dt.settings()[0];
+	if (dtSettings._fixedHeader) {
+		throw (
+			'FixedHeader already initialised on table ' + dtSettings.nTable.id
+		);
+	}
+
+	dtSettings._fixedHeader = this;
+
+	this._constructor();
+};
+
+/*
+ * Variable: FixedHeader
+ * Purpose:  Prototype for FixedHeader
+ * Scope:    global
+ */
+$.extend(FixedHeader.prototype, {
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 * API methods
+	 */
+
+	/**
+	 * Kill off FH and any events
+	 */
+	destroy: function () {
+		var dom = this.dom;
+
+		this.s.dt.off('.dtfc');
+		$(window).off(this.s.namespace);
+
+		// Remove clones of FC blockers
+		if (dom.header.rightBlocker) {
+			dom.header.rightBlocker.remove();
+		}
+		if (dom.header.leftBlocker) {
+			dom.header.leftBlocker.remove();
+		}
+		if (dom.footer.rightBlocker) {
+			dom.footer.rightBlocker.remove();
+		}
+		if (dom.footer.leftBlocker) {
+			dom.footer.leftBlocker.remove();
+		}
+
+		if (this.c.header) {
+			this._modeChange('in-place', 'header', true);
+		}
+
+		if (this.c.footer && dom.tfoot.length) {
+			this._modeChange('in-place', 'footer', true);
+		}
+	},
+
+	/**
+	 * Enable / disable the fixed elements
+	 *
+	 * @param  {boolean} enable `true` to enable, `false` to disable
+	 */
+	enable: function (enable, update, type) {
+		this.s.enable = enable;
+
+		this.s.enableType = type;
+
+		if (update || update === undefined) {
+			this._positions();
+			this._scroll(true);
+		}
+	},
+
+	/**
+	 * Get enabled status
+	 */
+	enabled: function () {
+		return this.s.enable;
+	},
+
+	/**
+	 * Set header offset
+	 *
+	 * @param  {int} new value for headerOffset
+	 */
+	headerOffset: function (offset) {
+		if (offset !== undefined) {
+			this.c.headerOffset = offset;
+			this.update();
+		}
+
+		return this.c.headerOffset;
+	},
+
+	/**
+	 * Set footer offset
+	 *
+	 * @param  {int} new value for footerOffset
+	 */
+	footerOffset: function (offset) {
+		if (offset !== undefined) {
+			this.c.footerOffset = offset;
+			this.update();
+		}
+
+		return this.c.footerOffset;
+	},
+
+	/**
+	 * Recalculate the position of the fixed elements and force them into place
+	 */
+	update: function (force) {
+		var table = this.s.dt.table().node();
+
+		// Update should only do something if enabled by the dev.
+		if (!this.s.enable && !this.s.autoDisable) {
+			return;
+		}
+
+		if ($(table).is(':visible')) {
+			this.s.autoDisable = false;
+			this.enable(true, false);
+		}
+		else {
+			this.s.autoDisable = true;
+			this.enable(false, false);
+		}
+
+		// Don't update if header is not in the document atm (due to
+		// async events)
+		if ($(table).children('thead').length === 0) {
+			return;
+		}
+
+		this._positions();
+		this._scroll(force !== undefined ? force : true);
+		this._widths(this.dom.header);
+		this._widths(this.dom.footer);
+	},
+
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 * Constructor
+	 */
+
+	/**
+	 * FixedHeader constructor - adding the required event listeners and
+	 * simple initialisation
+	 *
+	 * @private
+	 */
+	_constructor: function () {
+		var that = this;
+		var dt = this.s.dt;
+
+		$(window)
+			.on('scroll' + this.s.namespace, function () {
+				that._scroll();
+			})
+			.on(
+				'resize' + this.s.namespace,
+				DataTable.util.throttle(function () {
+					that.s.position.windowHeight = $(window).height();
+					that.update();
+				}, 50)
+			);
+
+		var autoHeader = $('.fh-fixedHeader');
+		if (!this.c.headerOffset && autoHeader.length) {
+			this.c.headerOffset = autoHeader.outerHeight();
+		}
+
+		var autoFooter = $('.fh-fixedFooter');
+		if (!this.c.footerOffset && autoFooter.length) {
+			this.c.footerOffset = autoFooter.outerHeight();
+		}
+
+		dt.on(
+			'column-reorder.dt.dtfc column-visibility.dt.dtfc column-sizing.dt.dtfc responsive-display.dt.dtfc',
+			function (e, ctx) {
+				that.update();
+			}
+		).on('draw.dt.dtfc', function (e, ctx) {
+			// For updates from our own table, don't reclone, but for all others, do
+			that.update(ctx === dt.settings()[0] ? false : true);
+		});
+
+		dt.on('destroy.dtfc', function () {
+			that.destroy();
+		});
+
+		this._positions();
+		this._scroll();
+	},
+
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 * Private methods
+	 */
+
+	/**
+	 * Clone a fixed item to act as a place holder for the original element
+	 * which is moved into a clone of the table element, and moved around the
+	 * document to give the fixed effect.
+	 *
+	 * @param  {string}  item  'header' or 'footer'
+	 * @param  {boolean} force Force the clone to happen, or allow automatic
+	 *   decision (reuse existing if available)
+	 * @private
+	 */
+	_clone: function (item, force) {
+		var that = this;
+		var dt = this.s.dt;
+		var itemDom = this.dom[item];
+		var itemElement = item === 'header' ? this.dom.thead : this.dom.tfoot;
+
+		// If footer and scrolling is enabled then we don't clone
+		// Instead the table's height is decreased accordingly - see `_scroll()`
+		if (item === 'footer' && this._scrollEnabled()) {
+			return;
+		}
+
+		if (!force && itemDom.floating) {
+			// existing floating element - reuse it
+			itemDom.floating.removeClass(
+				'fixedHeader-floating fixedHeader-locked'
+			);
+		}
+		else {
+			if (itemDom.floating) {
+				if (itemDom.placeholder !== null) {
+					itemDom.placeholder.detach();
+				}
+
+				itemDom.floating.detach();
+			}
+
+			var tableNode = $(dt.table().node());
+			var scrollBody = $(tableNode.parent());
+			var scrollEnabled = this._scrollEnabled();
+
+			itemDom.floating = $(dt.table().node().cloneNode(false))
+				.attr('aria-hidden', 'true')
+				.css({
+					top: 0,
+					left: 0
+				})
+				.removeAttr('id');
+
+			itemDom.floatingParent
+				.css({
+					width: scrollBody[0].offsetWidth,
+					position: 'fixed',
+					left: scrollEnabled
+						? tableNode.offset().left + scrollBody.scrollLeft()
+						: 0
+				})
+				.css(
+					item === 'header'
+						? {
+								top: this.c.headerOffset,
+								bottom: ''
+						}
+						: {
+								top: '',
+								bottom: this.c.footerOffset
+						}
+				)
+				.addClass(
+					item === 'footer'
+						? 'dtfh-floatingparent-foot'
+						: 'dtfh-floatingparent-head'
+				)
+				.appendTo('body')
+				.children()
+				.eq(0);
+
+			itemDom.limiter
+				.css({
+					width: '100%',
+					overflow: 'hidden',
+					height: 'fit-content'
+			});
+
+			itemDom.scrollAdjust
+				.append(itemDom.floating);
+
+			this._stickyPosition(itemDom.floating, '-');
+
+			var scrollLeftUpdate = function () {
+				var scrollLeft = scrollBody.scrollLeft();
+				that.s.scrollLeft = { footer: scrollLeft, header: scrollLeft };
+				itemDom.limiter.scrollLeft(that.s.scrollLeft.header);
+			};
+
+			scrollLeftUpdate();
+			scrollBody.off('scroll.dtfh').on('scroll.dtfh', scrollLeftUpdate);
+
+			// Need padding on the header's container to allow for a scrollbar,
+			// just like how DataTables handles it
+			itemDom.scrollAdjust.css({
+				width: 'fit-content',
+				paddingRight: that.s.dt.settings()[0].oBrowser.barWidth
+			});
+
+			// Blocker to hide the table behind the scrollbar - this needs to use
+			// fixed positioning in the container since we don't have an outer wrapper
+			let blocker = $(
+				item === 'footer'
+					? 'div.dtfc-bottom-blocker'
+					: 'div.dtfc-top-blocker',
+				dt.table().container()
+			);
+
+			if (blocker.length) {
+				blocker
+					.clone()
+					.appendTo(itemDom.floatingParent)
+					.css({
+						position: 'fixed',
+						right: blocker.width()
+					});
+			}
+
+			// Insert a fake thead/tfoot into the DataTable to stop it jumping around
+			itemDom.placeholder = itemElement.clone(false);
+			itemDom.placeholder.find('*[id]').removeAttr('id');
+
+			// Move the thead / tfoot elements around - original into the floating
+			// element and clone into the original table
+			itemDom.host.prepend(itemDom.placeholder);
+			itemDom.floating.append(itemElement);
+
+			this._widths(itemDom);
+
+			return scrollLeftUpdate;
+		}
+	},
+
+	/**
+	 * This method sets the sticky position of the header elements to match fixed columns
+	 * @param {JQuery<HTMLElement>} el
+	 * @param {string} sign
+	 */
+	_stickyPosition: function (el, sign) {
+		if (this._scrollEnabled()) {
+			var that = this;
+			var rtl = $(that.s.dt.table().node()).css('direction') === 'rtl';
+
+			el.find('th').each(function () {
+				// Find out if fixed header has previously set this column
+				if ($(this).css('position') === 'sticky') {
+					var right = $(this).css('right');
+					var left = $(this).css('left');
+					var potential;
+
+					if (right !== 'auto' && !rtl) {
+						potential = +right.replace(/px/g, '')
+
+						$(this).css('right', potential > 0 ? potential : 0);
+					}
+					else if (left !== 'auto' && rtl) {
+						potential = +left.replace(/px/g, '');
+
+						$(this).css('left', potential > 0 ? potential : 0);
+					}
+				}
+			});
+		}
+	},
+
+	/**
+	 * Reposition the floating elements to take account of horizontal page
+	 * scroll
+	 *
+	 * @param  {string} item       The `header` or `footer`
+	 * @param  {int}    scrollLeft Document scrollLeft
+	 * @private
+	 */
+	_horizontal: function (item, scrollLeft) {
+		var itemDom = this.dom[item];
+		var lastScrollLeft = this.s.scrollLeft;
+
+		if (itemDom.floating && lastScrollLeft[item] !== scrollLeft) {
+			// If scrolling is enabled we need to match the floating header to the body
+			if (this._scrollEnabled()) {
+				var newScrollLeft = $(
+					$(this.s.dt.table().node()).parent()
+				).scrollLeft();
+				itemDom.floating.scrollLeft(newScrollLeft);
+				itemDom.floatingParent.scrollLeft(newScrollLeft);
+			}
+
+			lastScrollLeft[item] = scrollLeft;
+		}
+	},
+
+	/**
+	 * Change from one display mode to another. Each fixed item can be in one
+	 * of:
+	 *
+	 * * `in-place` - In the main DataTable
+	 * * `in` - Floating over the DataTable
+	 * * `below` - (Header only) Fixed to the bottom of the table body
+	 * * `above` - (Footer only) Fixed to the top of the table body
+	 *
+	 * @param  {string}  mode        Mode that the item should be shown in
+	 * @param  {string}  item        'header' or 'footer'
+	 * @param  {boolean} forceChange Force a redraw of the mode, even if already
+	 *     in that mode.
+	 * @private
+	 */
+	_modeChange: function (mode, item, forceChange) {
+		var dt = this.s.dt;
+		var itemDom = this.dom[item];
+		var position = this.s.position;
+
+		// Just determine if scroll is enabled once
+		var scrollEnabled = this._scrollEnabled();
+
+		// If footer and scrolling is enabled then we don't clone
+		// Instead the table's height is decreased accordingly - see `_scroll()`
+		if (item === 'footer' && scrollEnabled) {
+			return;
+		}
+
+		// It isn't trivial to add a !important css attribute...
+		var importantWidth = function (w) {
+			itemDom.floating[0].style.setProperty('width', w + 'px', 'important');
+
+			// If not scrolling also have to update the floatingParent
+			if (!scrollEnabled) {
+				itemDom.floatingParent[0].style.setProperty('width', w + 'px', 'important');
+			}
+		};
+
+		// Record focus. Browser's will cause input elements to loose focus if
+		// they are inserted else where in the doc
+		var tablePart = this.dom[item === 'footer' ? 'tfoot' : 'thead'];
+		var focus = $.contains(tablePart[0], document.activeElement)
+			? document.activeElement
+			: null;
+		var scrollBody = $($(this.s.dt.table().node()).parent());
+
+		if (mode === 'in-place') {
+			// Insert the header back into the table's real header
+			if (itemDom.placeholder) {
+				itemDom.placeholder.remove();
+				itemDom.placeholder = null;
+			}
+
+			if (!$.contains(itemDom.host[0], tablePart[0])) {
+				if (item === 'header') {
+					itemDom.host.prepend(tablePart);
+				}
+				else {
+					itemDom.host.append(tablePart);
+				}
+			}
+
+			if (itemDom.floating) {
+				itemDom.floating.remove();
+				itemDom.floating = null;
+				this._stickyPosition(itemDom.host, '+');
+			}
+
+			if (itemDom.floatingParent) {
+				itemDom.floatingParent.find('div.dtfc-top-blocker').remove();
+				itemDom.floatingParent.remove();
+			}
+
+			$($(itemDom.host.parent()).parent()).scrollLeft(
+				scrollBody.scrollLeft()
+			);
+		}
+		else if (mode === 'in') {
+			// Remove the header from the real table and insert into a fixed
+			// positioned floating table clone
+			let scrollLeftUpdate = this._clone(item, forceChange);
+
+			// Get useful position values
+			var scrollOffset = scrollBody.offset();
+			var windowTop = $(document).scrollTop();
+			var windowHeight = $(window).height();
+			var windowBottom = windowTop + windowHeight;
+			var bodyTop = scrollEnabled ? scrollOffset.top : position.tbodyTop;
+			var bodyBottom = scrollEnabled
+				? scrollOffset.top + scrollBody.outerHeight()
+				: position.tfootTop;
+
+			// Calculate the amount that the footer or header needs to be shuffled
+			var shuffle;
+
+			if (item === 'footer') {
+				shuffle =
+					bodyTop > windowBottom
+						? position.tfootHeight // Yes - push the footer below
+						: bodyTop + position.tfootHeight - windowBottom; // No
+			}
+			else {
+				// Otherwise must be a header so get the difference from the bottom of the
+				//  desired floating header and the bottom of the table body
+				shuffle =
+					windowTop +
+					this.c.headerOffset +
+					position.theadHeight -
+					bodyBottom;
+			}
+
+			// Set the top or bottom based off of the offset and the shuffle value
+			var prop = item === 'header' ? 'top' : 'bottom';
+			var val = this.c[item + 'Offset'] - (shuffle > 0 ? shuffle : 0);
+
+			itemDom.floating.addClass('fixedHeader-floating');
+			itemDom.floatingParent
+				.css(prop, val)
+				.css({
+					left: position.left,
+					'z-index': 3
+				});
+
+			importantWidth(position.width);
+
+			if (scrollLeftUpdate) {
+				scrollLeftUpdate();
+			}
+
+			if (item === 'footer') {
+				itemDom.floating.css('top', '');
+			}
+		}
+		else if (mode === 'below') {
+			// only used for the header
+			// Fix the position of the floating header at base of the table body
+			this._clone(item, forceChange);
+
+			itemDom.floating.addClass('fixedHeader-locked');
+			itemDom.floatingParent.css({
+				position: 'absolute',
+				top: position.tfootTop - position.theadHeight,
+				left: position.left + 'px'
+			});
+
+			importantWidth(position.width);
+		}
+		else if (mode === 'above') {
+			// only used for the footer
+			// Fix the position of the floating footer at top of the table body
+			this._clone(item, forceChange);
+
+			itemDom.floating.addClass('fixedHeader-locked');
+			itemDom.floatingParent.css({
+				position: 'absolute',
+				top: position.tbodyTop,
+				left: position.left + 'px'
+			});
+
+			importantWidth(position.width);
+		}
+
+		// Restore focus if it was lost
+		if (focus && focus !== document.activeElement) {
+			setTimeout(function () {
+				focus.focus();
+			}, 10);
+		}
+
+		this.s.scrollLeft.header = -1;
+		this.s.scrollLeft.footer = -1;
+		this.s[item + 'Mode'] = mode;
+
+		dt.trigger('fixedheader-mode', [mode, item]);
+	},
+
+	/**
+	 * Cache the positional information that is required for the mode
+	 * calculations that FixedHeader performs.
+	 *
+	 * @private
+	 */
+	_positions: function () {
+		var dt = this.s.dt;
+		var table = dt.table();
+		var position = this.s.position;
+		var dom = this.dom;
+		var tableNode = $(table.node());
+		var scrollEnabled = this._scrollEnabled();
+
+		// Need to use the header and footer that are in the main table,
+		// regardless of if they are clones, since they hold the positions we
+		// want to measure from
+		var thead = $(dt.table().header());
+		var tfoot = $(dt.table().footer());
+		var tbody = dom.tbody;
+		var scrollBody = tableNode.parent();
+
+		position.visible = tableNode.is(':visible');
+		position.width = tableNode.outerWidth();
+		position.left = tableNode.offset().left;
+		position.theadTop = thead.offset().top;
+		position.tbodyTop = scrollEnabled
+			? scrollBody.offset().top
+			: tbody.offset().top;
+		position.tbodyHeight = scrollEnabled
+			? scrollBody.outerHeight()
+			: tbody.outerHeight();
+		position.theadHeight = thead.outerHeight();
+		position.theadBottom = position.theadTop + position.theadHeight;
+		position.tfootTop = position.tbodyTop + position.tbodyHeight; //tfoot.offset().top;
+
+		if (tfoot.length) {
+			position.tfootBottom = position.tfootTop + tfoot.outerHeight();
+			position.tfootHeight = tfoot.outerHeight();
+		}
+		else {
+			position.tfootBottom = position.tfootTop;
+			position.tfootHeight = 0;
+		}
+	},
+
+	/**
+	 * Mode calculation - determine what mode the fixed items should be placed
+	 * into.
+	 *
+	 * @param  {boolean} forceChange Force a redraw of the mode, even if already
+	 *     in that mode.
+	 * @private
+	 */
+	_scroll: function (forceChange) {
+		if (this.s.dt.settings()[0].bDestroying) {
+			return;
+		}
+
+		// ScrollBody details
+		var scrollEnabled = this._scrollEnabled();
+		var scrollBody = $(this.s.dt.table().node()).parent();
+		var scrollOffset = scrollBody.offset();
+		var scrollHeight = scrollBody.outerHeight();
+
+		// Window details
+		var windowLeft = $(document).scrollLeft();
+		var windowTop = $(document).scrollTop();
+		var windowHeight = $(window).height();
+		var windowBottom = windowHeight + windowTop;
+
+		var position = this.s.position;
+		var headerMode, footerMode;
+
+		// Body Details
+		var bodyTop = scrollEnabled ? scrollOffset.top : position.tbodyTop;
+		var bodyLeft = scrollEnabled ? scrollOffset.left : position.left;
+		var bodyBottom = scrollEnabled
+			? scrollOffset.top + scrollHeight
+			: position.tfootTop;
+		var bodyWidth = scrollEnabled
+			? scrollBody.outerWidth()
+			: position.tbodyWidth;
+
+		if (this.c.header) {
+			if (!this.s.enable) {
+				headerMode = 'in-place';
+			}
+			// The header is in it's normal place if the body top is lower than
+			//  the scroll of the window plus the headerOffset and the height of the header
+			else if (
+				!position.visible ||
+				windowTop + this.c.headerOffset + position.theadHeight <=
+					bodyTop
+			) {
+				headerMode = 'in-place';
+			}
+			// The header should be floated if
+			else if (
+				// The scrolling plus the header offset plus the height of the header is lower than the top of the body
+				windowTop + this.c.headerOffset + position.theadHeight >
+					bodyTop &&
+				// And the scrolling at the top plus the header offset is above the bottom of the body
+				windowTop + this.c.headerOffset + position.theadHeight <
+					bodyBottom
+			) {
+				headerMode = 'in';
+
+				// Further to the above, If the scrolling plus the header offset plus the header height is lower
+				// than the bottom of the table a shuffle is required so have to force the calculation
+				if (
+					windowTop + this.c.headerOffset + position.theadHeight >
+						bodyBottom ||
+					this.dom.header.floatingParent === undefined
+				) {
+					forceChange = true;
+				}
+				else {
+					var child = this.dom.header.floatingParent
+						.css({
+							top: this.c.headerOffset,
+							position: 'fixed'
+						})
+						.children()
+						.eq(0);
+
+					if (child.find(this.dom.header.floating).length === 0) {
+						child.append(this.dom.header.floating);
+					}
+				}
+			}
+			// Anything else and the view is below the table
+			else {
+				headerMode = 'below';
+			}
+
+			if (forceChange || headerMode !== this.s.headerMode) {
+				this._modeChange(headerMode, 'header', forceChange);
+			}
+
+			this._horizontal('header', windowLeft);
+		}
+
+		var header = {
+			offset: { top: 0, left: 0 },
+			height: 0
+		};
+		var footer = {
+			offset: { top: 0, left: 0 },
+			height: 0
+		};
+
+		if (
+			this.c.footer &&
+			this.dom.tfoot.length &&
+			this.dom.tfoot.find('th, td').length
+		) {
+			if (!this.s.enable) {
+				footerMode = 'in-place';
+			}
+			else if (
+				!position.visible ||
+				position.tfootBottom + this.c.footerOffset <= windowBottom
+			) {
+				footerMode = 'in-place';
+			}
+			else if (
+				bodyBottom + position.tfootHeight + this.c.footerOffset >
+					windowBottom &&
+				bodyTop + this.c.footerOffset < windowBottom
+			) {
+				footerMode = 'in';
+				forceChange = true;
+			}
+			else {
+				footerMode = 'above';
+			}
+
+			if (forceChange || footerMode !== this.s.footerMode) {
+				this._modeChange(footerMode, 'footer', forceChange);
+			}
+
+			this._horizontal('footer', windowLeft);
+
+			var getOffsetHeight = function (el) {
+				return {
+					offset: el.offset(),
+					height: el.outerHeight()
+				};
+			};
+
+			header = this.dom.header.floating
+				? getOffsetHeight(this.dom.header.floating)
+				: getOffsetHeight(this.dom.thead);
+			footer = this.dom.footer.floating
+				? getOffsetHeight(this.dom.footer.floating)
+				: getOffsetHeight(this.dom.tfoot);
+
+			// If scrolling is enabled and the footer is off the screen
+			if (scrollEnabled && footer.offset.top > windowTop) {
+				// && footer.offset.top >= windowBottom) {
+				// Calculate the gap between the top of the scrollBody and the top of the window
+				var overlap = windowTop - scrollOffset.top;
+				// The new height is the bottom of the window
+				var newHeight =
+					windowBottom +
+					// If the gap between the top of the scrollbody and the window is more than
+					//  the height of the header then the top of the table is still visible so add that gap
+					// Doing this has effectively calculated the height from the top of the table to the bottom of the current page
+					(overlap > -header.height ? overlap : 0) -
+					// Take from that
+					// The top of the header plus
+					(header.offset.top +
+						// The header height if the standard header is present
+						(overlap < -header.height ? header.height : 0) +
+						// And the height of the footer
+						footer.height);
+
+				// Don't want a negative height
+				if (newHeight < 0) {
+					newHeight = 0;
+				}
+
+				// At the end of the above calculation the space between the header (top of the page if floating)
+				// and the point just above the footer should be the new value for the height of the table.
+				scrollBody.outerHeight(newHeight);
+
+				// Need some rounding here as sometimes very small decimal places are encountered
+				// If the actual height is bigger or equal to the height we just applied then the footer is "Floating"
+				if (
+					Math.round(scrollBody.outerHeight()) >=
+					Math.round(newHeight)
+				) {
+					$(this.dom.tfoot.parent()).addClass('fixedHeader-floating');
+				}
+				// Otherwise max-width has kicked in so it is not floating
+				else {
+					$(this.dom.tfoot.parent()).removeClass(
+						'fixedHeader-floating'
+					);
+				}
+			}
+		}
+
+		if (this.dom.header.floating) {
+			this.dom.header.floatingParent.css('left', bodyLeft - windowLeft);
+		}
+		if (this.dom.footer.floating) {
+			this.dom.footer.floatingParent.css('left', bodyLeft - windowLeft);
+		}
+
+		// If fixed columns is being used on this table then the blockers need to be copied across
+		// Cloning these is cleaner than creating as our own as it will keep consistency with fixedColumns automatically
+		// ASSUMING that the class remains the same
+		if (this.s.dt.settings()[0]._fixedColumns !== undefined) {
+			var adjustBlocker = function (side, end, el) {
+				if (el === undefined) {
+					var blocker = $(
+						'div.dtfc-' + side + '-' + end + '-blocker'
+					);
+
+					el =
+						blocker.length === 0
+							? null
+							: blocker.clone().css('z-index', 1);
+				}
+
+				if (el !== null) {
+					if (headerMode === 'in' || headerMode === 'below') {
+						el.appendTo('body').css({
+							top:
+								end === 'top'
+									? header.offset.top
+									: footer.offset.top,
+							left:
+								side === 'right'
+									? bodyLeft + bodyWidth - el.width()
+									: bodyLeft
+						});
+					}
+					else {
+						el.detach();
+					}
+				}
+
+				return el;
+			};
+
+			// Adjust all blockers
+			this.dom.header.rightBlocker = adjustBlocker(
+				'right',
+				'top',
+				this.dom.header.rightBlocker
+			);
+			this.dom.header.leftBlocker = adjustBlocker(
+				'left',
+				'top',
+				this.dom.header.leftBlocker
+			);
+			this.dom.footer.rightBlocker = adjustBlocker(
+				'right',
+				'bottom',
+				this.dom.footer.rightBlocker
+			);
+			this.dom.footer.leftBlocker = adjustBlocker(
+				'left',
+				'bottom',
+				this.dom.footer.leftBlocker
+			);
+		}
+	},
+
+	/**
+	 * Function to check if scrolling is enabled on the table or not
+	 * @returns Boolean value indicating if scrolling on the table is enabled or not
+	 */
+	_scrollEnabled: function () {
+		var oScroll = this.s.dt.settings()[0].oScroll;
+		if (oScroll.sY !== '' || oScroll.sX !== '') {
+			return true;
+		}
+		return false;
+	},
+
+	/**
+	 * Realign columns by using the colgroup tag and
+	 * checking column widths
+	 */
+	_widths: function (itemDom) {
+		if (! itemDom || ! itemDom.placeholder) {
+			return;
+		}
+
+		// Match the table overall width
+		var tableNode = $(this.s.dt.table().node());
+		var scrollBody = $(tableNode.parent());
+
+		itemDom.floatingParent.css('width', scrollBody[0].offsetWidth);
+		itemDom.floating.css('width', tableNode[0].offsetWidth);
+
+		// Strip out the old colgroup
+		$('colgroup', itemDom.floating).remove();
+
+		// Copy the `colgroup` element to define the number of columns - needed
+		// for complex header cases where a column might not have a unique
+		// header
+		var cols = itemDom.placeholder
+			.parent()
+			.find('colgroup')
+			.clone()
+			.appendTo(itemDom.floating)
+			.find('col');
+
+		// However, the widths defined in the colgroup from the DataTable might
+		// not exactly reflect the actual widths of the columns (content can
+		// force it to stretch). So we need to copy the actual widths into the
+		// colgroup / col's used for the floating header.
+		var widths = this.s.dt.columns(':visible').widths();
+
+		for (var i=0 ; i<widths.length ; i++) {
+			cols.eq(i).css('width', widths[i]);
+		}
+	}
+});
+
+/**
+ * Version
+ * @type {String}
+ * @static
+ */
+FixedHeader.version = '4.0.5';
+
+/**
+ * Defaults
+ * @type {Object}
+ * @static
+ */
+FixedHeader.defaults = {
+	header: true,
+	footer: false,
+	headerOffset: 0,
+	footerOffset: 0
+};
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * DataTables interfaces
+ */
+
+// Attach for constructor access
+$.fn.dataTable.FixedHeader = FixedHeader;
+$.fn.DataTable.FixedHeader = FixedHeader;
+
+// DataTables creation - check if the FixedHeader option has been defined on the
+// table and if so, initialise
+$(document).on('init.dt.dtfh', function (e, settings, json) {
+	if (e.namespace !== 'dt') {
+		return;
+	}
+
+	var init = settings.oInit.fixedHeader;
+	var defaults = DataTable.defaults.fixedHeader;
+
+	if ((init || defaults) && !settings._fixedHeader) {
+		var opts = $.extend({}, defaults, init);
+
+		if (init !== false) {
+			new FixedHeader(settings, opts);
+		}
+	}
+});
+
+// DataTables API methods
+DataTable.Api.register('fixedHeader()', function () { });
+
+DataTable.Api.register('fixedHeader.adjust()', function () {
+	return this.iterator('table', function (ctx) {
+		var fh = ctx._fixedHeader;
+
+		if (fh) {
+			fh.update();
+		}
+	});
+});
+
+DataTable.Api.register('fixedHeader.enable()', function (flag) {
+	return this.iterator('table', function (ctx) {
+		var fh = ctx._fixedHeader;
+
+		flag = flag !== undefined ? flag : true;
+		if (fh && flag !== fh.enabled()) {
+			fh.enable(flag);
+		}
+	});
+});
+
+DataTable.Api.register('fixedHeader.enabled()', function () {
+	if (this.context.length) {
+		var fh = this.context[0]._fixedHeader;
+
+		if (fh) {
+			return fh.enabled();
+		}
+	}
+
+	return false;
+});
+
+DataTable.Api.register('fixedHeader.disable()', function () {
+	return this.iterator('table', function (ctx) {
+		var fh = ctx._fixedHeader;
+
+		if (fh && fh.enabled()) {
+			fh.enable(false);
+		}
+	});
+});
+
+$.each(['header', 'footer'], function (i, el) {
+	DataTable.Api.register('fixedHeader.' + el + 'Offset()', function (offset) {
+		var ctx = this.context;
+
+		if (offset === undefined) {
+			return ctx.length && ctx[0]._fixedHeader
+				? ctx[0]._fixedHeader[el + 'Offset']()
+				: undefined;
+		}
+
+		return this.iterator('table', function (ctx) {
+			var fh = ctx._fixedHeader;
+
+			if (fh) {
+				fh[el + 'Offset'](offset);
+			}
+		});
+	});
+});
 
 
 return DataTable;
