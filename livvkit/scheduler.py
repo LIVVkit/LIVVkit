@@ -118,7 +118,8 @@ def run_quiet(run_type, module, config, group=True):
 def launch_processes(run_type, tests, run_module, config):
     """ Helper method to launch processes and sync output """
     test_summaries = {}
-    with mp.Pool(livvkit.pool_size) as pool:
+    ctx = mp.get_context("fork")
+    with ctx.Pool(livvkit.pool_size) as pool:
         results = [
             pool.apply_async(pool_worker, (run_type, run_module.run_suite, t, config[t])) for t in tests
         ]
