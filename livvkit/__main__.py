@@ -126,6 +126,7 @@ def main(cl_args=None):
         logger.info("BEGIN RUNNING VALIDATION SUITE")
         summary_elements.extend(scheduler.run_quiet("validation", validation, validation_config,
                                                     group=False))
+        logger.info("DONE - RUNNING VALIDATION SUITE")
         print(" -----------------------------------------------------------------")
         print("   Validation test suite complete ")
         print(" -----------------------------------------------------------------")
