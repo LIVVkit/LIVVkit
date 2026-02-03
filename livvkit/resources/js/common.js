@@ -108,6 +108,23 @@ function drawContent() {
     var html = data["Page"]["Data"];
     $("#content").append(html);
     $("#tabs").tabs();
+    if (html.includes("dataTable")) {
+        $(document).ready(function() {
+        $('table.dataTable').DataTable({
+            scrollX: true,
+            scrollCollapse: true,
+            scrollY: '20em',
+            colReorder: true,
+            fixedHeader: true,
+            fixedColumns: true,
+            paging: false,
+            layout: {
+                bottomStart: {
+                    buttons: [{"extend": "csv", "text": "Save CSV"}]
+                }
+            }
+        });});
+    }
 }
 
 /**

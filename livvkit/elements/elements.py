@@ -462,7 +462,7 @@ class Table(BaseElement):
     _html_template = 'table.html'
     _latex_template = 'table.tex'
 
-    def __init__(self, title, data, index=False, transpose=False):
+    def __init__(self, title, data, index=False, transpose=False, data_table=False):
         """Initialize a Section element
 
                 Args:
@@ -501,7 +501,12 @@ class Table(BaseElement):
                                  'Table rows: {}, index length: {}.'.format(self.rows, len(index)))
             self.index = index
 
-        if transpose:
+        if data_table and not transpose:
+            self._html_template = "data_table.html"
+        elif data_table and transpose:
+            self._html_template = 'data_table_transposed.html'
+            self._latex_template = 'table_transposed.tex'
+        elif not data_table and transpose:
             self._html_template = 'table_transposed.html'
             self._latex_template = 'table_transposed.tex'
 

@@ -36,10 +36,20 @@ import os
 import sys
 import http.server as server
 import socketserver as socket
+from pathlib import Path
+import shutil
 
 import livvkit
 from livvkit.util import options
-
+from loguru import logger
+log_format =(
+    "<green>{time:YYYY-MM-DD HH:mm:ss.SSS Z}</green> | "
+    "<level>{level: <8}</level> | "
+    "<cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> | "
+    "<magenta>{process.name}.{process.id}</magenta> | "
+    "<level>{message}</level>"
+)
+logger.remove(0)    # Don't log to sys.stderr
 
 if not sys.warnoptions:
     import warnings
@@ -56,11 +66,20 @@ LOGO = r"""-------------------------------------------------------------------
 """
 
 
+@logger.catch
 def main(cl_args=None):
     """Direct execution."""
     if cl_args is None and len(sys.argv) > 1:
         cl_args = sys.argv[1:]
     args = options.parse_args(cl_args)
+    out_name = Path(livvkit.output_dir).parts[-1]
+    log_file = Path(f"livv_log_{out_name}.log")
+    if log_file.exists():
+        # Backup the log file
+        _filetime = str(os.stat(log_file).st_ctime).replace(".", "_")
+        _newname = f"{log_file.stem}_bkd_{_filetime}.log"
+        shutil.move(log_file, _newname)
+    logger.add(log_file, format=log_format, enqueue=True)
 
     print(LOGO)
     print("")
@@ -80,6 +99,7 @@ def main(cl_args=None):
     summary_elements = []
 
     if livvkit.verify or livvkit.validate:
+        logger.info("SETUP OUTPUT")
         functions.setup_output()
 
     if livvkit.verify:
@@ -96,14 +116,17 @@ def main(cl_args=None):
         print("")
         validation_config = {}
         for conf in livvkit.validation_model_configs:
+            logger.info(f"ADDING {conf} config")
             if "yml" in conf or "yaml" in conf:
                 validation_config = functions.merge_dicts(validation_config,
                                                         functions.read_yaml(conf))
             else:
                 validation_config = functions.merge_dicts(validation_config,
                                                         functions.read_json(conf))
+        logger.info("BEGIN RUNNING VALIDATION SUITE")
         summary_elements.extend(scheduler.run_quiet("validation", validation, validation_config,
                                                     group=False))
+        logger.info("DONE - RUNNING VALIDATION SUITE")
         print(" -----------------------------------------------------------------")
         print("   Validation test suite complete ")
         print(" -----------------------------------------------------------------")
@@ -131,7 +154,7 @@ def main(cl_args=None):
         print("-------------------------------------------------------------------")
 
     # Make webpage output directory have 0755 permissions
-    functions.webdir_chmod(livvkit.output_dir)
+    # functions.webdir_chmod(livvkit.output_dir)
 
     if args.serve:
         httpd = socket.TCPServer(('', args.serve), server.SimpleHTTPRequestHandler)
