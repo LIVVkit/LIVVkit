@@ -68,7 +68,6 @@ dependencies = [
     "json_tricks>=3.11.0",
     "pybtex",
     "pandas>=2.1.0",
-    "nodejs",
     "ruamel.yaml",
 ]
 dynamic = ["version"]
