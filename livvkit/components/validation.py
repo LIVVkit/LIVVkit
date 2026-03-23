@@ -78,19 +78,21 @@ file.
 
 
 def _case_dep_err(mod_path):
-    yml_path = mod_path.replace('.py', '.yml')
-    conda_env = os.environ.get('CONDA_DEFAULT_ENV')
+    yml_path = mod_path.replace(".py", ".yml")
+    conda_env = os.environ.get("CONDA_DEFAULT_ENV")
     if conda_env and os.path.isfile(yml_path):
-        return ERR_MISSING_DEP_CONDA_MSG.format('{}', '{}', conda_env, os.path.relpath(yml_path, os.getcwd()))
+        return ERR_MISSING_DEP_CONDA_MSG.format(
+            "{}", "{}", conda_env, os.path.relpath(yml_path, os.getcwd())
+        )
     else:
         return ERR_MISSING_DEP_MSG
 
 
 def _load_case_module(case, config):
     try:
-        m = importlib.import_module(config['module'])
+        m = importlib.import_module(config["module"])
     except ImportError:
-        mod_path = os.path.abspath(config['module'])
+        mod_path = os.path.abspath(config["module"])
         try:
             spec = importlib.util.spec_from_file_location(
                 case, mod_path, submodule_search_locations=os.path.dirname(mod_path)
@@ -99,28 +101,30 @@ def _load_case_module(case, config):
             spec.loader.exec_module(m)
         except IOError:
             # imp.load_source (py2) and spec.loader.exec_module (py3) raises an IOError if module isn't found
-            print(ERR_MISSING_MOD_MSG.format(case, os.path.relpath(mod_path, os.getcwd())))
+            print(
+                ERR_MISSING_MOD_MSG.format(case, os.path.relpath(mod_path, os.getcwd()))
+            )
             raise
         except ImportError as iie:
             # If module's internal import statements fail
             print(_case_dep_err(mod_path).format(case, iie.name))
             raise
-        
+
     return m
 
 
 def run_suite(case, config):
-    """ Run the full suite of validation tests """
+    """Run the full suite of validation tests"""
     m = _load_case_module(case, config)
 
     result = m.run(case, config)
     summary = _summarize_result(m, result)
     _print_summary(m, case, summary)
 
-
-    functions.create_page_from_template("validation.html",
-                                        os.path.join(livvkit.index_dir, "validation", case + ".html"))
-    with open(os.path.join(livvkit.output_dir, "validation", case + ".json"), 'w') as f:
+    functions.create_page_from_template(
+        "validation.html", os.path.join(livvkit.index_dir, "validation", case + ".html")
+    )
+    with open(os.path.join(livvkit.output_dir, "validation", case + ".json"), "w") as f:
         f.write(result._repr_json())
 
     return summary
@@ -156,9 +160,11 @@ def populate_metadata(case, config):
         except TypeError:
             metadata = m.populate_metadata(case, config)
     except (NotImplementedError, AttributeError):
-        metadata = {"Type": "ValSummary",
-                    "Title": "Validation",
-                    "TableTitle": "Validation",
-                    "Headers": ["Outcome"]}
+        metadata = {
+            "Type": "ValSummary",
+            "Title": "Validation",
+            "TableTitle": "Validation",
+            "Headers": ["Outcome"],
+        }
 
     return metadata

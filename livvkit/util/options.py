@@ -48,7 +48,7 @@ def positive_int(integer):
     """
     integer = int(integer)
     if integer < 0:
-        raise argparse.ArgumentTypeError('Must be zero or a positive integer')
+        raise argparse.ArgumentTypeError("Must be zero or a positive integer")
     return integer
 
 
@@ -59,72 +59,87 @@ def parse_args(args=None):
     Args:
         args: The list of arguments, typically sys.argv[1:]
     """
-    parser = argparse.ArgumentParser(description='Main script to run LIVVkit.',
-                                     formatter_class=argparse.ArgumentDefaultsHelpFormatter,
-                                     fromfile_prefix_chars='@')
+    parser = argparse.ArgumentParser(
+        description="Main script to run LIVVkit.",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+        fromfile_prefix_chars="@",
+    )
 
-    parser.add_argument('-o', '--out-dir',
-                        default=os.path.join(os.getcwd(), 'vv_' + time.strftime('%Y-%m-%d')),
-                        help='Location to output the LIVVkit webpages.'
-                        )
+    parser.add_argument(
+        "-o",
+        "--out-dir",
+        default=os.path.join(os.getcwd(), "vv_" + time.strftime("%Y-%m-%d")),
+        help="Location to output the LIVVkit webpages.",
+    )
 
-    parser.add_argument('-v', '--verify',
-                        nargs=2,
-                        default=None,
-                        help='Specify the locations of the test and bench bundle '
-                             'to compare (respectively).'
-                        )
+    parser.add_argument(
+        "-v",
+        "--verify",
+        nargs=2,
+        default=None,
+        help="Specify the locations of the test and bench bundle "
+        "to compare (respectively).",
+    )
 
-    parser.add_argument('-V', '--validate',
-                        action='store',
-                        nargs='+',
-                        default=None,
-                        help='Specify the location of the configuration files '
-                             'for validation tests.'
-                        )
+    parser.add_argument(
+        "-V",
+        "--validate",
+        action="store",
+        nargs="+",
+        default=None,
+        help="Specify the location of the configuration files for validation tests.",
+    )
 
     # FIXME: this just short-circuits to the validation option, and should become its own module
-    parser.add_argument('-e', '--extension',
-                        action='store',
-                        nargs='+',
-                        default=None,
-                        dest='validate',
-                        metavar='EXTENSION',
-                        help='Specify the location of the configuration files '
-                             'for LIVVkit extensions.'
-                        )
+    parser.add_argument(
+        "-e",
+        "--extension",
+        action="store",
+        nargs="+",
+        default=None,
+        dest="validate",
+        metavar="EXTENSION",
+        help="Specify the location of the configuration files for LIVVkit extensions.",
+    )
 
-    parser.add_argument('-s', '--serve',
-                        nargs='?',
-                        type=int,
-                        const=8000,
-                        help='Start a simple HTTP server for the output website '
-                             'specified by OUT_DIR on port SERVE.'
-                        )
+    parser.add_argument(
+        "-s",
+        "--serve",
+        nargs="?",
+        type=int,
+        const=8000,
+        help="Start a simple HTTP server for the output website "
+        "specified by OUT_DIR on port SERVE.",
+    )
 
-    parser.add_argument('-p', '--pool-size',
-                        nargs='?',
-                        type=int,
-                        default=(mp.cpu_count() - 1 or 1),
-                        help='The number of multiprocessing processes to run '
-                             'analyses in. If zero, processes will run serially '
-                             'outside of the multiprocessing module.')
+    parser.add_argument(
+        "-p",
+        "--pool-size",
+        nargs="?",
+        type=int,
+        default=(mp.cpu_count() - 1 or 1),
+        help="The number of multiprocessing processes to run "
+        "analyses in. If zero, processes will run serially "
+        "outside of the multiprocessing module.",
+    )
 
-    parser.add_argument('--version',
-                        action='version',
-                        version='LIVVkit {}'.format(livvkit.__version__),
-                        help="Show LIVVkit's version number and exit"
-                        )
+    parser.add_argument(
+        "--version",
+        action="version",
+        version="LIVVkit {}".format(livvkit.__version__),
+        help="Show LIVVkit's version number and exit",
+    )
 
     return init(parser.parse_args(args))
 
 
 def init(options):
-    """ Initialize some defaults """
+    """Initialize some defaults"""
 
     # Set matlplotlib's backend so LIVVkit can plot to files.
     import matplotlib
-    matplotlib.use('agg')
+
+    matplotlib.use("agg")
 
     livvkit.output_dir = os.path.abspath(options.out_dir)
     livvkit.index_dir = livvkit.output_dir
@@ -133,7 +148,9 @@ def init(options):
     livvkit.pool_size = options.pool_size
 
     # Get a list of bundles that provide model specific implementations
-    available_bundles = [mod for imp, mod, ispkg in pkgutil.iter_modules(bundles.__path__)]
+    available_bundles = [
+        mod for imp, mod, ispkg in pkgutil.iter_modules(bundles.__path__)
+    ]
 
     if options.verify is not None:
         livvkit.model_dir = os.path.normpath(options.verify[0])
@@ -145,7 +162,7 @@ def init(options):
             print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
             print("    Your comparison directory does not exist; please check")
             print("    the path:")
-            print("\n"+livvkit.model_dir+"\n\n")
+            print("\n" + livvkit.model_dir + "\n\n")
             sys.exit(1)
 
         if not os.path.isdir(livvkit.bench_dir):
@@ -155,7 +172,7 @@ def init(options):
             print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
             print("    Your benchmark directory does not exist; please check")
             print("    the path:")
-            print("\n"+livvkit.bench_dir+"\n\n")
+            print("\n" + livvkit.bench_dir + "\n\n")
             sys.exit(1)
 
         livvkit.model_bundle = os.path.basename(livvkit.model_dir)
@@ -165,7 +182,9 @@ def init(options):
         # check if the bundle is in the available bundles, then see if an available bundle
         # is somewhere in the path, and use that bundle
         if livvkit.model_bundle not in available_bundles:
-            bundle_in_path = [_bundle in livvkit.model_dir for _bundle in available_bundles]
+            bundle_in_path = [
+                _bundle in livvkit.model_dir for _bundle in available_bundles
+            ]
             if any(bundle_in_path):
                 # This uses the first found bundle in the path (Left-to-right) in the unlikely
                 # but possible instance that multiple bundles are in the path
@@ -174,17 +193,22 @@ def init(options):
 
         if livvkit.model_bundle in available_bundles:
             livvkit.numerics_model_config = os.path.join(
-                livvkit.bundle_dir, livvkit.model_bundle, "numerics.json")
+                livvkit.bundle_dir, livvkit.model_bundle, "numerics.json"
+            )
             livvkit.numerics_model_module = importlib.import_module(
-                ".".join(["livvkit.bundles", livvkit.model_bundle, "numerics"]))
+                ".".join(["livvkit.bundles", livvkit.model_bundle, "numerics"])
+            )
 
             livvkit.verification_model_config = os.path.join(
-                 livvkit.bundle_dir, livvkit.model_bundle, "verification.json")
+                livvkit.bundle_dir, livvkit.model_bundle, "verification.json"
+            )
             livvkit.verification_model_module = importlib.import_module(
-                 ".".join(["livvkit.bundles", livvkit.model_bundle, "verification"]))
+                ".".join(["livvkit.bundles", livvkit.model_bundle, "verification"])
+            )
 
             livvkit.performance_model_config = os.path.join(
-                 livvkit.bundle_dir, livvkit.model_bundle, "performance.json")
+                livvkit.bundle_dir, livvkit.model_bundle, "performance.json"
+            )
             # NOTE: This isn't used right now...
             # livvkit.performance_model_module = importlib.import_module(
             #      ".".join(["livvkit.bundles", livvkit.model_bundle, "performance"]))

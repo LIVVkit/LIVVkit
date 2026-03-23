@@ -30,6 +30,7 @@
 """
 Storage for global variables.  These are set upon startup in the options module
 """
+
 import os
 import time
 import getpass
@@ -40,7 +41,7 @@ from livvkit import bundles
 from livvkit import resources
 
 __version_info__ = (3, 3, 0)
-__version__ = '.'.join(str(vi) for vi in __version_info__)
+__version__ = ".".join(str(vi) for vi in __version_info__)
 
 cwd = os.getcwd()
 timestamp = time.strftime("%Y-%m-%d %H:%M:%S")

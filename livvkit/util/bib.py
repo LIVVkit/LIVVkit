@@ -54,25 +54,27 @@ class LatexBackend(LatexBaseBackend):
 class HTMLBackend(HTMLBaseBackend):
     def __init__(self, *args, **kwargs):
         super(HTMLBackend, self).__init__(*args, **kwargs)
-        self._html = ''
+        self._html = ""
 
     def output(self, html):
         self._html += html
 
     def format_protected(self, text):
-        if text[:4] == 'http':
+        if text[:4] == "http":
             return self.format_href(text, text)
         else:
             return r'<span class="bibtex-protected">{}</span>'.format(text)
 
     def write_prologue(self):
-        self.output('<div class="bibliography"><h2>References</h2>'
-                    '<p>LIVVkit is an open source project licensed under a BSD 3-clause License. '
-                    'We ask that you please acknowledge LIVVkit in any work it is used or supports. '
-                    'In any corresponding published work, please cite: </p><dl>')
+        self.output(
+            '<div class="bibliography"><h2>References</h2>'
+            "<p>LIVVkit is an open source project licensed under a BSD 3-clause License. "
+            "We ask that you please acknowledge LIVVkit in any work it is used or supports. "
+            "In any corresponding published work, please cite: </p><dl>"
+        )
 
     def write_epilogue(self):
-        self.output('</dl></div>')
+        self.output("</dl></div>")
 
     def _repr_html(self, formatted_bibliography):
         self.write_prologue()
@@ -80,7 +82,7 @@ class HTMLBackend(HTMLBaseBackend):
             self.write_entry(entry.key, entry.label, entry.text.render(self))
         self.write_epilogue()
 
-        return self._html.replace('\n', ' ').replace('\\url <a', '<a')
+        return self._html.replace("\n", " ").replace("\\url <a", "<a")
 
 
 # FIXME: For python 3.7+ only...
@@ -99,7 +101,9 @@ def bib2html(bib, style=None, backend=None):
     if isinstance(bib, pybtex.database.BibliographyData):
         return _bib2html_bibdata(bib, style=style, backend=backend)
     else:
-        raise NotImplementedError('I do not now how to convert a {} type to a bibliography'.format(type(bib)))
+        raise NotImplementedError(
+            "I do not now how to convert a {} type to a bibliography".format(type(bib))
+        )
 
 
 # FIXME: For python 3.7+ only...
