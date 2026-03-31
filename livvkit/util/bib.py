@@ -59,7 +59,7 @@ class HTMLBackend(HTMLBaseBackend):
         super().__init__()
         self._html = ""
 
-    def output(self, html):
+    def _output(self, html):
         """Append HTML to the _html attribute."""
         self._html += html
 
@@ -70,11 +70,11 @@ class HTMLBackend(HTMLBaseBackend):
 
     def write_prologue(self):
         """Add bibliography header to the output."""
-        self.output('<div class="bibliography"><dl>')
+        self._output('<div class="bibliography"><dl>')
 
     def write_epilogue(self):
         """Add bibliography close tags to the output."""
-        self.output("</dl></div>")
+        self._output("</dl></div>")
 
     def _repr_html(self, formatted_bibliography):
         self.write_prologue()
