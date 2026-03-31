@@ -80,10 +80,10 @@ def run_suite(case, config):
 
     functions.create_page_from_template(
         "verification.html",
-        os.path.join(livvkit.index_dir, "verification", case + ".html"),
+        os.path.join(livvkit.index_dir, "verification", f"{case}.html"),
     )
     with open(
-        os.path.join(livvkit.output_dir, "verification", case + ".json"), "w"
+        os.path.join(livvkit.output_dir, "verification", f"{case}.json"), "w"
     ) as f:
         f.write(result._repr_json())
 

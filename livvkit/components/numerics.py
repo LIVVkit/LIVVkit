@@ -77,9 +77,9 @@ def run_suite(case, config):
     _print_summary(m, case, summary)
 
     functions.create_page_from_template(
-        "numerics.html", os.path.join(livvkit.index_dir, "numerics", case + ".html")
+        "numerics.html", os.path.join(livvkit.index_dir, "numerics", f"{case}.html")
     )
-    with open(os.path.join(livvkit.output_dir, "numerics", case + ".json"), "w") as f:
+    with open(os.path.join(livvkit.output_dir, "numerics", f"{case}.json"), "w") as f:
         f.write(result._repr_json())
 
     return summary

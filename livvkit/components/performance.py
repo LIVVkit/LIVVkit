@@ -45,7 +45,7 @@ SEC_PER_DAY = 86400.0
 def run_suite(case, config):
     """Run the full suite of performance tests"""
     config["name"] = case
-    timing_data = dict()
+    timing_data = {}
     model_dir = os.path.join(livvkit.model_dir, config["data_dir"], case)
     bench_dir = os.path.join(livvkit.bench_dir, config["data_dir"], case)
     plot_dir = os.path.join(livvkit.output_dir, "performance", "imgs")
@@ -56,7 +56,7 @@ def run_suite(case, config):
     # Generate all of the timing data
     for subcase in sorted(model_cases):
         bench_subcases = bench_cases[subcase] if subcase in bench_cases else []
-        timing_data[subcase] = dict()
+        timing_data[subcase] = {}
         for mcase in model_cases[subcase]:
             config["case"] = "-".join([subcase, mcase])
             bpath = (
@@ -125,10 +125,10 @@ def run_suite(case, config):
 
     functions.create_page_from_template(
         "performance.html",
-        os.path.join(livvkit.index_dir, "performance", case + ".html"),
+        os.path.join(livvkit.index_dir, "performance", f"{case}.html"),
     )
     with open(
-        os.path.join(livvkit.output_dir, "performance", case + ".json"), "w"
+        os.path.join(livvkit.output_dir, "performance", f"{case}.json"), "w"
     ) as f:
         f.write(result._repr_json())
 
@@ -221,7 +221,7 @@ def generate_timing_stats(file_list, var_list):
         for f, data in timing_result.items():
             try:
                 var_time.append(data[var])
-            except:
+            except:  # NOQA
                 continue
         if len(var_time):
             timing_summary[var] = {

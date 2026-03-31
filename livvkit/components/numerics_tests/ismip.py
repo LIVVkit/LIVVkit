@@ -93,26 +93,32 @@ def run(config, analysis_data):
         fig_label = pattern.split("_")[1]
         description = ""
 
-        for l in sorted(lengths):
+        for _len in sorted(lengths):
             plt.figure(figsize=(10, 8), dpi=150)
             plt.xlabel(setup[case]["xlabel"][p])
             plt.ylabel(setup[case]["ylabel"][p])
 
             if case in ["ismip-hom-a", "ismip-hom-c"]:
-                plt.title(str(int(l)) + " km")
+                plt.title(str(int(_len)) + " km")
                 title = (
-                    fig_label[0:-1] + ". " + fig_label[-1] + ": " + str(int(l)) + " km"
+                    fig_label[0:-1]
+                    + ". "
+                    + fig_label[-1]
+                    + ": "
+                    + str(int(_len))
+                    + " km"
                 )
             else:
                 plt.title("No-Slip Bed")
                 title = fig_label[0:-2] + ". " + fig_label[-2:] + ": No-Slip Bed"
 
             plot_file = os.path.join(
-                config["plot_dir"], config["name"] + "_" + fig_label + "_" + l + ".png"
+                config["plot_dir"],
+                config["name"] + "_" + fig_label + "_" + _len + ".png",
             )
             recreate_file = os.path.join(
                 livvkit.__path__[0], setup[case]["data_dir"], pattern
-            ).replace("???", l)
+            ).replace("???", _len)
             (
                 axis,
                 fs_amin,
@@ -137,7 +143,7 @@ def run(config, analysis_data):
 
             analysis = {}
             for a in analysis_data:
-                if int(l) == int(a.split("-")[-1][1:]):
+                if int(_len) == int(a.split("-")[-1][1:]):
                     analysis[a] = analysis_data[a]
 
             for a in analysis:
@@ -168,10 +174,10 @@ def summarize_result(data, config):
     lengths = list(set([get_case_length(d) for d in data]))
 
     for p, pattern in enumerate(sorted(setup[case]["pattern"])):
-        for l in sorted(lengths):
+        for _len in sorted(lengths):
             recreate_file = os.path.join(
                 livvkit.__path__[0], setup[case]["data_dir"], pattern
-            ).replace("???", l)
+            ).replace("???", _len)
 
             (
                 axis,
@@ -189,7 +195,7 @@ def summarize_result(data, config):
 
             analysis = {}
             for a in data:
-                if int(l) == int(a.split("-")[-1][1:]):
+                if int(_len) == int(a.split("-")[-1][1:]):
                     analysis[a] = data[a]
 
             for a in analysis:

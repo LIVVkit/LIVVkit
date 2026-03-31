@@ -130,7 +130,7 @@ class RotatedGrid:
 
         try:
             self.wvel_ustag = data.variables["wvel_ho"][-1, 0, :, :]
-        except:
+        except:  # NOQA
             self.wvel_ustag = data.variables["wvel"][-1, 0, :, :]
         self.wvel_stag = (
             self.wvel_ustag[1:, 1:]

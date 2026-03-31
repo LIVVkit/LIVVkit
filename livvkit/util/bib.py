@@ -28,7 +28,6 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import io
-from pathlib import Path
 from collections.abc import Iterable
 from functools import singledispatch
 
@@ -53,7 +52,7 @@ class LatexBackend(LatexBaseBackend):
         return stream.getvalue()
 
 
-class HTMLBackend(BaseBackend):
+class HTMLBackend(HTMLBaseBackend):
     """Extends ``pybtex.backends.html.Backend``"""
 
     def __init__(self, *args, **kwargs):

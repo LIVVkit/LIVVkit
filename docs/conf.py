@@ -17,7 +17,7 @@ import os
 import re
 import sys
 
-import sphinx_js
+import sphinx_js  # NOQA
 import sphinx_py3doc_enhanced_theme
 
 top = os.path.abspath("..")

@@ -122,9 +122,9 @@ def run_suite(case, config):
     _print_summary(m, case, summary)
 
     functions.create_page_from_template(
-        "validation.html", os.path.join(livvkit.index_dir, "validation", case + ".html")
+        "validation.html", os.path.join(livvkit.index_dir, "validation", f"{case}.html")
     )
-    with open(os.path.join(livvkit.output_dir, "validation", case + ".json"), "w") as f:
+    with open(os.path.join(livvkit.output_dir, "validation", f"{case}.json"), "w") as f:
         f.write(result._repr_json())
 
     return summary
