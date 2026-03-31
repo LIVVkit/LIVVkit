@@ -86,3 +86,6 @@ target/
 
 # Tox cache
 .tox/
+# pixi environments
+.pixi/*
+!.pixi/config.toml

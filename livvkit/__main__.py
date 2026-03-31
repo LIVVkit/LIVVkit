@@ -42,17 +42,19 @@ import shutil
 import livvkit
 from livvkit.util import options
 from loguru import logger
-log_format =(
+
+log_format = (
     "<green>{time:YYYY-MM-DD HH:mm:ss.SSS Z}</green> | "
     "<level>{level: <8}</level> | "
     "<cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> | "
     "<magenta>{process.name}.{process.id}</magenta> | "
     "<level>{message}</level>"
 )
-logger.remove(0)    # Don't log to sys.stderr
+logger.remove(0)  # Don't log to sys.stderr
 
 if not sys.warnoptions:
     import warnings
+
     warnings.simplefilter("ignore")
 
 LOGO = r"""-------------------------------------------------------------------
@@ -103,12 +105,25 @@ def main(cl_args=None):
         functions.setup_output()
 
     if livvkit.verify:
-        summary_elements.append(scheduler.run("numerics", numerics,
-                                              functions.read_json(livvkit.numerics_model_config)))
-        summary_elements.append(scheduler.run("verification", verification,
-                                              functions.read_json(livvkit.verification_model_config)))
-        summary_elements.append(scheduler.run("performance", performance,
-                                              functions.read_json(livvkit.performance_model_config)))
+        summary_elements.append(
+            scheduler.run(
+                "numerics", numerics, functions.read_json(livvkit.numerics_model_config)
+            )
+        )
+        summary_elements.append(
+            scheduler.run(
+                "verification",
+                verification,
+                functions.read_json(livvkit.verification_model_config),
+            )
+        )
+        summary_elements.append(
+            scheduler.run(
+                "performance",
+                performance,
+                functions.read_json(livvkit.performance_model_config),
+            )
+        )
     if livvkit.validate:
         print(" -----------------------------------------------------------------")
         print("   Beginning the validation test suite ")
@@ -118,14 +133,19 @@ def main(cl_args=None):
         for conf in livvkit.validation_model_configs:
             logger.info(f"ADDING {conf} config")
             if "yml" in conf or "yaml" in conf:
-                validation_config = functions.merge_dicts(validation_config,
-                                                        functions.read_yaml(conf))
+                validation_config = functions.merge_dicts(
+                    validation_config, functions.read_yaml(conf)
+                )
             else:
-                validation_config = functions.merge_dicts(validation_config,
-                                                        functions.read_json(conf))
+                validation_config = functions.merge_dicts(
+                    validation_config, functions.read_json(conf)
+                )
         logger.info("BEGIN RUNNING VALIDATION SUITE")
-        summary_elements.extend(scheduler.run_quiet("validation", validation, validation_config,
-                                                    group=False))
+        summary_elements.extend(
+            scheduler.run_quiet(
+                "validation", validation, validation_config, group=False
+            )
+        )
         logger.info("DONE - RUNNING VALIDATION SUITE")
         print(" -----------------------------------------------------------------")
         print("   Validation test suite complete ")
@@ -134,20 +154,19 @@ def main(cl_args=None):
 
     if livvkit.verify or livvkit.validate:
         result = elements.Page("Summary", "", summary_elements)
-        with open(os.path.join(livvkit.output_dir, 'index.json'), 'w') as index_data:
+        with open(os.path.join(livvkit.output_dir, "index.json"), "w") as index_data:
             index_data.write(result._repr_json())
 
         if "/global/cfs/projectdirs" in livvkit.output_dir:
             webaddress = livvkit.output_dir.replace(
-                "/global/cfs/projectdirs",
-                "https://portal.nersc.gov/project"
+                "/global/cfs/projectdirs", "https://portal.nersc.gov/project"
             ).replace("/www", "")
         else:
             webaddress = ""
 
         print("-------------------------------------------------------------------")
         print(" Done!  Results can be seen in a web browser at:")
-        print("  " + os.path.join(livvkit.output_dir, 'index.html'))
+        print("  " + os.path.join(livvkit.output_dir, "index.html"))
         if webaddress:
             print("    or")
             print("  " + webaddress)
@@ -157,19 +176,25 @@ def main(cl_args=None):
     # functions.webdir_chmod(livvkit.output_dir)
 
     if args.serve:
-        httpd = socket.TCPServer(('', args.serve), server.SimpleHTTPRequestHandler)
+        httpd = socket.TCPServer(("", args.serve), server.SimpleHTTPRequestHandler)
 
         sa = httpd.socket.getsockname()
-        print('\nServing HTTP on {host} port {port} (http://{host}:{port}/)'.format(host=sa[0], port=sa[1]))
-        print('\nView the generated website by navigating to:')
-        print('\n    http://{host}:{port}/{path}/index.html'.format(host=sa[0], port=sa[1],
-                                                                    path=os.path.relpath(livvkit.output_dir)
-                                                                    ))
-        print('\nExit by pressing `ctrl+c` to send a keyboard interrupt.\n')
+        print(
+            "\nServing HTTP on {host} port {port} (http://{host}:{port}/)".format(
+                host=sa[0], port=sa[1]
+            )
+        )
+        print("\nView the generated website by navigating to:")
+        print(
+            "\n    http://{host}:{port}/{path}/index.html".format(
+                host=sa[0], port=sa[1], path=os.path.relpath(livvkit.output_dir)
+            )
+        )
+        print("\nExit by pressing `ctrl+c` to send a keyboard interrupt.\n")
         try:
             httpd.serve_forever()
         except KeyboardInterrupt:
-            print('\nKeyboard interrupt received, exiting.\n')
+            print("\nKeyboard interrupt received, exiting.\n")
             sys.exit(0)
 
 

@@ -29,9 +29,8 @@
 
 
 class LIVVDict(dict):
-    """
-    Extension of the dictionary data structure to allow for auto nesting.
-    """
+    """Extension of the dictionary data structure to allow for auto nesting."""
+
     def __getitem__(self, item):
         """
         Tries to get the item, and if it's not found creates it
@@ -45,7 +44,7 @@ class LIVVDict(dict):
             return tmp
 
     def nested_insert(self, item_list):
-        """ Create a series of nested LIVVDicts given a list """
+        """Create a series of nested LIVVDicts given a list"""
         if len(item_list) == 1:
             self[item_list[0]] = LIVVDict()
         elif len(item_list) > 1:
@@ -54,7 +53,7 @@ class LIVVDict(dict):
             self[item_list[0]].nested_insert(item_list[1:])
 
     def nested_assign(self, key_list, value):
-        """ Set the value of nested LIVVDicts given a list """
+        """Set the value of nested LIVVDicts given a list"""
         if len(key_list) == 1:
             self[key_list[0]] = value
         elif len(key_list) > 1:

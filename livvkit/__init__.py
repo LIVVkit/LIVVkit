@@ -27,9 +27,8 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-"""
-Storage for global variables.  These are set upon startup in the options module
-"""
+"""Storage for global variables. These are set upon startup in the options module."""
+
 import os
 import time
 import getpass
@@ -39,8 +38,8 @@ import socket
 from livvkit import bundles
 from livvkit import resources
 
-__version_info__ = (3, 3, 0)
-__version__ = '.'.join(str(vi) for vi in __version_info__)
+__version_info__ = (3, 3, 1)
+__version__ = ".".join(str(vi) for vi in __version_info__)
 
 cwd = os.getcwd()
 timestamp = time.strftime("%Y-%m-%d %H:%M:%S")

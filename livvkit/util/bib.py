@@ -28,7 +28,8 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import io
-from pathlib import Path
+from collections.abc import Iterable
+from functools import singledispatch
 
 import pybtex.database
 import pybtex.io
@@ -52,27 +53,34 @@ class LatexBackend(LatexBaseBackend):
 
 
 class HTMLBackend(HTMLBaseBackend):
-    def __init__(self, *args, **kwargs):
-        super(HTMLBackend, self).__init__(*args, **kwargs)
-        self._html = ''
+    """Extends ``pybtex.backends.html.Backend``"""
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._html = ""
+
+    # skipcq:  PYL-E0202
     def output(self, html):
+        """Append HTML to the _html attribute."""
         self._html += html
 
     def format_protected(self, text):
-        if text[:4] == 'http':
+        if text[:4] == "http":
             return self.format_href(text, text)
-        else:
-            return r'<span class="bibtex-protected">{}</span>'.format(text)
+        return f'<span class="bibtex-protected">{text}</span>'
 
     def write_prologue(self):
-        self.output('<div class="bibliography"><h2>References</h2>'
-                    '<p>LIVVkit is an open source project licensed under a BSD 3-clause License. '
-                    'We ask that you please acknowledge LIVVkit in any work it is used or supports. '
-                    'In any corresponding published work, please cite: </p><dl>')
+        """Add bibliography header to the output."""
+        self.output(
+            '<div class="bibliography"><h2>References</h2>'
+            "<p>LIVVkit is an open source project licensed under a BSD 3-clause License. "
+            "We ask that you please acknowledge LIVVkit in any work it is used or supports. "
+            "In any corresponding published work, please cite: </p><dl>"
+        )
 
     def write_epilogue(self):
-        self.output('</dl></div>')
+        """Add bibliography close tags to the output."""
+        self.output("</dl></div>")
 
     def _repr_html(self, formatted_bibliography):
         self.write_prologue()
@@ -80,32 +88,44 @@ class HTMLBackend(HTMLBaseBackend):
             self.write_entry(entry.key, entry.label, entry.text.render(self))
         self.write_epilogue()
 
-        return self._html.replace('\n', ' ').replace('\\url <a', '<a')
+        return self._html.replace("\n", " ").replace("\\url <a", "<a")
 
 
-# FIXME: For python 3.7+ only...
-# from functools import singledispatch
-# from collections.abc import Iterable
-# from typing import Union
-#
-# @singledispatch
-# def bib2html(bib, style=None, backend=None):
-#     raise NotImplementedError('I do not now how to convert a {} type to a bibliography'.format(type(bib)))
+@singledispatch
 def bib2html(bib, style=None, backend=None):
-    if isinstance(bib, (str, Path)):
-        return _bib2html_string(bib, style=style, backend=backend)
-    if isinstance(bib, (list, set, tuple)):
-        return _bib2html_list(bib, style=style, backend=backend)
-    if isinstance(bib, pybtex.database.BibliographyData):
-        return _bib2html_bibdata(bib, style=style, backend=backend)
-    else:
-        raise NotImplementedError('I do not now how to convert a {} type to a bibliography'.format(type(bib)))
+    """
+    Convert a BibTeX bibliography to HTML.
+
+    Parameters
+    ----------
+    bib : `str`, `Iterable`, ``pybtex.database.BibliographyData``
+        Location of bibliograph(y, ies), or a `pybtex.database.BibliographyData`
+    style : `pybtex.style.formatting.BaseStyle`, optional
+        Bibliography style to output, by default None, which uses
+        ``pybtex.style.formatting.plain.Style``
+    backend : `pybtex.backends.BaseBackend`, optional
+        HTML backend to format HTML output, by default None, which uses
+        ``pybtex.backends.html.Backend``
+
+    Returns
+    -------
+    bib_html : str
+        Bibliography in HTML format as a string
+
+    Raises
+    ------
+    NotImplementedError
+        If ``bib`` is not a `str`, `Iterable`, or `pybtex.database.BibliographyData`,
+        raise `NotImplementedError`
+
+    """
+    raise NotImplementedError(
+        f"I do not now how to convert a {type(bib)} type to a bibliography"
+    )
 
 
-# FIXME: For python 3.7+ only...
-# @bib2html.register
-# def _bib2html_string(bib: Union[str, Path], style=None, backend=None):
-def _bib2html_string(bib, style=None, backend=None):
+@bib2html.register
+def _bib2html_string(bib: str, style=None, backend=None):
     if style is None:
         style = PlainStyle()
     if backend is None:
@@ -116,10 +136,8 @@ def _bib2html_string(bib, style=None, backend=None):
     return backend._repr_html(formatted_bib)
 
 
-# FIXME: For python 3.7+ only...
-# @bib2html.register
-# def _bib2html_list(bib: Iterable, style=None, backend=None):
-def _bib2html_list(bib, style=None, backend=None):
+@bib2html.register
+def _bib2html_list(bib: Iterable, style=None, backend=None):
     if style is None:
         style = PlainStyle()
     if backend is None:
@@ -132,8 +150,6 @@ def _bib2html_list(bib, style=None, backend=None):
             try:
                 bibliography.add_entry(key, entry)
             except pybtex.database.BibliographyDataError:
-                # FIXME: should log this...
-                # Skip duplicate entries
                 continue
 
     formatted_bib = style.format_bibliography(bibliography)
@@ -141,10 +157,8 @@ def _bib2html_list(bib, style=None, backend=None):
     return backend._repr_html(formatted_bib)
 
 
-# FIXME: For python 3.7+ only...
-# @bib2html.register
-# def _bib2html_bibdata(bib: pybtex.database.BibliographyData, style=None, backend=None):
-def _bib2html_bibdata(bib, style=None, backend=None):
+@bib2html.register
+def _bib2html_bibdata(bib: pybtex.database.BibliographyData, style=None, backend=None):
     if style is None:
         style = PlainStyle()
     if backend is None:

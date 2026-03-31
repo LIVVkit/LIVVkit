@@ -26,9 +26,7 @@
 # CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-"""
-Module to hold LIVVkit specific functions
-"""
+"""Module to hold LIVVkit specific functions."""
 
 import os
 import stat
@@ -187,6 +185,7 @@ def write_json(data, path, file_name):
 
 class YAMLParser(ruamel.yaml.YAML):
     """Custom ruamel.yaml.YAML class for parsing LEX YAML files."""
+
     def add_cfg_path(self, cfg_path):
         """Initialize cfg_path instance variable."""
         self.cfg_path = Path(cfg_path)
@@ -194,6 +193,7 @@ class YAMLParser(ruamel.yaml.YAML):
 
 class YAMLIncluder(ruamel.yaml.Constructor):
     """Define a custom yaml Constructor to parse !include directive."""
+
     pass
 
 

@@ -26,9 +26,7 @@
 # CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-"""
-Validation Test Base Module
-"""
+"""Validation Test Base Module"""
 
 import os
 import importlib
@@ -78,19 +76,23 @@ file.
 
 
 def _case_dep_err(mod_path):
-    yml_path = mod_path.replace('.py', '.yml')
-    conda_env = os.environ.get('CONDA_DEFAULT_ENV')
+    """Checks module for existing YAML environment config file."""
+    yml_path = mod_path.replace(".py", ".yml")
+    conda_env = os.environ.get("CONDA_DEFAULT_ENV")
     if conda_env and os.path.isfile(yml_path):
-        return ERR_MISSING_DEP_CONDA_MSG.format('{}', '{}', conda_env, os.path.relpath(yml_path, os.getcwd()))
+        return ERR_MISSING_DEP_CONDA_MSG.format(
+            "{}", "{}", conda_env, os.path.relpath(yml_path, os.getcwd())
+        )
     else:
         return ERR_MISSING_DEP_MSG
 
 
 def _load_case_module(case, config):
+    """Load a case's validation module, get the environment if needed."""
     try:
-        m = importlib.import_module(config['module'])
+        m = importlib.import_module(config["module"])
     except ImportError:
-        mod_path = os.path.abspath(config['module'])
+        mod_path = os.path.abspath(config["module"])
         try:
             spec = importlib.util.spec_from_file_location(
                 case, mod_path, submodule_search_locations=os.path.dirname(mod_path)
@@ -99,34 +101,37 @@ def _load_case_module(case, config):
             spec.loader.exec_module(m)
         except IOError:
             # imp.load_source (py2) and spec.loader.exec_module (py3) raises an IOError if module isn't found
-            print(ERR_MISSING_MOD_MSG.format(case, os.path.relpath(mod_path, os.getcwd())))
+            print(
+                ERR_MISSING_MOD_MSG.format(case, os.path.relpath(mod_path, os.getcwd()))
+            )
             raise
         except ImportError as iie:
             # If module's internal import statements fail
             print(_case_dep_err(mod_path).format(case, iie.name))
             raise
-        
+
     return m
 
 
 def run_suite(case, config):
-    """ Run the full suite of validation tests """
+    """Run the full suite of validation tests"""
     m = _load_case_module(case, config)
 
     result = m.run(case, config)
     summary = _summarize_result(m, result)
     _print_summary(m, case, summary)
 
-
-    functions.create_page_from_template("validation.html",
-                                        os.path.join(livvkit.index_dir, "validation", case + ".html"))
-    with open(os.path.join(livvkit.output_dir, "validation", case + ".json"), 'w') as f:
+    functions.create_page_from_template(
+        "validation.html", os.path.join(livvkit.index_dir, "validation", f"{case}.html")
+    )
+    with open(os.path.join(livvkit.output_dir, "validation", f"{case}.json"), "w") as f:
         f.write(result._repr_json())
 
     return summary
 
 
 def _print_summary(module, case, summary):
+    """Call ``module``'s ``print_summary`` method, with fallback for number of args."""
     try:
         try:
             module.print_summary(summary)
@@ -138,6 +143,7 @@ def _print_summary(module, case, summary):
 
 
 def _summarize_result(module, result):
+    """Call ``module``'s ``summarize_result`` method."""
     try:
         summary = module.summarize_result(result)
     except (NotImplementedError, AttributeError):
@@ -149,6 +155,7 @@ def _summarize_result(module, result):
 
 
 def populate_metadata(case, config):
+    """Create metadata based on ``case`` name and ``config``."""
     m = _load_case_module(case, config)
     try:
         try:
@@ -156,9 +163,11 @@ def populate_metadata(case, config):
         except TypeError:
             metadata = m.populate_metadata(case, config)
     except (NotImplementedError, AttributeError):
-        metadata = {"Type": "ValSummary",
-                    "Title": "Validation",
-                    "TableTitle": "Validation",
-                    "Headers": ["Outcome"]}
+        metadata = {
+            "Type": "ValSummary",
+            "Title": "Validation",
+            "TableTitle": "Validation",
+            "Headers": ["Outcome"],
+        }
 
     return metadata

@@ -27,9 +27,7 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-"""
-Provides functions for scheduling the runs of tests.
-"""
+"""Provides functions for scheduling the runs of tests."""
 
 import os
 import sys
@@ -42,13 +40,20 @@ from livvkit import elements
 
 
 def pool_worker(run_type, run_suite, test, config):
+    """
+    Defines a pool worker for multi-processing.
+
+    Assigns std out and std err to files saved in the output
+    log directory, then runs the suite.
+
+    """
     sys.stdout = open(
-        os.path.join(livvkit.index_dir, 'logs', '{}-{}.stdout'.format(run_type, test)),
-        'a',
+        os.path.join(livvkit.index_dir, "logs", "{}-{}.stdout".format(run_type, test)),
+        "a",
     )
     sys.stderr = open(
-        os.path.join(livvkit.index_dir, 'logs', '{}-{}.stderr'.format(run_type, test)),
-        'a',
+        os.path.join(livvkit.index_dir, "logs", "{}-{}.stderr".format(run_type, test)),
+        "a",
     )
 
     summary = run_suite(test, config)
@@ -82,7 +87,13 @@ def run(run_type, module, config):
 
 
 def run_quiet(run_type, module, config, group=True):
-    tests = [t for t in config if isinstance(config[t], dict) and "common" not in t.lower()]
+    """
+    Collects the analyses cases to be run and launches processes for each of
+    them, without printing to stdout the start / completion of the case.
+    """
+    tests = [
+        t for t in config if isinstance(config[t], dict) and "common" not in t.lower()
+    ]
     if livvkit.pool_size == 0:
         test_summaries = {}
         for test in tests:
@@ -91,37 +102,47 @@ def run_quiet(run_type, module, config, group=True):
         test_summaries = launch_processes(run_type, tests, module, config)
 
         for t in tests:
-            with open(os.path.join(livvkit.index_dir, 'logs', '{}-{}.stdout'.format(run_type, t))) as log:
+            with open(
+                os.path.join(
+                    livvkit.index_dir, "logs", "{}-{}.stdout".format(run_type, t)
+                )
+            ) as log:
                 stdout = log.read()
             print(stdout)
 
     if group:
         meta = module.populate_metadata(tests[0], config[tests[0]])
         df = pd.concat(
-            {k: pd.DataFrame.from_dict(v, orient='index') for k, v, in test_summaries.items()},
-            names=['case', 'scale']
+            {
+                k: pd.DataFrame.from_dict(v, orient="index")
+                for k, v in test_summaries.items()
+            },
+            names=["case", "scale"],
         ).reset_index()
-        summary = elements.Table(meta['Title'], df.set_index('case'))
+        summary = elements.Table(meta["Title"], df.set_index("case"))
     else:
         summary = []
         for ii, t in enumerate(tests):
             meta = module.populate_metadata(t, config[t])
-            df = pd.DataFrame.from_dict(test_summaries[t], orient='index')
+            df = pd.DataFrame.from_dict(test_summaries[t], orient="index")
             # Set the index so that navigation in HTML page links correctly
             if "Case" in df.keys():
                 df = df.set_index("Case")
-            summary.append(elements.Table(meta['Title'], df))
+            summary.append(elements.Table(meta["Title"], df))
 
     return summary
 
 
 def launch_processes(run_type, tests, run_module, config):
-    """ Helper method to launch processes and sync output """
+    """Helper method to launch processes and sync output"""
     test_summaries = {}
     ctx = mp.get_context("fork")
     with ctx.Pool(livvkit.pool_size) as pool:
         results = [
-            pool.apply_async(pool_worker, (run_type, run_module.run_suite, t, config[t])) for t in tests
+            pool.apply_async(
+                pool_worker, (run_type, run_module.run_suite, t, config[t])
+            )
+            for t in tests
         ]
 
         for t, r in zip(tests, results):

@@ -68,7 +68,6 @@ dependencies = [
     "json_tricks>=3.11.0",
     "pybtex",
     "pandas>=2.1.0",
-    "nodejs",
     "ruamel.yaml",
 ]
 dynamic = ["version"]
@@ -107,3 +106,19 @@ Homepage = "https://github.com/LIVVkit/LIVVkit"
 
 [tool.setuptools.dynamic]
 version = { attr = "livvkit.__version__" }
+
+[tool.pixi.workspace]
+channels = ["conda-forge"]
+platforms = ["linux-64"]
+
+[tool.pixi.pypi-dependencies]
+livvkit = { path = ".", editable = true }
+
+[tool.pixi.environments]
+default = { solve-group = "default" }
+dev = { features = ["dev"], solve-group = "default" }
+
+[tool.pixi.tasks]
+
+[tool.pixi.dependencies]
+pre-commit = ">=4.5.1,<5"

@@ -26,9 +26,7 @@
 # CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-"""
-Numerics Test Base Module.
-"""
+"""Numerics Test Base Module."""
 
 import os
 import importlib
@@ -39,14 +37,14 @@ from livvkit import elements
 
 
 def run_suite(case, config):
-    """ Run the full suite of numerics tests """
-    m = importlib.import_module(config['module'])
+    """Run the full suite of numerics tests"""
+    m = importlib.import_module(config["module"])
     m.set_up()
     config["name"] = case
     analysis_data = {}
     bundle = livvkit.numerics_model_module
-    model_dir = os.path.join(livvkit.model_dir, config['data_dir'], case)
-    bench_dir = os.path.join(livvkit.bench_dir, config['data_dir'], case)
+    model_dir = os.path.join(livvkit.model_dir, config["data_dir"], case)
+    bench_dir = os.path.join(livvkit.bench_dir, config["data_dir"], case)
     plot_dir = os.path.join(livvkit.output_dir, "numerics", "imgs")
     config["plot_dir"] = plot_dir
     functions.mkdir_p(plot_dir)
@@ -56,36 +54,39 @@ def run_suite(case, config):
     for mscale in sorted(model_cases):
         bscale = bench_cases[mscale] if mscale in bench_cases else []
         for mproc in model_cases[mscale]:
-            full_name = '-'.join([mscale, mproc])
-            bpath = (os.path.join(bench_dir, mscale, mproc.replace("-", os.path.sep))
-                     if mproc in bscale else "")
+            full_name = "-".join([mscale, mproc])
+            bpath = (
+                os.path.join(bench_dir, mscale, mproc.replace("-", os.path.sep))
+                if mproc in bscale
+                else ""
+            )
             mpath = os.path.join(model_dir, mscale, mproc.replace("-", os.path.sep))
             model_data = functions.find_file(mpath, "*" + config["output_ext"])
             bench_data = functions.find_file(bpath, "*" + config["output_ext"])
-            analysis_data[full_name] = bundle.get_plot_data(model_data,
-                                                            bench_data,
-                                                            m.setup[case],
-                                                            config)
+            analysis_data[full_name] = bundle.get_plot_data(
+                model_data, bench_data, m.setup[case], config
+            )
     try:
         el = m.run(config, analysis_data)
     except KeyError:
         el = elements.Error("Numerics Plots", "Missing data")
 
-    result = elements.Page(case, config['description'], elements=[el])
+    result = elements.Page(case, config["description"], elements=[el])
     summary = _summarize_result(m, analysis_data, config)
 
     _print_summary(m, case, summary)
 
     functions.create_page_from_template(
-        "numerics.html", os.path.join(livvkit.index_dir, "numerics", case + ".html")
+        "numerics.html", os.path.join(livvkit.index_dir, "numerics", f"{case}.html")
     )
-    with open(os.path.join(livvkit.output_dir, "numerics", case + ".json"), 'w') as f:
+    with open(os.path.join(livvkit.output_dir, "numerics", f"{case}.json"), "w") as f:
         f.write(result._repr_json())
 
     return summary
 
 
 def _print_summary(module, case, summary):
+    """Call a module's ``print_summary`` method."""
     try:
         module.print_summary(case, summary)
     except (NotImplementedError, AttributeError):
@@ -94,18 +95,30 @@ def _print_summary(module, case, summary):
 
 
 def _summarize_result(module, data, config):
+    """Call a module's ``summarize_result`` method."""
     try:
         summary = module.summarize_result(data, config)
     except (NotImplementedError, AttributeError):
         status = "Could not retrieve summary, open page for statistics"
-        summary = {"": {"Test mean % error": status,
-                        "Bench mean % error": "",
-                        "Coefficient of variation": ""}}
+        summary = {
+            "": {
+                "Test mean % error": status,
+                "Bench mean % error": "",
+                "Coefficient of variation": "",
+            }
+        }
     return summary
 
 
 def populate_metadata(case, config):
-    metadata = {"Type": "Summary",
-                "Title": "Numerics",
-                "Headers": ["Bench mean % error", "Test mean % error", "Coefficient of variation"]}
+    """Create case metadata for summaries."""
+    metadata = {
+        "Type": "Summary",
+        "Title": "Numerics",
+        "Headers": [
+            "Bench mean % error",
+            "Test mean % error",
+            "Coefficient of variation",
+        ],
+    }
     return metadata
