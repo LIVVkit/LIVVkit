@@ -56,10 +56,11 @@ class HTMLBackend(HTMLBaseBackend):
     """Extends ``pybtex.backends.html.Backend``"""
 
     def __init__(self, *args, **kwargs):
-        super().__init__()
+        super().__init__(*args, **kwargs)
         self._html = ""
 
-    def _output(self, html):
+    # skipcq:  PYL-E0202
+    def output(self, html):
         """Append HTML to the _html attribute."""
         self._html += html
 
@@ -70,11 +71,16 @@ class HTMLBackend(HTMLBaseBackend):
 
     def write_prologue(self):
         """Add bibliography header to the output."""
-        self._output('<div class="bibliography"><dl>')
+        self.output(
+            '<div class="bibliography"><h2>References</h2>'
+            "<p>LIVVkit is an open source project licensed under a BSD 3-clause License. "
+            "We ask that you please acknowledge LIVVkit in any work it is used or supports. "
+            "In any corresponding published work, please cite: </p><dl>"
+        )
 
     def write_epilogue(self):
         """Add bibliography close tags to the output."""
-        self._output("</dl></div>")
+        self.output("</dl></div>")
 
     def _repr_html(self, formatted_bibliography):
         self.write_prologue()
