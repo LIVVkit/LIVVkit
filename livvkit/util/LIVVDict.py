@@ -29,9 +29,7 @@
 
 
 class LIVVDict(dict):
-    """
-    Extension of the dictionary data structure to allow for auto nesting.
-    """
+    """Extension of the dictionary data structure to allow for auto nesting."""
 
     def __getitem__(self, item):
         """

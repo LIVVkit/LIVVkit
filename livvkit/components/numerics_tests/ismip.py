@@ -27,9 +27,7 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-"""
-Utilities to provide numerical verification for the ISMIP test cases
-"""
+"""Utilities to provide numerical verification for the ISMIP test cases."""
 
 import os
 
@@ -50,6 +48,7 @@ setup = None
 
 
 def set_up():
+    """Initialize test using ``ismip.json`` configuration file."""
     global setup
     setup = functions.read_json(os.path.join(os.path.dirname(__file__), "ismip.json"))
 
@@ -75,10 +74,12 @@ def set_up():
 
 
 def get_case_length(case):
+    """Determine length of case name."""
     return str(int(case.split("-")[-1][1:])).zfill(3)
 
 
 def run(config, analysis_data):
+    """Run the numerics analysis."""
     case = config["name"]
     if case in ["ismip-hom-a", "ismip-hom-c", "ismip-hom-f"]:
         coord = "x_hat"
@@ -161,6 +162,7 @@ def run(config, analysis_data):
 
 
 def summarize_result(data, config):
+    """Generate a summary of numerics test data."""
     case = config["name"]
     summary = LIVVDict()
     lengths = list(set([get_case_length(d) for d in data]))

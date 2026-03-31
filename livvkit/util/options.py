@@ -135,7 +135,6 @@ def parse_args(args=None):
 
 def init(options):
     """Initialize some defaults"""
-
     # Set matlplotlib's backend so LIVVkit can plot to files.
     import matplotlib
 

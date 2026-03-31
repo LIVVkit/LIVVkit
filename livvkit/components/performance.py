@@ -26,9 +26,7 @@
 # CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-"""
-Performance Test Base Module.
-"""
+"""Performance Test Base Module."""
 
 import os
 import glob
@@ -377,6 +375,7 @@ def generate_scaling_plot(timing_data, title, ylabel, description, plot_file):
 
 
 def scaling_sypd_plot(timing_data, title, ylabel, description, plot_file):
+    """Create plot for scaling of simulated years per day."""
     for case in ["bench", "model"]:
         case_data = timing_data[case]
         means = np.array(case_data["means"])
@@ -393,6 +392,7 @@ def scaling_sypd_plot(timing_data, title, ylabel, description, plot_file):
 
 
 def weak_scaling_efficiency_plot(timing_data, title, ylabel, description, plot_file):
+    """Create plot for weak scaling efficiency."""
     for case in ["bench", "model"]:
         case_data = timing_data[case]
         means = np.array(case_data["means"])
@@ -409,6 +409,7 @@ def weak_scaling_efficiency_plot(timing_data, title, ylabel, description, plot_f
 
 
 def strong_scaling_efficiency_plot(timing_data, title, ylabel, description, plot_file):
+    """Create plot for strong scaling efficiency."""
     for case in ["bench", "model"]:
         case_data = timing_data[case]
         means = np.array(case_data["means"])

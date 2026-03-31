@@ -27,9 +27,7 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-"""
-Provides functions for scheduling the runs of tests.
-"""
+"""Provides functions for scheduling the runs of tests."""
 
 import os
 import sys
@@ -42,6 +40,13 @@ from livvkit import elements
 
 
 def pool_worker(run_type, run_suite, test, config):
+    """
+    Defines a pool worker for multi-processing.
+
+    Assigns std out and std err to files saved in the output
+    log directory, then runs the suite.
+
+    """
     sys.stdout = open(
         os.path.join(livvkit.index_dir, "logs", "{}-{}.stdout".format(run_type, test)),
         "a",
@@ -82,6 +87,10 @@ def run(run_type, module, config):
 
 
 def run_quiet(run_type, module, config, group=True):
+    """
+    Collects the analyses cases to be run and launches processes for each of
+    them, without printing to stdout the start / completion of the case.
+    """
     tests = [
         t for t in config if isinstance(config[t], dict) and "common" not in t.lower()
     ]

@@ -27,7 +27,6 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-# FIXME: This docstring
 """Module containing report generation and display elements
 
 The elements in this module are used by LIVVkit to generate analyses reports.
@@ -701,6 +700,7 @@ class Image(BaseElement):
         self.height = height
 
     def _repr_latex(self):
+        """Represent the image element as LaTeX."""
         template = _latex_env.get_template(self._latex_template)
         data = self.__dict__
         data["path"] = self.path.lstrip("/")

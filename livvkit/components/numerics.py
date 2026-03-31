@@ -26,9 +26,7 @@
 # CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-"""
-Numerics Test Base Module.
-"""
+"""Numerics Test Base Module."""
 
 import os
 import importlib
@@ -88,6 +86,7 @@ def run_suite(case, config):
 
 
 def _print_summary(module, case, summary):
+    """Call a module's ``print_summary`` method."""
     try:
         module.print_summary(case, summary)
     except (NotImplementedError, AttributeError):
@@ -96,6 +95,7 @@ def _print_summary(module, case, summary):
 
 
 def _summarize_result(module, data, config):
+    """Call a module's ``summarize_result`` method."""
     try:
         summary = module.summarize_result(data, config)
     except (NotImplementedError, AttributeError):
@@ -111,6 +111,7 @@ def _summarize_result(module, data, config):
 
 
 def populate_metadata(case, config):
+    """Create case metadata for summaries."""
     metadata = {
         "Type": "Summary",
         "Title": "Numerics",

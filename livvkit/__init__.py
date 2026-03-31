@@ -27,9 +27,7 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-"""
-Storage for global variables.  These are set upon startup in the options module
-"""
+"""Storage for global variables. These are set upon startup in the options module."""
 
 import os
 import time

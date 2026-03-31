@@ -26,9 +26,7 @@
 # CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-"""
-Validation Test Base Module
-"""
+"""Validation Test Base Module"""
 
 import os
 import importlib
@@ -78,6 +76,7 @@ file.
 
 
 def _case_dep_err(mod_path):
+    """Checks module for existing YAML environment config file."""
     yml_path = mod_path.replace(".py", ".yml")
     conda_env = os.environ.get("CONDA_DEFAULT_ENV")
     if conda_env and os.path.isfile(yml_path):
@@ -89,6 +88,7 @@ def _case_dep_err(mod_path):
 
 
 def _load_case_module(case, config):
+    """Load a case's validation module, get the environment if needed."""
     try:
         m = importlib.import_module(config["module"])
     except ImportError:
@@ -131,6 +131,7 @@ def run_suite(case, config):
 
 
 def _print_summary(module, case, summary):
+    """Call ``module``'s ``print_summary`` method, with fallback for number of args."""
     try:
         try:
             module.print_summary(summary)
@@ -142,6 +143,7 @@ def _print_summary(module, case, summary):
 
 
 def _summarize_result(module, result):
+    """Call ``module``'s ``summarize_result`` method."""
     try:
         summary = module.summarize_result(result)
     except (NotImplementedError, AttributeError):
@@ -153,6 +155,7 @@ def _summarize_result(module, result):
 
 
 def populate_metadata(case, config):
+    """Create metadata based on ``case`` name and ``config``."""
     m = _load_case_module(case, config)
     try:
         try:

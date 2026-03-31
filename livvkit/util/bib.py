@@ -70,9 +70,11 @@ class HTMLBackend(BaseBackend):
         return f'<span class="bibtex-protected">{text}</span>'
 
     def write_prologue(self):
+        """Add bibliography header to the output."""
         self.output('<div class="bibliography"><dl>')
 
     def write_epilogue(self):
+        """Add bibliography close tags to the output."""
         self.output("</dl></div>")
 
     def _repr_html(self, formatted_bibliography):
