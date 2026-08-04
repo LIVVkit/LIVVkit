@@ -40,6 +40,7 @@ from pathlib import Path
 import json_tricks
 import ruamel.yaml
 import livvkit
+from livvkit import elements as el
 
 
 class TempSysPath(object):
@@ -344,3 +345,35 @@ def setup_output(cssd=None, jsd=None, imgd=None):
 
     # Make a directory to keep log files
     mkdir_p(os.path.join(livvkit.index_dir, "logs"))
+
+
+def create_error_page(case: str, exception: Exception, config: dict) -> el.Page:
+    """
+    Create a LIVVkit error Page based on an exception.
+
+    Parameters
+    ----------
+    case : `str`
+        Case or test name
+    exception : `Exception`
+        Caught exception from a LIVVkit run
+    config : dict
+        LIVVkit configuration dictionary, should have a ``description`` key
+
+    Returns
+    -------
+    `el.Page`
+        Page with an `el.Error` element indicating the source of an error
+        within a module.
+    """
+    return el.Page(
+        case,
+        config["description"],
+        elements=[
+            el.Error(
+                "ERROR",
+                "This test raised an error,"
+                f"\n{type(exception)}: {exception}\nsee logs for details",
+            ),
+        ],
+    )
