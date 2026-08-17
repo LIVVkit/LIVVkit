@@ -140,6 +140,12 @@ def main(cl_args=None):
                 validation_config = functions.merge_dicts(
                     validation_config, functions.read_json(conf)
                 )
+
+        logger.info(
+            f"WRITE MERGED VALIDATION CONFIG TO {livvkit.output_dir}/livvkit.yml"
+        )
+        functions.write_yaml(validation_config, livvkit.output_dir, "livvkit.yml")
+
         logger.info("BEGIN RUNNING VALIDATION SUITE")
         summary_elements.extend(
             scheduler.run_quiet(

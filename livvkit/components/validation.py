@@ -33,6 +33,7 @@ import importlib
 
 import livvkit
 from livvkit.util import functions
+from loguru import logger
 
 ERR_MISSING_MOD_MSG = """
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -116,8 +117,12 @@ def _load_case_module(case, config):
 def run_suite(case, config):
     """Run the full suite of validation tests"""
     m = _load_case_module(case, config)
+    try:
+        result = m.run(case, config)
+    except Exception as _err:
+        logger.exception(_err)
+        result = functions.create_error_page(case, _err, config)
 
-    result = m.run(case, config)
     summary = _summarize_result(m, result)
     _print_summary(m, case, summary)
 
