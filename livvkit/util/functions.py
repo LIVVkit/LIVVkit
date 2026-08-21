@@ -366,9 +366,17 @@ def create_error_page(case: str, exception: Exception, config: dict) -> el.Page:
         Page with an `el.Error` element indicating the source of an error
         within a module.
     """
+    desc = config.get(
+        "description",
+        config.get(
+            "desc",
+            config.get("module", "UNKNOWN MODULE OF UNKNOWN DESCRIPTION CAUSING ERROR"),
+        ),
+    )
+
     return el.Page(
         case,
-        config["description"],
+        desc,
         elements=[
             el.Error(
                 "ERROR",

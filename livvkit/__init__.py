@@ -38,7 +38,7 @@ import socket
 from livvkit import bundles
 from livvkit import resources
 
-__version_info__ = (3, 4, 0)
+__version_info__ = (3, 4, 1)
 __version__ = ".".join(str(vi) for vi in __version_info__)
 
 cwd = os.getcwd()
